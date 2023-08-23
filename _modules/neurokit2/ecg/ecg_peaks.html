@@ -350,7 +350,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for neurokit2.ecg.ecg_peaks</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">rescale</span>
 <span class="kn">from</span> <span class="nn">.ecg_findpeaks</span> <span class="kn">import</span> <span class="n">ecg_findpeaks</span>
 
 
@@ -359,6 +363,7 @@ document.write(`
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
     <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find R-peaks in an ECG signal**</span>
@@ -409,8 +414,10 @@ document.write(`
 <span class="sd">    method : string</span>
 <span class="sd">        The algorithm to be used for R-peak detection.</span>
 <span class="sd">    correct_artifacts : bool</span>
-<span class="sd">        Whether or not to first identify and fix artifacts, using the method by</span>
+<span class="sd">        Whether or not to identify and fix artifacts, using the method by</span>
 <span class="sd">        Lipponen &amp; Tarvainen (2019).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Additional keyword arguments, usually specific for each method.</span>
 
@@ -436,12 +443,13 @@ document.write(`
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
+<span class="sd">      import numpy as np</span>
 
-<span class="sd">      ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)</span>
-<span class="sd">      signals, info = nk.ecg_peaks(ecg, correct_artifacts=True)</span>
+<span class="sd">      ecg = nk.ecg_simulate(duration=10, sampling_rate=250)</span>
+<span class="sd">      ecg[600:950] = ecg[600:950] + np.random.normal(0, 0.6, 350)</span>
 
 <span class="sd">      @savefig p_ecg_peaks1.png scale=100%</span>
-<span class="sd">      nk.events_plot(info[&quot;ECG_R_Peaks&quot;], ecg)</span>
+<span class="sd">      signals, info = nk.ecg_peaks(ecg, sampling_rate=250, correct_artifacts=True, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -450,50 +458,50 @@ document.write(`
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      # neurokit (default)</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;neurokit&quot;)</span>
-<span class="sd">      _, neurokit = nk.ecg_peaks(cleaned, method=&quot;neurokit&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;neurokit&quot;)</span>
+<span class="sd">      _, neurokit = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;neurokit&quot;)</span>
 
 <span class="sd">      # pantompkins1985</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;pantompkins1985&quot;)</span>
-<span class="sd">      _, pantompkins1985 = nk.ecg_peaks(cleaned, method=&quot;pantompkins1985&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;pantompkins1985&quot;)</span>
+<span class="sd">      _, pantompkins1985 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;pantompkins1985&quot;)</span>
 
 <span class="sd">      # nabian2018</span>
-<span class="sd">      _, nabian2018 = nk.ecg_peaks(ecg, method=&quot;nabian2018&quot;)</span>
+<span class="sd">      _, nabian2018 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;nabian2018&quot;)</span>
 
 <span class="sd">      # hamilton2002</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;hamilton2002&quot;)</span>
-<span class="sd">      _, hamilton2002 = nk.ecg_peaks(cleaned, method=&quot;hamilton2002&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;hamilton2002&quot;)</span>
+<span class="sd">      _, hamilton2002 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;hamilton2002&quot;)</span>
 
 <span class="sd">      # martinez2004</span>
-<span class="sd">      _, martinez2004 = nk.ecg_peaks(ecg, method=&quot;martinez2004&quot;)</span>
+<span class="sd">      _, martinez2004 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;martinez2004&quot;)</span>
 
 <span class="sd">      # zong2003</span>
-<span class="sd">      _, zong2003 = nk.ecg_peaks(ecg, method=&quot;zong2003&quot;)</span>
+<span class="sd">      _, zong2003 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;zong2003&quot;)</span>
 
 <span class="sd">      # christov2004</span>
-<span class="sd">      _, christov2004 = nk.ecg_peaks(cleaned, method=&quot;christov2004&quot;)</span>
+<span class="sd">      _, christov2004 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;christov2004&quot;)</span>
 
 <span class="sd">      # gamboa2008</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;gamboa2008&quot;)</span>
-<span class="sd">      _, gamboa2008 = nk.ecg_peaks(cleaned, method=&quot;gamboa2008&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;gamboa2008&quot;)</span>
+<span class="sd">      _, gamboa2008 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;gamboa2008&quot;)</span>
 
 <span class="sd">      # elgendi2010</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;elgendi2010&quot;)</span>
-<span class="sd">      _, elgendi2010 = nk.ecg_peaks(cleaned, method=&quot;elgendi2010&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;elgendi2010&quot;)</span>
+<span class="sd">      _, elgendi2010 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;elgendi2010&quot;)</span>
 
 <span class="sd">      # engzeemod2012</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;engzeemod2012&quot;)</span>
-<span class="sd">      _, engzeemod2012 = nk.ecg_peaks(cleaned, method=&quot;engzeemod2012&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;engzeemod2012&quot;)</span>
+<span class="sd">      _, engzeemod2012 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;engzeemod2012&quot;)</span>
 
 <span class="sd">      # kalidas2017</span>
-<span class="sd">      cleaned = nk.ecg_clean(ecg, method=&quot;kalidas2017&quot;)</span>
-<span class="sd">      _, kalidas2017 = nk.ecg_peaks(cleaned, method=&quot;kalidas2017&quot;)</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;kalidas2017&quot;)</span>
+<span class="sd">      _, kalidas2017 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;kalidas2017&quot;)</span>
 
 <span class="sd">      # rodrigues2021</span>
-<span class="sd">      _, rodrigues2021 = nk.ecg_peaks(ecg, method=&quot;rodrigues2021&quot;)</span>
+<span class="sd">      _, rodrigues2021 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;rodrigues2021&quot;)</span>
 
 <span class="sd">      # koka2022</span>
-<span class="sd">      _, koka2022 = nk.ecg_peaks(ecg, method=&quot;koka2022&quot;)</span>
+<span class="sd">      _, koka2022 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;koka2022&quot;)</span>
 
 <span class="sd">      # Collect all R-peak lists by iterating through the result dicts</span>
 <span class="sd">      rpeaks = [</span>
@@ -529,7 +537,7 @@ document.write(`
 <span class="sd">                              noise_amplitude=0.05, noise_frequency=[25, 50],</span>
 <span class="sd">                              artifacts_amplitude=0.05, artifacts_frequency=50)</span>
 <span class="sd">      @savefig p_ecg_peaks3.png scale=100%</span>
-<span class="sd">      info = nk.ecg_findpeaks(ecg, sampling_rate=500, method=&quot;promac&quot;, show=True)</span>
+<span class="sd">      info = nk.ecg_findpeaks(ecg, sampling_rate=250, method=&quot;promac&quot;, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -576,27 +584,6 @@ document.write(`
 <span class="sd">    * T. Koka and M. Muma, &quot;Fast and Sample Accurate R-Peak Detection for Noisy ECG Using</span>
 <span class="sd">      Visibility Graphs,&quot; 2022 44th Annual International Conference of the IEEE Engineering in</span>
 <span class="sd">      Medicine &amp; Biology Society (EMBC), 2022, pp. 121-126.</span>
-
-<span class="sd">    * ``nabian2018``</span>
-
-<span class="sd">    * ``gamboa2008``</span>
-
-
-<span class="sd">    * ``hamilton2002``</span>
-
-<span class="sd">    * ``christov2004``</span>
-
-<span class="sd">    * ``engzeemod2012``</span>
-
-<span class="sd">    * ``elgendi2010``</span>
-
-<span class="sd">    * ``kalidas2017``</span>
-
-
-<span class="sd">    * ``rodrigues2021``</span>
-
-<span class="sd">    * ``koka2022``</span>
-
 <span class="sd">    * ``promac``</span>
 <span class="sd">        * **Unpublished.** It runs different methods and derives a probability index using</span>
 <span class="sd">          convolution. See this discussion for more information on the method:</span>
@@ -606,25 +593,207 @@ document.write(`
 <span class="sd">      engineering &amp; technology, 43(3), 173-181.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_findpeaks</span><span class="p">(</span>
-        <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="c1"># Store info</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">:</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;method_fixpeaks&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">}</span>
+
+    <span class="c1"># First peak detection</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">ecg_findpeaks</span><span class="p">(</span>
+            <span class="n">ecg_cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 
+    <span class="c1"># Peak correction</span>
     <span class="k">if</span> <span class="n">correct_artifacts</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
-            <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Kubios&quot;</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks_Uncorrected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">fixpeaks</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
+            <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Kubios&quot;</span>
         <span class="p">)</span>
 
-        <span class="n">rpeaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">:</span> <span class="n">rpeaks</span><span class="p">}</span>
+        <span class="c1"># Add prefix and merge</span>
+        <span class="n">fixpeaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ECG_fixpeaks_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">fixpeaks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fixpeaks</span><span class="p">)</span>
 
-    <span class="n">instant_peaks</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
-        <span class="n">rpeaks</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">rpeaks</span>
+    <span class="c1"># Format output</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">ECG_R_Peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]),</span>  <span class="c1"># Takes a dict as input</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">),</span>
+        <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span>
     <span class="p">)</span>
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">instant_peaks</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">rpeaks</span>
+
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_ecg_peaks_plot</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internals</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ecg_peaks_plot</span><span class="p">(</span>
+    <span class="n">ecg_cleaned</span><span class="p">,</span>
+    <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">quality</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">phase</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">))</span>
+
+    <span class="c1"># Prepare plot</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ECG signal and peaks&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Quality Area -------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">quality</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span>
+            <span class="n">quality</span><span class="p">,</span>
+            <span class="n">to</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)]),</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">minimum_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_axis</span><span class="p">),</span> <span class="n">quality</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="c1"># Plot quality area first</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">minimum_line</span><span class="p">,</span>
+            <span class="n">quality</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;#4CAF50&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Signal quality&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Raw Signal ---------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw signal&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">label_clean</span> <span class="o">=</span> <span class="s2">&quot;Cleaned signal&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label_clean</span> <span class="o">=</span> <span class="s2">&quot;Signal&quot;</span>
+
+    <span class="c1"># Peaks -------------------------------------------------------------------</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]],</span>
+        <span class="n">ecg_cleaned</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;R-peaks&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Artifacts ---------------------------------------------------------------</span>
+    <span class="n">_ecg_peaks_plot_artefacts</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span>
+        <span class="n">ecg_cleaned</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">,</span>
+        <span class="n">peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Clean Signal ------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">phase</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">phase</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">phase</span><span class="p">))</span>
+        <span class="n">diastole</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">diastole</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Create overlap to avoid interuptions in signal</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mask</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">systole</span> <span class="o">=</span> <span class="n">ecg_cleaned</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">systole</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">diastole</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B71C1C&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label_clean</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">systole</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F44336&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">ecg_cleaned</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F44336&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label_clean</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Optimize legend</span>
+    <span class="k">if</span> <span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">handles</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">order</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">order</span><span class="p">],</span>
+            <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span>
+
+
+<span class="k">def</span> <span class="nf">_ecg_peaks_plot_artefacts</span><span class="p">(</span>
+    <span class="n">x_axis</span><span class="p">,</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">info</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Peaks_Uncorrected&quot;</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;No correction&quot;</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="n">raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;No bad peaks&quot;</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;Peak indices longer than signal. Signals might have been cropped. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Better skip plotting.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">extra</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">raw</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">[</span><span class="n">extra</span><span class="p">],</span>
+            <span class="n">signal</span><span class="p">[</span><span class="n">extra</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4CAF50&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Peaks removed after correction&quot;</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">added</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">peaks</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">added</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">[</span><span class="n">added</span><span class="p">],</span>
+            <span class="n">signal</span><span class="p">[</span><span class="n">added</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FF9800&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Peaks added after correction&quot;</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
 </pre></div>
 
                 </article>

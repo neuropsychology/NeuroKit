@@ -407,7 +407,18 @@ document.write(`
 <span class="sd">      cardiac_phase = nk.ecg_phase(ecg_cleaned=ecg, rpeaks=rpeaks,</span>
 <span class="sd">                                   delineate_info=waves, sampling_rate=1000)</span>
 <span class="sd">      @savefig p_ecg_phase.png scale=100%</span>
-<span class="sd">      nk.signal_plot([ecg, cardiac_phase], standardize=True)</span>
+<span class="sd">      _, ax = plt.subplots(nrows=2)</span>
+<span class="sd">      ax[0].plot(nk.rescale(ecg), label=&quot;ECG&quot;, color=&quot;red&quot;, alpha=0.3)</span>
+<span class="sd">      ax[0].plot(cardiac_phase[&quot;ECG_Phase_Atrial&quot;], label=&quot;Atrial Phase&quot;, color=&quot;orange&quot;)</span>
+<span class="sd">      ax[0].plot(cardiac_phase[&quot;ECG_Phase_Completion_Atrial&quot;],</span>
+<span class="sd">                 label=&quot;Atrial Phase Completion&quot;, linestyle=&quot;dotted&quot;)</span>
+<span class="sd">      ax[0].legend(loc=&quot;upper right&quot;)</span>
+
+<span class="sd">      ax[1].plot(nk.rescale(ecg), label=&quot;ECG&quot;, color=&quot;red&quot;, alpha=0.3)</span>
+<span class="sd">      ax[1].plot(cardiac_phase[&quot;ECG_Phase_Ventricular&quot;], label=&quot;Ventricular Phase&quot;, color=&quot;green&quot;)</span>
+<span class="sd">      ax[1].plot(cardiac_phase[&quot;ECG_Phase_Completion_Ventricular&quot;],</span>
+<span class="sd">                 label=&quot;Ventricular Phase Completion&quot;, linestyle=&quot;dotted&quot;)</span>
+<span class="sd">      ax[1].legend(loc=&quot;upper right&quot;)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -431,9 +442,10 @@ document.write(`
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
         <span class="n">delineate_info</span><span class="p">,</span> <span class="nb">dict</span>
     <span class="p">):</span>  <span class="c1"># FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated</span>
-
         <span class="n">toffsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
-        <span class="n">toffsets_idcs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">delineate_info</span><span class="p">[</span><span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+        <span class="n">toffsets_idcs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">delineate_info</span><span class="p">[</span><span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="n">toffsets</span><span class="p">[</span><span class="n">toffsets_idcs</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="n">ppeaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
@@ -445,8 +457,12 @@ document.write(`
     <span class="n">atrial</span><span class="p">[</span><span class="n">rpeaks</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">atrial</span><span class="p">[</span><span class="n">ppeaks</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-    <span class="n">last_element</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">atrial</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Avoid filling beyond the last peak/trough</span>
-    <span class="n">atrial</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">atrial</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span>
+    <span class="n">last_element</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">atrial</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span>
+        <span class="o">-</span><span class="mi">1</span>
+    <span class="p">]</span>  <span class="c1"># Avoid filling beyond the last peak/trough</span>
+    <span class="n">atrial</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">atrial</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="c1"># Atrial Phase Completion</span>
     <span class="n">atrial_completion</span> <span class="o">=</span> <span class="n">signal_phase</span><span class="p">(</span><span class="n">atrial</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;percent&quot;</span><span class="p">)</span>

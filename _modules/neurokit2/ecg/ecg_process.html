@@ -436,7 +436,7 @@ document.write(`
 
 <span class="sd">      # Visualize</span>
 <span class="sd">      @savefig p_ecg_process.png scale=100%</span>
-<span class="sd">      nk.ecg_plot(signals)</span>
+<span class="sd">      nk.ecg_plot(signals, info)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -447,32 +447,53 @@ document.write(`
     <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 
     <span class="c1"># Detect R-peaks</span>
-    <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span>
-        <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+        <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Calculate heart rate</span>
-    <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">))</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Assess signal quality</span>
-    <span class="n">quality</span> <span class="o">=</span> <span class="n">ecg_quality</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">quality</span> <span class="o">=</span> <span class="n">ecg_quality</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="c1"># Merge signals in a DataFrame</span>
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;ECG_Raw&quot;</span><span class="p">:</span> <span class="n">ecg_signal</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">:</span> <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span> <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">})</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;ECG_Raw&quot;</span><span class="p">:</span> <span class="n">ecg_signal</span><span class="p">,</span>
+            <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">:</span> <span class="n">ecg_cleaned</span><span class="p">,</span>
+            <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
+            <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
 
     <span class="c1"># Delineate QRS complex</span>
     <span class="n">delineate_signal</span><span class="p">,</span> <span class="n">delineate_info</span> <span class="o">=</span> <span class="n">ecg_delineate</span><span class="p">(</span>
-        <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
     <span class="p">)</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">delineate_info</span><span class="p">)</span>  <span class="c1"># Merge waves indices dict with info dict</span>
 
     <span class="c1"># Determine cardiac phases</span>
-    <span class="n">cardiac_phase</span> <span class="o">=</span> <span class="n">ecg_phase</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">delineate_info</span><span class="o">=</span><span class="n">delineate_info</span><span class="p">)</span>
+    <span class="n">cardiac_phase</span> <span class="o">=</span> <span class="n">ecg_phase</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="o">=</span><span class="n">ecg_cleaned</span><span class="p">,</span>
+        <span class="n">rpeaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span>
+        <span class="n">delineate_info</span><span class="o">=</span><span class="n">delineate_info</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Add additional information to signals DataFrame</span>
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">delineate_signal</span><span class="p">,</span> <span class="n">cardiac_phase</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">signals</span><span class="p">,</span> <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">delineate_signal</span><span class="p">,</span> <span class="n">cardiac_phase</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
 
     <span class="c1"># return signals DataFrame and R-peak locations</span>
-    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">rpeaks</span></div>
+    <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
 </pre></div>
 
                 </article>

@@ -581,7 +581,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         14.8833 |       1.29868 |</span>
+<span class="go">|         15.2416 |        1.5732 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -598,10 +598,10 @@ signals’ sampling rate.</p></li>
 <span class="go">    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y</span>
 <span class="go">    </span>
 
-<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_process_1.png"><img alt="../_images/p_rsp_process_1.png" src="../_images/p_rsp_process_1.png" style="width: 1000.0px; height: 1000.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_rsp_process_1.png"><img alt="../_images/p_rsp_process_1.png" src="../_images/p_rsp_process_1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -745,14 +745,13 @@ breathing waveforms using BreathMetrics: A respiratory signal processing toolbox
 <h3><em>rsp_plot()</em><a class="headerlink" href="#rsp-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_plot">
-<span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize respiration (RSP) data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>figsize</strong> (<em>tuple</em>) – The size of the figure (width, height) in inches.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – The information Dict returned by <code class="docutils literal notranslate"><span class="pre">rsp_process()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>static</strong> (<em>bool</em>) – If True, a static plot will be generated with matplotlib.
 If False, an interactive plot will be generated with plotly.
 Defaults to True.</p></li>
@@ -765,24 +764,23 @@ Defaults to True.</p></li>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>fig</em> – Figure representing a plot of the processed RSP signals.</p>
+<dd class="field-odd"><p>See <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_plot()</span></code></a> for details on how to access the figure, modify the size and save it.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
 <span class="go"># Simulate data</span>
-<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="go"># Process signal</span>
-<span class="gp">In [3]: </span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="go"># Plot</span>
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 1000x1000 with 5 Axes&gt;</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_plot1.png"><img alt="../_images/p_rsp_plot1.png" src="../_images/p_rsp_plot1.png" style="width: 1000.0px; height: 1000.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_rsp_plot1.png"><img alt="../_images/p_rsp_plot1.png" src="../_images/p_rsp_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>
@@ -1333,8 +1331,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  554.423725  4084.263158  332.162752  ...    0.597248  0.076362    0.693147</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1208.140328      4067.7  727.814833  ...     0.61528  0.018896         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1478,9 +1476,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.209229      0.002061</span>
-<span class="go">2     2        10000  ...          0.203526     -0.033273</span>
-<span class="go">3     3        15000  ...          0.201726      0.017657</span>
+<span class="go">1     1         5000  ...          0.155655      0.022232</span>
+<span class="go">2     2        10000  ...          0.217842     -0.001851</span>
+<span class="go">3     3        15000  ...          0.177313      0.014668</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1684,7 +1682,7 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  0.968483  0.043749   0.051923  0.053613</span>
+<span class="go">0  0.953411  0.058238   0.071319  0.074804</span>
 </pre></div>
 </div>
 </dd></dl>

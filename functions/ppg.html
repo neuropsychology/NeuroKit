@@ -527,7 +527,7 @@ see <a class="reference internal" href="#neurokit2.ppg.ppg_methods" title="neuro
 
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_process1.png"><img alt="../_images/p_ppg_process1.png" src="../_images/p_ppg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -587,9 +587,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.194402           0.889069</span>
-<span class="go">2     2        10000  ...                 -2.348316           0.974588</span>
-<span class="go">3     3        15000  ...                  1.459454           0.930208</span>
+<span class="go">1     1         5000  ...                 -0.932546           0.855224</span>
+<span class="go">2     2        10000  ...                  1.690067           0.859265</span>
+<span class="go">3     3        15000  ...                  0.510394           0.650568</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -676,21 +676,21 @@ allows generating multiple version of the same signal distorted by different ran
 <h3><em>ppg_plot()</em><a class="headerlink" href="#ppg-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_plot">
-<span class="sig-name descname"><span class="pre">ppg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_plot.html#ppg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_plot.html#ppg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize photoplethysmogram (PPG) data</strong></p>
 <p>Visualize the PPG signal processing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ppg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the PPG (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – The information Dict returned by <code class="docutils literal notranslate"><span class="pre">ppg_process()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>static</strong> (<em>bool</em>) – If True, a static plot will be generated with matplotlib.
 If False, an interactive plot will be generated with plotly.
 Defaults to True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>fig</em> – Figure representing a plot of the processed PPG signals.</p>
+<dd class="field-even"><p>See <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_plot()</span></code></a> for details on how to access the figure, modify the size and save it.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -707,7 +707,7 @@ Defaults to True.</p></li>
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="go"># Plot</span>
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" src="../_images/p_ppg_plot1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -782,7 +782,7 @@ IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</p></
 <h3><em>ppg_peaks()</em><a class="headerlink" href="#ppg-peaks" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_peaks">
-<span class="sig-name descname"><span class="pre">ppg_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_peaks.html#ppg_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_peaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_artifacts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_peaks.html#ppg_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_peaks" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Find systolic peaks in a photoplethysmogram (PPG) signal</strong></p>
 <p>Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG
 signals as input, but typically a filtered PPG (cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>) will result in
@@ -798,6 +798,9 @@ better results.</p>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ppg_cleaned</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bishop&quot;</span></code>. The default is
 <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
+<li><p><strong>correct_artifacts</strong> (<em>bool</em>) – Whether or not to identify and fix artifacts, using the method by
+Lipponen &amp; Tarvainen (2019).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show a plot of the signal with peaks. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – Additional keyword arguments, usually specific for each method.</p></li>
 </ul>
 </dd>
@@ -815,28 +818,35 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_segment" title="neurokit2.ppg.ppg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_segment</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_fixpeaks</span></code>, <a class="reference internal" href="signal.html#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="gp">In [3]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">heart_rate</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">ppg_clean</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">ppg</span><span class="p">[</span><span class="mi">400</span><span class="p">:</span><span class="mi">600</span><span class="p">]</span> <span class="o">=</span> <span class="n">ppg</span><span class="p">[</span><span class="mi">400</span><span class="p">:</span><span class="mi">600</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
 <span class="go"># Default method (Elgendi et al., 2013)</span>
-<span class="gp">In [5]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [5]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="gp">In [6]: </span><span class="n">peaks_idx</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
+<span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
+<span class="gh">Out[6]: </span>
+<span class="go">array([ 46,  87, 130, 175, 218, 265, 308, 350, 410, 486, 554, 596, 633,</span>
+<span class="go">       671, 706, 743, 776, 813, 852, 888, 927, 964])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
-<span class="gp">In [7]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="go"># Correct artifacts</span>
+<span class="gp">In [8]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_peaks1.png"><img alt="../_images/p_ppg_peaks1.png" src="../_images/p_ppg_peaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <a class="reference internal image-reference" href="../_images/p_ppg_peaks2.png"><img alt="../_images/p_ppg_peaks2.png" src="../_images/p_ppg_peaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_ppg_peaks3.png"><img alt="../_images/p_ppg_peaks3.png" src="../_images/p_ppg_peaks3.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Elgendi, M., Norton, I., Brearley, M., Abbott, D., &amp; Schuurmans, D. (2013). Systolic peak
@@ -909,9 +919,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.899148           0.835704</span>
-<span class="go">2     2        10000  ...                  2.175681           0.879778</span>
-<span class="go">3     3        15000  ...                 -0.707559           0.922053</span>
+<span class="go">1     1         5000  ...                  0.814061           0.565221</span>
+<span class="go">2     2        10000  ...                 -1.353220           0.966253</span>
+<span class="go">3     3        15000  ...                  0.379375           0.851318</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>

@@ -350,11 +350,22 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for neurokit2.ppg.ppg_peaks</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_formatpeaks</span>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..ecg.ecg_peaks</span> <span class="kn">import</span> <span class="n">_ecg_peaks_plot_artefacts</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
 <span class="kn">from</span> <span class="nn">.ppg_findpeaks</span> <span class="kn">import</span> <span class="n">ppg_findpeaks</span>
 
 
-<div class="viewcode-block" id="ppg_peaks"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_peaks">[docs]</a><span class="k">def</span> <span class="nf">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ppg_peaks"><a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_peaks">[docs]</a><span class="k">def</span> <span class="nf">ppg_peaks</span><span class="p">(</span>
+    <span class="n">ppg_cleaned</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span>
+    <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find systolic peaks in a photoplethysmogram (PPG) signal**</span>
 
 <span class="sd">    Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG</span>
@@ -375,6 +386,11 @@ document.write(`
 <span class="sd">    method : str</span>
 <span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;bishop&quot;``. The default is</span>
 <span class="sd">        ``&quot;elgendi&quot;``.</span>
+<span class="sd">    correct_artifacts : bool</span>
+<span class="sd">        Whether or not to identify and fix artifacts, using the method by</span>
+<span class="sd">        Lipponen &amp; Tarvainen (2019).</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Additional keyword arguments, usually specific for each method.</span>
 
@@ -391,28 +407,34 @@ document.write(`
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ppg_clean, ppg_segment, .signal_fixpeaks</span>
+<span class="sd">    ppg_clean, ppg_fixpeaks, .signal_fixpeaks</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
-<span class="sd">      import matplotlib.pyplot as plt</span>
+<span class="sd">      import numpy as np</span>
 
 <span class="sd">      ppg = nk.ppg_simulate(heart_rate=75, duration=20, sampling_rate=50)</span>
-<span class="sd">      ppg_clean = nk.ppg_clean(ppg, sampling_rate=50)</span>
+<span class="sd">      ppg[400:600] = ppg[400:600] + np.random.normal(0, 1.25, 200)</span>
 
 <span class="sd">      # Default method (Elgendi et al., 2013)</span>
 <span class="sd">      @savefig p_ppg_peaks1.png scale=100%</span>
-<span class="sd">      peaks, info = nk.ppg_peaks(ppg_clean, sampling_rate=100, method=&quot;elgendi&quot;, show=True)</span>
+<span class="sd">      peaks, info = nk.ppg_peaks(ppg, sampling_rate=100, method=&quot;elgendi&quot;, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
-<span class="sd">      peaks_idx = info[&quot;PPG_Peaks&quot;]</span>
+<span class="sd">      info[&quot;PPG_Peaks&quot;]</span>
 
 <span class="sd">      # Method by Bishop et al., (2018)</span>
 <span class="sd">      @savefig p_ppg_peaks2.png scale=100%</span>
-<span class="sd">      peaks = nk.ppg_peaks(ppg_clean, sampling_rate=100, method=&quot;bishop&quot;, show=True)</span>
+<span class="sd">      peaks, info = nk.ppg_peaks(ppg, sampling_rate=100, method=&quot;bishop&quot;, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      # Correct artifacts</span>
+<span class="sd">      @savefig p_ppg_peaks3.png scale=100%</span>
+<span class="sd">      peaks, info = nk.ppg_peaks(ppg, sampling_rate=100, correct_artifacts=True, show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -426,18 +448,103 @@ document.write(`
 <span class="sd">      (pp. 189-195). Springer International Publishing.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">ppg_findpeaks</span><span class="p">(</span>
-        <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="c1"># Store info</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">:</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;method_fixpeaks&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">}</span>
+
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">ppg_findpeaks</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="n">instant_peaks</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">peaks</span>
+    <span class="c1"># Peak correction</span>
+    <span class="k">if</span> <span class="n">correct_artifacts</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks_Uncorrected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">fixpeaks</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
+            <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Kubios&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add prefix and merge</span>
+        <span class="n">fixpeaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_fixpeaks_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">fixpeaks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fixpeaks</span><span class="p">)</span>
+
+    <span class="c1"># Format output</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">PPG_Peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]),</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">),</span>
+        <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span>
     <span class="p">)</span>
-    <span class="n">signals</span> <span class="o">=</span> <span class="n">instant_peaks</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">peaks</span>
     <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_ppg_peaks_plot</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internals</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ppg_peaks_plot</span><span class="p">(</span>
+    <span class="n">ppg_cleaned</span><span class="p">,</span>
+    <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">))</span>
+
+    <span class="c1"># Prepare plot</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PPG signal and peaks&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Raw Signal ---------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw signal&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">label_clean</span> <span class="o">=</span> <span class="s2">&quot;Cleaned signal&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label_clean</span> <span class="o">=</span> <span class="s2">&quot;Signal&quot;</span>
+
+    <span class="c1"># Peaks -------------------------------------------------------------------</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]],</span>
+        <span class="n">ppg_cleaned</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#FFC107&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Systolic peaks&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Artifacts ---------------------------------------------------------------</span>
+    <span class="n">_ecg_peaks_plot_artefacts</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span>
+        <span class="n">ppg_cleaned</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span>
+        <span class="n">ax</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Clean Signal ------------------------------------------------------------</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span>
+        <span class="n">ppg_cleaned</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">label_clean</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Optimize legend</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span>
 </pre></div>
 
                 </article>

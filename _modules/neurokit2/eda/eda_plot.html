@@ -351,21 +351,25 @@ document.write(`
                   
   <h1>Source code for neurokit2.eda.eda_plot</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.collections</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 
-<div class="viewcode-block" id="eda_plot"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_plot">[docs]</a><span class="k">def</span> <span class="nf">eda_plot</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="eda_plot"><a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_plot">[docs]</a><span class="k">def</span> <span class="nf">eda_plot</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Visualize electrodermal activity (EDA) data**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    eda_signals : DataFrame</span>
 <span class="sd">        DataFrame obtained from :func:`eda_process()`.</span>
-<span class="sd">    sampling_rate : int</span>
-<span class="sd">        The desired sampling rate (in Hz, i.e., samples/second). Defaults to None.</span>
+<span class="sd">    info : dict</span>
+<span class="sd">        The information Dict returned by ``eda_process()``. Defaults to ``None``.</span>
 <span class="sd">    static : bool</span>
 <span class="sd">        If True, a static plot will be generated with matplotlib.</span>
 <span class="sd">        If False, an interactive plot will be generated with plotly.</span>
@@ -373,8 +377,7 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    fig</span>
-<span class="sd">        Figure representing a plot of the processed EDA signals.</span>
+<span class="sd">    See :func:`.ecg_plot` for details on how to access the figure, modify the size and save it.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -384,8 +387,9 @@ document.write(`
 
 <span class="sd">      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)</span>
 <span class="sd">      eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)</span>
+
 <span class="sd">      @savefig p_eda_plot1.png scale=100%</span>
-<span class="sd">      nk.eda_plot(eda_signals)</span>
+<span class="sd">      nk.eda_plot(eda_signals, info)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -394,25 +398,31 @@ document.write(`
 <span class="sd">    eda_process</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;info&#39; dict not provided. Some information might be missing.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Sampling rate will be set to 1000 Hz.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sampling_rate&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="p">}</span>
+
     <span class="c1"># Determine peaks, onsets, and half recovery.</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Onsets&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">half_recovery</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Recovery&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Determine unit of x-axis.</span>
-    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">x_label</span> <span class="o">=</span> <span class="s2">&quot;Seconds&quot;</span>
-        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">x_label</span> <span class="o">=</span> <span class="s2">&quot;Samples&quot;</span>
-        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">))</span>
+    <span class="n">x_label</span> <span class="o">=</span> <span class="s2">&quot;Time (seconds)&quot;</span>
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">)</span> <span class="o">/</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">static</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">last_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">last_ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
         <span class="c1"># Plot cleaned and raw electrodermal activity.</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
@@ -473,7 +483,7 @@ document.write(`
             <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fig</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Create interactive plot with plotly.</span>
         <span class="k">try</span><span class="p">:</span>

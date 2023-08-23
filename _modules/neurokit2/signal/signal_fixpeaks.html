@@ -397,9 +397,9 @@ document.write(`
 <span class="sd">    show : bool</span>
 <span class="sd">        Whether or not to visualize artifacts and artifact thresholds.</span>
 <span class="sd">    interval_min : float</span>
-<span class="sd">        Only when ``method = &quot;neurokit&quot;``. The minimum interval between the peaks.</span>
+<span class="sd">        Only when ``method = &quot;neurokit&quot;``. The minimum interval between the peaks (in seconds).</span>
 <span class="sd">    interval_max : float</span>
-<span class="sd">        Only when ``method = &quot;neurokit&quot;``. The maximum interval between the peaks.</span>
+<span class="sd">        Only when ``method = &quot;neurokit&quot;``. The maximum interval between the peaks (in seconds).</span>
 <span class="sd">    relative_interval_min : float</span>
 <span class="sd">        Only when ``method = &quot;neurokit&quot;``. The minimum interval between the peaks as relative to</span>
 <span class="sd">        the sample (expressed in standard deviation from the mean).</span>
@@ -435,15 +435,17 @@ document.write(`
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # Simulate ECG data</span>
-<span class="sd">      ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)</span>
+<span class="sd">      # Simulate ECG data and add noisy period</span>
+<span class="sd">      ecg = nk.ecg_simulate(duration=240, sampling_rate=250, noise=2, random_state=42)</span>
+<span class="sd">      ecg[20000:30000] += np.random.uniform(size=10000)</span>
+<span class="sd">      ecg[40000:43000] = 0</span>
 
 <span class="sd">      # Identify and Correct Peaks using &quot;Kubios&quot; Method</span>
-<span class="sd">      rpeaks_uncorrected = nk.ecg_findpeaks(ecg)</span>
+<span class="sd">      rpeaks_uncorrected = nk.ecg_findpeaks(ecg, method=&quot;pantompkins&quot;, sampling_rate=250)</span>
 
 <span class="sd">      @savefig p_signal_fixpeaks1.png scale=100%</span>
-<span class="sd">      artifacts, rpeaks_corrected = nk.signal_fixpeaks(</span>
-<span class="sd">          rpeaks_uncorrected, iterative=True, method=&quot;Kubios&quot;, show=True</span>
+<span class="sd">      info, rpeaks_corrected = nk.signal_fixpeaks(</span>
+<span class="sd">          rpeaks_uncorrected, sampling_rate=250, iterative=True, method=&quot;Kubios&quot;, show=True</span>
 <span class="sd">      )</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -477,7 +479,7 @@ document.write(`
 <span class="sd">      peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts</span>
 
 <span class="sd">      # Identify and Correct Peaks using &#39;NeuroKit&#39; Method</span>
-<span class="sd">      peaks_corrected = nk.signal_fixpeaks(</span>
+<span class="sd">      info, peaks_corrected = nk.signal_fixpeaks(</span>
 <span class="sd">          peaks=peaks, interval_min=0.5, interval_max=1.5, method=&quot;neurokit&quot;</span>
 <span class="sd">      )</span>
 
@@ -500,10 +502,12 @@ document.write(`
 
     <span class="c1"># If method Kubios</span>
     <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;kubios&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_signal_fixpeaks_kubios</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="n">iterative</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_signal_fixpeaks_kubios</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="n">iterative</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Else method is NeuroKit</span>
-        <span class="k">return</span> <span class="n">_signal_fixpeaks_neurokit</span><span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_signal_fixpeaks_neurokit</span><span class="p">(</span>
             <span class="n">peaks</span><span class="p">,</span>
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">interval_min</span><span class="o">=</span><span class="n">interval_min</span><span class="p">,</span>
@@ -511,7 +515,8 @@ document.write(`
             <span class="n">relative_interval_min</span><span class="o">=</span><span class="n">relative_interval_min</span><span class="p">,</span>
             <span class="n">relative_interval_max</span><span class="o">=</span><span class="n">relative_interval_max</span><span class="p">,</span>
             <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span></div>
 
 
 <span class="c1"># =============================================================================</span>
@@ -528,21 +533,38 @@ document.write(`
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;NeuroKit method.&quot;&quot;&quot;</span>
 
-    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_remove_small</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="p">,</span> <span class="n">robust</span><span class="p">)</span>
-    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_interpolate_big</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">,</span> <span class="n">relative_interval_max</span><span class="p">,</span> <span class="n">robust</span><span class="p">,)</span>
+    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_remove_small</span><span class="p">(</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="p">,</span> <span class="n">robust</span>
+    <span class="p">)</span>
+    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_interpolate_big</span><span class="p">(</span>
+        <span class="n">peaks_clean</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">interval_max</span><span class="p">,</span>
+        <span class="n">relative_interval_max</span><span class="p">,</span>
+        <span class="n">robust</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">valid_peaks</span> <span class="o">=</span> <span class="n">peaks_clean</span><span class="p">[</span><span class="n">peaks_clean</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">n_invalid_idcs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_peaks</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n_invalid_idcs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot; Negative peak indices detected in output. &quot;</span> <span class="sa">f</span><span class="s2">&quot; Removing </span><span class="si">{</span><span class="n">n_invalid_idcs</span><span class="si">}</span><span class="s2"> invalid peaks. &quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot; Negative peak indices detected in output. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; Removing </span><span class="si">{</span><span class="n">n_invalid_idcs</span><span class="si">}</span><span class="s2"> invalid peaks. &quot;</span><span class="p">,</span>
             <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">valid_peaks</span>
-    <span class="k">return</span> <span class="n">peaks_clean</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">peaks</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">peaks_clean</span><span class="p">],</span>
+        <span class="s2">&quot;missed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">peaks_clean</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_fixpeaks_kubios</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_signal_fixpeaks_kubios</span><span class="p">(</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">iterative</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;kubios method.&quot;&quot;&quot;</span>
 
     <span class="c1"># Get corrected peaks and normal-to-normal intervals.</span>
@@ -550,14 +572,14 @@ document.write(`
     <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_correct_artifacts</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">peaks</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">iterative</span><span class="p">:</span>
-
         <span class="c1"># Iteratively apply the artifact correction until the number</span>
         <span class="c1"># of artifacts stops decreasing.</span>
         <span class="n">n_artifacts_current</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">artifacts</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-
-            <span class="n">new_artifacts</span><span class="p">,</span> <span class="n">new_subspaces</span> <span class="o">=</span> <span class="n">_find_artifacts</span><span class="p">(</span><span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">new_artifacts</span><span class="p">,</span> <span class="n">new_subspaces</span> <span class="o">=</span> <span class="n">_find_artifacts</span><span class="p">(</span>
+                <span class="n">peaks_clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
 
             <span class="n">n_artifacts_previous</span> <span class="o">=</span> <span class="n">n_artifacts_current</span>
             <span class="n">n_artifacts_current</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">new_artifacts</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
@@ -566,8 +588,13 @@ document.write(`
             <span class="n">artifacts</span> <span class="o">=</span> <span class="n">new_artifacts</span>
             <span class="n">subspaces</span> <span class="o">=</span> <span class="n">new_subspaces</span>
             <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">_correct_artifacts</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">peaks_clean</span><span class="p">)</span>
+
+    <span class="n">artifacts</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;kubios&quot;</span>
+    <span class="n">artifacts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subspaces</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-        <span class="n">_plot_artifacts_lipponen2019</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">subspaces</span><span class="p">)</span>
+        <span class="n">_plot_artifacts_lipponen2019</span><span class="p">(</span><span class="n">artifacts</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">artifacts</span><span class="p">,</span> <span class="n">peaks_clean</span>
 
 
@@ -575,9 +602,14 @@ document.write(`
 <span class="c1"># Kubios: Lipponen &amp; Tarvainen (2019).</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_find_artifacts</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">5.2</span><span class="p">,</span> <span class="n">window_width</span><span class="o">=</span><span class="mi">91</span><span class="p">,</span> <span class="n">medfilt_order</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">c1</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span>
+    <span class="n">c2</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">5.2</span><span class="p">,</span>
+    <span class="n">window_width</span><span class="o">=</span><span class="mi">91</span><span class="p">,</span>
+    <span class="n">medfilt_order</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
-
     <span class="c1"># Compute period series (make sure it has same numer of elements as peaks);</span>
     <span class="c1"># peaks are in samples, convert to seconds.</span>
     <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">to_begin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
@@ -606,7 +638,6 @@ document.write(`
 
     <span class="n">s12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">drrs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">drrs</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-
         <span class="k">if</span> <span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">s12</span><span class="p">[</span><span class="n">d</span> <span class="o">-</span> <span class="n">padding</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
         <span class="k">elif</span> <span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -614,7 +645,6 @@ document.write(`
     <span class="c1"># Cast dRRs to subspace s22.</span>
     <span class="n">s22</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">drrs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span> <span class="o">+</span> <span class="n">drrs</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-
         <span class="k">if</span> <span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">s22</span><span class="p">[</span><span class="n">d</span> <span class="o">-</span> <span class="n">padding</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]])</span>
         <span class="k">elif</span> <span class="n">drrs_pad</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -639,12 +669,15 @@ document.write(`
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rr</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># The flow control is implemented based on Figure 1</span>
-
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Figure 1</span>
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">continue</span>
-        <span class="n">eq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s12</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="p">(</span><span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">c2</span><span class="p">))</span>  <span class="c1"># pylint: disable=E1111</span>
-        <span class="n">eq2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">s12</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">c2</span><span class="p">))</span>  <span class="c1"># pylint: disable=E1111</span>
+        <span class="n">eq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s12</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="p">(</span><span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">c2</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=E1111</span>
+        <span class="n">eq2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">s12</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="n">drrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">c2</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=E1111</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">([</span><span class="n">eq1</span><span class="p">,</span> <span class="n">eq2</span><span class="p">]):</span>
             <span class="c1"># If any of the two equations is true.</span>
@@ -715,17 +748,23 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_compute_threshold</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">window_width</span><span class="p">):</span>
-
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;signal&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">)})</span>
-    <span class="n">q1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window_width</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">q3</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window_width</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window_width</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">values</span>
+    <span class="p">)</span>
+    <span class="n">q3</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window_width</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">values</span>
+    <span class="p">)</span>
     <span class="n">th</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">((</span><span class="n">q3</span> <span class="o">-</span> <span class="n">q1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">th</span>
 
 
 <span class="k">def</span> <span class="nf">_correct_artifacts</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">peaks</span><span class="p">):</span>
-
     <span class="c1"># Artifact correction</span>
     <span class="c1">#####################</span>
     <span class="c1"># The integrity of indices must be maintained if peaks are inserted or</span>
@@ -758,7 +797,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_correct_extra</span><span class="p">(</span><span class="n">extra_idcs</span><span class="p">,</span> <span class="n">peaks</span><span class="p">):</span>
-
     <span class="n">corrected_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">corrected_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">,</span> <span class="n">extra_idcs</span><span class="p">)</span>
 
@@ -766,13 +804,14 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_correct_missed</span><span class="p">(</span><span class="n">missed_idcs</span><span class="p">,</span> <span class="n">peaks</span><span class="p">):</span>
-
     <span class="n">corrected_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">missed_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">missed_idcs</span><span class="p">)</span>
     <span class="c1"># Calculate the position(s) of new beat(s). Make sure to not generate</span>
     <span class="c1"># negative indices. prev_peaks and next_peaks must have the same</span>
     <span class="c1"># number of elements.</span>
-    <span class="n">valid_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">missed_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">missed_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">))</span>  <span class="c1"># pylint: disable=E1111</span>
+    <span class="n">valid_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+        <span class="n">missed_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">missed_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># pylint: disable=E1111</span>
     <span class="n">missed_idcs</span> <span class="o">=</span> <span class="n">missed_idcs</span><span class="p">[</span><span class="n">valid_idcs</span><span class="p">]</span>
     <span class="n">prev_peaks</span> <span class="o">=</span> <span class="n">corrected_peaks</span><span class="p">[[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">missed_idcs</span><span class="p">]]</span>
     <span class="n">next_peaks</span> <span class="o">=</span> <span class="n">corrected_peaks</span><span class="p">[</span><span class="n">missed_idcs</span><span class="p">]</span>
@@ -784,14 +823,14 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_correct_misaligned</span><span class="p">(</span><span class="n">misaligned_idcs</span><span class="p">,</span> <span class="n">peaks</span><span class="p">):</span>
-
     <span class="n">corrected_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">misaligned_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">misaligned_idcs</span><span class="p">)</span>
     <span class="c1"># Make sure to not generate negative indices, or indices that exceed</span>
     <span class="c1"># the total number of peaks. prev_peaks and next_peaks must have the</span>
     <span class="c1"># same number of elements.</span>
     <span class="n">valid_idcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-        <span class="n">misaligned_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">misaligned_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># pylint: disable=E1111</span>
+        <span class="n">misaligned_idcs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">misaligned_idcs</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrected_peaks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># pylint: disable=E1111</span>
     <span class="p">)</span>
     <span class="n">misaligned_idcs</span> <span class="o">=</span> <span class="n">misaligned_idcs</span><span class="p">[</span><span class="n">valid_idcs</span><span class="p">]</span>
     <span class="n">prev_peaks</span> <span class="o">=</span> <span class="n">corrected_peaks</span><span class="p">[[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">misaligned_idcs</span><span class="p">]]</span>
@@ -817,65 +856,94 @@ document.write(`
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">update_idcs</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">_plot_artifacts_lipponen2019</span><span class="p">(</span><span class="n">artifacts</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_plot_artifacts_lipponen2019</span><span class="p">(</span><span class="n">info</span><span class="p">):</span>
+    <span class="c1"># Covnenience function to extract relevant stuff.</span>
+    <span class="k">def</span> <span class="nf">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">string</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Extract parameters</span>
-    <span class="n">longshort_idcs</span> <span class="o">=</span> <span class="n">artifacts</span><span class="p">[</span><span class="s2">&quot;longshort&quot;</span><span class="p">]</span>
-    <span class="n">ectopic_idcs</span> <span class="o">=</span> <span class="n">artifacts</span><span class="p">[</span><span class="s2">&quot;ectopic&quot;</span><span class="p">]</span>
-    <span class="n">extra_idcs</span> <span class="o">=</span> <span class="n">artifacts</span><span class="p">[</span><span class="s2">&quot;extra&quot;</span><span class="p">]</span>
-    <span class="n">missed_idcs</span> <span class="o">=</span> <span class="n">artifacts</span><span class="p">[</span><span class="s2">&quot;missed&quot;</span><span class="p">]</span>
+    <span class="n">longshort_idcs</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;longshort&quot;</span><span class="p">)</span>
+    <span class="n">ectopic_idcs</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;ectopic&quot;</span><span class="p">)</span>
+    <span class="n">extra_idcs</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;extra&quot;</span><span class="p">)</span>
+    <span class="n">missed_idcs</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;missed&quot;</span><span class="p">)</span>
 
-    <span class="n">rr</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;rr&quot;</span><span class="p">]</span>
-    <span class="n">drrs</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;drrs&quot;</span><span class="p">]</span>
-    <span class="n">mrrs</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;mrrs&quot;</span><span class="p">]</span>
-    <span class="n">s12</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;s12&quot;</span><span class="p">]</span>
-    <span class="n">s22</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;s22&quot;</span><span class="p">]</span>
-    <span class="n">c1</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;c1&quot;</span><span class="p">]</span>
-    <span class="n">c2</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;c2&quot;</span><span class="p">]</span>
+    <span class="c1"># Extract subspace info</span>
+    <span class="n">rr</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;rr&quot;</span><span class="p">)</span>
+    <span class="n">drrs</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;drrs&quot;</span><span class="p">)</span>
+    <span class="n">mrrs</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;mrrs&quot;</span><span class="p">)</span>
+    <span class="n">s12</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;s12&quot;</span><span class="p">)</span>
+    <span class="n">s22</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;s22&quot;</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;c1&quot;</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">_get_which_endswith</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;c2&quot;</span><span class="p">)</span>
 
     <span class="c1"># Visualize artifact type indices.</span>
 
     <span class="c1"># Set grids</span>
-    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-    <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-    <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Peak Correction&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Artifact types&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Artifact types&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;heart period&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">longshort_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">longshort_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long/short&quot;</span><span class="p">,</span>
+        <span class="n">longshort_idcs</span><span class="p">,</span>
+        <span class="n">rr</span><span class="p">[</span><span class="n">longshort_idcs</span><span class="p">],</span>
+        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long/short&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">ectopic_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">ectopic_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic&quot;</span><span class="p">,</span>
+        <span class="n">ectopic_idcs</span><span class="p">,</span>
+        <span class="n">rr</span><span class="p">[</span><span class="n">ectopic_idcs</span><span class="p">],</span>
+        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">extra_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">extra_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false positive&quot;</span><span class="p">,</span>
+        <span class="n">extra_idcs</span><span class="p">,</span>
+        <span class="n">rr</span><span class="p">[</span><span class="n">extra_idcs</span><span class="p">],</span>
+        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false positive&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">missed_idcs</span><span class="p">,</span> <span class="n">rr</span><span class="p">[</span><span class="n">missed_idcs</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false negative&quot;</span><span class="p">,</span>
+        <span class="n">missed_idcs</span><span class="p">,</span>
+        <span class="n">rr</span><span class="p">[</span><span class="n">missed_idcs</span><span class="p">],</span>
+        <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;false negative&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
     <span class="c1"># Visualize first threshold.</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Consecutive-difference criterion&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Consecutive-difference criterion&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">drrs</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;normalized difference consecutive heart periods&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;artifact threshold&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
     <span class="c1"># Visualize second threshold.</span>
-    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Difference-from-median criterion&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Difference-from-median criterion&quot;</span><span class="p">)</span>
     <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mrrs</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;difference from median over 11 periods&quot;</span><span class="p">)</span>
     <span class="n">ax2</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;artifact threshold&quot;</span><span class="p">)</span>
     <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
     <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
     <span class="c1"># Visualize subspaces.</span>
-    <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Subspace 1&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Subspace 1&quot;</span><span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;S11&quot;</span><span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;S12&quot;</span><span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">drrs</span><span class="p">,</span> <span class="n">s12</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;heart periods&quot;</span><span class="p">)</span>
@@ -883,52 +951,73 @@ document.write(`
     <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">verts0</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="o">-</span><span class="mi">10</span> <span class="o">+</span> <span class="n">c2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">c2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)]</span>
 
-    <span class="n">poly0</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic periods&quot;</span><span class="p">)</span>
+    <span class="n">poly0</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+        <span class="n">verts0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ectopic periods&quot;</span>
+    <span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly0</span><span class="p">)</span>
     <span class="n">verts1</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">c2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="n">c1</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">c2</span><span class="p">)]</span>
     <span class="n">poly1</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly1</span><span class="p">)</span>
     <span class="n">ax4</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
-    <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Subspace 2&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Subspace 2&quot;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;S21&quot;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;S22&quot;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">drrs</span><span class="p">,</span> <span class="n">s22</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;heart periods&quot;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">verts2</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
-    <span class="n">poly2</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;short periods&quot;</span><span class="p">)</span>
+    <span class="n">poly2</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+        <span class="n">verts2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;short periods&quot;</span>
+    <span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>
     <span class="n">verts3</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="n">poly3</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">verts3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long periods&quot;</span><span class="p">)</span>
+    <span class="n">poly3</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+        <span class="n">verts3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;long periods&quot;</span>
+    <span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly3</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># NeuroKit</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_remove_small</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relative_interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_interval_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">interval_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">relative_interval_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">peaks</span>
     <span class="k">if</span> <span class="n">interval_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">interval</span> <span class="o">&gt;</span> <span class="n">interval_min</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">relative_interval_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">standardize</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">relative_interval_min</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">peaks</span>
 
 
 <span class="k">def</span> <span class="nf">_interpolate_big</span><span class="p">(</span>
-    <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relative_interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">relative_interval_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">interval_max</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">relative_interval_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">peaks</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">relative_interval_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">outliers</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">relative_interval_max</span>
         <span class="k">else</span><span class="p">:</span>
@@ -957,9 +1046,13 @@ document.write(`
             <span class="n">peaks_to_correct</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
             <span class="n">peaks_to_correct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_nan</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="c1"># Interpolate values</span>
-        <span class="n">interpolated_peaks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">)</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">limit_area</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">interpolated_peaks</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">peaks_to_correct</span><span class="p">)</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">limit_area</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="p">)</span>
         <span class="c1"># If there are missing values remaining, remove</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="n">interpolated_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">interpolated_peaks</span><span class="p">))]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">interpolated_peaks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">interpolated_peaks</span><span class="p">))]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+            <span class="n">peaks</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">peaks</span>
 </pre></div>
 

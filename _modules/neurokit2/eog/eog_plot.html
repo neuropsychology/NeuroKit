@@ -351,29 +351,27 @@ document.write(`
                   
   <h1>Source code for neurokit2.eog.eog_plot</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.gridspec</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..epochs</span> <span class="kn">import</span> <span class="n">epochs_create</span><span class="p">,</span> <span class="n">epochs_to_array</span><span class="p">,</span> <span class="n">epochs_to_df</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">standardize</span>
 
 
-<div class="viewcode-block" id="eog_plot"><a class="viewcode-back" href="../../../functions/eog.html#neurokit2.eog.eog_plot">[docs]</a><span class="k">def</span> <span class="nf">eog_plot</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="eog_plot"><a class="viewcode-back" href="../../../functions/eog.html#neurokit2.eog.eog_plot">[docs]</a><span class="k">def</span> <span class="nf">eog_plot</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Visualize EOG data**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    eog_signals : DataFrame</span>
 <span class="sd">        DataFrame obtained from :func:`.eog_process`.</span>
-<span class="sd">    peaks : dict</span>
-<span class="sd">        The samples at which the blink peaks occur. Dict returned by</span>
-<span class="sd">        :func:`.eog_process`. Defaults to ``None``. Must be specified to plot individual blinks.</span>
-<span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if</span>
-<span class="sd">        the data should be plotted over time in seconds. Otherwise the data is plotted over</span>
-<span class="sd">        samples. Defaults to ``None``. Must be specified to plot individual blinks.</span>
+<span class="sd">    info : dict</span>
+<span class="sd">        The information Dict returned by ``eog_process()``. Defaults to ``None``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -399,15 +397,25 @@ document.write(`
 <span class="sd">      eog_signal = nk.data(&#39;eog_100hz&#39;)</span>
 
 <span class="sd">      # Process signal</span>
-<span class="sd">      eog_signals, peaks = nk.eog_process(eog_signal, sampling_rate=100)</span>
+<span class="sd">      eog_signals, info = nk.eog_process(eog_signal, sampling_rate=100)</span>
 
 <span class="sd">      # Plot</span>
-<span class="sd">      @savefig p.eog_plot.png scale=100%</span>
-<span class="sd">      nk.eog_plot(eog_signals, peaks, sampling_rate=100)</span>
+<span class="sd">      @savefig p_eog_plot.png scale=100%</span>
+<span class="sd">      nk.eog_plot(eog_signals, info)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;info&#39; dict not provided. Some information might be missing.&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; Sampling rate will be set to 1000 Hz.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sampling_rate&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="p">}</span>
 
     <span class="c1"># Sanity-check input.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
@@ -417,21 +425,17 @@ document.write(`
         <span class="p">)</span>
 
     <span class="c1"># Prepare figure</span>
-    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">eog_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">eog_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">gs</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">eog_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">)</span>
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="n">eog_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">],</span> <span class="n">eog_signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Electrooculography (EOG)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
@@ -440,14 +444,23 @@ document.write(`
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw and Cleaned Signal&quot;</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Raw&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#B0BEC5&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#49A4FD&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
+        <span class="n">x_axis</span><span class="p">,</span>
+        <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#49A4FD&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Cleaned&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude (mV)&quot;</span><span class="p">)</span>
 
     <span class="c1"># Plot blinks</span>
     <span class="n">blinks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">x_axis</span><span class="p">[</span><span class="n">blinks</span><span class="p">],</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">][</span><span class="n">blinks</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#0146D7&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Blinks&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span>
+        <span class="n">x_axis</span><span class="p">[</span><span class="n">blinks</span><span class="p">],</span>
+        <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">][</span><span class="n">blinks</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#0146D7&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Blinks&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
@@ -455,45 +468,46 @@ document.write(`
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Blink Rate&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Blinks per minute&quot;</span><span class="p">)</span>
     <span class="n">blink_rate_mean</span> <span class="o">=</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Rate&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C5AFF&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Rate&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_axis</span><span class="p">,</span> <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Rate&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C5AFF&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Rate&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span>
+    <span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">blink_rate_mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Mean&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#CEAFFF&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
 
     <span class="c1"># Plot individual blinks</span>
-    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Individual Blinks&quot;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Individual Blinks&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Create epochs</span>
-        <span class="n">events</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
-            <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">],</span>
-            <span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">],</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">,</span>
-            <span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">events_array</span> <span class="o">=</span> <span class="n">epochs_to_array</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>  <span class="c1"># Convert to 2D array</span>
-        <span class="n">events_array</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span>
-            <span class="n">events_array</span>
-        <span class="p">)</span>  <span class="c1"># Rescale so that all the blinks are on the same scale</span>
+    <span class="c1"># Create epochs</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
+        <span class="n">eog_signals</span><span class="p">[</span><span class="s2">&quot;EOG_Clean&quot;</span><span class="p">],</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">],</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">],</span>
+        <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">events_array</span> <span class="o">=</span> <span class="n">epochs_to_array</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>  <span class="c1"># Convert to 2D array</span>
+    <span class="n">events_array</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span>
+        <span class="n">events_array</span>
+    <span class="p">)</span>  <span class="c1"># Rescale so that all the blinks are on the same scale</span>
 
-        <span class="n">blinks_df</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-        <span class="n">blinks_wide</span> <span class="o">=</span> <span class="n">blinks_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
-        <span class="n">blinks_wide</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">blinks_wide</span><span class="p">)</span>
+    <span class="n">blinks_df</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+    <span class="n">blinks_wide</span> <span class="o">=</span> <span class="n">blinks_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
+    <span class="n">blinks_wide</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">blinks_wide</span><span class="p">)</span>
 
-        <span class="n">cmap</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">))))</span>
-        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">blinks_wide</span><span class="p">,</span> <span class="n">cmap</span><span class="p">):</span>
-            <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">blinks_wide</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">))))</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">blinks_wide</span><span class="p">,</span> <span class="n">cmap</span><span class="p">):</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">blinks_wide</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># Plot with their median (used here as a robust average)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">blinks_wide</span><span class="o">.</span><span class="n">index</span><span class="p">),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">events_array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Median&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
+    <span class="c1"># Plot with their median (used here as a robust average)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">blinks_wide</span><span class="o">.</span><span class="n">index</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">events_array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Median&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span></div>
 </pre></div>
 
                 </article>

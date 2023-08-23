@@ -520,11 +520,15 @@ Defaults to 1000.</p></li>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
 <span class="go"># Get data</span>
-<span class="gp">In [2]: </span><span class="n">eog_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
 
-<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_process</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_process</span><span class="p">(</span><span class="n">eog</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Plot</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eog_plot</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
+<a class="reference internal image-reference" href="../_images/p_eog_process.png"><img alt="../_images/p_eog_process.png" src="../_images/p_eog_process.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Agarwal, M., &amp; Sivakumar, R. (2019, September). Blink: A Fully Automated Unsupervised
@@ -606,17 +610,13 @@ by the <cite>Label</cite> column. See <a class="reference internal" href="#neuro
 <h3><em>eog_plot()</em><a class="headerlink" href="#eog-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_plot">
-<span class="sig-name descname"><span class="pre">eog_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_plot.html#eog_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_plot.html#eog_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Visualize EOG data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eog_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <a class="reference internal" href="#neurokit2.eog.eog_process" title="neurokit2.eog.eog_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_process()</span></code></a>.</p></li>
-<li><p><strong>peaks</strong> (<em>dict</em>) – The samples at which the blink peaks occur. Dict returned by
-<a class="reference internal" href="#neurokit2.eog.eog_process" title="neurokit2.eog.eog_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_process()</span></code></a>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. Must be specified to plot individual blinks.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EOG (in Hz, i.e., samples/second). Needs to be supplied if
-the data should be plotted over time in seconds. Otherwise the data is plotted over
-samples. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. Must be specified to plot individual blinks.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – The information Dict returned by <code class="docutils literal notranslate"><span class="pre">eog_process()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -642,13 +642,13 @@ fig.savefig(“myfig.png”)</p></li>
 <span class="gp">In [2]: </span><span class="n">eog_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
 
 <span class="go"># Process signal</span>
-<span class="gp">In [3]: </span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_process</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_process</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="go"># Plot</span>
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eog_plot</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eog_plot</span><span class="p">(</span><span class="n">eog_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p.eog_plot.png"><img alt="../_images/p.eog_plot.png" src="../_images/p.eog_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_eog_plot.png"><img alt="../_images/p_eog_plot.png" src="../_images/p_eog_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </section>

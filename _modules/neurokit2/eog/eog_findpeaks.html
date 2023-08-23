@@ -465,7 +465,9 @@ document.write(`
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;blinker&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">_eog_findpeaks_blinker</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s2">&quot;nk&quot;</span><span class="p">]:</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="n">_eog_findpeaks_neurokit</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">_eog_findpeaks_neurokit</span><span class="p">(</span>
+            <span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
     <span class="c1">#    elif method in [&quot;jammes2008&quot;, &quot;jammes&quot;]:</span>
     <span class="c1">#        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -483,7 +485,7 @@ document.write(`
 <span class="k">def</span> <span class="nf">_eog_findpeaks_neurokit</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;In-house EOG blink detection.&quot;&quot;&quot;</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="mf">1.25</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
-    <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">signal_fixpeaks</span><span class="p">(</span>
         <span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">interval_min</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span>
     <span class="p">)</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">_eog_findpeaks_neurokit_filterblinks</span><span class="p">(</span>
@@ -498,7 +500,11 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare each detected event to blink template and reject it if too different.&quot;&quot;&quot;</span>
     <span class="c1"># Get epoch around each blink</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
-        <span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.6</span>
+        <span class="n">eog_cleaned</span><span class="p">,</span>
+        <span class="n">peaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">epochs_end</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">epochs_to_array</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>  <span class="c1"># Convert to 2D array</span>
 

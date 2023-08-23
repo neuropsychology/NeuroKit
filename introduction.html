@@ -429,8 +429,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electrodermal-activity-eda-gsr">Electrodermal Activity (EDA/GSR)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cardiac-activity-ecg">Cardiac activity (ECG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#respiration-rsp">Respiration (RSP)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electromyography-emg">Electromyography (EMG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#photoplethysmography-ppg-bvp">Photoplethysmography (PPG/BVP)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electromyography-emg">Electromyography (EMG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electrooculography-eog">Electrooculography (EOG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electrogastrography-egg">Electrogastrography (EGG)</a></li>
 </ul>
@@ -619,7 +619,7 @@ Full bibtex reference:
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_process</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
 <span class="c1"># Visualise the processing</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">eda_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">eda_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference external image-reference" href="https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html"><img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png" /></a>
@@ -633,7 +633,7 @@ Full bibtex reference:
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
 <span class="c1"># Visualise the processing</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference external image-reference" href="https://neuropsychology.github.io/NeuroKit/examples/ecg_heartbeats/ecg_heartbeats.html"><img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png" /></a>
@@ -647,24 +647,10 @@ Full bibtex reference:
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
 <span class="c1"># Visualise the processing</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference external image-reference" href="https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html"><img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png" /></a>
-</section>
-<section id="electromyography-emg">
-<h3>Electromyography (EMG)<a class="headerlink" href="#electromyography-emg" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 10 seconds of EMG signal (recorded at 250 samples/second)</span>
-<span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="c1"># Process it</span>
-<span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
-
-<span class="c1"># Visualise the processing</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png" />
 </section>
 <section id="photoplethysmography-ppg-bvp">
 <h3>Photoplethysmography (PPG/BVP)<a class="headerlink" href="#photoplethysmography-ppg-bvp" title="Permalink to this heading">#</a></h3>
@@ -675,10 +661,24 @@ Full bibtex reference:
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
 <span class="c1"># Visualize the processing</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png" />
+</section>
+<section id="electromyography-emg">
+<h3>Electromyography (EMG)<a class="headerlink" href="#electromyography-emg" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 10 seconds of EMG signal (recorded at 250 samples/second)</span>
+<span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Process it</span>
+<span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+
+<span class="c1"># Visualise the processing</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png" />
 </section>
 <section id="electrooculography-eog">
 <h3>Electrooculography (EOG)<a class="headerlink" href="#electrooculography-eog" title="Permalink to this heading">#</a></h3>
@@ -689,7 +689,7 @@ Full bibtex reference:
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_process</span><span class="p">(</span><span class="n">eog_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="c1"># Plot</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">eog_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">eog_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png" src="https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png" />
@@ -982,8 +982,8 @@ Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electrodermal-activity-eda-gsr">Electrodermal Activity (EDA/GSR)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cardiac-activity-ecg">Cardiac activity (ECG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#respiration-rsp">Respiration (RSP)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electromyography-emg">Electromyography (EMG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#photoplethysmography-ppg-bvp">Photoplethysmography (PPG/BVP)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electromyography-emg">Electromyography (EMG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electrooculography-eog">Electrooculography (EOG)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#electrogastrography-egg">Electrogastrography (EGG)</a></li>
 </ul>

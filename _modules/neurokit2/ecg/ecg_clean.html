@@ -358,7 +358,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">as_vector</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_resample</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span>
 
 
 <div class="viewcode-block" id="ecg_clean"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_clean">[docs]</a><span class="k">def</span> <span class="nf">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -687,7 +687,9 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter and Convolve ECG signal with QRS complex template.</span>
 <span class="sd">    Totally exploratory method by Dominique Makowski, use at your own risks.</span>
 
-<span class="sd">    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS features. However, it doens&#39;t work well and creates a lot of artifacts. If you have ideas for improvement please let me know!</span>
+<span class="sd">    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS</span>
+<span class="sd">    features. However, it doens&#39;t work well and creates a lot of artifacts. If you have ideas for</span>
+<span class="sd">    improvement please let me know!</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">4</span><span class="p">))</span>

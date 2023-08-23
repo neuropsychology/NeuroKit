@@ -525,8 +525,7 @@ specified,marked as “1” in a list of zeros.</p></li>
 
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_emg_process1.png"><img alt="../_images/p_emg_process1.png" src="../_images/p_emg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -584,9 +583,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.433767         1.0</span>
+<span class="go">1     1         3000  ...                1.650875         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.859480         1.0</span>
+<span class="go">3     3         9000  ...                1.311706         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -596,7 +595,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.245455</span>
+<span class="go">0               3.0              0.2432</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -650,16 +649,14 @@ durations for each bursts.</p></li>
 <h3><em>emg_plot()</em><a class="headerlink" href="#emg-plot" title="Permalink to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_plot">
-<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>EMG Graph</strong></p>
 <p>Visualize electromyography (EMG) data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>emg_signals</strong> (<em>DataFrame</em>) – DataFrame obtained from <code class="docutils literal notranslate"><span class="pre">emg_process()</span></code>.</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the EMG (in Hz, i.e., samples/second). Needs to be supplied if the
-data should be plotted over time in seconds. Otherwise the data is plotted over samples.
-Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – The information Dict returned by <code class="docutils literal notranslate"><span class="pre">emg_process()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>static</strong> (<em>bool</em>) – If True, a static plot will be generated with matplotlib.
 If False, an interactive plot will be generated with plotly.
 Defaults to True.</p></li>
@@ -672,13 +669,7 @@ Defaults to True.</p></li>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><em>Though the function returns nothing, the figure can be retrieved and saved as follows</em></p></li>
-<li><p><em>.. code-block:: console</em> – # To be run after emg_plot()
-fig = plt.gcf()
-fig.savefig(“myfig.png”)</p></li>
-</ul>
-</p>
+<dd class="field-odd"><p>See <a class="reference internal" href="ecg.html#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_plot()</span></code></a> for details on how to access the figure, modify the size and save it.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -688,11 +679,10 @@ fig.savefig(“myfig.png”)</p></li>
 <span class="gp">In [2]: </span><span class="n">emg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="go"># Process signal</span>
-<span class="gp">In [3]: </span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_process</span><span class="p">(</span><span class="n">emg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="go"># Plot</span>
-<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 2 Axes&gt;</span>
+<span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_emg_plot.png"><img alt="../_images/p_emg_plot.png" src="../_images/p_emg_plot.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -953,9 +943,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.540820         1.0</span>
+<span class="go">1     1         3000  ...                1.337719         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.612356         1.0</span>
+<span class="go">3     3         9000  ...                1.329715         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -998,15 +988,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.242271</span>
+<span class="go">0               3.0            0.244217</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.234089</span>
-<span class="go">2     2                 1            0.250504</span>
+<span class="go">1     1                 2            0.246502</span>
+<span class="go">2     2                 1            0.241924</span>
 </pre></div>
 </div>
 </dd></dl>

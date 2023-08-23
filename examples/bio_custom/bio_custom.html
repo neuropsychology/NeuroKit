@@ -464,12 +464,12 @@ document.write(`
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="c1"># Visualize</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a6a811bc4f18706017e8755a7c070923f4d0f85e1f6b4137934ae616725d10ae.png" src="../../_images/a6a811bc4f18706017e8755a7c070923f4d0f85e1f6b4137934ae616725d10ae.png" />
+<img alt="../../_images/fe0425b24ef1ecda3b8df000d90be41f7dc722e2800053dd3434e3b1ce071366.png" src="../../_images/fe0425b24ef1ecda3b8df000d90be41f7dc722e2800053dd3434e3b1ce071366.png" />
 </div>
 </div>
 </section>
@@ -495,7 +495,10 @@ document.write(`
                             <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
                             <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">})</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">instant_peaks</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Create info dict</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rpeaks</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span>
     
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span>
 </pre></div>
@@ -509,12 +512,12 @@ document.write(`
 <span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">my_processing</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
 
 <span class="c1"># Visualize</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a6a811bc4f18706017e8755a7c070923f4d0f85e1f6b4137934ae616725d10ae.png" src="../../_images/a6a811bc4f18706017e8755a7c070923f4d0f85e1f6b4137934ae616725d10ae.png" />
+<img alt="../../_images/2c1f5cba65a50381a8957a728af79eb575934698f837883a4f18ac193f3418a8.png" src="../../_images/2c1f5cba65a50381a8957a728af79eb575934698f837883a4f18ac193f3418a8.png" />
 </div>
 </div>
 </section>
@@ -539,7 +542,10 @@ document.write(`
                             <span class="s2">&quot;ECG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
                             <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">})</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">instant_peaks</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Create info dict</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rpeaks</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span>
     
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span>
 </pre></div>
@@ -584,7 +590,10 @@ document.write(`
                             <span class="s2">&quot;ECG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">})</span>
 
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">signals</span><span class="p">,</span> <span class="n">instant_peaks</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Create info dict</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rpeaks</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span>
     
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span>
 </pre></div>
@@ -595,12 +604,12 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">my_processing</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">ecg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/acf82234c08c77f4d03d0b9b44ce350bbcf4f8a1fe6806860ad0dc4bb14c4196.png" src="../../_images/acf82234c08c77f4d03d0b9b44ce350bbcf4f8a1fe6806860ad0dc4bb14c4196.png" />
+<img alt="../../_images/431f67eede80b0c01eecd9e69a886e9bc657ef6b0d0a7b68d1824ded93f970e5.png" src="../../_images/431f67eede80b0c01eecd9e69a886e9bc657ef6b0d0a7b68d1824ded93f970e5.png" />
 </div>
 </div>
 <p>This doesn’t look bad :) <strong>Can you do better?</strong></p>

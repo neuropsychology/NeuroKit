@@ -403,8 +403,14 @@ document.write(`
         <span class="n">_</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The data length is too small to be segmented.&quot;</span><span class="p">)</span>
+
     <span class="n">epochs_start</span><span class="p">,</span> <span class="n">epochs_end</span><span class="p">,</span> <span class="n">average_hr</span> <span class="o">=</span> <span class="n">_ecg_segment_window</span><span class="p">(</span>
-        <span class="n">rpeaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span>
+        <span class="n">rpeaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">),</span>
+        <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
         <span class="n">ppg_cleaned</span><span class="p">,</span>
@@ -421,7 +427,7 @@ document.write(`
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">_ecg_segment_plot</span><span class="p">(</span>
-            <span class="n">heartbeats</span><span class="p">,</span> <span class="n">heartrate</span><span class="o">=</span><span class="n">average_hr</span><span class="p">,</span> <span class="n">ytitle</span><span class="o">=</span><span class="s2">&quot;PPG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#9C27B0&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="n">heartbeats</span><span class="p">,</span> <span class="n">heartrate</span><span class="o">=</span><span class="n">average_hr</span><span class="p">,</span> <span class="n">ytitle</span><span class="o">=</span><span class="s2">&quot;PPG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">show</span> <span class="o">==</span> <span class="s2">&quot;return&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ax</span>

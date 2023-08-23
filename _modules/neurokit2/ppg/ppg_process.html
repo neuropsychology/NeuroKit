@@ -412,8 +412,9 @@ document.write(`
 
 <span class="sd">      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)</span>
 <span class="sd">      signals, info = nk.ppg_process(ppg, sampling_rate=1000)</span>
+
 <span class="sd">      @savefig p_ppg_process1.png scale=100%</span>
-<span class="sd">      nk.ppg_plot(signals)</span>
+<span class="sd">      nk.ppg_plot(signals, info)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
@@ -458,7 +459,7 @@ document.write(`
     <span class="k">if</span> <span class="n">report</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Generate report containing description and figures of processing</span>
         <span class="k">if</span> <span class="s2">&quot;.html&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">report</span><span class="p">):</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">create_report</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">signals</span><span class="o">=</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">methods</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>

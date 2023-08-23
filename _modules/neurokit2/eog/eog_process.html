@@ -402,9 +402,15 @@ document.write(`
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      # Get data</span>
-<span class="sd">      eog_signal = nk.data(&#39;eog_100hz&#39;)</span>
+<span class="sd">      eog = nk.data(&#39;eog_100hz&#39;)</span>
 
-<span class="sd">      signals, info = nk.eog_process(eog_signal, sampling_rate=100)</span>
+<span class="sd">      eog_signals, info = nk.eog_process(eog, sampling_rate=100)</span>
+
+<span class="sd">      # Plot</span>
+<span class="sd">      @savefig p_eog_process.png scale=100%</span>
+<span class="sd">      nk.eog_plot(eog_signals, info)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -423,17 +429,24 @@ document.write(`
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">eog_findpeaks</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">}</span>
-    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sampling_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_rate</span>  <span class="c1"># Add sampling rate in dict info</span>
 
     <span class="c1"># Mark (potential) blink events</span>
     <span class="n">signal_blinks</span> <span class="o">=</span> <span class="n">_signal_from_indices</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">))</span>
 
     <span class="c1"># Rate computation</span>
-    <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">))</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">eog_cleaned</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># Prepare output</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;EOG_Raw&quot;</span><span class="p">:</span> <span class="n">eog_signal</span><span class="p">,</span> <span class="s2">&quot;EOG_Clean&quot;</span><span class="p">:</span> <span class="n">eog_cleaned</span><span class="p">,</span> <span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">:</span> <span class="n">signal_blinks</span><span class="p">,</span> <span class="s2">&quot;EOG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">}</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;EOG_Raw&quot;</span><span class="p">:</span> <span class="n">eog_signal</span><span class="p">,</span>
+            <span class="s2">&quot;EOG_Clean&quot;</span><span class="p">:</span> <span class="n">eog_cleaned</span><span class="p">,</span>
+            <span class="s2">&quot;EOG_Blinks&quot;</span><span class="p">:</span> <span class="n">signal_blinks</span><span class="p">,</span>
+            <span class="s2">&quot;EOG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
+        <span class="p">}</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>

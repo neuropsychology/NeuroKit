@@ -407,6 +407,9 @@ document.write(`
         <span class="p">)</span>
         <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The data length is too small to be segmented.&quot;</span><span class="p">)</span>
+
     <span class="n">epochs_start</span><span class="p">,</span> <span class="n">epochs_end</span><span class="p">,</span> <span class="n">average_hr</span> <span class="o">=</span> <span class="n">_ecg_segment_window</span><span class="p">(</span>
         <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span>
     <span class="p">)</span>
@@ -418,11 +421,14 @@ document.write(`
         <span class="n">epochs_end</span><span class="o">=</span><span class="n">epochs_end</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># pad last heartbeat with nan so that segments are equal length</span>
+    <span class="c1"># Pad last heartbeats with nan so that segments are equal length</span>
     <span class="n">last_heartbeat_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">heartbeats</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
     <span class="n">after_last_index</span> <span class="o">=</span> <span class="n">heartbeats</span><span class="p">[</span><span class="n">last_heartbeat_key</span><span class="p">][</span><span class="s2">&quot;Index&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">)</span>
-    <span class="n">heartbeats</span><span class="p">[</span><span class="n">last_heartbeat_key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">after_last_index</span><span class="p">,</span> <span class="s2">&quot;Signal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">heartbeats</span><span class="p">[</span><span class="n">last_heartbeat_key</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">heartbeats</span><span class="p">[</span><span class="n">last_heartbeat_key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">after_last_index</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
+    <span class="c1"># Plot or return plot axis (feature meant to be used internally in ecg_plot)</span>
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">_ecg_segment_plot</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">,</span> <span class="n">heartrate</span><span class="o">=</span><span class="n">average_hr</span><span class="p">,</span> <span class="n">ytitle</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">show</span> <span class="o">==</span> <span class="s2">&quot;return&quot;</span><span class="p">:</span>
@@ -436,13 +442,17 @@ document.write(`
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_segment_plot</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">,</span> <span class="n">heartrate</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ytitle</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F44336&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">)</span>
+
+    <span class="c1"># Get main signal column name</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;ECG_Clean&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
     <span class="c1"># Average heartbeat</span>
-    <span class="n">mean_heartbeat</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Index&quot;</span><span class="p">,</span> <span class="s2">&quot;Label&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">df_pivoted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
+    <span class="n">mean_heartbeat</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)[[</span><span class="n">col</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">df_pivoted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
 
     <span class="c1"># Prepare plot</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Individual Heart Beats (average heart rate: </span><span class="si">{</span><span class="n">heartrate</span><span class="si">:</span><span class="s2">0.1f</span><span class="si">}</span><span class="s2"> bpm)&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
@@ -453,19 +463,49 @@ document.write(`
 
     <span class="c1"># Plot average heartbeat</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">mean_heartbeat</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">mean_heartbeat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Average&quot;</span>
+        <span class="n">mean_heartbeat</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="n">mean_heartbeat</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Average beat shape&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Plot all heartbeats</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">df_pivoted</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># alpha decreases with more heartbeats</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_pivoted</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="c1"># Alpha of individual beats decreases with more heartbeats</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">df_pivoted</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
+    <span class="c1"># Plot all heartbeats</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_pivoted</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Plot individual waves</span>
+    <span class="k">for</span> <span class="n">wave</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;#3949AB&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;#1E88E5&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;#039BE5&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;#00ACC1&quot;</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="n">wave_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ECG_</span><span class="si">{</span><span class="n">wave</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_Peaks&quot;</span>
+        <span class="k">if</span> <span class="n">wave_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">][</span><span class="n">df</span><span class="p">[</span><span class="n">wave_col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="n">df</span><span class="p">[</span><span class="n">wave_col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">wave</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">wave</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">-waves&quot;</span><span class="p">,</span>
+                <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Legend</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ax</span>
 
 
 <span class="k">def</span> <span class="nf">_ecg_segment_window</span><span class="p">(</span>
-    <span class="n">heart_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">heart_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="c1"># Extract heart rate</span>
     <span class="k">if</span> <span class="n">heart_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -482,8 +522,8 @@ document.write(`
     <span class="n">window_size</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">heart_rate</span>  <span class="c1"># Beats per second</span>
 
     <span class="c1"># Window</span>
-    <span class="n">epochs_start</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">window_size</span>
-    <span class="n">epochs_end</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">window_size</span>
+    <span class="n">epochs_start</span> <span class="o">=</span> <span class="n">ratio_pre</span> <span class="o">*</span> <span class="n">window_size</span>
+    <span class="n">epochs_end</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ratio_pre</span><span class="p">)</span> <span class="o">*</span> <span class="n">window_size</span>
 
     <span class="k">return</span> <span class="o">-</span><span class="n">epochs_start</span><span class="p">,</span> <span class="n">epochs_end</span><span class="p">,</span> <span class="n">heart_rate</span>
 </pre></div>
