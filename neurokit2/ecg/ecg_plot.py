@@ -4,10 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..ecg import ecg_peaks
-from ..signal import signal_fixpeaks
 from ..signal.signal_rate import _signal_rate_plot
-from ..stats import rescale
 from .ecg_peaks import _ecg_peaks_plot
 from .ecg_segment import ecg_segment
 

@@ -45,9 +45,9 @@ def signal_fixpeaks(
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
     interval_min : float
-        Only when ``method = "neurokit"``. The minimum interval between the peaks.
+        Only when ``method = "neurokit"``. The minimum interval between the peaks (in seconds).
     interval_max : float
-        Only when ``method = "neurokit"``. The maximum interval between the peaks.
+        Only when ``method = "neurokit"``. The maximum interval between the peaks (in seconds).
     relative_interval_min : float
         Only when ``method = "neurokit"``. The minimum interval between the peaks as relative to
         the sample (expressed in standard deviation from the mean).
