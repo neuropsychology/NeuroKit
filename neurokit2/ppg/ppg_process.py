@@ -60,8 +60,9 @@ def ppg_process(
 
       ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
       signals, info = nk.ppg_process(ppg, sampling_rate=1000)
+
       @savefig p_ppg_process1.png scale=100%
-      nk.ppg_plot(signals)
+      nk.ppg_plot(signals, info)
       @suppress
       plt.close()
 
@@ -106,7 +107,7 @@ def ppg_process(
     if report is not None:
         # Generate report containing description and figures of processing
         if ".html" in str(report):
-            fig = ppg_plot(signals, sampling_rate=sampling_rate)
+            fig = ppg_plot(signals, info)
         else:
             fig = None
         create_report(file=report, signals=signals, info=methods, fig=fig)
