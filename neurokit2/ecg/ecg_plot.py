@@ -89,13 +89,17 @@ def ecg_plot(ecg_signals, info=None):
     ax2 = fig.add_subplot(gs[:, -1])
 
     # Plot signals
+    phase = None
+    if "ECG_Phase_Ventricular" in ecg_signals.columns:
+        phase = ecg_signals["ECG_Phase_Ventricular"].values
+
     ax0 = _ecg_peaks_plot(
         ecg_signals["ECG_Clean"].values,
         info=info,
         sampling_rate=info["sampling_rate"],
         raw=ecg_signals["ECG_Raw"].values,
         quality=ecg_signals["ECG_Quality"].values,
-        phase=ecg_signals["ECG_Phase_Ventricular"].values,
+        phase=phase,
         ax=ax0,
     )
 
