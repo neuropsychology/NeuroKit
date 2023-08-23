@@ -55,7 +55,18 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
       cardiac_phase = nk.ecg_phase(ecg_cleaned=ecg, rpeaks=rpeaks,
                                    delineate_info=waves, sampling_rate=1000)
       @savefig p_ecg_phase.png scale=100%
-      nk.signal_plot([ecg, cardiac_phase], standardize=True)
+      _, ax = plt.subplots(nrows=2)
+      ax[0].plot(nk.rescale(ecg), label="ECG", color="red", alpha=0.3)
+      ax[0].plot(cardiac_phase["ECG_Phase_Atrial"], label="Atrial Phase", color="orange")
+      ax[0].plot(cardiac_phase["ECG_Phase_Completion_Atrial"],
+                 label="Atrial Phase Completion", linestyle="dotted")
+      ax[0].legend(loc="upper right")
+
+      ax[1].plot(nk.rescale(ecg), label="ECG", color="red", alpha=0.3)
+      ax[1].plot(cardiac_phase["ECG_Phase_Ventricular"], label="Ventricular Phase", color="green")
+      ax[1].plot(cardiac_phase["ECG_Phase_Completion_Ventricular"],
+                 label="Ventricular Phase Completion", linestyle="dotted")
+      ax[1].legend(loc="upper right")
       @suppress
       plt.close()
 
@@ -79,9 +90,10 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     if isinstance(
         delineate_info, dict
     ):  # FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated
-
         toffsets = np.full(len(ecg_cleaned), False, dtype=bool)
-        toffsets_idcs = [int(x) for x in delineate_info["ECG_T_Offsets"] if ~np.isnan(x)]
+        toffsets_idcs = [
+            int(x) for x in delineate_info["ECG_T_Offsets"] if ~np.isnan(x)
+        ]
         toffsets[toffsets_idcs] = True
 
         ppeaks = np.full(len(ecg_cleaned), False, dtype=bool)
@@ -93,8 +105,12 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     atrial[rpeaks] = 0.0
     atrial[ppeaks] = 1.0
 
-    last_element = np.where(~np.isnan(atrial))[0][-1]  # Avoid filling beyond the last peak/trough
-    atrial[0:last_element] = pd.Series(atrial).fillna(method="ffill").values[0:last_element]
+    last_element = np.where(~np.isnan(atrial))[0][
+        -1
+    ]  # Avoid filling beyond the last peak/trough
+    atrial[0:last_element] = (
+        pd.Series(atrial).fillna(method="ffill").values[0:last_element]
+    )
 
     # Atrial Phase Completion
     atrial_completion = signal_phase(atrial, method="percent")

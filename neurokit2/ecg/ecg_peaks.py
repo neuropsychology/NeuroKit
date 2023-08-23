@@ -283,7 +283,13 @@ def ecg_peaks(
 # Internals
 # =============================================================================
 def _ecg_peaks_plot(
-    ecg_cleaned, info=None, sampling_rate=1000, raw=None, quality=None, ax=None
+    ecg_cleaned,
+    info=None,
+    sampling_rate=1000,
+    raw=None,
+    quality=None,
+    phase=None,
+    ax=None,
 ):
     x_axis = np.linspace(0, len(ecg_cleaned) / sampling_rate, len(ecg_cleaned))
 
@@ -349,14 +355,40 @@ def _ecg_peaks_plot(
     # _plot_artifact("ECG_fixpeaks_longshort", "#1E88E5", "Long/Short", ax)
 
     # Clean Signal ------------------------------------------------------------
-    ax.plot(
-        x_axis,
-        ecg_cleaned,
-        color="#F44336",
-        label="Cleaned signal",
-        zorder=3,
-        linewidth=1,
-    )
+    if phase is not None:
+        mask = (phase == 0) | (np.isnan(phase))
+        diastole = ecg_cleaned.copy()
+        diastole[~mask] = np.nan
+
+        # Create overlap to avoid interuptions in signal
+        mask[np.where(np.diff(mask))[0] + 1] = True
+        systole = ecg_cleaned.copy()
+        systole[mask] = np.nan
+
+        ax.plot(
+            x_axis,
+            diastole,
+            color="#B71C1C",
+            label="Cleaned signal",
+            zorder=3,
+            linewidth=1,
+        )
+        ax.plot(
+            x_axis,
+            systole,
+            color="#F44336",
+            zorder=3,
+            linewidth=1,
+        )
+    else:
+        ax.plot(
+            x_axis,
+            ecg_cleaned,
+            color="#F44336",
+            label="Cleaned signal",
+            zorder=3,
+            linewidth=1,
+        )
 
     # Optimize legend
     if raw is not None:

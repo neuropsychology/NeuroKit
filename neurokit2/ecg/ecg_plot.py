@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.gridspec
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal.signal_rate import _signal_rate_plot
 from .ecg_peaks import _ecg_peaks_plot
 from .ecg_segment import ecg_segment
 
 
-def ecg_plot(ecg_signals, info=None, sampling_rate=1000, show_type="default"):
+def ecg_plot(ecg_signals, info=None, sampling_rate=None):
     """**Visualize ECG data**
 
     Plot ECG signals and R-peaks.
@@ -54,7 +57,7 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=1000, show_type="default"):
 
       # Plot
       @savefig p_ecg_plot.png scale=100%
-      nk.ecg_plot(signals, info, sampling_rate=1000, show_type='default')
+      nk.ecg_plot(signals, info, sampling_rate=1000)
       @suppress
       plt.close()
 
@@ -68,7 +71,16 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=1000, show_type="default"):
 
     # Extract R-peaks.
     if info is None:
-        info = {"ECG_R_Peaks": np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]}
+        warn(
+            "'info' dict not provided. Some information might be missing."
+            + " Sampling rate will be set to 1000 Hz.",
+            category=NeuroKitWarning,
+        )
+
+        info = {
+            "ECG_R_Peaks": np.where(ecg_signals["ECG_R_Peaks"] == 1)[0],
+            "sampling_rate": 1000,
+        }
 
     # Prepare figure and set axes.
     gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[2 / 3, 1 / 3])
@@ -84,9 +96,10 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=1000, show_type="default"):
     ax0 = _ecg_peaks_plot(
         ecg_signals["ECG_Clean"].values,
         info=info,
-        sampling_rate=sampling_rate,
+        sampling_rate=info["sampling_rate"],
         raw=ecg_signals["ECG_Raw"].values,
         quality=ecg_signals["ECG_Quality"].values,
+        phase=ecg_signals["ECG_Phase_Ventricular"].values,
         ax=ax0,
     )
 
@@ -94,7 +107,7 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=1000, show_type="default"):
     ax1 = _signal_rate_plot(
         ecg_signals["ECG_Rate"].values,
         info["ECG_R_Peaks"],
-        sampling_rate=sampling_rate,
+        sampling_rate=info["sampling_rate"],
         title="Heart Rate",
         ytitle="Beats per minute (bpm)",
         color="#FF5722",
@@ -107,7 +120,7 @@ def ecg_plot(ecg_signals, info=None, sampling_rate=1000, show_type="default"):
     ax2 = ecg_segment(
         ecg_signals["ECG_Clean"],
         info["ECG_R_Peaks"],
-        sampling_rate,
+        info["sampling_rate"],
         show="return",
         ax=ax2,
     )
