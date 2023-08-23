@@ -2,11 +2,11 @@
 
 import itertools
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
 import neurokit2 as nk
-
 
 durations = (20, 200, 300)
 sampling_rates = (25, 50, 500)
@@ -45,8 +45,12 @@ def test_ppg_simulate(duration, sampling_rate, heart_rate, freq_modulation):
         assert np.allclose(signals["PPG_Rate"].mean(), heart_rate, atol=1)
         # Ensure that the heart rate fluctuates in the requested range.
         groundtruth_range = freq_modulation * heart_rate
-        observed_range = np.percentile(signals["PPG_Rate"], 90) - np.percentile(signals["PPG_Rate"], 10)
-        assert np.allclose(groundtruth_range, observed_range, atol=groundtruth_range * 0.15)
+        observed_range = np.percentile(signals["PPG_Rate"], 90) - np.percentile(
+            signals["PPG_Rate"], 10
+        )
+        assert np.allclose(
+            groundtruth_range, observed_range, atol=groundtruth_range * 0.15
+        )
 
     # TODO: test influence of different noise configurations
 
@@ -245,3 +249,22 @@ def test_ppg_intervalrelated():
 
     ppg_intervals = nk.ppg_intervalrelated(df)
     assert "PPG_Rate_Mean" in ppg_intervals.columns
+
+
+def test_ppg_plot():
+    ppg = nk.ppg_simulate(duration=60, sampling_rate=250)
+
+    ppg_summary, info = nk.ppg_process(ppg, sampling_rate=250)
+
+    # Plot data over seconds.
+    nk.ppg_plot(ppg_summary, info)
+    fig = plt.gcf()
+    assert len(fig.axes) == 3
+    assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
+    plt.close(fig)
+
+    # Make sure it works with cropped data
+    nk.ppg_plot(ppg_summary[0:1000], info)
+    fig = plt.gcf()
+    assert fig.get_axes()[2].get_xlabel() == "Time (seconds)"

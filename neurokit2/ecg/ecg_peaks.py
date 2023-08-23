@@ -346,8 +346,8 @@ def _ecg_peaks_plot(
         x_axis,
         ecg_cleaned,
         info,
-        info["ECG_R_Peaks"],
-        ax,
+        peaks=info["ECG_R_Peaks"],
+        ax=ax,
     )
 
     # Clean Signal ------------------------------------------------------------
@@ -414,6 +414,11 @@ def _ecg_peaks_plot_artefacts(
     raw = info[raw[0]]
     if len(raw) == 0:
         return "No bad peaks"
+    if any([i < len(signal) for i in raw]):
+        return (
+            "Peak indices longer than signal. Signals might have been cropped. "
+            + "Better skip plotting."
+        )
 
     extra = [i for i in raw if i not in peaks]
     if len(extra) > 0:
