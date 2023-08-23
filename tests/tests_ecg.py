@@ -94,11 +94,16 @@ def test_ecg_plot():
 
     # Plot data over seconds.
     nk.ecg_plot(ecg_summary, info)
-    fig = plt.gcf()  # Extract the latest figure.
+    fig = plt.gcf()
     assert len(fig.axes) == 3
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
+
+    # Make sure it works with cropped data
+    nk.ecg_plot(ecg_summary[0:5000], info)
+    fig = plt.gcf()
+    assert fig.get_axes()[2].get_xlabel() == "Time (seconds)"
 
 
 def test_ecg_findpeaks():

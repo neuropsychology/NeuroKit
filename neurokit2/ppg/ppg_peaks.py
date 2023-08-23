@@ -1,11 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ..signal import signal_formatpeaks
+from ..ecg.ecg_peaks import _ecg_peaks_plot_artefacts
+from ..signal import signal_fixpeaks, signal_formatpeaks
 from .ppg_findpeaks import ppg_findpeaks
 
 
-def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **kwargs):
+def ppg_peaks(
+    ppg_cleaned,
+    sampling_rate=1000,
+    method="elgendi",
+    correct_artifacts=False,
+    show=False,
+    **kwargs
+):
     """**Find systolic peaks in a photoplethysmogram (PPG) signal**
 
     Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG
@@ -26,6 +34,9 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **k
     method : str
         The processing pipeline to apply. Can be one of ``"elgendi"``, ``"bishop"``. The default is
         ``"elgendi"``.
+    correct_artifacts : bool
+        Whether or not to identify and fix artifacts, using the method by
+        Lipponen & Tarvainen (2019).
     show : bool
         If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.
     **kwargs
@@ -44,28 +55,34 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **k
 
     See Also
     --------
-    ppg_clean, ppg_segment, .signal_fixpeaks
+    ppg_clean, ppg_fixpeaks, .signal_fixpeaks
 
     Examples
     --------
     .. ipython:: python
 
       import neurokit2 as nk
-      import matplotlib.pyplot as plt
+      import numpy as np
 
       ppg = nk.ppg_simulate(heart_rate=75, duration=20, sampling_rate=50)
-      ppg_clean = nk.ppg_clean(ppg, sampling_rate=50)
+      ppg[400:600] = ppg[400:600] + np.random.normal(0, 1.25, 200)
 
       # Default method (Elgendi et al., 2013)
       @savefig p_ppg_peaks1.png scale=100%
-      peaks, info = nk.ppg_peaks(ppg_clean, sampling_rate=100, method="elgendi", show=True)
+      peaks, info = nk.ppg_peaks(ppg, sampling_rate=100, method="elgendi", show=True)
       @suppress
       plt.close()
-      peaks_idx = info["PPG_Peaks"]
+      info["PPG_Peaks"]
 
       # Method by Bishop et al., (2018)
       @savefig p_ppg_peaks2.png scale=100%
-      peaks = nk.ppg_peaks(ppg_clean, sampling_rate=100, method="bishop", show=True)
+      peaks, info = nk.ppg_peaks(ppg, sampling_rate=100, method="bishop", show=True)
+      @suppress
+      plt.close()
+
+      # Correct artifacts
+      @savefig p_ppg_peaks3.png scale=100%
+      peaks, info = nk.ppg_peaks(ppg, sampling_rate=100, correct_artifacts=True, show=True)
       @suppress
       plt.close()
 
@@ -79,15 +96,37 @@ def ppg_peaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False, **k
       (pp. 189-195). Springer International Publishing.
 
     """
-    peaks = ppg_findpeaks(
-        ppg_cleaned, sampling_rate=sampling_rate, method=method, show=False, **kwargs
+    # Store info
+    info = {"method_peaks": method.lower(), "method_fixpeaks": "None"}
+
+    info.update(
+        ppg_findpeaks(
+            ppg_cleaned,
+            sampling_rate=sampling_rate,
+            method=method,
+            show=False,
+            **kwargs
+        )
     )
 
-    instant_peaks = signal_formatpeaks(
-        peaks, desired_length=len(ppg_cleaned), peak_indices=peaks
+    # Peak correction
+    if correct_artifacts:
+        info["PPG_Peaks_Uncorrected"] = info["PPG_Peaks"].copy()
+
+        fixpeaks, info["PPG_Peaks"] = signal_fixpeaks(
+            info["PPG_Peaks"], sampling_rate=sampling_rate, method="Kubios"
+        )
+
+        # Add prefix and merge
+        fixpeaks = {"PPG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
+        info.update(fixpeaks)
+
+    # Format output
+    signals = signal_formatpeaks(
+        dict(PPG_Peaks=info["PPG_Peaks"]),
+        desired_length=len(ppg_cleaned),
+        peak_indices=info["PPG_Peaks"],
     )
-    signals = instant_peaks
-    info = peaks
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     if show is True:
@@ -129,6 +168,15 @@ def _ppg_peaks_plot(
         color="#FFC107",
         label="Systolic peaks",
         zorder=2,
+    )
+
+    # Artifacts ---------------------------------------------------------------
+    _ecg_peaks_plot_artefacts(
+        x_axis,
+        ppg_cleaned,
+        info,
+        info["PPG_Peaks"],
+        ax,
     )
 
     # Clean Signal ------------------------------------------------------------

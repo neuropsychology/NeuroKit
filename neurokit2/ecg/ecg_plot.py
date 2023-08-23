@@ -72,11 +72,11 @@ def ecg_plot(ecg_signals, info=None):
             + " Sampling rate will be set to 1000 Hz.",
             category=NeuroKitWarning,
         )
+        info = {"sampling_rate": 1000}
 
-        info = {
-            "ECG_R_Peaks": np.where(ecg_signals["ECG_R_Peaks"] == 1)[0],
-            "sampling_rate": 1000,
-        }
+    # Extract R-peaks (take those from df as it might have been cropped)
+    if "ECG_R_Peaks" in ecg_signals.columns:
+        info["ECG_R_Peaks"] = np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]
 
     # Prepare figure and set axes.
     gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[2 / 3, 1 / 3])

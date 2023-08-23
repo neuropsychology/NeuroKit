@@ -51,6 +51,9 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
         _, peaks = ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)
         peaks = peaks["PPG_Peaks"]
 
+    if len(ppg_cleaned) < sampling_rate * 4:
+        raise ValueError("The data length is too small to be segmented.")
+
     epochs_start, epochs_end, average_hr = _ecg_segment_window(
         rpeaks=peaks,
         sampling_rate=sampling_rate,

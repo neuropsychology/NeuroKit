@@ -62,7 +62,7 @@ def ecg_peaks(
     method : string
         The algorithm to be used for R-peak detection.
     correct_artifacts : bool
-        Whether or not to first identify and fix artifacts, using the method by
+        Whether or not to identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).
     show : bool
         If ``True``, will show a plot of the signal with peaks. Defaults to ``False``.
@@ -91,8 +91,10 @@ def ecg_peaks(
     .. ipython:: python
 
       import neurokit2 as nk
+      import numpy as np
 
       ecg = nk.ecg_simulate(duration=10, sampling_rate=250)
+      ecg[600:950] = ecg[600:950] + np.random.normal(0, 0.6, 350)
 
       @savefig p_ecg_peaks1.png scale=100%
       signals, info = nk.ecg_peaks(ecg, sampling_rate=250, correct_artifacts=True, show=True)
@@ -339,21 +341,14 @@ def _ecg_peaks_plot(
         zorder=2,
     )
 
-    # TODO
-    # # Artifacts ---------------------------------------------------------------
-    # def _plot_artifact(artifact, color, label, ax):
-    #     if artifact in info.keys() and len(info[artifact]) > 0:
-    #         ax.scatter(
-    #             x_axis[info[artifact]],
-    #             ecg_cleaned[info[artifact]],
-    #             color=color,
-    #             label=label,
-    #             marker="x",
-    #             zorder=2,
-    #         )
-
-    # _plot_artifact("ECG_fixpeaks_missed", "#1E88E5", "Missed Peaks", ax)
-    # _plot_artifact("ECG_fixpeaks_longshort", "#1E88E5", "Long/Short", ax)
+    # Artifacts ---------------------------------------------------------------
+    _ecg_peaks_plot_artefacts(
+        x_axis,
+        ecg_cleaned,
+        info,
+        peaks=info["ECG_R_Peaks"],
+        ax=ax,
+    )
 
     # Clean Signal ------------------------------------------------------------
     if phase is not None:
@@ -403,4 +398,47 @@ def _ecg_peaks_plot(
     else:
         ax.legend(loc="upper right")
 
+    return ax
+
+
+def _ecg_peaks_plot_artefacts(
+    x_axis,
+    signal,
+    info,
+    peaks,
+    ax,
+):
+    raw = [s for s in info.keys() if str(s).endswith("Peaks_Uncorrected")]
+    if len(raw) == 0:
+        return "No correction"
+    raw = info[raw[0]]
+    if len(raw) == 0:
+        return "No bad peaks"
+    if any([i < len(signal) for i in raw]):
+        return (
+            "Peak indices longer than signal. Signals might have been cropped. "
+            + "Better skip plotting."
+        )
+
+    extra = [i for i in raw if i not in peaks]
+    if len(extra) > 0:
+        ax.scatter(
+            x_axis[extra],
+            signal[extra],
+            color="#4CAF50",
+            label="Peaks removed after correction",
+            marker="x",
+            zorder=2,
+        )
+
+    added = [i for i in peaks if i not in raw]
+    if len(added) > 0:
+        ax.scatter(
+            x_axis[added],
+            signal[added],
+            color="#FF9800",
+            label="Peaks added after correction",
+            marker="x",
+            zorder=2,
+        )
     return ax

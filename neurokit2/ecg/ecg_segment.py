@@ -55,6 +55,9 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
         )
         rpeaks = rpeaks["ECG_R_Peaks"]
 
+    if len(ecg_cleaned) < sampling_rate * 4:
+        raise ValueError("The data length is too small to be segmented.")
+
     epochs_start, epochs_end, average_hr = _ecg_segment_window(
         rpeaks=rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned)
     )

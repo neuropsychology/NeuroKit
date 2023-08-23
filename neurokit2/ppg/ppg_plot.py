@@ -69,11 +69,11 @@ def ppg_plot(ppg_signals, info=None, static=True):
             + " Sampling rate will be set to 1000 Hz.",
             category=NeuroKitWarning,
         )
+        info = {"sampling_rate": 1000}
 
-        info = {
-            "PPG_Peaks": np.where(ppg_signals["PPG_Peaks"] == 1)[0],
-            "sampling_rate": 1000,
-        }
+    # Extract Peaks (take those from df as it might have been cropped)
+    if "PPG_Peaks" in ppg_signals.columns:
+        info["PPG_Peaks"] = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
 
     if static:
         # Prepare figure

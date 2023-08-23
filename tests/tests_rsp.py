@@ -241,17 +241,21 @@ def test_rsp_process():
 
 def test_rsp_plot():
     rsp = nk.rsp_simulate(
-        duration=120, sampling_rate=1000, respiratory_rate=15, random_state=3
+        duration=120, sampling_rate=100, respiratory_rate=15, random_state=3
     )
-    rsp_summary, info = nk.rsp_process(rsp, sampling_rate=1000)
+    rsp_summary, info = nk.rsp_process(rsp, sampling_rate=100)
+
     nk.rsp_plot(rsp_summary, info)
-    # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 5
     titles = ["Raw and Cleaned Signal", "Breathing Rate", "Breathing Amplitude"]
     for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     plt.close(fig)
+
+    nk.rsp_plot(rsp_summary[0:800], info)
+    fig = plt.gcf()
+    assert fig.get_axes()[-1].get_title() == "Cycle Symmetry"
 
 
 def test_rsp_eventrelated():
