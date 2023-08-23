@@ -335,7 +335,9 @@ def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
     """Filter and Convolve ECG signal with QRS complex template.
     Totally exploratory method by Dominique Makowski, use at your own risks.
 
-    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS features. However, it doens't work well and creates a lot of artifacts. If you have ideas for improvement please let me know!
+    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS
+    features. However, it doens't work well and creates a lot of artifacts. If you have ideas for
+    improvement please let me know!
     """
 
     window_size = int(np.round(sampling_rate / 4))
