@@ -120,10 +120,10 @@ def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax
     )
 
     # Alpha of individual beats decreases with more heartbeats
-    alpha = 1 / np.log1p(np.log2(1 + df_pivoted.shape[1]))
+    alpha = 1 / np.log2(np.log2(1 + df_pivoted.shape[1]))
 
     # Plot all heartbeats
-    ax.plot(df_pivoted, color="grey", linewidth=alpha, zorder=2)
+    ax.plot(df_pivoted, color="grey", linewidth=alpha, alpha=alpha, zorder=2)
 
     # Plot individual waves
     for wave in [
