@@ -201,14 +201,14 @@ def complexity_coarsegraining(
         raise ValueError("Unknown `method`: {}".format(method))
 
     if show is True:
-        _complexity_show(signal[0:n], coarse, method=method)
+        _complexity_coarsegraining_show(signal[0:n], coarse, method=method)
     return coarse
 
 
 # =============================================================================
 # Utils
 # =============================================================================
-def _complexity_show(signal, coarse, method="nonoverlapping"):
+def _complexity_coarsegraining_show(signal, coarse, method="nonoverlapping"):
     plt.plot(signal, linewidth=1.5)
     if method == "nonoverlapping":
         plt.plot(

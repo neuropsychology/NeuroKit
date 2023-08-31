@@ -81,13 +81,13 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     }
 
     # Compute phi
-    phi = _phi(
+    info["phi"], _ = _phi(
         signal,
         delay=delay,
         dimension=dimension,
         tolerance=info["Tolerance"],
         approximate=False,
         **kwargs
-    )[0]
+    )
 
-    return _phi_divide(phi), info
+    return _phi_divide(info["phi"]), info

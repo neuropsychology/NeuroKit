@@ -391,13 +391,14 @@ def _entropy_multiscale(
     # Get coarse-grained signal
     coarse = complexity_coarsegraining(signal, scale=scale, method=coarsegraining)
 
-    # Get delay
-    delay = 1  # If non-overlapping
-    if coarsegraining in ["rolling", "interpolate"]:
-        delay = scale
-
     # For 1D coarse-graining
     if coarse.ndim == 1:
+        # Get delay
+        delay = 1  # If non-overlapping
+        if coarsegraining in ["rolling", "interpolate"]:
+            delay = scale
+            
+        # Compute entropy
         return algorithm(
             coarse,
             delay=delay,
@@ -414,7 +415,7 @@ def _entropy_multiscale(
                 [
                     algorithm(
                         coarse[i],
-                        delay=delay,
+                        delay=1,
                         dimension=dimension,
                         tolerance=tolerance,
                         **kwargs,
@@ -428,7 +429,7 @@ def _entropy_multiscale(
                 [
                     _phi(
                         coarse[i],
-                        delay=delay,
+                        delay=1,
                         dimension=dimension,
                         tolerance=tolerance,
                         approximate=False,
