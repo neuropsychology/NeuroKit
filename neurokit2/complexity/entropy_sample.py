@@ -81,7 +81,7 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     }
 
     # Compute phi
-    info["phi"], _ = _phi(
+    info["phi"], details = _phi(
         signal,
         delay=delay,
         dimension=dimension,
@@ -89,5 +89,6 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
         approximate=False,
         **kwargs
     )
+    info.update(details)  # This should be removed in the future to avoid huge returns
 
     return _phi_divide(info["phi"]), info
