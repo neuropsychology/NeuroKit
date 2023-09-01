@@ -101,9 +101,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SampEn**: See :func:`.entropy_sample`.
     * **ShanEn**: See :func:`.entropy_shannon`.
     * **FuzzyEn**: See :func:`.entropy_fuzzy`.
-    * **MSE**: See :func:`.entropy_multiscale`.
-    * **CMSE**: See :func:`.entropy_multiscale`.
-    * **RCMSE**: See :func:`.entropy_multiscale`.
+    * **MSEn**: See :func:`.entropy_multiscale`.
+    * **CMSEn**: See :func:`.entropy_multiscale`.
+    * **RCMSEn**: See :func:`.entropy_multiscale`.
     * **CD**: See :func:`.fractal_correlation`.
     * **HFD**: See :func:`.fractal_higuchi` (with ``kmax`` set to ``"default"``).
     * **KFD**: See :func:`.fractal_katz`.
