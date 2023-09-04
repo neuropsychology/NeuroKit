@@ -183,13 +183,7 @@ def complexity_coarsegraining(
             )
 
     elif method == "rolling":
-        # Relying on scipy is a fast alternative to:
-        # pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
-        # https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
-        # coarse = scipy.ndimage.filters.uniform_filter1d(
-        #     signal, size=scale, mode="nearest"
-        # )
-        # coarse = coarse[scale - 1 : :]
+        # See https://github.com/neuropsychology/NeuroKit/pull/892
         coarse = complexity_embedding(signal, dimension=scale, delay=1).mean(axis=1)
 
     elif method == "timeshift":
