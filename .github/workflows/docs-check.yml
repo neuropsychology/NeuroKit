@@ -6,7 +6,7 @@ jobs:
     docs:
         runs-on: windows-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # To be able to push refs to destination repo
             - name: Set up Python 🐍
