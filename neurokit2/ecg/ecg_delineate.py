@@ -1012,7 +1012,7 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
 
 
 def _ecg_delineator_peak_Q(rpeak, heartbeat, R):
-    segment = heartbeat.iloc[:0]  # Select left hand side
+    segment = heartbeat[:0]  # Select left hand side
 
     Q = signal_findpeaks(
         -1 * segment["Signal"],
