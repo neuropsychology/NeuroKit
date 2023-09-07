@@ -10,7 +10,7 @@ def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, 
 
     Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
     state, or equivalently, of its average information content. Shannon entropy (SE) is one of the
-    first and most basic measure of entropy and a foundational concept of information theory,
+    first and most basic measures of entropy and a foundational concept of information theory,
     introduced by Shannon (1948) to quantify the amount of information in a variable.
 
     .. math::
