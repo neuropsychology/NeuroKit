@@ -124,7 +124,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
         -1
     ]  # Avoid filling beyond the last peak/trough
     ventricular[0:last_element] = (
-        pd.Series(ventricular).ffill.values[0:last_element]
+        pd.Series(ventricular).ffill().values[0:last_element]
     )
 
     # Ventricular Phase Completion
