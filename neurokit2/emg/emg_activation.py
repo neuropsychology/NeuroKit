@@ -4,8 +4,12 @@ import pandas as pd
 
 from ..events import events_find
 from ..misc import as_vector
-from ..signal import (signal_binarize, signal_changepoints, signal_formatpeaks,
-                      signal_smooth)
+from ..signal import (
+    signal_binarize,
+    signal_changepoints,
+    signal_formatpeaks,
+    signal_smooth,
+)
 
 
 def emg_activation(
@@ -170,7 +174,9 @@ def emg_activation(
                 "NeuroKit error: emg_activation(): 'pelt' method needs 'emg_cleaned' (cleaned or raw EMG) signal to "
                 "be passed."
             )
-        activity = _emg_activation_pelt(emg_cleaned, duration_min=duration_min, **kwargs)
+        activity = _emg_activation_pelt(
+            emg_cleaned, duration_min=duration_min, **kwargs
+        )
 
     elif method == "biosppy":
         if emg_cleaned is None:
@@ -247,7 +253,6 @@ def emg_activation(
 
 
 def _emg_activation_threshold(emg_amplitude, threshold="default"):
-
     if threshold == "default":
         threshold = (1 / 10) * np.std(emg_amplitude)
 
@@ -262,7 +267,6 @@ def _emg_activation_threshold(emg_amplitude, threshold="default"):
 
 
 def _emg_activation_mixture(emg_amplitude, threshold="default"):
-
     if threshold == "default":
         threshold = 0.33
 
@@ -271,7 +275,6 @@ def _emg_activation_mixture(emg_amplitude, threshold="default"):
 
 
 def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **kwargs):
-
     if threshold == "default":
         threshold = None
 
@@ -294,7 +297,7 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
     binary[changepoints[0::2]] = 0
     binary[changepoints[1::2]] = 1
 
-    activity = pd.Series(binary).fillna(method="ffill").values
+    activity = pd.Series(binary).ffill().values
 
     # Label as 1 to parts that have the larger SD (likely to be activations)
     if emg_cleaned[activity == 1].std() > emg_cleaned[activity == 0].std():
@@ -306,7 +309,9 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
     return activity
 
 
-def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshold="default"):
+def _emg_activation_biosppy(
+    emg_cleaned, sampling_rate=1000, size=0.05, threshold="default"
+):
     """Adapted from `find_onsets` in Biosppy."""
 
     # check inputs
@@ -364,7 +369,9 @@ def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="de
     tf_mvgav = np.convolve(fwlo, np.ones((size,)) / size, mode="valid")
 
     # moving average for calculating the adaptive threshold
-    threshold_mvgav = np.convolve(fwlo, np.ones((threshold_size,)) / threshold_size, mode="valid")
+    threshold_mvgav = np.convolve(
+        fwlo, np.ones((threshold_size,)) / threshold_size, mode="valid"
+    )
 
     onset_time_list = []
     offset_time_list = []
@@ -401,7 +408,6 @@ def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="de
 # Internals
 # =============================================================================
 def _emg_activation_activations(activity, duration_min=0.05):
-
     activations = events_find(
         activity, threshold=0.5, threshold_keep="above", duration_min=duration_min
     )
