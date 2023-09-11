@@ -414,7 +414,7 @@ def _ecg_quality_basSQI(
         **kwargs
     )
 
-    num_power = psd.iloc[0][0]
-    dem_power = psd.iloc[0][1]
+    num_power = psd.iloc[0, 0]
+    dem_power = psd.iloc[0, 1]
 
     return (1 - num_power) / dem_power
