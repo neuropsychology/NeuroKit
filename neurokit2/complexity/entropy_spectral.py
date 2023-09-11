@@ -89,7 +89,9 @@ def entropy_spectral(signal, bins=None, show=False, **kwargs):
 
     # Cut into bins
     if isinstance(bins, int):
-        psd = psd.groupby(pd.cut(psd["Frequency"], bins=bins)).agg("sum")
+        psd = psd.groupby(pd.cut(psd["Frequency"], bins=bins), observed=False).agg(
+            "sum"
+        )
         idx = psd.index.values.astype(str)
     else:
         idx = psd["Frequency"].values
