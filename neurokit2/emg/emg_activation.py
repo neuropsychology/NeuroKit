@@ -398,7 +398,7 @@ def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="de
     binary[onsets[0::2]] = 0
     binary[onsets[1::2]] = 1
 
-    activity = pd.Series(binary).fillna(method="bfill").values
+    activity = pd.Series(binary).bfill().values
     activity = pd.Series(activity).fillna(0)
 
     return activity
