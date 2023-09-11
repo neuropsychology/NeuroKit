@@ -46,7 +46,7 @@ Miscellaneous
 ^^^^^^^^^^^^^^^^
 *ppg_findpeaks()*
 """"""""""""""""""""""""
-.. autofunction:: neurokit2.ecg.ppg_findpeaks
+.. autofunction:: neurokit2.ppg.ppg_findpeaks
 
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
