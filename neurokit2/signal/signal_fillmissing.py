@@ -31,8 +31,8 @@ def signal_fillmissing(signal, method="both"):
 
     """
     if method in ["forward", "forwards", "ffill", "both"]:
-        signal = pd.Series(signal).fillna(method="ffill").values
+        signal = pd.Series(signal).ffill().values
 
     if method in ["backward", "backwards", "back", "bfill", "both"]:
-        signal = pd.Series(signal).fillna(method="bfill").values
+        signal = pd.Series(signal).bfill().values
     return signal
