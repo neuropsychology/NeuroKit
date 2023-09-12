@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import numpy as np
+
 from .signal_period import signal_period
 
 
 def signal_rate(
-    peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"
+    peaks,
+    sampling_rate=1000,
+    desired_length=None,
+    interpolation_method="monotone_cubic",
+    show=False,
 ):
     """**Compute Signal Rate**
 
@@ -13,7 +20,7 @@ def signal_rate(
 
     .. note:: This function is implemented under :func:`.signal_rate`, but it also re-exported under
        different names, such as :func:`.ecg_rate`, or :func:`.rsp_rate`. The
-       aliases provided for consistency.
+       aliases are provided for consistency.
 
     Parameters
     ----------
@@ -38,6 +45,8 @@ def signal_rate(
         interpolation between data points (i.e., it prevents physiologically implausible
         "overshoots" or "undershoots" in the y-direction). In contrast, the widely used cubic
         spline interpolation does not ensure monotonicity.
+     show : bool
+        If ``True``, shows a plot. Defaults to ``False``.
 
     Returns
     -------
@@ -82,4 +91,64 @@ def signal_rate(
     period = signal_period(peaks, sampling_rate, desired_length, interpolation_method)
     rate = 60 / period
 
+    if show is True:
+        _signal_rate_plot(rate, peaks, sampling_rate, interpolation_method)
+
     return rate
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _signal_rate_plot(
+    rate,
+    peaks,
+    sampling_rate=None,
+    interpolation_method=None,
+    title="Rate",
+    ytitle="Cycle per minute",
+    color="black",
+    color_mean="orange",
+    color_points="red",
+    ax=None,
+):
+    # Prepare plot
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    if sampling_rate is None:
+        x_axis = np.arange(0, len(rate))
+        ax.set_xlabel("Time (samples)")
+    else:
+        x_axis = np.linspace(0, len(rate) / sampling_rate, len(rate))
+        ax.set_xlabel("Time (seconds)")
+
+    if interpolation_method is not None:
+        title += " (interpolation method: " + str(interpolation_method) + ")"
+    ax.set_title(title)
+    ax.set_ylabel(ytitle)
+
+    # Plot continuous rate
+    ax.plot(
+        x_axis,
+        rate,
+        color=color,
+        label="Rate",
+        linewidth=1.5,
+    )
+
+    # Plot points
+    if peaks is not None:
+        ax.scatter(
+            x_axis[peaks],
+            rate[peaks],
+            color=color_points,
+        )
+
+    # Show average rate
+    rate_mean = rate.mean()
+    ax.axhline(y=rate_mean, label="Mean", linestyle="--", color=color_mean)
+
+    ax.legend(loc="upper right")
+
+    return ax

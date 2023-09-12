@@ -86,6 +86,10 @@ def ppg_intervalrelated(data, sampling_rate=1000):
             )
 
         ppg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
+    else:
+        raise ValueError(
+            "Input should be a dataframe or a dict of dataframes (epochs)."
+        )
 
     return ppg_intervals
 

@@ -8,7 +8,6 @@ import neurokit2 as nk
 
 
 def test_eog_clean():
-
     # test with exported csv
     eog_signal = nk.data("eog_200hz")["vEOG"]
     eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=200)
@@ -16,7 +15,8 @@ def test_eog_clean():
 
     # test with mne.io.Raw
     raw = mne.io.read_raw_fif(
-        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif",
+        preload=True,
     )
     sampling_rate = raw.info["sfreq"]
 
@@ -43,7 +43,6 @@ def test_eog_clean():
 
 
 def test_eog_findpeaks():
-
     eog_signal = nk.data("eog_100hz")
     eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
 
@@ -66,7 +65,6 @@ def test_eog_findpeaks():
 
 
 def test_eog_process():
-
     eog_signal = nk.data("eog_200hz")["vEOG"]
     signals, info = nk.eog_process(eog_signal, sampling_rate=200)
 
@@ -76,12 +74,11 @@ def test_eog_process():
 
 
 def test_eog_plot():
-
     eog_signal = nk.data("eog_100hz")
     signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     # Plot
-    nk.eog_plot(signals, peaks=info, sampling_rate=100)
+    nk.eog_plot(signals, info)
     fig = plt.gcf()
     assert len(fig.axes) == 3
 
@@ -89,7 +86,7 @@ def test_eog_plot():
     legends = [["Raw", "Cleaned", "Blinks"], ["Rate", "Mean"], ["Median"]]
     ylabels = ["Amplitude (mV)", "Blinks per minute"]
 
-    for (ax, title, legend, ylabel) in zip(fig.get_axes(), titles, legends, ylabels):
+    for ax, title, legend, ylabel in zip(fig.get_axes(), titles, legends, ylabels):
         assert ax.get_title() == title
         subplot = ax.get_legend_handles_labels()
         assert subplot[1] == legend
@@ -104,7 +101,6 @@ def test_eog_plot():
 
 
 def test_eog_eventrelated():
-
     eog = nk.data("eog_200hz")["vEOG"]
     eog_signals, info = nk.eog_process(eog, sampling_rate=200)
     epochs = nk.epochs_create(
@@ -114,24 +110,32 @@ def test_eog_eventrelated():
 
     # Test rate features
     assert np.alltrue(
-        np.array(eog_eventrelated["EOG_Rate_Min"]) < np.array(eog_eventrelated["EOG_Rate_Mean"])
+        np.array(eog_eventrelated["EOG_Rate_Min"])
+        < np.array(eog_eventrelated["EOG_Rate_Mean"])
     )
 
     assert np.alltrue(
-        np.array(eog_eventrelated["EOG_Rate_Mean"]) < np.array(eog_eventrelated["EOG_Rate_Max"])
+        np.array(eog_eventrelated["EOG_Rate_Mean"])
+        < np.array(eog_eventrelated["EOG_Rate_Max"])
     )
 
     # Test blink presence
-    assert np.alltrue(np.array(eog_eventrelated["EOG_Blinks_Presence"]) == np.array([1, 0, 0]))
+    assert np.alltrue(
+        np.array(eog_eventrelated["EOG_Blinks_Presence"]) == np.array([1, 0, 0])
+    )
 
     # Test warning on missing columns
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EOG_Blinks`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an `EOG_Blinks`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["EOG_Blinks"]
         nk.eog_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EOG_Rate`.*"):
+    with pytest.warns(
+        nk.misc.NeuroKitWarning, match=r".*does not have an `EOG_Rate`.*"
+    ):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["EOG_Rate"]
@@ -139,7 +143,6 @@ def test_eog_eventrelated():
 
 
 def test_eog_intervalrelated():
-
     eog = nk.data("eog_200hz")["vEOG"]
     eog_signals, info = nk.eog_process(eog, sampling_rate=200)
 
@@ -158,5 +161,7 @@ def test_eog_intervalrelated():
     )
     epochs_dict = nk.eog_intervalrelated(epochs)
 
-    assert all(elem in columns for elem in np.array(epochs_dict.columns.values, dtype=str))
+    assert all(
+        elem in columns for elem in np.array(epochs_dict.columns.values, dtype=str)
+    )
     assert epochs_dict.shape[0] == len(epochs)  # Number of rows

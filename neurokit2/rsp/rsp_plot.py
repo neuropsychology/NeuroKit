@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 
-def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
+
+def rsp_plot(rsp_signals, info=None, static=True):
     """**Visualize respiration (RSP) data**
 
     Parameters
     ----------
     rsp_signals : DataFrame
         DataFrame obtained from :func:`.rsp_process`.
-    sampling_rate : int
-        The desired sampling rate (in Hz, i.e., samples/second).
-    figsize : tuple
-        The size of the figure (width, height) in inches.
+    info : dict
+        The information Dict returned by ``rsp_process()``. Defaults to ``None``.
     static : bool
         If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
@@ -26,8 +28,7 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
 
     Returns
     -------
-    fig
-        Figure representing a plot of the processed RSP signals.
+    See :func:`.ecg_plot` for details on how to access the figure, modify the size and save it.
 
     Examples
     --------
@@ -36,18 +37,29 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
       import neurokit2 as nk
 
       # Simulate data
-      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15, sampling_rate=100)
 
       # Process signal
-      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=100)
 
       # Plot
       @savefig p_rsp_plot1.png scale=100%
-      nk.rsp_plot(rsp_signals, sampling_rate=1000)
+      nk.rsp_plot(rsp_signals, info)
       @suppress
       plt.close()
 
     """
+    if info is None:
+        warn(
+            "'info' dict not provided. Some information might be missing."
+            + " Sampling rate will be set to 1000 Hz.",
+            category=NeuroKitWarning,
+        )
+
+        info = {
+            "sampling_rate": 1000,
+        }
+
     # Mark peaks, troughs and phases.
     peaks = np.where(rsp_signals["RSP_Peaks"] == 1)[0]
     troughs = np.where(rsp_signals["RSP_Troughs"] == 1)[0]
@@ -74,15 +86,11 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
     exhale_signal, inhale_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
 
     # Determine unit of x-axis.
-    if sampling_rate is not None:
-        x_label = "Time (seconds)"
-        x_axis = np.linspace(0, len(rsp_signals) / sampling_rate, len(rsp_signals))
-    else:
-        x_label = "Samples"
-        x_axis = np.arange(0, len(rsp_signals))
+    x_label = "Time (seconds)"
+    x_axis = np.linspace(0, len(rsp_signals) / info["sampling_rate"], len(rsp_signals))
 
     if static:
-        fig, ax = plt.subplots(nrows=nrow, ncols=1, sharex=True, figsize=figsize)
+        fig, ax = plt.subplots(nrows=nrow, ncols=1, sharex=True)
 
         last_ax = fig.get_axes()[-1]
         last_ax.set_xlabel(x_label)
@@ -198,7 +206,6 @@ def rsp_plot(rsp_signals, sampling_rate=None, figsize=(10, 10), static=True):
                 linewidth=1.5,
             )
             ax[4].legend(loc="upper right")
-            return fig
     else:
         # Generate interactive plot with plotly.
         try:
@@ -374,11 +381,11 @@ def _rsp_plot_phase(rsp_signals, troughs, peaks):
     exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
     exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
     exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
-    exhale_signal = exhale_signal.fillna(method="backfill")
+    exhale_signal = exhale_signal.bfill()
 
     inhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
     inhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
     inhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
-    inhale_signal = inhale_signal.fillna(method="ffill")
+    inhale_signal = inhale_signal.ffill()
 
     return exhale_signal, inhale_signal

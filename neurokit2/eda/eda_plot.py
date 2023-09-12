@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.collections
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 
-def eda_plot(eda_signals, sampling_rate=None, static=True):
+
+def eda_plot(eda_signals, info=None, static=True):
     """**Visualize electrodermal activity (EDA) data**
 
     Parameters
     ----------
     eda_signals : DataFrame
         DataFrame obtained from :func:`eda_process()`.
-    sampling_rate : int
-        The desired sampling rate (in Hz, i.e., samples/second). Defaults to None.
+    info : dict
+        The information Dict returned by ``eda_process()``. Defaults to ``None``.
     static : bool
         If True, a static plot will be generated with matplotlib.
         If False, an interactive plot will be generated with plotly.
@@ -21,8 +25,7 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
 
     Returns
     -------
-    fig
-        Figure representing a plot of the processed EDA signals.
+    See :func:`.ecg_plot` for details on how to access the figure, modify the size and save it.
 
     Examples
     --------
@@ -32,8 +35,9 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
 
       eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
       eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)
+
       @savefig p_eda_plot1.png scale=100%
-      nk.eda_plot(eda_signals)
+      nk.eda_plot(eda_signals, info)
       @suppress
       plt.close()
 
@@ -42,25 +46,31 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
     eda_process
 
     """
+    if info is None:
+        warn(
+            "'info' dict not provided. Some information might be missing."
+            + " Sampling rate will be set to 1000 Hz.",
+            category=NeuroKitWarning,
+        )
+
+        info = {
+            "sampling_rate": 1000,
+        }
+
     # Determine peaks, onsets, and half recovery.
     peaks = np.where(eda_signals["SCR_Peaks"] == 1)[0]
     onsets = np.where(eda_signals["SCR_Onsets"] == 1)[0]
     half_recovery = np.where(eda_signals["SCR_Recovery"] == 1)[0]
 
     # Determine unit of x-axis.
-    if sampling_rate is not None:
-        x_label = "Seconds"
-        x_axis = np.linspace(0, len(eda_signals) / sampling_rate, len(eda_signals))
-    else:
-        x_label = "Samples"
-        x_axis = np.arange(0, len(eda_signals))
+    x_label = "Time (seconds)"
+    x_axis = np.linspace(0, len(eda_signals) / info["sampling_rate"], len(eda_signals))
 
     if static:
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
         last_ax = fig.get_axes()[-1]
         last_ax.set_xlabel(x_label)
-        plt.tight_layout(h_pad=0.2)
 
         # Plot cleaned and raw electrodermal activity.
         ax0.set_title("Raw and Cleaned Signal")
@@ -121,7 +131,7 @@ def eda_plot(eda_signals, sampling_rate=None, static=True):
             linewidth=1.5,
         )
         ax2.legend(loc="upper right")
-        return fig
+
     else:
         # Create interactive plot with plotly.
         try:
