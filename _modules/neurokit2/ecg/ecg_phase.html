@@ -461,7 +461,7 @@ document.write(`
         <span class="o">-</span><span class="mi">1</span>
     <span class="p">]</span>  <span class="c1"># Avoid filling beyond the last peak/trough</span>
     <span class="n">atrial</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">atrial</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">atrial</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span>
     <span class="p">)</span>
 
     <span class="c1"># Atrial Phase Completion</span>
@@ -476,7 +476,7 @@ document.write(`
         <span class="o">-</span><span class="mi">1</span>
     <span class="p">]</span>  <span class="c1"># Avoid filling beyond the last peak/trough</span>
     <span class="n">ventricular</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">ventricular</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">ventricular</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last_element</span><span class="p">]</span>
     <span class="p">)</span>
 
     <span class="c1"># Ventricular Phase Completion</span>

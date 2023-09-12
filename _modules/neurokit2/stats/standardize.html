@@ -422,10 +422,12 @@ document.write(`
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The data is not standardized.&quot;</span>
                 <span class="s2">&quot;Some elements in the list is of string type.&quot;</span><span class="p">,</span>
-                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_standardize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">_standardize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="c1"># only standardize columns that are not string and are not nan</span>
@@ -439,7 +441,8 @@ document.write(`
             <span class="n">out</span> <span class="o">=</span> <span class="n">data</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The data is not standardized as it is of string type.&quot;</span><span class="p">,</span>
-                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">)</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
@@ -448,7 +451,8 @@ document.write(`
             <span class="n">out</span> <span class="o">=</span> <span class="n">data</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The data is not standardized as it is of string type.&quot;</span><span class="p">,</span>
-                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">)</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -459,7 +463,6 @@ document.write(`
 <span class="c1"># Internals</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
     <span class="c1"># Compute standardized on whole data</span>
     <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">robust</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -476,12 +479,12 @@ document.write(`
                 <span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">/</span> <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
-                <span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">mad</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">df</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+            <span class="p">)</span> <span class="o">/</span> <span class="n">df</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">mad</span><span class="p">)</span>
 
         <span class="c1"># Fill the created nans</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;bfill&quot;</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">bfill</span><span class="p">()</span>
 
         <span class="c1"># Restore to vector or array</span>
         <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>

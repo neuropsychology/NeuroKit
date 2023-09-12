@@ -1364,7 +1364,7 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_ecg_delineator_peak_Q</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">,</span> <span class="n">R</span><span class="p">):</span>
-    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="p">[:</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Select left hand side</span>
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Select left hand side</span>
 
     <span class="n">Q</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
         <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span>
@@ -1395,7 +1395,7 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_ecg_delineator_peak_S</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">heartbeat</span><span class="p">):</span>
-    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="p">[</span><span class="mi">0</span><span class="p">:]</span>  <span class="c1"># Select right hand side</span>
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">heartbeat</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">:]</span>  <span class="c1"># Select right hand side</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">signal_findpeaks</span><span class="p">(</span>
         <span class="o">-</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">],</span>
         <span class="n">height_min</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">segment</span><span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span>

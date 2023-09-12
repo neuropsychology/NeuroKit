@@ -438,6 +438,10 @@ document.write(`
             <span class="p">)</span>
 
         <span class="n">ppg_intervals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Input should be a dataframe or a dict of dataframes (epochs).&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ppg_intervals</span></div>
 

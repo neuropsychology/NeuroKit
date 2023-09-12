@@ -356,8 +356,12 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">..events</span> <span class="kn">import</span> <span class="n">events_find</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">as_vector</span>
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_binarize</span><span class="p">,</span> <span class="n">signal_changepoints</span><span class="p">,</span> <span class="n">signal_formatpeaks</span><span class="p">,</span>
-                      <span class="n">signal_smooth</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_binarize</span><span class="p">,</span>
+    <span class="n">signal_changepoints</span><span class="p">,</span>
+    <span class="n">signal_formatpeaks</span><span class="p">,</span>
+    <span class="n">signal_smooth</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="emg_activation"><a class="viewcode-back" href="../../../functions/emg.html#neurokit2.emg.emg_activation">[docs]</a><span class="k">def</span> <span class="nf">emg_activation</span><span class="p">(</span>
@@ -522,7 +526,9 @@ document.write(`
                 <span class="s2">&quot;NeuroKit error: emg_activation(): &#39;pelt&#39; method needs &#39;emg_cleaned&#39; (cleaned or raw EMG) signal to &quot;</span>
                 <span class="s2">&quot;be passed.&quot;</span>
             <span class="p">)</span>
-        <span class="n">activity</span> <span class="o">=</span> <span class="n">_emg_activation_pelt</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span><span class="n">duration_min</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">activity</span> <span class="o">=</span> <span class="n">_emg_activation_pelt</span><span class="p">(</span>
+            <span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span><span class="n">duration_min</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;biosppy&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">emg_cleaned</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -599,7 +605,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_emg_activation_threshold</span><span class="p">(</span><span class="n">emg_amplitude</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
-
     <span class="k">if</span> <span class="n">threshold</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">emg_amplitude</span><span class="p">)</span>
 
@@ -614,7 +619,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_emg_activation_mixture</span><span class="p">(</span><span class="n">emg_amplitude</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
-
     <span class="k">if</span> <span class="n">threshold</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.33</span>
 
@@ -623,7 +627,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_emg_activation_pelt</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
     <span class="k">if</span> <span class="n">threshold</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -646,7 +649,7 @@ document.write(`
     <span class="n">binary</span><span class="p">[</span><span class="n">changepoints</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">binary</span><span class="p">[</span><span class="n">changepoints</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="n">activity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binary</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">activity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binary</span><span class="p">)</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
 
     <span class="c1"># Label as 1 to parts that have the larger SD (likely to be activations)</span>
     <span class="k">if</span> <span class="n">emg_cleaned</span><span class="p">[</span><span class="n">activity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">emg_cleaned</span><span class="p">[</span><span class="n">activity</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">():</span>
@@ -658,7 +661,9 @@ document.write(`
     <span class="k">return</span> <span class="n">activity</span>
 
 
-<span class="k">def</span> <span class="nf">_emg_activation_biosppy</span><span class="p">(</span><span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_emg_activation_biosppy</span><span class="p">(</span>
+    <span class="n">emg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s2">&quot;default&quot;</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapted from `find_onsets` in Biosppy.&quot;&quot;&quot;</span>
 
     <span class="c1"># check inputs</span>
@@ -716,7 +721,9 @@ document.write(`
     <span class="n">tf_mvgav</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">fwlo</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">size</span><span class="p">,))</span> <span class="o">/</span> <span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">)</span>
 
     <span class="c1"># moving average for calculating the adaptive threshold</span>
-    <span class="n">threshold_mvgav</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">fwlo</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">threshold_size</span><span class="p">,))</span> <span class="o">/</span> <span class="n">threshold_size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">)</span>
+    <span class="n">threshold_mvgav</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span>
+        <span class="n">fwlo</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">threshold_size</span><span class="p">,))</span> <span class="o">/</span> <span class="n">threshold_size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">onset_time_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">offset_time_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -743,7 +750,7 @@ document.write(`
     <span class="n">binary</span><span class="p">[</span><span class="n">onsets</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">binary</span><span class="p">[</span><span class="n">onsets</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="n">activity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binary</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;bfill&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">activity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binary</span><span class="p">)</span><span class="o">.</span><span class="n">bfill</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
     <span class="n">activity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">activity</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">activity</span>
@@ -753,7 +760,6 @@ document.write(`
 <span class="c1"># Internals</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_emg_activation_activations</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
-
     <span class="n">activations</span> <span class="o">=</span> <span class="n">events_find</span><span class="p">(</span>
         <span class="n">activity</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">threshold_keep</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span><span class="n">duration_min</span>
     <span class="p">)</span>

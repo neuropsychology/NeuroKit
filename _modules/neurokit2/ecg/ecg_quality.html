@@ -365,7 +365,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.ecg_segment</span> <span class="kn">import</span> <span class="n">ecg_segment</span>
 
 
-<div class="viewcode-block" id="ecg_quality"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_quality">[docs]</a><span class="k">def</span> <span class="nf">ecg_quality</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;averageQRS&quot;</span><span class="p">,</span> <span class="n">approach</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ecg_quality"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_quality">[docs]</a><span class="k">def</span> <span class="nf">ecg_quality</span><span class="p">(</span>
+    <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;averageQRS&quot;</span><span class="p">,</span> <span class="n">approach</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**ECG Signal Quality Assessment**</span>
 
 <span class="sd">    Assess the quality of the ECG Signal using various methods:</span>
@@ -452,7 +454,9 @@ document.write(`
 
     <span class="c1"># Run peak detection algorithm</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;averageqrs&quot;</span><span class="p">]:</span>
-        <span class="n">quality</span> <span class="o">=</span> <span class="n">_ecg_quality_averageQRS</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">_ecg_quality_averageQRS</span><span class="p">(</span>
+            <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;zhao2018&quot;</span><span class="p">,</span> <span class="s2">&quot;zhao&quot;</span><span class="p">,</span> <span class="s2">&quot;SQI&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">approach</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">approach</span> <span class="o">=</span> <span class="s2">&quot;simple&quot;</span>
@@ -475,7 +479,6 @@ document.write(`
 <span class="c1"># Average QRS method</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_quality_averageQRS</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-
     <span class="c1"># Sanitize inputs</span>
     <span class="k">if</span> <span class="n">rpeaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
@@ -483,7 +486,9 @@ document.write(`
 
     <span class="c1"># Get heartbeats</span>
     <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">)</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">)</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+        <span class="n">index</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span>
+    <span class="p">)</span>
     <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
 
@@ -565,8 +570,12 @@ document.write(`
 
     <span class="c1"># Compute indexes</span>
     <span class="n">kSQI</span> <span class="o">=</span> <span class="n">_ecg_quality_kSQI</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">kurtosis_method</span><span class="p">)</span>
-    <span class="n">pSQI</span> <span class="o">=</span> <span class="n">_ecg_quality_pSQI</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">basSQI</span> <span class="o">=</span> <span class="n">_ecg_quality_basSQI</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">pSQI</span> <span class="o">=</span> <span class="n">_ecg_quality_pSQI</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="n">basSQI</span> <span class="o">=</span> <span class="n">_ecg_quality_basSQI</span><span class="p">(</span>
+        <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
 
     <span class="c1"># Classify indices based on simple heuristic fusion</span>
     <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;simple&quot;</span><span class="p">:</span>
@@ -688,7 +697,9 @@ document.write(`
         <span class="c1"># W = np.array([0.4, 0.4, 0.1, 0.1])</span>
         <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>
 
-        <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">))])</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">R</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">W</span><span class="p">))]</span>
+        <span class="p">)</span>
 
         <span class="c1"># classify</span>
         <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
@@ -730,8 +741,8 @@ document.write(`
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
-    <span class="n">num_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dem_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">num_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">dem_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">num_power</span> <span class="o">/</span> <span class="n">dem_power</span>
 
@@ -755,8 +766,8 @@ document.write(`
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
-    <span class="n">num_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dem_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">num_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">dem_power</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">num_power</span><span class="p">)</span> <span class="o">/</span> <span class="n">dem_power</span>
 </pre></div>
