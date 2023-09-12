@@ -89,7 +89,7 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
 
     # Get psd with fourier transform
     psd = signal_psd(signal, sampling_rate=1000, method="fft", show=False, **kwargs)
-    psd = psd[psd["Frequency"] < psd.quantile(0.25)[0]]
+    psd = psd[psd["Frequency"] < psd.quantile(0.25).iloc[0]]
     psd = psd[psd["Frequency"] > 0]
 
     # Get slope

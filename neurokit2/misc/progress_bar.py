@@ -21,11 +21,11 @@ def progress_bar(it, prefix="", size=40, verbose=True):
     --------
     ..ipython:: python
 
-        import neurokit2 as nk
+      import neurokit2 as nk
 
-        for i, j in nk.progress_bar(["a", "b", "c"], prefix="Progress: "):
-            pass
-        print(i, j)
+      for i, j in nk.progress_bar(["a", "b", "c"], prefix="Progress: "):
+          pass
+      print(i, j)
 
     """
     if verbose is False:

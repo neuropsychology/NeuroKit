@@ -70,10 +70,12 @@ def standardize(data, robust=False, window=None, **kwargs):
             warn(
                 "The data is not standardized."
                 "Some elements in the list is of string type.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         else:
-            out = list(_standardize(np.array(data), robust=robust, window=window, **kwargs))
+            out = list(
+                _standardize(np.array(data), robust=robust, window=window, **kwargs)
+            )
 
     elif isinstance(data, pd.DataFrame):
         # only standardize columns that are not string and are not nan
@@ -87,7 +89,8 @@ def standardize(data, robust=False, window=None, **kwargs):
             out = data
             warn(
                 "The data is not standardized as it is of string type.",
-                category=NeuroKitWarning)
+                category=NeuroKitWarning,
+            )
         else:
             out = pd.Series(_standardize(data, robust=robust, window=window, **kwargs))
 
@@ -96,7 +99,8 @@ def standardize(data, robust=False, window=None, **kwargs):
             out = data
             warn(
                 "The data is not standardized as it is of string type.",
-                category=NeuroKitWarning)
+                category=NeuroKitWarning,
+            )
         else:
             out = _standardize(data, robust=robust, window=window, **kwargs)
 
@@ -107,7 +111,6 @@ def standardize(data, robust=False, window=None, **kwargs):
 # Internals
 # =============================================================================
 def _standardize(data, robust=False, window=None, **kwargs):
-
     # Compute standardized on whole data
     if window is None:
         if robust is False:
@@ -124,12 +127,12 @@ def _standardize(data, robust=False, window=None, **kwargs):
                 window, min_periods=0, **kwargs
             ).std(ddof=1)
         else:
-            z = (df - df.rolling(window, min_periods=0, **kwargs).median()) / df.rolling(
-                window, min_periods=0, **kwargs
-            ).apply(mad)
+            z = (
+                df - df.rolling(window, min_periods=0, **kwargs).median()
+            ) / df.rolling(window, min_periods=0, **kwargs).apply(mad)
 
         # Fill the created nans
-        z = z.fillna(method="bfill")
+        z = z.bfill()
 
         # Restore to vector or array
         if z.shape[1] == 1:
