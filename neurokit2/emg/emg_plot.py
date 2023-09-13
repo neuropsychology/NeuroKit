@@ -93,7 +93,7 @@ def _emg_plot_activity(emg_signals, onsets, offsets):
     activity_signal = pd.Series(np.full(len(emg_signals), np.nan))
     activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
     activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
-    activity_signal = activity_signal.fillna(method="backfill")
+    activity_signal = activity_signal.bfill()
 
     if np.any(activity_signal.isna()):
         index = np.min(np.where(activity_signal.isna())) - 1

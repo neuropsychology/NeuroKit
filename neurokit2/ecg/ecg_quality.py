@@ -13,7 +13,9 @@ from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
 
 
-def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS", approach=None):
+def ecg_quality(
+    ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS", approach=None
+):
     """**ECG Signal Quality Assessment**
 
     Assess the quality of the ECG Signal using various methods:
@@ -100,7 +102,9 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 
     # Run peak detection algorithm
     if method in ["averageqrs"]:
-        quality = _ecg_quality_averageQRS(ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate)
+        quality = _ecg_quality_averageQRS(
+            ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate
+        )
     elif method in ["zhao2018", "zhao", "SQI"]:
         if approach is None:
             approach = "simple"
@@ -123,7 +127,6 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 # Average QRS method
 # =============================================================================
 def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
-
     # Sanitize inputs
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
@@ -131,7 +134,9 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
     # Get heartbeats
     heartbeats = ecg_segment(ecg_cleaned, rpeaks, sampling_rate)
-    data = epochs_to_df(heartbeats).pivot(index="Label", columns="Time", values="Signal")
+    data = epochs_to_df(heartbeats).pivot(
+        index="Label", columns="Time", values="Signal"
+    )
     data.index = data.index.astype(int)
     data = data.sort_index()
 
@@ -213,8 +218,12 @@ def _ecg_quality_zhao2018(
 
     # Compute indexes
     kSQI = _ecg_quality_kSQI(ecg_cleaned, method=kurtosis_method)
-    pSQI = _ecg_quality_pSQI(ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs)
-    basSQI = _ecg_quality_basSQI(ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs)
+    pSQI = _ecg_quality_pSQI(
+        ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs
+    )
+    basSQI = _ecg_quality_basSQI(
+        ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs
+    )
 
     # Classify indices based on simple heuristic fusion
     if mode == "simple":
@@ -336,7 +345,9 @@ def _ecg_quality_zhao2018(
         # W = np.array([0.4, 0.4, 0.1, 0.1])
         W = np.array([0.6, 0.2, 0.2])
 
-        S = np.array([np.sum((R[:, 0] * W)), np.sum((R[:, 1] * W)), np.sum((R[:, 2] * W))])
+        S = np.array(
+            [np.sum((R[:, 0] * W)), np.sum((R[:, 1] * W)), np.sum((R[:, 2] * W))]
+        )
 
         # classify
         V = np.sum(np.power(S, 2) * [1, 2, 3]) / np.sum(np.power(S, 2))
@@ -378,8 +389,8 @@ def _ecg_quality_pSQI(
         **kwargs
     )
 
-    num_power = psd.iloc[0][0]
-    dem_power = psd.iloc[0][1]
+    num_power = psd.iloc[0, 0]
+    dem_power = psd.iloc[0, 1]
 
     return num_power / dem_power
 
@@ -403,7 +414,7 @@ def _ecg_quality_basSQI(
         **kwargs
     )
 
-    num_power = psd.iloc[0][0]
-    dem_power = psd.iloc[0][1]
+    num_power = psd.iloc[0, 0]
+    dem_power = psd.iloc[0, 1]
 
     return (1 - num_power) / dem_power

@@ -28,15 +28,15 @@ Preprocessing
 .. autofunction:: neurokit2.rsp.rsp_clean
 
 *rsp_amplitude()*
-"""""""""""""""""
+"""""""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_amplitude
 
 *rsp_peaks()*
-"""""""""""""
+"""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_peaks
 
 *rsp_findpeaks()*
-"""""""""""""""""
+"""""""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_findpeaks
 
 *rsp_fixpeaks()*
@@ -52,7 +52,7 @@ Preprocessing
 .. autofunction:: neurokit2.rsp.rsp_rate
 
 *rsp_symmetry()*
-"""""""""""""
+"""""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_symmetry
 
 *rsp_rrv()*
