@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from .optim_complexity_tolerance import complexity_tolerance
-from .utils import _phi, _phi_divide
+from .utils_entropy import _phi, _phi_divide
 
 
 def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
@@ -81,7 +81,7 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     }
 
     # Compute phi
-    info["phi"], details = _phi(
+    info["phi"], _ = _phi(
         signal,
         delay=delay,
         dimension=dimension,
@@ -89,6 +89,5 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
         approximate=False,
         **kwargs
     )
-    info.update(details)  # This should be removed in the future to avoid huge returns
 
     return _phi_divide(info["phi"]), info

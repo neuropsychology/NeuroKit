@@ -13,8 +13,8 @@ from .entropy_sample import entropy_sample
 from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
-from .utils import _phi, _phi_divide
 from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
+from .utils_entropy import _phi, _phi_divide
 
 
 def entropy_multiscale(
@@ -397,7 +397,7 @@ def _entropy_multiscale(
         delay = 1  # If non-overlapping
         if coarsegraining in ["rolling", "interpolate"]:
             delay = scale
-            
+
         # Compute entropy
         return algorithm(
             coarse,

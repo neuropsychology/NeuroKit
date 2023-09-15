@@ -6,8 +6,8 @@ import scipy.spatial
 import sklearn.neighbors
 
 from ..stats import density
-from .utils import _phi
 from .utils_complexity_embedding import complexity_embedding
+from .utils_entropy import _phi
 
 
 def complexity_tolerance(
@@ -224,7 +224,11 @@ def complexity_tolerance(
     ):
         if dimension is None:
             raise ValueError("'dimension' cannot be empty for the 'nolds' method.")
-        r = 0.11604738531196232 * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
+        r = (
+            0.11604738531196232
+            * np.std(signal, ddof=1)
+            * (0.5627 * np.log(dimension) + 1.3334)
+        )
         info = {"Method": "Adjusted 20% SD"}
 
     elif method in ["chon", "chon2009"] and (
@@ -264,7 +268,9 @@ def complexity_tolerance(
             raise ValueError("'dimension' cannot be empty for the 'makowski' method.")
         n = len(signal)
         r = np.std(signal, ddof=1) * (
-            0.2811 * (dimension - 1) + 0.0049 * np.log(n) - 0.02 * ((dimension - 1) * np.log(n))
+            0.2811 * (dimension - 1)
+            + 0.0049 * np.log(n)
+            - 0.02 * ((dimension - 1) * np.log(n))
         )
 
         info = {"Method": "Makowski"}
@@ -292,7 +298,9 @@ def complexity_tolerance(
         info.update({"Method": "bin"})
 
     else:
-        raise ValueError("NeuroKit error: complexity_tolerance(): 'method' not recognized.")
+        raise ValueError(
+            "NeuroKit error: complexity_tolerance(): 'method' not recognized."
+        )
 
     if show is True:
         _optimize_tolerance_plot(r, info, method=method, signal=signal)
@@ -305,10 +313,11 @@ def complexity_tolerance(
 
 
 def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=None):
-
     # Optimize missing parameters
     if delay is None or dimension is None:
-        raise ValueError("If method='recurrence', both delay and dimension must be specified.")
+        raise ValueError(
+            "If method='recurrence', both delay and dimension must be specified."
+        )
 
     # Compute distance matrix
     emb = complexity_embedding(signal, delay=delay, dimension=dimension)
@@ -332,10 +341,11 @@ def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=N
 
 
 def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None):
-
     # Optimize missing parameters
     if delay is None or dimension is None:
-        raise ValueError("If method='maxApEn', both delay and dimension must be specified.")
+        raise ValueError(
+            "If method='maxApEn', both delay and dimension must be specified."
+        )
 
     if r_range is None:
         r_range = 40
@@ -359,7 +369,6 @@ def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None
 
 
 def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
-
     phi, info = _phi(
         signal,
         delay=delay,
@@ -400,7 +409,6 @@ def _optimize_tolerance_neighbours(signal, r_range=None, delay=None, dimension=N
 
 
 def _optimize_tolerance_bin(signal, delay=None, dimension=None):
-
     # Optimize missing parameters
     if delay is None or dimension is None:
         raise ValueError("If method='bin', both delay and dimension must be specified.")
@@ -424,7 +432,6 @@ def _optimize_tolerance_bin(signal, delay=None, dimension=None):
 # Plotting
 # =============================================================================
 def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
-
     if ax is None:
         fig, ax = plt.subplots()
     else:

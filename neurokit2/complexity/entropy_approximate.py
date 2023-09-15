@@ -3,10 +3,12 @@ import numpy as np
 import pandas as pd
 
 from .optim_complexity_tolerance import _entropy_apen, complexity_tolerance
-from .utils import _get_count
+from .utils_entropy import _get_count
 
 
-def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=False, **kwargs):
+def entropy_approximate(
+    signal, delay=1, dimension=2, tolerance="sd", corrected=False, **kwargs
+):
     """**Approximate entropy (ApEn) and its corrected version (cApEn)**
 
     Approximate entropy is a technique used to quantify the amount of regularity and the
@@ -110,7 +112,6 @@ def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=
 
 
 def _entropy_capen(signal, delay, dimension, tolerance, **kwargs):
-
     __, count1, _ = _get_count(
         signal,
         delay=delay,
