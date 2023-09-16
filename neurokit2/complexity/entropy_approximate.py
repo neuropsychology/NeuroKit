@@ -97,7 +97,7 @@ def entropy_approximate(
 
     # Compute index
     if corrected is False:
-        # ApEn is implemented in 'optim_complexity_tolerance()' to avoid circular imports
+        # ApEn is implemented in 'utils_entropy.py' to avoid circular imports
         # as one of the method for optimizing tolerance relies on ApEn
         out, _ = _entropy_apen(signal, delay, dimension, info["Tolerance"], **kwargs)
     else:

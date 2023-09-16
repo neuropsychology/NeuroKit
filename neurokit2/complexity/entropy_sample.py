@@ -35,7 +35,7 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
 
     See Also
     --------
-    entropy_shannon, entropy_approximate, entropy_fuzzy
+    entropy_shannon, entropy_approximate, entropy_fuzzy, entropy_quadratic
 
     Returns
     ----------

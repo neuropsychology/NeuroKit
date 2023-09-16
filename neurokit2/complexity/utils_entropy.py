@@ -6,6 +6,23 @@ from packaging import version
 
 from .utils_complexity_embedding import complexity_embedding
 
+
+# =============================================================================
+# ApEn
+# =============================================================================
+def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
+    phi, info = _phi(
+        signal,
+        delay=delay,
+        dimension=dimension,
+        tolerance=tolerance,
+        approximate=True,
+        **kwargs,
+    )
+
+    return np.abs(np.subtract(phi[0], phi[1])), info
+
+
 # =============================================================================
 # Phi
 # =============================================================================
@@ -54,12 +71,8 @@ def _phi(
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
         phi[1] = np.mean(np.log(count2 / embedded2.shape[0]))
     else:
-        # TODO: What is the correct normalization?
-        # See https://github.com/neuropsychology/NeuroKit/pull/892#issuecomment-1720992976
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
-        # phi[0] = np.mean((count1 - 1) / (len(signal) - dimension))
-        # phi[1] = np.mean((count2 - 1) / (len(signal) - dimension + 1))
 
     return phi, {
         "embedded1": embedded1,

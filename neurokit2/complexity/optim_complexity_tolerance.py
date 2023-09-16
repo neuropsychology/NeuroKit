@@ -7,7 +7,7 @@ import sklearn.neighbors
 
 from ..stats import density
 from .utils_complexity_embedding import complexity_embedding
-from .utils_entropy import _phi
+from .utils_entropy import _entropy_apen
 
 
 def complexity_tolerance(
@@ -366,19 +366,6 @@ def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None
     # apens = [_entropy_apen(signal, delay=delay, dimension=dimension, tolerance=r) for r in r_range]
 
     return r_range[np.argmax(apens)], {"Values": r_range, "Scores": np.array(apens)}
-
-
-def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
-    phi, info = _phi(
-        signal,
-        delay=delay,
-        dimension=dimension,
-        tolerance=tolerance,
-        approximate=True,
-        **kwargs,
-    )
-
-    return np.abs(np.subtract(phi[0], phi[1])), info
 
 
 def _optimize_tolerance_neighbours(signal, r_range=None, delay=None, dimension=None):
