@@ -70,4 +70,5 @@ def entropy_svd(signal, delay=1, dimension=2, show=False):
     W = np.linalg.svd(embedded, compute_uv=False)  # Compute SVD
     W /= np.sum(W)  # Normalize singular values
 
+    plt.plot(W)
     return -1 * sum(W * np.log2(W)), {"Dimension": dimension, "Delay": delay}

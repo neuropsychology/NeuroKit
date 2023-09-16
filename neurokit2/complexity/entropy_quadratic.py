@@ -8,7 +8,8 @@ from .entropy_sample import entropy_sample
 def entropy_quadratic(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     """**Quadratic Sample Entropy (QSE)**
 
-    Compute the quadratic sample entropy (QSE) of a signal. It is essentially a correction of SampEn introduced by Lake (2005) defined as:
+    Compute the quadratic sample entropy (QSE) of a signal. It is essentially a correction of
+    SampEn introduced by Lake (2005) defined as:
 
     .. math::
 
@@ -66,6 +67,10 @@ def entropy_quadratic(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
 
     """
     sampen, info = entropy_sample(
-        signal, delay=delay, dimension=dimension, tolerance=tolerance, **kwargs
+        signal,
+        delay=delay,
+        dimension=dimension,
+        tolerance=tolerance,
+        **kwargs,
     )
     return sampen + np.log(2 * info["Tolerance"]), info
