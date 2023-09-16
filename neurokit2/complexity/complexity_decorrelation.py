@@ -1,10 +1,11 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from ..signal import signal_autocor
 
 
-def complexity_decorrelation(signal):
+def complexity_decorrelation(signal, show=False):
     """**Decorrelation Time (DT)**
 
     The decorrelation time (DT) is defined as the time (in samples) of the first zero crossing of
@@ -17,6 +18,8 @@ def complexity_decorrelation(signal):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    show : bool
+        If True, will return a plot of the autocorrelation.
 
     Returns
     -------
@@ -36,11 +39,15 @@ def complexity_decorrelation(signal):
 
       import neurokit2 as nk
 
-      # Simulate a signal with duration os 2s
-      signal = nk.signal_simulate(duration=2, frequency=[5, 9, 12])
+      # Simulate a signal
+      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
 
       # Compute DT
-      dt, _ = nk.complexity_decorrelation(signal)
+      @savefig p_complexity_decorrelation1.png scale=100%
+      dt, _ = nk.complexity_decorrelation(signal, show=True)
+      @suppress
+      plt.close()
+
       dt
 
     References
@@ -60,7 +67,7 @@ def complexity_decorrelation(signal):
         )
 
     # Unbiased autocor (see https://github.com/mne-tools/mne-features/)
-    autocor, _ = signal_autocor(signal, method="unbiased")
+    autocor, _ = signal_autocor(signal, unbiased=True)
 
     # Get zero-crossings
     zc = np.diff(np.sign(autocor)) != 0
@@ -68,4 +75,20 @@ def complexity_decorrelation(signal):
         dt = np.argmax(zc) + 1
     else:
         dt = -1
+
+    if show is True:
+        # Max length of autocorrelation to plot
+        max_len = int(dt * 4)
+        if max_len > len(autocor):
+            max_len = len(autocor)
+
+        plt.plot(autocor[0:max_len])
+        plt.xlabel("Lag")
+        plt.ylabel("Autocorrelation")
+        plt.xticks(np.arange(0, max_len, step=dt).astype(int))
+        plt.axvline(dt, color="red", linestyle="--", label=f"DT = {dt}")
+        plt.axhline(0, color="black", linestyle="--")
+        plt.title("Decorrelation Time (DT)")
+        plt.legend()
+
     return dt, {}
