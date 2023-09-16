@@ -92,7 +92,13 @@ def complexity_lyapunov(
 
       signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
 
-      lle, info = nk.complexity_lyapunov(signal, method="rosenstein1993", show=True)
+      # Rosenstein's method
+      @savefig p_complexity_lyapunov.png scale=100%
+      lle, info = nk.complexity
+      _lyapunov(signal, method="rosenstein1993", show=True)
+      @suppress
+      plt.close()
+
       lle
 
       # Eckman's method is broken. Please help us fix-it!
@@ -127,7 +133,9 @@ def complexity_lyapunov(
     # spectrum, to yield equivalent results."
 
     # Actual sampling rate does not matter
-    psd = signal_psd(signal, sampling_rate=1000, method="fft", normalize=False, show=False)
+    psd = signal_psd(
+        signal, sampling_rate=1000, method="fft", normalize=False, show=False
+    )
     mean_freq = np.sum(psd["Power"] * psd["Frequency"]) / np.sum(psd["Power"])
 
     # 1 / mean_freq = seconds per cycle
@@ -170,7 +178,6 @@ def complexity_lyapunov(
 def _complexity_lyapunov_rosenstein(
     signal, delay=1, dimension=2, separation=1, len_trajectory=20, show=False, **kwargs
 ):
-
     # 1. Check that sufficient data points are available
     # Minimum length required to find single orbit vector
     min_len = (dimension - 1) * delay + 1
@@ -200,7 +207,9 @@ def _complexity_lyapunov_rosenstein(
 
     # Find indices of nearest neighbours
     ntraj = m - len_trajectory + 1
-    min_dist_indices = np.argmin(dists[:ntraj, :ntraj], axis=1)  # exclude last few indices
+    min_dist_indices = np.argmin(
+        dists[:ntraj, :ntraj], axis=1
+    )  # exclude last few indices
     min_dist_indices = min_dist_indices.astype(int)
 
     # Follow trajectories of neighbour pairs for len_trajectory data points
@@ -217,15 +226,24 @@ def _complexity_lyapunov_rosenstein(
     divergence_rate = trajectories[np.isfinite(trajectories)]
 
     # LLE obtained by least-squares fit to average line
-    slope, intercept = np.polyfit(np.arange(1, len(divergence_rate) + 1), divergence_rate, 1)
+    slope, intercept = np.polyfit(
+        np.arange(1, len(divergence_rate) + 1), divergence_rate, 1
+    )
+
+    # Store info
+    parameters = {
+        "Trajectory_Length": len_trajectory,
+        "Divergence_Rate": divergence_rate,
+    }
 
     if show is True:
         plt.plot(np.arange(1, len(divergence_rate) + 1), divergence_rate)
-        plt.axline((0, intercept), slope=slope, color="orange", label="Least-squares Fit")
+        plt.axline(
+            (0, intercept), slope=slope, color="orange", label="Least-squares Fit"
+        )
         plt.ylabel("Divergence Rate")
+        plt.title(f"Largest Lyapunov Exponent (slope of the line) = {slope:.3f}")
         plt.legend()
-
-    parameters = {"Trajectory_Length": len_trajectory}
 
     return slope, parameters
 
@@ -279,7 +297,9 @@ def _complexity_lyapunov_eckmann(
 
         # get neighbors within the radius
         r = distances[i][neighbour_furthest]
-        neighbors = np.where(distances[i] <= r)[0]  # should have length = min_neighbours
+        neighbors = np.where(distances[i] <= r)[
+            0
+        ]  # should have length = min_neighbours
 
         # Find matrix T_i (matrix_dim * matrix_dim) that sends points from neighbourhood of x(i) to x(i+1)
         vec_beta = signal[neighbors + matrix_dim * m] - signal[i + matrix_dim * m]
@@ -289,7 +309,9 @@ def _complexity_lyapunov_eckmann(
         # form matrix T_i
         t_i = np.zeros((matrix_dim, matrix_dim))
         t_i[:-1, 1:] = np.identity(matrix_dim - 1)
-        t_i[-1] = np.linalg.lstsq(matrix, vec_beta, rcond=-1)[0]  # least squares solution
+        t_i[-1] = np.linalg.lstsq(matrix, vec_beta, rcond=-1)[
+            0
+        ]  # least squares solution
 
         # QR-decomposition of T * old_Q
         mat_Q, mat_R = np.linalg.qr(np.dot(t_i, old_Q))
