@@ -9,7 +9,6 @@ import sklearn.neighbors
 
 from ..misc import NeuroKitWarning, find_knee
 from ..signal.signal_psd import signal_psd
-from .optim_complexity_tolerance import complexity_tolerance
 from .utils_complexity_embedding import complexity_embedding
 
 
