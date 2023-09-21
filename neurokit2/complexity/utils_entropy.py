@@ -128,7 +128,7 @@ def _get_count(
     # -------------------
     # Sanity checks
     sklearn_version = version.parse(sklearn.__version__)
-    if sklearn_version >= version.parse("1.3.0"):
+    if sklearn_version == version.parse("1.3.0"):
         valid_metrics = sklearn.neighbors.KDTree.valid_metrics() + ["range"]
     else:
         valid_metrics = sklearn.neighbors.KDTree.valid_metrics + ["range"]
