@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Fit a function to a non-linear pattern &#8212; NeuroKit2 0.2.6 documentation</title>
+    <title>Fit a function to a non-linear pattern &#8212; NeuroKit2 0.2.7 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -63,6 +64,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -377,10 +387,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -388,7 +398,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -459,7 +469,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/cc50a5fa48fc8a2755a0d9364b578258dc175112a33d62035212e8b95501ab32.png" src="../../_images/cc50a5fa48fc8a2755a0d9364b578258dc175112a33d62035212e8b95501ab32.png" />
+<img alt="../../_images/486d2c4a2e93393b7c0a73f5f6dfd293599e1b6d31433fc57e6fdd6c745b102b.png" src="../../_images/486d2c4a2e93393b7c0a73f5f6dfd293599e1b6d31433fc57e6fdd6c745b102b.png" />
 </div>
 </div>
 <p>In this case we <strong>know</strong> that the best fitting line will be a linear function (i.e., a straight line), and we want to find its parameters. A linear function has two parameters, the <strong>intercept</strong> and the <strong>slope</strong>.</p>
@@ -482,7 +492,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([3.52351709, 2.87073388])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([2.47976391, 2.76082131])
 </pre></div>
 </div>
 </div>
@@ -499,7 +509,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/fbc0b9c7eb59d42579d53804e49e5a11742bc5b1e5989f8b223cf4eb1fa1245c.png" src="../../_images/fbc0b9c7eb59d42579d53804e49e5a11742bc5b1e5989f8b223cf4eb1fa1245c.png" />
+<img alt="../../_images/61c71efd7227583d82c3dfe7b1e46448ec73d02f95efbcf8af17f2d22c667f37.png" src="../../_images/61c71efd7227583d82c3dfe7b1e46448ec73d02f95efbcf8af17f2d22c667f37.png" />
 </div>
 </div>
 </section>
@@ -514,7 +524,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5f266974a2225327c6d762eb627391eff2a3d04035c601d56e53877591588a21.png" src="../../_images/5f266974a2225327c6d762eb627391eff2a3d04035c601d56e53877591588a21.png" />
+<img alt="../../_images/55b48fc7b84bf7584cf9dc72a3bd06bf905431afb468d3bb3e0b4ce896c0c14f.png" src="../../_images/55b48fc7b84bf7584cf9dc72a3bd06bf905431afb468d3bb3e0b4ce896c0c14f.png" />
 </div>
 </div>
 <p>In this example, we will try to approximate this Skin Conductance Response (SCR) using a <a class="reference external" href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma distribution</a>, which is quite a flexible distribution defined by 3 parameters (<strong>a</strong>, <strong>loc</strong> and <strong>scale</strong>).</p>
@@ -540,7 +550,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/78c5c16fc71d183eae0c6b4311637590d1ddd8286ec837dc2cf6d5cc331f9ac0.png" src="../../_images/78c5c16fc71d183eae0c6b4311637590d1ddd8286ec837dc2cf6d5cc331f9ac0.png" />
+<img alt="../../_images/2543441a904de6abfc40e07ecb84e753bdfa25393f898c3a6a257faa02d6d2f6.png" src="../../_images/2543441a904de6abfc40e07ecb84e753bdfa25393f898c3a6a257faa02d6d2f6.png" />
 </div>
 </div>
 <p>Since these values are already a good start, we will use them as “starting point” (through the <code class="docutils literal notranslate"><span class="pre">p0</span></code> argument), to help the estimation algorithm converge (otherwise it could never find the right combination of parameters).</p>
@@ -552,7 +562,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94637384, 2.30932544, 1.03145471, 0.96192384, 2.12479078])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94422817, 2.35208018, 1.09227281, 0.6011826 , 2.01475588])
 </pre></div>
 </div>
 </div>
@@ -568,7 +578,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c58d09c82e6931c6bde201ab877392bff8ded651470023b2f84ceefa88f01d2e.png" src="../../_images/c58d09c82e6931c6bde201ab877392bff8ded651470023b2f84ceefa88f01d2e.png" />
+<img alt="../../_images/7e81695b58b9a8f562e817bd2544be6f66df756e8f79ed17f591a53be82e20ac.png" src="../../_images/7e81695b58b9a8f562e817bd2544be6f66df756e8f79ed17f591a53be82e20ac.png" />
 </div>
 </div>
 </section>
@@ -580,11 +590,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../eeg_microstates/eeg_microstates.html"
@@ -604,10 +613,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -671,8 +677,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

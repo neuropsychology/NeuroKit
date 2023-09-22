@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Respiratory Rate Variability (RRV) &#8212; NeuroKit2 0.2.6 documentation</title>
+    <title>Respiratory Rate Variability (RRV) &#8212; NeuroKit2 0.2.7 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -63,6 +64,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -377,10 +387,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -388,7 +398,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -459,7 +469,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/877d1e18f9072a75b8c726e803248573841ceba3718f05f2ad3771ac9f868795.png" src="../../_images/877d1e18f9072a75b8c726e803248573841ceba3718f05f2ad3771ac9f868795.png" />
+<img alt="../../_images/347200880aa9c92473bf09b4f9f52e789ba5e359b8d1e49f2f7258944a91592c.png" src="../../_images/347200880aa9c92473bf09b4f9f52e789ba5e359b8d1e49f2f7258944a91592c.png" />
 </div>
 </div>
 <p>You now have the raw RSP signal in the shape of a vector (i.e., a one-dimensional array). You can then clean it using <code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code> and extract the inhalation peaks of the signal using <code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code>. This will output 1) a <em>dataframe</em> indicating the occurrences of inhalation peaks and exhalation troughs (“1” marked in a list of zeros), and 2) a <em>dictionary</em> showing the samples of peaks and troughs.</p>
@@ -484,7 +494,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c20e5ef6bd000678c9e3cbffc4e7b3fcdef1aa11cdb41fd58fd64be2b9e74dd1.png" src="../../_images/c20e5ef6bd000678c9e3cbffc4e7b3fcdef1aa11cdb41fd58fd64be2b9e74dd1.png" />
+<img alt="../../_images/4eceec27f9e94e94cd93e134b574ba7bc670dfbfce6d3cf7280ddca7f486c4fb.png" src="../../_images/4eceec27f9e94e94cd93e134b574ba7bc670dfbfce6d3cf7280ddca7f486c4fb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -494,7 +504,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d814a5b541ac636c0ab82e28d465d0161427f4d1b57ada3a488ceb7de4e1ebe0.png" src="../../_images/d814a5b541ac636c0ab82e28d465d0161427f4d1b57ada3a488ceb7de4e1ebe0.png" />
+<img alt="../../_images/a6572ae264c21668d0d156526bf9e24fb4097a4e15f709a97358f5e22e657e60.png" src="../../_images/a6572ae264c21668d0d156526bf9e24fb4097a4e15f709a97358f5e22e657e60.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -504,7 +514,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d814a5b541ac636c0ab82e28d465d0161427f4d1b57ada3a488ceb7de4e1ebe0.png" src="../../_images/d814a5b541ac636c0ab82e28d465d0161427f4d1b57ada3a488ceb7de4e1ebe0.png" />
+<img alt="../../_images/a6572ae264c21668d0d156526bf9e24fb4097a4e15f709a97358f5e22e657e60.png" src="../../_images/a6572ae264c21668d0d156526bf9e24fb4097a4e15f709a97358f5e22e657e60.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -522,7 +532,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Breaths Per Minute&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/c06359003d3608194d79352f3b70dcdc4e18d646369ed5504e0160cd2aab4e7f.png" src="../../_images/c06359003d3608194d79352f3b70dcdc4e18d646369ed5504e0160cd2aab4e7f.png" />
+<img alt="../../_images/e3425c5c8a14364ffffe6fc9a20c99602dc52b6d20f926ccf6e3bd50472a10a9.png" src="../../_images/e3425c5c8a14364ffffe6fc9a20c99602dc52b6d20f926ccf6e3bd50472a10a9.png" />
 </div>
 </div>
 </section>
@@ -604,8 +614,8 @@ document.write(`
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/62f97d9da93a898b9fe9c1474399233215fa807e09686f547c17b70a74046517.png" src="../../_images/62f97d9da93a898b9fe9c1474399233215fa807e09686f547c17b70a74046517.png" />
-<img alt="../../_images/ed9a76c5ce2f8732d1a224d836124e10023e7d61b961c5582ebe5fff25fbe54c.png" src="../../_images/ed9a76c5ce2f8732d1a224d836124e10023e7d61b961c5582ebe5fff25fbe54c.png" />
+</div></div><img alt="../../_images/0838d007b82bdf76ed42efc91367ee7e07f0f7eb7449beead53e8d351b74285e.png" src="../../_images/0838d007b82bdf76ed42efc91367ee7e07f0f7eb7449beead53e8d351b74285e.png" />
+<img alt="../../_images/7330858c50887f00b126555ae4aba57e4856b3f5be57b308722f9b89ea501da8.png" src="../../_images/7330858c50887f00b126555ae4aba57e4856b3f5be57b308722f9b89ea501da8.png" />
 </div>
 </div>
 <p>This is a simple visualization tool for short-term (SD1) and long-term variability (SD2) in respiratory rhythm.</p>
@@ -618,11 +628,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../eda_peaks/eda_peaks.html"
@@ -642,10 +651,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -709,8 +715,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Extract and Visualize Individual Heartbeats &#8212; NeuroKit2 0.2.6 documentation</title>
+    <title>Extract and Visualize Individual Heartbeats &#8212; NeuroKit2 0.2.7 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -63,6 +64,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -377,10 +387,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -388,7 +398,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -494,7 +504,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9e676f6d0d979926c288d95b9c7e2832e98e0e03fb06e57fd3348158196efb9b.png" src="../../_images/9e676f6d0d979926c288d95b9c7e2832e98e0e03fb06e57fd3348158196efb9b.png" />
+<img alt="../../_images/132830f197b1c119a99ad43574f312e113418a6d8b0232f46fe3045d8cdbba2f.png" src="../../_images/132830f197b1c119a99ad43574f312e113418a6d8b0232f46fe3045d8cdbba2f.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -510,7 +520,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9bc78b9cab12bb62c299f03a63adbc5d140f5b86b6dd8a0b74a33774b2677852.png" src="../../_images/9bc78b9cab12bb62c299f03a63adbc5d140f5b86b6dd8a0b74a33774b2677852.png" />
+<img alt="../../_images/94f8e6f5ff8081a21cba9a1e95e35cd339a58d6cb6652a80fac3c0c71aade680.png" src="../../_images/94f8e6f5ff8081a21cba9a1e95e35cd339a58d6cb6652a80fac3c0c71aade680.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -566,36 +576,36 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.216061</td>
-      <td>134</td>
+      <td>-0.188941</td>
+      <td>140</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.209984</td>
-      <td>135</td>
+      <td>-0.183322</td>
+      <td>141</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.203878</td>
-      <td>136</td>
+      <td>-0.177647</td>
+      <td>142</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.197711</td>
-      <td>137</td>
+      <td>-0.171849</td>
+      <td>143</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.191434</td>
-      <td>138</td>
+      <td>-0.165843</td>
+      <td>144</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -680,123 +690,123 @@ document.write(`
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.216061</td>
-      <td>-0.133830</td>
-      <td>-0.137092</td>
-      <td>-0.130174</td>
-      <td>-0.143784</td>
-      <td>-0.142567</td>
-      <td>-0.134950</td>
-      <td>-0.134176</td>
-      <td>-0.129412</td>
-      <td>-0.139679</td>
+      <td>-0.188941</td>
+      <td>-0.131356</td>
+      <td>-0.142182</td>
+      <td>-0.134797</td>
+      <td>-0.131595</td>
+      <td>-0.144169</td>
+      <td>-0.134076</td>
+      <td>-0.132602</td>
+      <td>-0.138781</td>
+      <td>-0.131183</td>
       <td>...</td>
-      <td>-0.127078</td>
-      <td>-0.143822</td>
-      <td>-0.114888</td>
-      <td>-0.160035</td>
-      <td>-0.113568</td>
-      <td>-0.150170</td>
-      <td>-0.128622</td>
-      <td>-0.131104</td>
-      <td>-0.138385</td>
-      <td>-0.138072</td>
+      <td>-0.134477</td>
+      <td>-0.164652</td>
+      <td>-0.065323</td>
+      <td>-0.297402</td>
+      <td>-0.105264</td>
+      <td>-0.135795</td>
+      <td>-0.137724</td>
+      <td>-0.137404</td>
+      <td>-0.133319</td>
+      <td>-0.127577</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.209984</td>
-      <td>-0.133231</td>
-      <td>-0.136162</td>
-      <td>-0.128979</td>
-      <td>-0.142415</td>
-      <td>-0.141660</td>
-      <td>-0.134231</td>
-      <td>-0.133152</td>
-      <td>-0.128284</td>
-      <td>-0.139013</td>
+      <td>-0.183322</td>
+      <td>-0.130003</td>
+      <td>-0.140834</td>
+      <td>-0.133713</td>
+      <td>-0.130475</td>
+      <td>-0.143831</td>
+      <td>-0.133158</td>
+      <td>-0.131582</td>
+      <td>-0.138242</td>
+      <td>-0.129986</td>
       <td>...</td>
-      <td>-0.126284</td>
-      <td>-0.142489</td>
-      <td>-0.113922</td>
-      <td>-0.159804</td>
-      <td>-0.112882</td>
-      <td>-0.149488</td>
-      <td>-0.127611</td>
-      <td>-0.130072</td>
-      <td>-0.137202</td>
-      <td>-0.137032</td>
+      <td>-0.133810</td>
+      <td>-0.163364</td>
+      <td>-0.064420</td>
+      <td>-0.296869</td>
+      <td>-0.104275</td>
+      <td>-0.134998</td>
+      <td>-0.136820</td>
+      <td>-0.136320</td>
+      <td>-0.132777</td>
+      <td>-0.126586</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.203878</td>
-      <td>-0.132497</td>
-      <td>-0.135111</td>
-      <td>-0.127590</td>
-      <td>-0.140832</td>
-      <td>-0.140580</td>
-      <td>-0.133390</td>
-      <td>-0.131978</td>
-      <td>-0.126997</td>
-      <td>-0.138196</td>
+      <td>-0.177647</td>
+      <td>-0.128459</td>
+      <td>-0.139262</td>
+      <td>-0.132505</td>
+      <td>-0.129278</td>
+      <td>-0.143266</td>
+      <td>-0.132038</td>
+      <td>-0.130441</td>
+      <td>-0.137618</td>
+      <td>-0.128714</td>
       <td>...</td>
-      <td>-0.125398</td>
-      <td>-0.141066</td>
-      <td>-0.112731</td>
-      <td>-0.159460</td>
-      <td>-0.112044</td>
-      <td>-0.148658</td>
-      <td>-0.126516</td>
-      <td>-0.128904</td>
-      <td>-0.135797</td>
-      <td>-0.135877</td>
+      <td>-0.132961</td>
+      <td>-0.161920</td>
+      <td>-0.063279</td>
+      <td>-0.296145</td>
+      <td>-0.103203</td>
+      <td>-0.134041</td>
+      <td>-0.135748</td>
+      <td>-0.135080</td>
+      <td>-0.132121</td>
+      <td>-0.125490</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.197711</td>
-      <td>-0.131595</td>
-      <td>-0.133892</td>
-      <td>-0.125955</td>
-      <td>-0.138993</td>
-      <td>-0.139301</td>
-      <td>-0.132392</td>
-      <td>-0.130597</td>
-      <td>-0.125507</td>
-      <td>-0.137186</td>
+      <td>-0.171849</td>
+      <td>-0.126676</td>
+      <td>-0.137394</td>
+      <td>-0.131141</td>
+      <td>-0.127977</td>
+      <td>-0.142420</td>
+      <td>-0.130678</td>
+      <td>-0.129128</td>
+      <td>-0.136892</td>
+      <td>-0.127344</td>
       <td>...</td>
-      <td>-0.124403</td>
-      <td>-0.139532</td>
-      <td>-0.111257</td>
-      <td>-0.158960</td>
-      <td>-0.111007</td>
-      <td>-0.147645</td>
-      <td>-0.125317</td>
-      <td>-0.127545</td>
-      <td>-0.134128</td>
-      <td>-0.134561</td>
+      <td>-0.131873</td>
+      <td>-0.160251</td>
+      <td>-0.061858</td>
+      <td>-0.295180</td>
+      <td>-0.101994</td>
+      <td>-0.132883</td>
+      <td>-0.134447</td>
+      <td>-0.133646</td>
+      <td>-0.131322</td>
+      <td>-0.124260</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.191434</td>
-      <td>-0.130492</td>
-      <td>-0.132447</td>
-      <td>-0.124012</td>
-      <td>-0.136853</td>
-      <td>-0.137784</td>
-      <td>-0.131185</td>
-      <td>-0.128934</td>
-      <td>-0.123751</td>
-      <td>-0.135937</td>
+      <td>-0.165843</td>
+      <td>-0.124585</td>
+      <td>-0.135142</td>
+      <td>-0.129576</td>
+      <td>-0.126528</td>
+      <td>-0.141240</td>
+      <td>-0.129030</td>
+      <td>-0.127573</td>
+      <td>-0.136035</td>
+      <td>-0.125843</td>
       <td>...</td>
-      <td>-0.123276</td>
-      <td>-0.137849</td>
-      <td>-0.109436</td>
-      <td>-0.158240</td>
-      <td>-0.109704</td>
-      <td>-0.146419</td>
-      <td>-0.123981</td>
-      <td>-0.125916</td>
-      <td>-0.132136</td>
-      <td>-0.133031</td>
+      <td>-0.130485</td>
+      <td>-0.158278</td>
+      <td>-0.060110</td>
+      <td>-0.293914</td>
+      <td>-0.100587</td>
+      <td>-0.131476</td>
+      <td>-0.132824</td>
+      <td>-0.131965</td>
+      <td>-0.130341</td>
+      <td>-0.122870</td>
     </tr>
   </tbody>
 </table>
@@ -824,7 +834,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9fd2595bcbb460c5251617315d230447fa4a961c86f9e13cb0945db9a7ea8bfd.png" src="../../_images/9fd2595bcbb460c5251617315d230447fa4a961c86f9e13cb0945db9a7ea8bfd.png" />
+<img alt="../../_images/56456d99ec6e8d1ac573292507949e595ec56fb18caf9d7e8987454247f884c0.png" src="../../_images/56456d99ec6e8d1ac573292507949e595ec56fb18caf9d7e8987454247f884c0.png" />
 </div>
 </div>
 </section>
@@ -858,11 +868,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../ecg_hrv/ecg_hrv.html"
@@ -882,10 +891,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -955,8 +961,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>EEG Complexity Analysis &#8212; NeuroKit2 0.2.6 documentation</title>
+    <title>EEG Complexity Analysis &#8212; NeuroKit2 0.2.7 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -63,6 +64,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -377,10 +387,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -388,7 +398,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -490,7 +500,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/942c09af9a48b9f2aa50f77781677f035009db94abe374e076380cdf609c4405.png" src="../../_images/942c09af9a48b9f2aa50f77781677f035009db94abe374e076380cdf609c4405.png" />
+<img alt="../../_images/47bd234550c6ff4bc930103b5c6d378f49d658c91423a4b6065a3af09392610e.png" src="../../_images/47bd234550c6ff4bc930103b5c6d378f49d658c91423a4b6065a3af09392610e.png" />
 </div>
 </div>
 </section>
@@ -515,7 +525,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/0e39aeef3fdc9bb6ab598612316fe2eecbe5501a86a3cfd13c52978675a814de.png" src="../../_images/0e39aeef3fdc9bb6ab598612316fe2eecbe5501a86a3cfd13c52978675a814de.png" />
+<img alt="../../_images/105a5a86ef95cdbe6903b85521972d56bb627a3f8aab861398cbbcdb3f1650b1.png" src="../../_images/105a5a86ef95cdbe6903b85521972d56bb627a3f8aab861398cbbcdb3f1650b1.png" />
 </div>
 </div>
 <p>Now, we can compute the complexity metrics of this signal.</p>
@@ -541,7 +551,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SVDEn score: 1.22
 </pre></div>
 </div>
-<img alt="../../_images/6a450265b95938b24992d46909fe2b7d6e87c1d37a2fd32e5979b688013e4f13.png" src="../../_images/6a450265b95938b24992d46909fe2b7d6e87c1d37a2fd32e5979b688013e4f13.png" />
+<img alt="../../_images/81e9e2a8b3eb993fe9ccb369eedd937624f6eb9bacb4919864161363656ae973.png" src="../../_images/81e9e2a8b3eb993fe9ccb369eedd937624f6eb9bacb4919864161363656ae973.png" />
 </div>
 </div>
 </section>
@@ -593,7 +603,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/32693c82e19fc6fb275f0694fb7b297ae60bce6b7f770373bf7e2147935bc124.png" src="../../_images/32693c82e19fc6fb275f0694fb7b297ae60bce6b7f770373bf7e2147935bc124.png" />
+<img alt="../../_images/064074e9f2f707a72b8fe21a0ba5a4391d55b45d664ab3198eb06b3d76ffb825.png" src="../../_images/064074e9f2f707a72b8fe21a0ba5a4391d55b45d664ab3198eb06b3d76ffb825.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
@@ -603,7 +613,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/64fd31a6cdb1bb9bc3f39f64ebc743f09d4e4d85660d51b57dd5ff0cb3c49756.png" src="../../_images/64fd31a6cdb1bb9bc3f39f64ebc743f09d4e4d85660d51b57dd5ff0cb3c49756.png" />
+<img alt="../../_images/12881923ec3f71993a3051377339797b7fcbf1fa41a4fdb16edac2e7053b4b19.png" src="../../_images/12881923ec3f71993a3051377339797b7fcbf1fa41a4fdb16edac2e7053b4b19.png" />
 </div>
 </div>
 <p>Now we are going to convert the data to a Pandas dataframe and concatenate the two groups of epochs. Next, we are going to average together the EEG channels.</p>
@@ -730,7 +740,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Event-related Attractors&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/29fc399bf66d12b99fbb4e1ddaee7350b361fe43a53eee155beca24cf12fcfb4.png" src="../../_images/29fc399bf66d12b99fbb4e1ddaee7350b361fe43a53eee155beca24cf12fcfb4.png" />
+<img alt="../../_images/55dcfdde48ea3caf0080514995c9b10649f003f850b0ede23f6168e9b8c542a1.png" src="../../_images/55dcfdde48ea3caf0080514995c9b10649f003f850b0ede23f6168e9b8c542a1.png" />
 </div>
 </div>
 </section>
@@ -868,7 +878,7 @@ C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\seaborn\_oldcore
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;variable&#39;, ylabel=&#39;value&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/0f845de853ba281158df5e1e68f5ccd23651463052b8c6bb99e9a396f182308c.png" src="../../_images/0f845de853ba281158df5e1e68f5ccd23651463052b8c6bb99e9a396f182308c.png" />
+<img alt="../../_images/6a7649a263a20e51d8e4f5cf53d489cbe12883a51478bca150ce5f4715b1dd16.png" src="../../_images/6a7649a263a20e51d8e4f5cf53d489cbe12883a51478bca150ce5f4715b1dd16.png" />
 </div>
 </div>
 </section>
@@ -886,11 +896,10 @@ C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\seaborn\_oldcore
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../eeg_power/eeg_power.html"
@@ -910,10 +919,7 @@ C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\seaborn\_oldcore
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -984,8 +990,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Locate P, Q, S and T waves in ECG &#8212; NeuroKit2 0.2.6 documentation</title>
+    <title>Locate P, Q, S and T waves in ECG &#8212; NeuroKit2 0.2.7 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,8 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -63,6 +64,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -377,10 +387,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -388,7 +398,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -472,7 +482,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/65dc95f5a1ae3c0ad2628311bda72c510367bdec542b555ef05bdab1ab4d2370.png" src="../../_images/65dc95f5a1ae3c0ad2628311bda72c510367bdec542b555ef05bdab1ab4d2370.png" />
+<img alt="../../_images/6b237ebb12046d2f079bd43dea23b36a8a6d1a79b5454bf2a6989978cfa7eded.png" src="../../_images/6b237ebb12046d2f079bd43dea23b36a8a6d1a79b5454bf2a6989978cfa7eded.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -483,7 +493,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a902c225a7e2188948abd97ba3bc5eec7578e9d51c651fbde9853a2e99323c2e.png" src="../../_images/a902c225a7e2188948abd97ba3bc5eec7578e9d51c651fbde9853a2e99323c2e.png" />
+<img alt="../../_images/953fe1169bc30ef7c7f85e81f8286c9c4e6f817159131f975f06d6d782af3905.png" src="../../_images/953fe1169bc30ef7c7f85e81f8286c9c4e6f817159131f975f06d6d782af3905.png" />
 </div>
 </div>
 <p>Visually, the R-peaks seem to have been correctly identified. You can also explore searching for R-peaks using different methods provided by NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
@@ -513,7 +523,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/47dfbfd1853a94821de36cfc507a5fdd50ba664b9c9489aee45b75a6e46bffe7.png" src="../../_images/47dfbfd1853a94821de36cfc507a5fdd50ba664b9c9489aee45b75a6e46bffe7.png" />
+<img alt="../../_images/1c6359dead193f53f4ed88652e73f9f2f5d8ff5dbc6b41dcd315ce076b9f7c72.png" src="../../_images/1c6359dead193f53f4ed88652e73f9f2f5d8ff5dbc6b41dcd315ce076b9f7c72.png" />
 </div>
 </div>
 <p>Visually, the ‘peak’ method seems to have correctly identified the P-peaks, Q-peaks, S-peaks and T-peaks for this signal, at least, for the first few complexes. Well done, <em>peak</em>!</p>
@@ -531,7 +541,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0b5be4d057c32c0c38204a35835a620e6d9de91b5f5df9643573f255eee2edf7.png" src="../../_images/0b5be4d057c32c0c38204a35835a620e6d9de91b5f5df9643573f255eee2edf7.png" />
+<img alt="../../_images/a56ba99b8e83ee4414f68ae55f79f2aa331305f3aca1e83a14ae2b150a3cf3ff.png" src="../../_images/a56ba99b8e83ee4414f68ae55f79f2aa331305f3aca1e83a14ae2b150a3cf3ff.png" />
 </div>
 </div>
 <p>The ‘peak’ method is doing a glamorous job with identifying all the ECG peaks for this piece of ECG signal.</p>
@@ -550,7 +560,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f17edabf96968653984638bd58f5492cbd95735bc37af76dd8cb183ab16b5798.png" src="../../_images/f17edabf96968653984638bd58f5492cbd95735bc37af76dd8cb183ab16b5798.png" />
+<img alt="../../_images/4f128002c4812727f3709e28a693ab0c8778aec84eaee13a33993416e98ecdbb.png" src="../../_images/4f128002c4812727f3709e28a693ab0c8778aec84eaee13a33993416e98ecdbb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -566,7 +576,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/cd60f9144020762bc5cd959e028e3910b663e8b589de9fa08b2d2a86ec6f4a4c.png" src="../../_images/cd60f9144020762bc5cd959e028e3910b663e8b589de9fa08b2d2a86ec6f4a4c.png" />
+<img alt="../../_images/442f7858266b135a6fb078c295a3742a1d5fe62f0663b82e4017d2ae3ab16600.png" src="../../_images/442f7858266b135a6fb078c295a3742a1d5fe62f0663b82e4017d2ae3ab16600.png" />
 </div>
 </div>
 <p>Both the onsets of P-peaks and the offsets of T-peaks appears to have been correctly identified here. This information will be used to delineate cardiac phases in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-phase">ecg_phase()</a>.</p>
@@ -587,7 +597,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/60a8d625d19a8802536f03a60426d89556d9c75d8f18000e8cfc8d9076e3bffa.png" src="../../_images/60a8d625d19a8802536f03a60426d89556d9c75d8f18000e8cfc8d9076e3bffa.png" />
+<img alt="../../_images/ffbc125865ed8ab03296c6661d17f05889b84e8e599076d24b0f89e163edaeab.png" src="../../_images/ffbc125865ed8ab03296c6661d17f05889b84e8e599076d24b0f89e163edaeab.png" />
 </div>
 </div>
 <p>By specifying <em>‘all’</em> in the <code class="docutils literal notranslate"><span class="pre">show_type</span></code> argument, you can plot all delineated information output by the cwt method. However, it could be hard to evaluate the accuracy of the delineated information with everyhing plotted together. Let’s tease them apart!</p>
@@ -604,7 +614,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/79292920d87c0651bb3737a803aad44e35a21f408ebbad6ea3db03b3b5a99ca3.png" src="../../_images/79292920d87c0651bb3737a803aad44e35a21f408ebbad6ea3db03b3b5a99ca3.png" />
+<img alt="../../_images/2b10258ec84323b6af75817e9b0e56afb1895569f27575491fbdae9e44adf788.png" src="../../_images/2b10258ec84323b6af75817e9b0e56afb1895569f27575491fbdae9e44adf788.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -620,7 +630,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/38b832fde0d6b792d555d42e12ffb70987858d5f05c893d246c00a511bcabba2.png" src="../../_images/38b832fde0d6b792d555d42e12ffb70987858d5f05c893d246c00a511bcabba2.png" />
+<img alt="../../_images/a9eca920bce2adfbe541935f73bf845f702548de6316c4c09e6760213f0af2fe.png" src="../../_images/a9eca920bce2adfbe541935f73bf845f702548de6316c4c09e6760213f0af2fe.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -636,7 +646,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/997a002c3e31739d2f1583f86c3876b64b302d2039105c603ba8d3203095ea52.png" src="../../_images/997a002c3e31739d2f1583f86c3876b64b302d2039105c603ba8d3203095ea52.png" />
+<img alt="../../_images/0e8a7178939dba775eb3a856c5e821ef06ad04dc16e6c1357f9e4c47f4fbe8b8.png" src="../../_images/0e8a7178939dba775eb3a856c5e821ef06ad04dc16e6c1357f9e4c47f4fbe8b8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -652,7 +662,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d837f024bdb9e3c65521719e8fc7c03148e24aaf958a5fa30e200566b6c3834c.png" src="../../_images/d837f024bdb9e3c65521719e8fc7c03148e24aaf958a5fa30e200566b6c3834c.png" />
+<img alt="../../_images/29098917bc94082ff03dbfb5a6de60d7ba9a8358f90a1381ebcc0fd69b467118.png" src="../../_images/29098917bc94082ff03dbfb5a6de60d7ba9a8358f90a1381ebcc0fd69b467118.png" />
 </div>
 </div>
 <p><em>Unlike the peak method, the continuous wavelet method does not idenfity the Q-peaks and S-peaks. However, it provides more information regarding the boundaries of the waves</em></p>
@@ -674,7 +684,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d840e79ddd7f464e07da2b6ef48f5fdf3ed8cce59c47b1651d2a3271da4a9f27.png" src="../../_images/d840e79ddd7f464e07da2b6ef48f5fdf3ed8cce59c47b1651d2a3271da4a9f27.png" />
+<img alt="../../_images/076cdb998c34de0306e3f3e58b50ea1a7e7acec76d02807863a067e9069ef30e.png" src="../../_images/076cdb998c34de0306e3f3e58b50ea1a7e7acec76d02807863a067e9069ef30e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -690,7 +700,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/87dc137aa9dc57c117c8ee824b6abb4f56b8656d427051bf70727216e9987019.png" src="../../_images/87dc137aa9dc57c117c8ee824b6abb4f56b8656d427051bf70727216e9987019.png" />
+<img alt="../../_images/3db526cfc31298cbce82d3de3ebe8650f4b801a5de8e281ac7180965dadff85c.png" src="../../_images/3db526cfc31298cbce82d3de3ebe8650f4b801a5de8e281ac7180965dadff85c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -706,7 +716,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b2afaab8a80a5c2626ff647979af34e81d0e51aaa474733dcceadd60a76db55f.png" src="../../_images/b2afaab8a80a5c2626ff647979af34e81d0e51aaa474733dcceadd60a76db55f.png" />
+<img alt="../../_images/2eb0da3d600420f7697794cacf4d975353584c11f31eadf74c1569b2e983ce73.png" src="../../_images/2eb0da3d600420f7697794cacf4d975353584c11f31eadf74c1569b2e983ce73.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -722,7 +732,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a598f27666ec2140ee8c383e2fec6f824f4c621f55f5d60bf6b76a00ab1cca38.png" src="../../_images/a598f27666ec2140ee8c383e2fec6f824f4c621f55f5d60bf6b76a00ab1cca38.png" />
+<img alt="../../_images/751f1a13380d22910f365e2fb8e3f5a9d07bed92bb388ce34ca6996b5a54f68b.png" src="../../_images/751f1a13380d22910f365e2fb8e3f5a9d07bed92bb388ce34ca6996b5a54f68b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -738,7 +748,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9b6759e24b681f41958525555fbebd355f4a6a44edeb99433dfae230d49b00bd.png" src="../../_images/9b6759e24b681f41958525555fbebd355f4a6a44edeb99433dfae230d49b00bd.png" />
+<img alt="../../_images/5bd2416d73683a4b3dd189132c0ab30ebaf5e2ef534e1427718800e7fbd4d15d.png" src="../../_images/5bd2416d73683a4b3dd189132c0ab30ebaf5e2ef534e1427718800e7fbd4d15d.png" />
 </div>
 </div>
 <p>Visually, from the plots above, the delineated outputs of DWT appear to be more accurate than CWT, especially for the P-peaks and P-wave boundaries.</p>
@@ -753,11 +763,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../ecg_heartbeats/ecg_heartbeats.html"
@@ -777,10 +786,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -849,8 +855,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.complexity.optim_complexity_tolerance &#8212; NeuroKit2 0.2.6 documentation</title>
+    <title>neurokit2.complexity.optim_complexity_tolerance &#8212; NeuroKit2 0.2.7 documentation</title>
   
   
   
@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -34,8 +34,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -60,6 +61,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -309,10 +319,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -320,7 +330,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -358,8 +368,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">sklearn.neighbors</span>
 
 <span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">density</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_phi</span>
 <span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
+<span class="kn">from</span> <span class="nn">.utils_entropy</span> <span class="kn">import</span> <span class="n">_entropy_apen</span>
 
 
 <div class="viewcode-block" id="complexity_tolerance"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_tolerance">[docs]</a><span class="k">def</span> <span class="nf">complexity_tolerance</span><span class="p">(</span>
@@ -576,7 +586,11 @@ document.write(`
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;nolds&#39; method.&quot;</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="mf">0.11604738531196232</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5627</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.3334</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">0.11604738531196232</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mf">0.5627</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.3334</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Adjusted 20% SD&quot;</span><span class="p">}</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chon&quot;</span><span class="p">,</span> <span class="s2">&quot;chon2009&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span>
@@ -616,7 +630,9 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;dimension&#39; cannot be empty for the &#39;makowski&#39; method.&quot;</span><span class="p">)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
-            <span class="mf">0.2811</span> <span class="o">*</span> <span class="p">(</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.0049</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="p">((</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+            <span class="mf">0.2811</span> <span class="o">*</span> <span class="p">(</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="o">+</span> <span class="mf">0.0049</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="o">-</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="p">((</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
         <span class="p">)</span>
 
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;Makowski&quot;</span><span class="p">}</span>
@@ -644,7 +660,9 @@ document.write(`
         <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;bin&quot;</span><span class="p">})</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: complexity_tolerance(): &#39;method&#39; not recognized.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;NeuroKit error: complexity_tolerance(): &#39;method&#39; not recognized.&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">_optimize_tolerance_plot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">)</span>
@@ -657,10 +675,11 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_optimize_tolerance_recurrence</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
     <span class="c1"># Optimize missing parameters</span>
     <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If method=&#39;recurrence&#39;, both delay and dimension must be specified.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;If method=&#39;recurrence&#39;, both delay and dimension must be specified.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># Compute distance matrix</span>
     <span class="n">emb</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
@@ -684,10 +703,11 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_optimize_tolerance_maxapen</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
     <span class="c1"># Optimize missing parameters</span>
     <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If method=&#39;maxApEn&#39;, both delay and dimension must be specified.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;If method=&#39;maxApEn&#39;, both delay and dimension must be specified.&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">r_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">r_range</span> <span class="o">=</span> <span class="mi">40</span>
@@ -708,20 +728,6 @@ document.write(`
     <span class="c1"># apens = [_entropy_apen(signal, delay=delay, dimension=dimension, tolerance=r) for r in r_range]</span>
 
     <span class="k">return</span> <span class="n">r_range</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">apens</span><span class="p">)],</span> <span class="p">{</span><span class="s2">&quot;Values&quot;</span><span class="p">:</span> <span class="n">r_range</span><span class="p">,</span> <span class="s2">&quot;Scores&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">apens</span><span class="p">)}</span>
-
-
-<span class="k">def</span> <span class="nf">_entropy_apen</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-    <span class="n">phi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_phi</span><span class="p">(</span>
-        <span class="n">signal</span><span class="p">,</span>
-        <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
-        <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
-        <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-        <span class="n">approximate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span> <span class="n">info</span>
 
 
 <span class="k">def</span> <span class="nf">_optimize_tolerance_neighbours</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">r_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -752,7 +758,6 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_optimize_tolerance_bin</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
     <span class="c1"># Optimize missing parameters</span>
     <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dimension</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If method=&#39;bin&#39;, both delay and dimension must be specified.&quot;</span><span class="p">)</span>
@@ -776,7 +781,6 @@ document.write(`
 <span class="c1"># Plotting</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_optimize_tolerance_plot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;maxApEn&quot;</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -868,16 +872,12 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -926,8 +926,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>
