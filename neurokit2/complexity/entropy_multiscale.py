@@ -13,8 +13,8 @@ from .entropy_sample import entropy_sample
 from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
-from .utils import _phi, _phi_divide
 from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
+from .utils_entropy import _phi, _phi_divide
 
 
 def entropy_multiscale(
@@ -249,10 +249,12 @@ def entropy_multiscale(
     if "delay" in kwargs:
         kwargs.pop("delay")
 
-    # Parameters selection
+    # Default parameters
     algorithm = entropy_sample
     refined = False
     coarsegraining = "nonoverlapping"
+
+    # Parameters adjustement for variants
     if method in ["MSEn", "SampEn"]:
         pass  # The default arguments are good
     elif method in ["MSApEn", "ApEn", "MSPEn", "PEn", "MSWPEn", "WPEn"]:
@@ -326,13 +328,9 @@ def entropy_multiscale(
     info["Value"] = np.array(
         [
             _entropy_multiscale(
-                coarse=complexity_coarsegraining(
-                    signal,
-                    scale=scale,
-                    method=coarsegraining,
-                    show=False,
-                    **kwargs,
-                ),
+                signal,
+                scale=scale,
+                coarsegraining=coarsegraining,
                 algorithm=algorithm,
                 dimension=dimension,
                 tolerance=info["Tolerance"],
@@ -378,13 +376,32 @@ def _entropy_multiscale_plot(mse, info):
 # =============================================================================
 # Methods
 # =============================================================================
-def _entropy_multiscale(coarse, algorithm, dimension, tolerance, refined=False, **kwargs):
+def _entropy_multiscale(
+    signal,
+    scale,
+    coarsegraining,
+    algorithm,
+    dimension,
+    tolerance,
+    refined=False,
+    **kwargs,
+):
     """Wrapper function that works both on 1D and 2D coarse-grained (for composite)"""
+
+    # Get coarse-grained signal
+    coarse = complexity_coarsegraining(signal, scale=scale, method=coarsegraining)
+
     # For 1D coarse-graining
     if coarse.ndim == 1:
+        # Get delay
+        delay = 1  # If non-overlapping
+        if coarsegraining in ["rolling", "interpolate"]:
+            delay = scale
+
+        # Compute entropy
         return algorithm(
             coarse,
-            delay=1,
+            delay=delay,
             dimension=dimension,
             tolerance=tolerance,
             **kwargs,
