@@ -117,6 +117,8 @@ def ppg_plot(ppg_signals, info=None, static=True):
             ax=ax2,
         )
 
+        return fig
+
     else:
         try:
             import plotly.graph_objects as go
