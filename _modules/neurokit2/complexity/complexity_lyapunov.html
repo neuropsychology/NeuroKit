@@ -367,9 +367,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">sklearn.metrics.pairwise</span>
-<span class="kn">import</span> <span class="nn">sklearn.neighbors</span>
 
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">find_knee</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..signal.signal_psd</span> <span class="kn">import</span> <span class="n">signal_psd</span>
 <span class="kn">from</span> <span class="nn">.utils_complexity_embedding</span> <span class="kn">import</span> <span class="n">complexity_embedding</span>
 
@@ -379,7 +378,9 @@ document.write(`
     <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rosenstein1993&quot;</span><span class="p">,</span>
-    <span class="n">separation</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">len_trajectory</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">matrix_dim</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">min_neighbors</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**(Largest) Lyapunov Exponent (LLE)**</span>
@@ -387,7 +388,7 @@ document.write(`
 <span class="sd">    Lyapunov exponents (LE) describe the rate of exponential separation (convergence or divergence)</span>
 <span class="sd">    of nearby trajectories of a dynamical system. It is a measure of sensitive dependence on</span>
 <span class="sd">    initial conditions, i.e. how quickly two nearby states diverge. A system can have multiple LEs,</span>
-<span class="sd">    equal to the number of the dimensionality of the phase space, and the largest LE value, &quot;LLE&quot; is</span>
+<span class="sd">    equal to thenumber of the dimensionality of the phase space, and the largest LE value, &quot;LLE&quot; is</span>
 <span class="sd">    often used to determine the overall predictability of the dynamical system.</span>
 
 <span class="sd">    Different algorithms exist to estimate these indices:</span>
@@ -398,17 +399,13 @@ document.write(`
 <span class="sd">      neighbouring points are then tracked along their distance trajectories for a number of data</span>
 <span class="sd">      points. The slope of the line using a least-squares fit of the mean log trajectory of the</span>
 <span class="sd">      distances gives the final LLE.</span>
-<span class="sd">    * **Makowski** is a custom modification of Rosenstein&#39;s algorithm, using KDTree for more</span>
-<span class="sd">      efficient nearest neighbors computation. Additionally, the LLE is computed as the slope up to</span>
-<span class="sd">      the changepoint of divergence rate (the point where it flattens out), making it more robust</span>
-<span class="sd">      to the length trajectory parameter.</span>
-<span class="sd">    * **Eckmann et al. (1986)** computes LEs by first reconstructing the time series using a</span>
+<span class="sd">    * **Eckmann et al. (1996)** computes LEs by first reconstructing the time series using a</span>
 <span class="sd">      delay-embedding method, and obtains the tangent that maps to the reconstructed dynamics using</span>
 <span class="sd">      a least-squares fit, where the LEs are deduced from the tangent maps.</span>
 
 <span class="sd">    .. warning::</span>
 
-<span class="sd">      The **Eckman (1986)** method currently does not work. Please help us fixing it by double</span>
+<span class="sd">      The **Eckman (1996)** method currently does not work. Please help us fixing it by double</span>
 <span class="sd">      checking the code, the paper and helping us figuring out what&#39;s wrong. Overall, we would like</span>
 <span class="sd">      to improve this function to return for instance all the exponents (Lyapunov spectrum),</span>
 <span class="sd">      implement newer and faster methods (e.g., Balcerzak, 2018, 2020), etc. If you&#39;re interested</span>
@@ -424,17 +421,17 @@ document.write(`
 <span class="sd">    dimension : int</span>
 <span class="sd">        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See</span>
 <span class="sd">        :func:`complexity_dimension` to estimate the optimal value for this parameter. If method</span>
-<span class="sd">        is ``&quot;eckmann1986&quot;``, larger values for dimension are recommended.</span>
+<span class="sd">        is ``&quot;eckmann1996&quot;``, larger values for dimension are recommended.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The method that defines the algorithm for computing LE. Can be one of ``&quot;rosenstein1993&quot;``,</span>
-<span class="sd">        ``&quot;makowski&quot;``, or ``&quot;eckmann1986&quot;``.</span>
+<span class="sd">        The method that defines the algorithm for computing LE. Can be one of ``&quot;rosenstein1993&quot;``</span>
+<span class="sd">        or ``&quot;eckmann1996&quot;``.</span>
 <span class="sd">    len_trajectory : int</span>
 <span class="sd">        Applies when method is ``&quot;rosenstein1993&quot;``. The number of data points in which</span>
 <span class="sd">        neighboring trajectories are followed.</span>
 <span class="sd">    matrix_dim : int</span>
-<span class="sd">        Applies when method is ``&quot;eckmann1986&quot;``. Corresponds to the number of LEs to return.</span>
+<span class="sd">        Applies when method is ``&quot;eckmann1996&quot;``. Corresponds to the number of LEs to return.</span>
 <span class="sd">    min_neighbors : int, str</span>
-<span class="sd">        Applies when method is ``&quot;eckmann1986&quot;``. Minimum number of neighbors. If ``&quot;default&quot;``,</span>
+<span class="sd">        Applies when method is ``&quot;eckmann1996&quot;``. Minimum number of neighbors. If ``&quot;default&quot;``,</span>
 <span class="sd">        ``min(2 * matrix_dim, matrix_dim + 4)`` is used.</span>
 <span class="sd">    **kwargs : optional</span>
 <span class="sd">        Other arguments to be passed to ``signal_psd()`` for calculating the minimum temporal</span>
@@ -444,7 +441,7 @@ document.write(`
 <span class="sd">    --------</span>
 <span class="sd">    lle : float</span>
 <span class="sd">        An estimate of the largest Lyapunov exponent (LLE) if method is ``&quot;rosenstein1993&quot;``, and</span>
-<span class="sd">        an array of LEs if ``&quot;eckmann1986&quot;``.</span>
+<span class="sd">        an array of LEs if ``&quot;eckmann1996&quot;``.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing additional information regarding the parameters used</span>
 <span class="sd">        to compute LLE.</span>
@@ -455,24 +452,13 @@ document.write(`
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 8], noise=0.1)</span>
+<span class="sd">      signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)</span>
 
-<span class="sd">      # Rosenstein&#39;s method</span>
-<span class="sd">      @savefig p_complexity_lyapunov1.png scale=100%</span>
-<span class="sd">      lle, info = nk.complexity_lyapunov(signal, method=&quot;rosenstein&quot;, show=True)</span>
-<span class="sd">      @suppress</span>
-<span class="sd">      plt.close()</span>
-
+<span class="sd">      lle, info = nk.complexity_lyapunov(signal, method=&quot;rosenstein1993&quot;, show=True)</span>
 <span class="sd">      lle</span>
 
-<span class="sd">      # Makowski&#39;s change-point method</span>
-<span class="sd">      @savefig p_complexity_lyapunov2.png scale=100%</span>
-<span class="sd">      lle, info = nk.complexity_lyapunov(signal, method=&quot;makowski&quot;, show=True)</span>
-<span class="sd">      @suppress</span>
-<span class="sd">      plt.close()</span>
-
 <span class="sd">      # Eckman&#39;s method is broken. Please help us fix-it!</span>
-<span class="sd">      # lle, info = nk.complexity_lyapunov(signal, dimension=2, method=&quot;eckmann1986&quot;)</span>
+<span class="sd">      # lle, info = nk.complexity_lyapunov(signal, dimension=2, method=&quot;eckmann1996&quot;)</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -496,22 +482,18 @@ document.write(`
 
     <span class="c1"># &quot;We impose the additional constraint that nearest neighbors have a temporal separation</span>
     <span class="c1"># greater than the mean period of the time series: This allows us to consider each pair of</span>
-    <span class="c1"># neighbors as nearby initial conditions for different trajectories.&quot;</span>
+    <span class="c1"># neighbors as nearby initial conditions for different trajectories.&quot;&quot;</span>
 
     <span class="c1"># &quot;We estimated the mean period as the reciprocal of the mean frequency of the power spectrum,</span>
     <span class="c1"># although we expect any comparable estimate, e.g., using the median frequency of the magnitude</span>
     <span class="c1"># spectrum, to yield equivalent results.&quot;</span>
-    <span class="k">if</span> <span class="n">separation</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
-        <span class="c1"># Actual sampling rate does not matter</span>
-        <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_psd</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
-        <span class="n">mean_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">])</span>
 
-        <span class="c1"># 1 / mean_freq = seconds per cycle</span>
-        <span class="n">separation</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">mean_freq</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">separation</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="s2">&quot;&#39;separation&#39; should be an integer.&quot;</span>
+    <span class="c1"># Actual sampling rate does not matter</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">mean_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">])</span>
+
+    <span class="c1"># 1 / mean_freq = seconds per cycle</span>
+    <span class="n">separation</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">mean_freq</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
 
     <span class="c1"># Run algorithm</span>
     <span class="c1"># ----------------</span>
@@ -519,22 +501,15 @@ document.write(`
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rosenstein&quot;</span><span class="p">,</span> <span class="s2">&quot;rosenstein1993&quot;</span><span class="p">]:</span>
         <span class="n">le</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">_complexity_lyapunov_rosenstein</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">separation</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">separation</span><span class="p">,</span> <span class="n">len_trajectory</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;makowski&quot;</span><span class="p">]:</span>
-        <span class="n">le</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">_complexity_lyapunov_makowski</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">separation</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;eckmann&quot;</span><span class="p">,</span> <span class="s2">&quot;eckmann1986&quot;</span><span class="p">,</span> <span class="s2">&quot;eckmann1986&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;eckmann&quot;</span><span class="p">,</span> <span class="s2">&quot;eckmann1996&quot;</span><span class="p">]:</span>
         <span class="n">le</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">_complexity_lyapunov_eckmann</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span>
             <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span>
             <span class="n">separation</span><span class="o">=</span><span class="n">separation</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: complexity_lyapunov(): &#39;method&#39; should be one of &quot;</span>
-            <span class="s2">&quot; &#39;rosenstein1993&#39;, &#39;makowski&#39;, &#39;eckmann1986&#39;.&quot;</span>
+            <span class="n">matrix_dim</span><span class="o">=</span><span class="n">matrix_dim</span><span class="p">,</span>
+            <span class="n">min_neighbors</span><span class="o">=</span><span class="n">min_neighbors</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># Store params</span>
@@ -554,83 +529,10 @@ document.write(`
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_complexity_lyapunov_makowski</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span>
-    <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">separation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">max_length</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="c1"># Store parameters</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;Dimension&quot;</span><span class="p">:</span> <span class="n">dimension</span><span class="p">,</span>
-        <span class="s2">&quot;Delay&quot;</span><span class="p">:</span> <span class="n">delay</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="c1"># Embedding</span>
-    <span class="n">embedded</span> <span class="o">=</span> <span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">embedded</span><span class="p">)</span>
-
-    <span class="c1"># Set the maxiimum trajectory length to 10 times the delay</span>
-    <span class="k">if</span> <span class="n">max_length</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
-        <span class="n">max_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">delay</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">max_length</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">max_length</span> <span class="o">=</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
-
-    <span class="c1"># Create KDTree and query for nearest neighbors</span>
-    <span class="n">tree</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KDTree</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Query for nearest neighbors. To ensure we get a neighbor outside of the `separation`,</span>
-    <span class="c1"># k=1 is the point itself, k=2 is the nearest neighbor, and k=3 is the second nearest neighbor.</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span> <span class="o">+</span> <span class="n">separation</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># The neighbor outside the `separation` region will be the last one in the returned list.</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># Compute the average divergence for each trajectory length</span>
-    <span class="n">trajectories</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">max_length</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">idx</span><span class="p">[:</span> <span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">valid</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">trajectories</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-            <span class="k">continue</span>
-
-        <span class="n">divergences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
-            <span class="n">embedded</span><span class="p">[</span><span class="n">valid</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">embedded</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">],</span>
-            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">divergences</span> <span class="o">=</span> <span class="n">divergences</span><span class="p">[</span><span class="n">divergences</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">divergences</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">trajectories</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">trajectories</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">divergences</span><span class="p">))</span>
-
-    <span class="c1"># Change point</span>
-    <span class="n">x_axis</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trajectories</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">knee</span> <span class="o">=</span> <span class="n">find_knee</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">trajectories</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Divergence_Rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trajectories</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Changepoint&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">knee</span>
-
-    <span class="c1"># Linear fit</span>
-    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x_axis</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">knee</span><span class="p">],</span> <span class="n">trajectories</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">knee</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trajectories</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">trajectories</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">knee</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Changepoint&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axline</span><span class="p">(</span>
-            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">intercept</span><span class="p">),</span> <span class="n">slope</span><span class="o">=</span><span class="n">slope</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Least-squares Fit&quot;</span>
-        <span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">trajectories</span><span class="p">))</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Divergence Rate&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Largest Lyapunov Exponent (slope of the line) = </span><span class="si">{</span><span class="n">slope</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">slope</span><span class="p">,</span> <span class="n">info</span>
-
-
 <span class="k">def</span> <span class="nf">_complexity_lyapunov_rosenstein</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">separation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">len_trajectory</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
+
     <span class="c1"># 1. Check that sufficient data points are available</span>
     <span class="c1"># Minimum length required to find single orbit vector</span>
     <span class="n">min_len</span> <span class="o">=</span> <span class="p">(</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">delay</span> <span class="o">+</span> <span class="mi">1</span>
@@ -660,9 +562,7 @@ document.write(`
 
     <span class="c1"># Find indices of nearest neighbours</span>
     <span class="n">ntraj</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">len_trajectory</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">min_dist_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
-        <span class="n">dists</span><span class="p">[:</span><span class="n">ntraj</span><span class="p">,</span> <span class="p">:</span><span class="n">ntraj</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
-    <span class="p">)</span>  <span class="c1"># exclude last few indices</span>
+    <span class="n">min_dist_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dists</span><span class="p">[:</span><span class="n">ntraj</span><span class="p">,</span> <span class="p">:</span><span class="n">ntraj</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># exclude last few indices</span>
     <span class="n">min_dist_indices</span> <span class="o">=</span> <span class="n">min_dist_indices</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="c1"># Follow trajectories of neighbour pairs for len_trajectory data points</span>
@@ -679,24 +579,15 @@ document.write(`
     <span class="n">divergence_rate</span> <span class="o">=</span> <span class="n">trajectories</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trajectories</span><span class="p">)]</span>
 
     <span class="c1"># LLE obtained by least-squares fit to average line</span>
-    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">divergence_rate</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">divergence_rate</span><span class="p">,</span> <span class="mi">1</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Store info</span>
-    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;Trajectory_Length&quot;</span><span class="p">:</span> <span class="n">len_trajectory</span><span class="p">,</span>
-        <span class="s2">&quot;Divergence_Rate&quot;</span><span class="p">:</span> <span class="n">divergence_rate</span><span class="p">,</span>
-    <span class="p">}</span>
+    <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">divergence_rate</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">divergence_rate</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">divergence_rate</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">divergence_rate</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axline</span><span class="p">(</span>
-            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">intercept</span><span class="p">),</span> <span class="n">slope</span><span class="o">=</span><span class="n">slope</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Least-squares Fit&quot;</span>
-        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axline</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">intercept</span><span class="p">),</span> <span class="n">slope</span><span class="o">=</span><span class="n">slope</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Least-squares Fit&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Divergence Rate&quot;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Largest Lyapunov Exponent (slope of the line) = </span><span class="si">{</span><span class="n">slope</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Trajectory_Length&quot;</span><span class="p">:</span> <span class="n">len_trajectory</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">slope</span><span class="p">,</span> <span class="n">parameters</span>
 
@@ -750,9 +641,7 @@ document.write(`
 
         <span class="c1"># get neighbors within the radius</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">neighbour_furthest</span><span class="p">]</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)[</span>
-            <span class="mi">0</span>
-        <span class="p">]</span>  <span class="c1"># should have length = min_neighbours</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">distances</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># should have length = min_neighbours</span>
 
         <span class="c1"># Find matrix T_i (matrix_dim * matrix_dim) that sends points from neighbourhood of x(i) to x(i+1)</span>
         <span class="n">vec_beta</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">neighbors</span> <span class="o">+</span> <span class="n">matrix_dim</span> <span class="o">*</span> <span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">matrix_dim</span> <span class="o">*</span> <span class="n">m</span><span class="p">]</span>
@@ -762,9 +651,7 @@ document.write(`
         <span class="c1"># form matrix T_i</span>
         <span class="n">t_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="n">matrix_dim</span><span class="p">))</span>
         <span class="n">t_i</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">matrix_dim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">t_i</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vec_beta</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span>
-            <span class="mi">0</span>
-        <span class="p">]</span>  <span class="c1"># least squares solution</span>
+        <span class="n">t_i</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">vec_beta</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># least squares solution</span>
 
         <span class="c1"># QR-decomposition of T * old_Q</span>
         <span class="n">mat_Q</span><span class="p">,</span> <span class="n">mat_R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">t_i</span><span class="p">,</span> <span class="n">old_Q</span><span class="p">))</span>
