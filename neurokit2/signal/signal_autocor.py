@@ -4,7 +4,9 @@ import scipy.stats
 from matplotlib import pyplot as plt
 
 
-def signal_autocor(signal, lag=None, demean=True, method="auto", show=False):
+def signal_autocor(
+    signal, lag=None, demean=True, method="auto", unbiased=False, show=False
+):
     """**Autocorrelation (ACF)**
 
     Compute the autocorrelation of a signal.
@@ -57,6 +59,14 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", show=False):
       @suppress
       plt.close()
 
+    .. ipython:: python
+
+      # Example 3: Using 'unbiased' Method
+      @savefig p_signal_autocor3.png scale=100%
+      r, info = nk.signal_autocor(signal, lag=2, method='fft', unbiased=True, show=True)
+      @suppress
+      plt.close()
+
     """
     n = len(signal)
 
@@ -66,8 +76,14 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", show=False):
 
     # Run autocor
     method = method.lower()
+    if method == "unbiased":
+        unbiased = True
+        method = "fft"
+
     if method in ["auto"]:
-        acov = scipy.signal.correlate(signal, signal, mode="full", method="auto")[n - 1 :]
+        acov = scipy.signal.correlate(signal, signal, mode="full", method="auto")[
+            n - 1 :
+        ]
     elif method in ["cor", "correlation", "correlate"]:
         acov = np.correlate(signal, signal, mode="full")
         acov = acov[n - 1 :]  # Min time lag is 0
@@ -76,16 +92,15 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", show=False):
         fft = np.fft.fft(a)
         acf = np.fft.ifft(np.conjugate(fft) * fft)[:n]
         acov = acf.real
-    elif method == "unbiased":
-        dnorm = np.r_[np.arange(1, n + 1), np.arange(n - 1, 0, -1)]
-        fft = np.fft.fft(signal, n=n)
-        acf = np.fft.ifft(np.conjugate(fft) * fft)[:n]
-        acf /= dnorm[n - 1 :]
-        acov = acf.real
     else:
         raise ValueError("Method must be 'auto', 'correlation' or 'fft'.")
 
-    # Normalize
+    # If unbiased, normalize by the number of overlapping elements
+    if unbiased is True:
+        normalization = np.arange(n, 0, -1)
+        acov /= normalization
+
+    # Normalize (so that max correlation is 1)
     r = acov / np.max(acov)
 
     # Confidence interval

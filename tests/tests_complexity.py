@@ -4,9 +4,9 @@ import antropy
 import nolds
 import numpy as np
 import pandas as pd
-from pyentrp import entropy as pyentrp
 import sklearn.neighbors
 from packaging import version
+from pyentrp import entropy as pyentrp
 
 # import EntropyHub
 import neurokit2 as nk
@@ -21,13 +21,14 @@ import neurokit2 as nk
 # Some sanity checks
 # =============================================================================
 def test_complexity_sanity():
-
     signal = np.cos(np.linspace(start=0, stop=30, num=1000))
     mdfa_q = [-5, -3, -1, 1, 3, 5]
 
     # Entropy
     assert np.allclose(
-        nk.entropy_fuzzy(signal)[0], nk.entropy_sample(signal, fuzzy=True)[0], atol=0.000001
+        nk.entropy_fuzzy(signal)[0],
+        nk.entropy_sample(signal, fuzzy=True)[0],
+        atol=0.000001,
     )
 
     # Fractal
@@ -39,9 +40,13 @@ def test_complexity_sanity():
     # TODO: why this gives 70 or 71 depending on the machine????
     # assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
 
-    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7382138350901658, atol=0.000001)
     assert np.allclose(
-        nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.01
+        nk.fractal_correlation(signal)[0], 0.7382138350901658, atol=0.000001
+    )
+    assert np.allclose(
+        nk.fractal_correlation(signal, radius="nolds")[0],
+        nolds.corr_dim(signal, 2),
+        atol=0.01,
     )
 
 
@@ -79,7 +84,6 @@ def test_complexity_sanity():
 
 
 def test_complexity_vs_R():
-
     signal = pd.read_csv(
         "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv"
     )["RSP"].values
@@ -97,7 +101,9 @@ def test_complexity_vs_R():
     sampen = nk.entropy_sample(signal[0:300], dimension=2, tolerance=r)[0]
     assert np.allclose(
         sampen,
-        nk.entropy_sample(signal[0:300], dimension=2, tolerance=r, distance="infinity")[0],
+        nk.entropy_sample(signal[0:300], dimension=2, tolerance=r, distance="infinity")[
+            0
+        ],
         atol=0.001,
     )
     assert np.allclose(sampen, 0.03784376, atol=0.001)
@@ -111,7 +117,6 @@ def test_complexity_vs_R():
 
 
 def test_complexity_vs_Python():
-
     signal = np.cos(np.linspace(start=0, stop=30, num=100))
     tolerance = 0.2 * np.std(signal, ddof=1)
 
@@ -133,9 +138,9 @@ def test_complexity_vs_Python():
         entropy_app_entropy(signal, 2),
     )
 
-    assert nk.entropy_approximate(signal, dimension=2, tolerance=tolerance)[0] != pyeeg_ap_entropy(
-        signal, 2, tolerance
-    )
+    assert nk.entropy_approximate(signal, dimension=2, tolerance=tolerance)[
+        0
+    ] != pyeeg_ap_entropy(signal, 2, tolerance)
 
     # Sample
     assert np.allclose(
@@ -167,7 +172,9 @@ def test_complexity_vs_Python():
         != pyentrp.sample_entropy(signal, 2, 0.2)[1]
     )
     assert (
-        nk.entropy_sample(signal, dimension=2, tolerance=0.2 * np.sqrt(np.var(signal)))[0]
+        nk.entropy_sample(signal, dimension=2, tolerance=0.2 * np.sqrt(np.var(signal)))[
+            0
+        ]
         != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
     )
 
@@ -254,11 +261,16 @@ def pyeeg_embed_seq(time_series, tau, embedding_dimension):
     else:
         typed_time_series = time_series
 
-    shape = (typed_time_series.size - tau * (embedding_dimension - 1), embedding_dimension)
+    shape = (
+        typed_time_series.size - tau * (embedding_dimension - 1),
+        embedding_dimension,
+    )
 
     strides = (typed_time_series.itemsize, tau * typed_time_series.itemsize)
 
-    return np.lib.stride_tricks.as_strided(typed_time_series, shape=shape, strides=strides)
+    return np.lib.stride_tricks.as_strided(
+        typed_time_series, shape=shape, strides=strides
+    )
 
 
 def pyeeg_bin_power(X, Band, Fs):
@@ -269,7 +281,11 @@ def pyeeg_bin_power(X, Band, Fs):
         Freq = float(Band[Freq_Index])
         Next_Freq = float(Band[Freq_Index + 1])
         Power[Freq_Index] = sum(
-            C[int(np.floor(Freq / Fs * len(X))) : int(np.floor(Next_Freq / Fs * len(X)))]
+            C[
+                int(np.floor(Freq / Fs * len(X))) : int(
+                    np.floor(Next_Freq / Fs * len(X))
+                )
+            ]
         )
     Power_Ratio = Power / sum(Power)
     return Power, Power_Ratio
@@ -341,16 +357,6 @@ def entropy_embed(x, order=3, delay=1):
 
 
 def entropy_app_samp_entropy(x, order, metric="chebyshev", approximate=True):
-    sklearn_version = version.parse(sklearn.__version__)
-    if sklearn_version >= version.parse("1.3.0"):
-        _all_metrics = sklearn.neighbors.KDTree.valid_metrics()
-    else:
-        _all_metrics = sklearn.neighbors.KDTree.valid_metrics
-    if metric not in _all_metrics:
-        raise ValueError(
-            "The given metric (%s) is not valid. The valid "  # pylint: disable=consider-using-f-string
-            "metric names are: %s" % (metric, _all_metrics)
-        )
     phi = np.zeros(2)
     r = 0.2 * np.std(x, axis=-1, ddof=1)
 
@@ -516,7 +522,11 @@ def MultiscaleEntropy_check_type(x, num_type, name):
         tmp = [x]
     elif not isinstance(x, Iterable):
         raise ValueError(
-            name + " should be a " + num_type.__name__ + " or an iterator of " + num_type.__name__
+            name
+            + " should be a "
+            + num_type.__name__
+            + " or an iterator of "
+            + num_type.__name__
         )
     else:
         tmp = []
@@ -635,7 +645,12 @@ def MultiscaleEntropy_sample_entropy(
 
 
 def MultiscaleEntropy_mse(
-    x, scale_factor=list(range(1, 21)), m=[2], r=[0.15], return_type="dict", safe_mode=False
+    x,
+    scale_factor=list(range(1, 21)),
+    m=[2],
+    r=[0.15],
+    return_type="dict",
+    safe_mode=False,
 ):
     """[Multiscale Entropy]
 
