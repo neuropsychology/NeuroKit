@@ -114,7 +114,7 @@ def _eda_intervalrelated(
         )
         output["SCR_Peaks_Amplitude_Mean"] = np.nan
     else:
-        output["SCR_Peaks_Amplitude_Mean"] = np.nanmean(data["SCR_Amplitude"].values)
+        output["SCR_Peaks_Amplitude_Mean"] = np.nanmean(data[data["SCR_Peaks"] == 1]["SCR_Amplitude"].values)
 
     # Get variability of tonic
     if "EDA_Tonic" in colnames:
