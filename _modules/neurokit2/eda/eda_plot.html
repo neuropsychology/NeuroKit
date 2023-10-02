@@ -424,6 +424,10 @@ document.write(`
     <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Onsets&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">half_recovery</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">[</span><span class="s2">&quot;SCR_Recovery&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
+    <span class="c1"># clean peaks that do not have onsets</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">):</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
     <span class="c1"># Determine unit of x-axis.</span>
     <span class="n">x_label</span> <span class="o">=</span> <span class="s2">&quot;Time (seconds)&quot;</span>
     <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">)</span> <span class="o">/</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">eda_signals</span><span class="p">))</span>

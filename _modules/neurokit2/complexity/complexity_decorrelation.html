@@ -360,13 +360,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for neurokit2.complexity.complexity_decorrelation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_autocor</span>
 
 
-<div class="viewcode-block" id="complexity_decorrelation"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_decorrelation">[docs]</a><span class="k">def</span> <span class="nf">complexity_decorrelation</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
+<div class="viewcode-block" id="complexity_decorrelation"><a class="viewcode-back" href="../../../functions/complexity.html#neurokit2.complexity.complexity_decorrelation">[docs]</a><span class="k">def</span> <span class="nf">complexity_decorrelation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Decorrelation Time (DT)**</span>
 
 <span class="sd">    The decorrelation time (DT) is defined as the time (in samples) of the first zero crossing of</span>
@@ -379,6 +380,8 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The signal (i.e., a time series) in the form of a vector of values.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If True, will return a plot of the autocorrelation.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -398,11 +401,15 @@ document.write(`
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      # Simulate a signal with duration os 2s</span>
-<span class="sd">      signal = nk.signal_simulate(duration=2, frequency=[5, 9, 12])</span>
+<span class="sd">      # Simulate a signal</span>
+<span class="sd">      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)</span>
 
 <span class="sd">      # Compute DT</span>
-<span class="sd">      dt, _ = nk.complexity_decorrelation(signal)</span>
+<span class="sd">      @savefig p_complexity_decorrelation1.png scale=100%</span>
+<span class="sd">      dt, _ = nk.complexity_decorrelation(signal, show=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
 <span class="sd">      dt</span>
 
 <span class="sd">    References</span>
@@ -422,7 +429,7 @@ document.write(`
         <span class="p">)</span>
 
     <span class="c1"># Unbiased autocor (see https://github.com/mne-tools/mne-features/)</span>
-    <span class="n">autocor</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;unbiased&quot;</span><span class="p">)</span>
+    <span class="n">autocor</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Get zero-crossings</span>
     <span class="n">zc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">autocor</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span>
@@ -430,6 +437,22 @@ document.write(`
         <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">zc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># Max length of autocorrelation to plot</span>
+        <span class="n">max_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dt</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_len</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">autocor</span><span class="p">):</span>
+            <span class="n">max_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">autocor</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">autocor</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_len</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Lag&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Autocorrelation&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_len</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;DT = </span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Decorrelation Time (DT)&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
     <span class="k">return</span> <span class="n">dt</span><span class="p">,</span> <span class="p">{}</span></div>
 </pre></div>
 
