@@ -62,6 +62,10 @@ def eda_plot(eda_signals, info=None, static=True):
     onsets = np.where(eda_signals["SCR_Onsets"] == 1)[0]
     half_recovery = np.where(eda_signals["SCR_Recovery"] == 1)[0]
 
+    # clean peaks that do not have onsets
+    if len(peaks) > len(onsets):
+        peaks = peaks[1:]
+
     # Determine unit of x-axis.
     x_label = "Time (seconds)"
     x_axis = np.linspace(0, len(eda_signals) / info["sampling_rate"], len(eda_signals))
