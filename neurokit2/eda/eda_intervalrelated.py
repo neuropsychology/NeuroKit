@@ -114,7 +114,12 @@ def _eda_intervalrelated(
         )
         output["SCR_Peaks_Amplitude_Mean"] = np.nan
     else:
-        output["SCR_Peaks_Amplitude_Mean"] = np.nanmean(data[data["SCR_Peaks"] == 1]["SCR_Amplitude"].values)
+        only_peaks = data["SCR_Peaks"] == 1
+        # This test is to avoid a "RuntimeWarning: Mean of empty slice"
+        if only_peaks.sum() > 0:
+            output["SCR_Peaks_Amplitude_Mean"] = np.nanmean(data[only_peaks]["SCR_Amplitude"].values)
+        else:
+            output["SCR_Peaks_Amplitude_Mean"] = np.nan
 
     # Get variability of tonic
     if "EDA_Tonic" in colnames:
