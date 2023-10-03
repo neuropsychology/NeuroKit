@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from .optim_complexity_tolerance import complexity_tolerance
-from .utils import _phi, _phi_divide
+from .utils_entropy import _phi, _phi_divide
 
 
 def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
@@ -35,7 +35,7 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
 
     See Also
     --------
-    entropy_shannon, entropy_approximate, entropy_fuzzy
+    entropy_shannon, entropy_approximate, entropy_fuzzy, entropy_quadratic
 
     Returns
     ----------
@@ -81,13 +81,13 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     }
 
     # Compute phi
-    phi = _phi(
+    info["phi"], _ = _phi(
         signal,
         delay=delay,
         dimension=dimension,
         tolerance=info["Tolerance"],
         approximate=False,
         **kwargs
-    )[0]
+    )
 
-    return _phi_divide(phi), info
+    return _phi_divide(info["phi"]), info

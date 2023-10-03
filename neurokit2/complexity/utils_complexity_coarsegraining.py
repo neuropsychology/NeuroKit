@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.ndimage.filters
 
 from ..signal import signal_interpolate
+from .utils_complexity_embedding import complexity_embedding
 
 
-def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=False, **kwargs):
+def complexity_coarsegraining(
+    signal, scale=2, method="nonoverlapping", show=False, **kwargs
+):
     """**Coarse-graining of a signal**
 
     The goal of coarse-graining is to represent the signal at a different "scale". The
@@ -181,31 +183,37 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
             )
 
     elif method == "rolling":
-        # Relying on scipy is a fast alternative to:
-        # pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
-        # https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
-        coarse = scipy.ndimage.filters.uniform_filter1d(signal, size=scale, mode="nearest")
-        coarse = coarse[scale - 1 : :]
+        # See https://github.com/neuropsychology/NeuroKit/pull/892
+        coarse = complexity_embedding(signal, dimension=scale, delay=1).mean(axis=1)
 
     elif method == "timeshift":
-        coarse = np.transpose(np.reshape(signal[: scale * (n // scale)], (n // scale, scale)))
+        coarse = np.transpose(
+            np.reshape(signal[: scale * (n // scale)], (n // scale, scale))
+        )
 
     else:
         raise ValueError("Unknown `method`: {}".format(method))
 
     if show is True:
-        _complexity_show(signal[0:n], coarse, method=method)
+        _complexity_coarsegraining_show(signal[0:n], coarse, method=method)
     return coarse
 
 
 # =============================================================================
 # Utils
 # =============================================================================
-def _complexity_show(signal, coarse, method="nonoverlapping"):
+def _complexity_coarsegraining_show(signal, coarse, method="nonoverlapping"):
     plt.plot(signal, linewidth=1.5)
     if method == "nonoverlapping":
-        plt.plot(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=0.75)
-        plt.scatter(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=0.5)
+        plt.plot(
+            np.linspace(0, len(signal), len(coarse)),
+            coarse,
+            color="red",
+            linewidth=0.75,
+        )
+        plt.scatter(
+            np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=0.5
+        )
     elif method == "timeshift":
         for i in range(len(coarse)):
             plt.plot(
@@ -215,7 +223,9 @@ def _complexity_show(signal, coarse, method="nonoverlapping"):
                 linewidth=0.75,
             )
     else:
-        plt.plot(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=1)
+        plt.plot(
+            np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=1
+        )
     plt.title(f'Coarse-graining using method "{method}"')
 
 
