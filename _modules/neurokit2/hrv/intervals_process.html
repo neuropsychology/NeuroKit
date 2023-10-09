@@ -428,39 +428,42 @@ document.write(`
 
 <span class="sd">      # Download data</span>
 <span class="sd">      data = nk.data(&quot;bio_resting_5min_100hz&quot;)</span>
+<span class="sd">      sampling_rate = 100</span>
 
 <span class="sd">      # Clean signal and find peaks</span>
 <span class="sd">      ecg_cleaned = nk.ecg_clean(data[&quot;ECG&quot;], sampling_rate=100)</span>
-<span class="sd">      peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)</span>
+<span class="sd">      _, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)</span>
+<span class="sd">      peaks = info[&quot;ECG_R_Peaks&quot;]</span>
 
 <span class="sd">      # Convert peaks to intervals</span>
 <span class="sd">      rri = np.diff(peaks) / sampling_rate * 1000</span>
 <span class="sd">      rri_time = np.array(peaks[1:]) / sampling_rate</span>
 
-<span class="sd">      # Compute HRV indices</span>
-<span class="sd">      @savefig p_intervals_process1.png scale=100%</span>
-<span class="sd">      plt.figure()</span>
-<span class="sd">      plt.plot(intervals_time, intervals, label=&quot;Original intervals&quot;)</span>
-<span class="sd">      intervals, intervals_time = intervals_process(rri,</span>
-<span class="sd">                                                    intervals_time=rri_time,</span>
-<span class="sd">                                                    interpolate=True,</span>
-<span class="sd">                                                    interpolation_rate=100,</span>
-<span class="sd">                                                    detrend=&quot;tarvainen2002&quot;)</span>
-<span class="sd">      plt.plot(intervals_time, intervals, label=&quot;Processed intervals&quot;)</span>
-<span class="sd">      plt.xlabel(&quot;Time (seconds)&quot;)</span>
-<span class="sd">      plt.ylabel(&quot;Interbeat intervals (milliseconds)&quot;)</span>
-<span class="sd">      @suppress</span>
-<span class="sd">      plt.close()</span>
+<span class="sd">      # # Compute HRV indices</span>
+<span class="sd">      # @savefig p_intervals_process1.png scale=100%</span>
+<span class="sd">      # plt.figure()</span>
+<span class="sd">      # plt.plot(intervals_time, intervals, label=&quot;Original intervals&quot;)</span>
+<span class="sd">      # intervals, intervals_time = nk.intervals_process(rri,</span>
+<span class="sd">      #                                               intervals_time=rri_time,</span>
+<span class="sd">      #                                               interpolate=True,</span>
+<span class="sd">      #                                               interpolation_rate=100,</span>
+<span class="sd">      #                                               detrend=&quot;tarvainen2002&quot;)</span>
+<span class="sd">      # plt.plot(intervals_time, intervals, label=&quot;Processed intervals&quot;)</span>
+<span class="sd">      # plt.xlabel(&quot;Time (seconds)&quot;)</span>
+<span class="sd">      # plt.ylabel(&quot;Interbeat intervals (milliseconds)&quot;)</span>
+<span class="sd">      # @suppress</span>
+<span class="sd">      # plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
-    <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_intervals_sanitize</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">intervals_time</span><span class="p">)</span>
+    <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_intervals_sanitize</span><span class="p">(</span>
+        <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">intervals_time</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">interpolate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">interpolation_rate</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">interpolation_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
         <span class="c1"># Rate should be at least 1 Hz (due to Nyquist &amp; frequencies we are interested in)</span>
         <span class="c1"># We considered an interpolation rate 4 Hz by default to match Kubios</span>
         <span class="c1"># but in case of some applications with high heart rates we decided to make it 100 Hz</span>
@@ -489,7 +492,9 @@ document.write(`
             <span class="n">interpolation_rate</span> <span class="o">=</span> <span class="n">_intervals_time_to_sampling_rate</span><span class="p">(</span><span class="n">intervals_time</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">detrend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span><span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">)</span>
+        <span class="n">intervals</span> <span class="o">=</span> <span class="n">signal_detrend</span><span class="p">(</span>
+            <span class="n">intervals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">detrend</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">interpolation_rate</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">intervals</span><span class="p">,</span> <span class="n">intervals_time</span><span class="p">,</span> <span class="n">interpolation_rate</span></div>
 </pre></div>
 

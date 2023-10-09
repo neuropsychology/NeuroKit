@@ -1237,29 +1237,29 @@ algorithm from chronux). By default None such that there is no detrending.</p></
 import matplotlib.pyplot as plt</p>
 <p>plt.rc(‘font’, size=8)</p>
 <p># Download data
-data = nk.data(“bio_resting_5min_100hz”)</p>
+data = nk.data(“bio_resting_5min_100hz”)
+sampling_rate = 100</p>
 <p># Clean signal and find peaks
 ecg_cleaned = nk.ecg_clean(data[“ECG”], sampling_rate=100)
-peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)</p>
+_, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
+peaks = info[“ECG_R_Peaks”]</p>
 <p># Convert peaks to intervals
 rri = np.diff(peaks) / sampling_rate * 1000
 rri_time = np.array(peaks[1:]) / sampling_rate</p>
-<p># Compute HRV indices
-&#64;savefig p_intervals_process1.png scale=100%
-plt.figure()
-plt.plot(intervals_time, intervals, label=”Original intervals”)
-intervals, intervals_time = intervals_process(rri,</p>
-<blockquote>
-<div><p>intervals_time=rri_time,
-interpolate=True,
-interpolation_rate=100,
-detrend=”tarvainen2002”)</p>
-</div></blockquote>
-<p>plt.plot(intervals_time, intervals, label=”Processed intervals”)
-plt.xlabel(“Time (seconds)”)
-plt.ylabel(“Interbeat intervals (milliseconds)”)
-&#64;suppress
-plt.close()</p>
+<p># # Compute HRV indices
+# &#64;savefig p_intervals_process1.png scale=100%
+# plt.figure()
+# plt.plot(intervals_time, intervals, label=”Original intervals”)
+# intervals, intervals_time = nk.intervals_process(rri,
+#                                               intervals_time=rri_time,
+#                                               interpolate=True,
+#                                               interpolation_rate=100,
+#                                               detrend=”tarvainen2002”)
+# plt.plot(intervals_time, intervals, label=”Processed intervals”)
+# plt.xlabel(“Time (seconds)”)
+# plt.ylabel(“Interbeat intervals (milliseconds)”)
+# &#64;suppress
+# plt.close()</p>
 </div></blockquote>
 </dd></dl>
 

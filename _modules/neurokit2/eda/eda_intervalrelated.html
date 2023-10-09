@@ -437,9 +437,7 @@ document.write(`
             <span class="c1"># Add label info</span>
             <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;Label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_eda_intervalrelated</span><span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_eda_intervalrelated</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
 
@@ -451,9 +449,7 @@ document.write(`
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_eda_intervalrelated</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{},</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method_sympathetic</span><span class="o">=</span><span class="s2">&quot;posada&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">):</span>
+<span class="k">def</span> <span class="nf">_eda_intervalrelated</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="p">{},</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method_sympathetic</span><span class="o">=</span><span class="s2">&quot;posada&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format input for dictionary.&quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
     <span class="n">colnames</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
@@ -476,7 +472,12 @@ document.write(`
         <span class="p">)</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">peaks_idx</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="c1"># Mean amplitude is only computed over peaks. If no peaks, return NaN</span>
+        <span class="k">if</span> <span class="n">peaks_idx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">peaks_idx</span><span class="p">][</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks_Amplitude_Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="c1"># Get variability of tonic</span>
     <span class="k">if</span> <span class="s2">&quot;EDA_Tonic&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
@@ -488,14 +489,18 @@ document.write(`
         <span class="k">if</span> <span class="s2">&quot;EDA_Clean&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
             <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="n">eda_sympathetic</span><span class="p">(</span>
-                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_sympathetic</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span>
+                    <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                    <span class="n">method</span><span class="o">=</span><span class="n">method_sympathetic</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="s2">&quot;EDA_Raw&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
             <span class="c1"># If not clean signal, use raw</span>
             <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="n">eda_sympathetic</span><span class="p">(</span>
-                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_sympathetic</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span>
+                    <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                    <span class="n">method</span><span class="o">=</span><span class="n">method_sympathetic</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -503,14 +508,10 @@ document.write(`
     <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;EDA_Autocorrelation&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>  <span class="c1"># Default values</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">30</span><span class="p">:</span>  <span class="c1"># 30 seconds minimum (NOTE: somewhat arbitrary)</span>
         <span class="k">if</span> <span class="s2">&quot;EDA_Clean&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
-            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;EDA_Autocorrelation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_autocor</span><span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
+            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;EDA_Autocorrelation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_autocor</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Clean&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="s2">&quot;EDA_Raw&quot;</span> <span class="ow">in</span> <span class="n">colnames</span><span class="p">:</span>
             <span class="c1"># If not clean signal, use raw</span>
-            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;EDA_Autocorrelation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_autocor</span><span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
+            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;EDA_Autocorrelation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eda_autocor</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDA_Raw&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">output</span>
 </pre></div>
