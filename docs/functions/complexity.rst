@@ -80,11 +80,11 @@ Fractal Dimension
 Entropy
 ^^^^^^^^^^^^^^^^^
 *entropy_shannon()*
-"""""""""""""""""""
+"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_shannon
 
 *entropy_maximum()*
-"""""""""""""""""""
+"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_maximum
 
 *entropy_differential()*
@@ -112,7 +112,7 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_sample
 
 *entropy_quadratic()*
-""""""""""""""""""""
+""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_quadratic
 
 *entropy_cumulativeresidual()*

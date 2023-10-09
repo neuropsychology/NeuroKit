@@ -66,39 +66,42 @@ def intervals_process(
 
       # Download data
       data = nk.data("bio_resting_5min_100hz")
+      sampling_rate = 100
 
       # Clean signal and find peaks
       ecg_cleaned = nk.ecg_clean(data["ECG"], sampling_rate=100)
-      peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
+      _, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
+      peaks = info["ECG_R_Peaks"]
 
       # Convert peaks to intervals
       rri = np.diff(peaks) / sampling_rate * 1000
       rri_time = np.array(peaks[1:]) / sampling_rate
 
-      # Compute HRV indices
-      @savefig p_intervals_process1.png scale=100%
-      plt.figure()
-      plt.plot(intervals_time, intervals, label="Original intervals")
-      intervals, intervals_time = intervals_process(rri,
-                                                    intervals_time=rri_time,
-                                                    interpolate=True,
-                                                    interpolation_rate=100,
-                                                    detrend="tarvainen2002")
-      plt.plot(intervals_time, intervals, label="Processed intervals")
-      plt.xlabel("Time (seconds)")
-      plt.ylabel("Interbeat intervals (milliseconds)")
-      @suppress
-      plt.close()
+      # # Compute HRV indices
+      # @savefig p_intervals_process1.png scale=100%
+      # plt.figure()
+      # plt.plot(intervals_time, intervals, label="Original intervals")
+      # intervals, intervals_time = nk.intervals_process(rri,
+      #                                               intervals_time=rri_time,
+      #                                               interpolate=True,
+      #                                               interpolation_rate=100,
+      #                                               detrend="tarvainen2002")
+      # plt.plot(intervals_time, intervals, label="Processed intervals")
+      # plt.xlabel("Time (seconds)")
+      # plt.ylabel("Interbeat intervals (milliseconds)")
+      # @suppress
+      # plt.close()
 
     """
     # Sanitize input
-    intervals, intervals_time, _ = _intervals_sanitize(intervals, intervals_time=intervals_time)
+    intervals, intervals_time, _ = _intervals_sanitize(
+        intervals, intervals_time=intervals_time
+    )
 
     if interpolate is False:
         interpolation_rate = None
 
     if interpolation_rate is not None:
-
         # Rate should be at least 1 Hz (due to Nyquist & frequencies we are interested in)
         # We considered an interpolation rate 4 Hz by default to match Kubios
         # but in case of some applications with high heart rates we decided to make it 100 Hz
@@ -127,5 +130,7 @@ def intervals_process(
             interpolation_rate = _intervals_time_to_sampling_rate(intervals_time)
 
     if detrend is not None:
-        intervals = signal_detrend(intervals, method=detrend, sampling_rate=interpolation_rate)
+        intervals = signal_detrend(
+            intervals, method=detrend, sampling_rate=interpolation_rate
+        )
     return intervals, intervals_time, interpolation_rate
