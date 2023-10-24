@@ -4,11 +4,18 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import (
+    signal_findpeaks,
+    signal_plot,
+    signal_sanitize,
+    signal_smooth,
+    signal_zerocrossings,
+)
 
 
-def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
+def ecg_findpeaks(
+    ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs
+):
     """**Locate R-peaks**
 
     Low-level function used by :func:`ecg_peaks` to identify R-peaks in an ECG signal using a
@@ -86,9 +93,11 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_christov
     elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
         return _ecg_findpeaks_engzee
+    elif method in ["manikandan", "manikandan2012"]:
+        return _ecg_findpeaks_manikandan
     elif method in ["elgendi", "elgendi2010"]:
         return _ecg_findpeaks_elgendi
-    elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
+    elif method in ["kalidas2017", "swt", "kalidas"]:
         return _ecg_findpeaks_kalidas
     elif method in ["martinez2004", "martinez"]:
         return _ecg_findpeaks_WT
@@ -99,7 +108,9 @@ def _ecg_findpeaks_findmethod(method):
     elif method in ["promac", "all"]:
         return _ecg_findpeaks_promac
     else:
-        raise ValueError(f"NeuroKit error: ecg_findpeaks(): '{method}' not implemented.")
+        raise ValueError(
+            f"NeuroKit error: ecg_findpeaks(): '{method}' not implemented."
+        )
 
 
 # =============================================================================
@@ -116,6 +127,7 @@ def _ecg_findpeaks_promac(
         "zong",
         "engzee",
         "elgendi",
+        "manikandan",
         "kalidas",
         "martinez",
         "rodrigues",
@@ -149,7 +161,9 @@ def _ecg_findpeaks_promac(
 
     """
     x = np.zeros(len(signal))
-    promac_methods = [method.lower() for method in promac_methods]  # remove capitalised letters
+    promac_methods = [
+        method.lower() for method in promac_methods
+    ]  # remove capitalised letters
     error_list = []  # Stores the failed methods
 
     for method in promac_methods:
@@ -173,7 +187,9 @@ def _ecg_findpeaks_promac(
     peaks = signal_findpeaks(x, height_min=threshold)["Peaks"]
 
     if show is True:
-        signal_plot(pd.DataFrame({"ECG": signal, "Convoluted": convoluted}), standardize=True)
+        signal_plot(
+            pd.DataFrame({"ECG": signal, "Convoluted": convoluted}), standardize=True
+        )
         [
             plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks
         ]  # pylint: disable=W0106
@@ -187,7 +203,9 @@ def _ecg_findpeaks_promac(
 
 # _ecg_findpeaks_promac_addmethod + _ecg_findpeaks_promac_convolve
 # Joining them makes parameters exposition more consistent
-def _ecg_findpeaks_promac_addconvolve(signal, sampling_rate, x, fun, gaussian_sd=100, **kwargs):
+def _ecg_findpeaks_promac_addconvolve(
+    signal, sampling_rate, x, fun, gaussian_sd=100, **kwargs
+):
     peaks = fun(signal, sampling_rate=sampling_rate, **kwargs)
 
     mask = np.zeros(len(signal))
@@ -195,7 +213,9 @@ def _ecg_findpeaks_promac_addconvolve(signal, sampling_rate, x, fun, gaussian_sd
 
     # SD is defined as a typical QRS size, which for adults if 100ms
     sd = sampling_rate * gaussian_sd / 1000
-    shape = scipy.stats.norm.pdf(np.linspace(-sd * 4, sd * 4, num=int(sd * 8)), loc=0, scale=sd)
+    shape = scipy.stats.norm.pdf(
+        np.linspace(-sd * 4, sd * 4, num=int(sd * 8)), loc=0, scale=sd
+    )
 
     x += np.convolve(mask, shape, "same")
 
@@ -252,7 +272,6 @@ def _ecg_findpeaks_neurokit(
     peaks = [0]
 
     for i in range(num_qrs):
-
         beg = beg_qrs[i]
         end = end_qrs[i]
         len_qrs = end - beg
@@ -307,35 +326,6 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000, **kwargs):
     return mwa_peaks
 
 
-# ===========================================================================
-# Nabian et al. (2018)
-# ===========================================================================
-def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000, **kwargs):
-    """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.
-
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
-      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
-      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.
-
-    """
-    window_size = int(0.4 * sampling_rate)
-
-    peaks = np.zeros(len(signal))
-
-    for i in range(1 + window_size, len(signal) - window_size):
-        ecg_window = signal[i - window_size : i + window_size]
-        rpeak = np.argmax(ecg_window)
-
-        if i == (i - window_size - 1 + rpeak):
-            peaks[i] = 1
-
-    rpeaks = np.where(peaks == 1)[0]
-
-    # min_distance = 200
-
-    return rpeaks
-
-
 # =============================================================================
 # Hamilton (2002)
 # =============================================================================
@@ -370,7 +360,6 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
     peaks = []
 
     for i in range(len(ma)):  # pylint: disable=C0200,R1702
-
         if (
             i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]
         ):  # pylint: disable=R1716
@@ -420,7 +409,9 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
 # =============================================================================
 # Slope Sum Function (SSF) - Zong et al. (2003)
 # =============================================================================
-def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, after=0.01, **kwargs):
+def _ecg_findpeaks_ssf(
+    signal, sampling_rate=1000, threshold=20, before=0.03, after=0.01, **kwargs
+):
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
@@ -489,7 +480,10 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
     for i, j in enumerate(np.arange(w, len(y))):
         s = y[j - w : j]
         tmp[i] = np.sum(
-            np.sqrt(np.power(1 / sampling_rate, 2) * np.ones(w - 1) + np.power(np.diff(s), 2))
+            np.sqrt(
+                np.power(1 / sampling_rate, 2) * np.ones(w - 1)
+                + np.power(np.diff(s), 2)
+            )
         )
     # Pad with the first value
     clt = np.concatenate([[tmp[0]] * w, tmp])
@@ -544,7 +538,6 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
 
     Y = []
     for i in range(1, len(MA2) - 1):
-
         diff = abs(MA2[i + 1] - MA2[i - 1])
 
         Y.append(diff)
@@ -581,7 +574,6 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
     QRS = []
 
     for i in range(len(MA3)):  # pylint: disable=C0200
-
         # M
         if i < 5 * sampling_rate:
             M = 0.6 * np.max(MA3[: i + 1])
@@ -603,7 +595,6 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
             M = np.mean(MM)
 
         elif QRS and i > QRS[-1] + ms200 and i < QRS[-1] + ms1200:
-
             M = np.mean(MM) * M_slope[i - (QRS[-1] + ms200)]
 
         elif QRS and i > QRS[-1] + ms1200:
@@ -618,11 +609,9 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
 
         # R
         if QRS and i < QRS[-1] + int((2.0 / 3.0 * Rm)):
-
             R = 0
 
         elif QRS and i > QRS[-1] + int((2.0 / 3.0 * Rm)) and i < QRS[-1] + Rm:
-
             dec = (M - np.mean(MM)) / 1.4
             R = 0 + dec
 
@@ -646,6 +635,75 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
     QRS.pop(0)
     QRS = np.array(QRS, dtype="int")
     return QRS
+
+
+# =============================================================================
+# Continuous Wavelet Transform (CWT) - Martinez et al. (2004)
+# =============================================================================
+def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):
+    # Try loading pywt
+    try:
+        import pywt
+    except ImportError as import_error:
+        raise ImportError(
+            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
+            " this method to run. Please install it first (`pip install PyWavelets`)."
+        ) from import_error
+    # first derivative of the Gaissian signal
+    scales = np.array([1, 2, 4, 8, 16])
+    cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
+
+    # For wt of scale 2^4
+    signal_4 = cwtmatr[4, :]
+    epsilon_4 = np.sqrt(np.mean(np.square(signal_4)))
+    peaks_4, _ = scipy.signal.find_peaks(np.abs(signal_4), height=epsilon_4)
+
+    # For wt of scale 2^3
+    signal_3 = cwtmatr[3, :]
+    epsilon_3 = np.sqrt(np.mean(np.square(signal_3)))
+    peaks_3, _ = scipy.signal.find_peaks(np.abs(signal_3), height=epsilon_3)
+    # Keep only peaks_3 that are nearest to peaks_4
+    peaks_3_keep = np.zeros_like(peaks_4)
+    for i in range(len(peaks_4)):  # pylint: disable=C0200
+        peaks_distance = abs(peaks_4[i] - peaks_3)
+        peaks_3_keep[i] = peaks_3[np.argmin(peaks_distance)]
+
+    # For wt of scale 2^2
+    signal_2 = cwtmatr[2, :]
+    epsilon_2 = np.sqrt(np.mean(np.square(signal_2)))
+    peaks_2, _ = scipy.signal.find_peaks(np.abs(signal_2), height=epsilon_2)
+    # Keep only peaks_2 that are nearest to peaks_3
+    peaks_2_keep = np.zeros_like(peaks_4)
+    for i in range(len(peaks_4)):
+        peaks_distance = abs(peaks_3_keep[i] - peaks_2)
+        peaks_2_keep[i] = peaks_2[np.argmin(peaks_distance)]
+
+    # For wt of scale 2^1
+    signal_1 = cwtmatr[1, :]
+    epsilon_1 = np.sqrt(np.mean(np.square(signal_1)))
+    peaks_1, _ = scipy.signal.find_peaks(np.abs(signal_1), height=epsilon_1)
+    # Keep only peaks_1 that are nearest to peaks_2
+    peaks_1_keep = np.zeros_like(peaks_4)
+    for i in range(len(peaks_4)):
+        peaks_distance = abs(peaks_2_keep[i] - peaks_1)
+        peaks_1_keep[i] = peaks_1[np.argmin(peaks_distance)]
+
+    # Find R peaks
+    max_R_peak_dist = int(0.1 * sampling_rate)
+    rpeaks = []
+    for index_cur, index_next in zip(peaks_1_keep[:-1], peaks_1_keep[1:]):
+        correct_sign = (
+            signal_1[index_cur] < 0 and signal_1[index_next] > 0
+        )  # pylint: disable=R1716
+        near = (index_next - index_cur) < max_R_peak_dist  # limit 2
+        if near and correct_sign:
+            rpeaks.append(
+                signal_zerocrossings(signal_1[index_cur : index_next + 1])[0]
+                + index_cur
+            )
+
+    rpeaks = np.array(rpeaks, dtype="int")
+    return rpeaks
 
 
 # =============================================================================
@@ -673,7 +731,9 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002, **kwargs):
 
     d2 = np.diff(norm_signal, 2)
 
-    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2  # pylint: disable=E1130
+    b = (
+        np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2
+    )  # pylint: disable=E1130
     b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])  # pylint: disable=E1130
 
     rpeaks = []
@@ -691,6 +751,50 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002, **kwargs):
     rpeaks = sorted(list(set(rpeaks)))
     rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
+
+
+# =============================================================================
+# Elgendi et al. (2010)
+# =============================================================================
+def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
+    """From https://github.com/berndporr/py-ecg-detectors/
+
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS
+      Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing
+      (BIOSIGNALS2010). 428-431.
+
+    """
+
+    window1 = int(0.12 * sampling_rate)
+    mwa_qrs = _ecg_findpeaks_MWA(abs(signal), window1)
+
+    window2 = int(0.6 * sampling_rate)
+    mwa_beat = _ecg_findpeaks_MWA(abs(signal), window2)
+
+    blocks = np.zeros(len(signal))
+    block_height = np.max(signal)
+
+    for i in range(len(mwa_qrs)):  # pylint: disable=C0200
+        blocks[i] = block_height if mwa_qrs[i] > mwa_beat[i] else 0
+    QRS = []
+
+    for i in range(1, len(blocks)):
+        if blocks[i - 1] == 0 and blocks[i] == block_height:
+            start = i
+
+        elif blocks[i - 1] == block_height and blocks[i] == 0:
+            end = i - 1
+
+            if end - start > int(0.08 * sampling_rate):
+                detection = np.argmax(signal[start : end + 1]) + start
+                if QRS:
+                    if detection - QRS[-1] > int(0.3 * sampling_rate):
+                        QRS.append(detection)
+                else:
+                    QRS.append(detection)
+
+    QRS = np.array(QRS, dtype="int")
+    return QRS
 
 
 # =============================================================================
@@ -739,7 +843,6 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
     newM5 = False
 
     for i in range(len(low_pass)):  # pylint: disable=C0200
-
         # M
         if i < 5 * sampling_rate:
             M = 0.6 * np.max(low_pass[: i + 1])
@@ -748,7 +851,6 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
                 MM.pop(0)
 
         elif QRS and i < QRS[-1] + ms200:
-
             newM5 = 0.6 * np.max(low_pass[QRS[-1] : i])
 
             if newM5 > 1.5 * MM[-1]:
@@ -761,7 +863,6 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
             M = np.mean(MM)
 
         elif QRS and i > QRS[-1] + ms200 and i < QRS[-1] + ms1200:
-
             M = np.mean(MM) * M_slope[i - (QRS[-1] + ms200)]
 
         elif QRS and i > QRS[-1] + ms1200:
@@ -819,6 +920,103 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
 
 
 # =============================================================================
+# Shannon energy R-peak detection - Manikandan and Soman (2012)
+# =============================================================================
+def _ecg_findpeaks_manikandan(signal, sampling_rate=1000, **kwargs):
+    """From https://github.com/hongzuL/A-novel-method-for-detecting-R-peaks-in-electrocardiogram-signal/
+
+    A (hopefully) fixed version of https://github.com/nsunami/Shannon-Energy-R-Peak-Detection
+    """
+
+    # Preprocessing ------------------------------------------------------------
+    # Forward and backward filtering using filtfilt.
+    def cheby1_bandpass_filter(data, lowcut, highcut, fs, order=5, rp=1):
+        nyq = 0.5 * fs
+        low = lowcut / nyq
+        high = highcut / nyq
+        b, a = scipy.signal.cheby1(order, rp=rp, Wn=[low, high], btype="bandpass")
+        y = scipy.signal.filtfilt(b, a, data)
+        return y
+
+    # Running mean filter function
+    def running_mean(x, N):
+        cumsum = np.cumsum(np.insert(x, 0, 0))
+        return (cumsum[N:] - cumsum[:-N]) / float(N)
+
+    # Apply Chebyshev Type I Bandpass filter
+    # Low cut frequency = 6 Hz
+    # High cut frequency = 18
+    filtered = cheby1_bandpass_filter(
+        signal, lowcut=6, highcut=18, fs=sampling_rate, order=4
+    )
+
+    # Eq. 1: First-order differencing difference
+    dn = np.append(filtered[1:], 0) - filtered
+    # Eq. 2
+    dtn = dn / (np.max(abs(dn)))
+
+    # The absolute value, energy value, Shannon entropy value, and Shannon energy value
+    # # Eq. 3
+    # an = np.abs(dtn)
+    # # Eq. 4
+    # en = an**2
+    # # Eq. 5
+    # sen = -np.abs(dtn) * np.log10(np.abs(dtn))
+    # Eq. 6
+    sn = -(dtn**2) * np.log10(dtn**2)
+
+    # Apply rectangular window
+    # Length should be approximately the same as the duration of possible wider QRS complex
+    # Normal QRS duration is .12 sec, so we overshoot with 0.15 sec
+    window_len = int(0.15 * sampling_rate)
+    window_len = window_len - 1 if window_len % 2 == 0 else window_len  # Make odd
+    window = scipy.signal.windows.boxcar(window_len)
+
+    # The filtering operation is performed in both the forward and reverse directions
+    see = scipy.signal.convolve(sn, window, mode="same")
+    see = np.flip(see)
+    see = scipy.signal.convolve(see, window, "same")
+    see = np.flip(see)
+
+    # Hilbert Transformation
+    ht = np.imag(scipy.signal.hilbert(see))
+
+    # Moving Average to remove low frequency drift
+    # 2.5 sec from Manikanda in 360 Hz (900 samples)
+    # 2.5 sec in 500 Hz == 1250 samples
+    ma_len = int(2.5 * sampling_rate)
+    ma_out = np.insert(running_mean(ht, ma_len), 0, [0] * (ma_len - 1))
+
+    # Get the difference between the Hilbert signal and the MA filtered signal
+    zn = ht - ma_out
+
+    # R-Peak Detection ---------------------------------------------------------
+    # Look for points crossing zero
+
+    # Find points crossing zero upwards (negative to positive)
+    idx = np.argwhere(np.diff(np.sign(zn)) > 0).flatten().tolist()
+    # Prepare a container for windows
+    idx_search = []
+    id_maxes = np.empty(0, dtype=int)
+    search_window_half = int(np.ceil(window_len / 2))
+    for i in idx:
+        lows = np.arange(i - search_window_half, i)
+        highs = np.arange(i + 1, i + search_window_half + 1)
+        if highs[-1] > len(signal):
+            highs = np.delete(
+                highs, np.arange(np.where(highs == len(signal))[0], len(highs) + 1)
+            )
+        ekg_window = np.concatenate((lows, [i], highs))
+        idx_search.append(ekg_window)
+        ekg_window_wave = signal[ekg_window]
+        id_maxes = np.append(
+            id_maxes,
+            ekg_window[np.where(ekg_window_wave == np.max(ekg_window_wave))[0]],
+        )
+    return np.array(idx)
+
+
+# =============================================================================
 # Stationary Wavelet Transform  (SWT) - Kalidas and Tamil (2017)
 # =============================================================================
 def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
@@ -873,112 +1071,32 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
     return filt_peaks
 
 
-# =============================================================================
-# Elgendi et al. (2010)
-# =============================================================================
-def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
-    """From https://github.com/berndporr/py-ecg-detectors/
+# ===========================================================================
+# Nabian et al. (2018)
+# ===========================================================================
+def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000, **kwargs):
+    """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.
 
-    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS
-      Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing
-      (BIOSIGNALS2010). 428-431.
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
+      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
+      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.
 
     """
+    window_size = int(0.4 * sampling_rate)
 
-    window1 = int(0.12 * sampling_rate)
-    mwa_qrs = _ecg_findpeaks_MWA(abs(signal), window1)
+    peaks = np.zeros(len(signal))
 
-    window2 = int(0.6 * sampling_rate)
-    mwa_beat = _ecg_findpeaks_MWA(abs(signal), window2)
+    for i in range(1 + window_size, len(signal) - window_size):
+        ecg_window = signal[i - window_size : i + window_size]
+        rpeak = np.argmax(ecg_window)
 
-    blocks = np.zeros(len(signal))
-    block_height = np.max(signal)
+        if i == (i - window_size - 1 + rpeak):
+            peaks[i] = 1
 
-    for i in range(len(mwa_qrs)):  # pylint: disable=C0200
-        blocks[i] = block_height if mwa_qrs[i] > mwa_beat[i] else 0
-    QRS = []
+    rpeaks = np.where(peaks == 1)[0]
 
-    for i in range(1, len(blocks)):
-        if blocks[i - 1] == 0 and blocks[i] == block_height:
-            start = i
+    # min_distance = 200
 
-        elif blocks[i - 1] == block_height and blocks[i] == 0:
-            end = i - 1
-
-            if end - start > int(0.08 * sampling_rate):
-                detection = np.argmax(signal[start : end + 1]) + start
-                if QRS:
-                    if detection - QRS[-1] > int(0.3 * sampling_rate):
-                        QRS.append(detection)
-                else:
-                    QRS.append(detection)
-
-    QRS = np.array(QRS, dtype="int")
-    return QRS
-
-
-# =============================================================================
-# Continuous Wavelet Transform (CWT) - Martinez et al. (2004)
-# =============================================================================
-#
-def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError as import_error:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
-            " this method to run. Please install it first (`pip install PyWavelets`)."
-        ) from import_error
-    # first derivative of the Gaissian signal
-    scales = np.array([1, 2, 4, 8, 16])
-    cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
-
-    # For wt of scale 2^4
-    signal_4 = cwtmatr[4, :]
-    epsilon_4 = np.sqrt(np.mean(np.square(signal_4)))
-    peaks_4, _ = scipy.signal.find_peaks(np.abs(signal_4), height=epsilon_4)
-
-    # For wt of scale 2^3
-    signal_3 = cwtmatr[3, :]
-    epsilon_3 = np.sqrt(np.mean(np.square(signal_3)))
-    peaks_3, _ = scipy.signal.find_peaks(np.abs(signal_3), height=epsilon_3)
-    # Keep only peaks_3 that are nearest to peaks_4
-    peaks_3_keep = np.zeros_like(peaks_4)
-    for i in range(len(peaks_4)):  # pylint: disable=C0200
-        peaks_distance = abs(peaks_4[i] - peaks_3)
-        peaks_3_keep[i] = peaks_3[np.argmin(peaks_distance)]
-
-    # For wt of scale 2^2
-    signal_2 = cwtmatr[2, :]
-    epsilon_2 = np.sqrt(np.mean(np.square(signal_2)))
-    peaks_2, _ = scipy.signal.find_peaks(np.abs(signal_2), height=epsilon_2)
-    # Keep only peaks_2 that are nearest to peaks_3
-    peaks_2_keep = np.zeros_like(peaks_4)
-    for i in range(len(peaks_4)):
-        peaks_distance = abs(peaks_3_keep[i] - peaks_2)
-        peaks_2_keep[i] = peaks_2[np.argmin(peaks_distance)]
-
-    # For wt of scale 2^1
-    signal_1 = cwtmatr[1, :]
-    epsilon_1 = np.sqrt(np.mean(np.square(signal_1)))
-    peaks_1, _ = scipy.signal.find_peaks(np.abs(signal_1), height=epsilon_1)
-    # Keep only peaks_1 that are nearest to peaks_2
-    peaks_1_keep = np.zeros_like(peaks_4)
-    for i in range(len(peaks_4)):
-        peaks_distance = abs(peaks_2_keep[i] - peaks_1)
-        peaks_1_keep[i] = peaks_1[np.argmin(peaks_distance)]
-
-    # Find R peaks
-    max_R_peak_dist = int(0.1 * sampling_rate)
-    rpeaks = []
-    for index_cur, index_next in zip(peaks_1_keep[:-1], peaks_1_keep[1:]):
-        correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # pylint: disable=R1716
-        near = (index_next - index_cur) < max_R_peak_dist  # limit 2
-        if near and correct_sign:
-            rpeaks.append(signal_zerocrossings(signal_1[index_cur : index_next + 1])[0] + index_cur)
-
-    rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
 
 
@@ -1105,8 +1223,8 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
         elif N - deltaM <= L < L < N:
             w[L:] = 0.5 * (_w + w[L:])
         else:
-            w[L: L + deltaM] = 0.5 * (_w[:deltaM] + w[L: L + deltaM])
-            w[L + deltaM: R] = _w[deltaM:]
+            w[L : L + deltaM] = 0.5 * (_w[:deltaM] + w[L : L + deltaM])
+            w[L + deltaM : R] = _w[deltaM:]
 
         # Update the boundary conditions
         L = L + (M - deltaM)
@@ -1120,6 +1238,7 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
         rpeaks = _ecg_findpeaks_peakdetect(weighted_signal, sampling_rate)
         rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
+
 
 # =============================================================================
 # Utilities
@@ -1143,14 +1262,18 @@ def _ecg_findpeaks_MWA(signal, window_size, **kwargs):
     # return causal moving averages, i.e. each output element is the average
     # of window_size input elements ending at that position, we use the
     # `origin` argument to shift the filter computation accordingly.
-    mwa = scipy.ndimage.uniform_filter1d(signal, window_size, origin=(window_size - 1) // 2)
+    mwa = scipy.ndimage.uniform_filter1d(
+        signal, window_size, origin=(window_size - 1) // 2
+    )
 
     # Compute actual moving averages for the first `window_size - 1` elements,
     # which the uniform_filter1d function computes using padding. We want
     # those output elements to be averages of only the input elements until
     # that position.
     head_size = min(window_size - 1, len(signal))
-    mwa[:head_size] = np.cumsum(signal[:head_size]) / np.linspace(1, head_size, head_size)
+    mwa[:head_size] = np.cumsum(signal[:head_size]) / np.linspace(
+        1, head_size, head_size
+    )
 
     return mwa
 
@@ -1200,7 +1323,9 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000, **kwargs):
                     threshold_I2 = 0.5 * threshold_I1
                     missed_peaks = missed_peaks[detection[missed_peaks] > threshold_I2]
                     if len(missed_peaks) > 0:
-                        signal_peaks[-1] = missed_peaks[np.argmax(detection[missed_peaks])]
+                        signal_peaks[-1] = missed_peaks[
+                            np.argmax(detection[missed_peaks])
+                        ]
                         signal_peaks.append(peak)
 
             last_peak = peak
