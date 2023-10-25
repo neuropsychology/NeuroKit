@@ -34,6 +34,8 @@ def ecg_peaks(
     * **elgendi2010**: Algorithm by Elgendi et al. (2010).
     * **engzeemod2012**: Original algorithm by Engelse & Zeelenberg (1979) modified by Lourenço et
       al. (2012).
+    * **manikandan2012**: Algorithm by Manikandan & Soman (2012) based on the Shannon energy
+      envelope (SEE).
     * **kalidas2017**: Algorithm by Kalidas et al. (2017).
     * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.
     * **rodrigues2021**: Adaptation of the work by Sadhukhan & Mitra (2012) and Gutiérrez-Rivas et
@@ -113,18 +115,15 @@ def ecg_peaks(
       cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="pantompkins1985")
       _, pantompkins1985 = nk.ecg_peaks(cleaned, sampling_rate=250, method="pantompkins1985")
 
-      # nabian2018
-      _, nabian2018 = nk.ecg_peaks(ecg, sampling_rate=250, method="nabian2018")
-
       # hamilton2002
       cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="hamilton2002")
       _, hamilton2002 = nk.ecg_peaks(cleaned, sampling_rate=250, method="hamilton2002")
 
-      # martinez2004
-      _, martinez2004 = nk.ecg_peaks(ecg, sampling_rate=250, method="martinez2004")
-
       # zong2003
       _, zong2003 = nk.ecg_peaks(ecg, sampling_rate=250, method="zong2003")
+
+      # martinez2004
+      _, martinez2004 = nk.ecg_peaks(ecg, sampling_rate=250, method="martinez2004")
 
       # christov2004
       _, christov2004 = nk.ecg_peaks(cleaned, sampling_rate=250, method="christov2004")
@@ -141,9 +140,15 @@ def ecg_peaks(
       cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012")
       _, engzeemod2012 = nk.ecg_peaks(cleaned, sampling_rate=250, method="engzeemod2012")
 
+      # Manikandan (2012)
+      _, manikandan2012 = nk.ecg_peaks(ecg, sampling_rate=250, method="manikandan2012")
+
       # kalidas2017
       cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="kalidas2017")
       _, kalidas2017 = nk.ecg_peaks(cleaned, sampling_rate=250, method="kalidas2017")
+
+      # nabian2018
+      _, nabian2018 = nk.ecg_peaks(ecg, sampling_rate=250, method="nabian2018")
 
       # rodrigues2021
       _, rodrigues2021 = nk.ecg_peaks(ecg, sampling_rate=250, method="rodrigues2021")
@@ -212,6 +217,8 @@ def ecg_peaks(
       Signal Processing, 428-431.
     * Engelse, W. A., & Zeelenberg, C. (1979). A single scan algorithm for QRS-detection and
       feature extraction. Computers in cardiology, 6(1979), 37-42.
+    * Manikandan, M. S., & Soman, K. P. (2012). A novel method for detecting R-peaks in
+      electrocardiogram (ECG) signal. Biomedical Signal Processing and Control, 7(2), 118-128.
     * Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real
       Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.
       49-54).
