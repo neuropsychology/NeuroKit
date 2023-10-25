@@ -1096,6 +1096,8 @@ the QRS complexes. Unpublished, but see <a class="github reference external" hre
 <li><p><strong>elgendi2010</strong>: Algorithm by Elgendi et al. (2010).</p></li>
 <li><p><strong>engzeemod2012</strong>: Original algorithm by Engelse &amp; Zeelenberg (1979) modified by Lourenço et
 al. (2012).</p></li>
+<li><p><strong>manikandan2012</strong>: Algorithm by Manikandan &amp; Soman (2012) based on the Shannon energy
+envelope (SEE).</p></li>
 <li><p><strong>kalidas2017</strong>: Algorithm by Kalidas et al. (2017).</p></li>
 <li><p><strong>nabian2018</strong>: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.</p></li>
 <li><p><strong>rodrigues2021</strong>: Adaptation of the work by Sadhukhan &amp; Mitra (2012) and Gutiérrez-Rivas et
@@ -1170,51 +1172,54 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [9]: </span><span class="n">_</span><span class="p">,</span> <span class="n">pantompkins1985</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pantompkins1985&quot;</span><span class="p">)</span>
 
-<span class="go"># nabian2018</span>
-<span class="gp">In [10]: </span><span class="n">_</span><span class="p">,</span> <span class="n">nabian2018</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
-
 <span class="go"># hamilton2002</span>
-<span class="gp">In [11]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hamilton2002&quot;</span><span class="p">)</span>
+<span class="gp">In [10]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hamilton2002&quot;</span><span class="p">)</span>
 
-<span class="gp">In [12]: </span><span class="n">_</span><span class="p">,</span> <span class="n">hamilton2002</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hamilton2002&quot;</span><span class="p">)</span>
+<span class="gp">In [11]: </span><span class="n">_</span><span class="p">,</span> <span class="n">hamilton2002</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hamilton2002&quot;</span><span class="p">)</span>
+
+<span class="go"># zong2003</span>
+<span class="gp">In [12]: </span><span class="n">_</span><span class="p">,</span> <span class="n">zong2003</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;zong2003&quot;</span><span class="p">)</span>
 
 <span class="go"># martinez2004</span>
 <span class="gp">In [13]: </span><span class="n">_</span><span class="p">,</span> <span class="n">martinez2004</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;martinez2004&quot;</span><span class="p">)</span>
 
-<span class="go"># zong2003</span>
-<span class="gp">In [14]: </span><span class="n">_</span><span class="p">,</span> <span class="n">zong2003</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;zong2003&quot;</span><span class="p">)</span>
-
 <span class="go"># christov2004</span>
-<span class="gp">In [15]: </span><span class="n">_</span><span class="p">,</span> <span class="n">christov2004</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;christov2004&quot;</span><span class="p">)</span>
+<span class="gp">In [14]: </span><span class="n">_</span><span class="p">,</span> <span class="n">christov2004</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;christov2004&quot;</span><span class="p">)</span>
 
 <span class="go"># gamboa2008</span>
-<span class="gp">In [16]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">)</span>
+<span class="gp">In [15]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">)</span>
 
-<span class="gp">In [17]: </span><span class="n">_</span><span class="p">,</span> <span class="n">gamboa2008</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">)</span>
+<span class="gp">In [16]: </span><span class="n">_</span><span class="p">,</span> <span class="n">gamboa2008</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">)</span>
 
 <span class="go"># elgendi2010</span>
-<span class="gp">In [18]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi2010&quot;</span><span class="p">)</span>
+<span class="gp">In [17]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi2010&quot;</span><span class="p">)</span>
 
-<span class="gp">In [19]: </span><span class="n">_</span><span class="p">,</span> <span class="n">elgendi2010</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi2010&quot;</span><span class="p">)</span>
+<span class="gp">In [18]: </span><span class="n">_</span><span class="p">,</span> <span class="n">elgendi2010</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi2010&quot;</span><span class="p">)</span>
 
 <span class="go"># engzeemod2012</span>
-<span class="gp">In [20]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;engzeemod2012&quot;</span><span class="p">)</span>
+<span class="gp">In [19]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;engzeemod2012&quot;</span><span class="p">)</span>
 
-<span class="gp">In [21]: </span><span class="n">_</span><span class="p">,</span> <span class="n">engzeemod2012</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;engzeemod2012&quot;</span><span class="p">)</span>
+<span class="gp">In [20]: </span><span class="n">_</span><span class="p">,</span> <span class="n">engzeemod2012</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;engzeemod2012&quot;</span><span class="p">)</span>
+
+<span class="go"># Manikandan (2012)</span>
+<span class="gp">In [21]: </span><span class="n">_</span><span class="p">,</span> <span class="n">manikandan2012</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;manikandan2012&quot;</span><span class="p">)</span>
 
 <span class="go"># kalidas2017</span>
 <span class="gp">In [22]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kalidas2017&quot;</span><span class="p">)</span>
 
 <span class="gp">In [23]: </span><span class="n">_</span><span class="p">,</span> <span class="n">kalidas2017</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kalidas2017&quot;</span><span class="p">)</span>
 
+<span class="go"># nabian2018</span>
+<span class="gp">In [24]: </span><span class="n">_</span><span class="p">,</span> <span class="n">nabian2018</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
+
 <span class="go"># rodrigues2021</span>
-<span class="gp">In [24]: </span><span class="n">_</span><span class="p">,</span> <span class="n">rodrigues2021</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rodrigues2021&quot;</span><span class="p">)</span>
+<span class="gp">In [25]: </span><span class="n">_</span><span class="p">,</span> <span class="n">rodrigues2021</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rodrigues2021&quot;</span><span class="p">)</span>
 
 <span class="go"># koka2022</span>
-<span class="gp">In [25]: </span><span class="n">_</span><span class="p">,</span> <span class="n">koka2022</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;koka2022&quot;</span><span class="p">)</span>
+<span class="gp">In [26]: </span><span class="n">_</span><span class="p">,</span> <span class="n">koka2022</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;koka2022&quot;</span><span class="p">)</span>
 
 <span class="go"># Collect all R-peak lists by iterating through the result dicts</span>
-<span class="gp">In [26]: </span><span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">In [27]: </span><span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[</span>
 <span class="gp">   ....: </span>    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
 <span class="gp">   ....: </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span>
 <span class="gp">   ....: </span>        <span class="n">neurokit</span><span class="p">,</span>
@@ -1234,22 +1239,22 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 <span class="gp">   ....: </span>
 
 <span class="go"># Visualize results</span>
-<span class="gp">In [27]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">ecg</span><span class="p">)</span>
+<span class="gp">In [28]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">ecg</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_peaks2.png"><img alt="../_images/p_ecg_peaks2.png" src="../_images/p_ecg_peaks2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <ul class="simple">
 <li><p><strong>Example 3</strong>: Method-agreement procedure (‘promac’)</p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 
-<span class="gp">In [29]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span>
+<span class="gp">In [30]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span>
 <span class="gp">   ....: </span>                        <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
 <span class="gp">   ....: </span>                        <span class="n">noise_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">noise_frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
 <span class="gp">   ....: </span>                        <span class="n">artifacts_amplitude</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">artifacts_frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">   ....: </span>
 
-<span class="gp">In [30]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;promac&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [31]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;promac&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_peaks3.png"><img alt="../_images/p_ecg_peaks3.png" src="../_images/p_ecg_peaks3.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1276,6 +1281,8 @@ Biosignals, Proceedings of the Third International Conference on Bio-inspired Sy
 Signal Processing, 428-431.</p></li>
 <li><p>Engelse, W. A., &amp; Zeelenberg, C. (1979). A single scan algorithm for QRS-detection and
 feature extraction. Computers in cardiology, 6(1979), 37-42.</p></li>
+<li><p>Manikandan, M. S., &amp; Soman, K. P. (2012). A novel method for detecting R-peaks in
+electrocardiogram (ECG) signal. Biomedical Signal Processing and Control, 7(2), 118-128.</p></li>
 <li><p>Lourenço, A., Silva, H., Leite, P., Lourenço, R., &amp; Fred, A. L. (2012, February). Real
 Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.
 49-54).</p></li>
@@ -1450,32 +1457,32 @@ in percentage (from 0 to 1), representing the stage of the current cardiac phase
 <span class="gp">In [6]: </span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2664fe92ce0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x27b815854b0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Atrial&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2664acf8ac0&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x27b815daef0&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Atrial&quot;</span><span class="p">],</span>
 <span class="gp">   ...: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2664acf8700&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x27b815d8220&gt;]</span>
 
 <span class="gp">In [10]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x2664aafeb30&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x27b86e9b7f0&gt;</span>
 
 <span class="gp">In [11]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2664acf8f40&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x27b81578f10&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Ventricular&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2664acfa440&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x27b81578310&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Ventricular&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ....: </span>
-<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2664acfb1f0&gt;]</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x27b8157bd60&gt;]</span>
 
 <span class="gp">In [14]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x2664aafff70&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x27b86e99bd0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_phase.png"><img alt="../_images/p_ecg_phase.png" src="../_images/p_ecg_phase.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -1676,9 +1683,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.685484          0.981937</span>
-<span class="go">2     2        10000  ...                          0.431535          0.949146</span>
-<span class="go">3     3        15000  ...                          0.092213          0.953089</span>
+<span class="go">1     1         5000  ...                          0.703320          0.965781</span>
+<span class="go">2     2        10000  ...                          0.421811          0.966893</span>
+<span class="go">3     3        15000  ...                          0.157787          0.989613</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
