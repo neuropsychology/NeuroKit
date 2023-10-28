@@ -112,7 +112,7 @@ def _ecg_segment_plot(heartbeats, heartrate=0, ytitle="ECG", color="#F44336", ax
     # Plot average heartbeat
     ax.plot(
         mean_heartbeat.index,
-        mean_heartbeat,
+        mean_heartbeat[col].values,
         color=color,
         linewidth=7,
         label="Average beat shape",
