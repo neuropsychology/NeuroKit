@@ -6,6 +6,23 @@ from packaging import version
 
 from .utils_complexity_embedding import complexity_embedding
 
+
+# =============================================================================
+# ApEn
+# =============================================================================
+def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
+    phi, info = _phi(
+        signal,
+        delay=delay,
+        dimension=dimension,
+        tolerance=tolerance,
+        approximate=True,
+        **kwargs,
+    )
+
+    return np.abs(np.subtract(phi[0], phi[1])), info
+
+
 # =============================================================================
 # Phi
 # =============================================================================
@@ -117,9 +134,8 @@ def _get_count(
         valid_metrics = sklearn.neighbors.KDTree.valid_metrics + ["range"]
     if distance not in valid_metrics:
         raise ValueError(
-            "The given metric (%s) is not valid."
-            "The valid metric names are: %s"
-            % (distance, valid_metrics)
+            f"The given metric ({distance}) is not valid."
+            f" Valid metric names are: {valid_metrics}"
         )
 
     if fuzzy is True:
@@ -152,7 +168,10 @@ def _get_count(
 
         # Count for each row
         count = np.array(
-            [np.sum(distrange(embedded, embedded[i]) < tolerance) for i in range(len(embedded))]
+            [
+                np.sum(distrange(embedded, embedded[i]) < tolerance)
+                for i in range(len(embedded))
+            ]
         )
 
     else:  # chebyshev and other sklearn methods
@@ -160,5 +179,7 @@ def _get_count(
         # has a `workers` argument to use multiple cores? Benchmark or opinion required!
         if kdtree is None:
             kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
-        count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
+        count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(
+            np.float64
+        )
     return embedded, count, kdtree
