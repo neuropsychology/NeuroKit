@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -133,13 +133,14 @@
   
   
   
+  
     
     
       
     
     
-    <img src="../_static/neurokit.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.7 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.7 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -528,11 +529,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  0.567264  -0.047038  70.064355  ...            0      0.0   7.932052</span>
-<span class="go">1  0.533511  -0.126293  70.064355  ...            0      0.0   7.932052</span>
-<span class="go">2  0.445878  -0.214048  70.064355  ...            0      0.0   7.932052</span>
-<span class="go">3  0.320750  -0.313422  70.064355  ...            0      0.0   7.932052</span>
-<span class="go">4  0.175656  -0.422618  70.064355  ...            0      0.0   7.932052</span>
+<span class="go">0  1.082179  -0.074274  69.969939  ...            0      8.0   7.913574</span>
+<span class="go">1  1.029502  -0.197746  69.969939  ...            0      8.0   7.913574</span>
+<span class="go">2  0.892846  -0.334275  69.969939  ...            0      8.0   7.913574</span>
+<span class="go">3  0.698068  -0.488550  69.969939  ...            0      8.0   7.913574</span>
+<span class="go">4  0.472793  -0.657633  69.969939  ...            0      8.0   7.913574</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -545,7 +546,7 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_bio_process1.png"><img alt="savefig/p_bio_process1.png" src="savefig/p_bio_process1.png" /></a>
 <p><strong>Example 2</strong>: Using a real dataset</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download EOG signal separately</span>
 <span class="gp">In [9]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
@@ -565,7 +566,7 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_bio_process2.png"><img alt="../_images/p_bio_process2.png" src="../_images/p_bio_process2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="savefig/p_bio_process2.png"><img alt="savefig/p_bio_process2.png" src="savefig/p_bio_process2.png" /></a>
 </dd></dl>
 
 </section>
@@ -632,11 +633,11 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="go"># Analyze</span>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T     RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN   7.111969  1.776357e-15</span>
-<span class="go">2     2   Neutral         4957  ...               NaN -15.476818  1.203761e-02</span>
-<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871  2.738234e-02</span>
-<span class="go">4     4  Negative        12984  ...               NaN  -0.397892 -5.451553e-03</span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T  RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN   7.111969   0.000000</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -15.476818   0.012038</span>
+<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871   0.027382</span>
+<span class="go">4     4  Negative        12984  ...               NaN  -0.397892  -0.005452</span>
 
 <span class="go">[4 rows x 46 columns]</span>
 </pre></div>
@@ -765,8 +766,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>
