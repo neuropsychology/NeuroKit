@@ -233,6 +233,27 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
 
 
 # =============================================================================
+# Hamilton (2002)
+# =============================================================================
+def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
+    """Adapted from https://github.com/PIA-
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
+    """
+
+    order = 1
+    clean = signal_filter(
+        signal=ecg_signal,
+        sampling_rate=sampling_rate,
+        lowcut=8,
+        highcut=16,
+        method="butterworth_zi",
+        order=order,
+    )
+
+    return clean  # Return filtered
+
+
+# =============================================================================
 # Elgendi et al. (2010)
 # =============================================================================
 def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
@@ -250,27 +271,6 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
         sampling_rate=sampling_rate,
         lowcut=8,
         highcut=20,
-        method="butterworth_zi",
-        order=order,
-    )
-
-    return clean  # Return filtered
-
-
-# =============================================================================
-# Hamilton (2002)
-# =============================================================================
-def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
-    """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
-    """
-
-    order = 1
-    clean = signal_filter(
-        signal=ecg_signal,
-        sampling_rate=sampling_rate,
-        lowcut=8,
-        highcut=16,
         method="butterworth_zi",
         order=order,
     )

@@ -30,6 +30,7 @@ from .entropy_ofentropy import entropy_ofentropy
 from .entropy_permutation import entropy_permutation
 from .entropy_phase import entropy_phase
 from .entropy_power import entropy_power
+from .entropy_quadratic import entropy_quadratic
 from .entropy_range import entropy_range
 from .entropy_rate import entropy_rate
 from .entropy_renyi import entropy_renyi
@@ -96,7 +97,9 @@ complexity_cmse = functools.partial(entropy_multiscale, method="CMSEn")
 complexity_rcmse = functools.partial(entropy_multiscale, method="RCMSEn")
 complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
 complexity_fuzzycmse = functools.partial(entropy_multiscale, method="CMSEn", fuzzy=True)
-complexity_fuzzyrcmse = functools.partial(entropy_multiscale, method="RCMSEn", fuzzy=True)
+complexity_fuzzyrcmse = functools.partial(
+    entropy_multiscale, method="RCMSEn", fuzzy=True
+)
 
 
 complexity_dfa = fractal_dfa
@@ -175,6 +178,7 @@ __all__ = [
     "entropy_symbolicdynamic",
     "entropy_cumulativeresidual",
     "entropy_approximate",
+    "entropy_quadratic",
     "entropy_bubble",
     "entropy_coalition",
     "entropy_sample",

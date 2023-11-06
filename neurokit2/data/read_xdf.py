@@ -82,13 +82,11 @@ def read_xdf(filename, upsample=2, fillmissing=None):
             # Rename GYRO channels and add ACCelerometer
             if stream["info"]["type"][0] == "GYRO":
                 dat = dat.rename(columns={"X": "GYRO_X", "Y": "GYRO_Y", "Z": "GYRO_Z"})
-                dat["ACC"] = np.sqrt(
-                    dat["GYRO_X"] ** 2 + dat["GYRO_Y"] ** 2 + dat["GYRO_Z"] ** 2
-                )
+                dat["ACC"] = np.sqrt(dat["GYRO_X"] ** 2 + dat["GYRO_Y"] ** 2 + dat["GYRO_Z"] ** 2)
 
             # Muse - PPG data has three channels: ambient, infrared, red
             if stream["info"]["type"][0] == "PPG":
-                dat = dat.rename(columns={"PPG1": "LUX", "PPG2": "PPG", "PPG3": "RED"})
+                dat = dat.rename(columns={"PPG1": "LUX", "PPG2": "PPG", "PPG3": "RED", "IR": "PPG"})
                 # Zeros suggest interruptions, better to replace with NaNs (I think?)
                 dat["PPG"] = dat["PPG"].replace(0, value=np.nan)
                 dat["LUX"] = dat["LUX"].replace(0, value=np.nan)
@@ -101,12 +99,8 @@ def read_xdf(filename, upsample=2, fillmissing=None):
 
     # Store metadata
     info = {
-        "sampling_rates_original": [
-            float(s["info"]["nominal_srate"][0]) for s in streams
-        ],
-        "sampling_rates_effective": [
-            float(s["info"]["effective_srate"]) for s in streams
-        ],
+        "sampling_rates_original": [float(s["info"]["nominal_srate"][0]) for s in streams],
+        "sampling_rates_effective": [float(s["info"]["effective_srate"]) for s in streams],
         "datetime": header["info"]["datetime"][0],
         "data": dfs,
     }
@@ -127,14 +121,8 @@ def read_xdf(filename, upsample=2, fillmissing=None):
         fillmissing = int(info["sampling_rate"] * fillmissing)
 
     # Create new index with evenly spaced timestamps
-    idx = pd.date_range(
-        df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms"
-    )
+    idx = pd.date_range(df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms")
     # https://stackoverflow.com/questions/47148446/pandas-resample-interpolate-is-producing-nans
-    df = (
-        df.reindex(df.index.union(idx))
-        .interpolate(method="index", limit=fillmissing)
-        .reindex(idx)
-    )
+    df = df.reindex(df.index.union(idx)).interpolate(method="index", limit=fillmissing).reindex(idx)
 
     return df, info
