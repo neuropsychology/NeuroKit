@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>PPG &#8212; NeuroKit2 0.2.7 documentation</title>
+    <title>PPG &#8212; NeuroKit2 0.2.8 documentation</title>
   
   
   
@@ -139,8 +139,8 @@
       
     
     
-    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.7 documentation - Home"/>
-    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.7 documentation - Home"/>`);</script>
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.8 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.8 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -599,9 +599,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.786488           0.701318</span>
-<span class="go">2     2        10000  ...                 -0.049040           0.987234</span>
-<span class="go">3     3        15000  ...                  0.684202           0.996853</span>
+<span class="go">1     1         5000  ...                 -1.391322           0.764443</span>
+<span class="go">2     2        10000  ...                 -3.144707           0.901281</span>
+<span class="go">3     3        15000  ...                 -1.874648           0.648830</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -846,8 +846,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 46,  88, 131, 174, 217, 263, 309, 351, 395, 444, 476, 526, 557,</span>
-<span class="go">       596, 631, 669, 707, 742, 778, 813, 852, 887, 927, 965])</span>
+<span class="go">array([ 44,  87, 131, 175, 217, 262, 307, 350, 412, 483, 514, 565, 633,</span>
+<span class="go">       670, 707, 742, 777, 814, 850, 887, 925, 966])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -931,9 +931,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.036356           0.991462</span>
-<span class="go">2     2        10000  ...                 -0.335670           0.989955</span>
-<span class="go">3     3        15000  ...                 -0.314446           0.841464</span>
+<span class="go">1     1         5000  ...                  1.087606           0.797092</span>
+<span class="go">2     2        10000  ...                 -3.937162           0.834036</span>
+<span class="go">3     3        15000  ...                 -0.873389           0.962779</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
