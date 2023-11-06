@@ -28,7 +28,7 @@ def find_version():
 requirements = ["numpy", "pandas", "scipy", "scikit-learn>=1.0.0", "matplotlib"]
 
 # Optional Dependencies (only needed / downloaded for testing purposes, for instance to test against some other packages)
-setup_requirements = ["pytest-runner", "numpy"]
+setup_requirements = ["pytest-runner", "numpy", "requests"]
 test_requirements = requirements + [
     "pytest",
     "coverage",
