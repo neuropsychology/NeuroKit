@@ -13,9 +13,7 @@ with open("README.rst") as readme_file:
 
 with open("NEWS.rst") as history_file:
     history = history_file.read()
-history = history.replace("\n-------------------", "\n^^^^^^^^^^^^^^^^^^^").replace(
-    "\n=====", "\n-----"
-)
+history = history.replace("\n-------------------", "\n^^^^^^^^^^^^^^^^^^^").replace("\n=====", "\n-----")
 
 
 def find_version():
@@ -62,7 +60,7 @@ setup(
     license="MIT license",
     # The name and contact of a maintainer
     author="Dominique Makowski",
-    author_email="dom.makowski@gmail.com",
+    author_email="D.Makowski@sussex.ac.uk",
     # Dependencies
     install_requires=requirements,
     setup_requires=setup_requirements,
