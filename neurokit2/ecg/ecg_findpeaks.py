@@ -1241,6 +1241,13 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
 
 
 # =============================================================================
+# Fast Visibility Graph Detector - by Emrich et al. (2023)
+# =============================================================================
+def _ecg_findpeaks_visibilitygraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwargs):
+    # TODO: Add implementation
+
+
+# =============================================================================
 # Utilities
 # =============================================================================
 
