@@ -1243,8 +1243,101 @@ def _ecg_findpeaks_vgraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwarg
 # =============================================================================
 # Fast Visibility Graph Detector - by Emrich et al. (2023)
 # =============================================================================
-def _ecg_findpeaks_visibilitygraph(signal, sampling_rate=1000, lowcut=3, order=2, **kwargs):
-    # TODO: Add implementation
+def _ecg_findpeaks_visibilitygraph(signal, sampling_rate=1000, window_seconds=2, 
+    window_overlap=0.5, accelerated=True, **kwargs):
+    """ Accelerated R-Peak Detector Using Visibility Graphs by Emrich et al. (2023).
+    Implements the FastNVG algorithm, allowing fast and sample precise R-peak detection.
+
+    References
+    ----------    
+    - J. Emrich, T. Koka, S. Wirth and M. Muma, "Accelerated Sample-Accurate R-Peak
+      Detectors Based on Visibility Graphs," 31st European Signal Processing
+      Conference (EUSIPCO), 2023, pp. 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007,
+      https://ieeexplore.ieee.org/document/10290007
+
+    - https://github.com/JonasEmrich/vg-beat-detectors    
+    """
+
+    # Try loading ts2vg
+    try:
+        import ts2vg
+    except ImportError as import_error:
+        raise ImportError(
+            "NeuroKit error: ecg_findpeaks(): the 'ts2vg' module is required for"
+            " this method to run. Please install it first (`pip install ts2vg`)."
+        ) from import_error
+
+   
+    # Initialize variables
+    N = len(signal)  # Signal length
+    M = int(window_seconds * sampling_rate)  # Length of window segment
+    l = 0  # Left segment boundary
+    r = M  # Right segment boundary
+    dM = int(np.ceil(window_overlap * M))  # Size of segment overlap
+    n_segments = int(np.ceil(((N - r) / (M - dM) + 1)))  # Number of segments
+    weights = np.zeros(N)  # Empty array to store the weights
+    BETA = 0.55 # Target number of nonzero elements in the resulting weight vector
+
+    # If input length is smaller than window, compute only one segment of this length
+    if N < M:
+        M, r = N, N
+        n_segments = 1
+
+    # Do computation in small segments
+    for jj in range(n_segments):
+        segment = signal[l:r]
+        
+        # Select indicies and values to construct the visibility graph
+        if accelerated:
+            # Compute the threshold for the segment
+            threshold = np.quantile(segment, 0.5)
+            # Find local maxima
+            indices_maxima = scipy.signal.find_peaks(segment)[0]
+            segment_maxima = segment[indices_maxima]
+            # Select local maxima above the threshold
+            greater = np.argwhere(segment_maxima > threshold).flatten()
+            indices = indices_maxima[greater]
+            segment = segment_maxima[greater]        
+        else:
+            indices = np.arange(len(segment))
+
+        # Compute the adjacency matrix to the directed visibility graph
+        A = ts2vg.NaturalVG(directed="top_to_bottom").build(segment, indices).adjacency_matrix()
+
+        # Compute the ECG weights using k-Hop-paths
+        size = len(indices)
+        w = np.ones(size) / size
+        while np.count_nonzero(w) / size >= BETA:
+            _w = np.matmul(A, w) 
+            _w /= np.linalg.norm(_w)
+            if np.any(np.isnan(_w)):
+                break
+            w = _w  
+
+        # Update weight vector by merging overlaping segments
+        if l == 0:
+            weights[l + indices] = w
+        elif N - dM + 1 <= l and l + 1 <= N:
+            weights[l + indices] = 0.5 * (weights[l + indices] + w)
+        else:
+            weights[l + indices[indices <= dM]] = 0.5 * (w[indices <= dM] + weights[l + indices[indices <= dM]])
+            weights[l + indices[indices > dM]] = w[indices > dM]
+
+        if r - l < M:
+            break
+
+        # Update segment boundaries
+        l += M - dM
+        if r + (M - dM) <= N:
+            r += M - dM
+        else:
+            r = N
+
+    # Weigh signal with obtained weights and use thresholding algorithm for peak localization
+    weighted_signal = signal * weights
+    rpeaks = _ecg_findpeaks_visgraphthreshold(weighted_signal, sampling_rate)
+    rpeaks = np.array(rpeaks, dtype="int")
+    return rpeaks
 
 
 # =============================================================================
@@ -1343,3 +1436,85 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000, **kwargs):
             NPKI = 0.125 * peak_value + 0.875 * NPKI
 
     return signal_peaks
+
+def _ecg_findpeaks_visgraphthreshold(weight, sampling_frequency=1000, **kwargs):
+        """
+        Based on the python implementation [3] of the thresholding proposed by Pan and Tompkins in [4].
+        Modifications were made with respect to the application of R-peak detection using visibility graphs
+        and the k-Hop paths metric.
+
+        References
+        ----------
+        [3] https://github.com/berndporr/py-ecg-detectors
+        [4] J. Pan and W. J. Tompkins, “A Real-Time QRS Detection Algorithm”, IEEE Transactions on Biomedical
+         Engineering, vol. BME-32, Mar. 1985. pp. 230-236.
+
+        """
+        # initialise variables
+        N = len(weight)
+        min_distance = int(0.25 * sampling_frequency)
+        signal_peaks = [-min_distance]
+        noise_peaks = []
+
+        # Learning Phase, 2sec
+        spki = np.max(weight[0:2 * sampling_frequency]) * 0.25  # running estimate of signal level
+        npki = np.mean(weight[0:2 * sampling_frequency]) * 0.5  # running estimate of noise level
+        threshold_I1 = spki
+
+        # iterate over the whole array / series
+        for i in range(N):
+            # skip first and last elements
+            if 0 < i < N - 1:
+                # detect peak candidates based on a rising + falling slope
+                if weight[i - 1] <= weight[i] >= weight[i + 1]:
+                    # peak candidates should be greater than signal threshold
+                    if weight[i] > threshold_I1:
+                        # distance to last peak is greater than minimum detection distance
+                        if (i - signal_peaks[-1]) > 0.3 * sampling_frequency:
+                            signal_peaks.append(i)
+                            spki = 0.125 * weight[signal_peaks[-1]] + 0.875 * spki
+                        # candidate is close to last detected peak -> check if current candidate is better choice
+                        elif 0.3 * sampling_frequency >= (i - signal_peaks[-1]):
+                            # compare slope of last peak with current candidate
+                            if weight[i] > weight[signal_peaks[-1]]:  # test greater slope -> qrs
+                                spki = (spki - 0.125 * weight[signal_peaks[-1]]) / 0.875  # reset threshold
+                                signal_peaks[-1] = i
+                                spki = 0.125 * weight[signal_peaks[-1]] + 0.875 * spki
+                            else:
+                                noise_peaks.append(i)
+                                npki = 0.125 * weight[noise_peaks[-1]] + 0.875 * npki
+                        else:
+                            # not a peak -> label as noise and update noise level
+                            npki = 0.125 * weight[i] + 0.875 * npki
+
+                        # back search for missed peaks
+                        if len(signal_peaks) > 8:
+                            RR = np.diff(signal_peaks[-9:])
+                            RR_ave = int(np.mean(RR))
+                            RR_missed = int(1.66 * RR_ave)
+
+                            # if time difference of the last two signal peaks found is too large
+                            if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
+                                threshold_I2 = 0.5 * threshold_I1
+                                # get range of candidates and apply noise threshold
+                                missed_section_peaks = range(signal_peaks[-2] + min_distance,
+                                                             signal_peaks[-1] - min_distance)
+                                missed_section_peaks = [p for p in missed_section_peaks if weight[p] > threshold_I2]
+
+                                # add the largest sample in missed interval to peaks
+                                if len(missed_section_peaks) > 0:
+                                    missed_peak = missed_section_peaks[np.argmax(weight[missed_section_peaks])]
+                                    signal_peaks.append(signal_peaks[-1])
+                                    signal_peaks[-2] = missed_peak
+
+                    else:
+                        # not a peak -> label as noise and update noise level
+                        npki = 0.125 * weight[i] + 0.875 * npki
+
+                    threshold_I1 = npki + 0.25 * (spki - npki)
+
+        # remove first dummy elements
+        if signal_peaks[0] == -min_distance:
+            signal_peaks.pop(0)
+
+        return np.array(signal_peaks)
