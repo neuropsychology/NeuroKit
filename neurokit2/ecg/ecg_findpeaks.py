@@ -105,6 +105,8 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_rodrigues
     elif method in ["vg", "vgraph", "koka2022"]:
         return _ecg_findpeaks_vgraph
+    elif method in ["FastNVG", "fastnvg", "emrich", "emrich2023"]:
+        return _ecg_findpeaks_visibilitygraph
     elif method in ["promac", "all"]:
         return _ecg_findpeaks_promac
     else:
