@@ -72,6 +72,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
           "ECG_Hamilton" : nk.ecg_clean(ecg, sampling_rate=250, method="hamilton2002"),
           "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=250, method="elgendi2010"),
           "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012"),
+          "ECG_VG" : nk.ecg_clean(ecg, sampling_rate=250, method="vg"),
           "ECG_TC" : nk.ecg_clean(ecg, sampling_rate=250, method="templateconvolution")
       })
 
@@ -122,7 +123,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_elgendi(ecg_signal, sampling_rate)
     elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
-    elif method in ["vg", "vgraph", "koka2022", "FastNVG", "fastnvg", "emrich", "emrich2023"]:
+    elif method in ["vg", "vgraph", "fastnvg", "emrich", "emrich2023"]:
         clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
     elif method in ["templateconvolution"]:
         clean = _ecg_clean_templateconvolution(ecg_signal, sampling_rate)
@@ -172,9 +173,7 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
         order=5,
     )
 
-    clean = signal_filter(
-        signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs
-    )
+    clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs)
     return clean
 
 
@@ -198,9 +197,7 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = (
-        2 * np.array(frequency) / sampling_rate
-    )  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
@@ -341,12 +338,12 @@ def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
 # Template Convolution (Exploratory)
 # =============================================================================
 def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
-    """Filter and Convolve ECG signal with QRS complex template.
-    Totally exploratory method by Dominique Makowski, use at your own risks.
+    """Filter and Convolve ECG signal with QRS complex template. Totally exploratory method by Dominique Makowski, use
+    at your own risks.
 
-    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS
-    features. However, it doens't work well and creates a lot of artifacts. If you have ideas for
-    improvement please let me know!
+    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS features. However,
+    it doens't work well and creates a lot of artifacts. If you have ideas for improvement please let me know!
+
     """
 
     window_size = int(np.round(sampling_rate / 4))
@@ -364,14 +361,10 @@ def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
     )
 
     # Detect peaks
-    peaks, _ = scipy.signal.find_peaks(
-        filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered)
-    )
+    peaks, _ = scipy.signal.find_peaks(filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered))
     peaks = peaks[peaks + 0.6 * sampling_rate < len(ecg_signal)]
 
-    idx = [
-        np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks
-    ]
+    idx = [np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks]
     epochs = np.array([filtered[i] for i in idx])
     qrs = np.mean(epochs, axis=0)
 
