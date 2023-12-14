@@ -33,6 +33,7 @@ def signal_flatintervals(signal, sampling_rate, threshold=0.01, tolerance=60):
     .. ipython:: python
 
       import neurokit2 as nk
+      import numpy as np
 
       ecg = nk.ecg_simulate(duration=10 * one_minute, sampling_rate=sampling_rate)
       flatline_1 = np.full(10 * one_minute * sampling_rate, -4.0)
