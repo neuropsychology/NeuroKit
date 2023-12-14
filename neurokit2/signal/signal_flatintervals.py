@@ -31,7 +31,7 @@ def signal_flatintervals(signal, sampling_rate, threshold=0.01, tolerance=60):
 
     # Identify flanks: +1 for beginning plateau; -1 for ending plateau.
     flanks = np.diff(_find_flatlines(signal, sampling_rate, threshold, tolerance).astype(int))
-    
+
     flatline_starts = np.flatnonzero(flanks > 0)
     flatline_ends = np.flatnonzero(flanks < 0)
 
@@ -97,7 +97,7 @@ def _moving_average(signal, window_size):
     np.array
         Returns a signal of averages from the original signal.
         Note: The returned signal is shorter than the original signal by window_size - 1.
-        
+
     """
 
-    return np.convolve(signal, np.ones(window_size), 'valid') / window_size
+    return np.convolve(signal, np.ones(window_size), "valid") / window_size
