@@ -24,9 +24,23 @@ def signal_flatintervals(signal, sampling_rate, threshold=0.01, tolerance=60):
     -------
     list
         Returns a list of tuples:
-        flatline_starts: Indices where a flatline part starts.
-        flatline_ends: Indices where a flatline part ends.
+        [(flatline_starts1, flatline_ends1), (flatline_starts2, flatline_ends2), ...]
+        flatline_starts: Index where a flatline part starts.
+        flatline_ends: Index where a flatline part ends.
 
+    Examples
+    --------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg = nk.ecg_simulate(duration=10 * one_minute, sampling_rate=sampling_rate)
+      flatline_1 = np.full(10 * one_minute * sampling_rate, -4.0)
+      flatline_2 = np.zeros(10 * one_minute * sampling_rate)
+      signal = np.concatenate([ecg, flatline_1, ecg, flatline_2, ecg, flatline_1])
+
+      nk.signal_flatintervals(signal)
+    
     """
 
     # Identify flanks: +1 for beginning plateau; -1 for ending plateau.
