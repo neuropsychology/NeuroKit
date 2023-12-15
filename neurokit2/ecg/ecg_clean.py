@@ -125,6 +125,13 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
     elif method in ["vg", "vgraph", "fastnvg", "emrich", "emrich2023"]:
         clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
+    elif method in ["koka2022", "koka"]:
+        warn(
+            "The 'koka2022' method has been replaced by 'emrich2023'."
+            " Please replace method='koka2022' by method='emrich2023'.",
+            category=NeuroKitWarning,
+        )
+        clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
     elif method in ["templateconvolution"]:
         clean = _ecg_clean_templateconvolution(ecg_signal, sampling_rate)
     elif method in [

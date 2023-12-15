@@ -3,9 +3,10 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 import scipy.stats
+from warnings import warn
 
 from ..signal import signal_findpeaks, signal_plot, signal_sanitize, signal_smooth, signal_zerocrossings
-
+from ..misc import NeuroKitWarning
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
     """**Locate R-peaks**
@@ -96,6 +97,13 @@ def _ecg_findpeaks_findmethod(method):
     elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
         return _ecg_findpeaks_rodrigues
     elif method in ["vg", "vgraph", "fastnvg", "emrich", "emrich2023"]:
+        return _ecg_findpeaks_visibilitygraph
+    elif method in ["koka2022", "koka"]:
+        warn(
+            "The 'koka2022' method has been replaced by 'emrich2023'."
+            " Please replace method='koka2022' by method='emrich2023'.",
+            category=NeuroKitWarning,
+        )
         return _ecg_findpeaks_visibilitygraph
     elif method in ["promac", "all"]:
         return _ecg_findpeaks_promac
