@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,21 +35,18 @@
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/misc_fit_function/misc_fit_function';</script>
-    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Create epochs" href="../misc_epochs_create/misc_epochs_create.html" />
@@ -126,6 +123,7 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -386,6 +384,7 @@
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -395,6 +394,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -470,7 +470,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/6c35a46ae32deba9403b21de72c5452b668d318d25d6d5e340facf1777935b7e.png" src="../../_images/6c35a46ae32deba9403b21de72c5452b668d318d25d6d5e340facf1777935b7e.png" />
+<img alt="../../_images/3c007491e16d73afff376df554d88c7ccd76f1b27ebb03cbd30744863af2bfa7.png" src="../../_images/3c007491e16d73afff376df554d88c7ccd76f1b27ebb03cbd30744863af2bfa7.png" />
 </div>
 </div>
 <p>In this case we <strong>know</strong> that the best fitting line will be a linear function (i.e., a straight line), and we want to find its parameters. A linear function has two parameters, the <strong>intercept</strong> and the <strong>slope</strong>.</p>
@@ -493,7 +493,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1.64786866, 3.29405973])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.95637502, 3.18572143])
 </pre></div>
 </div>
 </div>
@@ -510,7 +510,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f96d11b02e7c893dc00b6fa60302377ab1f52c89996a8a7c766abe93e8b16c51.png" src="../../_images/f96d11b02e7c893dc00b6fa60302377ab1f52c89996a8a7c766abe93e8b16c51.png" />
+<img alt="../../_images/e68d51bc3b3938dbd2f77ddf6f888c514ac2ddaccd16c52343dafbe1d275eecd.png" src="../../_images/e68d51bc3b3938dbd2f77ddf6f888c514ac2ddaccd16c52343dafbe1d275eecd.png" />
 </div>
 </div>
 </section>
@@ -525,7 +525,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b2aac774f697597202364b4d377ee817ea2e3d8e68a7a5c45f1a2a7e13210436.png" src="../../_images/b2aac774f697597202364b4d377ee817ea2e3d8e68a7a5c45f1a2a7e13210436.png" />
+<img alt="../../_images/5aa6c69fc1c1771940eadd5f12ccca64dcd28a58d8fbb0e665083168512b8fad.png" src="../../_images/5aa6c69fc1c1771940eadd5f12ccca64dcd28a58d8fbb0e665083168512b8fad.png" />
 </div>
 </div>
 <p>In this example, we will try to approximate this Skin Conductance Response (SCR) using a <a class="reference external" href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma distribution</a>, which is quite a flexible distribution defined by 3 parameters (<strong>a</strong>, <strong>loc</strong> and <strong>scale</strong>).</p>
@@ -551,7 +551,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c7fe36bc9a40424315f1efdbca18b9f164601969fc7cce105db487f1bdd9dce8.png" src="../../_images/c7fe36bc9a40424315f1efdbca18b9f164601969fc7cce105db487f1bdd9dce8.png" />
+<img alt="../../_images/05039fb28353867d6b067459c17a0d078307a6658f5c882f589a024bec81faad.png" src="../../_images/05039fb28353867d6b067459c17a0d078307a6658f5c882f589a024bec81faad.png" />
 </div>
 </div>
 <p>Since these values are already a good start, we will use them as “starting point” (through the <code class="docutils literal notranslate"><span class="pre">p0</span></code> argument), to help the estimation algorithm converge (otherwise it could never find the right combination of parameters).</p>
@@ -563,7 +563,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94928503, 2.25318616, 1.03524754, 1.6032064 , 2.07694392])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.94792272, 2.30156083, 1.06692426, 1.20240133, 2.03568301])
 </pre></div>
 </div>
 </div>
@@ -579,7 +579,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/805cc489d176557c2d9b804c0937a94f5008696bd4537313752da15318229f75.png" src="../../_images/805cc489d176557c2d9b804c0937a94f5008696bd4537313752da15318229f75.png" />
+<img alt="../../_images/b805d2b7e5dcf636bd170c8d9b482461b005bb6da466e9c992528c65115d50e7.png" src="../../_images/b805d2b7e5dcf636bd170c8d9b482461b005bb6da466e9c992528c65115d50e7.png" />
 </div>
 </div>
 </section>
@@ -594,7 +594,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="../eeg_microstates/eeg_microstates.html"
@@ -652,6 +652,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2020–2023.
@@ -678,8 +679,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,21 +35,18 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/bio';</script>
-    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="ECG" href="ecg.html" />
@@ -126,6 +123,7 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../index.html">
@@ -386,6 +384,7 @@
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -395,6 +394,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -529,11 +529,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.079692  -0.081720  70.071629  ...            0     40.0   7.974939</span>
-<span class="go">1  1.027688  -0.204170  70.071629  ...            0     40.0   7.974939</span>
-<span class="go">2  0.892533  -0.339984  70.071629  ...            0     40.0   7.974939</span>
-<span class="go">3  0.699097  -0.494201  70.071629  ...            0     40.0   7.974939</span>
-<span class="go">4  0.474041  -0.664221  70.071629  ...            0     40.0   7.974939</span>
+<span class="go">0  1.038713  -0.067135  70.042544  ...            0     28.0   7.996117</span>
+<span class="go">1  0.987607  -0.186471  70.042544  ...            0     28.0   7.996117</span>
+<span class="go">2  0.855261  -0.318038  70.042544  ...            0     28.0   7.996117</span>
+<span class="go">3  0.667366  -0.466016  70.042544  ...            0     28.0   7.996117</span>
+<span class="go">4  0.451287  -0.627287  70.042544  ...            0     28.0   7.996117</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -633,11 +633,11 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="go"># Analyze</span>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T  RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN   7.111969   0.000000</span>
-<span class="go">2     2   Neutral         4957  ...               NaN -15.476818   0.012038</span>
-<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871   0.027382</span>
-<span class="go">4     4  Negative        12984  ...               NaN  -0.397892  -0.005452</span>
+<span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T     RSA_Gates</span>
+<span class="go">1     1  Negative         1024  ...               NaN   7.111969 -1.776357e-15</span>
+<span class="go">2     2   Neutral         4957  ...               NaN -15.476818  1.203761e-02</span>
+<span class="go">3     3   Neutral         9224  ...               NaN  -6.685871  2.738234e-02</span>
+<span class="go">4     4  Negative        12984  ...               NaN  -0.397892 -5.451553e-03</span>
 
 <span class="go">[4 rows x 46 columns]</span>
 </pre></div>
@@ -673,7 +673,7 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="index.html"
@@ -740,6 +740,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2020–2023.
@@ -766,8 +767,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>
