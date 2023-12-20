@@ -199,14 +199,14 @@ def test_signal_interpolate():
 def test_signal_flatintervals():
     sampling_rate = 128
     one_minute = 60
-    tolerance = 60
+    duration_min = 60
 
     ecg = nk.ecg_simulate(duration=10 * one_minute, sampling_rate=sampling_rate)
     flatline_1 = np.full(10 * one_minute * sampling_rate, -4.0)
     flatline_2 = np.zeros(10 * one_minute * sampling_rate)
     signal = np.concatenate([ecg, flatline_1, ecg, flatline_2, ecg, flatline_1])
 
-    flatintervals = np.array(nk.signal_flatintervals(signal, sampling_rate, tolerance=tolerance)) / sampling_rate
+    flatintervals = np.array(nk.signal_flatintervals(signal, sampling_rate, duration_min=duration_min)) / sampling_rate
 
     assert len(flatintervals) == 3
     ground_truth = np.array([(10, 20), (30, 40), (50, 60)]) * one_minute
@@ -214,8 +214,8 @@ def test_signal_flatintervals():
     for interval, truth in zip(flatintervals, ground_truth):
         interval_begin, interval_end = interval
         true_begin, true_end = truth
-        assert interval_begin > true_begin and interval_begin < true_begin + tolerance
-        assert interval_end > true_end - tolerance and interval_end < true_end
+        assert interval_begin > true_begin and interval_begin < true_begin + duration_min
+        assert interval_end > true_end - duration_min and interval_end < true_end
 
 
 def test_signal_findpeaks():
