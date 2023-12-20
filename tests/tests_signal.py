@@ -197,24 +197,45 @@ def test_signal_interpolate():
 
 
 def test_signal_flatintervals():
+    # parameters
     sampling_rate = 128
     one_minute = 60
     duration_min = 60
 
+    # signal components
     ecg = nk.ecg_simulate(duration=10 * one_minute, sampling_rate=sampling_rate)
     flatline_1 = np.full(10 * one_minute * sampling_rate, -4.0)
     flatline_2 = np.zeros(10 * one_minute * sampling_rate)
-    signal = np.concatenate([ecg, flatline_1, ecg, flatline_2, ecg, flatline_1])
 
-    flatintervals = np.array(nk.signal_flatintervals(signal, sampling_rate, duration_min=duration_min)) / sampling_rate
+    # test signals
+    signal1 = np.concatenate([ecg, flatline_1, ecg, flatline_2, ecg, flatline_1])
+    signal2 = np.concatenate([flatline_1, ecg, flatline_2, ecg, flatline_1, ecg])
+    ground_truth1 = np.array([(10, 20), (30, 40), (50, 60)]) * one_minute
+    ground_truth2 = np.array([(0, 10), (20, 30), (40, 50)]) * one_minute
 
-    assert len(flatintervals) == 3
-    ground_truth = np.array([(10, 20), (30, 40), (50, 60)]) * one_minute
+    # flatline interval detection
+    flatintervals1 = (
+        np.array(nk.signal_flatintervals(signal1, sampling_rate, duration_min=duration_min)) / sampling_rate
+    )
+    flatintervals2 = (
+        np.array(nk.signal_flatintervals(signal2, sampling_rate, duration_min=duration_min)) / sampling_rate
+    )
 
-    for interval, truth in zip(flatintervals, ground_truth):
+    # check correct number of flatline intervals
+    assert len(flatintervals1) == 3
+    assert len(flatintervals2) == 3
+
+    # check correct detection of flatline intervals
+    for interval, truth in zip(flatintervals1, ground_truth1):
         interval_begin, interval_end = interval
         true_begin, true_end = truth
-        assert interval_begin > true_begin and interval_begin < true_begin + duration_min
+        assert interval_begin >= true_begin and interval_begin < true_begin + duration_min
+        assert interval_end > true_end - duration_min and interval_end < true_end
+
+    for interval, truth in zip(flatintervals2, ground_truth2):
+        interval_begin, interval_end = interval
+        true_begin, true_end = truth
+        assert interval_begin >= true_begin and interval_begin < true_begin + duration_min
         assert interval_end > true_end - duration_min and interval_end < true_end
 
 

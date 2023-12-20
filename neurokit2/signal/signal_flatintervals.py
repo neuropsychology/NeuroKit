@@ -41,7 +41,7 @@ def signal_flatintervals(signal, sampling_rate, threshold=0.01, duration_min=60)
       signal = np.concatenate([ecg, flatline_1, ecg, flatline_2, ecg, flatline_1])
 
       nk.signal_flatintervals(signal)
-    
+
     """
 
     # Identify flanks: +1 for beginning plateau; -1 for ending plateau.
