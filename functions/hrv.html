@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>HRV &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/hrv';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -479,14 +489,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="hrv">
-<h1>HRV<a class="headerlink" href="#hrv" title="Permalink to this heading">#</a></h1>
+<h1>HRV<a class="headerlink" href="#hrv" title="Link to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Link to this heading">#</a></h2>
 <section id="id1">
-<h3><em>hrv()</em><a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<h3><em>hrv()</em><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv">
-<span class="sig-name descname"><span class="pre">hrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv.html#hrv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv.html#hrv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv" title="Link to this definition">#</a></dt>
 <dd><p><strong>Heart Rate Variability (HRV)</strong></p>
 <p>This function computes all HRV indices available in NeuroKit. It is essentially a convenience
 function that aggregates results from the <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">time</span> <span class="pre">domain</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-func docutils literal notranslate"><span class="pre">frequency</span>
@@ -570,12 +580,12 @@ norms. Frontiers in public health, 5, 258.</p></li>
 </section>
 </section>
 <section id="sub-domains">
-<h2>Sub-domains<a class="headerlink" href="#sub-domains" title="Permalink to this heading">#</a></h2>
+<h2>Sub-domains<a class="headerlink" href="#sub-domains" title="Link to this heading">#</a></h2>
 <section id="hrv-time">
-<h3><em>hrv_time()</em><a class="headerlink" href="#hrv-time" title="Permalink to this heading">#</a></h3>
+<h3><em>hrv_time()</em><a class="headerlink" href="#hrv-time" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_time">
-<span class="sig-name descname"><span class="pre">hrv_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_time.html#hrv_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_time" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_time.html#hrv_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_time" title="Link to this definition">#</a></dt>
 <dd><p><strong>Computes time-domain indices of Heart Rate Variability (HRV)</strong></p>
 <p>Time-domain measures reflect the total variability of HR and are relatively indiscriminate when
 it comes to precisely quantifying the respective contributions of different underlying
@@ -702,10 +712,10 @@ ratio in a patient population and normal healthy controls. Biomed Sci Instrum, 4
 
 </section>
 <section id="hrv-frequency">
-<h3><em>hrv_frequency()</em><a class="headerlink" href="#hrv-frequency" title="Permalink to this heading">#</a></h3>
+<h3><em>hrv_frequency()</em><a class="headerlink" href="#hrv-frequency" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_frequency">
-<span class="sig-name descname"><span class="pre">hrv_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ulf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0.0033)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0033,</span> <span class="pre">0.04)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.04,</span> <span class="pre">0.15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.15,</span> <span class="pre">0.4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vhf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.4,</span> <span class="pre">0.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psd_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'welch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_frequency.html#hrv_frequency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_frequency" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ulf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0.0033)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0033,</span> <span class="pre">0.04)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.04,</span> <span class="pre">0.15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.15,</span> <span class="pre">0.4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vhf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.4,</span> <span class="pre">0.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psd_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'welch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_frequency.html#hrv_frequency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_frequency" title="Link to this definition">#</a></dt>
 <dd><p><strong>Computes frequency-domain indices of Heart Rate Variability (HRV)</strong></p>
 <p>Computes frequency domain HRV metrics, such as the power in different frequency bands.</p>
 <ul class="simple">
@@ -814,10 +824,10 @@ Rate Variability. Simul. Notes Eur., 27(4), 183-190.</p></li>
 
 </section>
 <section id="hrv-nonlinear">
-<h3><em>hrv_nonlinear()</em><a class="headerlink" href="#hrv-nonlinear" title="Permalink to this heading">#</a></h3>
+<h3><em>hrv_nonlinear()</em><a class="headerlink" href="#hrv-nonlinear" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_nonlinear">
-<span class="sig-name descname"><span class="pre">hrv_nonlinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_nonlinear.html#hrv_nonlinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_nonlinear" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv_nonlinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_nonlinear.html#hrv_nonlinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_nonlinear" title="Link to this definition">#</a></dt>
 <dd><p><strong>Nonlinear indices of Heart Rate Variability (HRV)</strong></p>
 <p>This function computes non-linear indices, which include features derived from the <em>Poincaré
 plot</em>, as well as other <a class="reference internal" href="complexity.html#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity()</span></code></a> indices corresponding to entropy or fractal
@@ -990,10 +1000,10 @@ correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-3
 
 </section>
 <section id="hrv-rsa">
-<h3><em>hrv_rsa()</em><a class="headerlink" href="#hrv-rsa" title="Permalink to this heading">#</a></h3>
+<h3><em>hrv_rsa()</em><a class="headerlink" href="#hrv-rsa" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_rsa">
-<span class="sig-name descname"><span class="pre">hrv_rsa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_rsa.html#hrv_rsa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_rsa" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv_rsa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_rsa.html#hrv_rsa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_rsa" title="Link to this definition">#</a></dt>
 <dd><p><strong>Respiratory Sinus Arrhythmia (RSA)</strong></p>
 <p>Respiratory sinus arrhythmia (RSA), also referred to as ‘cardiac coherence’ or ‘physiological
 coherence’ (though these terms are often encompassing a wider meaning), is the naturally
@@ -1127,10 +1137,10 @@ Sciences, 1(06), 32.</p></li>
 
 </section>
 <section id="hrv-rqa">
-<h3><em>hrv_rqa()</em><a class="headerlink" href="#hrv-rqa" title="Permalink to this heading">#</a></h3>
+<h3><em>hrv_rqa()</em><a class="headerlink" href="#hrv-rqa" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.hrv_rqa">
-<span class="sig-name descname"><span class="pre">hrv_rqa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zimatore2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_rqa.html#hrv_rqa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_rqa" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hrv_rqa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zimatore2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_rqa.html#hrv_rqa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_rqa" title="Link to this definition">#</a></dt>
 <dd><p><strong>Recurrence Quantification Analysis (RQA) of Heart Rate Variability (HRV)</strong></p>
 <p>RQA is a type of complexity analysis used in non-linear dynamics (related to entropy and fractal
 dimensions). See <a class="reference internal" href="complexity.html#neurokit2.complexity.complexity_rqa" title="neurokit2.complexity.complexity_rqa"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_rqa()</span></code></a> for more information.</p>
@@ -1196,12 +1206,12 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 </section>
 </section>
 <section id="intervals">
-<h2>Intervals<a class="headerlink" href="#intervals" title="Permalink to this heading">#</a></h2>
+<h2>Intervals<a class="headerlink" href="#intervals" title="Link to this heading">#</a></h2>
 <section id="intervals-process">
-<h3><em>intervals_process()</em><a class="headerlink" href="#intervals-process" title="Permalink to this heading">#</a></h3>
+<h3><em>intervals_process()</em><a class="headerlink" href="#intervals-process" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.intervals_process">
-<span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">intervals_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_process.html#intervals_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_process" title="Link to this definition">#</a></dt>
 <dd><p><strong>Interval preprocessing</strong></p>
 <p>R-peak intervals preprocessing.</p>
 <dl class="field-list simple">
@@ -1266,10 +1276,10 @@ rri_time = np.array(peaks[1:]) / sampling_rate</p>
 
 </section>
 <section id="intervals-to-peaks">
-<h3><em>intervals_to_peaks()</em><a class="headerlink" href="#intervals-to-peaks" title="Permalink to this heading">#</a></h3>
+<h3><em>intervals_to_peaks()</em><a class="headerlink" href="#intervals-to-peaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hrv.intervals_to_peaks">
-<span class="sig-name descname"><span class="pre">intervals_to_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_to_peaks.html#intervals_to_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_to_peaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">intervals_to_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intervals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/intervals_to_peaks.html#intervals_to_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.intervals_to_peaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Convert intervals to peaks</strong></p>
 <p>Convenience function to convert intervals to peaks, such as from R-R intervals to R-peaks of an
 ECG signal. This can be useful if you do not have raw peak indices and have only interval data

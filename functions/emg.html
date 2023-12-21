@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EMG &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/emg';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -483,14 +493,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="emg">
-<h1>EMG<a class="headerlink" href="#emg" title="Permalink to this heading">#</a></h1>
+<h1>EMG<a class="headerlink" href="#emg" title="Link to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Link to this heading">#</a></h2>
 <section id="emg-process">
-<h3><em>emg_process()</em><a class="headerlink" href="#emg-process" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_process()</em><a class="headerlink" href="#emg-process" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_process">
-<span class="sig-name descname"><span class="pre">emg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_process.html#emg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_process.html#emg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_process" title="Link to this definition">#</a></dt>
 <dd><p><strong>Process a electromyography (EMG) signal</strong></p>
 <p>Convenience function that automatically processes an electromyography signal.</p>
 <dl class="field-list simple">
@@ -544,10 +554,10 @@ specified,marked as “1” in a list of zeros.</p></li>
 
 </section>
 <section id="emg-analyze">
-<h3><em>emg_analyze()</em><a class="headerlink" href="#emg-analyze" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_analyze()</em><a class="headerlink" href="#emg-analyze" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_analyze">
-<span class="sig-name descname"><span class="pre">emg_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_analyze.html#emg_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_analyze" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_analyze.html#emg_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_analyze" title="Link to this definition">#</a></dt>
 <dd><p><strong>EMG Analysis</strong></p>
 <p>Performs EMG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.</p>
 <dl class="field-list simple">
@@ -594,9 +604,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.279690         1.0</span>
+<span class="go">1     1         3000  ...                1.697899         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                1.091596         1.0</span>
+<span class="go">3     3         9000  ...                0.752426         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -606,17 +616,17 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.246824</span>
+<span class="go">0               3.0            0.234239</span>
 </pre></div>
 </div>
 </dd></dl>
 
 </section>
 <section id="emg-simulate">
-<h3><em>emg_simulate()</em><a class="headerlink" href="#emg-simulate" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_simulate()</em><a class="headerlink" href="#emg-simulate" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_simulate">
-<span class="sig-name descname"><span class="pre">emg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_simulate.html#emg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burst_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_simulate.html#emg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_simulate" title="Link to this definition">#</a></dt>
 <dd><p><strong>Simulate an EMG signal</strong></p>
 <p>Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.</p>
 <dl class="field-list simple">
@@ -657,10 +667,10 @@ durations for each bursts.</p></li>
 
 </section>
 <section id="emg-plot">
-<h3><em>emg_plot()</em><a class="headerlink" href="#emg-plot" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_plot()</em><a class="headerlink" href="#emg-plot" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_plot">
-<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_plot.html#emg_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>EMG Graph</strong></p>
 <p>Visualize electromyography (EMG) data.</p>
 <dl class="field-list simple">
@@ -702,12 +712,12 @@ Defaults to True.</p></li>
 </section>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
 <section id="emg-clean">
-<h3><em>emg_clean()</em><a class="headerlink" href="#emg-clean" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_clean()</em><a class="headerlink" href="#emg-clean" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_clean">
-<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'biosppy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'biosppy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_clean.html#emg_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_clean" title="Link to this definition">#</a></dt>
 <dd><p><strong>Preprocess an electromyography (emg) signal</strong></p>
 <p>Clean an EMG signal using a set of parameters. Only one method is available at the moment.</p>
 <ul class="simple">
@@ -750,10 +760,10 @@ any cleaning.</p></li>
 
 </section>
 <section id="emg-amplitude">
-<h3><em>emg_amplitude()</em><a class="headerlink" href="#emg-amplitude" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_amplitude()</em><a class="headerlink" href="#emg-amplitude" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_amplitude">
-<span class="sig-name descname"><span class="pre">emg_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_amplitude.html#emg_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_amplitude" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_amplitude.html#emg_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_amplitude" title="Link to this definition">#</a></dt>
 <dd><p><strong>Compute electromyography (EMG) amplitude</strong></p>
 <p>Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
 linear envelope of the signal.</p>
@@ -788,10 +798,10 @@ linear envelope of the signal.</p>
 
 </section>
 <section id="emg-activation">
-<h3><em>emg_activation()</em><a class="headerlink" href="#emg-activation" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_activation()</em><a class="headerlink" href="#emg-activation" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_activation">
-<span class="sig-name descname"><span class="pre">emg_activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'threshold'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_activation.html#emg_activation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_activation" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emg_amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emg_cleaned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'threshold'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_activation.html#emg_activation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_activation" title="Link to this definition">#</a></dt>
 <dd><p><strong>Locate EMG Activity</strong></p>
 <p>Detects onset in EMG signal based on the amplitude threshold.</p>
 <dl class="field-list simple">
@@ -899,12 +909,12 @@ electromyographic interfacess”, Journal of Oral Rehabilitation, pp. 1-2, 2012.
 </section>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Link to this heading">#</a></h2>
 <section id="emg-eventrelated">
-<h3><em>emg_eventrelated()</em><a class="headerlink" href="#emg-eventrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_eventrelated()</em><a class="headerlink" href="#emg-eventrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_eventrelated">
-<span class="sig-name descname"><span class="pre">emg_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_eventrelated.html#emg_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_eventrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_eventrelated.html#emg_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_eventrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>Event-related EMG Analysis</strong></p>
 <p>Performs event-related EMG analysis on epochs.</p>
 <dl class="field-list simple">
@@ -954,9 +964,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.860980         1.0</span>
+<span class="go">1     1         3000  ...                1.590845         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                1.089595         1.0</span>
+<span class="go">3     3         9000  ...                1.350725         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -965,10 +975,10 @@ activation, nans are displayed for the below features.</p></li>
 
 </section>
 <section id="emg-intervalrelated">
-<h3><em>emg_intervalrelated()</em><a class="headerlink" href="#emg-intervalrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>emg_intervalrelated()</em><a class="headerlink" href="#emg-intervalrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.emg.emg_intervalrelated">
-<span class="sig-name descname"><span class="pre">emg_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_intervalrelated.html#emg_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_intervalrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">emg_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/emg/emg_intervalrelated.html#emg_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.emg.emg_intervalrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>EMG Analysis for Interval-related Data</strong></p>
 <p>Performs EMG analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state data.</p>
 <dl class="field-list simple">
@@ -999,21 +1009,21 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.244393</span>
+<span class="go">0               3.0             0.24308</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.248571</span>
-<span class="go">2     2                 1            0.240234</span>
+<span class="go">1     1                 2            0.248646</span>
+<span class="go">2     2                 1            0.237454</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.emg"></span><p>Submodule for NeuroKit.</p>
+<p id="module-neurokit2.emg">Submodule for NeuroKit.</p>
 </section>
 </section>
 </section>

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EEG Complexity Analysis &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/eeg_complexity/eeg_complexity';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -447,7 +457,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="eeg-complexity-analysis">
-<h1>EEG Complexity Analysis<a class="headerlink" href="#eeg-complexity-analysis" title="Permalink to this heading">#</a></h1>
+<h1>EEG Complexity Analysis<a class="headerlink" href="#eeg-complexity-analysis" title="Link to this heading">#</a></h1>
 <p>In this example, we are going to apply <strong>complexity analysis</strong> to EEG data. Useful reads include:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/complexity.html">List of complexity indices available in NeuroKit</a></p></li>
@@ -472,7 +482,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="data-preprocessing">
-<h2>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading">#</a></h2>
 <p>Load and format the EEG data of one participant following this <a class="reference external" href="https://mne.tools/dev/auto_tutorials/evoked/30_eeg_erp.html">MNE example</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -506,7 +516,7 @@ document.write(`
 </div>
 </section>
 <section id="interval-related-complexity-analysis">
-<h2>Interval-related Complexity Analysis<a class="headerlink" href="#interval-related-complexity-analysis" title="Permalink to this heading">#</a></h2>
+<h2>Interval-related Complexity Analysis<a class="headerlink" href="#interval-related-complexity-analysis" title="Link to this heading">#</a></h2>
 <p>This type of analysis is suited for when we don’t have time-locked “events”, and we want to compute the complexity over the whole signal (e.g., in <a class="reference external" href="https://github.com/RealityBending/RestingState"><strong>resting-state paradigms</strong></a>).</p>
 <p>We will first extract the signal at a subset of channels of interest (region of interest, ROI). We will pick 4 fronto-central channels, namely <em>EEG 011-014</em>, as follows:</p>
 <div class="cell docutils container">
@@ -557,9 +567,9 @@ document.write(`
 </div>
 </section>
 <section id="event-related-complexity-analysis">
-<h2>Event-related Complexity Analysis<a class="headerlink" href="#event-related-complexity-analysis" title="Permalink to this heading">#</a></h2>
+<h2>Event-related Complexity Analysis<a class="headerlink" href="#event-related-complexity-analysis" title="Link to this heading">#</a></h2>
 <section id="event-related-preprocessing-epoching">
-<h3>Event-related Preprocessing (Epoching)<a class="headerlink" href="#event-related-preprocessing-epoching" title="Permalink to this heading">#</a></h3>
+<h3>Event-related Preprocessing (Epoching)<a class="headerlink" href="#event-related-preprocessing-epoching" title="Link to this heading">#</a></h3>
 <p>We will now create <strong>epochs</strong> around each event, and reject some based on extreme values.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -708,7 +718,7 @@ document.write(`
 </div>
 </section>
 <section id="event-related-attractors">
-<h3>Event-related Attractors<a class="headerlink" href="#event-related-attractors" title="Permalink to this heading">#</a></h3>
+<h3>Event-related Attractors<a class="headerlink" href="#event-related-attractors" title="Link to this heading">#</a></h3>
 <p>Let’s visualize the attractors of the averaged events. We will then compute the complexity metrics for each epoch separately. We will re-use the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/complexity.html#complexity-delay"><strong>delay</strong></a> parameters selected above, but this time with a dimension of 2 for easier visualization.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -734,7 +744,7 @@ document.write(`
 </div>
 </section>
 <section id="compute-complexity-indices-per-epoch">
-<h3>Compute complexity indices per epoch<a class="headerlink" href="#compute-complexity-indices-per-epoch" title="Permalink to this heading">#</a></h3>
+<h3>Compute complexity indices per epoch<a class="headerlink" href="#compute-complexity-indices-per-epoch" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_sdvden</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -862,7 +872,7 @@ document.write(`
 </div>
 </section>
 <section id="fractal-density">
-<h3>Fractal Density<a class="headerlink" href="#fractal-density" title="Permalink to this heading">#</a></h3>
+<h3>Fractal Density<a class="headerlink" href="#fractal-density" title="Link to this heading">#</a></h3>
 <p><strong>Note: this index is totally exploratory and is mentioned here as part of a WIP development.</strong></p>
 <p>Now, we will average the signal of those 4 channels for each epoch and store them in a dictionary.</p>
 </section>

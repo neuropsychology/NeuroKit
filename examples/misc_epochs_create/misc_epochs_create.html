@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Create epochs &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/misc_epochs_create/misc_epochs_create';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -440,7 +450,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="create-epochs">
-<h1>Create epochs<a class="headerlink" href="#create-epochs" title="Permalink to this heading">#</a></h1>
+<h1>Create epochs<a class="headerlink" href="#create-epochs" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>In your experiment, participants undergo a number of trials (events) and these events are possibly of different conditions. You are wondering how can you locate these events on your signals and perhaps make them into epochs for future analysis?</p>
 <p>This example shows how to use NeuroKit to extract epochs from data based on events localisation. In case you have multiple data files for each subject, this example also shows you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
@@ -456,7 +466,7 @@ document.write(`
 </div>
 <p>In this example, we will use a short segment of data which has ECG, EDA and respiration (RSP) signals.</p>
 <section id="one-signal-with-multiple-event-markings">
-<h2>One signal with multiple event markings<a class="headerlink" href="#one-signal-with-multiple-event-markings" title="Permalink to this heading">#</a></h2>
+<h2>One signal with multiple event markings<a class="headerlink" href="#one-signal-with-multiple-event-markings" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve ECG data from data folder (sampling rate= 1000 Hz)</span>
@@ -519,7 +529,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/40baf8f9cf5db2f81dcf80a89dd95bd977ea25fcde7a148c31e311eba6fc67f8.png" src="../../_images/40baf8f9cf5db2f81dcf80a89dd95bd977ea25fcde7a148c31e311eba6fc67f8.png" />
+<img alt="../../_images/e03e79b238df233ecf3f1c6ab96b9b0d9667c2d327f7f8a880d0998c53594137.png" src="../../_images/e03e79b238df233ecf3f1c6ab96b9b0d9667c2d327f7f8a880d0998c53594137.png" />
 </div>
 </div>
 <p>Or you can visualize the events together with the all other signals.</p>
@@ -530,7 +540,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/df57bdfe0afebe9830ec349658364f12131bb795f796aafae66a55faebeb9504.png" src="../../_images/df57bdfe0afebe9830ec349658364f12131bb795f796aafae66a55faebeb9504.png" />
+<img alt="../../_images/450b0e4d0b00e86717a92ba07d6b180086362816bbdfd99e50b0cd2727c0e744.png" src="../../_images/450b0e4d0b00e86717a92ba07d6b180086362816bbdfd99e50b0cd2727c0e744.png" />
 </div>
 </div>
 <p>After you have located the events, you can now create epochs using the NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/epochs.html#epochs-create">epochs_create()</a> function. However, we recommend to process your signal first before cutting them to smaller epochs. You can read more about processing of physiological signals using NeuroKit in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/bio_custom/bio_custom.html">Custom your Processing Pipeline</a> Example.</p>
@@ -562,7 +572,7 @@ document.write(`
 <p>Here, in the above example, all your epochs have the same starting time and ending time, specified by <code class="docutils literal notranslate"><span class="pre">epochs_start</span></code> and <code class="docutils literal notranslate"><span class="pre">epochs_end</span></code>. Nevertheless, you can also pass a list of different timings to these two arguments to customize the duration of the epochs for each of your events.</p>
 </section>
 <section id="each-subject-with-multiple-files">
-<h2>Each subject with multiple files<a class="headerlink" href="#each-subject-with-multiple-files" title="Permalink to this heading">#</a></h2>
+<h2>Each subject with multiple files<a class="headerlink" href="#each-subject-with-multiple-files" title="Link to this heading">#</a></h2>
 <p>In some experimental designs, instead of having one signal file with multiple events, each subject can have multiples files where each file is the record of one event.</p>
 <p>In the following example, we will show you how to create a loop through the subject folders and put the files together in an epoch format for further analysis.</p>
 <p>Firstly, let’s say your data is arranged as the following where each subject has a folder and in each folder there are multiple data files corresponding to different events:</p>

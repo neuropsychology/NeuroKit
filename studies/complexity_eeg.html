@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Optimal Selection of Delay and Embedding Dimension for EEG Complexity Analysis &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'studies/complexity_eeg';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -457,18 +467,18 @@ Analysis</h1>
                   
   <section id="optimal-selection-of-delay-and-embedding-dimension-for-eeg-complexity-analysis">
 <h1>Optimal Selection of Delay and Embedding Dimension for EEG Complexity
-Analysis<a class="headerlink" href="#optimal-selection-of-delay-and-embedding-dimension-for-eeg-complexity-analysis" title="Permalink to this heading">#</a></h1>
+Analysis<a class="headerlink" href="#optimal-selection-of-delay-and-embedding-dimension-for-eeg-complexity-analysis" title="Link to this heading">#</a></h1>
 <p><em>This study can be referenced by</em> <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html"><em>citing the package and the
 documentation</em></a>.</p>
 <p><strong>We’d like to improve this study, but unfortunately we currently don’t
 have the time. If you want to help to make it happen, please contact
 us!</strong></p>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>The aim is to assess the optimal complexity parameters for EEG signals.</p>
 </section>
 <section id="methods">
-<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">#</a></h2>
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h2>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">patchwork</span><span class="p">)</span>
@@ -493,9 +503,9 @@ us!</strong></p>
 </div>
 </section>
 <section id="results">
-<h2>Results<a class="headerlink" href="#results" title="Permalink to this heading">#</a></h2>
+<h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
 <section id="optimization-of-delay">
-<h3>Optimization of Delay<a class="headerlink" href="#optimization-of-delay" title="Permalink to this heading">#</a></h3>
+<h3>Optimization of Delay<a class="headerlink" href="#optimization-of-delay" title="Link to this heading">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data_delay</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_delay.csv&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">  </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Metric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Metric</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Mutual Information&quot;</span><span class="p">),</span>
 <span class="w">         </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Value</span><span class="o">/</span><span class="n">Sampling_Rate</span><span class="o">*</span><span class="m">1000</span><span class="p">,</span>
@@ -522,7 +532,7 @@ us!</strong></p>
 </pre></div>
 </div>
 <section id="per-channel">
-<h4>Per Channel<a class="headerlink" href="#per-channel" title="Permalink to this heading">#</a></h4>
+<h4>Per Channel<a class="headerlink" href="#per-channel" title="Link to this heading">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">delay_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">group_by</span><span class="p">(</span><span class="n">Metric</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
@@ -646,7 +656,7 @@ us!</strong></p>
 <!-- ``` -->
 </section>
 <section id="attractors">
-<h4>Attractors<a class="headerlink" href="#attractors" title="Permalink to this heading">#</a></h4>
+<h4>Attractors<a class="headerlink" href="#attractors" title="Link to this heading">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_attractor.csv&quot;</span><span class="p">)</span>
 
 <span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">|&gt;</span>
@@ -684,7 +694,7 @@ us!</strong></p>
 </section>
 </section>
 <section id="optimization-of-dimension">
-<h3>Optimization of Dimension<a class="headerlink" href="#optimization-of-dimension" title="Permalink to this heading">#</a></h3>
+<h3>Optimization of Dimension<a class="headerlink" href="#optimization-of-dimension" title="Link to this heading">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data_dim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_dimension.csv&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">  </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">str_remove_all</span><span class="p">(</span><span class="n">Channel</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[:digit:]|z&quot;</span><span class="p">),</span>
 <span class="w">         </span><span class="n">Area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">substring</span><span class="p">(</span><span class="n">Channel</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
@@ -695,7 +705,7 @@ us!</strong></p>
 </pre></div>
 </div>
 <section id="id1">
-<h4>Per Channel<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<h4>Per Channel<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dim_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span>
@@ -783,7 +793,7 @@ us!</strong></p>
 </section>
 </section>
 <section id="topological-clusters">
-<h3>Topological Clusters<a class="headerlink" href="#topological-clusters" title="Permalink to this heading">#</a></h3>
+<h3>Topological Clusters<a class="headerlink" href="#topological-clusters" title="Link to this heading">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_complexity.csv&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">  </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">ifelse</span><span class="p">(</span><span class="n">Channel</span><span class="o">==</span><span class="s">&quot;Cpz&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CPz&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Channel</span><span class="p">))</span>
 
@@ -921,13 +931,13 @@ us!</strong></p>
 </section>
 </section>
 <section id="discussion">
-<h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this heading">#</a></h2>
+<h2>Discussion<a class="headerlink" href="#discussion" title="Link to this heading">#</a></h2>
 <p>In conclusion, the optimal delay for resting state EEG, accross
 different datasets, was estimated to be between 25 and 30 ms. 27 ms,
 which corresponds to a frequency of 37.037 Hz, is a possible value.</p>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 </section>
 </section>
 

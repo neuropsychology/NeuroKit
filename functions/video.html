@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Video Analysis &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/video';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -454,12 +464,12 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="video-analysis">
-<h1>Video Analysis<a class="headerlink" href="#video-analysis" title="Permalink to this heading">#</a></h1>
+<h1>Video Analysis<a class="headerlink" href="#video-analysis" title="Link to this heading">#</a></h1>
 <section id="video-plot">
-<h2><em>video_plot()</em><a class="headerlink" href="#video-plot" title="Permalink to this heading">#</a></h2>
+<h2><em>video_plot()</em><a class="headerlink" href="#video-plot" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.video.video_plot">
-<span class="sig-name descname"><span class="pre">video_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_plot.html#video_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">video_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_plot.html#video_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>Visualize video</strong></p>
 <p>This function plots a few frames from a video as an image.</p>
 <dl class="field-list simple">
@@ -484,10 +494,10 @@ linearly spaced frames.</p></li>
 
 </section>
 <section id="video-face">
-<h2><em>video_face()</em><a class="headerlink" href="#video-face" title="Permalink to this heading">#</a></h2>
+<h2><em>video_face()</em><a class="headerlink" href="#video-face" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.video.video_face">
-<span class="sig-name descname"><span class="pre">video_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_face.html#video_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_face" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">video_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_face.html#video_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_face" title="Link to this definition">#</a></dt>
 <dd><p><strong>Extract face from video</strong></p>
 <p>This function extracts the faces from a video. This function requires the <cite>cv2, `menpo</cite> and
 <cite>menpodetect</cite> modules to be installed.</p>
@@ -519,10 +529,10 @@ NeuroKit (e.g., by adding more detection algorithms), please get in touch!</p>
 
 </section>
 <section id="video-skin">
-<h2><em>video_skin()</em><a class="headerlink" href="#video-skin" title="Permalink to this heading">#</a></h2>
+<h2><em>video_skin()</em><a class="headerlink" href="#video-skin" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.video.video_skin">
-<span class="sig-name descname"><span class="pre">video_skin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_skin.html#video_skin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_skin" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">video_skin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_skin.html#video_skin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_skin" title="Link to this definition">#</a></dt>
 <dd><p><strong>Skin detection</strong></p>
 <p>This function detects the skin in a face.</p>
 <div class="admonition note">
@@ -557,10 +567,10 @@ NeuroKit (e.g., by adding more detection algorithms), please get in touch!</p>
 
 </section>
 <section id="video-ppg">
-<h2><em>video_ppg()</em><a class="headerlink" href="#video-ppg" title="Permalink to this heading">#</a></h2>
+<h2><em>video_ppg()</em><a class="headerlink" href="#video-ppg" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.video.video_ppg">
-<span class="sig-name descname"><span class="pre">video_ppg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_ppg.html#video_ppg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_ppg" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">video_ppg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/video/video_ppg.html#video_ppg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.video.video_ppg" title="Link to this definition">#</a></dt>
 <dd><p><strong>Remote Photoplethysmography (rPPG) from Video</strong></p>
 <p>Extracts the photoplethysmogram (PPG) from a webcam video using the Plane-Orthogonal-to-Skin
 (POS) algorithm.</p>

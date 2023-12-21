@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EEG Microstates &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/eeg_microstates/eeg_microstates';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -449,7 +459,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="eeg-microstates">
-<h1>EEG Microstates<a class="headerlink" href="#eeg-microstates" title="Permalink to this heading">#</a></h1>
+<h1>EEG Microstates<a class="headerlink" href="#eeg-microstates" title="Link to this heading">#</a></h1>
 <p>In continually recorded human EEG, the spatial distribution of electric potentials across the cortex changes over time. Interestingly, for brief time periods (60 - 120ms), quasi-stable states of activity (i.e., <strong>microstates</strong>), characterized by unique spatial configurations of electrical activity distribution, have been observed. NeuroKit can be used to easily analyze them.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -463,7 +473,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="eeg-preprocessing">
-<h2>EEG Preprocessing<a class="headerlink" href="#eeg-preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>EEG Preprocessing<a class="headerlink" href="#eeg-preprocessing" title="Link to this heading">#</a></h2>
 <p>First, let’s download a raw eeg data in an <a class="reference external" href="https://mne.tools/stable/index.html">MNE</a> format and select teh EEG channels.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -495,9 +505,9 @@ document.write(`
 </div>
 </section>
 <section id="microstates-analysis">
-<h2>Microstates Analysis<a class="headerlink" href="#microstates-analysis" title="Permalink to this heading">#</a></h2>
+<h2>Microstates Analysis<a class="headerlink" href="#microstates-analysis" title="Link to this heading">#</a></h2>
 <section id="minimal-example">
-<h3>Minimal Example<a class="headerlink" href="#minimal-example" title="Permalink to this heading">#</a></h3>
+<h3>Minimal Example<a class="headerlink" href="#minimal-example" title="Link to this heading">#</a></h3>
 <p>Microstates can be extracted and analyzed like that:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -510,7 +520,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/41a896206eb7c37b8652cf40fa6082517a9bda968ca0e4555febcea370a95cc6.png" src="../../_images/41a896206eb7c37b8652cf40fa6082517a9bda968ca0e4555febcea370a95cc6.png" />
+<img alt="../../_images/30b8fee41c78fc72ffc6ce33c2c5946aa0f8d2058da063d0e5aa8df0dcdc8353.png" src="../../_images/30b8fee41c78fc72ffc6ce33c2c5946aa0f8d2058da063d0e5aa8df0dcdc8353.png" />
 </div>
 </div>
 <p>This shows the aspect of the microstates and their sequence in the Global Field Power (GFP; see below). We can then proceed to a statistical analysis.</p>
@@ -562,28 +572,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.251917</td>
-      <td>0.273667</td>
-      <td>0.303667</td>
-      <td>0.17075</td>
+      <td>0.271</td>
+      <td>0.24625</td>
+      <td>0.312667</td>
+      <td>0.170083</td>
+      <td>758.0</td>
       <td>686.0</td>
-      <td>759.0</td>
-      <td>783.0</td>
-      <td>477.5</td>
-      <td>0.019403</td>
+      <td>806.5</td>
+      <td>477.0</td>
+      <td>0.01904</td>
       <td>0.015</td>
-      <td>0.019688</td>
+      <td>0.01887</td>
       <td>0.015</td>
-      <td>0.021211</td>
+      <td>0.021318</td>
       <td>0.015</td>
-      <td>0.018101</td>
+      <td>0.017935</td>
       <td>0.01</td>
-      <td>0.01975</td>
+      <td>0.019443</td>
       <td>0.015</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/a6737dcc44e92cc14940812bed56437e8e01eb909dce29c47072292e68f968d1.png" src="../../_images/a6737dcc44e92cc14940812bed56437e8e01eb909dce29c47072292e68f968d1.png" />
+</div></div><img alt="../../_images/276b2a6ac8d79cf2f076c521ac40c1984b60726ec3895c06446046d015a5a86b.png" src="../../_images/276b2a6ac8d79cf2f076c521ac40c1984b60726ec3895c06446046d015a5a86b.png" />
 </div>
 </div>
 <p>This shows computes static statistics, such as the prevalence of each microstates and the median duration time (also shown in the graph).</p>
@@ -633,26 +643,26 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.742309</td>
-      <td>0.104863</td>
-      <td>0.099901</td>
-      <td>0.052928</td>
-      <td>0.093179</td>
-      <td>0.746041</td>
-      <td>0.102314</td>
-      <td>0.058465</td>
-      <td>0.090011</td>
-      <td>0.086992</td>
-      <td>0.76427</td>
-      <td>0.058727</td>
-      <td>0.070801</td>
-      <td>0.097168</td>
-      <td>0.10791</td>
-      <td>0.724121</td>
+      <td>0.737392</td>
+      <td>0.095018</td>
+      <td>0.106089</td>
+      <td>0.061501</td>
+      <td>0.100508</td>
+      <td>0.735025</td>
+      <td>0.11066</td>
+      <td>0.053807</td>
+      <td>0.093817</td>
+      <td>0.084755</td>
+      <td>0.765458</td>
+      <td>0.05597</td>
+      <td>0.10049</td>
+      <td>0.076471</td>
+      <td>0.101471</td>
+      <td>0.721569</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/ffedd1676c2be2f0ef20eff8be9cca0cb3c94b5faa12c7e6f16b690d446462cc.png" src="../../_images/ffedd1676c2be2f0ef20eff8be9cca0cb3c94b5faa12c7e6f16b690d446462cc.png" />
+</div></div><img alt="../../_images/ebb3c391f01e79e7b8dbcb5f64cde4dd06a11ad8c34b162c6a5eb16365ee4667.png" src="../../_images/ebb3c391f01e79e7b8dbcb5f64cde4dd06a11ad8c34b162c6a5eb16365ee4667.png" />
 </div>
 </div>
 <p>Finally, one can compute complexity features of the sequence of microstates, such as the entropy.</p>
@@ -687,19 +697,19 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.970236</td>
+      <td>1.967451</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/84ede1c399f7b87369d05fbccec539468431795c9a8034a06087f4da2b989298.png" src="../../_images/84ede1c399f7b87369d05fbccec539468431795c9a8034a06087f4da2b989298.png" />
+</div></div><img alt="../../_images/70a03c774e2c1b45e6b040411a623e364403d20a5cef0e7b51d76b4d2489d28f.png" src="../../_images/70a03c774e2c1b45e6b040411a623e364403d20a5cef0e7b51d76b4d2489d28f.png" />
 </div>
 </div>
 </section>
 </section>
 <section id="options-and-features">
-<h2>Options and features<a class="headerlink" href="#options-and-features" title="Permalink to this heading">#</a></h2>
+<h2>Options and features<a class="headerlink" href="#options-and-features" title="Link to this heading">#</a></h2>
 <section id="global-field-power-gfp">
-<h3>Global Field Power (GFP)<a class="headerlink" href="#global-field-power-gfp" title="Permalink to this heading">#</a></h3>
+<h3>Global Field Power (GFP)<a class="headerlink" href="#global-field-power-gfp" title="Link to this heading">#</a></h3>
 <p>Under the hood, <code class="docutils literal notranslate"><span class="pre">microstates_segment()</span></code> starts by computing the GFP.</p>
 <p>The Global Field Power (GFP) is a reference-independent measure of potential field strength. It is thought to quantify the integrated electrical activity of the brain and is mathematically defined as the standard deviation of all electrodes at a given time.</p>
 <p>The GFP time series periodically shows peaks, where the EEG topographies are most clearly defined (i.e., signal-to-noise ratio is maximized at GFP peaks). As such, GFP peak samples are often used to extract microstates.</p>
@@ -728,12 +738,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/687d21980c24e46d56d36fdac26b9434d9505cfd67e5dad4487a441d42c3cb1e.png" src="../../_images/687d21980c24e46d56d36fdac26b9434d9505cfd67e5dad4487a441d42c3cb1e.png" />
+<img alt="../../_images/3faffd3865c98a9dd95053944e13cd75c47ef152e729f9d22b906ea1bdc7b798.png" src="../../_images/3faffd3865c98a9dd95053944e13cd75c47ef152e729f9d22b906ea1bdc7b798.png" />
 </div>
 </div>
 </section>
 <section id="how-many-microstates">
-<h3>How many microstates?<a class="headerlink" href="#how-many-microstates" title="Permalink to this heading">#</a></h3>
+<h3>How many microstates?<a class="headerlink" href="#how-many-microstates" title="Link to this heading">#</a></h3>
 <p>Most of the clustering algorithms used in microstates analysis require the number of clusters to extract to be specified beforehand.</p>
 <p>However, one can attempt at statistically estimating the optimal number of microstates. A variety of indices of fit can be used.</p>
 <div class="cell docutils container">
@@ -775,12 +785,12 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal number of microstates:  4.0
 </pre></div>
 </div>
-<img alt="../../_images/3a66d6ae2a8e8824269557456d0d8c9b5b255c6540be72766e951daa266850a5.png" src="../../_images/3a66d6ae2a8e8824269557456d0d8c9b5b255c6540be72766e951daa266850a5.png" />
+<img alt="../../_images/3c27aa8998bb4edf5ad2629b315c50c60887b2008837ffb39c21968eb7a4cfcd.png" src="../../_images/3c27aa8998bb4edf5ad2629b315c50c60887b2008837ffb39c21968eb7a4cfcd.png" />
 </div>
 </div>
 </section>
 <section id="microstates-clustering-algorithms">
-<h3>Microstates clustering algorithms<a class="headerlink" href="#microstates-clustering-algorithms" title="Permalink to this heading">#</a></h3>
+<h3>Microstates clustering algorithms<a class="headerlink" href="#microstates-clustering-algorithms" title="Link to this heading">#</a></h3>
 <p>Several different clustering algorithms can be used to segment your EEG recordings into microstates. These algorithms mainly differ in how they define cluster membership and the cost functionals to be optimized (<a class="reference internal" href="#10.1007/s40745-015-0040-1"><span class="xref myst">Xu &amp; Tian, 2015</span></a>). The method to use hence depends on your data and the underlying assumptions of the methods (e.g., some methods ignore polarity). There is no one true method that gives the best results but you can refer to <a class="reference external" href="https://www.researchgate.net/publication/331367421_Microstate_EEGlab_toolbox_An_introductory_guide#pf6">Poulsen et al., 2018</a> if you would like a more detailed review of the different clustering methods.</p>
 <p>In the example below, we will compare the two most commonly applied clustering algorithms - the <em>K-means</em> and <em>modified K-means</em>. Other methods that can be applied using <code class="docutils literal notranslate"><span class="pre">nk.microstates_segment</span></code> include <code class="docutils literal notranslate"><span class="pre">kmedoids,</span> <span class="pre">pca,</span> <span class="pre">ica,</span> <span class="pre">aahc</span></code>.</p>
 <div class="cell docutils container">
@@ -802,12 +812,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 61.22%
- Using modified Kmeans,  GEV = 71.38%
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 61.36%
+ Using modified Kmeans,  GEV = 72.08%
 </pre></div>
 </div>
-<img alt="../../_images/9a7535ed1f7fe540c9db49330d54156a269c83d332d7ed1b0f02fcb8bee87543.png" src="../../_images/9a7535ed1f7fe540c9db49330d54156a269c83d332d7ed1b0f02fcb8bee87543.png" />
-<img alt="../../_images/47ee6bc80893189cdd8712edc320ac408f381ef0b0486149f9802e43a3c17471.png" src="../../_images/47ee6bc80893189cdd8712edc320ac408f381ef0b0486149f9802e43a3c17471.png" />
+<img alt="../../_images/fe9ef7145a77da7236cf4094d9d5fbc7233d8089e3e278b9f0001b2d8aba33cd.png" src="../../_images/fe9ef7145a77da7236cf4094d9d5fbc7233d8089e3e278b9f0001b2d8aba33cd.png" />
+<img alt="../../_images/e69b310c45ce3962b781d1df95d3d27607e2eb7d5a05f666df7d3250bcbc608c.png" src="../../_images/e69b310c45ce3962b781d1df95d3d27607e2eb7d5a05f666df7d3250bcbc608c.png" />
 </div>
 </div>
 </section>

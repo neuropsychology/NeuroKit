@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EDA &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/eda';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -506,14 +516,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="eda">
-<h1>EDA<a class="headerlink" href="#eda" title="Permalink to this heading">#</a></h1>
+<h1>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Link to this heading">#</a></h2>
 <section id="eda-process">
-<h3><em>eda_process()</em><a class="headerlink" href="#eda-process" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_process()</em><a class="headerlink" href="#eda-process" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_process">
-<span class="sig-name descname"><span class="pre">eda_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_process.html#eda_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_process.html#eda_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_process" title="Link to this definition">#</a></dt>
 <dd><p><strong>Process Electrodermal Activity (EDA)</strong></p>
 <p>Convenience function that automatically processes electrodermal activity (EDA) signal.</p>
 <dl class="field-list simple">
@@ -578,10 +588,10 @@ as well as the signals’ sampling rate.</p></li>
 
 </section>
 <section id="eda-analyze">
-<h3><em>eda_analyze()</em><a class="headerlink" href="#eda-analyze" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_analyze()</em><a class="headerlink" href="#eda-analyze" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_analyze">
-<span class="sig-name descname"><span class="pre">eda_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_analyze.html#eda_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_analyze" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_analyze.html#eda_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_analyze" title="Link to this definition">#</a></dt>
 <dd><p><strong>EDA Analysis</strong></p>
 <p>Perform EDA analysis on either epochs (event-related analysis) or on longer periods of data
 such as resting-state data.</p>
@@ -669,10 +679,10 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 </section>
 <section id="eda-plot">
-<h3><em>eda_plot()</em><a class="headerlink" href="#eda-plot" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_plot()</em><a class="headerlink" href="#eda-plot" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_plot">
-<span class="sig-name descname"><span class="pre">eda_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_plot.html#eda_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_plot.html#eda_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>Visualize electrodermal activity (EDA) data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -707,10 +717,10 @@ Defaults to True.</p></li>
 
 </section>
 <section id="eda-simulate">
-<h3><em>eda_simulate()</em><a class="headerlink" href="#eda-simulate" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_simulate()</em><a class="headerlink" href="#eda-simulate" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_simulate">
-<span class="sig-name descname"><span class="pre">eda_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scr_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_distort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spawn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_simulate.html#eda_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scr_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_distort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spawn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_simulate.html#eda_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_simulate" title="Link to this definition">#</a></dt>
 <dd><p><strong>Simulate Electrodermal Activity (EDA) signal</strong></p>
 <p>Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.</p>
 <dl class="field-list simple">
@@ -759,12 +769,12 @@ conductance responses. International Journal of Psychophysiology, 75(3), 349-356
 </section>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
 <section id="eda-clean">
-<h3><em>eda_clean()</em><a class="headerlink" href="#eda-clean" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_clean()</em><a class="headerlink" href="#eda-clean" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_clean">
-<span class="sig-name descname"><span class="pre">eda_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_clean.html#eda_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_clean" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_clean.html#eda_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_clean" title="Link to this definition">#</a></dt>
 <dd><p><strong>Preprocess Electrodermal Activity (EDA) signal</strong></p>
 <p>This function cleans the EDA signal by removing noise and smoothing the signal with different methods.</p>
 <ul class="simple">
@@ -813,10 +823,10 @@ is no high enough frequency to remove).</p></li>
 
 </section>
 <section id="eda-phasic">
-<h3><em>eda_phasic()</em><a class="headerlink" href="#eda-phasic" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_phasic()</em><a class="headerlink" href="#eda-phasic" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_phasic">
-<span class="sig-name descname"><span class="pre">eda_phasic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'highpass'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_phasic.html#eda_phasic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_phasic" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_phasic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'highpass'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_phasic.html#eda_phasic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_phasic" title="Link to this definition">#</a></dt>
 <dd><p><strong>Electrodermal Activity (EDA) Decomposition into Phasic and Tonic Components</strong></p>
 <p>Decompose the Electrodermal Activity (EDA) into two components, namely <strong>Phasic</strong> and
 <strong>Tonic</strong>, using different methods including cvxEDA (Greco, 2016) or Biopac’s Acqknowledge
@@ -919,10 +929,10 @@ shealth informatics, 22(5), 1385-1394.</p></li>
 
 </section>
 <section id="eda-peaks">
-<h3><em>eda_peaks()</em><a class="headerlink" href="#eda-peaks" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_peaks()</em><a class="headerlink" href="#eda-peaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_peaks">
-<span class="sig-name descname"><span class="pre">eda_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_phasic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_peaks.html#eda_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_peaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_phasic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_peaks.html#eda_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_peaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Find Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)</strong></p>
 <p>Identify Skin Conductance Responses (SCR) peaks in the phasic component of
 Electrodermal Activity (EDA) with different possible methods, such as:</p>
@@ -1003,10 +1013,10 @@ journal of translational engineering in health and medicine, 6, 2800711.</p></li
 
 </section>
 <section id="eda-fixpeaks">
-<h3><em>eda_fixpeaks()</em><a class="headerlink" href="#eda-fixpeaks" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_fixpeaks()</em><a class="headerlink" href="#eda-fixpeaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_fixpeaks">
-<span class="sig-name descname"><span class="pre">eda_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_fixpeaks.html#eda_fixpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_fixpeaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_fixpeaks.html#eda_fixpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_fixpeaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Correct  Skin Conductance Responses (SCR) peaks</strong></p>
 <p>Low-level function used by <code class="docutils literal notranslate"><span class="pre">&quot;eda_peaks()&quot;</span></code> to correct the peaks found by
 <code class="docutils literal notranslate"><span class="pre">&quot;eda_findpeaks()&quot;</span></code>. Doesn’t do anything for now for EDA. See <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_peaks()</span></code></a> for details.</p>
@@ -1057,12 +1067,12 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 </section>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Link to this heading">#</a></h2>
 <section id="eda-eventrelated">
-<h3><em>eda_eventrelated()</em><a class="headerlink" href="#eda-eventrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_eventrelated()</em><a class="headerlink" href="#eda-eventrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_eventrelated">
-<span class="sig-name descname"><span class="pre">eda_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_eventrelated.html#eda_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_eventrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_eventrelated.html#eda_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_eventrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>Performs event-related EDA analysis on epochs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1117,8 +1127,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.368             974.0</span>
-<span class="go">2     2        10000  ...         0.367            1267.0</span>
+<span class="go">1     1         5000  ...         0.364            1743.0</span>
+<span class="go">2     2        10000  ...         0.363            1548.0</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1157,10 +1167,10 @@ for SCR to decrease to half amplitude.</p></li>
 
 </section>
 <section id="eda-intervalrelated">
-<h3><em>eda_intervalrelated()</em><a class="headerlink" href="#eda-intervalrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_intervalrelated()</em><a class="headerlink" href="#eda-intervalrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_intervalrelated">
-<span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_intervalrelated.html#eda_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_intervalrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>EDA Analysis on Interval-Related Data</strong></p>
 <p>Performs EDA analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
 data.</p>
@@ -1227,10 +1237,10 @@ features consist of the following:
 
 </section>
 <section id="eda-sympathetic">
-<h3><em>eda_sympathetic()</em><a class="headerlink" href="#eda-sympathetic" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_sympathetic()</em><a class="headerlink" href="#eda-sympathetic" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_sympathetic">
-<span class="sig-name descname"><span class="pre">eda_sympathetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.045,</span> <span class="pre">0.25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'posada'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_sympathetic.html#eda_sympathetic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_sympathetic" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_sympathetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.045,</span> <span class="pre">0.25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'posada'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_sympathetic.html#eda_sympathetic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_sympathetic" title="Link to this definition">#</a></dt>
 <dd><p><strong>Sympathetic Nervous System Index from Electrodermal activity (EDA)</strong></p>
 <p>Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
 of EDA signal is represented in the frequency band of 0.045-0.25Hz. Note that the Posada method
@@ -1293,10 +1303,10 @@ electrodermal activity for sympathetic function assessment. Annals of biomedical
 
 </section>
 <section id="eda-autocor">
-<h3><em>eda_autocor()</em><a class="headerlink" href="#eda-autocor" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_autocor()</em><a class="headerlink" href="#eda-autocor" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_autocor">
-<span class="sig-name descname"><span class="pre">eda_autocor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_autocor.html#eda_autocor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_autocor" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_autocor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_autocor.html#eda_autocor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_autocor" title="Link to this definition">#</a></dt>
 <dd><p><strong>EDA Autocorrelation</strong></p>
 <p>Compute the autocorrelation measure of raw EDA signal i.e., the correlation between the time
 series data and a specified time-lagged version of itself.</p>
@@ -1328,7 +1338,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.32349882600644436</span>
+<span class="gh">Out[5]: </span><span class="go">-0.274178941625533</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1342,10 +1352,10 @@ events within an experience sampling framework. European Journal of Personality,
 
 </section>
 <section id="eda-changepoints">
-<h3><em>eda_changepoints()</em><a class="headerlink" href="#eda-changepoints" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_changepoints()</em><a class="headerlink" href="#eda-changepoints" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_changepoints">
-<span class="sig-name descname"><span class="pre">eda_changepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_changepoints.html#eda_changepoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_changepoints" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_changepoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_changepoints.html#eda_changepoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_changepoints" title="Link to this definition">#</a></dt>
 <dd><p><strong>Calculate Number of Change Points</strong></p>
 <p>Calculate the number of change points using of the skin conductance signal in terms of mean
 and variance.</p>
@@ -1396,12 +1406,12 @@ events within an experience sampling framework. European Journal of Personality,
 </section>
 </section>
 <section id="miscellaneous">
-<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this heading">#</a></h2>
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link to this heading">#</a></h2>
 <section id="eda-findpeaks">
-<h3><em>eda_findpeaks()</em><a class="headerlink" href="#eda-findpeaks" title="Permalink to this heading">#</a></h3>
+<h3><em>eda_findpeaks()</em><a class="headerlink" href="#eda-findpeaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eda.eda_findpeaks">
-<span class="sig-name descname"><span class="pre">eda_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_phasic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_findpeaks.html#eda_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_findpeaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eda_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eda_phasic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eda/eda_findpeaks.html#eda_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eda.eda_findpeaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Find Skin Conductance Responses (SCR) in Electrodermal Activity (EDA)</strong></p>
 <p>Low-level function used by <cite>eda_peaks()</cite> to identify Skin Conductance Responses (SCR) peaks in
 the phasic component of Electrodermal Activity (EDA) with different possible methods. See
@@ -1473,7 +1483,7 @@ journal of translational engineering in health and medicine, 6, 2800711.</p></li
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.eda"></span><p>Submodule for NeuroKit.</p>
+<p id="module-neurokit2.eda">Submodule for NeuroKit.</p>
 </section>
 </section>
 </section>

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>RSP &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/rsp';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -513,14 +523,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="rsp">
-<h1>RSP<a class="headerlink" href="#rsp" title="Permalink to this heading">#</a></h1>
+<h1>RSP<a class="headerlink" href="#rsp" title="Link to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Link to this heading">#</a></h2>
 <section id="rsp-process">
-<h3><em>rsp_process()</em><a class="headerlink" href="#rsp-process" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_process()</em><a class="headerlink" href="#rsp-process" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_process">
-<span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'harrison2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_process.html#rsp_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_process" title="Link to this definition">#</a></dt>
 <dd><p><strong>Process a respiration (RSP) signal</strong></p>
 <p>Convenience function that automatically processes a respiration signal with one of the
 following methods:</p>
@@ -592,7 +602,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         14.8478 |       1.23968 |</span>
+<span class="go">|         14.9925 |       2.06083 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -617,10 +627,10 @@ signals’ sampling rate.</p></li>
 
 </section>
 <section id="rsp-analyze">
-<h3><em>rsp_analyze()</em><a class="headerlink" href="#rsp-analyze" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_analyze()</em><a class="headerlink" href="#rsp-analyze" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_analyze">
-<span class="sig-name descname"><span class="pre">rsp_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_analyze.html#rsp_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_analyze" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_analyze.html#rsp_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_analyze" title="Link to this definition">#</a></dt>
 <dd><p><strong>RSP Analysis</strong></p>
 <p>Performs RSP analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.</p>
 <dl class="field-list simple">
@@ -693,10 +703,10 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 
 </section>
 <section id="rsp-simulate">
-<h3><em>rsp_simulate()</em><a class="headerlink" href="#rsp-simulate" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_simulate()</em><a class="headerlink" href="#rsp-simulate" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_simulate">
-<span class="sig-name descname"><span class="pre">rsp_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">respiratory_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'breathmetrics'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_distort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spawn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_simulate.html#rsp_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">respiratory_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'breathmetrics'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_distort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spawn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_simulate.html#rsp_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_simulate" title="Link to this definition">#</a></dt>
 <dd><p><strong>Simulate a respiratory signal</strong></p>
 <p>Generate an artificial (synthetic) respiratory signal of a given duration
 and rate.</p>
@@ -753,10 +763,10 @@ breathing waveforms using BreathMetrics: A respiratory signal processing toolbox
 
 </section>
 <section id="rsp-plot">
-<h3><em>rsp_plot()</em><a class="headerlink" href="#rsp-plot" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_plot()</em><a class="headerlink" href="#rsp-plot" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_plot">
-<span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_plot.html#rsp_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>Visualize respiration (RSP) data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -797,12 +807,12 @@ Defaults to True.</p></li>
 </section>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
 <section id="rsp-clean">
-<h3><em>rsp_clean()</em><a class="headerlink" href="#rsp-clean" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_clean()</em><a class="headerlink" href="#rsp-clean" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_clean">
-<span class="sig-name descname"><span class="pre">rsp_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_clean.html#rsp_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_clean" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_clean.html#rsp_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_clean" title="Link to this definition">#</a></dt>
 <dd><p><strong>Preprocess a respiration (RSP) signal</strong></p>
 <p>Clean a respiration signal using different sets of parameters, such as:</p>
 <ul class="simple">
@@ -865,10 +875,10 @@ NeuroImage, Volume 204, 116234</p></li>
 
 </section>
 <section id="rsp-amplitude">
-<h3><em>rsp_amplitude()</em><a class="headerlink" href="#rsp-amplitude" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_amplitude()</em><a class="headerlink" href="#rsp-amplitude" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_amplitude">
-<span class="sig-name descname"><span class="pre">rsp_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_amplitude.html#rsp_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_amplitude" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_amplitude.html#rsp_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_amplitude" title="Link to this definition">#</a></dt>
 <dd><p><strong>Compute respiratory amplitude</strong></p>
 <p>Compute respiratory amplitude given the raw respiration signal and its extrema. The
 <strong>standard</strong> method computes the amplitude as the difference between a peak and its preceding
@@ -929,10 +939,10 @@ neurophysiology, 122(2), 849-861.</p></li>
 
 </section>
 <section id="rsp-peaks">
-<h3><em>rsp_peaks()</em><a class="headerlink" href="#rsp-peaks" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_peaks()</em><a class="headerlink" href="#rsp-peaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_peaks">
-<span class="sig-name descname"><span class="pre">rsp_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_peaks.html#rsp_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_peaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_peaks.html#rsp_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_peaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Identify extrema in a respiration (RSP) signal</strong></p>
 <p>This function runs <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a> and <a class="reference internal" href="#neurokit2.rsp.rsp_fixpeaks" title="neurokit2.rsp.rsp_fixpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_fixpeaks()</span></code></a> to identify and process
 peaks (exhalation onsets) and troughs (inhalation onsets) in a preprocessed respiration signal
@@ -999,10 +1009,10 @@ Physiological measurement, 39(9), 094001.</p></li>
 
 </section>
 <section id="rsp-findpeaks">
-<h3><em>rsp_findpeaks()</em><a class="headerlink" href="#rsp-findpeaks" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_findpeaks()</em><a class="headerlink" href="#rsp-findpeaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_findpeaks">
-<span class="sig-name descname"><span class="pre">rsp_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_prominence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_findpeaks.html#rsp_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_findpeaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_prominence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_findpeaks.html#rsp_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_findpeaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Extract extrema in a respiration (RSP) signal</strong></p>
 <p>Low-level function used by <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a> to identify inhalation and exhalation onsets
 (troughs and peaks respectively) in a preprocessed respiration signal using different sets of
@@ -1051,10 +1061,10 @@ onsets and exhalation onsets occur, accessible with the keys <code class="docuti
 
 </section>
 <section id="rsp-fixpeaks">
-<h3><em>rsp_fixpeaks()</em><a class="headerlink" href="#rsp-fixpeaks" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_fixpeaks()</em><a class="headerlink" href="#rsp-fixpeaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_fixpeaks">
-<span class="sig-name descname"><span class="pre">rsp_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_fixpeaks.html#rsp_fixpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_fixpeaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_fixpeaks.html#rsp_fixpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_fixpeaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Correct RSP peaks</strong></p>
 <p>Low-level function used by <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_peaks()</span></code></a> to correct the peaks found
 by <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>. Doesn’t do anything for now for RSP.
@@ -1098,10 +1108,10 @@ and <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks
 
 </section>
 <section id="rsp-phase">
-<h3><em>rsp_phase()</em><a class="headerlink" href="#rsp-phase" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_phase()</em><a class="headerlink" href="#rsp-phase" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_phase">
-<span class="sig-name descname"><span class="pre">rsp_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_phase.html#rsp_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_phase" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_phase.html#rsp_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_phase" title="Link to this definition">#</a></dt>
 <dd><p><strong>Compute respiratory phase (inspiration and expiration)</strong></p>
 <p>Finds the respiratory phase, labelled as 1 for inspiration and 0 for expiration.</p>
 <dl class="field-list simple">
@@ -1150,10 +1160,10 @@ to 1), representing the stage of the current respiratory phase.</p></li>
 
 </section>
 <section id="rsp-rate">
-<h3><em>rsp_rate()</em><a class="headerlink" href="#rsp-rate" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_rate()</em><a class="headerlink" href="#rsp-rate" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rate">
-<span class="sig-name descname"><span class="pre">rsp_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trough'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rate.html#rsp_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trough'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad2018'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rate.html#rsp_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rate" title="Link to this definition">#</a></dt>
 <dd><p><strong>Find respiration rate</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1200,10 +1210,10 @@ monotonicity.</p></li>
 
 </section>
 <section id="rsp-symmetry">
-<h3><em>rsp_symmetry()</em><a class="headerlink" href="#rsp-symmetry" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_symmetry()</em><a class="headerlink" href="#rsp-symmetry" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_symmetry">
-<span class="sig-name descname"><span class="pre">rsp_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_symmetry.html#rsp_symmetry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_symmetry" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_symmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_symmetry.html#rsp_symmetry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_symmetry" title="Link to this definition">#</a></dt>
 <dd><p><strong>Respiration Cycle Symmetry Features</strong></p>
 <p>Compute symmetry features of the respiration cycle, such as the Peak-Trough symmetry and the
 Rise-Decay symmetry (see Cole, 2019). Note that the values for each cycle are interpolated to
@@ -1263,10 +1273,10 @@ neurophysiology, 122(2), 849-861.</p></li>
 
 </section>
 <section id="rsp-rrv">
-<h3><em>rsp_rrv()</em><a class="headerlink" href="#rsp-rrv" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_rrv()</em><a class="headerlink" href="#rsp-rrv" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rrv">
-<span class="sig-name descname"><span class="pre">rsp_rrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rrv.html#rsp_rrv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rrv" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_rrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rrv.html#rsp_rrv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rrv" title="Link to this definition">#</a></dt>
 <dd><p><strong>Respiratory Rate Variability (RRV)</strong></p>
 <p>Computes time domain and frequency domain features for Respiratory Rate Variability (RRV)
 analysis.</p>
@@ -1342,8 +1352,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  1001.754724      4004.8  629.245379  ...    0.703766  0.054067        -inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  753.005137      4054.0  567.462681  ...    1.083962  0.018896         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1357,10 +1367,10 @@ meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
 
 </section>
 <section id="rsp-rvt">
-<h3><em>rsp_rvt()</em><a class="headerlink" href="#rsp-rvt" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_rvt()</em><a class="headerlink" href="#rsp-rvt" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rvt">
-<span class="sig-name descname"><span class="pre">rsp_rvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2.0,</span> <span class="pre">0.03333333333333333]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rvt.html#rsp_rvt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rvt" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_rvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2.0,</span> <span class="pre">0.03333333333333333]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rvt.html#rsp_rvt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rvt" title="Link to this definition">#</a></dt>
 <dd><p><strong>Respiratory Volume per Time (RVT)</strong></p>
 <p>Computes Respiratory Volume per Time (RVT). RVT is the product of respiratory volume and
 breathing rate. RVT can be used to identify the global fMRI confounds of breathing, which is
@@ -1427,12 +1437,12 @@ A Hilbert-based method for processing respiratory timeseries. Neuroimage, 230, 1
 </section>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Link to this heading">#</a></h2>
 <section id="rsp-eventrelated">
-<h3><em>rsp_eventrelated()</em><a class="headerlink" href="#rsp-eventrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_eventrelated()</em><a class="headerlink" href="#rsp-eventrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_eventrelated">
-<span class="sig-name descname"><span class="pre">rsp_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_eventrelated.html#rsp_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_eventrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_eventrelated.html#rsp_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_eventrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>Performs event-related RSP analysis on epochs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1487,9 +1497,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.197842     -0.047001</span>
-<span class="go">2     2        10000  ...          0.273605      0.007374</span>
-<span class="go">3     3        15000  ...          0.198371     -0.006113</span>
+<span class="go">1     1         5000  ...          0.210883     -0.025582</span>
+<span class="go">2     2        10000  ...          0.238727     -0.022477</span>
+<span class="go">3     3        15000  ...          0.234147      0.024879</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1522,10 +1532,10 @@ inspiration (1) or expiration (0).</p></li>
 
 </section>
 <section id="rsp-intervalrelated">
-<h3><em>rsp_intervalrelated()</em><a class="headerlink" href="#rsp-intervalrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>rsp_intervalrelated()</em><a class="headerlink" href="#rsp-intervalrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_intervalrelated">
-<span class="sig-name descname"><span class="pre">rsp_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_intervalrelated.html#rsp_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_intervalrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_intervalrelated.html#rsp_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_intervalrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>State-related Respiration Indices</strong></p>
 <p>Performs RSP analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
 data. It returns a dataframe containing features and characteristics of respiration in that
@@ -1589,10 +1599,10 @@ See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.rsp"></span><p>Submodule for NeuroKit.</p>
+<p id="module-neurokit2.rsp">Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_methods">
-<span class="sig-name descname"><span class="pre">rsp_methods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_cleaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_methods.html#rsp_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_methods" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_methods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khodadad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_cleaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_rvt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'power'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_methods.html#rsp_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_methods" title="Link to this definition">#</a></dt>
 <dd><p><strong>RSP Preprocessing Methods</strong></p>
 <p>This function analyzes and specifies the methods used in the preprocessing, and create a
 textual description of the methods used. It is used by <a class="reference internal" href="#neurokit2.rsp.rsp_process" title="neurokit2.rsp.rsp_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_process()</span></code></a> to dispatch the
@@ -1648,7 +1658,7 @@ references.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rav">
-<span class="sig-name descname"><span class="pre">rsp_rav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rav.html#rsp_rav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rav" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rsp_rav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rav.html#rsp_rav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rav" title="Link to this definition">#</a></dt>
 <dd><p><strong>Respiratory Amplitude Variability (RAV)</strong></p>
 <p>Computes indices of amplitude variability, such as the mean and SD of the amplitude, and the
 RMSSD of the successive differences.</p>
@@ -1693,7 +1703,7 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  0.958393  0.080697   0.079706  0.083167</span>
+<span class="go">0  0.909019  0.071815   0.086797  0.095485</span>
 </pre></div>
 </div>
 </dd></dl>

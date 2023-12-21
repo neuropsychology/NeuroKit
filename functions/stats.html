@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Stats &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/stats';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -512,14 +522,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="stats">
-<h1>Stats<a class="headerlink" href="#stats" title="Permalink to this heading">#</a></h1>
+<h1>Stats<a class="headerlink" href="#stats" title="Link to this heading">#</a></h1>
 <section id="utilities">
-<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading">#</a></h2>
+<h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h2>
 <section id="correlation">
-<h3><em>correlation()</em><a class="headerlink" href="#correlation" title="Permalink to this heading">#</a></h3>
+<h3><em>correlation()</em><a class="headerlink" href="#correlation" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.cor">
-<span class="sig-name descname"><span class="pre">cor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pearson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/correlation.html#cor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cor" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pearson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/correlation.html#cor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cor" title="Link to this definition">#</a></dt>
 <dd><p><strong>Density estimation</strong></p>
 <p>Computes kernel density estimates.</p>
 <dl class="field-list simple">
@@ -553,10 +563,10 @@ document.write(`
 
 </section>
 <section id="density">
-<h3><em>density()</em><a class="headerlink" href="#density" title="Permalink to this heading">#</a></h3>
+<h3><em>density()</em><a class="headerlink" href="#density" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.density">
-<span class="sig-name descname"><span class="pre">density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Scott'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/density.html#density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.density" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Scott'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/density.html#density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.density" title="Link to this definition">#</a></dt>
 <dd><p>Density estimation.</p>
 <p>Computes kernel density estimates.</p>
 <dl class="field-list simple">
@@ -611,10 +621,10 @@ document.write(`
 
 </section>
 <section id="distance">
-<h3><em>distance()</em><a class="headerlink" href="#distance" title="Permalink to this heading">#</a></h3>
+<h3><em>distance()</em><a class="headerlink" href="#distance" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.distance">
-<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mahalanobis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/distance.html#distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.distance" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mahalanobis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/distance.html#distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.distance" title="Link to this definition">#</a></dt>
 <dd><p><strong>Distance</strong></p>
 <p>Compute distance using different metrics.</p>
 <dl class="field-list simple">
@@ -651,10 +661,10 @@ mean.</p></li>
 
 </section>
 <section id="hdi">
-<h3><em>hdi()</em><a class="headerlink" href="#hdi" title="Permalink to this heading">#</a></h3>
+<h3><em>hdi()</em><a class="headerlink" href="#hdi" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.hdi">
-<span class="sig-name descname"><span class="pre">hdi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/hdi.html#hdi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hdi" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hdi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/hdi.html#hdi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hdi" title="Link to this definition">#</a></dt>
 <dd><p><strong>Highest Density Interval (HDI)</strong></p>
 <p>Compute the Highest Density Interval (HDI) of a distribution. All points within this interval
 have a higher probability density than points outside the interval. The HDI can be used in the
@@ -701,10 +711,10 @@ Default to .95 (95%).</p></li>
 
 </section>
 <section id="mad">
-<h3><em>mad()</em><a class="headerlink" href="#mad" title="Permalink to this heading">#</a></h3>
+<h3><em>mad()</em><a class="headerlink" href="#mad" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.mad">
-<span class="sig-name descname"><span class="pre">mad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.4826</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/mad.html#mad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.mad" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.4826</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/mad.html#mad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.mad" title="Link to this definition">#</a></dt>
 <dd><p><strong>Median Absolute Deviation: a “robust” version of standard deviation</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -732,10 +742,10 @@ Default to .95 (95%).</p></li>
 
 </section>
 <section id="rescale">
-<h3><em>rescale()</em><a class="headerlink" href="#rescale" title="Permalink to this heading">#</a></h3>
+<h3><em>rescale()</em><a class="headerlink" href="#rescale" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rescale">
-<span class="sig-name descname"><span class="pre">rescale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/rescale.html#rescale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rescale" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rescale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/rescale.html#rescale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rescale" title="Link to this definition">#</a></dt>
 <dd><p><strong>Rescale data</strong></p>
 <p>Rescale a numeric variable to a new range.</p>
 <dl class="field-list simple">
@@ -775,10 +785,10 @@ provided data will be used.</p></li>
 
 </section>
 <section id="standardize">
-<h3><em>standardize()</em><a class="headerlink" href="#standardize" title="Permalink to this heading">#</a></h3>
+<h3><em>standardize()</em><a class="headerlink" href="#standardize" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.standardize">
-<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/standardize.html#standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.standardize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/standardize.html#standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.standardize" title="Link to this definition">#</a></dt>
 <dd><p><strong>Standardization of data</strong></p>
 <p>Performs a standardization of data (Z-scoring), i.e., centering and scaling, so that the data is
 expressed in terms of standard deviation (i.e., mean = 0, SD = 1) or Median Absolute Deviance
@@ -856,10 +866,10 @@ complex detrending.</p></li>
 
 </section>
 <section id="summary">
-<h3><em>summary()</em><a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h3>
+<h3><em>summary()</em><a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.summary_plot">
-<span class="sig-name descname"><span class="pre">summary_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errorbars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/summary.html#summary_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.summary_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">summary_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errorbars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/summary.html#summary_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.summary_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>Descriptive plot</strong></p>
 <p>Visualize a distribution with density, histogram, boxplot and rugs plots all at once.</p>
 <p class="rubric">Examples</p>
@@ -878,12 +888,12 @@ complex detrending.</p></li>
 </section>
 </section>
 <section id="clustering">
-<h2>Clustering<a class="headerlink" href="#clustering" title="Permalink to this heading">#</a></h2>
+<h2>Clustering<a class="headerlink" href="#clustering" title="Link to this heading">#</a></h2>
 <section id="cluster">
-<h3><em>cluster()</em><a class="headerlink" href="#cluster" title="Permalink to this heading">#</a></h3>
+<h3><em>cluster()</em><a class="headerlink" href="#cluster" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.cluster">
-<span class="sig-name descname"><span class="pre">cluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/cluster.html#cluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cluster" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/cluster.html#cluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cluster" title="Link to this definition">#</a></dt>
 <dd><p><strong>Data Clustering</strong></p>
 <p>Performs clustering of data using different algorithms.</p>
 <ul class="simple">
@@ -957,91 +967,91 @@ different random state is chosen each time this function is called.</p></li>
 <span class="gp">In [15]: </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_kmeans</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[16]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31c880&gt;</span>
+<span class="gh">Out[16]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efc1404940&gt;</span>
 
 <span class="gp">In [17]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_kmeans</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_kmeans</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cdefa2c0&gt;</span>
+<span class="gh">Out[17]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbc3aefe0&gt;</span>
 
 <span class="gp">In [18]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k-means&quot;</span><span class="p">)</span>
 <span class="gh">Out[18]: </span><span class="go">Text(0.5, 1.0, &#39;k-means&#39;)</span>
 
 <span class="gp">In [19]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_spectral</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[19]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31f610&gt;</span>
+<span class="gh">Out[19]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce920640&gt;</span>
 
 <span class="gp">In [20]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_spectral</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_spectral</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[20]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31ff40&gt;</span>
+<span class="gh">Out[20]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce9226e0&gt;</span>
 
 <span class="gp">In [21]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Spectral&quot;</span><span class="p">)</span>
 <span class="gh">Out[21]: </span><span class="go">Text(0.5, 1.0, &#39;Spectral&#39;)</span>
 
 <span class="gp">In [22]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_hierarchical</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[22]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31d660&gt;</span>
+<span class="gh">Out[22]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce923d90&gt;</span>
 
 <span class="gp">In [23]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_hierarchical</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_hierarchical</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[23]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31f310&gt;</span>
+<span class="gh">Out[23]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce921cf0&gt;</span>
 
 <span class="gp">In [24]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Hierarchical&quot;</span><span class="p">)</span>
 <span class="gh">Out[24]: </span><span class="go">Text(0.5, 1.0, &#39;Hierarchical&#39;)</span>
 
 <span class="gp">In [25]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_agglomerative</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31efe0&gt;</span>
+<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce921390&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_agglomerative</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_agglomerative</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[26]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31cc10&gt;</span>
+<span class="gh">Out[26]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbc3ad3c0&gt;</span>
 
 <span class="gp">In [27]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Agglomerative&quot;</span><span class="p">)</span>
 <span class="gh">Out[27]: </span><span class="go">Text(0.5, 1.0, &#39;Agglomerative&#39;)</span>
 
 <span class="gp">In [28]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_mixture</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[28]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31f5e0&gt;</span>
+<span class="gh">Out[28]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbb6a4e80&gt;</span>
 
 <span class="gp">In [29]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_mixture</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_mixture</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[29]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31dfc0&gt;</span>
+<span class="gh">Out[29]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce920520&gt;</span>
 
 <span class="gp">In [30]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mixture&quot;</span><span class="p">)</span>
 <span class="gh">Out[30]: </span><span class="go">Text(0.5, 1.0, &#39;Mixture&#39;)</span>
 
 <span class="gp">In [31]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_bayes</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cde88f10&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbb6a5060&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_bayes</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_bayes</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[32]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31c4f0&gt;</span>
+<span class="gh">Out[32]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbb6a7d90&gt;</span>
 
 <span class="gp">In [33]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Bayesian Mixture&quot;</span><span class="p">)</span>
 <span class="gh">Out[33]: </span><span class="go">Text(0.5, 1.0, &#39;Bayesian Mixture&#39;)</span>
 
 <span class="gp">In [34]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_pca</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[34]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235ce31e350&gt;</span>
+<span class="gh">Out[34]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbb6a4c10&gt;</span>
 
 <span class="gp">In [35]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_pca</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_pca</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[35]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cdefa1d0&gt;</span>
+<span class="gh">Out[35]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbb6a4760&gt;</span>
 
 <span class="gp">In [36]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">)</span>
 <span class="gh">Out[36]: </span><span class="go">Text(0.5, 1.0, &#39;PCA&#39;)</span>
 
 <span class="gp">In [37]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_ica</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[37]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cde895d0&gt;</span>
+<span class="gh">Out[37]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce97c4f0&gt;</span>
 
 <span class="gp">In [38]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_ica</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_ica</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[38]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cde89570&gt;</span>
+<span class="gh">Out[38]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce97ed70&gt;</span>
 
 <span class="gp">In [39]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ICA&quot;</span><span class="p">)</span>
 <span class="gh">Out[39]: </span><span class="go">Text(0.5, 1.0, &#39;ICA&#39;)</span>
 
 <span class="gp">In [40]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_kmod</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[40]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cde8a920&gt;</span>
+<span class="gh">Out[40]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce97fb80&gt;</span>
 
 <span class="gp">In [41]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_kmod</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_kmod</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[41]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cde89de0&gt;</span>
+<span class="gh">Out[41]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce97c760&gt;</span>
 
 <span class="gp">In [42]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;modified K-means&quot;</span><span class="p">)</span>
 <span class="gh">Out[42]: </span><span class="go">Text(0.5, 1.0, &#39;modified K-means&#39;)</span>
 
 <span class="gp">In [43]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_aahc</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[43]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cde8ab00&gt;</span>
+<span class="gh">Out[43]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efce97d480&gt;</span>
 
 <span class="gp">In [44]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_aahc</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_aahc</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[44]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x235cdefa350&gt;</span>
+<span class="gh">Out[44]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1efbb6a5930&gt;</span>
 
 <span class="gp">In [45]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;AAHC (Frederic&#39;s method)&quot;</span><span class="p">)</span>
 <span class="gh">Out[45]: </span><span class="go">Text(0.5, 1.0, &quot;AAHC (Frederic&#39;s method)&quot;)</span>
@@ -1057,10 +1067,10 @@ clustering. Expert systems with applications, 36(2), 3336-3341.</p></li>
 
 </section>
 <section id="cluster-findnumber">
-<h3><em>cluster_findnumber()</em><a class="headerlink" href="#cluster-findnumber" title="Permalink to this heading">#</a></h3>
+<h3><em>cluster_findnumber()</em><a class="headerlink" href="#cluster-findnumber" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.cluster_findnumber">
-<span class="sig-name descname"><span class="pre">cluster_findnumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/cluster_findnumber.html#cluster_findnumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cluster_findnumber" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cluster_findnumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/cluster_findnumber.html#cluster_findnumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cluster_findnumber" title="Link to this definition">#</a></dt>
 <dd><p><strong>Optimal Number of Clusters</strong></p>
 <p>Find the optimal number of clusters based on different indices of quality of fit.</p>
 <dl class="field-list simple">
@@ -1108,10 +1118,10 @@ quality metrices produced for each cluster number.</p></li>
 
 </section>
 <section id="cluster-quality">
-<h3><em>cluster_quality()</em><a class="headerlink" href="#cluster-quality" title="Permalink to this heading">#</a></h3>
+<h3><em>cluster_quality()</em><a class="headerlink" href="#cluster-quality" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.cluster_quality">
-<span class="sig-name descname"><span class="pre">cluster_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/cluster_quality.html#cluster_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cluster_quality" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cluster_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/cluster_quality.html#cluster_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.cluster_quality" title="Link to this definition">#</a></dt>
 <dd><p><strong>Assess Clustering Quality</strong></p>
 <p>Compute quality of the clustering using several metrics.</p>
 <dl class="field-list simple">
@@ -1153,7 +1163,7 @@ statistic.</p></li>
 <span class="gp">In [5]: </span><span class="n">general</span>
 <span class="gh">Out[5]: </span>
 <span class="go">   n_Clusters  Score_Silhouette  ...  Score_GAP_sk  Score_GAPmod_sk</span>
-<span class="go">0         3.0          0.552819  ...       0.37706       985.602795</span>
+<span class="go">0         3.0          0.551192  ...      0.211358       986.341496</span>
 
 <span class="go">[1 rows x 12 columns]</span>
 </pre></div>
@@ -1171,12 +1181,12 @@ definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
 </section>
 </section>
 <section id="indices-of-fit">
-<h2>Indices of fit<a class="headerlink" href="#indices-of-fit" title="Permalink to this heading">#</a></h2>
+<h2>Indices of fit<a class="headerlink" href="#indices-of-fit" title="Link to this heading">#</a></h2>
 <section id="fit-error">
-<h3><em>fit_error()</em><a class="headerlink" href="#fit-error" title="Permalink to this heading">#</a></h3>
+<h3><em>fit_error()</em><a class="headerlink" href="#fit-error" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.fit_error">
-<span class="sig-name descname"><span class="pre">fit_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_error" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_error" title="Link to this definition">#</a></dt>
 <dd><p><strong>Calculate the fit error for a model</strong></p>
 <p>Also specific and direct access functions can be used, such as <a class="reference internal" href="#neurokit2.stats.fit_mse" title="neurokit2.stats.fit_mse"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_mse()</span></code></a>,
 <a class="reference internal" href="#neurokit2.stats.fit_rmse" title="neurokit2.stats.fit_rmse"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_rmse()</span></code></a> and <a class="reference internal" href="#neurokit2.stats.fit_r2" title="neurokit2.stats.fit_r2"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_r2()</span></code></a>.</p>
@@ -1232,10 +1242,10 @@ definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
 
 </section>
 <section id="fit-loess">
-<h3><em>fit_loess()</em><a class="headerlink" href="#fit-loess" title="Permalink to this heading">#</a></h3>
+<h3><em>fit_loess()</em><a class="headerlink" href="#fit-loess" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.fit_loess">
-<span class="sig-name descname"><span class="pre">fit_loess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_loess.html#fit_loess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_loess" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_loess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_loess.html#fit_loess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_loess" title="Link to this definition">#</a></dt>
 <dd><p><strong>Local Polynomial Regression (LOESS)</strong></p>
 <p>Performs a LOWESS (LOcally WEighted Scatter-plot Smoother) regression.</p>
 <dl class="field-list simple">
@@ -1291,10 +1301,10 @@ of the samples to include in local regression.</p></li>
 
 </section>
 <section id="fit-mixture">
-<h3><em>fit_mixture()</em><a class="headerlink" href="#fit-mixture" title="Permalink to this heading">#</a></h3>
+<h3><em>fit_mixture()</em><a class="headerlink" href="#fit-mixture" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.fit_mixture">
-<span class="sig-name descname"><span class="pre">fit_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_mixture.html#fit_mixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_mixture" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_mixture.html#fit_mixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_mixture" title="Link to this definition">#</a></dt>
 <dd><p><strong>Gaussian Mixture Model</strong></p>
 <p>Performs a polynomial regression of given order.</p>
 <dl class="field-list simple">
@@ -1333,10 +1343,10 @@ of the samples to include in local regression.</p></li>
 
 </section>
 <section id="fit-polynomial">
-<h3><em>fit_polynomial()</em><a class="headerlink" href="#fit-polynomial" title="Permalink to this heading">#</a></h3>
+<h3><em>fit_polynomial()</em><a class="headerlink" href="#fit-polynomial" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.fit_polynomial">
-<span class="sig-name descname"><span class="pre">fit_polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_polynomial.html#fit_polynomial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_polynomial" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_polynomial.html#fit_polynomial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.fit_polynomial" title="Link to this definition">#</a></dt>
 <dd><p><strong>Polynomial Regression</strong></p>
 <p>Performs a polynomial regression of given order.</p>
 <dl class="field-list simple">
@@ -1385,10 +1395,10 @@ compute orthogonal polynomials (and is equivalent to R’s <code class="docutils
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.stats"></span><p>Submodule for NeuroKit.</p>
+<p id="module-neurokit2.stats">Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.stats.density_bandwidth">
-<span class="sig-name descname"><span class="pre">density_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'KernSmooth'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">401</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/density_bandwidth.html#density_bandwidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.density_bandwidth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">density_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'KernSmooth'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">401</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/density_bandwidth.html#density_bandwidth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.density_bandwidth" title="Link to this definition">#</a></dt>
 <dd><p><strong>Bandwidth Selection for Density Estimation</strong></p>
 <p>Bandwidth selector for <a class="reference internal" href="#neurokit2.density" title="neurokit2.density"><code class="xref py py-func docutils literal notranslate"><span class="pre">density()</span></code></a> estimation. See <code class="docutils literal notranslate"><span class="pre">bw_method</span></code> argument in
 <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.stats.gaussian_kde()</span></code>.</p>
@@ -1422,7 +1432,7 @@ is performed to obtain kernel functional approximation (see <code class="docutil
 <span class="gp">In [3]: </span><span class="n">bw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">density_bandwidth</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">bw</span>
-<span class="gh">Out[4]: </span><span class="go">0.5114364297357907</span>
+<span class="gh">Out[4]: </span><span class="go">0.3953164643372033</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">density_bandwidth</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scott&quot;</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go">0.3981071705534972</span>
@@ -1442,13 +1452,13 @@ is performed to obtain kernel functional approximation (see <code class="docutil
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.stats.fit_mse">
-<span class="sig-name descname"><span class="pre">fit_mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_mse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_mse" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_mse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_mse" title="Link to this definition">#</a></dt>
 <dd><p>Compute Mean Square Error (MSE).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.stats.fit_polynomial_findorder">
-<span class="sig-name descname"><span class="pre">fit_polynomial_findorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_polynomial.html#fit_polynomial_findorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_polynomial_findorder" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_polynomial_findorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_polynomial.html#fit_polynomial_findorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_polynomial_findorder" title="Link to this definition">#</a></dt>
 <dd><p>Polynomial Regression.</p>
 <p>Find the optimal order for polynomial fitting. Currently, the only method implemented is
 RMSE minimization.</p>
@@ -1477,13 +1487,13 @@ RMSE minimization.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.stats.fit_r2">
-<span class="sig-name descname"><span class="pre">fit_r2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjusted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_r2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_r2" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_r2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjusted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_r2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_r2" title="Link to this definition">#</a></dt>
 <dd><p>Compute R2.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.stats.fit_rmse">
-<span class="sig-name descname"><span class="pre">fit_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_rmse" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/stats/fit_error.html#fit_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.stats.fit_rmse" title="Link to this definition">#</a></dt>
 <dd><p>Compute Root Mean Square Error (RMSE).</p>
 </dd></dl>
 

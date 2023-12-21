@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Learn Python in 10 minutes &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'resources/learn_python';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -453,7 +463,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="learn-python-in-10-minutes">
-<h1>Learn Python in 10 minutes<a class="headerlink" href="#learn-python-in-10-minutes" title="Permalink to this heading">#</a></h1>
+<h1>Learn Python in 10 minutes<a class="headerlink" href="#learn-python-in-10-minutes" title="Link to this heading">#</a></h1>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Spotted a typo? Would like to add something or make a correction? Join us by contributing (<a class="reference external" href="https://neuropsychology.github.io/NeuroKit/resources/contributing.html">see this guide</a>).</p>
@@ -461,7 +471,7 @@ document.write(`
 <p>You have no experience in computer science? You are afraid of code? You feel betrayed because you didn’t expect to do programming in psychology studies? <strong>Relax!</strong> We got you covered.</p>
 <p>This tutorial will provide you with all you need to know to dive into the wonderful world of scientific programming. The goal here is not become a programmer, or a software designer, but rather to be able to use the power of programming to get <strong>scientific results</strong>.</p>
 <section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
 <p>The first thing you will need is to <strong>install Python</strong> on your computer (see <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/installation.html">here</a>). In fact, this includes <strong>two things</strong>, installing Python (the <em>language</em>), and an <em>environment</em> to be able to use it. For this tutorial, we will assume you have something that looks like <a class="reference external" href="https://www.spyder-ide.org/">Spyder</a> (called an IDE). But you can use <a class="reference external" href="https://jupyter.org/">jupyter notebooks</a>, <a class="reference external" href="https://code.visualstudio.com/">VS Code</a> or <a class="reference external" href="https://www.guru99.com/python-ide-code-editor.html">anything else</a>, it doesn’t really matter.</p>
 <p>There is one important concept to understand here: the difference between the <strong>CONSOLE</strong> and the <strong>EDITOR</strong>. The editor is like a <em>cooking table</em> where you prepare your ingredients to make a dish, whereas the console is like the <em>oven</em>, you only open it to put the dish in it and get the result.</p>
 <p>The process of writing code usually happens in the editor, which is basically a text editor (such as notepad), except that it automatically highlights the code (making it easy to see functions, numbers, etc.). Importantly, you can directly <em>execute</em> a line of code (which is equivalent to copy it and paste it the <em>console</em>).</p>
@@ -474,7 +484,7 @@ document.write(`
 <p>You can now save the file (<code class="docutils literal notranslate"><span class="pre">CTRL</span> <span class="pre">+</span> <span class="pre">S</span></code>), which will be saved with a <code class="docutils literal notranslate"><span class="pre">.py</span></code> extension (i.e., a Python script). Try closing everything and reopening this file with the editor.</p>
 </section>
 <section id="variables">
-<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">#</a></h2>
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading">#</a></h2>
 <p>The most important concept of programming is <strong>variables</strong>, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous <em>x</em>, this placeholder for any value? Well, <em>x</em> was a variable, i.e., the name referring to some other thing.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -506,7 +516,7 @@ document.write(`
 </div>
 </section>
 <section id="data-types">
-<h2>Data types<a class="headerlink" href="#data-types" title="Permalink to this heading">#</a></h2>
+<h2>Data types<a class="headerlink" href="#data-types" title="Link to this heading">#</a></h2>
 <p>The next important thing to have in mind is that variables have <strong>types</strong>. Basic types include <strong>integers</strong> (numbers without decimals), <strong>floats</strong> (numbers with decimals), <strong>strings</strong> (character text) and <strong>booleans</strong> (<code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="docutils literal notranslate"><span class="pre">False</span></code>). Depending on their type, the variables will not behave in the same way. For example, try:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">3</span>
@@ -541,7 +551,7 @@ document.write(`
 <p>You can see that the message of this error is not as obscure as it seems. In fact, getting used to having and understanding error and warning messages is an central part of the programming experience!</p>
 </section>
 <section id="lists-and-dictionaries">
-<h2>Lists and dictionaries<a class="headerlink" href="#lists-and-dictionaries" title="Permalink to this heading">#</a></h2>
+<h2>Lists and dictionaries<a class="headerlink" href="#lists-and-dictionaries" title="Link to this heading">#</a></h2>
 <p>Two other important types are <strong>lists</strong> and <strong>dictionaries</strong>. You can think of them as <strong>containers</strong>, as they contain multiple variables. The main difference between them is that in a <strong>list</strong>, you access the individual elements that it contains <strong>by its order</strong> (for instance, <em>“give me the third one”</em>), whereas in a <strong>dictionary</strong>, you access an element by its name (also known as <strong>key</strong>), for example <em>“give me the element named A”</em>.</p>
 <p>A list is created using square brackets, and a dictionary using curly brackets. Importantly, in a dictionary, you must specify a name to each element. Here’s what it looks like:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
@@ -552,7 +562,7 @@ document.write(`
 <p>Keep in mind that there are more types of containers, such as <em>arrays</em> and <em>dataframes</em>, that we will talk about later.</p>
 </section>
 <section id="basic-indexing">
-<h2>Basic indexing<a class="headerlink" href="#basic-indexing" title="Permalink to this heading">#</a></h2>
+<h2>Basic indexing<a class="headerlink" href="#basic-indexing" title="Link to this heading">#</a></h2>
 <p>There’s no point in storing elements in containers if we cannot access them later on. As mentioned earlier, we can access elements from a <strong>dictionary</strong> by its key within square brackets (note that here the square brackets don’t mean <em>list</em>, just mean <em>within the previous container</em>).</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
 
@@ -576,7 +586,7 @@ document.write(`
 <p><strong>Answer</strong>: If you guessed <strong>42</strong>, you’re right, congrats! If you guessed <strong>7</strong>, you have likely confused the <strong>variable</strong> named <code class="docutils literal notranslate"><span class="pre">x</span></code> (which represents 1+1 converted to a character), with the character <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>. And if you guessed <strong>0</strong>… what is wrong with you?</p>
 </section>
 <section id="indexing-starts-from-0">
-<h2>Indexing starts from 0<a class="headerlink" href="#indexing-starts-from-0" title="Permalink to this heading">#</a></h2>
+<h2>Indexing starts from 0<a class="headerlink" href="#indexing-starts-from-0" title="Link to this heading">#</a></h2>
 <p>As mentioned earlier, one can access elements from a list by its <strong>order</strong>. However, <strong>and there is very important to remember</strong> (the source of many beginner errors), in Python, <strong>the order starts from 0</strong>. That means that the <strong>first element is the 0th</strong>.</p>
 <p>So if we want the 2nd element of the list, we have to ask for the 1th:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
@@ -589,7 +599,7 @@ document.write(`
 </div>
 </section>
 <section id="control-flow-if-and-else">
-<h2>Control flow (if and else)<a class="headerlink" href="#control-flow-if-and-else" title="Permalink to this heading">#</a></h2>
+<h2>Control flow (if and else)<a class="headerlink" href="#control-flow-if-and-else" title="Link to this heading">#</a></h2>
 <p>One important notion in programming is control flow. You want the code to do something different depending on a condition. For instance, if <code class="docutils literal notranslate"><span class="pre">x</span></code> is lower than 3, print “lower than 3”. In Python, this is done as follows:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
 
@@ -627,7 +637,7 @@ document.write(`
 <p>Again, note the <strong>indentation</strong> and how the <strong>else</strong> statement creates a new indented chunk.</p>
 </section>
 <section id="for-loops">
-<h2>For loops<a class="headerlink" href="#for-loops" title="Permalink to this heading">#</a></h2>
+<h2>For loops<a class="headerlink" href="#for-loops" title="Link to this heading">#</a></h2>
 <p>One of the most used concept is <strong>loops</strong>, and in particular <strong>for loops</strong>. Loops are chunks of code that will be run several times, until a condition is complete.</p>
 <p>The <strong>for loops</strong> create a <em>variable</em> that will successively take all the values of a list (or other <strong>iterable</strong> types). Let’s look at the code below:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
@@ -641,7 +651,7 @@ document.write(`
 <p>Here, the <strong>for loop</strong> creates a variable (that we named <cite>var</cite>), that will successively take all the values of the provided list.</p>
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <p>Now that you know what a <strong>variable</strong> is, as well as the purpose of little things like <strong>if</strong>, <strong>else</strong>, <strong>for</strong>, etc., the last most common thing that you will find in code are <strong>function</strong> calls. In fact, we have already used some of them! Indeed, things like <code class="docutils literal notranslate"><span class="pre">print()</span></code>, <code class="docutils literal notranslate"><span class="pre">str()</span></code> and <code class="docutils literal notranslate"><span class="pre">int()</span></code> were functions. And in fact, you’ve probably encountered them in secondary school mathematics! Remember <em>f(x)</em>?</p>
 <p>One important thing about functions is that <em>most of the time</em> (not always though), it takes something <strong>in</strong>, and returns something <strong>out</strong>. It’s like a <strong>factory</strong>, you give it some raw material and it outputs some transformed stuff.</p>
 <p>For instance, let’s say we want to transform a variable containing an <code class="docutils literal notranslate"><span class="pre">integer</span></code> into a character <code class="docutils literal notranslate"><span class="pre">string</span></code>:</p>
@@ -692,7 +702,7 @@ document.write(`
 <p>If you understand what happened here, in this combination of lists, functions, loops and indexing, great! You are ready to move on.</p>
 </section>
 <section id="packages">
-<h2>Packages<a class="headerlink" href="#packages" title="Permalink to this heading">#</a></h2>
+<h2>Packages<a class="headerlink" href="#packages" title="Link to this heading">#</a></h2>
 <p>Interestingly, Python alone does not include a lot of functions. <strong>And that’s also its strength</strong>, because it allows to easily use functions developped by other people, that are stored in <strong>packages</strong> (or <em>modules</em>). A package is a collection of functions that can be downloaded and used in your code.</p>
 <p>One of the most popular package is <strong>numpy</strong> (for <em>NUM</em> -erical <em>PY</em> -thon), including a lot of functions for maths and scientific programming. It is likely that this package is already <strong>installed</strong> on your Python distribution (note that to install a package in Python, you have to do that from outside Python, running for instance <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">numpy</span></code> in your <em>console</em> - and not in Python). However, installing a package doesn’t mean you can use it. In order to use a package, you have to <strong>import it</strong> (<em>load it</em>) in your script, before using it. This usually happens at the top of a Python file, like this:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="kn">import</span> <span class="nn">numpy</span>
@@ -717,7 +727,7 @@ document.write(`
 </div>
 </section>
 <section id="lists-vs-vectors-arrays">
-<h2>Lists <em>vs.</em> vectors (arrays)<a class="headerlink" href="#lists-vs-vectors-arrays" title="Permalink to this heading">#</a></h2>
+<h2>Lists <em>vs.</em> vectors (arrays)<a class="headerlink" href="#lists-vs-vectors-arrays" title="Link to this heading">#</a></h2>
 <p>Packages can also add new <strong>types</strong>. One important type available through <strong>numpy</strong> is <strong>arrays</strong>.</p>
 <p>In short, an array is a container, similar to a <strong>list</strong>. However, it can only contain one type of things inside (for instance, only <em>floats</em>, only <em>strings</em>, etc.) and can be multidimensional (imagine a 3D cube made of little cubes containing a value). If an array is one-dimensional (like a list, i.e., a sequence of elements), we can call it a <strong>vector</strong>.</p>
 <p>A list can be converted to a vector using the <code class="docutils literal notranslate"><span class="pre">array()</span></code> function from the <strong>numpy</strong> package:</p>
@@ -741,7 +751,7 @@ document.write(`
 <p>Indeed, vectors allow for <em>vectorized</em> operations, which means that any operation is propagated on each element of the vector. And that’s very useful for signal processing :)</p>
 </section>
 <section id="conditional-indexing">
-<h2>Conditional indexing<a class="headerlink" href="#conditional-indexing" title="Permalink to this heading">#</a></h2>
+<h2>Conditional indexing<a class="headerlink" href="#conditional-indexing" title="Link to this heading">#</a></h2>
 <p>Arrays can also be transformed in arrays of <strong>booleans</strong> (<code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>) using a condition, for instance:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [54]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
@@ -774,7 +784,7 @@ document.write(`
 <p>Here we assigned a new value <code class="docutils literal notranslate"><span class="pre">6</span></code> to all elements of the vector that respected the condition (were inferior or equal to 2).</p>
 </section>
 <section id="dataframes">
-<h2>Dataframes<a class="headerlink" href="#dataframes" title="Permalink to this heading">#</a></h2>
+<h2>Dataframes<a class="headerlink" href="#dataframes" title="Link to this heading">#</a></h2>
 <p>If you’ve followed everything until now, congrats! You’re almost there. The last important type that we are going to see is <strong>dataframes</strong>. A dataframe is essentially a table with rows and columns. Often, the rows represent different <strong>observations</strong> and the columns different <strong>variables</strong>.</p>
 <p>Dataframes are available in Python through the <strong>pandas</strong> package, another very used package, usually imported under the shortcut <code class="docutils literal notranslate"><span class="pre">pd</span></code>. A dataframe can be constructed from a <em>dictionary</em>: the <strong>key</strong> will become the <strong>variable name</strong>, and the list or vector associated will become the <strong>variable values</strong>.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [64]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -808,7 +818,7 @@ document.write(`
 <p>Note that Python cares about the <strong>case</strong>: <code class="docutils literal notranslate"><span class="pre">tHiS</span></code> is not equivalent to <code class="docutils literal notranslate"><span class="pre">ThIs`.</span> <span class="pre">And</span> <span class="pre">``pd.DataFrame</span></code> has to be written with the <em>D</em> and <em>F</em> in capital letters. This is another common source of beginner errors, so make sure you put capital letters at the right place.</p>
 </section>
 <section id="reading-data">
-<h2>Reading data<a class="headerlink" href="#reading-data" title="Permalink to this heading">#</a></h2>
+<h2>Reading data<a class="headerlink" href="#reading-data" title="Link to this heading">#</a></h2>
 <p>Now that you know how to create a dataframe in Python, note that you also use <strong>pandas</strong> to read data from a file (<em>.csv</em>, <em>excel</em>, etc.) by its <em>path</em>:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [71]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -841,7 +851,7 @@ document.write(`
 </div>
 </section>
 <section id="next-steps">
-<h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h2>
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
 <p>Now that you know the basis, and that you can distinguish between the different elements of Python code (functions calls, variables, etc.), we recommend that you dive in and try to follow our other examples and tutorials, that will show you some usages of Python to get something out of it.</p>
 </section>
 </section>

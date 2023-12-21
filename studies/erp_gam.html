@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>An GAM-based Approach to EEG/ERP Analysis using Python and R &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'studies/erp_gam';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -454,14 +464,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="an-gam-based-approach-to-eeg-erp-analysis-using-python-and-r">
-<h1>An GAM-based Approach to EEG/ERP Analysis using Python and R<a class="headerlink" href="#an-gam-based-approach-to-eeg-erp-analysis-using-python-and-r" title="Permalink to this heading">#</a></h1>
+<h1>An GAM-based Approach to EEG/ERP Analysis using Python and R<a class="headerlink" href="#an-gam-based-approach-to-eeg-erp-analysis-using-python-and-r" title="Link to this heading">#</a></h1>
 <p><em>This study can be referenced by</em> <a class="reference external" href="https://github.com/neuropsychology/NeuroKit#citation">citing the
 package</a>.</p>
 <p><strong>We’d like to publish this study, but unfortunately we currently don’t
 have the time. If you want to help to make it happen, please contact
 us!</strong></p>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>The aim of this study is to explore the feasibility of analyzing
 event-related potentials (ERP) under a regression framework, through the
 usage of non-linear links (using splines, and General Additive Models -
@@ -472,14 +482,14 @@ computation of marginal means and contrasts, allowing for a flexible and
 powerful way of analysing differences between conditions.</p>
 </section>
 <section id="procedure">
-<h2>Procedure<a class="headerlink" href="#procedure" title="Permalink to this heading">#</a></h2>
+<h2>Procedure<a class="headerlink" href="#procedure" title="Link to this heading">#</a></h2>
 <p>We will start by running a “traditional” ERP analysis for a single
 subject using the MNE Python package (Gramfort et al., 2013, 2014) to
 obtain “gold standard” baseline patterns of results. Then, we will first
 attempt to model the evoked potentials using a simple linear model with
 splines, before applying GAMs.</p>
 <section id="data">
-<h3>Data<a class="headerlink" href="#data" title="Permalink to this heading">#</a></h3>
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -530,7 +540,7 @@ splines, before applying GAMs.</p>
 <p><img alt="fig1" src="../_images/fig11.png" /></p>
 </section>
 <section id="erp-analysis-using-mne-python">
-<h3>ERP analysis using MNE-Python<a class="headerlink" href="#erp-analysis-using-mne-python" title="Permalink to this heading">#</a></h3>
+<h3>ERP analysis using MNE-Python<a class="headerlink" href="#erp-analysis-using-mne-python" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transform each condition to array</span>
 <span class="n">condition1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="s2">&quot;audio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">condition2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="s2">&quot;visual&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -601,7 +611,7 @@ this pattern of results under a regression framework.</p>
 </section>
 </section>
 <section id="results">
-<h2>Results<a class="headerlink" href="#results" title="Permalink to this heading">#</a></h2>
+<h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="n">patchwork</span><span class="p">)</span>
@@ -615,7 +625,7 @@ this pattern of results under a regression framework.</p>
 </pre></div>
 </div>
 <section id="utility-functions">
-<h3>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this heading">#</a></h3>
+<h3>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">theme_eeg</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(){</span>
 <span class="w">  </span><span class="nf">list</span><span class="p">(</span>
 <span class="w">    </span><span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
@@ -627,7 +637,7 @@ this pattern of results under a regression framework.</p>
 </div>
 </section>
 <section id="visualize-average">
-<h3>Visualize Average<a class="headerlink" href="#visualize-average" title="Permalink to this heading">#</a></h3>
+<h3>Visualize Average<a class="headerlink" href="#visualize-average" title="Link to this heading">#</a></h3>
 <p>We will start by visualizing the “simple” grand average of all epochs as
 thick lines, as well as all epochs as thin lines. This will serve us as
 a baseline to check if our regression approach is on track.</p>
@@ -646,7 +656,7 @@ a baseline to check if our regression approach is on track.</p>
 <p><img alt="" src="../_images/unnamed-chunk-8-11.png" /><!-- --></p>
 </section>
 <section id="spline-regression">
-<h3>Spline Regression<a class="headerlink" href="#spline-regression" title="Permalink to this heading">#</a></h3>
+<h3>Spline Regression<a class="headerlink" href="#spline-regression" title="Link to this heading">#</a></h3>
 <p>We sill start by running a spline regression and specifying the degrees
 of freedom as a function of the epoch length. As our epoch is 600 ms
 (including the baseline), we will select a fraction (5%) of that.</p>
@@ -701,7 +711,7 @@ values by the model and their confidence interval (CI), as well as the
 difference between the two conditions (estimated as marginal contrasts).</p>
 </section>
 <section id="general-additive-model-gam">
-<h3>General Additive Model (GAM)<a class="headerlink" href="#general-additive-model-gam" title="Permalink to this heading">#</a></h3>
+<h3>General Additive Model (GAM)<a class="headerlink" href="#general-additive-model-gam" title="Link to this heading">#</a></h3>
 <p>General Additive Model (GAM)</p>
 <p>Fit a GAM with cubic splines using the <code class="docutils literal notranslate"><span class="pre">bam()</span></code> function that is
 optimized for very large datasets.</p>
@@ -747,7 +757,7 @@ the epochs, which in our case corresponds to <code class="docutils literal notra
 <p><img alt="" src="../_images/unnamed-chunk-14-1.png" /><!-- --></p>
 </section>
 <section id="using-data-from-all-the-channels">
-<h3>Using data from all the channels<a class="headerlink" href="#using-data-from-all-the-channels" title="Permalink to this heading">#</a></h3>
+<h3>Using data from all the channels<a class="headerlink" href="#using-data-from-all-the-channels" title="Link to this heading">#</a></h3>
 <p>It is important to note that all the channels contribute in the same way
 to these differences, and taking into account the variability of this
 data could reinforce our model.</p>
@@ -790,13 +800,13 @@ condition factor).</p>
 </section>
 </section>
 <section id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
 <p>GAMs offer a flexible and powerful way to model ERPs. Moreover, these
 models can be extended to include more covariates, hopefully increasing
 the signal to noise ratio.</p>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <div id="refs" class="references">
 <div id="ref-gramfort2013meg">
 <p>Gramfort, A., Luessi, M., Larson, E., Engemann, D. A., Strohmeier, D.,

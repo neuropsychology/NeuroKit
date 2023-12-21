@@ -1,9 +1,8 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
@@ -28,9 +27,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -38,12 +37,12 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/neurokit2/ecg/ecg_peaks';</script>
     <link rel="icon" href="../../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -139,7 +138,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="nav bd-sidenav">
@@ -369,14 +379,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.ecg_findpeaks</span> <span class="kn">import</span> <span class="n">ecg_findpeaks</span>
 
 
-<div class="viewcode-block" id="ecg_peaks"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_peaks">[docs]</a><span class="k">def</span> <span class="nf">ecg_peaks</span><span class="p">(</span>
-    <span class="n">ecg_cleaned</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span>
-    <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="ecg_peaks">
+<a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_peaks">[docs]</a>
+<span class="k">def</span> <span class="nf">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find R-peaks in an ECG signal**</span>
 
 <span class="sd">    Find R-peaks in an ECG signal using the specified method. You can pass an unfiltered ECG</span>
@@ -403,7 +408,9 @@ document.write(`
 <span class="sd">    * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.</span>
 <span class="sd">    * **rodrigues2021**: Adaptation of the work by Sadhukhan &amp; Mitra (2012) and Gutiérrez-Rivas et</span>
 <span class="sd">      al. (2015) by Rodrigues et al. (2021).</span>
-<span class="sd">    * **koka2022**: Algorithm by Koka et al. (2022) based on the visibility graphs.</span>
+<span class="sd">    * **emrich2023**: FastNVG Algorithm by Emrich et al. (2023) based on the visibility graph detector of Koka et al. (2022).</span>
+<span class="sd">      Provides fast and sample-accurate R-peak detection. The algorithm transforms the ecg into a graph representation</span>
+<span class="sd">      and extracts exact R-peak positions using graph metrics.</span>
 <span class="sd">    * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.</span>
 <span class="sd">      For a given peak detector, the binary signal representing the peak locations is convolved</span>
 <span class="sd">      with a Gaussian distribution, resulting in a probabilistic representation of each peak</span>
@@ -516,8 +523,9 @@ document.write(`
 <span class="sd">      # rodrigues2021</span>
 <span class="sd">      _, rodrigues2021 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;rodrigues2021&quot;)</span>
 
-<span class="sd">      # koka2022</span>
-<span class="sd">      _, koka2022 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;koka2022&quot;)</span>
+<span class="sd">      # emrich2023</span>
+<span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;emrich2023&quot;)</span>
+<span class="sd">      _, emrich2023 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;emrich2023&quot;)</span>
 
 <span class="sd">      # Collect all R-peak lists by iterating through the result dicts</span>
 <span class="sd">      rpeaks = [</span>
@@ -534,7 +542,7 @@ document.write(`
 <span class="sd">              engzeemod2012,</span>
 <span class="sd">              kalidas2017,</span>
 <span class="sd">              rodrigues2021,</span>
-<span class="sd">              koka2022</span>
+<span class="sd">              emrich2023</span>
 <span class="sd">          ]</span>
 <span class="sd">      ]</span>
 <span class="sd">      # Visualize results</span>
@@ -609,20 +617,16 @@ document.write(`
 <span class="sd">    * Lipponen, J. A., &amp; Tarvainen, M. P. (2019). A robust algorithm for heart rate variability</span>
 <span class="sd">      time series artefact correction using novel beat classification. Journal of medical</span>
 <span class="sd">      engineering &amp; technology, 43(3), 173-181.</span>
+<span class="sd">    * Emrich, J., Koka, T., Wirth, S., &amp; Muma, M. (2023), Accelerated Sample-Accurate R-Peak</span>
+<span class="sd">      Detectors Based on Visibility Graphs. 31st European Signal Processing Conference</span>
+<span class="sd">      (EUSIPCO), 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Store info</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">:</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;method_fixpeaks&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">}</span>
 
     <span class="c1"># First peak detection</span>
-    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">ecg_findpeaks</span><span class="p">(</span>
-            <span class="n">ecg_cleaned</span><span class="p">,</span>
-            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-            <span class="n">method</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">],</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
     <span class="c1"># Peak correction</span>
     <span class="k">if</span> <span class="n">correct_artifacts</span><span class="p">:</span>
@@ -649,6 +653,7 @@ document.write(`
         <span class="n">_ecg_peaks_plot</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">signals</span><span class="p">,</span> <span class="n">info</span></div>
+
 
 
 <span class="c1"># =============================================================================</span>
@@ -785,10 +790,7 @@ document.write(`
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;No bad peaks&quot;</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="s2">&quot;Peak indices longer than signal. Signals might have been cropped. &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;Better skip plotting.&quot;</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;Peak indices longer than signal. Signals might have been cropped. &quot;</span> <span class="o">+</span> <span class="s2">&quot;Better skip plotting.&quot;</span>
 
     <span class="n">extra</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">raw</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>

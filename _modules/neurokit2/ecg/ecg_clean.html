@@ -1,9 +1,8 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
@@ -28,9 +27,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -38,12 +37,12 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/neurokit2/ecg/ecg_clean';</script>
     <link rel="icon" href="../../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -139,7 +138,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="nav bd-sidenav">
@@ -372,11 +382,13 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span>
 
 
-<div class="viewcode-block" id="ecg_clean"><a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_clean">[docs]</a><span class="k">def</span> <span class="nf">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ecg_clean">
+<a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_clean">[docs]</a>
+<span class="k">def</span> <span class="nf">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**ECG Signal Cleaning**</span>
 
 <span class="sd">    Clean an ECG signal to remove noise and improve peak-detection accuracy. Different cleaning</span>
-<span class="sd">    method are implemented.</span>
+<span class="sd">    methods are implemented.</span>
 
 <span class="sd">    * ``&#39;neurokit&#39;`` (default): 0.5 Hz high-pass butterworth filter (order = 5), followed by</span>
 <span class="sd">      powerline filtering (see ``signal_filter()``). By default, ``powerline = 50``.</span>
@@ -391,7 +403,8 @@ document.write(`
 <span class="sd">      description!**</span>
 <span class="sd">    * ``&#39;engzeemod2012&#39;``: Method used in Engelse &amp; Zeelenberg (1979). **Please help providing a</span>
 <span class="sd">      better description!**</span>
-
+<span class="sd">    * ``&#39;vg&#39;``: Method used in Visibility Graph Based Detection Emrich et al. (2023)</span>
+<span class="sd">      and Koka et al. (2022). A 4.0 Hz high-pass butterworth filter (order = 2).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -402,7 +415,7 @@ document.write(`
 <span class="sd">    method : str</span>
 <span class="sd">        The processing pipeline to apply. Can be one of ``&quot;neurokit&quot;`` (default),</span>
 <span class="sd">        ``&quot;biosppy&quot;``, ``&quot;pantompkins1985&quot;``, ``&quot;hamilton2002&quot;``, ``&quot;elgendi2010&quot;``,</span>
-<span class="sd">        ``&quot;engzeemod2012&quot;``.</span>
+<span class="sd">        ``&quot;engzeemod2012&quot;``, ``&#39;vg&#39;``.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed to specific methods.</span>
 
@@ -434,6 +447,7 @@ document.write(`
 <span class="sd">          &quot;ECG_Hamilton&quot; : nk.ecg_clean(ecg, sampling_rate=250, method=&quot;hamilton2002&quot;),</span>
 <span class="sd">          &quot;ECG_Elgendi&quot; : nk.ecg_clean(ecg, sampling_rate=250, method=&quot;elgendi2010&quot;),</span>
 <span class="sd">          &quot;ECG_EngZeeMod&quot; : nk.ecg_clean(ecg, sampling_rate=250, method=&quot;engzeemod2012&quot;),</span>
+<span class="sd">          &quot;ECG_VG&quot; : nk.ecg_clean(ecg, sampling_rate=250, method=&quot;vg&quot;),</span>
 <span class="sd">          &quot;ECG_TC&quot; : nk.ecg_clean(ecg, sampling_rate=250, method=&quot;templateconvolution&quot;)</span>
 <span class="sd">      })</span>
 
@@ -454,6 +468,9 @@ document.write(`
 <span class="sd">    * Elgendi, M., Jonkman, M., &amp; De Boer, F. (2010). Frequency Bands Effects on QRS Detection.</span>
 <span class="sd">      Biosignals, Proceedings of the Third International Conference on Bio-inspired Systems and</span>
 <span class="sd">      Signal Processing, 428-431.</span>
+<span class="sd">    * Emrich, J., Koka, T., Wirth, S., &amp; Muma, M. (2023), Accelerated Sample-Accurate R-Peak</span>
+<span class="sd">      Detectors Based on Visibility Graphs. 31st European Signal Processing Conference</span>
+<span class="sd">      (EUSIPCO), 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
@@ -481,7 +498,14 @@ document.write(`
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ecg_clean_elgendi</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;engzee&quot;</span><span class="p">,</span> <span class="s2">&quot;engzee2012&quot;</span><span class="p">,</span> <span class="s2">&quot;engzeemod&quot;</span><span class="p">,</span> <span class="s2">&quot;engzeemod2012&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ecg_clean_engzee</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;vg&quot;</span><span class="p">,</span> <span class="s2">&quot;vgraph&quot;</span><span class="p">,</span> <span class="s2">&quot;koka2022&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;vg&quot;</span><span class="p">,</span> <span class="s2">&quot;vgraph&quot;</span><span class="p">,</span> <span class="s2">&quot;fastnvg&quot;</span><span class="p">,</span> <span class="s2">&quot;emrich&quot;</span><span class="p">,</span> <span class="s2">&quot;emrich2023&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_ecg_clean_vgraph</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;koka2022&quot;</span><span class="p">,</span> <span class="s2">&quot;koka&quot;</span><span class="p">]:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;koka2022&#39; method has been replaced by &#39;emrich2023&#39;.&quot;</span>
+            <span class="s2">&quot; Please replace method=&#39;koka2022&#39; by method=&#39;emrich2023&#39;.&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ecg_clean_vgraph</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templateconvolution&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ecg_clean_templateconvolution</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -504,9 +528,10 @@ document.write(`
             <span class="s2">&quot;NeuroKit error: ecg_clean(): &#39;method&#39; should be &quot;</span>
             <span class="s2">&quot;one of &#39;neurokit&#39;, &#39;biosppy&#39;, &#39;pantompkins1985&#39;,&quot;</span>
             <span class="s2">&quot; &#39;hamilton2002&#39;, &#39;elgendi2010&#39;, &#39;engzeemod2012&#39;,&quot;</span>
-            <span class="s2">&quot; &#39;templateconvolution&#39;.&quot;</span>
+            <span class="s2">&quot; &#39;templateconvolution&#39;, &#39;vg&#39;.&quot;</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">clean</span></div>
+
 
 
 <span class="c1"># =============================================================================</span>
@@ -531,9 +556,7 @@ document.write(`
         <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
-        <span class="n">signal</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;powerline&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">)</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;powerline&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clean</span>
 
 
@@ -557,9 +580,7 @@ document.write(`
 
     <span class="c1">#   -&gt; get_filter()</span>
     <span class="c1">#     -&gt; _norm_freq()</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-    <span class="p">)</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
 
     <span class="c1">#     -&gt; get coeffs</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
@@ -668,10 +689,15 @@ document.write(`
 
 
 <span class="c1"># =============================================================================</span>
-<span class="c1"># Engzee Modified (2012)</span>
+<span class="c1"># Visibility-Graph Detector - Emrich et al. (2023) &amp; Koka et al. (2022)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_clean_vgraph</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filtering used by Taulant Koka and Michael Muma (2022).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filtering used for Visibility-Graph Detectors Emrich et al. (2023) and Koka et al. (2022).</span>
+
+<span class="sd">    - J. Emrich, T. Koka, S. Wirth and M. Muma, &quot;Accelerated Sample-Accurate R-Peak</span>
+<span class="sd">      Detectors Based on Visibility Graphs,&quot; 31st European Signal Processing</span>
+<span class="sd">      Conference (EUSIPCO), 2023, pp. 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007,</span>
+<span class="sd">      https://ieeexplore.ieee.org/document/10290007</span>
 
 <span class="sd">    - T. Koka and M. Muma (2022), Fast and Sample Accurate R-Peak Detection for Noisy ECG Using</span>
 <span class="sd">      Visibility Graphs. In: 2022 44th Annual International Conference of the IEEE Engineering</span>
@@ -695,12 +721,12 @@ document.write(`
 <span class="c1"># Template Convolution (Exploratory)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span> <span class="nf">_ecg_clean_templateconvolution</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter and Convolve ECG signal with QRS complex template.</span>
-<span class="sd">    Totally exploratory method by Dominique Makowski, use at your own risks.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter and Convolve ECG signal with QRS complex template. Totally exploratory method by Dominique Makowski, use</span>
+<span class="sd">    at your own risks.</span>
 
-<span class="sd">    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS</span>
-<span class="sd">    features. However, it doens&#39;t work well and creates a lot of artifacts. If you have ideas for</span>
-<span class="sd">    improvement please let me know!</span>
+<span class="sd">    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS features. However,</span>
+<span class="sd">    it doens&#39;t work well and creates a lot of artifacts. If you have ideas for improvement please let me know!</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">4</span><span class="p">))</span>
@@ -718,14 +744,10 @@ document.write(`
     <span class="p">)</span>
 
     <span class="c1"># Detect peaks</span>
-    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
-        <span class="n">filtered</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">filtered</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">filtered</span><span class="p">))</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">peaks</span> <span class="o">+</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)]</span>
 
-    <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">p</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span>
-    <span class="p">]</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">p</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="n">epochs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">filtered</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">])</span>
     <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 

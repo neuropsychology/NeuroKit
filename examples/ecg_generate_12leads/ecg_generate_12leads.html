@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Generating Abnormal 12-leads ECG &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/ecg_generate_12leads/ecg_generate_12leads';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -441,7 +451,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="generating-abnormal-12-leads-ecg">
-<h1>Generating Abnormal 12-leads ECG<a class="headerlink" href="#generating-abnormal-12-leads-ecg" title="Permalink to this heading">#</a></h1>
+<h1>Generating Abnormal 12-leads ECG<a class="headerlink" href="#generating-abnormal-12-leads-ecg" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://github.com/neuropsychology/NeuroKit#citation">citing the package</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -454,7 +464,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="normal-multi-lead-ecg">
-<h2>Normal Multi-lead ECG<a class="headerlink" href="#normal-multi-lead-ecg" title="Permalink to this heading">#</a></h2>
+<h2>Normal Multi-lead ECG<a class="headerlink" href="#normal-multi-lead-ecg" title="Link to this heading">#</a></h2>
 <p>We can generate a normal multi-lead ECG signal with the following code:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -466,12 +476,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/789c4c6a703292e8578325bb527f879200d6f37ae32b8c7be4185046993ef5f4.png" src="../../_images/789c4c6a703292e8578325bb527f879200d6f37ae32b8c7be4185046993ef5f4.png" />
+<img alt="../../_images/a52d95cb9bb21a9046ecf166127036ce19ca0e4d8a33e4bf75ae646163684869.png" src="../../_images/a52d95cb9bb21a9046ecf166127036ce19ca0e4d8a33e4bf75ae646163684869.png" />
 </div>
 </div>
 </section>
 <section id="abnormal-multi-lead-ecg">
-<h2>Abnormal Multi-lead ECG<a class="headerlink" href="#abnormal-multi-lead-ecg" title="Permalink to this heading">#</a></h2>
+<h2>Abnormal Multi-lead ECG<a class="headerlink" href="#abnormal-multi-lead-ecg" title="Link to this heading">#</a></h2>
 <p>Abnormal ECG can be generated by modifying the simulation parameters. We will draw random parameters from a distribution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -498,12 +508,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/71916204701516b4e54f7d42c6ebff0ff70a96f486dba88a7515c5fddc6ffece.png" src="../../_images/71916204701516b4e54f7d42c6ebff0ff70a96f486dba88a7515c5fddc6ffece.png" />
+<img alt="../../_images/c572a93f948ba8402fba423631ef0efb0fa4c5c9dcb2b881443a4ca1455728ba.png" src="../../_images/c572a93f948ba8402fba423631ef0efb0fa4c5c9dcb2b881443a4ca1455728ba.png" />
 </div>
 </div>
 </section>
 <section id="explanation">
-<h2>Explanation<a class="headerlink" href="#explanation" title="Permalink to this heading">#</a></h2>
+<h2>Explanation<a class="headerlink" href="#explanation" title="Link to this heading">#</a></h2>
 <p>For a better understanding of the above parameters, please read the following.</p>
 <p><img alt="" src="../../_images/table.png" /></p>
 <p>We can see from the above table that each interval in the 3D trajectory can be fixed by 3 parameters:</p>

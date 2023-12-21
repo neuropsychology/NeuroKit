@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EOG &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/eog';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -487,14 +497,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="eog">
-<h1>EOG<a class="headerlink" href="#eog" title="Permalink to this heading">#</a></h1>
+<h1>EOG<a class="headerlink" href="#eog" title="Link to this heading">#</a></h1>
 <section id="main">
-<h2>Main<a class="headerlink" href="#main" title="Permalink to this heading">#</a></h2>
+<h2>Main<a class="headerlink" href="#main" title="Link to this heading">#</a></h2>
 <section id="eog-process">
-<h3><em>eog_process()</em><a class="headerlink" href="#eog-process" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_process()</em><a class="headerlink" href="#eog-process" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_process">
-<span class="sig-name descname"><span class="pre">eog_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_process.html#eog_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_process" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_process.html#eog_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_process" title="Link to this definition">#</a></dt>
 <dd><p><strong>Process an EOG signal</strong></p>
 <p>Convenience function that automatically processes an EOG signal.</p>
 <dl class="field-list simple">
@@ -550,10 +560,10 @@ Communication, Control, and Computing (Allerton) (pp. 1113-1121). IEEE.</p></li>
 
 </section>
 <section id="eog-analyze">
-<h3><em>eog_analyze()</em><a class="headerlink" href="#eog-analyze" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_analyze()</em><a class="headerlink" href="#eog-analyze" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_analyze">
-<span class="sig-name descname"><span class="pre">eog_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_analyze.html#eog_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_analyze" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_analyze.html#eog_analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_analyze" title="Link to this definition">#</a></dt>
 <dd><p><strong>EOG Analysis</strong></p>
 <p>Performs EOG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state data.</p>
 <dl class="field-list simple">
@@ -618,10 +628,10 @@ by the <cite>Label</cite> column. See <a class="reference internal" href="#neuro
 
 </section>
 <section id="eog-plot">
-<h3><em>eog_plot()</em><a class="headerlink" href="#eog-plot" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_plot()</em><a class="headerlink" href="#eog-plot" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_plot">
-<span class="sig-name descname"><span class="pre">eog_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_plot.html#eog_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_plot.html#eog_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>Visualize EOG data</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -665,12 +675,12 @@ fig.savefig(“myfig.png”)</p></li>
 </section>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
 <section id="eog-clean">
-<h3><em>eog_clean()</em><a class="headerlink" href="#eog-clean" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_clean()</em><a class="headerlink" href="#eog-clean" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_clean">
-<span class="sig-name descname"><span class="pre">eog_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_clean.html#eog_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_clean" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_clean.html#eog_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_clean" title="Link to this definition">#</a></dt>
 <dd><p><strong>Clean an EOG signal</strong></p>
 <p>Prepare a raw EOG signal for eye blinks detection.</p>
 <dl class="field-list simple">
@@ -735,10 +745,10 @@ Behavior Research Methods, Instruments, &amp; Computers, 30(4), 713-719.</p></li
 
 </section>
 <section id="eog-features">
-<h3><em>eog_features()</em><a class="headerlink" href="#eog-features" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_features()</em><a class="headerlink" href="#eog-features" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_features">
-<span class="sig-name descname"><span class="pre">eog_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_features.html#eog_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_features" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_features.html#eog_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_features" title="Link to this definition">#</a></dt>
 <dd><p><strong>Extracts Features of EOG Eye Blinks</strong></p>
 <p>Extracts features of EOG eye blinks e.g., velocity measures, blink-amplitude-ratio (BAR),
 duration, and markers of onset and offset of each blink.</p>
@@ -795,10 +805,10 @@ neuroscience, 11, 12.</p></li>
 
 </section>
 <section id="eog-peaks">
-<h3><em>eog_peaks()</em><a class="headerlink" href="#eog-peaks" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_peaks()</em><a class="headerlink" href="#eog-peaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_peaks">
-<span class="sig-name descname"><span class="pre">eog_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mne'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_peaks.html#eog_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_peaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mne'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_peaks.html#eog_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_peaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Locate EOG eye blinks</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -885,12 +895,12 @@ extraction of ocular indices from EEG enabling large-scale analysis. Frontiers i
 </section>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Link to this heading">#</a></h2>
 <section id="eog-eventrelated">
-<h3><em>eog_eventrelated()</em><a class="headerlink" href="#eog-eventrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_eventrelated()</em><a class="headerlink" href="#eog-eventrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_eventrelated">
-<span class="sig-name descname"><span class="pre">eog_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_eventrelated.html#eog_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_eventrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_eventrelated.html#eog_eventrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_eventrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>Performs event-related EOG analysis on epochs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -951,10 +961,10 @@ consist of the following:</p>
 
 </section>
 <section id="eog-intervalrelated">
-<h3><em>eog_intervalrelated()</em><a class="headerlink" href="#eog-intervalrelated" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_intervalrelated()</em><a class="headerlink" href="#eog-intervalrelated" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_intervalrelated">
-<span class="sig-name descname"><span class="pre">eog_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_intervalrelated.html#eog_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_intervalrelated" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_intervalrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_intervalrelated.html#eog_intervalrelated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_intervalrelated" title="Link to this definition">#</a></dt>
 <dd><p><strong>EOG analysis on longer periods of data</strong></p>
 <p>Performs EOG analysis on longer periods of data (typically &gt; 10 seconds), such as resting-state
 data.</p>
@@ -1010,12 +1020,12 @@ following:</p>
 </section>
 </section>
 <section id="miscellaneous">
-<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this heading">#</a></h2>
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link to this heading">#</a></h2>
 <section id="eog-findpeaks">
-<h3><em>eog_findpeaks()</em><a class="headerlink" href="#eog-findpeaks" title="Permalink to this heading">#</a></h3>
+<h3><em>eog_findpeaks()</em><a class="headerlink" href="#eog-findpeaks" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_findpeaks">
-<span class="sig-name descname"><span class="pre">eog_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mne'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_findpeaks.html#eog_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_findpeaks" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">veog_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mne'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eog/eog_findpeaks.html#eog_findpeaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eog.eog_findpeaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Locate EOG eye blinks</strong></p>
 <p>Low-level function used by <a class="reference internal" href="#neurokit2.eog.eog_peaks" title="neurokit2.eog.eog_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_peaks()</span></code></a> to identify blinks in an EOG signal using a
 different set of algorithms. See <a class="reference internal" href="#neurokit2.eog.eog_peaks" title="neurokit2.eog.eog_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eog_peaks()</span></code></a> for details.</p>
@@ -1097,10 +1107,10 @@ if the method to be used is <code class="docutils literal notranslate"><span cla
 <a class="reference internal image-reference" href="savefig/p_eog_findpeaks4.png"><img alt="savefig/p_eog_findpeaks4.png" src="savefig/p_eog_findpeaks4.png" /></a>
 </dd></dl>
 
-<span class="target" id="module-neurokit2.eog"></span><p>Submodule for NeuroKit.</p>
+<p id="module-neurokit2.eog">Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eog.eog_rate">
-<span class="sig-name descname"><span class="pre">eog_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eog.eog_rate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eog_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'monotone_cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.eog.eog_rate" title="Link to this definition">#</a></dt>
 <dd><p><strong>Compute Signal Rate</strong></p>
 <p>Calculate signal rate (per minute) from a series of peaks. It is a general function that works
 for any series of peaks (i.e., not specific to a particular type of signal). It is computed as

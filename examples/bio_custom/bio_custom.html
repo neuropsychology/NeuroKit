@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Customize your Processing Pipeline &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/bio_custom/bio_custom';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -442,7 +452,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="customize-your-processing-pipeline">
-<h1>Customize your Processing Pipeline<a class="headerlink" href="#customize-your-processing-pipeline" title="Permalink to this heading">#</a></h1>
+<h1>Customize your Processing Pipeline<a class="headerlink" href="#customize-your-processing-pipeline" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>While <em>NeuroKit</em> is designed to be beginner-friendly, experts who desire to have more control over their own processing pipeline are also offered the possibility to tune functions to their specific usage. This example shows how to use NeuroKit to customize your own processing pipeline for advanced users taking ECG processing as an example.</p>
 <div class="cell docutils container">
@@ -463,7 +473,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="the-default-neurokit-processing-pipeline">
-<h2>The Default NeuroKit processing pipeline<a class="headerlink" href="#the-default-neurokit-processing-pipeline" title="Permalink to this heading">#</a></h2>
+<h2>The Default NeuroKit processing pipeline<a class="headerlink" href="#the-default-neurokit-processing-pipeline" title="Link to this heading">#</a></h2>
 <p><em>NeuroKit</em> provides a very useful set of functions, <code class="docutils literal notranslate"><span class="pre">*_process()</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code>, <code class="docutils literal notranslate"><span class="pre">eda_process()</span></code>, <code class="docutils literal notranslate"><span class="pre">emg_process()</span></code>, …), which are all-in-one functions that cleans, preprocesses and processes the signals. It includes good and sensible defaults that should be suited for most of users and typical use-cases. That being said, in some cases, you might want to have more control over the processing pipeline.</p>
 <p>This is how <code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code> is typically used:</p>
 <div class="cell docutils container">
@@ -480,12 +490,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/836eb58fe664b0b5ff7ea60aa51b5c0454364ed8dd92a62aad912ecfc5ce23a6.png" src="../../_images/836eb58fe664b0b5ff7ea60aa51b5c0454364ed8dd92a62aad912ecfc5ce23a6.png" />
+<img alt="../../_images/3f4964e781e671a651db55df7b18baa90290479b887e782e396653c4ac2105b5.png" src="../../_images/3f4964e781e671a651db55df7b18baa90290479b887e782e396653c4ac2105b5.png" />
 </div>
 </div>
 </section>
 <section id="building-your-own-process-function">
-<h2>Building your own <code class="docutils literal notranslate"><span class="pre">process()</span></code> function<a class="headerlink" href="#building-your-own-process-function" title="Permalink to this heading">#</a></h2>
+<h2>Building your own <code class="docutils literal notranslate"><span class="pre">process()</span></code> function<a class="headerlink" href="#building-your-own-process-function" title="Link to this heading">#</a></h2>
 <p>Now, if you look at the code of <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_process.py#L49"><code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> (see <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/resources/contributing.html#understanding-neurokit">here</a> for how to explore the code), you can see that it is in fact very simple.</p>
 <p>It uses what can be referred to as “mid-level functions”, such as <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>, <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, <code class="docutils literal notranslate"><span class="pre">ecg_rate()</span></code> etc.</p>
 <p>This means that you can basically <strong>re-create</strong> the <code class="docutils literal notranslate"><span class="pre">ecg_process()</span></code> function very easily by calling these mid-level functions:</p>
@@ -528,12 +538,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/ce6641b551993fa9a8189bb409ce289d28c58fa8f1226b4ba06aa9560f25ebdb.png" src="../../_images/ce6641b551993fa9a8189bb409ce289d28c58fa8f1226b4ba06aa9560f25ebdb.png" />
+<img alt="../../_images/aa68092e6bcbc3bd5c60ec73223a34a1546220f18007ac88ac70e11b831bf63c.png" src="../../_images/aa68092e6bcbc3bd5c60ec73223a34a1546220f18007ac88ac70e11b831bf63c.png" />
 </div>
 </div>
 </section>
 <section id="changing-the-processing-parameters">
-<h2>Changing the processing parameters<a class="headerlink" href="#changing-the-processing-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Changing the processing parameters<a class="headerlink" href="#changing-the-processing-parameters" title="Link to this heading">#</a></h2>
 <p>Now, you might want to ask, why would you re-create the processing function? Well, it allows you to <strong>change the parameters</strong> of the inside as you please. Let’s say you want to use a specific <strong>cleaning</strong> method.</p>
 <p>First, let’s look at the documentation for <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-clean"><code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code></a>, you can see that they are several different methods for cleaning which can be specified. The default is the <strong>NeuroKit</strong> method, however depending on the quality of your signal (and several other factors), other methods may be more appropriate. It is up to you to make this decision.</p>
 <p>You can now change the methods as you please for each function in your custom processing function that you have written above:</p>
@@ -566,7 +576,7 @@ document.write(`
 <p>Similarly, you can select a different method for the peak detection.</p>
 </section>
 <section id="customize-even-more">
-<h2>Customize even more!<a class="headerlink" href="#customize-even-more" title="Permalink to this heading">#</a></h2>
+<h2>Customize even more!<a class="headerlink" href="#customize-even-more" title="Link to this heading">#</a></h2>
 <p>It is possible that none of these methods suit your needs, or that you want to test a new method. Rejoice yourself, as <em>NeuroKit</em> allows you to do that by providing what can be referred to as “low-level” functions.</p>
 <p>For instance, you can rewrite the <strong>cleaning</strong> procedure by using the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/signal.html">signal processing tools</a> offered by <em>NeuroKit</em>:</p>
 <div class="cell docutils container">
@@ -620,7 +630,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bd1d91245f03c1e54b92f259d752042e266d6f8639b5aa386bb93e962f55c9fd.png" src="../../_images/bd1d91245f03c1e54b92f259d752042e266d6f8639b5aa386bb93e962f55c9fd.png" />
+<img alt="../../_images/c3f445978f926d7a07fa8b72eeb653d619afc79e9fede0529cd90af83cee6900.png" src="../../_images/c3f445978f926d7a07fa8b72eeb653d619afc79e9fede0529cd90af83cee6900.png" />
 </div>
 </div>
 <p>This doesn’t look bad :) <strong>Can you do better?</strong></p>

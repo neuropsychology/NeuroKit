@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Blink Template Estimation for Electrooculography (EOG) &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'studies/eog_blinktemplate';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -141,7 +140,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -457,14 +467,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="blink-template-estimation-for-electrooculography-eog">
-<h1>Blink Template Estimation for Electrooculography (EOG)<a class="headerlink" href="#blink-template-estimation-for-electrooculography-eog" title="Permalink to this heading">#</a></h1>
+<h1>Blink Template Estimation for Electrooculography (EOG)<a class="headerlink" href="#blink-template-estimation-for-electrooculography-eog" title="Link to this heading">#</a></h1>
 <p><em>This study can be referenced by</em> <a class="reference external" href="https://github.com/neuropsychology/NeuroKit#citation">citing the
 package</a>.</p>
 <p><strong>We’d like to publish this study, but unfortunately we currently don’t
 have the time. If you want to help to make it happen, please contact
 us!</strong></p>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>The goal of this study is to identify a template for blinks in vertical
 EOG recordings. For this, we will optimize to candidate functions, a
 <em>Gamma</em> distribution and the <em>SCR</em> function proposed by Bach, Flandin,
@@ -484,11 +494,11 @@ identify and keep only the “blink”-like events, we will then re-optimize
 the functions parameters on this cleaner subset of events.</p>
 </section>
 <section id="study-1-initial-estimation">
-<h2>Study 1: Initial Estimation<a class="headerlink" href="#study-1-initial-estimation" title="Permalink to this heading">#</a></h2>
+<h2>Study 1: Initial Estimation<a class="headerlink" href="#study-1-initial-estimation" title="Link to this heading">#</a></h2>
 <section id="methods">
-<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this heading">#</a></h3>
+<h3>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h3>
 <section id="define-functions">
-<h4>Define Functions<a class="headerlink" href="#define-functions" title="Permalink to this heading">#</a></h4>
+<h4>Define Functions<a class="headerlink" href="#define-functions" title="Link to this heading">#</a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import neurokit2 as nk</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -572,7 +582,7 @@ Optimize Parameters</p>
 </section>
 </section>
 <section id="results">
-<h3>Results<a class="headerlink" href="#results" title="Permalink to this heading">#</a></h3>
+<h3>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h3>
 <p>Visualize the optimal templates for one task.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/eogdb/eogdb_task3.csv&quot;</span><span class="p">)</span>
 <span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_clean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;vEOG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;neurokit&#39;</span><span class="p">)</span>
@@ -599,9 +609,9 @@ Optimize Parameters</p>
 </section>
 </section>
 <section id="study-2-difference-between-template-and-eog-events">
-<h2>Study 2: Difference between Template and EOG Events<a class="headerlink" href="#study-2-difference-between-template-and-eog-events" title="Permalink to this heading">#</a></h2>
+<h2>Study 2: Difference between Template and EOG Events<a class="headerlink" href="#study-2-difference-between-template-and-eog-events" title="Link to this heading">#</a></h2>
 <section id="id1">
-<h3>Methods<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<h3>Methods<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_rmse</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="s2">&quot;Index&quot;</span><span class="p">,</span> <span class="s2">&quot;Participant&quot;</span><span class="p">,</span> <span class="s2">&quot;Task&quot;</span><span class="p">,</span> <span class="s2">&quot;Function&quot;</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/eogdb/eogdb_task&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
@@ -641,7 +651,7 @@ Optimize Parameters</p>
 </div>
 </section>
 <section id="id2">
-<h3>Results<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<h3>Results<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">data_rmse</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Function&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;RMSE&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">kde</span><span class="p">()</span>
 <span class="n">p</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">p</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
@@ -653,9 +663,9 @@ Optimize Parameters</p>
 </section>
 </section>
 <section id="study-3-optimize-the-parameters">
-<h2>Study 3: Optimize the Parameters<a class="headerlink" href="#study-3-optimize-the-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Study 3: Optimize the Parameters<a class="headerlink" href="#study-3-optimize-the-parameters" title="Link to this heading">#</a></h2>
 <section id="id3">
-<h3>Methods<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<h3>Methods<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimal_gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">params_gamma</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">optimal_scr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">params_scr</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -757,7 +767,7 @@ Optimize Parameters</p>
 </div>
 </section>
 <section id="id4">
-<h3>Results<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<h3>Results<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/eogdb/eogdb_task3.csv&quot;</span><span class="p">)</span>
 <span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_clean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;vEOG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;neurokit&#39;</span><span class="p">)</span>
 <span class="n">blinks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
@@ -830,7 +840,7 @@ has the following parameters:</p>
 </section>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <div id="refs" class="references">
 <div id="ref-bach2010modelling">
 <p>Bach, D. R., Flandin, G., Friston, K. J., &amp; Dolan, R. J. (2010).

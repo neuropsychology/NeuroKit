@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Neurophysiological Data Analysis with NeuroKit2 &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="icon" href="_static/icon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -141,7 +140,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="nav bd-sidenav">
@@ -443,7 +453,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="neurophysiological-data-analysis-with-neurokit2">
-<h1><strong>Neurophysiological Data Analysis with NeuroKit2</strong><a class="headerlink" href="#neurophysiological-data-analysis-with-neurokit2" title="Permalink to this heading">#</a></h1>
+<h1><strong>Neurophysiological Data Analysis with NeuroKit2</strong><a class="headerlink" href="#neurophysiological-data-analysis-with-neurokit2" title="Link to this heading">#</a></h1>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Like the software? Don’t forget to support it by <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">starring</a> ⭐, sponsoring 💞, or spreading the word 💌</p>
@@ -453,7 +463,7 @@ count on you to help us making it better by <strong>contributing even the tinies
 <strong>NeuroKit2 belongs to you.</strong> Make yourself part of the team!</p>
 </div>
 <section id="home">
-<h2>Home<a class="headerlink" href="#home" title="Permalink to this heading">#</a></h2>
+<h2>Home<a class="headerlink" href="#home" title="Link to this heading">#</a></h2>
 <p>Welcome to <strong>NeuroKit</strong>’s documentation, where you can find information and learn about Python, NeuroKit, Physiological Signals and more.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -475,7 +485,7 @@ count on you to help us making it better by <strong>contributing even the tinies
 </ul>
 </div>
 <section id="popularity">
-<h3>Popularity<a class="headerlink" href="#popularity" title="Permalink to this heading">#</a></h3>
+<h3>Popularity<a class="headerlink" href="#popularity" title="Link to this heading">#</a></h3>
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/neurokit2"><img alt="https://img.shields.io/pypi/dd/neurokit2" src="https://img.shields.io/pypi/dd/neurokit2" /></a>
 <a class="reference external image-reference" href="https://github.com/neuropsychology/NeuroKit/stargazers"><img alt="https://img.shields.io/github/stars/neuropsychology/NeuroKit" src="https://img.shields.io/github/stars/neuropsychology/NeuroKit" /></a>
 <a class="reference external image-reference" href="https://github.com/neuropsychology/NeuroKit/network"><img alt="https://img.shields.io/github/forks/neuropsychology/NeuroKit" src="https://img.shields.io/github/forks/neuropsychology/NeuroKit" /></a>
@@ -483,11 +493,11 @@ count on you to help us making it better by <strong>contributing even the tinies
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/neurokit2"><img alt="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/README_popularity.png" src="https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/README_popularity.png" /></a>
 </section>
 <section id="used-at">
-<h3>Used at<a class="headerlink" href="#used-at" title="Permalink to this heading">#</a></h3>
+<h3>Used at<a class="headerlink" href="#used-at" title="Link to this heading">#</a></h3>
 <p><a class="reference internal" href="https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Nanyang_Technological_University.svg/1024px-Nanyang_Technological_University.svg.png"><img alt="ntu" src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Nanyang_Technological_University.svg/1024px-Nanyang_Technological_University.svg.png" style="height: 70px;" /></a> <a class="reference internal" href="https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg"><img alt="univ_paris" height="70" src="https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg" /></a> <a class="reference internal" href="https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png"><img alt="univ_duke" src="https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png" style="height: 70px;" /></a> <a class="reference internal" href="https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/University_of_Auckland.svg/1024px-University_of_Auckland.svg.png"><img alt="uni_auckland" src="https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/University_of_Auckland.svg/1024px-University_of_Auckland.svg.png" style="height: 70px;" /></a> <a class="reference internal" href="https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png"><img alt="uni_pittsburh" src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png" style="height: 70px;" /></a> <a class="reference internal" href="https://upload.wikimedia.org/wikipedia/en/thumb/5/58/University_of_Washington_seal.svg/768px-University_of_Washington_seal.svg.png"><img alt="uni_washington" src="https://upload.wikimedia.org/wikipedia/en/thumb/5/58/University_of_Washington_seal.svg/768px-University_of_Washington_seal.svg.png" style="height: 70px;" /></a></p>
 </section>
 <section id="disclaimer">
-<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this heading">#</a></h3>
+<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Link to this heading">#</a></h3>
 <p><em>The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.</em></p>
 </section>
 </section>

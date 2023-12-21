@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Analyze Electrodermal Activity (EDA) &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/eda_peaks/eda_peaks';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -442,7 +452,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="analyze-electrodermal-activity-eda">
-<h1>Analyze Electrodermal Activity (EDA)<a class="headerlink" href="#analyze-electrodermal-activity-eda" title="Permalink to this heading">#</a></h1>
+<h1>Analyze Electrodermal Activity (EDA)<a class="headerlink" href="#analyze-electrodermal-activity-eda" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>This example shows how to use NeuroKit2 to extract the features from <strong>Electrodermal Activity (EDA)</strong>.</p>
 <div class="cell docutils container">
@@ -456,7 +466,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="extract-the-cleaned-eda-signal">
-<h2>Extract the cleaned EDA signal<a class="headerlink" href="#extract-the-cleaned-eda-signal" title="Permalink to this heading">#</a></h2>
+<h2>Extract the cleaned EDA signal<a class="headerlink" href="#extract-the-cleaned-eda-signal" title="Link to this heading">#</a></h2>
 <p>In this example, we will use a simulated EDA signal. However, you can use any signal you have generated (for instance, extracted from the dataframe using <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/data.html#read-acqknowledge">read_acqknowledge()</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -479,7 +489,7 @@ document.write(`
 <p>This function outputs two elements, a <em>dataframe</em> containing the different signals (e.g., the raw signal, clean signal, SCR samples marking the different features etc.), and a <em>dictionary</em> containing information about the Skin Conductance Response (SCR) peaks (e.g., onsets, peak amplitude etc.).</p>
 </section>
 <section id="locate-skin-conductance-response-scr-features">
-<h2>Locate Skin Conductance Response (SCR) features<a class="headerlink" href="#locate-skin-conductance-response-scr-features" title="Permalink to this heading">#</a></h2>
+<h2>Locate Skin Conductance Response (SCR) features<a class="headerlink" href="#locate-skin-conductance-response-scr-features" title="Link to this heading">#</a></h2>
 <p>The processing function does two important things for our purpose: Firstly, it cleans the signal. Secondly, it detects the location of 1) peak onsets, 2) peak amplitude, and 3) half-recovery time. Let’s extract these from the output.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -499,12 +509,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/59cf654e9f3d2993c762e58c663f2982fe5b0c9a08154f26e1abc8283a24c2b2.png" src="../../_images/59cf654e9f3d2993c762e58c663f2982fe5b0c9a08154f26e1abc8283a24c2b2.png" />
+<img alt="../../_images/90608ab90c0d087e134ca22c938341d1ac2a3d4ed887c287ca1e343868169770.png" src="../../_images/90608ab90c0d087e134ca22c938341d1ac2a3d4ed887c287ca1e343868169770.png" />
 </div>
 </div>
 </section>
 <section id="decompose-eda-into-phasic-and-tonic-components">
-<h2>Decompose EDA into Phasic and Tonic components<a class="headerlink" href="#decompose-eda-into-phasic-and-tonic-components" title="Permalink to this heading">#</a></h2>
+<h2>Decompose EDA into Phasic and Tonic components<a class="headerlink" href="#decompose-eda-into-phasic-and-tonic-components" title="Link to this heading">#</a></h2>
 <p>We can also decompose the EDA signal into its phasic and tonic components, or more specifically, the <em><strong>Phasic Skin Conductance Response (SCR)</strong></em> and the <em><strong>Tonic Skin Conductance Level (SCL)</strong></em> respectively.
 The SCR represents the stimulus-dependent fast changing signal whereas the SCL is slow-changing and continuous. Separating these two signals helps to provide a more accurate estimation of the true SCR amplitude.</p>
 <div class="cell docutils container">
@@ -528,12 +538,12 @@ The SCR represents the stimulus-dependent fast changing signal whereas the SCL i
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
 </pre></div>
 </div>
-<img alt="../../_images/fe4bdd8868e43b7f8bb2f9f94da6d3439cd35b9b83835e60b05d2588d626a93e.png" src="../../_images/fe4bdd8868e43b7f8bb2f9f94da6d3439cd35b9b83835e60b05d2588d626a93e.png" />
+<img alt="../../_images/1f3c29d94c65b6cb0ca76419deecb98b2d53f65090289809d0b6ca2eeeaf2dfe.png" src="../../_images/1f3c29d94c65b6cb0ca76419deecb98b2d53f65090289809d0b6ca2eeeaf2dfe.png" />
 </div>
 </div>
 </section>
 <section id="quick-plot">
-<h2>Quick Plot<a class="headerlink" href="#quick-plot" title="Permalink to this heading">#</a></h2>
+<h2>Quick Plot<a class="headerlink" href="#quick-plot" title="Link to this heading">#</a></h2>
 <p>You can obtain all of these features by using the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/eda.html#eda-plot">eda_plot()</a> function on the dataframe of processed EDA.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -547,7 +557,7 @@ The SCR represents the stimulus-dependent fast changing signal whereas the SCL i
   warn(
 </pre></div>
 </div>
-<img alt="../../_images/c1c59621fdfa906554150ceb25153f270fe5fdc887116a806a9d9f26b3174c9c.png" src="../../_images/c1c59621fdfa906554150ceb25153f270fe5fdc887116a806a9d9f26b3174c9c.png" />
+<img alt="../../_images/2d15499501b03f2d0e178d2c65b8cc006b7fa9f200ac4f2e2a6ceebcf8f58fd7.png" src="../../_images/2d15499501b03f2d0e178d2c65b8cc006b7fa9f200ac4f2e2a6ceebcf8f58fd7.png" />
 </div>
 </div>
 </section>

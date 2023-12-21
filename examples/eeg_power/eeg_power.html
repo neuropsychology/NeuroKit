@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EEG Power in Frequency Bands &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/eeg_power/eeg_power';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -443,7 +453,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="eeg-power-in-frequency-bands">
-<h1>EEG Power in Frequency Bands<a class="headerlink" href="#eeg-power-in-frequency-bands" title="Permalink to this heading">#</a></h1>
+<h1>EEG Power in Frequency Bands<a class="headerlink" href="#eeg-power-in-frequency-bands" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://github.com/neuropsychology/NeuroKit#citation">citing the package</a>.</p>
 <p><strong>This example is not ready. We need your help to help us create a small example on how to compute do frequency power analysis for EEG data!</strong></p>
 <div class="cell docutils container">
@@ -459,7 +469,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="eeg-frequency-bands">
-<h2>EEG Frequency Bands<a class="headerlink" href="#eeg-frequency-bands" title="Permalink to this heading">#</a></h2>
+<h2>EEG Frequency Bands<a class="headerlink" href="#eeg-frequency-bands" title="Link to this heading">#</a></h2>
 <p>From fastest to slowest:</p>
 <ul class="simple">
 <li><p><strong>Gamma</strong> (30-80 Hz)</p></li>
@@ -479,7 +489,7 @@ document.write(`
 <p>Note that the ranges are approximate and artificial, and studies are quite <a class="reference external" href="https://sapienlabs.org/the-remarkable-inconsistency-of-frequency-band-definitions/">inconsistent</a> in their definition.</p>
 </section>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading">#</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the NeuroKit package and other useful packages</span>
@@ -525,7 +535,7 @@ document.write(`
 </div>
 </section>
 <section id="frontal-alpha-asymmetry-faa">
-<h2>Frontal Alpha Asymmetry (FAA)<a class="headerlink" href="#frontal-alpha-asymmetry-faa" title="Permalink to this heading">#</a></h2>
+<h2>Frontal Alpha Asymmetry (FAA)<a class="headerlink" href="#frontal-alpha-asymmetry-faa" title="Link to this heading">#</a></h2>
 <p>Frontal Alpha Asymmetry (FAA) is the difference between right and left alpha activity over frontal regions of the brain (Davidson et al., 1990). Relatively higher right to left alpha power has commonly been interpreted as relatively higher left to right brain activity (Reznik and Allen 2018). The laterality quotient (LQ) is calculated by subtracting left alpha power from right alpha power ($log_{right} - log_{left}$).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -555,7 +565,7 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Subtracting Evoked from Epochs
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 001, EOG 061, STI 003, STI 014, STI 006, STI 016, STI 015, STI 002, STI 004, STI 005
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    The following channels are not included in the subtraction: STI 002, STI 004, STI 001, EOG 061, STI 006, STI 016, STI 003, STI 005, STI 015, STI 014
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[done]
@@ -752,11 +762,11 @@ document.write(`
 </div>
 </section>
 <section id="frontal-midline-theta-fmt">
-<h2>Frontal Midline Theta (FMT)<a class="headerlink" href="#frontal-midline-theta-fmt" title="Permalink to this heading">#</a></h2>
+<h2>Frontal Midline Theta (FMT)<a class="headerlink" href="#frontal-midline-theta-fmt" title="Link to this heading">#</a></h2>
 <p>Work in Progress. Please help!</p>
 </section>
 <section id="f-electrophysiological-noise">
-<h2>1/f Electrophysiological Noise<a class="headerlink" href="#f-electrophysiological-noise" title="Permalink to this heading">#</a></h2>
+<h2>1/f Electrophysiological Noise<a class="headerlink" href="#f-electrophysiological-noise" title="Link to this heading">#</a></h2>
 <p>Electrophysiological signal is not a simple superposition of sinusoids of various frequencies, and its spectrum should not be interpreted as such.</p>
 <p>Individual frequencies are indeed not independent of one another (Milotti, 2002). The EEG power spectrum is dominantly structured by a decreasing function with lower power at higher frequencies that approximates a <strong>1/f pattern</strong> (Pritchard, 1992; Voytek et al., 2015). There is an inverse relationship between frequency and power, and the steepness with which the power drops off as the frequency gets higher is represented by the exponent γ.</p>
 <p>Estimation of the 1/f exponent γ (Voytek et al., 2015) provides a consolidated view of the differences across bands and can be used to compute the difference between any two frequencies if desired. The 1/f decay exponent is best estimated in the range of 2–30 Hz where baseline drifts, line noise and distortions introduced by band pass filters have the least impact (Newson, 2019).</p>

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>EEG &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'functions/eeg';</script>
     <link rel="icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -498,14 +508,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="eeg">
-<h1>EEG<a class="headerlink" href="#eeg" title="Permalink to this heading">#</a></h1>
+<h1>EEG<a class="headerlink" href="#eeg" title="Link to this heading">#</a></h1>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
 <section id="eeg-badchannels">
-<h3><em>eeg_badchannels()</em><a class="headerlink" href="#eeg-badchannels" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_badchannels()</em><a class="headerlink" href="#eeg-badchannels" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_badchannels">
-<span class="sig-name descname"><span class="pre">eeg_badchannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_badchannels.html#eeg_badchannels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_badchannels" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_badchannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_badchannels.html#eeg_badchannels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_badchannels" title="Link to this definition">#</a></dt>
 <dd><p><strong>Find bad channels</strong></p>
 <p>Find bad channels among the EEG channels.</p>
 <dl class="field-list simple">
@@ -544,10 +554,10 @@ crossings.</p></li>
 
 </section>
 <section id="eeg-diss">
-<h3><em>eeg_diss()</em><a class="headerlink" href="#eeg-diss" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_diss()</em><a class="headerlink" href="#eeg-diss" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_diss">
-<span class="sig-name descname"><span class="pre">eeg_diss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gfp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_diss.html#eeg_diss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_diss" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_diss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gfp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_diss.html#eeg_diss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_diss" title="Link to this definition">#</a></dt>
 <dd><p><strong>Global dissimilarity (DISS)</strong></p>
 <p>Global dissimilarity (DISS) is an index of configuration differences between two electric
 fields, independent of their strength. Like GFP, DISS was first introduced by Lehmann and
@@ -595,10 +605,10 @@ neurophysiology, 48(6), 609-621.</p></li>
 
 </section>
 <section id="eeg-gfp">
-<h3><em>eeg_gfp()</em><a class="headerlink" href="#eeg-gfp" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_gfp()</em><a class="headerlink" href="#eeg-gfp" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_gfp">
-<span class="sig-name descname"><span class="pre">eeg_gfp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize_eeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_gfp.html#eeg_gfp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_gfp" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_gfp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardize_eeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_gfp.html#eeg_gfp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_gfp" title="Link to this definition">#</a></dt>
 <dd><p><strong>Global Field Power (GFP)</strong></p>
 <p>Global Field Power (GFP) constitutes a reference-independent measure of response strength.
 GFP was first introduced by Lehmann and Skrandies (1980) and has since become a commonplace
@@ -676,10 +686,10 @@ neurophysiology, 48(6), 609-621.</p></li>
 
 </section>
 <section id="eeg-power">
-<h3><em>eeg_power()</em><a class="headerlink" href="#eeg-power" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_power()</em><a class="headerlink" href="#eeg-power" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_power">
-<span class="sig-name descname"><span class="pre">eeg_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Gamma',</span> <span class="pre">'Beta',</span> <span class="pre">'Alpha',</span> <span class="pre">'Theta',</span> <span class="pre">'Delta']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_power.html#eeg_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_power" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Gamma',</span> <span class="pre">'Beta',</span> <span class="pre">'Alpha',</span> <span class="pre">'Theta',</span> <span class="pre">'Delta']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_power.html#eeg_power"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_power" title="Link to this definition">#</a></dt>
 <dd><p><strong>EEG Power in Different Frequency Bands</strong></p>
 <p>See our <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/examples/eeg_power/eeg_power.html">walkthrough</a> for
 details.</p>
@@ -742,10 +752,10 @@ neurophysiology, 48(6), 609-621.</p></li>
 
 </section>
 <section id="eeg-rereference">
-<h3><em>eeg_rereference()</em><a class="headerlink" href="#eeg-rereference" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_rereference()</em><a class="headerlink" href="#eeg-rereference" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_rereference">
-<span class="sig-name descname"><span class="pre">eeg_rereference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_rereference.html#eeg_rereference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_rereference" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_rereference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_rereference.html#eeg_rereference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_rereference" title="Link to this definition">#</a></dt>
 <dd><p><strong>EEG Rereferencing</strong></p>
 <p>This function can be used for arrays as well as MNE objects.</p>
 <p>EEG recordings measure differences in electrical potentials between two points, which means the
@@ -823,10 +833,10 @@ EEG signals. Frontiers in Neuroscience, 11, 425.</p></li>
 
 </section>
 <section id="eeg-source">
-<h3><em>eeg_source()</em><a class="headerlink" href="#eeg-source" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_source()</em><a class="headerlink" href="#eeg-source" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_source">
-<span class="sig-name descname"><span class="pre">eeg_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sLORETA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_source.html#eeg_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_source" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sLORETA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_source.html#eeg_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_source" title="Link to this definition">#</a></dt>
 <dd><p><strong>Source Reconstruction for EEG data</strong></p>
 <p>Currently only for mne.Raw objects.</p>
 <dl class="field-list simple">
@@ -851,10 +861,10 @@ EEG signals. Frontiers in Neuroscience, 11, 425.</p></li>
 
 </section>
 <section id="eeg-source-extract">
-<h3><em>eeg_source_extract()</em><a class="headerlink" href="#eeg-source-extract" title="Permalink to this heading">#</a></h3>
+<h3><em>eeg_source_extract()</em><a class="headerlink" href="#eeg-source-extract" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_source_extract">
-<span class="sig-name descname"><span class="pre">eeg_source_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PALS_B12_Lobes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_source_extract.html#eeg_source_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_source_extract" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_source_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PALS_B12_Lobes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_source_extract.html#eeg_source_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_source_extract" title="Link to this definition">#</a></dt>
 <dd><p><strong>Extract the activity from an anatomical source</strong></p>
 <p>Returns a dataframe with the activity from each source in the segmentation.</p>
 <p>Parcellation models include:
@@ -898,12 +908,12 @@ EEG signals. Frontiers in Neuroscience, 11, 425.</p></li>
 </section>
 </section>
 <section id="mne-utilities">
-<h2>MNE-Utilities<a class="headerlink" href="#mne-utilities" title="Permalink to this heading">#</a></h2>
+<h2>MNE-Utilities<a class="headerlink" href="#mne-utilities" title="Link to this heading">#</a></h2>
 <section id="mne-data">
-<h3><em>mne_data()</em><a class="headerlink" href="#mne-data" title="Permalink to this heading">#</a></h3>
+<h3><em>mne_data()</em><a class="headerlink" href="#mne-data" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_data">
-<span class="sig-name descname"><span class="pre">mne_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_data.html#mne_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_data" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_data.html#mne_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_data" title="Link to this definition">#</a></dt>
 <dd><p><strong>Access MNE Datasets</strong></p>
 <p>Utility function to easily access MNE datasets.</p>
 <dl class="field-list simple">
@@ -930,10 +940,10 @@ specify the directory to download the folder.</p></li>
 
 </section>
 <section id="mne-to-df">
-<h3><em>mne_to_df()</em><a class="headerlink" href="#mne-to-df" title="Permalink to this heading">#</a></h3>
+<h3><em>mne_to_df()</em><a class="headerlink" href="#mne-to-df" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_to_df">
-<span class="sig-name descname"><span class="pre">mne_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_df" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_df" title="Link to this definition">#</a></dt>
 <dd><p><strong>Conversion from MNE to dataframes</strong></p>
 <p>Convert MNE objects to dataframe or dict of dataframes.</p>
 <dl class="field-list simple">
@@ -1024,10 +1034,10 @@ is stored in the <code class="docutils literal notranslate"><span class="pre">&q
 
 </section>
 <section id="mne-channel-add">
-<h3><em>mne_channel_add()</em><a class="headerlink" href="#mne-channel-add" title="Permalink to this heading">#</a></h3>
+<h3><em>mne_channel_add()</em><a class="headerlink" href="#mne-channel-add" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_channel_add">
-<span class="sig-name descname"><span class="pre">mne_channel_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_index_raw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_index_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_channel_add.html#mne_channel_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_channel_add" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_channel_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_index_raw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_index_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_channel_add.html#mne_channel_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_channel_add" title="Link to this definition">#</a></dt>
 <dd><p><strong>Add channel as array to MNE</strong></p>
 <p>Add a channel to a mne’s Raw m/eeg file. It will basically synchronize the channel to the eeg
 data following a particular index and add it.</p>
@@ -1077,10 +1087,10 @@ to add do not have the same onsets and must be aligned through some common event
 
 </section>
 <section id="mne-channel-extract">
-<h3><em>mne_channel_extract()</em><a class="headerlink" href="#mne-channel-extract" title="Permalink to this heading">#</a></h3>
+<h3><em>mne_channel_extract()</em><a class="headerlink" href="#mne-channel-extract" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_channel_extract">
-<span class="sig-name descname"><span class="pre">mne_channel_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_firstsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_channel_extract.html#mne_channel_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_channel_extract" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_channel_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_firstsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_channel_extract.html#mne_channel_extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_channel_extract" title="Link to this definition">#</a></dt>
 <dd><p><strong>Channel extraction from MNE objects</strong></p>
 <p>Select one or several channels by name and returns them in a dataframe.</p>
 <dl class="field-list simple">
@@ -1125,10 +1135,10 @@ values instead. If it is set to <code class="docutils literal notranslate"><span
 
 </section>
 <section id="mne-crop">
-<h3><em>mne_crop()</em><a class="headerlink" href="#mne-crop" title="Permalink to this heading">#</a></h3>
+<h3><em>mne_crop()</em><a class="headerlink" href="#mne-crop" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_crop">
-<span class="sig-name descname"><span class="pre">mne_crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_crop.html#mne_crop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_crop" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_crop.html#mne_crop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_crop" title="Link to this definition">#</a></dt>
 <dd><p><strong>Crop mne.Raw objects</strong></p>
 <p>This function is similar to <code class="docutils literal notranslate"><span class="pre">raw.crop()</span></code> (same arguments), but with a few critical differences:
 * It recreates a whole new Raw object, and as such drops all information pertaining to the
@@ -1167,10 +1177,10 @@ specify the directory to download the folder.</p></li>
 
 </section>
 <section id="mne-templatemri">
-<h3><em>mne_templateMRI()</em><a class="headerlink" href="#mne-templatemri" title="Permalink to this heading">#</a></h3>
+<h3><em>mne_templateMRI()</em><a class="headerlink" href="#mne-templatemri" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_templateMRI">
-<span class="sig-name descname"><span class="pre">mne_templateMRI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_templateMRI.html#mne_templateMRI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_templateMRI" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_templateMRI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_templateMRI.html#mne_templateMRI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_templateMRI" title="Link to this definition">#</a></dt>
 <dd><p><strong>Return Path of MRI Template</strong></p>
 <p>This function is a helper that returns the path of the MRI template for adults (the <code class="docutils literal notranslate"><span class="pre">src</span></code> and
 the <code class="docutils literal notranslate"><span class="pre">bem</span></code>) that is made available through <code class="docutils literal notranslate"><span class="pre">&quot;MNE&quot;</span></code>. It downloads the data if need be. These
@@ -1190,10 +1200,10 @@ templates can be used for EEG source reconstruction when no individual MRI is av
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.eeg"></span><p>Submodule for NeuroKit.</p>
+<p id="module-neurokit2.eeg">Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.eeg_simulate">
-<span class="sig-name descname"><span class="pre">eeg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_simulate.html#eeg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eeg_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/eeg_simulate.html#eeg_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.eeg_simulate" title="Link to this definition">#</a></dt>
 <dd><p><strong>EEG Signal Simulation</strong></p>
 <p>Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw
 simulation example. Help is needed to improve this function.</p>
@@ -1221,7 +1231,7 @@ simulation example. Help is needed to improve this function.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.eeg.mne_to_dict">
-<span class="sig-name descname"><span class="pre">mne_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_dict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mne_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eeg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/eeg/mne_to_df.html#mne_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.eeg.mne_to_dict" title="Link to this definition">#</a></dt>
 <dd><p><strong>Convert MNE Raw or Epochs object to a dictionary</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

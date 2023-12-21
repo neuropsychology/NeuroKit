@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Locate P, Q, S and T waves in ECG &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/ecg_delineate/ecg_delineate';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -445,7 +455,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="locate-p-q-s-and-t-waves-in-ecg">
-<h1>Locate P, Q, S and T waves in ECG<a class="headerlink" href="#locate-p-q-s-and-t-waves-in-ecg" title="Permalink to this heading">#</a></h1>
+<h1>Locate P, Q, S and T waves in ECG<a class="headerlink" href="#locate-p-q-s-and-t-waves-in-ecg" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>This example shows how to use NeuroKit to delineate the ECG peaks in Python using NeuroKit. This means detecting and locating all components of the QRS complex, including <strong>P-peaks</strong> and <strong>T-peaks</strong>, as well their <strong>onsets</strong> and <strong>offsets</strong> from an ECG signal.</p>
 <div class="cell docutils container">
@@ -462,7 +472,7 @@ document.write(`
 </div>
 <p>In this example, we will use a short segment of ECG signal with sampling rate of 3000 Hz.</p>
 <section id="find-the-r-peaks">
-<h2>Find the R peaks<a class="headerlink" href="#find-the-r-peaks" title="Permalink to this heading">#</a></h2>
+<h2>Find the R peaks<a class="headerlink" href="#find-the-r-peaks" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve ECG data from data folder</span>
@@ -500,10 +510,10 @@ document.write(`
 <p>Visually, the R-peaks seem to have been correctly identified. You can also explore searching for R-peaks using different methods provided by NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
 </section>
 <section id="locate-other-waves-p-q-s-t-and-their-onset-and-offset">
-<h2>Locate other waves (P, Q, S, T) and their onset and offset<a class="headerlink" href="#locate-other-waves-p-q-s-t-and-their-onset-and-offset" title="Permalink to this heading">#</a></h2>
+<h2>Locate other waves (P, Q, S, T) and their onset and offset<a class="headerlink" href="#locate-other-waves-p-q-s-t-and-their-onset-and-offset" title="Link to this heading">#</a></h2>
 <p>In <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-delineate">ecg_delineate()</a>, NeuroKit implements different methods to segment the QRS complexes. There are the derivative method and the other methods that make use of Wavelet to delineate the complexes.</p>
 <section id="peak-method">
-<h3>Peak method<a class="headerlink" href="#peak-method" title="Permalink to this heading">#</a></h3>
+<h3>Peak method<a class="headerlink" href="#peak-method" title="Link to this heading">#</a></h3>
 <p>First, let’s take a look at the ‘peak’ method and its output.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -584,7 +594,7 @@ document.write(`
 <p>Let’s next take a look at the continuous wavelet method.</p>
 </section>
 <section id="continuous-wavelet-method-cwt">
-<h3>Continuous Wavelet Method (CWT)<a class="headerlink" href="#continuous-wavelet-method-cwt" title="Permalink to this heading">#</a></h3>
+<h3>Continuous Wavelet Method (CWT)<a class="headerlink" href="#continuous-wavelet-method-cwt" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal</span>
@@ -671,7 +681,7 @@ document.write(`
 <p>Last but not least, we will look at the third method in NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-delineate">ecg_delineate()</a> function: the discrete wavelet method.</p>
 </section>
 <section id="discrete-wavelet-method-dwt-default-method">
-<h3>Discrete Wavelet Method (DWT) - default method<a class="headerlink" href="#discrete-wavelet-method-dwt-default-method" title="Permalink to this heading">#</a></h3>
+<h3>Discrete Wavelet Method (DWT) - default method<a class="headerlink" href="#discrete-wavelet-method-dwt-default-method" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal</span>

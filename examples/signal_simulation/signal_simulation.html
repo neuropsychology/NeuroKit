@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Simulate Artificial Physiological Signals &#8212; NeuroKit2 0.2.8 documentation</title>
   
@@ -29,9 +28,9 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -39,12 +38,12 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/signal_simulation/signal_simulation';</script>
     <link rel="icon" href="../../_static/icon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -142,7 +141,18 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
 <ul class="current nav bd-sidenav">
@@ -442,7 +452,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="simulate-artificial-physiological-signals">
-<h1>Simulate Artificial Physiological Signals<a class="headerlink" href="#simulate-artificial-physiological-signals" title="Permalink to this heading">#</a></h1>
+<h1>Simulate Artificial Physiological Signals<a class="headerlink" href="#simulate-artificial-physiological-signals" title="Link to this heading">#</a></h1>
 <p>This example can be referenced by <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html">citing the package</a>.</p>
 <p>NeuroKit’s core signal processing functions surround electrocardiogram (ECG), respiratory (RSP), electrodermal activity (EDA), and electromyography (EMG) data. Hence, this example shows how to use NeuroKit to simulate these physiological signals with customized parametric control.</p>
 <div class="cell docutils container">
@@ -459,7 +469,7 @@ document.write(`
 <div class="cell tag_remove-input docutils container">
 </div>
 <section id="cardiac-activity-ecg">
-<h2>Cardiac Activity (ECG)<a class="headerlink" href="#cardiac-activity-ecg" title="Permalink to this heading">#</a></h2>
+<h2>Cardiac Activity (ECG)<a class="headerlink" href="#cardiac-activity-ecg" title="Link to this heading">#</a></h2>
 <p>With <code class="docutils literal notranslate"><span class="pre">ecg_simulate()</span></code>, you can generate an artificial ECG signal of a desired length (in this case here, <code class="docutils literal notranslate"><span class="pre">duration=10</span></code>), noise, and heart rate. As you can see in the plot below, <em>ecg50</em> has about half the number of heart beats than <em>ecg100</em>, and <em>ecg50</em> also has more noise in the signal than the latter.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -475,7 +485,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/6cd0f04c22af9c4496f9f3cb2fbb94d13ab1467a71ef61a2f8833521f685c7a0.png" src="../../_images/6cd0f04c22af9c4496f9f3cb2fbb94d13ab1467a71ef61a2f8833521f685c7a0.png" />
+<img alt="../../_images/99c437d4d965dd2af40a4ccb9d228956ffa0be658c15c7b077ef6546b1b88b2d.png" src="../../_images/99c437d4d965dd2af40a4ccb9d228956ffa0be658c15c7b077ef6546b1b88b2d.png" />
 </div>
 </div>
 <p>You can also choose to generate the default, simple simulation based on Daubechies wavelets, which roughly approximates one cardiac cycle, or a more complex one by specifiying <code class="docutils literal notranslate"><span class="pre">method=&quot;ecgsyn&quot;</span></code>.</p>
@@ -492,12 +502,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2294ba5f9847526057aaca29b36000178703e9669678b52a2afff7cf8929ec29.png" src="../../_images/2294ba5f9847526057aaca29b36000178703e9669678b52a2afff7cf8929ec29.png" />
+<img alt="../../_images/4cb3b0bb771749a4826f4cf105624586a65524ec9addffe7013ed16950d72018.png" src="../../_images/4cb3b0bb771749a4826f4cf105624586a65524ec9addffe7013ed16950d72018.png" />
 </div>
 </div>
 </section>
 <section id="respiration-rsp">
-<h2>Respiration (RSP)<a class="headerlink" href="#respiration-rsp" title="Permalink to this heading">#</a></h2>
+<h2>Respiration (RSP)<a class="headerlink" href="#respiration-rsp" title="Link to this heading">#</a></h2>
 <p>To simulate a synthetic respiratory signal, you can use <code class="docutils literal notranslate"><span class="pre">rsp_simulate()</span></code> and choose a specific duration and breathing rate. In this example below, you can see that <em>rsp7</em> has a lower breathing rate than <em>rsp15</em>. You can also decide which model you want to generate the signal. The <em>simple rsp15</em> signal incorporates <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;sinusoidal&quot;</span></code> which approximates a respiratory cycle based on the trigonometric sine wave. On the other hand, the <em>complex rsp15</em> signal specifies <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;breathmetrics&quot;</span></code> which uses a more advanced model by interpolating inhalation and exhalation pauses between each respiratory cycle.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -515,12 +525,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2057a0f5df7c3da45359ef40ba273df23ae9476c3e1974e7a0f631eace23dae5.png" src="../../_images/2057a0f5df7c3da45359ef40ba273df23ae9476c3e1974e7a0f631eace23dae5.png" />
+<img alt="../../_images/c72ec2baf609e3cc49de69b8bc31419a8723cdffa58e120402dd04df229079aa.png" src="../../_images/c72ec2baf609e3cc49de69b8bc31419a8723cdffa58e120402dd04df229079aa.png" />
 </div>
 </div>
 </section>
 <section id="electromyography-emg">
-<h2>Electromyography (EMG)<a class="headerlink" href="#electromyography-emg" title="Permalink to this heading">#</a></h2>
+<h2>Electromyography (EMG)<a class="headerlink" href="#electromyography-emg" title="Link to this heading">#</a></h2>
 <p>Now, we come to generating an artificial EMG signal using <code class="docutils literal notranslate"><span class="pre">emg_simulate()</span></code>. Here, you can specify the number of bursts of muscular activity (<code class="docutils literal notranslate"><span class="pre">n_bursts</span></code>) in the signal as well as the duration of the bursts (<code class="docutils literal notranslate"><span class="pre">duration_bursts</span></code>). As you can see the active muscle periods in <em>EMG2_Longer</em> are greater in duration than that of <em>EMG2</em>, and <em>EMG5</em> contains more bursts than the former two.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -538,12 +548,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0cab8113f6d889b3f51ea9153b6496d39825a442f9c98dc87f746a150127923e.png" src="../../_images/0cab8113f6d889b3f51ea9153b6496d39825a442f9c98dc87f746a150127923e.png" />
+<img alt="../../_images/305525ba02764d0c2b0dfe59cb07ffcb94d6485946a6351c3c0c3dfa26399dbb.png" src="../../_images/305525ba02764d0c2b0dfe59cb07ffcb94d6485946a6351c3c0c3dfa26399dbb.png" />
 </div>
 </div>
 </section>
 <section id="electrodermal-activity-eda">
-<h2>Electrodermal Activity (EDA)<a class="headerlink" href="#electrodermal-activity-eda" title="Permalink to this heading">#</a></h2>
+<h2>Electrodermal Activity (EDA)<a class="headerlink" href="#electrodermal-activity-eda" title="Link to this heading">#</a></h2>
 <p>Finally, <code class="docutils literal notranslate"><span class="pre">eda_simulate()</span></code> can be used to generate a synthetic EDA signal of a given duration, specifying the number of skin conductance responses or activity ‘peaks’ (<code class="docutils literal notranslate"><span class="pre">n_scr</span></code>) and the <code class="docutils literal notranslate"><span class="pre">drift</span></code> of the signal. You can also modify the noise level of the signal.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -561,7 +571,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d0452341ee645bfd4198cb55a17e79626a0597137ba9887ca80c1f5c14657885.png" src="../../_images/d0452341ee645bfd4198cb55a17e79626a0597137ba9887ca80c1f5c14657885.png" />
+<img alt="../../_images/42179dcc17b469b169765545e30fc0f03dafb395b2a9406fabf2c28ae5713148.png" src="../../_images/42179dcc17b469b169765545e30fc0f03dafb395b2a9406fabf2c28ae5713148.png" />
 </div>
 </div>
 </section>
