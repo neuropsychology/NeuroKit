@@ -35,6 +35,7 @@ def signal_flatintervals(signal, sampling_rate, threshold=0.01, duration_min=60)
       import neurokit2 as nk
       import numpy as np
 
+      sampling_rate = 128
       one_minute = 60 # seconds
 
       ecg = nk.ecg_simulate(duration=10 * one_minute, sampling_rate=sampling_rate)
@@ -42,7 +43,7 @@ def signal_flatintervals(signal, sampling_rate, threshold=0.01, duration_min=60)
       flatline_2 = np.zeros(10 * one_minute * sampling_rate)
       signal = np.concatenate([ecg, flatline_1, ecg, flatline_2, ecg, flatline_1])
 
-      nk.signal_flatintervals(signal)
+      nk.signal_flatintervals(signal, sampling_rate=sampling_rate)
 
     """
 
