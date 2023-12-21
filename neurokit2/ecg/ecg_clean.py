@@ -13,7 +13,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     """**ECG Signal Cleaning**
 
     Clean an ECG signal to remove noise and improve peak-detection accuracy. Different cleaning
-    method are implemented.
+    methods are implemented.
 
     * ``'neurokit'`` (default): 0.5 Hz high-pass butterworth filter (order = 5), followed by
       powerline filtering (see ``signal_filter()``). By default, ``powerline = 50``.
@@ -28,7 +28,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
       description!**
     * ``'engzeemod2012'``: Method used in Engelse & Zeelenberg (1979). **Please help providing a
       better description!**
-
+    * ``'vg'``: Method used in Visibility Graph Based Detection Emrich et al. (2023)
+      and Koka et al. (2022). A 4.0 Hz high-pass butterworth filter (order = 2).
 
     Parameters
     ----------
@@ -39,7 +40,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     method : str
         The processing pipeline to apply. Can be one of ``"neurokit"`` (default),
         ``"biosppy"``, ``"pantompkins1985"``, ``"hamilton2002"``, ``"elgendi2010"``,
-        ``"engzeemod2012"``.
+        ``"engzeemod2012"``, ``'vg'``.
     **kwargs
         Other arguments to be passed to specific methods.
 
@@ -71,6 +72,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
           "ECG_Hamilton" : nk.ecg_clean(ecg, sampling_rate=250, method="hamilton2002"),
           "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=250, method="elgendi2010"),
           "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012"),
+          "ECG_VG" : nk.ecg_clean(ecg, sampling_rate=250, method="vg"),
           "ECG_TC" : nk.ecg_clean(ecg, sampling_rate=250, method="templateconvolution")
       })
 
@@ -91,6 +93,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     * Elgendi, M., Jonkman, M., & De Boer, F. (2010). Frequency Bands Effects on QRS Detection.
       Biosignals, Proceedings of the Third International Conference on Bio-inspired Systems and
       Signal Processing, 428-431.
+    * Emrich, J., Koka, T., Wirth, S., & Muma, M. (2023), Accelerated Sample-Accurate R-Peak
+      Detectors Based on Visibility Graphs. 31st European Signal Processing Conference
+      (EUSIPCO), 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007
 
     """
     ecg_signal = as_vector(ecg_signal)
@@ -118,7 +123,14 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_elgendi(ecg_signal, sampling_rate)
     elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
-    elif method in ["vg", "vgraph", "koka2022"]:
+    elif method in ["vg", "vgraph", "fastnvg", "emrich", "emrich2023"]:
+        clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
+    elif method in ["koka2022", "koka"]:
+        warn(
+            "The 'koka2022' method has been replaced by 'emrich2023'."
+            " Please replace method='koka2022' by method='emrich2023'.",
+            category=NeuroKitWarning,
+        )
         clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
     elif method in ["templateconvolution"]:
         clean = _ecg_clean_templateconvolution(ecg_signal, sampling_rate)
@@ -141,7 +153,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
             "NeuroKit error: ecg_clean(): 'method' should be "
             "one of 'neurokit', 'biosppy', 'pantompkins1985',"
             " 'hamilton2002', 'elgendi2010', 'engzeemod2012',"
-            " 'templateconvolution'."
+            " 'templateconvolution', 'vg'."
         )
     return clean
 
@@ -168,9 +180,7 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
         order=5,
     )
 
-    clean = signal_filter(
-        signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs
-    )
+    clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs)
     return clean
 
 
@@ -194,9 +204,7 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = (
-        2 * np.array(frequency) / sampling_rate
-    )  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
@@ -305,10 +313,15 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
 
 
 # =============================================================================
-# Engzee Modified (2012)
+# Visibility-Graph Detector - Emrich et al. (2023) & Koka et al. (2022)
 # =============================================================================
 def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
-    """Filtering used by Taulant Koka and Michael Muma (2022).
+    """Filtering used for Visibility-Graph Detectors Emrich et al. (2023) and Koka et al. (2022).
+
+    - J. Emrich, T. Koka, S. Wirth and M. Muma, "Accelerated Sample-Accurate R-Peak
+      Detectors Based on Visibility Graphs," 31st European Signal Processing
+      Conference (EUSIPCO), 2023, pp. 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007,
+      https://ieeexplore.ieee.org/document/10290007
 
     - T. Koka and M. Muma (2022), Fast and Sample Accurate R-Peak Detection for Noisy ECG Using
       Visibility Graphs. In: 2022 44th Annual International Conference of the IEEE Engineering
@@ -332,12 +345,12 @@ def _ecg_clean_vgraph(ecg_signal, sampling_rate=1000):
 # Template Convolution (Exploratory)
 # =============================================================================
 def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
-    """Filter and Convolve ECG signal with QRS complex template.
-    Totally exploratory method by Dominique Makowski, use at your own risks.
+    """Filter and Convolve ECG signal with QRS complex template. Totally exploratory method by Dominique Makowski, use
+    at your own risks.
 
-    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS
-    features. However, it doens't work well and creates a lot of artifacts. If you have ideas for
-    improvement please let me know!
+    The idea is to use a QRS template to convolve the signal with, in order to magnify the QRS features. However,
+    it doens't work well and creates a lot of artifacts. If you have ideas for improvement please let me know!
+
     """
 
     window_size = int(np.round(sampling_rate / 4))
@@ -355,14 +368,10 @@ def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
     )
 
     # Detect peaks
-    peaks, _ = scipy.signal.find_peaks(
-        filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered)
-    )
+    peaks, _ = scipy.signal.find_peaks(filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered))
     peaks = peaks[peaks + 0.6 * sampling_rate < len(ecg_signal)]
 
-    idx = [
-        np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks
-    ]
+    idx = [np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks]
     epochs = np.array([filtered[i] for i in idx])
     qrs = np.mean(epochs, axis=0)
 
