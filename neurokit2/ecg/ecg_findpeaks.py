@@ -738,24 +738,24 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
     window2 = int(0.6 * sampling_rate)
     mwa_beat = _ecg_findpeaks_MWA(abs(signal), window2)
 
-    blocks = np.zeros(len(signal))
-    block_height = np.max(signal)
+    blocks = mwa_qrs > mwa_beat
 
-    for i in range(len(mwa_qrs)):  # pylint: disable=C0200
-        blocks[i] = block_height if mwa_qrs[i] > mwa_beat[i] else 0
     QRS = []
+    
+    qrs_duration_threshold = int(0.08 * sampling_rate)
+    rr_distance_threshold = int(0.3 * sampling_rate)
 
-    for i in range(1, len(blocks)):
-        if blocks[i - 1] == 0 and blocks[i] == block_height:
+    for i, (prev, cur) in enumerate(zip(blocks, blocks[1:])):
+        if prev < cur:
             start = i
 
-        elif blocks[i - 1] == block_height and blocks[i] == 0:
+        elif prev > cur:
             end = i - 1
 
-            if end - start > int(0.08 * sampling_rate):
+            if end - start > qrs_duration_threshold:
                 detection = np.argmax(signal[start : end + 1]) + start
                 if QRS:
-                    if detection - QRS[-1] > int(0.3 * sampling_rate):
+                    if detection - QRS[-1] > rr_distance_threshold:
                         QRS.append(detection)
                 else:
                     QRS.append(detection)
