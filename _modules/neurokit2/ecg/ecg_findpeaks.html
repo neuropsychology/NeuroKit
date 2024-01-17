@@ -1459,7 +1459,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">128</span><span class="p">))</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">128</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
     <span class="n">Nd</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="n">Pth</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="o">/</span> <span class="mi">128</span> <span class="o">+</span> <span class="mf">2.7</span>
     <span class="c1"># Pth = 3, optimal for fs = 250 Hz</span>
