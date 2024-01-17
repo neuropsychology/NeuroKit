@@ -1075,7 +1075,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
 
     """
 
-    N = int(np.round(3 * sampling_rate / 128))
+    N = int(np.clip(np.round(3 * sampling_rate / 128), 2, None))
     Nd = N - 1
     Pth = (0.7 * sampling_rate) / 128 + 2.7
     # Pth = 3, optimal for fs = 250 Hz
