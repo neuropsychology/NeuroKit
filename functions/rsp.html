@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
@@ -34,9 +34,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=a0cf2451"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
@@ -62,7 +62,6 @@
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -102,13 +101,10 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
-    </div>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
@@ -600,7 +596,7 @@ signals’ sampling rate.</p></li>
 <span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_process</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
-<span class="go">The raw signal, sampled at 1000 Hz, linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter; following Khoadadad et al., 2018.</span>
+<span class="go">The raw signal, sampled at 1000 Hz, was preprocessed using a second order 0.05-3 Hz bandpass Butterworth filter.</span>
 
 <span class="go">The peak detection was carried out using the method described in Khoadadad et al. (2018).</span>
 
@@ -608,16 +604,13 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.2862 |       2.22405 |</span>
+<span class="go">|         15.1722 |       2.18572 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
 <span class="go">            A Hilbert-based method for processing respiratory timeseries.</span>
 <span class="go">            Neuroimage, 230, 117787.</span>
 <span class="go">- Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford, R. (2018).</span>
-<span class="go">            Optimized breath detection algorithm in electrical impedance tomography.</span>
-<span class="go">            Physiological measurement, 39(9), 094001.</span>
-<span class="go">- Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T.,... &amp; Bayford, R. (2018).</span>
 <span class="go">            Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="go">            Physiological measurement, 39(9), 094001.</span>
 <span class="go">- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,</span>
@@ -822,8 +815,8 @@ Defaults to True.</p></li>
 <dd><p><strong>Preprocess a respiration (RSP) signal</strong></p>
 <p>Clean a respiration signal using different sets of parameters, such as:</p>
 <ul class="simple">
-<li><p><strong>khodadad2018</strong>: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
-filter)</p></li>
+<li><p><strong>khodadad2018</strong>: Second order 0.05-3 Hz bandpass Butterworth filter. Note that the
+implementation differs from the referenced paper (see issue #950).</p></li>
 <li><p><strong>BioSPPy</strong>: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
 detrending).</p></li>
 <li><p><strong>hampel</strong>: Applies a median-based Hampel filter by replacing values which are 3 (can be
@@ -1358,8 +1351,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  673.751438     4028.55  500.097304  ...    1.047947  0.018896         inf</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1290.309632      3960.7  787.008199  ...    0.642427  0.054067        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1503,9 +1496,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.317316     -0.062779</span>
-<span class="go">2     2        10000  ...          0.289297     -0.031416</span>
-<span class="go">3     3        15000  ...          0.169001      0.015236</span>
+<span class="go">1     1         5000  ...          0.199907     -0.004143</span>
+<span class="go">2     2        10000  ...          0.242066     -0.010530</span>
+<span class="go">3     3        15000  ...          0.200210     -0.014993</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1709,7 +1702,7 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  0.930488  0.042588   0.065106   0.06997</span>
+<span class="go">0  0.919773  0.063488   0.074832  0.081359</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1886,8 +1879,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
@@ -34,9 +34,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=a0cf2451"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
@@ -62,7 +62,6 @@
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -102,13 +101,10 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
-    </div>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
@@ -1350,7 +1346,7 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1a78c42f340&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2d1cc447550&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_signal_interpolate1.png"><img alt="savefig/p_signal_interpolate1.png" src="savefig/p_signal_interpolate1.png" /></a>
@@ -1468,19 +1464,19 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a786298160&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1cef5c9a0&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a788a38190&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1cfbcf760&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a788a38700&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1cfbcfcd0&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a788a38b80&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1cfc34130&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a788a39060&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1cfc34610&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_signal_noise2.png"><img alt="savefig/p_signal_noise2.png" src="savefig/p_signal_noise2.png" /></a>
@@ -1528,32 +1524,32 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a7889b4970&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1be124520&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a7889b5030&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1be124be0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a788a409d0&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1be115180&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1a7889b4d00&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x2d1be124820&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_signal_surrogate1.png"><img alt="savefig/p_signal_surrogate1.png" src="savefig/p_signal_surrogate1.png" /></a>
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a7843875e0&gt;]</span>
+<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1be12bc40&gt;]</span>
 
 <span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a784387af0&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1bd76c100&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a7843d25c0&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2d1bd777c70&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1a788a41d50&gt;</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x2d1be12bc10&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_signal_surrogate2.png"><img alt="savefig/p_signal_surrogate2.png" src="savefig/p_signal_surrogate2.png" /></a>
@@ -1870,9 +1866,7 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span>
-<span class="go">array([1751, 2750, 4055, 4056, 4058, 4060, 4500, 5500, 6164, 6837, 7250,</span>
-<span class="go">       8250])</span>
+<span class="gh">Out[3]: </span><span class="go">array([1751, 2750, 4500, 5500, 7251, 8250])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_signal_changepoints1.png"><img alt="savefig/p_signal_changepoints1.png" src="savefig/p_signal_changepoints1.png" /></a>
@@ -2882,8 +2876,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
