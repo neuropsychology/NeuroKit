@@ -4,6 +4,8 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 from warnings import warn
+from bisect import insort
+from collections import deque
 
 from ..signal import signal_findpeaks, signal_plot, signal_sanitize, signal_smooth, signal_zerocrossings
 from ..misc import NeuroKitWarning
@@ -331,12 +333,12 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
 
     ma[0 : len(b) * 2] = 0
 
-    n_pks = []
+    n_pks = deque([], maxlen=8)
     n_pks_ave = 0.0
-    s_pks = []
+    s_pks = deque([], maxlen=8)
     s_pks_ave = 0.0
     QRS = [0]
-    RR = []
+    RR = deque([], maxlen=8)
     RR_ave = 0.0
 
     th = 0.0
@@ -345,41 +347,32 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
     idx = []
     peaks = []
 
-    for i in range(len(ma)):  # pylint: disable=C0200,R1702
-        if i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:  # pylint: disable=R1716
+    for i in range(1, len(ma) - 1):  # pylint: disable=C0200,R1702
+        if ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:  # pylint: disable=R1716
             peak = i
             peaks.append(peak)
             if ma[peak] > th and (peak - QRS[-1]) > 0.3 * sampling_rate:
                 QRS.append(peak)
                 idx.append(peak)
                 s_pks.append(ma[peak])
-                if len(n_pks) > 8:
-                    s_pks.pop(0)
                 s_pks_ave = np.mean(s_pks)
 
                 if RR_ave != 0.0 and QRS[-1] - QRS[-2] > 1.5 * RR_ave:
                     missed_peaks = peaks[idx[-2] + 1 : idx[-1]]
                     for missed_peak in missed_peaks:
                         if missed_peak - peaks[idx[-2]] > int(0.36 * sampling_rate) and ma[missed_peak] > 0.5 * th:
-                            QRS.append(missed_peak)
-                            QRS.sort()
+                            insort(QRS, missed_peak)
                             break
 
                 if len(QRS) > 2:
                     RR.append(QRS[-1] - QRS[-2])
-                    if len(RR) > 8:
-                        RR.pop(0)
                     RR_ave = int(np.mean(RR))
 
             else:
                 n_pks.append(ma[peak])
-                if len(n_pks) > 8:
-                    n_pks.pop(0)
                 n_pks_ave = np.mean(n_pks)
 
             th = n_pks_ave + 0.45 * (s_pks_ave - n_pks_ave)
-
-            i += 1
 
     QRS.pop(0)
 
