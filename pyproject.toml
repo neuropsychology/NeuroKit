@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.poetry]
 name = "neurokit2"
-version = "0.2.7"  # Needs to find a way to automatically get latest version
+version = "0.2.8"  # Needs to find a way to automatically get latest version
 description = "The Python Toolbox for Neurophysiological Signal Processing."
 authors = [
     "Dominique Makowski <@DominiqueMakowski>",
