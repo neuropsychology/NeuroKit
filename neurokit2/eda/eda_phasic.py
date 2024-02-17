@@ -466,7 +466,7 @@ def _eda_phasic_sparsEDA(
 
     SCRaux = driverAux[pointerS:pointerE]
     SCL = slcAux[pointerS:pointerE]
-    MSE = resAux[pointerS:pointerE]
+    #MSE = resAux[pointerS:pointerE]
 
     # PP
     ind = np.argwhere(SCRaux > 0).reshape(-1)
