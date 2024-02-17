@@ -357,15 +357,15 @@ def _eda_phasic_sparsEDA(
     if np.sum(np.isnan(eda_signal)) > 0:
         raise AssertionError("Signal contains NaN")
 
-    # Preprocessing
-    signalAdd = np.zeros(len(eda_signal) + (20 * sampling_rate) + (60 * sampling_rate))
-    signalAdd[0 : 20 * sampling_rate] = eda_signal[0]
-    signalAdd[20 * sampling_rate : 20 * sampling_rate + len(eda_signal)] = eda_signal
-    signalAdd[20 * sampling_rate + len(eda_signal) :] = eda_signal[-1]
-
     # Resample to 8 Hz
     eda_signal = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=8)
     new_sr = 8
+
+    # Preprocessing
+    signalAdd = np.zeros(len(eda_signal) + (20 * new_sr) + (60 * new_sr))
+    signalAdd[0 : 20 * new_sr] = eda_signal[0]
+    signalAdd[20 * new_sr : 20 * new_sr + len(eda_signal)] = eda_signal
+    signalAdd[20 * new_sr + len(eda_signal) :] = eda_signal[-1]
 
     Nss = len(eda_signal)
     Ns = len(signalAdd)
@@ -428,7 +428,7 @@ def _eda_phasic_sparsEDA(
             b0 = signalCut[0]
 
         signalCutIn = signalCut - b0
-        beta, _, _, _, _, _ = lasso(R, signalCutIn, sampling_rate, Kmax, epsilon)
+        beta, _, _, _, _, _ = lasso(R, signalCutIn, new_sr, Kmax, epsilon)
 
         signalEst = (np.matmul(R, beta) + b0).reshape(-1)
 
@@ -488,7 +488,7 @@ def _eda_phasic_sparsEDA(
     threshold = rho * scr_max
     driver[driver < threshold] = 0
 
-    # Resample
+    # Resample back to original sampling rate
     SCL = signal_resample(SCL, desired_length=original_length)
     MSE = signal_resample(MSE, desired_length=original_length)
 

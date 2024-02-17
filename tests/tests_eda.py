@@ -82,7 +82,7 @@ def test_eda_phasic():
     assert len(highpass) == len(eda)
 
     sparsEDA = nk.eda_phasic(eda, sampling_rate=sr, method="sparsEDA")
-    assert len(highpass) == len(eda)
+    assert len(sparsEDA) == len(eda)
 
 
 def test_eda_peaks():
