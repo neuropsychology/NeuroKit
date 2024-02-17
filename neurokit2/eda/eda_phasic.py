@@ -489,10 +489,10 @@ def _eda_phasic_sparsEDA(
     driver[driver < threshold] = 0
 
     # Resample back to original sampling rate
+    SCR = eda_signal-SCL
+    SCR = signal_resample(SCR, desired_length=original_length)
     SCL = signal_resample(SCL, desired_length=original_length)
-    MSE = signal_resample(MSE, desired_length=original_length)
-
-    return SCL, eda_signal-SCL
+    return SCL, SCR
 
 
 def lasso(R, s, sampling_rate, maxIters, epsilon):
