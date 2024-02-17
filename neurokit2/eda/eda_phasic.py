@@ -492,7 +492,7 @@ def _eda_phasic_sparsEDA(
     SCL = signal_resample(SCL, desired_length=original_length)
     MSE = signal_resample(MSE, desired_length=original_length)
 
-    return driver, SCL, MSE
+    return SCL, signalIn-SCL
 
 
 def lasso(R, s, sampling_rate, maxIters, epsilon):

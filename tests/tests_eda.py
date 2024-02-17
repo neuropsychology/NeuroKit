@@ -81,9 +81,8 @@ def test_eda_phasic():
     highpass = nk.eda_phasic(eda, sampling_rate=sr, method="highpass")
     assert len(highpass) == len(eda)
 
-    # This fails unfortunately... need to fix the sparsEDA algorithm
-    # sparsEDA = nk.eda_phasic(eda, sampling_rate=sr, method="sparsEDA")
-    # assert len(highpass) == len(eda)
+    sparsEDA = nk.eda_phasic(eda, sampling_rate=sr, method="sparsEDA")
+    assert len(highpass) == len(eda)
 
 
 def test_eda_peaks():
