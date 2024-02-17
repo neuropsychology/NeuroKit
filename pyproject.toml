@@ -30,6 +30,8 @@ scikit-learn = "^1.4"
 pandas = "^2.1"
 matplotlib = "*"
 requests = "^2.31.0"
+cvxopt = "^1.3"
+biosppy = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.4"
