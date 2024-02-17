@@ -437,8 +437,8 @@ def _eda_phasic_sparsEDA(
         # res3 = sum(remAout(40*sampling_rate+1:(60*sampling_rate)));
 
         remAout = (signalCut - signalEst) ** 2
-        res2 = np.sum(remAout[20 * sampling_rate : 40 * sampling_rate])
-        res3 = np.sum(remAout[40 * sampling_rate : 60 * sampling_rate])
+        res2 = np.sum(remAout[20 * new_sr : 40 * new_sr])
+        res3 = np.sum(remAout[40 * new_sr : 60 * new_sr])
 
         jump = 1
         if res2 < 1:
@@ -454,14 +454,14 @@ def _eda_phasic_sparsEDA(
         SCRaux[:] = SCRline.reshape([5, Lreg]).transpose()
         driver = SCRaux.sum(axis=1)
 
-        b0 = np.matmul(R[jump * 20 * sampling_rate - 1, 0:6], beta[0:6, :]) + b0
+        b0 = np.matmul(R[jump * 20 * new_sr - 1, 0:6], beta[0:6, :]) + b0
 
-        driverAux[cutS : cutS + (jump * 20 * sampling_rate)] = driver[0 : jump * sampling_rate * 20]
-        slcAux[cutS : cutS + (jump * 20 * sampling_rate)] = SCL[
-            0 : jump * sampling_rate * 20
+        driverAux[cutS : cutS + (jump * 20 * new_sr)] = driver[0 : jump * new_sr * 20]
+        slcAux[cutS : cutS + (jump * 20 * new_sr)] = SCL[
+            0 : jump * new_sr * 20
         ].reshape(-1)
-        resAux[cutS : cutS + (jump * 20 * sampling_rate)] = remAout[0 : jump * sampling_rate * 20]
-        cutS = cutS + jump * 20 * sampling_rate
+        resAux[cutS : cutS + (jump * 20 * new_sr)] = remAout[0 : jump * new_sr * 20]
+        cutS = cutS + jump * 20 * new_sr
         cutE = cutS + N
 
     SCRaux = driverAux[pointerS:pointerE]
