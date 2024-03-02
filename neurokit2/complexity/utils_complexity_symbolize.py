@@ -217,8 +217,8 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
             symbolic = np.signbit(np.diff(signal)).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
-                df["A"][np.insert(symbolic, 0, False)] = np.nan
-                df["B"][~np.isnan(df["A"])] = np.nan
+                df.loc[np.insert(symbolic, 0, False), "A"] = np.nan
+                df.loc[~np.isnan(df["A"]), "B"] = np.nan
                 df.plot()
                 plt.title("Method C")
 
