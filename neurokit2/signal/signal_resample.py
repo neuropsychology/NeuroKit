@@ -157,7 +157,7 @@ def _resample_poly(signal, desired_length):
 
 def _resample_pandas(signal, desired_length):
     # Convert to Time Series
-    index = pd.date_range("20131212", freq="L", periods=len(signal))
+    index = pd.date_range("20131212", freq="ms", periods=len(signal))
     resampled_signal = pd.Series(signal, index=index)
 
     # Create resampling factor
