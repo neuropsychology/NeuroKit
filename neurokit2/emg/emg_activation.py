@@ -236,11 +236,11 @@ def emg_activation(
                 df_activity.loc[x, "EMG_Activity"] = 1
             else:
                 df_activity.loc[x, "EMG_Activity"] = 0
-        if df_offsets["EMG_Offsets"][x] != 0:
+        if df_offsets[x, "EMG_Offsets"] != 0:
             if df_offsets.index[x] == df_offsets.index.get_loc(x):
-                df_offsets["EMG_Offsets"][x] = 1
+                df_offsets[x, "EMG_Offsets"] = 1
             else:
-                df_offsets["EMG_Offsets"][x] = 0
+                df_offsets[x, "EMG_Offsets"] = 0
 
     activity_signal = pd.concat([df_activity, df_onsets, df_offsets], axis=1)
 
