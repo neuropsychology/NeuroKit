@@ -161,7 +161,7 @@ def _resample_pandas(signal, desired_length):
     resampled_signal = pd.Series(signal, index=index)
 
     # Create resampling factor
-    resampling_factor = str(np.round(1 / (desired_length / len(signal)), 6)) + "L"
+    resampling_factor = str(np.round(1 / (desired_length / len(signal)), 6)) + "ms"
 
     # Resample
     resampled_signal = resampled_signal.resample(resampling_factor).bfill().values
