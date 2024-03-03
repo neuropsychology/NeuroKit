@@ -125,7 +125,7 @@ def _rsp_rate_xcorr(
         # Find xcorr for all frequencies with diff
         xcorr = []
         t = np.linspace(0, window, len(diff))
-        for frequency in np.arange(5 / 60, 30.25 / 60, 0.25 / 50):
+        for frequency in np.arange(5 / 60, 30.25 / 60, 0.25 / 60):
             # Define the sin waves
             sin_wave = np.sin(2 * np.pi * frequency * t)
             # Calculate cross-correlation
