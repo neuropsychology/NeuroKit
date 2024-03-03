@@ -165,7 +165,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
@@ -381,6 +381,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">scipy.signal</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">bisect</span> <span class="kn">import</span> <span class="n">insort</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
 
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_findpeaks</span><span class="p">,</span> <span class="n">signal_plot</span><span class="p">,</span> <span class="n">signal_sanitize</span><span class="p">,</span> <span class="n">signal_smooth</span><span class="p">,</span> <span class="n">signal_zerocrossings</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
@@ -711,12 +713,12 @@ document.write(`
 
     <span class="n">ma</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="n">n_pks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">n_pks</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([],</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">n_pks_ave</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">s_pks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">s_pks</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([],</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">s_pks_ave</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">QRS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">RR</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">RR</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([],</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">RR_ave</span> <span class="o">=</span> <span class="mf">0.0</span>
 
     <span class="n">th</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -725,41 +727,32 @@ document.write(`
     <span class="n">idx</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ma</span><span class="p">)):</span>  <span class="c1"># pylint: disable=C0200,R1702</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>  <span class="c1"># pylint: disable=R1716</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># pylint: disable=C0200,R1702</span>
+        <span class="k">if</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>  <span class="c1"># pylint: disable=R1716</span>
             <span class="n">peak</span> <span class="o">=</span> <span class="n">i</span>
             <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ma</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span> <span class="ow">and</span> <span class="p">(</span><span class="n">peak</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">:</span>
                 <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
                 <span class="n">idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
                 <span class="n">s_pks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="n">peak</span><span class="p">])</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_pks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
-                    <span class="n">s_pks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">s_pks_ave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s_pks</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">RR_ave</span> <span class="o">!=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">RR_ave</span><span class="p">:</span>
                     <span class="n">missed_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">idx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
                     <span class="k">for</span> <span class="n">missed_peak</span> <span class="ow">in</span> <span class="n">missed_peaks</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">missed_peak</span> <span class="o">-</span> <span class="n">peaks</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.36</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ma</span><span class="p">[</span><span class="n">missed_peak</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">th</span><span class="p">:</span>
-                            <span class="n">QRS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">missed_peak</span><span class="p">)</span>
-                            <span class="n">QRS</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                            <span class="n">insort</span><span class="p">(</span><span class="n">QRS</span><span class="p">,</span> <span class="n">missed_peak</span><span class="p">)</span>
                             <span class="k">break</span>
 
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">QRS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="n">RR</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">QRS</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">RR</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
-                        <span class="n">RR</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                     <span class="n">RR_ave</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">RR</span><span class="p">))</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">n_pks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="n">peak</span><span class="p">])</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_pks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
-                    <span class="n">n_pks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">n_pks_ave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">n_pks</span><span class="p">)</span>
 
             <span class="n">th</span> <span class="o">=</span> <span class="n">n_pks_ave</span> <span class="o">+</span> <span class="mf">0.45</span> <span class="o">*</span> <span class="p">(</span><span class="n">s_pks_ave</span> <span class="o">-</span> <span class="n">n_pks_ave</span><span class="p">)</span>
-
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="n">QRS</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 

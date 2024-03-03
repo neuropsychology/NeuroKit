@@ -166,7 +166,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
@@ -606,9 +606,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.370735         1.0</span>
+<span class="go">1     1         3000  ...                1.478789         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                1.200650         1.0</span>
+<span class="go">3     3         9000  ...                0.544322         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -618,7 +618,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.248745</span>
+<span class="go">0               3.0            0.249057</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -966,9 +966,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.522811         1.0</span>
+<span class="go">1     1         3000  ...                1.317709         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.710405         1.0</span>
+<span class="go">3     3         9000  ...                1.384742         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -1011,15 +1011,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.239157</span>
+<span class="go">0               3.0            0.240785</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.235052</span>
-<span class="go">2     2                 1            0.243297</span>
+<span class="go">1     1                 2            0.244833</span>
+<span class="go">2     2                 1            0.236763</span>
 </pre></div>
 </div>
 </dd></dl>

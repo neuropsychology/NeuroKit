@@ -165,7 +165,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
@@ -537,11 +537,11 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_resample_pandas</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">desired_length</span><span class="p">):</span>
     <span class="c1"># Convert to Time Series</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s2">&quot;20131212&quot;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s2">&quot;20131212&quot;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
     <span class="n">resampled_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
 
     <span class="c1"># Create resampling factor</span>
-    <span class="n">resampling_factor</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">desired_length</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)),</span> <span class="mi">6</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;L&quot;</span>
+    <span class="n">resampling_factor</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">desired_length</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)),</span> <span class="mi">6</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;ms&quot;</span>
 
     <span class="c1"># Resample</span>
     <span class="n">resampled_signal</span> <span class="o">=</span> <span class="n">resampled_signal</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">resampling_factor</span><span class="p">)</span><span class="o">.</span><span class="n">bfill</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>

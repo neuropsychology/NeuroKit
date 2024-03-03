@@ -49,7 +49,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Locate P, Q, S and T waves in ECG" href="../ecg_delineate/ecg_delineate.html" />
-    <link rel="prev" title="Heart Rate Varability (HRV)" href="../ecg_hrv/ecg_hrv.html" />
+    <link rel="prev" title="Heart Rate Variability (HRV)" href="../ecg_hrv/ecg_hrv.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,7 +166,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Extract and Visualize Individual Heartbeats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
@@ -517,7 +517,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d556ce9a521985a7d0440b0af3ff13d6cb811c2a9ebc8f7ae5bc13f84c2e0256.png" src="../../_images/d556ce9a521985a7d0440b0af3ff13d6cb811c2a9ebc8f7ae5bc13f84c2e0256.png" />
+<img alt="../../_images/db72e8b6b267442c3428ce6ac2e3be3fa94a845cd1762a8413a53402893d5cca.png" src="../../_images/db72e8b6b267442c3428ce6ac2e3be3fa94a845cd1762a8413a53402893d5cca.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -533,7 +533,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/45d58e5fd6c65821a9994b4dde900e1a5f9253f115cb264558f2975047254beb.png" src="../../_images/45d58e5fd6c65821a9994b4dde900e1a5f9253f115cb264558f2975047254beb.png" />
+<img alt="../../_images/b2426775643a374350fba53973eee484fab3abdf11f0832e377fce6d9a2b558f.png" src="../../_images/b2426775643a374350fba53973eee484fab3abdf11f0832e377fce6d9a2b558f.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -589,35 +589,35 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.213319</td>
+      <td>-0.219486</td>
       <td>136</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.207611</td>
+      <td>-0.213784</td>
       <td>137</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.201839</td>
+      <td>-0.208021</td>
       <td>138</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.195950</td>
+      <td>-0.202146</td>
       <td>139</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.189878</td>
+      <td>-0.196097</td>
       <td>140</td>
       <td>1</td>
       <td>-0.283908</td>
@@ -703,123 +703,123 @@ document.write(`
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.213319</td>
-      <td>-0.133981</td>
-      <td>-0.125282</td>
-      <td>-0.134800</td>
-      <td>-0.131082</td>
-      <td>-0.137061</td>
-      <td>-0.135345</td>
-      <td>-0.136284</td>
-      <td>-0.144399</td>
-      <td>-0.148635</td>
+      <td>-0.219486</td>
+      <td>-0.140223</td>
+      <td>-0.127892</td>
+      <td>-0.134810</td>
+      <td>-0.145077</td>
+      <td>-0.138646</td>
+      <td>-0.130145</td>
+      <td>-0.132410</td>
+      <td>-0.140218</td>
+      <td>-0.144533</td>
       <td>...</td>
-      <td>-0.134846</td>
-      <td>-0.149155</td>
-      <td>-0.113841</td>
-      <td>-0.213659</td>
-      <td>-0.129730</td>
-      <td>-0.148682</td>
-      <td>-0.140237</td>
-      <td>-0.144714</td>
-      <td>-0.145581</td>
-      <td>-0.140718</td>
+      <td>-0.134445</td>
+      <td>-0.163475</td>
+      <td>-0.079977</td>
+      <td>-0.245773</td>
+      <td>-0.113906</td>
+      <td>-0.148654</td>
+      <td>-0.133772</td>
+      <td>-0.138845</td>
+      <td>-0.144643</td>
+      <td>-0.141482</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.207611</td>
-      <td>-0.132704</td>
-      <td>-0.123989</td>
-      <td>-0.133519</td>
-      <td>-0.130044</td>
-      <td>-0.135383</td>
-      <td>-0.134980</td>
-      <td>-0.135027</td>
-      <td>-0.143446</td>
-      <td>-0.148148</td>
+      <td>-0.213784</td>
+      <td>-0.139723</td>
+      <td>-0.126929</td>
+      <td>-0.133844</td>
+      <td>-0.144548</td>
+      <td>-0.137901</td>
+      <td>-0.129170</td>
+      <td>-0.131368</td>
+      <td>-0.138605</td>
+      <td>-0.143384</td>
       <td>...</td>
-      <td>-0.133964</td>
-      <td>-0.147850</td>
-      <td>-0.112945</td>
-      <td>-0.212753</td>
-      <td>-0.128785</td>
-      <td>-0.147868</td>
-      <td>-0.140088</td>
-      <td>-0.143456</td>
-      <td>-0.144338</td>
-      <td>-0.139725</td>
+      <td>-0.133577</td>
+      <td>-0.162807</td>
+      <td>-0.079116</td>
+      <td>-0.244805</td>
+      <td>-0.112800</td>
+      <td>-0.147773</td>
+      <td>-0.132860</td>
+      <td>-0.137678</td>
+      <td>-0.143715</td>
+      <td>-0.140762</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.201839</td>
-      <td>-0.131348</td>
-      <td>-0.122612</td>
-      <td>-0.132043</td>
-      <td>-0.128820</td>
-      <td>-0.133629</td>
-      <td>-0.134496</td>
-      <td>-0.133598</td>
-      <td>-0.142307</td>
-      <td>-0.147507</td>
+      <td>-0.208021</td>
+      <td>-0.139097</td>
+      <td>-0.125851</td>
+      <td>-0.132767</td>
+      <td>-0.143845</td>
+      <td>-0.137018</td>
+      <td>-0.128117</td>
+      <td>-0.130153</td>
+      <td>-0.136709</td>
+      <td>-0.142043</td>
       <td>...</td>
-      <td>-0.132935</td>
-      <td>-0.146305</td>
-      <td>-0.111791</td>
-      <td>-0.211679</td>
-      <td>-0.127582</td>
-      <td>-0.146914</td>
-      <td>-0.139807</td>
-      <td>-0.141996</td>
-      <td>-0.142915</td>
-      <td>-0.138593</td>
+      <td>-0.132589</td>
+      <td>-0.162023</td>
+      <td>-0.078111</td>
+      <td>-0.243659</td>
+      <td>-0.111543</td>
+      <td>-0.146675</td>
+      <td>-0.131765</td>
+      <td>-0.136345</td>
+      <td>-0.142542</td>
+      <td>-0.139920</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.195950</td>
-      <td>-0.129886</td>
-      <td>-0.121113</td>
-      <td>-0.130301</td>
-      <td>-0.127348</td>
-      <td>-0.131788</td>
-      <td>-0.133843</td>
-      <td>-0.131960</td>
-      <td>-0.140930</td>
-      <td>-0.146680</td>
+      <td>-0.202146</td>
+      <td>-0.138323</td>
+      <td>-0.124627</td>
+      <td>-0.131534</td>
+      <td>-0.142910</td>
+      <td>-0.135958</td>
+      <td>-0.126937</td>
+      <td>-0.128696</td>
+      <td>-0.134448</td>
+      <td>-0.140469</td>
       <td>...</td>
-      <td>-0.131702</td>
-      <td>-0.144455</td>
-      <td>-0.110322</td>
-      <td>-0.210406</td>
-      <td>-0.126070</td>
-      <td>-0.145798</td>
-      <td>-0.139354</td>
-      <td>-0.140302</td>
-      <td>-0.141269</td>
-      <td>-0.137300</td>
+      <td>-0.131439</td>
+      <td>-0.161051</td>
+      <td>-0.076914</td>
+      <td>-0.242287</td>
+      <td>-0.110079</td>
+      <td>-0.145311</td>
+      <td>-0.130412</td>
+      <td>-0.134791</td>
+      <td>-0.141063</td>
+      <td>-0.138908</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.189878</td>
-      <td>-0.128280</td>
-      <td>-0.119435</td>
-      <td>-0.128207</td>
-      <td>-0.125554</td>
-      <td>-0.129836</td>
-      <td>-0.132962</td>
-      <td>-0.130078</td>
-      <td>-0.139245</td>
-      <td>-0.145598</td>
+      <td>-0.196097</td>
+      <td>-0.137376</td>
+      <td>-0.123215</td>
+      <td>-0.130080</td>
+      <td>-0.141675</td>
+      <td>-0.134676</td>
+      <td>-0.125569</td>
+      <td>-0.126916</td>
+      <td>-0.131727</td>
+      <td>-0.138602</td>
       <td>...</td>
-      <td>-0.130197</td>
-      <td>-0.142228</td>
-      <td>-0.108474</td>
-      <td>-0.208887</td>
-      <td>-0.124199</td>
-      <td>-0.144486</td>
-      <td>-0.138678</td>
-      <td>-0.138327</td>
-      <td>-0.139338</td>
-      <td>-0.135808</td>
+      <td>-0.130062</td>
+      <td>-0.159793</td>
+      <td>-0.075472</td>
+      <td>-0.240631</td>
+      <td>-0.108341</td>
+      <td>-0.143624</td>
+      <td>-0.128713</td>
+      <td>-0.132941</td>
+      <td>-0.139214</td>
+      <td>-0.137669</td>
     </tr>
   </tbody>
 </table>
@@ -847,7 +847,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e76aae449fd21cea16def055d4d8e22efe4691488c2b09b3463d9fb240159dc6.png" src="../../_images/e76aae449fd21cea16def055d4d8e22efe4691488c2b09b3463d9fb240159dc6.png" />
+<img alt="../../_images/4a639a3977ace3301de38bd7f47f4ca8d4302b554543f31983ba7da967440a65.png" src="../../_images/4a639a3977ace3301de38bd7f47f4ca8d4302b554543f31983ba7da967440a65.png" />
 </div>
 </div>
 </section>
@@ -892,7 +892,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Heart Rate Varability (HRV)</p>
+        <p class="prev-next-title">Heart Rate Variability (HRV)</p>
       </div>
     </a>
     <a class="right-next"

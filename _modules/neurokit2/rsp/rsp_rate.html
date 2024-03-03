@@ -165,7 +165,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Varability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
@@ -505,7 +505,7 @@ document.write(`
         <span class="c1"># Find xcorr for all frequencies with diff</span>
         <span class="n">xcorr</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">diff</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="mf">30.25</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="mf">0.25</span> <span class="o">/</span> <span class="mi">50</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="mf">30.25</span> <span class="o">/</span> <span class="mi">60</span><span class="p">,</span> <span class="mf">0.25</span> <span class="o">/</span> <span class="mi">60</span><span class="p">):</span>
             <span class="c1"># Define the sin waves</span>
             <span class="n">sin_wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
             <span class="c1"># Calculate cross-correlation</span>
