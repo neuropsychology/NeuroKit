@@ -346,58 +346,64 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
 
     """
+    diff = abs(np.diff(signal))
 
-    def _check_missed_peaks(missed_peaks, idx, peaks, ma, th, sampling_rate, QRS):
-        for missed_peak in missed_peaks:
-            if (
-                missed_peak - peaks[idx[-2]] > int(0.36 * sampling_rate)
-                and ma[missed_peak] > 0.5 * th
-            ):
-                insort(QRS, missed_peak)
-                return True
-        return False
+    b = np.ones(int(0.08 * sampling_rate))
+    b = b / int(0.08 * sampling_rate)
+    a = [1]
 
-    def _update_threshold(n_pks, s_pks):
-        n_pks_ave = np.mean(n_pks)
-        s_pks_ave = np.mean(s_pks)
-        return n_pks_ave + 0.45 * (s_pks_ave - n_pks_ave)
+    ma = scipy.signal.lfilter(b, a, diff)
 
-    diff = np.abs(np.diff(signal))
-    b = np.ones(int(0.08 * sampling_rate)) / int(0.08 * sampling_rate)
-    ma = scipy.signal.lfilter(b, [1], diff)
-    ma[: len(b) * 2] = 0
+    ma[0 : len(b) * 2] = 0
 
-    n_pks, s_pks = deque([], maxlen=8), deque([], maxlen=8)
-    QRS, RR = [0], deque([], maxlen=8)
-    th, RR_ave = 0.0, 0.0
+    n_pks = deque([], maxlen=8)
+    n_pks_ave = 0.0
+    s_pks = deque([], maxlen=8)
+    s_pks_ave = 0.0
+    QRS = [0]
+    RR = deque([], maxlen=8)
+    RR_ave = 0.0
 
-    idx, peaks = [], []
+    th = 0.0
 
-    for i in range(1, len(ma) - 1):
-        if ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:
+    i = 0
+    idx = []
+    peaks = []
+
+    for i in range(1, len(ma) - 1):  # pylint: disable=C0200,R1702
+        if ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:  # pylint: disable=R1716
             peak = i
             peaks.append(peak)
             if ma[peak] > th and (peak - QRS[-1]) > 0.3 * sampling_rate:
                 QRS.append(peak)
                 idx.append(peak)
                 s_pks.append(ma[peak])
+                s_pks_ave = np.mean(s_pks)
 
                 if RR_ave != 0.0 and QRS[-1] - QRS[-2] > 1.5 * RR_ave:
                     missed_peaks = peaks[idx[-2] + 1 : idx[-1]]
-                    _check_missed_peaks(
-                        missed_peaks, idx, peaks, ma, th, sampling_rate, QRS
-                    )
+                    for missed_peak in missed_peaks:
+                        if (
+                            missed_peak - peaks[idx[-2]] > int(0.36 * sampling_rate)
+                            and ma[missed_peak] > 0.5 * th
+                        ):
+                            insort(QRS, missed_peak)
+                            break
 
                 if len(QRS) > 2:
                     RR.append(QRS[-1] - QRS[-2])
                     RR_ave = int(np.mean(RR))
+
             else:
                 n_pks.append(ma[peak])
+                n_pks_ave = np.mean(n_pks)
 
-            th = _update_threshold(n_pks, s_pks)
+            th = n_pks_ave + 0.45 * (s_pks_ave - n_pks_ave)
 
     QRS.pop(0)
-    return np.array(QRS, dtype="int")
+
+    QRS = np.array(QRS, dtype="int")
+    return QRS
 
 
 # =============================================================================
