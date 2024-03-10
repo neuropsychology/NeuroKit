@@ -9,7 +9,11 @@ import pandas as pd
 # Using neurokit2.ecg.ecg_findpeaks._ecg_findpeaks_MWA doesn't
 # work because of the "from .ecg_findpeaks import ecg_findpeaks"
 # statement in neurokit2/ecg/__init.__.py.
-from neurokit2.ecg.ecg_findpeaks import _ecg_findpeaks_MWA, _ecg_findpeaks_peakdetect
+from neurokit2.ecg.ecg_findpeaks import (
+    _ecg_findpeaks_MWA,
+    _ecg_findpeaks_peakdetect,
+    _ecg_findpeaks_hamilton,
+)
 
 
 def _read_csv_column(csv_name, column):
