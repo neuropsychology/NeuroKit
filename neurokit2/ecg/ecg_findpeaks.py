@@ -346,11 +346,6 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
 
     """
-    import numpy as np
-    import scipy.signal
-    from collections import deque
-    from bisect import insort
-
     diff = np.abs(np.diff(signal))
 
     b = np.ones(int(0.08 * sampling_rate))
