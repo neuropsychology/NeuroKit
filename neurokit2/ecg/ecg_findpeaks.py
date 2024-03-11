@@ -346,7 +346,12 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
 
     """
-    diff = abs(np.diff(signal))
+    import numpy as np
+    import scipy.signal
+    from collections import deque
+    from bisect import insort
+
+    diff = np.abs(np.diff(signal))
 
     b = np.ones(int(0.08 * sampling_rate))
     b = b / int(0.08 * sampling_rate)
@@ -382,13 +387,17 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
 
                 if RR_ave != 0.0 and QRS[-1] - QRS[-2] > 1.5 * RR_ave:
                     missed_peaks = peaks[idx[-2] + 1 : idx[-1]]
+                    missed_peak_added = False
                     for missed_peak in missed_peaks:
                         if (
                             missed_peak - peaks[idx[-2]] > int(0.36 * sampling_rate)
                             and ma[missed_peak] > 0.5 * th
                         ):
                             insort(QRS, missed_peak)
+                            missed_peak_added = True
                             break
+                    if missed_peak_added:
+                        continue
 
                 if len(QRS) > 2:
                     RR.append(QRS[-1] - QRS[-2])
