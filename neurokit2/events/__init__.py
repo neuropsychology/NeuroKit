@@ -4,5 +4,6 @@ from .events_find import events_find
 from .events_create import events_create
 from .events_plot import events_plot
 from .events_to_mne import events_to_mne
+from .stim_events_find import stim_events_find
 
-__all__ = ["events_find", "events_create", "events_plot", "events_to_mne"]
+__all__ = ["events_find", "events_create", "events_plot", "events_to_mne", "stim_events_find"]
