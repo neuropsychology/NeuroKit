@@ -9,6 +9,7 @@ from .signal_fillmissing import signal_fillmissing
 from .signal_filter import signal_filter
 from .signal_findpeaks import signal_findpeaks
 from .signal_fixpeaks import signal_fixpeaks
+from .signal_flatintervals import signal_flatintervals
 from .signal_flatline import signal_flatline
 from .signal_formatpeaks import signal_formatpeaks
 from .signal_interpolate import signal_interpolate
@@ -41,6 +42,7 @@ __all__ = [
     "signal_distort",
     "signal_interpolate",
     "signal_detrend",
+    "signal_flatintervals",
     "signal_findpeaks",
     "signal_fixpeaks",
     "signal_formatpeaks",
