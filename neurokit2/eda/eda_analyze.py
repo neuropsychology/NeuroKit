@@ -97,7 +97,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
 
     # Interval-related analysis
     elif method in ["interval-related", "interval", "resting-state"]:
-        features = eda_intervalrelated(data)
+        features = eda_intervalrelated(data, sampling_rate=sampling_rate)
 
     # Auto
     elif method in ["auto"]:
@@ -106,7 +106,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
             for i in data:
                 duration = len(data[i]) / sampling_rate
             if duration >= 10:
-                features = eda_intervalrelated(data)
+                features = eda_intervalrelated(data, sampling_rate=sampling_rate)
             else:
                 features = eda_eventrelated(data)
 
@@ -117,7 +117,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
             else:
                 duration = len(data) / sampling_rate
             if duration >= 10:
-                features = eda_intervalrelated(data)
+                features = eda_intervalrelated(data, sampling_rate=sampling_rate)
             else:
                 features = eda_eventrelated(data)
 
