@@ -378,6 +378,8 @@ document.write(`
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -386,9 +388,7 @@ document.write(`
 
 <div class="viewcode-block" id="read_acqknowledge">
 <a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.read_acqknowledge">[docs]</a>
-<span class="k">def</span> <span class="nf">read_acqknowledge</span><span class="p">(</span>
-    <span class="n">filename</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">resample_method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span> <span class="n">impute_missing</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">):</span>
+<span class="k">def</span> <span class="nf">read_acqknowledge</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">resample_method</span><span class="o">=</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span> <span class="n">impute_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Read and format a BIOPAC&#39;s AcqKnowledge file into a pandas&#39; dataframe**</span>
 
 <span class="sd">    The function outputs both the dataframe and the sampling rate (retrieved from the</span>
@@ -448,10 +448,7 @@ document.write(`
         <span class="n">filename</span> <span class="o">+=</span> <span class="s2">&quot;.acq&quot;</span>
 
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: read_acqknowledge(): couldn&#39;t&quot;</span>
-            <span class="s2">&quot; find the following file: &quot;</span> <span class="o">+</span> <span class="n">filename</span>
-        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: read_acqknowledge(): couldn&#39;t&quot;</span> <span class="s2">&quot; find the following file: &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
 
     <span class="c1"># Read file</span>
     <span class="n">file</span> <span class="o">=</span> <span class="n">bioread</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -463,24 +460,34 @@ document.write(`
             <span class="n">freq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">named_channels</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">samples_per_second</span><span class="p">)</span>
         <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">freq_list</span><span class="p">)</span>
 
+    <span class="c1"># Counter for checking duplicate channel names</span>
+    <span class="n">channel_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
     <span class="c1"># Loop through channels</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">named_channels</span><span class="p">:</span>
-        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">named_channels</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">channel_num</span><span class="p">,</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">channels</span><span class="p">):</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">channels</span><span class="p">[</span><span class="n">channel_num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># Fill signal interruptions</span>
         <span class="k">if</span> <span class="n">impute_missing</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">signal</span><span class="p">)):</span>
             <span class="n">signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;pad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 
         <span class="c1"># Resample if necessary</span>
-        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">named_channels</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">samples_per_second</span> <span class="o">!=</span> <span class="n">sampling_rate</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">channels</span><span class="p">[</span><span class="n">channel_num</span><span class="p">]</span><span class="o">.</span><span class="n">samples_per_second</span> <span class="o">!=</span> <span class="n">sampling_rate</span><span class="p">:</span>
             <span class="n">signal</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
                 <span class="n">signal</span><span class="p">,</span>
-                <span class="n">sampling_rate</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">named_channels</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">samples_per_second</span><span class="p">,</span>
+                <span class="n">sampling_rate</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">channels</span><span class="p">[</span><span class="n">channel_num</span><span class="p">]</span><span class="o">.</span><span class="n">samples_per_second</span><span class="p">,</span>
                 <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
                 <span class="n">method</span><span class="o">=</span><span class="n">resample_method</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span>
+
+        <span class="c1"># If there is a duplicate channel name, append a number</span>
+        <span class="k">if</span> <span class="n">channel_counter</span><span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">channel_counter</span><span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span>
+
+        <span class="n">channel_counter</span><span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="c1"># Sanitize lengths</span>
     <span class="n">lengths</span> <span class="o">=</span> <span class="p">[]</span>
