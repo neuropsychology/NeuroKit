@@ -357,15 +357,15 @@ def _eda_phasic_sparsEDA(
     if np.sum(np.isnan(eda_signal)) > 0:
         raise AssertionError("Signal contains NaN")
 
-    # Preprocessing
-    signalAdd = np.zeros(len(eda_signal) + (20 * sampling_rate) + (60 * sampling_rate))
-    signalAdd[0 : 20 * sampling_rate] = eda_signal[0]
-    signalAdd[20 * sampling_rate : 20 * sampling_rate + len(eda_signal)] = eda_signal
-    signalAdd[20 * sampling_rate + len(eda_signal) :] = eda_signal[-1]
-
     # Resample to 8 Hz
     eda_signal = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=8)
     new_sr = 8
+
+    # Preprocessing
+    signalAdd = np.zeros(len(eda_signal) + (20 * new_sr) + (60 * new_sr))
+    signalAdd[0 : 20 * new_sr] = eda_signal[0]
+    signalAdd[20 * new_sr : 20 * new_sr + len(eda_signal)] = eda_signal
+    signalAdd[20 * new_sr + len(eda_signal) :] = eda_signal[-1]
 
     Nss = len(eda_signal)
     Ns = len(signalAdd)
@@ -428,7 +428,7 @@ def _eda_phasic_sparsEDA(
             b0 = signalCut[0]
 
         signalCutIn = signalCut - b0
-        beta, _, _, _, _, _ = lasso(R, signalCutIn, sampling_rate, Kmax, epsilon)
+        beta, _, _, _, _, _ = lasso(R, signalCutIn, new_sr, Kmax, epsilon)
 
         signalEst = (np.matmul(R, beta) + b0).reshape(-1)
 
@@ -437,8 +437,8 @@ def _eda_phasic_sparsEDA(
         # res3 = sum(remAout(40*sampling_rate+1:(60*sampling_rate)));
 
         remAout = (signalCut - signalEst) ** 2
-        res2 = np.sum(remAout[20 * sampling_rate : 40 * sampling_rate])
-        res3 = np.sum(remAout[40 * sampling_rate : 60 * sampling_rate])
+        res2 = np.sum(remAout[20 * new_sr : 40 * new_sr])
+        res3 = np.sum(remAout[40 * new_sr : 60 * new_sr])
 
         jump = 1
         if res2 < 1:
@@ -454,19 +454,19 @@ def _eda_phasic_sparsEDA(
         SCRaux[:] = SCRline.reshape([5, Lreg]).transpose()
         driver = SCRaux.sum(axis=1)
 
-        b0 = np.matmul(R[jump * 20 * sampling_rate - 1, 0:6], beta[0:6, :]) + b0
+        b0 = np.matmul(R[jump * 20 * new_sr - 1, 0:6], beta[0:6, :]) + b0
 
-        driverAux[cutS : cutS + (jump * 20 * sampling_rate)] = driver[0 : jump * sampling_rate * 20]
-        slcAux[cutS : cutS + (jump * 20 * sampling_rate)] = SCL[
-            0 : jump * sampling_rate * 20
+        driverAux[cutS : cutS + (jump * 20 * new_sr)] = driver[0 : jump * new_sr * 20]
+        slcAux[cutS : cutS + (jump * 20 * new_sr)] = SCL[
+            0 : jump * new_sr * 20
         ].reshape(-1)
-        resAux[cutS : cutS + (jump * 20 * sampling_rate)] = remAout[0 : jump * sampling_rate * 20]
-        cutS = cutS + jump * 20 * sampling_rate
+        resAux[cutS : cutS + (jump * 20 * new_sr)] = remAout[0 : jump * new_sr * 20]
+        cutS = cutS + jump * 20 * new_sr
         cutE = cutS + N
 
     SCRaux = driverAux[pointerS:pointerE]
     SCL = slcAux[pointerS:pointerE]
-    MSE = resAux[pointerS:pointerE]
+    #MSE = resAux[pointerS:pointerE]
 
     # PP
     ind = np.argwhere(SCRaux > 0).reshape(-1)
@@ -488,11 +488,11 @@ def _eda_phasic_sparsEDA(
     threshold = rho * scr_max
     driver[driver < threshold] = 0
 
-    # Resample
+    # Resample back to original sampling rate
+    SCR = eda_signal-SCL
+    SCR = signal_resample(SCR, desired_length=original_length)
     SCL = signal_resample(SCL, desired_length=original_length)
-    MSE = signal_resample(MSE, desired_length=original_length)
-
-    return driver, SCL, MSE
+    return SCL, SCR
 
 
 def lasso(R, s, sampling_rate, maxIters, epsilon):
