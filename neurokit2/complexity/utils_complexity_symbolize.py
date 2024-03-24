@@ -184,8 +184,8 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
             symbolic = (signal > np.nanmean(signal)).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
-                df["A"][df["A"] > np.nanmean(signal)] = np.nan
-                df["B"][df["B"] <= np.nanmean(signal)] = np.nan
+                df.loc[df["A"] > np.nanmean(signal), "A"] = np.nan
+                df.loc[df["B"] <= np.nanmean(signal), "B"] = np.nan
                 df.plot()
                 plt.axhline(y=np.nanmean(signal), color="r", linestyle="dotted")
                 plt.title("Method A")
@@ -194,8 +194,8 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
             symbolic = (signal > np.nanmedian(signal)).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
-                df["A"][df["A"] > np.nanmedian(signal)] = np.nan
-                df["B"][df["B"] <= np.nanmedian(signal)] = np.nan
+                df.loc[df["A"] > np.nanmedian(signal), "A"] = np.nan
+                df.loc[df["B"] <= np.nanmedian(signal), "B"] = np.nan
                 df.plot()
                 plt.axhline(y=np.nanmean(signal), color="r", linestyle="dotted")
                 plt.title("Binarization by median")
@@ -206,8 +206,9 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
             symbolic = np.logical_or(signal < m - sd, signal > m + sd).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
-                df["A"][np.logical_or(signal < m - sd, signal > m + sd)] = np.nan
-                df["B"][~np.isnan(df["A"])] = np.nan
+                condition = np.logical_or(signal < m - sd, signal > m + sd)
+                df.loc[condition, "A"] = np.nan
+                df.loc[~np.isnan(df["A"]), "B"] = np.nan
                 df.plot()
                 plt.axhline(y=m - sd, color="r", linestyle="dotted")
                 plt.axhline(y=m + sd, color="r", linestyle="dotted")
@@ -217,8 +218,8 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
             symbolic = np.signbit(np.diff(signal)).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
-                df["A"][np.insert(symbolic, 0, False)] = np.nan
-                df["B"][~np.isnan(df["A"])] = np.nan
+                df.loc[np.insert(symbolic, 0, False), "A"] = np.nan
+                df.loc[~np.isnan(df["A"]), "B"] = np.nan
                 df.plot()
                 plt.title("Method C")
 

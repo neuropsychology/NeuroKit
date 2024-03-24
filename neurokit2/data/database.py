@@ -1,8 +1,6 @@
 import pathlib
-import urllib.parse
+import urllib
 import zipfile
-
-import requests
 
 
 def download_from_url(url, destination_path=None):
@@ -26,7 +24,7 @@ def download_from_url(url, destination_path=None):
     destination_path = _download_path_sanitize(url, destination_path)
 
     # Download the file
-    response = requests.get(url)
+    response = urllib.request.urlopen(url)
 
     if response.status_code == 200:
         with destination_path.open("wb") as file:

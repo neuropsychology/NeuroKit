@@ -6,14 +6,7 @@ from ..stats import rescale
 from .ecg_findpeaks import ecg_findpeaks
 
 
-def ecg_peaks(
-    ecg_cleaned,
-    sampling_rate=1000,
-    method="neurokit",
-    correct_artifacts=False,
-    show=False,
-    **kwargs
-):
+def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False, show=False, **kwargs):
     """**Find R-peaks in an ECG signal**
 
     Find R-peaks in an ECG signal using the specified method. You can pass an unfiltered ECG
@@ -40,7 +33,9 @@ def ecg_peaks(
     * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.
     * **rodrigues2021**: Adaptation of the work by Sadhukhan & Mitra (2012) and Gutiérrez-Rivas et
       al. (2015) by Rodrigues et al. (2021).
-    * **koka2022**: Algorithm by Koka et al. (2022) based on the visibility graphs.
+    * **emrich2023**: FastNVG Algorithm by Emrich et al. (2023) based on the visibility graph detector of Koka et al. (2022).
+      Provides fast and sample-accurate R-peak detection. The algorithm transforms the ecg into a graph representation
+      and extracts exact R-peak positions using graph metrics.
     * **promac**: ProMAC combines the result of several R-peak detectors in a probabilistic way.
       For a given peak detector, the binary signal representing the peak locations is convolved
       with a Gaussian distribution, resulting in a probabilistic representation of each peak
@@ -153,8 +148,9 @@ def ecg_peaks(
       # rodrigues2021
       _, rodrigues2021 = nk.ecg_peaks(ecg, sampling_rate=250, method="rodrigues2021")
 
-      # koka2022
-      _, koka2022 = nk.ecg_peaks(ecg, sampling_rate=250, method="koka2022")
+      # emrich2023
+      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="emrich2023")
+      _, emrich2023 = nk.ecg_peaks(cleaned, sampling_rate=250, method="emrich2023")
 
       # Collect all R-peak lists by iterating through the result dicts
       rpeaks = [
@@ -171,7 +167,7 @@ def ecg_peaks(
               engzeemod2012,
               kalidas2017,
               rodrigues2021,
-              koka2022
+              emrich2023
           ]
       ]
       # Visualize results
@@ -246,20 +242,16 @@ def ecg_peaks(
     * Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability
       time series artefact correction using novel beat classification. Journal of medical
       engineering & technology, 43(3), 173-181.
+    * Emrich, J., Koka, T., Wirth, S., & Muma, M. (2023), Accelerated Sample-Accurate R-Peak
+      Detectors Based on Visibility Graphs. 31st European Signal Processing Conference
+      (EUSIPCO), 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007
 
     """
     # Store info
     info = {"method_peaks": method.lower(), "method_fixpeaks": "None"}
 
     # First peak detection
-    info.update(
-        ecg_findpeaks(
-            ecg_cleaned,
-            sampling_rate=sampling_rate,
-            method=info["method_peaks"],
-            **kwargs
-        )
-    )
+    info.update(ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=info["method_peaks"], **kwargs))
 
     # Peak correction
     if correct_artifacts:
@@ -422,10 +414,7 @@ def _ecg_peaks_plot_artefacts(
     if len(raw) == 0:
         return "No bad peaks"
     if any([i < len(signal) for i in raw]):
-        return (
-            "Peak indices longer than signal. Signals might have been cropped. "
-            + "Better skip plotting."
-        )
+        return "Peak indices longer than signal. Signals might have been cropped. " + "Better skip plotting."
 
     extra = [i for i in raw if i not in peaks]
     if len(extra) > 0:

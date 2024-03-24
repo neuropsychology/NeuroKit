@@ -79,10 +79,16 @@ def read_xdf(filename, upsample=2, fillmissing=None):
 
         # Special treatment for some devices
         if stream["info"]["name"][0] == "Muse":
-            # Rename GYRO channels and add ACCelerometer
+            # Rename GYRO channels
             if stream["info"]["type"][0] == "GYRO":
                 dat = dat.rename(columns={"X": "GYRO_X", "Y": "GYRO_Y", "Z": "GYRO_Z"})
-                dat["ACC"] = np.sqrt(dat["GYRO_X"] ** 2 + dat["GYRO_Y"] ** 2 + dat["GYRO_Z"] ** 2)
+                # Compute movement
+                dat["GYRO"] = np.sqrt(dat["GYRO_X"] ** 2 + dat["GYRO_Y"] ** 2 + dat["GYRO_Z"] ** 2)
+
+            if stream["info"]["type"][0] == "ACC":
+                dat = dat.rename(columns={"X": "ACC_X", "Y": "ACC_Y", "Z": "ACC_Z"})
+                # Compute acceleration
+                dat["ACC"] = np.sqrt(dat["ACC_X"] ** 2 + dat["ACC_Y"] ** 2 + dat["ACC_Z"] ** 2)
 
             # Muse - PPG data has three channels: ambient, infrared, red
             if stream["info"]["type"][0] == "PPG":

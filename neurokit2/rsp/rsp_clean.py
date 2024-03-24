@@ -15,8 +15,8 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
 
     Clean a respiration signal using different sets of parameters, such as:
 
-    * **khodadad2018**: Linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
-      filter)
+    * **khodadad2018**: Second order 0.05-3 Hz bandpass Butterworth filter. Note that the
+      implementation differs from the referenced paper (see issue #950).
     * **BioSPPy**: Second order 0.1-0.35 Hz bandpass Butterworth filter followed by a constant
       detrending).
     * **hampel**: Applies a median-based Hampel filter by replacing values which are 3 (can be

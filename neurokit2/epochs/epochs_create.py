@@ -113,6 +113,15 @@ def epochs_create(
       # Chunk into n blocks of 1 second
       epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
 
+    * **Example 5**: Epochs with list of starting points
+
+    .. ipython:: python
+
+      epochs = nk.epochs_create(data, events, sampling_rate=100,
+                                epochs_start=[0, -1, -1, 0],
+                                epochs_end=[1, 0, 0, 1])
+      [len(epochs[i]) for i in epochs.keys()]
+
     """
 
     # Santize data input
@@ -129,9 +138,7 @@ def epochs_create(
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
-        events = _events_find_label(
-            {"onset": events}, event_labels=event_labels, event_conditions=event_conditions
-        )
+        events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
 
     event_onsets = list(events["onset"])
     event_labels = list(events["label"])
@@ -160,9 +167,7 @@ def epochs_create(
     length_buffer = epoch_max_duration
 
     # First createa buffer of the same dtype as data and fill with it 0s
-    buffer = pd.DataFrame(0, index=range(length_buffer), columns=data.columns).astype(
-        dtype=data.dtypes
-    )
+    buffer = pd.DataFrame(0, index=range(length_buffer), columns=data.columns).astype(dtype=data.dtypes)
     # Only then, we convert the non-integers to nans (because regular numpy's ints cannot be nan)
     buffer.select_dtypes(exclude="int64").replace({0.0: np.nan}, inplace=True)
     # Now we can combine the buffer with the data
@@ -173,7 +178,6 @@ def epochs_create(
 
     epochs = {}
     for i, label in enumerate(parameters["label"]):
-
         # Find indices
         start = parameters["onset"][i] + (parameters["start"][i] * sampling_rate)
         end = parameters["onset"][i] + (parameters["end"][i] * sampling_rate)
@@ -201,9 +205,7 @@ def epochs_create(
 
     # Sanitize dtype of individual columns
     for i in epochs:
-
         for colname, column in epochs[i].select_dtypes(include=["object"]).items():
-
             # Check whether columns are indices or label/condition
             values = column.unique().tolist()
             zero_or_one = not (False in [x in [0, 1] for x in values])

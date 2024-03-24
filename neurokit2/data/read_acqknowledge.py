@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
 
+from collections import Counter
+
 import numpy as np
 import pandas as pd
 
 from ..signal import signal_resample
 
 
-def read_acqknowledge(
-    filename, sampling_rate="max", resample_method="interpolation", impute_missing=True
-):
+def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
     """**Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe**
 
     The function outputs both the dataframe and the sampling rate (retrieved from the
@@ -69,10 +69,7 @@ def read_acqknowledge(
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError(
-            "NeuroKit error: read_acqknowledge(): couldn't"
-            " find the following file: " + filename
-        )
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't" " find the following file: " + filename)
 
     # Read file
     file = bioread.read(filename)
@@ -84,24 +81,34 @@ def read_acqknowledge(
             freq_list.append(file.named_channels[channel].samples_per_second)
         sampling_rate = np.max(freq_list)
 
+    # Counter for checking duplicate channel names
+    channel_counter = Counter()
+
     # Loop through channels
     data = {}
-    for channel in file.named_channels:
-        signal = np.array(file.named_channels[channel].data)
+    for channel_num, channel in enumerate(file.channels):
+        signal = np.array(file.channels[channel_num].data)
 
         # Fill signal interruptions
         if impute_missing is True and np.isnan(np.sum(signal)):
             signal = pd.Series(signal).fillna(method="pad").values
 
         # Resample if necessary
-        if file.named_channels[channel].samples_per_second != sampling_rate:
+        if file.channels[channel_num].samples_per_second != sampling_rate:
             signal = signal_resample(
                 signal,
-                sampling_rate=file.named_channels[channel].samples_per_second,
+                sampling_rate=file.channels[channel_num].samples_per_second,
                 desired_sampling_rate=sampling_rate,
                 method=resample_method,
             )
-        data[channel] = signal
+
+        # If there is a duplicate channel name, append a number
+        if channel_counter[channel.name] == 0:
+            data[channel.name] = signal
+        else:
+            data[f"{channel.name} ({channel_counter[channel.name]})"] = signal
+
+        channel_counter[channel.name] += 1
 
     # Sanitize lengths
     lengths = []

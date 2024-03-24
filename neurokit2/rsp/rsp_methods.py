@@ -106,14 +106,7 @@ def rsp_methods(
     report_info["text_cleaning"] = f"The raw signal, sampled at {sampling_rate} Hz,"
     if method_cleaning in ["khodadad", "khodadad2018"]:
         report_info["text_cleaning"] += (
-            " linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter; "
-            + "following Khoadadad et al., 2018."
-        )
-
-        refs.append(
-            """Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T.,... & Bayford, R. (2018).
-            Optimized breath detection algorithm in electrical impedance tomography.
-            Physiological measurement, 39(9), 094001."""
+            " was preprocessed using a second order 0.05-3 Hz bandpass Butterworth filter."
         )
     elif method_cleaning in ["hampel", "power", "power2020"]:
         report_info["text_cleaning"] += (
@@ -136,10 +129,10 @@ def rsp_methods(
     elif method_cleaning in ["none"]:
         report_info[
             "text_cleaning"
-        ] += "was directly used for peak detection without preprocessing."
+        ] += " was directly used for peak detection without preprocessing."
     else:
         # just in case more methods are added
-        report_info["text_cleaning"] += f"was cleaned following the {method} method."
+        report_info["text_cleaning"] += f" was cleaned following the {method} method."
 
     # 2. Peaks
     # ----------
