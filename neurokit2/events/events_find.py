@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import itertools
+
 from warnings import warn
 
 import numpy as np
+import pandas as pd
 
 from ..misc import NeuroKitWarning
 from ..signal import signal_binarize
@@ -28,11 +30,13 @@ def events_find(
 
     Parameters
     ----------
-    event_channel : array or list
-        The channel containing the events.
+    event_channel : array or list or DataFrame
+        The channel containing the events. If multiple channels are entered, the channels are
+        handled as digital inputs and a new channel is created based on them.
     threshold : str or float
         The threshold value by which to select the events. If ``"auto"``, takes the value between
-        the max and the min.
+        the max and the min. If ``"auto"`` is used with multi-channel inputs, the default value
+        of 0.9 is used to capture all events.
     threshold_keep : str
         ``"above"`` or ``"below"``, define the events as above or under the threshold. For
         photosensors, a white screen corresponds usually to higher values. Therefore, if your
@@ -60,14 +64,16 @@ def events_find(
         A list containing unique event identifiers. If ``None``, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
-        experimental conditions.
+        experimental conditions. This option is ignored when multiple channels are supplied, as
+        the function generates these automatically.
 
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, ``"onset"`` for event onsets, ``"duration"`` for event
-        durations, ``"label"`` for the event identifiers and the optional ``"conditions"`` passed
-        to ``event_conditions``.
+        Dict containing 3 to 5 arrays, ``"onset"`` for event onsets, ``"duration"`` for event
+        durations, ``"label"`` for the event identifiers, the optional ``"condition"`` passed
+        to ``event_conditions`` and the ``events_channel`` if multiple channels were supplied
+        to the function.
 
     See Also
     --------
@@ -106,12 +112,32 @@ def events_find(
       @suppress
       plt.close()
 
+    Combine multiple digital signals into a single channel and its compute its events
+    The higher the channel, the higher the bit representation on the channel.
 
+    .. ipython:: python
+
+      signal2 = np.zeros(200)
+      signal2[20:60] = 1
+      signal2[110:125] = 1
+      signal2[130:170] = 1
+
+      events = nk.events_find([signal, signal2])
+      events
+      @savefig p_events_find3.png scale=100%
+      nk.events_plot(events, events["events_channel"])
+      @suppress
+      plt.close()
+
+    Convert the event condition results its human readable representation
+
+    .. ipython:: python
+      value_to_condition = {1: "Stimulus 1", 2: "Stimulus 2", 3: "Stimulus 3"}
+      events["condition"] = [value_to_condition[id] for id in events["condition"]]
+      events
 
     """
-    events = _events_find(
-        event_channel, threshold=threshold, threshold_keep=threshold_keep
-    )
+    events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 
     # Warning when no events detected
     if len(events["onset"]) == 0:
@@ -141,12 +167,8 @@ def events_find(
     # Remove based on interval min
     if inter_min > 0:
         inter = np.diff(events["onset"])
-        events["onset"] = np.concatenate(
-            [events["onset"][0:1], events["onset"][1::][inter >= inter_min]]
-        )
-        events["duration"] = np.concatenate(
-            [events["duration"][0:1], events["duration"][1::][inter >= inter_min]]
-        )
+        events["onset"] = np.concatenate([events["onset"][0:1], events["onset"][1::][inter >= inter_min]])
+        events["duration"] = np.concatenate([events["duration"][0:1], events["duration"][1::][inter >= inter_min]])
 
     # Remove first and last n
     if discard_first > 0:
@@ -156,9 +178,7 @@ def events_find(
         events["onset"] = events["onset"][0 : -1 * discard_last]
         events["duration"] = events["duration"][0 : -1 * discard_last]
 
-    events = _events_find_label(
-        events, event_labels=event_labels, event_conditions=event_conditions
-    )
+    events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
 
     return events
 
@@ -168,9 +188,7 @@ def events_find(
 # =============================================================================
 
 
-def _events_find_label(
-    events, event_labels=None, event_conditions=None, function_name="events_find"
-):
+def _events_find_label(events, event_labels=None, event_conditions=None, function_name="events_find"):
     # Get n events
     n = len(events["onset"])
 
@@ -202,7 +220,7 @@ def _events_find_label(
     events["label"] = event_labels
 
     # Condition
-    if event_conditions is not None:
+    if event_conditions is not None and "condition" not in events:
         if len(event_conditions) != n:
             raise ValueError(
                 "NeuroKit error: "
@@ -218,12 +236,18 @@ def _events_find_label(
 
 
 def _events_find(event_channel, threshold="auto", threshold_keep="above"):
-    binary = signal_binarize(event_channel, threshold=threshold)
+    events_channel = _events_generate_events_channel(event_channel)
+
+    # Differing setup based on multi-channel input or single channel input
+    if events_channel is not None:
+        if threshold == "auto":
+            threshold = 0.9
+        binary = signal_binarize(events_channel, threshold=threshold)
+    else:
+        binary = signal_binarize(event_channel, threshold=threshold)
 
     if threshold_keep not in ["above", "below"]:
-        raise ValueError(
-            "In events_find(), 'threshold_keep' must be one of 'above' or 'below'."
-        )
+        raise ValueError("In events_find(), 'threshold_keep' must be one of 'above' or 'below'.")
 
     if threshold_keep != "above":
         binary = np.abs(binary - 1)  # Reverse if events are below
@@ -231,15 +255,57 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
     # Initialize data
     events = {"onset": [], "duration": []}
 
+    if events_channel is not None:
+        events["events_channel"] = events_channel
+        events["condition"] = []
+
     index = 0
     for event, group in itertools.groupby(binary):
         duration = len(list(group))
         if event == 1:
             events["onset"].append(index)
             events["duration"].append(duration)
+
+            if events_channel is not None:
+                events["condition"].append(int(events["events_channel"][index]))
         index += duration
 
     # Convert to array
     events["onset"] = np.array(events["onset"])
     events["duration"] = np.array(events["duration"])
     return events
+
+
+def _events_generate_events_channel(event_channels):
+    # check if nested list / array
+    is_nested_loop = isinstance(event_channels, (list, np.ndarray)) and (
+        len(event_channels) > 1 and isinstance(event_channels[0], (list, np.ndarray))
+    )
+
+    # check if dataframe
+    is_dataframe = isinstance(event_channels, pd.DataFrame) and len(event_channels.columns) > 1
+
+    # if neither, return None and continue
+    if not is_nested_loop and not is_dataframe:
+        return None
+
+    stim_channel = None
+
+    # create stim events array
+    if is_dataframe:
+        stim_channel = np.zeros(event_channels.shape[0])
+
+        # add channels based on order and multiply by power of 2
+        for i, column in enumerate(event_channels):
+            peak_value = np.max(event_channels[column])
+            stim_channel += np.floor(event_channels[column] / peak_value) * 2**i
+
+    elif is_nested_loop:
+        stim_channel = np.zeros(len(event_channels[0]))
+        print(len(event_channels[0]))
+
+        for i, channel in enumerate(event_channels):
+            peak_value = np.max(channel)
+            stim_channel += np.floor(channel / peak_value) * 2**i
+
+    return stim_channel

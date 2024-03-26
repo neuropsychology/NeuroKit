@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -82,13 +83,13 @@ def test_stim_events_find():
     channel3[150:170] = 1
 
     # test list of channels input
-    stim_events, stim_channel = nk.stim_events_find([channel1, channel2, channel3])
+    stim_events = nk.events_find([channel1, channel2, channel3])
     assert list(stim_events["onset"]) == [10, 60, 150]
     assert list(stim_events["duration"]) == [20, 20, 20]
     assert stim_events["condition"] == [1, 3, 7]
 
     # test array of array channels input
-    stim_events, stim_channel = nk.stim_events_find(
+    stim_events = nk.events_find(
                                    np.array([channel1, channel2, channel3])
                                 )
 
@@ -96,24 +97,13 @@ def test_stim_events_find():
     assert list(stim_events["duration"]) == [20, 20, 20]
     assert stim_events["condition"] == [1, 3, 7]
 
-
-    # test dictionary value to condition
-    value_condition = {1: "start", 3: "stim", 7: "end"}
-    stim_events, stim_channel = nk.stim_events_find([channel1, channel2, channel3],
-                                                 value_condition
-                                                 )
+    # test for pandas dataframe
+    stim_events = nk.events_find(
+            pd.DataFrame({"c1": channel1, "c2": channel2, "c3": channel3})
+                                )
 
     assert list(stim_events["onset"]) == [10, 60, 150]
     assert list(stim_events["duration"]) == [20, 20, 20]
-    assert stim_events["condition"] == ["start", "stim", "end"]
+    assert stim_events["condition"] == [1, 3, 7]
 
-    # test dictionary value to condition (not all stim descsriptions exist)
-    value_condition = {1: "start", 7: "end"}
-    stim_events, stim_channel = nk.stim_events_find([channel1, channel2, channel3],
-                                                 value_condition
-                                                 )
-
-    assert list(stim_events["onset"]) == [10, 60, 150]
-    assert list(stim_events["duration"]) == [20, 20, 20]
-    assert stim_events["condition"] == ["start", 3, "end"]
 
