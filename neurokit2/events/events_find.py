@@ -32,7 +32,7 @@ def events_find(
     ----------
     event_channel : array or list or DataFrame
         The channel containing the events. If multiple channels are entered, the channels are
-        handled as digital inputs and a new channel is created based on them.
+        handled as reflecting different events new channel is created based on them.
     threshold : str or float
         The threshold value by which to select the events. If ``"auto"``, takes the value between
         the max and the min. If ``"auto"`` is used with multi-channel inputs, the default value
@@ -105,7 +105,7 @@ def events_find(
 
     .. ipython:: python
 
-      events = nk.events_find(signal, duration_min= 10)
+      events = nk.events_find(signal, duration_min=10)
 
       @savefig p_events_find2.png scale=100%
       nk.events_plot(events, signal)
@@ -118,13 +118,18 @@ def events_find(
     .. ipython:: python
 
       signal2 = np.zeros(200)
-      signal2[20:60] = 1
+      signal2[65:80] = 1
       signal2[110:125] = 1
-      signal2[130:170] = 1
+      signal2[175:190] = 1
+
+      @savefig p_events_find3.png scale=100%
+      nk.signal_plot([signal, signal2])
+      @suppress
+      plt.close()
 
       events = nk.events_find([signal, signal2])
       events
-      @savefig p_events_find3.png scale=100%
+      @savefig p_events_find4.png scale=100%
       nk.events_plot(events, events["events_channel"])
       @suppress
       plt.close()
@@ -137,7 +142,9 @@ def events_find(
       events
 
     """
-    events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
+    events = _events_find(
+        event_channel, threshold=threshold, threshold_keep=threshold_keep
+    )
 
     # Warning when no events detected
     if len(events["onset"]) == 0:
@@ -167,8 +174,12 @@ def events_find(
     # Remove based on interval min
     if inter_min > 0:
         inter = np.diff(events["onset"])
-        events["onset"] = np.concatenate([events["onset"][0:1], events["onset"][1::][inter >= inter_min]])
-        events["duration"] = np.concatenate([events["duration"][0:1], events["duration"][1::][inter >= inter_min]])
+        events["onset"] = np.concatenate(
+            [events["onset"][0:1], events["onset"][1::][inter >= inter_min]]
+        )
+        events["duration"] = np.concatenate(
+            [events["duration"][0:1], events["duration"][1::][inter >= inter_min]]
+        )
 
     # Remove first and last n
     if discard_first > 0:
@@ -178,7 +189,9 @@ def events_find(
         events["onset"] = events["onset"][0 : -1 * discard_last]
         events["duration"] = events["duration"][0 : -1 * discard_last]
 
-    events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
+    events = _events_find_label(
+        events, event_labels=event_labels, event_conditions=event_conditions
+    )
 
     return events
 
@@ -188,7 +201,9 @@ def events_find(
 # =============================================================================
 
 
-def _events_find_label(events, event_labels=None, event_conditions=None, function_name="events_find"):
+def _events_find_label(
+    events, event_labels=None, event_conditions=None, function_name="events_find"
+):
     # Get n events
     n = len(events["onset"])
 
@@ -247,7 +262,9 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
         binary = signal_binarize(event_channel, threshold=threshold)
 
     if threshold_keep not in ["above", "below"]:
-        raise ValueError("In events_find(), 'threshold_keep' must be one of 'above' or 'below'.")
+        raise ValueError(
+            "In events_find(), 'threshold_keep' must be one of 'above' or 'below'."
+        )
 
     if threshold_keep != "above":
         binary = np.abs(binary - 1)  # Reverse if events are below
@@ -283,7 +300,9 @@ def _events_generate_events_channel(event_channels):
     )
 
     # check if dataframe
-    is_dataframe = isinstance(event_channels, pd.DataFrame) and len(event_channels.columns) > 1
+    is_dataframe = (
+        isinstance(event_channels, pd.DataFrame) and len(event_channels.columns) > 1
+    )
 
     # if neither, return None and continue
     if not is_nested_loop and not is_dataframe:
@@ -302,8 +321,6 @@ def _events_generate_events_channel(event_channels):
 
     elif is_nested_loop:
         stim_channel = np.zeros(len(event_channels[0]))
-        print(len(event_channels[0]))
-
         for i, channel in enumerate(event_channels):
             peak_value = np.max(channel)
             stim_channel += np.floor(channel / peak_value) * 2**i
