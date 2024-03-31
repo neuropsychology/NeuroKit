@@ -6,8 +6,9 @@ News
 New Features
 +++++++++++++
 
-* New feature `stim_events_find()`: combines multiple digital input channels and retrieves events
-  from the new stimulus channel and differentiates between the different levels.
+* New feature `events_find()`: is now able to combine multiple digital input channels,
+  retrieve events from the combined events channel and differentiate between the inputs that
+  occur simultaneously.
 
 
 
