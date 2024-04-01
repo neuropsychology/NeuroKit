@@ -581,7 +581,7 @@ experimental conditions.</p></li>
 <h3><em>epochs_plot()</em><a class="headerlink" href="#epochs-plot" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.epochs.epochs_plot">
-<span class="sig-name descname"><span class="pre">epochs_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_plot.html#epochs_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">epochs_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/epochs/epochs_plot.html#epochs_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.epochs.epochs_plot" title="Link to this definition">#</a></dt>
 <dd><p><strong>Epochs visualization</strong></p>
 <p>Plot epochs.</p>
 <dl class="field-list simple">
@@ -589,6 +589,7 @@ experimental conditions.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>epochs</strong> (<em>dict</em>) – A dict containing one DataFrame per event/trial. Usually obtained via <cite>epochs_create()</cite>.</p></li>
 <li><p><strong>legend</strong> (<em>bool</em>) – Display the legend (the key of each epoch).</p></li>
+<li><p><strong>columns</strong> (<em>str or list</em>) – Which columns to plot. If ‘all’, plot all columns. If a list, plot only the columns in the list.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to pass (not used for now).</p></li>
 </ul>
 </dd>
