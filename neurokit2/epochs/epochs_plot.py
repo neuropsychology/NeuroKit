@@ -36,10 +36,10 @@ def epochs_plot(epochs, legend=True, columns="all", **kwargs):
       events = nk.events_find(data["Photosensor"],
                               threshold_keep='below',
                               event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-      epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=1)
+      epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=7)
 
       @savefig p_epochs_plot1.png scale=100%
-      nk.epochs_plot(epochs)
+      nk.epochs_plot(epochs, columns=["EDA", "RSP"])
       @suppress
       plt.close()
 
