@@ -377,9 +377,11 @@ document.write(`
   <h1>Source code for neurokit2.events.events_find</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
+
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_binarize</span>
@@ -407,11 +409,13 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    event_channel : array or list</span>
-<span class="sd">        The channel containing the events.</span>
+<span class="sd">    event_channel : array or list or DataFrame</span>
+<span class="sd">        The channel containing the events. If multiple channels are entered, the channels are</span>
+<span class="sd">        handled as reflecting different events new channel is created based on them.</span>
 <span class="sd">    threshold : str or float</span>
 <span class="sd">        The threshold value by which to select the events. If ``&quot;auto&quot;``, takes the value between</span>
-<span class="sd">        the max and the min.</span>
+<span class="sd">        the max and the min. If ``&quot;auto&quot;`` is used with multi-channel inputs, the default value</span>
+<span class="sd">        of 0.9 is used to capture all events.</span>
 <span class="sd">    threshold_keep : str</span>
 <span class="sd">        ``&quot;above&quot;`` or ``&quot;below&quot;``, define the events as above or under the threshold. For</span>
 <span class="sd">        photosensors, a white screen corresponds usually to higher values. Therefore, if your</span>
@@ -439,14 +443,16 @@ document.write(`
 <span class="sd">        A list containing unique event identifiers. If ``None``, will use the event index number.</span>
 <span class="sd">    event_conditions : list</span>
 <span class="sd">        An optional list containing, for each event, for example the trial category, group or</span>
-<span class="sd">        experimental conditions.</span>
+<span class="sd">        experimental conditions. This option is ignored when multiple channels are supplied, as</span>
+<span class="sd">        the function generates these automatically.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
 <span class="sd">    dict</span>
-<span class="sd">        Dict containing 3 or 4 arrays, ``&quot;onset&quot;`` for event onsets, ``&quot;duration&quot;`` for event</span>
-<span class="sd">        durations, ``&quot;label&quot;`` for the event identifiers and the optional ``&quot;conditions&quot;`` passed</span>
-<span class="sd">        to ``event_conditions``.</span>
+<span class="sd">        Dict containing 3 to 5 arrays, ``&quot;onset&quot;`` for event onsets, ``&quot;duration&quot;`` for event</span>
+<span class="sd">        durations, ``&quot;label&quot;`` for the event identifiers, the optional ``&quot;condition&quot;`` passed</span>
+<span class="sd">        to ``event_conditions`` and the ``events_channel`` if multiple channels were supplied</span>
+<span class="sd">        to the function.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -478,14 +484,41 @@ document.write(`
 
 <span class="sd">    .. ipython:: python</span>
 
-<span class="sd">      events = nk.events_find(signal, duration_min= 10)</span>
+<span class="sd">      events = nk.events_find(signal, duration_min=10)</span>
 
 <span class="sd">      @savefig p_events_find2.png scale=100%</span>
 <span class="sd">      nk.events_plot(events, signal)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    Combine multiple digital signals into a single channel and its compute its events</span>
+<span class="sd">    The higher the channel, the higher the bit representation on the channel.</span>
 
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      signal2 = np.zeros(200)</span>
+<span class="sd">      signal2[65:80] = 1</span>
+<span class="sd">      signal2[110:125] = 1</span>
+<span class="sd">      signal2[175:190] = 1</span>
+
+<span class="sd">      @savefig p_events_find3.png scale=100%</span>
+<span class="sd">      nk.signal_plot([signal, signal2])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">      events = nk.events_find([signal, signal2])</span>
+<span class="sd">      events</span>
+<span class="sd">      @savefig p_events_find4.png scale=100%</span>
+<span class="sd">      nk.events_plot(events, events[&quot;events_channel&quot;])</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    Convert the event condition results its human readable representation</span>
+
+<span class="sd">    .. ipython:: python</span>
+<span class="sd">      value_to_condition = {1: &quot;Stimulus 1&quot;, 2: &quot;Stimulus 2&quot;, 3: &quot;Stimulus 3&quot;}</span>
+<span class="sd">      events[&quot;condition&quot;] = [value_to_condition[id] for id in events[&quot;condition&quot;]]</span>
+<span class="sd">      events</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">_events_find</span><span class="p">(</span>
@@ -582,7 +615,7 @@ document.write(`
     <span class="n">events</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event_labels</span>
 
     <span class="c1"># Condition</span>
-    <span class="k">if</span> <span class="n">event_conditions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">event_conditions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;condition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">event_conditions</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;NeuroKit error: &quot;</span>
@@ -598,7 +631,15 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_events_find</span><span class="p">(</span><span class="n">event_channel</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">threshold_keep</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">):</span>
-    <span class="n">binary</span> <span class="o">=</span> <span class="n">signal_binarize</span><span class="p">(</span><span class="n">event_channel</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+    <span class="n">events_channel</span> <span class="o">=</span> <span class="n">_events_generate_events_channel</span><span class="p">(</span><span class="n">event_channel</span><span class="p">)</span>
+
+    <span class="c1"># Differing setup based on multi-channel input or single channel input</span>
+    <span class="k">if</span> <span class="n">events_channel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">threshold</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">binary</span> <span class="o">=</span> <span class="n">signal_binarize</span><span class="p">(</span><span class="n">events_channel</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">binary</span> <span class="o">=</span> <span class="n">signal_binarize</span><span class="p">(</span><span class="n">event_channel</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">threshold_keep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="s2">&quot;below&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -611,18 +652,60 @@ document.write(`
     <span class="c1"># Initialize data</span>
     <span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;onset&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="p">[]}</span>
 
+    <span class="k">if</span> <span class="n">events_channel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">events</span><span class="p">[</span><span class="s2">&quot;events_channel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events_channel</span>
+        <span class="n">events</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
     <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">event</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">binary</span><span class="p">):</span>
         <span class="n">duration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
             <span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">events_channel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">events</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;events_channel&quot;</span><span class="p">][</span><span class="n">index</span><span class="p">]))</span>
         <span class="n">index</span> <span class="o">+=</span> <span class="n">duration</span>
 
     <span class="c1"># Convert to array</span>
     <span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">])</span>
     <span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">events</span>
+
+
+<span class="k">def</span> <span class="nf">_events_generate_events_channel</span><span class="p">(</span><span class="n">event_channels</span><span class="p">):</span>
+    <span class="c1"># check if nested list / array</span>
+    <span class="n">is_nested_loop</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event_channels</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">event_channels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="c1"># check if dataframe</span>
+    <span class="n">is_dataframe</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">event_channels</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">event_channels</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+    <span class="p">)</span>
+
+    <span class="c1"># if neither, return None and continue</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_nested_loop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_dataframe</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">stim_channel</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># create stim events array</span>
+    <span class="k">if</span> <span class="n">is_dataframe</span><span class="p">:</span>
+        <span class="n">stim_channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">event_channels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># add channels based on order and multiply by power of 2</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">event_channels</span><span class="p">):</span>
+            <span class="n">peak_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">event_channels</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+            <span class="n">stim_channel</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">event_channels</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">/</span> <span class="n">peak_value</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">i</span>
+
+    <span class="k">elif</span> <span class="n">is_nested_loop</span><span class="p">:</span>
+        <span class="n">stim_channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event_channels</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">event_channels</span><span class="p">):</span>
+            <span class="n">peak_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+            <span class="n">stim_channel</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">channel</span> <span class="o">/</span> <span class="n">peak_value</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">i</span>
+
+    <span class="k">return</span> <span class="n">stim_channel</span>
 </pre></div>
 
                 </article>

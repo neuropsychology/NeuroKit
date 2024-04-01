@@ -536,9 +536,11 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>event_channel</strong> (<em>array or list</em>) – The channel containing the events.</p></li>
+<li><p><strong>event_channel</strong> (<em>array or list or DataFrame</em>) – The channel containing the events. If multiple channels are entered, the channels are
+handled as reflecting different events new channel is created based on them.</p></li>
 <li><p><strong>threshold</strong> (<em>str or float</em>) – The threshold value by which to select the events. If <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>, takes the value between
-the max and the min.</p></li>
+the max and the min. If <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> is used with multi-channel inputs, the default value
+of 0.9 is used to capture all events.</p></li>
 <li><p><strong>threshold_keep</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">&quot;above&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;below&quot;</span></code>, define the events as above or under the threshold. For
 photosensors, a white screen corresponds usually to higher values. Therefore, if your
 events are signaled by a black colour, events values are the lower ones (i.e., the signal
@@ -556,13 +558,15 @@ If <code class="docutils literal notranslate"><span class="pre">discard_first=0<
 If <code class="docutils literal notranslate"><span class="pre">discard_last=0</span></code>, no last event is removed.</p></li>
 <li><p><strong>event_labels</strong> (<em>list</em>) – A list containing unique event identifiers. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will use the event index number.</p></li>
 <li><p><strong>event_conditions</strong> (<em>list</em>) – An optional list containing, for each event, for example the trial category, group or
-experimental conditions.</p></li>
+experimental conditions. This option is ignored when multiple channels are supplied, as
+the function generates these automatically.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>dict</em> – Dict containing 3 or 4 arrays, <code class="docutils literal notranslate"><span class="pre">&quot;onset&quot;</span></code> for event onsets, <code class="docutils literal notranslate"><span class="pre">&quot;duration&quot;</span></code> for event
-durations, <code class="docutils literal notranslate"><span class="pre">&quot;label&quot;</span></code> for the event identifiers and the optional <code class="docutils literal notranslate"><span class="pre">&quot;conditions&quot;</span></code> passed
-to <code class="docutils literal notranslate"><span class="pre">event_conditions</span></code>.</p>
+<dd class="field-even"><p><em>dict</em> – Dict containing 3 to 5 arrays, <code class="docutils literal notranslate"><span class="pre">&quot;onset&quot;</span></code> for event onsets, <code class="docutils literal notranslate"><span class="pre">&quot;duration&quot;</span></code> for event
+durations, <code class="docutils literal notranslate"><span class="pre">&quot;label&quot;</span></code> for the event identifiers, the optional <code class="docutils literal notranslate"><span class="pre">&quot;condition&quot;</span></code> passed
+to <code class="docutils literal notranslate"><span class="pre">event_conditions</span></code> and the <code class="docutils literal notranslate"><span class="pre">events_channel</span></code> if multiple channels were supplied
+to the function.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -596,12 +600,51 @@ to <code class="docutils literal notranslate"><span class="pre">event_conditions
 </div>
 <a class="reference internal image-reference" href="savefig/p_events_find1.png"><img alt="savefig/p_events_find1.png" src="savefig/p_events_find1.png" /></a>
 <p>The second event is an artifact (too short), we can skip it</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">duration_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="savefig/p_events_find2.png"><img alt="savefig/p_events_find2.png" src="savefig/p_events_find2.png" /></a>
+<p>Combine multiple digital signals into a single channel and its compute its events
+The higher the channel, the higher the bit representation on the channel.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">signal2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">signal2</span><span class="p">[</span><span class="mi">65</span><span class="p">:</span><span class="mi">80</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="gp">In [14]: </span><span class="n">signal2</span><span class="p">[</span><span class="mi">110</span><span class="p">:</span><span class="mi">125</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="gp">In [15]: </span><span class="n">signal2</span><span class="p">[</span><span class="mi">175</span><span class="p">:</span><span class="mi">190</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="gp">In [16]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">signal2</span><span class="p">])</span>
+
+<span class="gp">In [17]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">signal2</span><span class="p">])</span>
+
+<span class="gp">In [18]: </span><span class="n">events</span>
+<span class="gh">Out[18]: </span>
+<span class="go">{&#39;onset&#39;: array([ 20,  65, 100, 110, 130, 175]),</span>
+<span class="go"> &#39;duration&#39;: array([40, 15,  5, 15, 40, 15]),</span>
+<span class="go"> &#39;events_channel&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,</span>
+<span class="go">        0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 0., 0., 0., 0., 0., 2., 2., 2.,</span>
+<span class="go">        2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 0., 0., 0., 0., 0.,</span>
+<span class="go">        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1.,</span>
+<span class="go">        1., 1., 1., 0., 0., 0., 0., 0., 2., 2., 2., 2., 2., 2., 2., 2., 2.,</span>
+<span class="go">        2., 2., 2., 2., 2., 2., 0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        0., 0., 0., 0., 0., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.,</span>
+<span class="go">        2., 2., 2., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]),</span>
+<span class="go"> &#39;condition&#39;: [1, 2, 1, 2, 1, 2],</span>
+<span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;], dtype=&#39;&lt;U11&#39;)}</span>
+
+<span class="gp">In [19]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;events_channel&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_events_find3.png"><img alt="savefig/p_events_find3.png" src="savefig/p_events_find3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_events_find4.png"><img alt="savefig/p_events_find4.png" src="savefig/p_events_find4.png" /></a>
+<p>Convert the event condition results its human readable representation</p>
 </dd></dl>
 
 </section>
@@ -735,7 +778,7 @@ via <code class="docutils literal notranslate"><span class="pre">raw.add_events(
 <span class="gp">In [8]: </span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_to_mne</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">event_id</span>
-<span class="gh">Out[9]: </span><span class="go">{&#39;B&#39;: 0, &#39;A&#39;: 1}</span>
+<span class="gh">Out[9]: </span><span class="go">{&#39;A&#39;: 0, &#39;B&#39;: 1}</span>
 </pre></div>
 </div>
 </dd></dl>
