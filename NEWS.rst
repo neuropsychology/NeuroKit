@@ -1,6 +1,17 @@
 News
 =====
 
+0.2.8
+-------------------
+New Features
++++++++++++++
+
+* New feature `events_find()`: is now able to combine multiple digital input channels,
+  retrieve events from the combined events channel and differentiate between the inputs that
+  occur simultaneously.
+
+
+
 0.2.4
 -------------------
 Fixes

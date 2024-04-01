@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -65,3 +66,44 @@ def test_events_plot():
     assert len(labels) == len(handles)
 
     plt.close(fig)
+
+
+def test_stim_events_find():
+
+    channel1 = np.zeros(200)
+    channel1[10:30] = 1
+    channel1[60:80] = 1
+    channel1[150:170] = 1
+
+    channel2 = np.zeros(200)
+    channel2[60:80] = 1
+    channel2[150:170] = 1
+
+    channel3 = np.zeros(200)
+    channel3[150:170] = 1
+
+    # test list of channels input
+    stim_events = nk.events_find([channel1, channel2, channel3])
+    assert list(stim_events["onset"]) == [10, 60, 150]
+    assert list(stim_events["duration"]) == [20, 20, 20]
+    assert stim_events["condition"] == [1, 3, 7]
+
+    # test array of array channels input
+    stim_events = nk.events_find(
+                                   np.array([channel1, channel2, channel3])
+                                )
+
+    assert list(stim_events["onset"]) == [10, 60, 150]
+    assert list(stim_events["duration"]) == [20, 20, 20]
+    assert stim_events["condition"] == [1, 3, 7]
+
+    # test for pandas dataframe
+    stim_events = nk.events_find(
+            pd.DataFrame({"c1": channel1, "c2": channel2, "c3": channel3})
+                                )
+
+    assert list(stim_events["onset"]) == [10, 60, 150]
+    assert list(stim_events["duration"]) == [20, 20, 20]
+    assert stim_events["condition"] == [1, 3, 7]
+
+
