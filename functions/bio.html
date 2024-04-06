@@ -541,11 +541,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.054860  -0.068020  70.049813  ...            0      4.0   7.889564</span>
-<span class="go">1  1.002603  -0.190020  70.049813  ...            0      4.0   7.889564</span>
-<span class="go">2  0.867310  -0.324474  70.049813  ...            0      4.0   7.889564</span>
-<span class="go">3  0.675319  -0.475607  70.049813  ...            0      4.0   7.889564</span>
-<span class="go">4  0.454680  -0.640200  70.049813  ...            0      4.0   7.889564</span>
+<span class="go">0  1.082495  -0.074407  69.998963  ...            0      8.0   7.906503</span>
+<span class="go">1  1.028872  -0.199971  69.998963  ...            0      8.0   7.906503</span>
+<span class="go">2  0.889847  -0.338673  69.998963  ...            0      8.0   7.906503</span>
+<span class="go">3  0.691951  -0.495154  69.998963  ...            0      8.0   7.906503</span>
+<span class="go">4  0.463497  -0.666323  69.998963  ...            0      8.0   7.906503</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -646,7 +646,7 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T     RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN   7.111969 -1.776357e-15</span>
+<span class="go">1     1  Negative         1024  ...               NaN   7.111969  1.776357e-15</span>
 <span class="go">2     2   Neutral         4957  ...               NaN -15.476818  1.203761e-02</span>
 <span class="go">3     3   Neutral         9224  ...               NaN  -6.685871  2.738234e-02</span>
 <span class="go">4     4  Negative        12984  ...               NaN  -0.397892 -5.451553e-03</span>
