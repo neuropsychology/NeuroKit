@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>PPG &#8212; NeuroKit2 0.2.8 documentation</title>
+    <title>PPG &#8212; NeuroKit2 0.2.9 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=a0cf2451"></script>
+    <script src="../_static/documentation_options.js?v=1b33a64c"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -138,8 +138,8 @@
       
     
     
-    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.8 documentation - Home"/>
-    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.8 documentation - Home"/>`);</script>
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.9 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.9 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -611,9 +611,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.089330           0.992999</span>
-<span class="go">2     2        10000  ...                 -1.196503           0.841941</span>
-<span class="go">3     3        15000  ...                 -0.418167           0.743738</span>
+<span class="go">1     1         5000  ...                 -0.797136           0.900890</span>
+<span class="go">2     2        10000  ...                 -2.094703           0.970885</span>
+<span class="go">3     3        15000  ...                 -1.359211           0.882318</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -858,8 +858,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 49,  89, 132, 174, 221, 263, 306, 352, 404, 441, 475, 516, 571,</span>
-<span class="go">       631, 668, 707, 743, 776, 814, 851, 887, 925, 964])</span>
+<span class="go">array([ 45,  87, 133, 175, 215, 264, 305, 350, 394, 446, 520, 576, 634,</span>
+<span class="go">       671, 708, 742, 779, 813, 852, 887, 927, 963])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -943,9 +943,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.559415           0.933506</span>
-<span class="go">2     2        10000  ...                  1.197236           0.944286</span>
-<span class="go">3     3        15000  ...                  1.073562           0.973651</span>
+<span class="go">1     1         5000  ...                 -0.761809           0.887379</span>
+<span class="go">2     2        10000  ...                  0.492673           0.986730</span>
+<span class="go">3     3        15000  ...                 -0.464755           0.722780</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
