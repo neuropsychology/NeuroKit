@@ -1,4 +1,5 @@
 """Top-level package for NeuroKit."""
+
 import datetime
 import platform
 
@@ -32,12 +33,12 @@ from .stats import *
 from .video import *
 
 # Info
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 
 # Maintainer info
 __author__ = "The NeuroKit development team"
-__email__ = "dom.makowski@gmail.com"
+__email__ = "D.Makowski@sussex.ac.uk"
 
 
 # Citation
