@@ -1,14 +1,9 @@
 # - * - coding: utf-8 - * -
-from warnings import warn
 
 import numpy as np
-import scipy
 
 from ..epochs import epochs_to_df
-from ..misc import NeuroKitWarning
 from ..signal import signal_interpolate
-from ..signal.signal_power import signal_power
-from ..stats import distance, rescale
 from .ppg_peaks import ppg_peaks
 from .ppg_segment import ppg_segment
 

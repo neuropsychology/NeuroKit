@@ -66,7 +66,9 @@ def ppg_methods(
 
       import neurokit2 as nk
 
-      methods = nk.ppg_methods(sampling_rate=100, method="elgendi", method_cleaning="nabian2018", method_quality="templatematch")
+      methods = nk.ppg_methods(
+          sampling_rate=100, method="elgendi",
+          method_cleaning="nabian2018", method_quality="templatematch")
       print(methods["text_cleaning"])
       print(methods["references"][0])
 
