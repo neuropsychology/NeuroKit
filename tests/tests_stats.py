@@ -122,6 +122,7 @@ def test_cor():
     rez = nk.cor(utd_example_x, utd_example_y, "kendall")
     assert np.allclose(rez, 0.6666666666666669, atol=0.0001)
 
+    # negative test for incorrect 'method' argument
     try:
         rez = nk.cor(wiki_example_x, wiki_example_y, "pearso")
     except ValueError as e:
