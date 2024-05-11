@@ -121,3 +121,8 @@ def test_cor():
     utd_example_y = np.array([1, 4, 2, 3])
     rez = nk.cor(utd_example_x, utd_example_y, "kendall")
     assert np.allclose(rez, 0.6666666666666669, atol=0.0001)
+
+    try:
+        rez = nk.cor(wiki_example_x, wiki_example_y, "pearso")
+    except ValueError as e:
+        print(e)
