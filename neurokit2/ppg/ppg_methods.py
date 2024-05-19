@@ -190,7 +190,10 @@ def ppg_methods(
     elif method_quality in ["disimilarity"]:
         report_info[
             "text_quality"
-        ] = "The quality assessment was carried out using a disimilarity measure of positive-peaked beats, approximately as described in Sabeti et al. (2019)."
+        ] = (
+            "The quality assessment was carried out using a disimilarity measure of positive-peaked beats, "
+            + "approximately as described in Sabeti et al. (2019)."
+        )
         refs.append(
             """Sabeti E, Reamaroon N, Mathis M, Gryak J, Sjoding M, Najarian K (2019)
             Signal quality measure for pulsatile physiological signals using
