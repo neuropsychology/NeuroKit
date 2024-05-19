@@ -114,6 +114,7 @@ def ppg_process(
             "PPG_Clean": ppg_cleaned,
             "PPG_Rate": rate,
             "PPG_Quality": quality,
+            "PPG_Peaks": peaks_signal["PPG_Peaks"].values,
         }
     )
 
