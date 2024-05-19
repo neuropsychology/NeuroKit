@@ -253,6 +253,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
         [[signal]],
         sfreq=sampling_rate,
         freqs=np.linspace(frequency_band[0], frequency_band[1], precision),
+        zero_mean=False,
         output="power",
     )
     power = np.mean(out[0][0], axis=0)
