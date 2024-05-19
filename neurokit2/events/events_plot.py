@@ -127,7 +127,7 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
     else:
         # Convert color and style to list
         if isinstance(color, str):
-            color_map = matplotlib.cm.get_cmap("rainbow")
+            color_map = plt.get_cmap("rainbow")
             color = color_map(np.linspace(0, 1, num=len(events)))
         if isinstance(linestyle, str):
             linestyle = np.full(len(events), linestyle)
