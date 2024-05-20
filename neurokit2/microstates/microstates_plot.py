@@ -99,7 +99,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
     if epoch is None:
         epoch = (0, len(gfp))
 
-    cmap = plt.cm.get_cmap("plasma", n)
+    cmap = plt.get_cmap("plasma").resampled(n)
     # Plot the GFP line above the area
     ax["GFP"].plot(
         times[epoch[0] : epoch[1]], gfp[epoch[0] : epoch[1]], color="black", linewidth=0.5

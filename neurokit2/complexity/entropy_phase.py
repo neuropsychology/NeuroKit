@@ -123,7 +123,7 @@ def entropy_phase(signal, delay=1, k=4, show=False, **kwargs):
         Tx = Tx.astype(bool)
         Ys = np.sin(angles) * limx * np.sqrt(2)
         Xs = np.cos(angles) * limx * np.sqrt(2)
-        colors = plt.get_cmap("jet")(np.linspace(0, 1, k))
+        colors = plt.get_cmap("jet").resampled(k)
 
         plt.figure()
         for i in range(k):
