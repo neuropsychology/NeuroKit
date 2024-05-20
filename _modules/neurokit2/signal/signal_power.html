@@ -38,7 +38,7 @@
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../../../_static/documentation_options.js?v=1b33a64c"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -376,7 +376,6 @@ document.write(`
                   
   <h1>Source code for neurokit2.signal.signal_power</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -573,7 +572,7 @@ document.write(`
         <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> Hz&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">]</span>
 
     <span class="c1"># Get cmap</span>
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="o">.</span><span class="n">colors</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
@@ -633,6 +632,7 @@ document.write(`
         <span class="p">[[</span><span class="n">signal</span><span class="p">]],</span>
         <span class="n">sfreq</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
         <span class="n">freqs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">frequency_band</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">frequency_band</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">precision</span><span class="p">),</span>
+        <span class="n">zero_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">output</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>

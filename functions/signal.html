@@ -39,7 +39,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=1b33a64c"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -619,7 +619,14 @@ document.write(`
 <span class="gh">Out[3]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_simulate1.png"><img alt="savefig/p_signal_simulate1.png" src="savefig/p_signal_simulate1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_simulate1.png"><img alt="savefig/p_signal_simulate1.png" src="savefig/p_signal_simulate1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_simulate.py:docstring of neurokit2.signal.signal_simulate.signal_simulate</span>, line 16)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_simulate1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_simulate1.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -691,7 +698,14 @@ The powerline frequency (normally 50 Hz or 60Hz).</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_filter1.png"><img alt="savefig/p_signal_filter1.png" src="savefig/p_signal_filter1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_filter1.png"><img alt="savefig/p_signal_filter1.png" src="savefig/p_signal_filter1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_filter.py:docstring of neurokit2.signal.signal_filter.signal_filter</span>, line 29)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_filter1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_filter1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize Highpass Filtered Signal using Different Methods</span>
 <span class="gp">In [7]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
 <span class="gp">   ...: </span>                    <span class="s2">&quot;Butter_2&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span>
@@ -708,7 +722,14 @@ The powerline frequency (normally 50 Hz or 60Hz).</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_filter2.png"><img alt="savefig/p_signal_filter2.png" src="savefig/p_signal_filter2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_filter2.png"><img alt="savefig/p_signal_filter2.png" src="savefig/p_signal_filter2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_filter.py:docstring of neurokit2.signal.signal_filter.signal_filter</span>, line 19)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_filter2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_filter2.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using Bandpass Filtering in real-life scenarios</span>
 <span class="go"># Simulate noisy respiratory signal</span>
 <span class="gp">In [8]: </span><span class="n">original</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -737,7 +758,14 @@ The powerline frequency (normally 50 Hz or 60Hz).</p></li>
 <span class="gp">   ....: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_filter3.png"><img alt="savefig/p_signal_filter3.png" src="savefig/p_signal_filter3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_filter3.png"><img alt="savefig/p_signal_filter3.png" src="savefig/p_signal_filter3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_filter.py:docstring of neurokit2.signal.signal_filter.signal_filter</span>, line 31)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_filter3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_filter3.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -825,7 +853,14 @@ increases. In contrast, <code class="docutils literal notranslate"><span class="
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_resample1.png"><img alt="savefig/p_signal_resample1.png" src="savefig/p_signal_resample1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_resample1.png"><img alt="savefig/p_signal_resample1.png" src="savefig/p_signal_resample1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_resample.py:docstring of neurokit2.signal.signal_resample.signal_resample</span>, line 21)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_resample1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_resample1.png'</p>
+</aside>
+</a>
 <p><strong>Example 2</strong>: Upsampling</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
@@ -839,7 +874,14 @@ increases. In contrast, <code class="docutils literal notranslate"><span class="
 <span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()],</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_resample2.png"><img alt="savefig/p_signal_resample2.png" src="savefig/p_signal_resample2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_resample2.png"><img alt="savefig/p_signal_resample2.png" src="savefig/p_signal_resample2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_resample.py:docstring of neurokit2.signal.signal_resample.signal_resample</span>, line 15)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_resample2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_resample2.png'</p>
+</aside>
+</a>
 <p><strong>Example 3</strong>: Benchmark</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
@@ -940,7 +982,14 @@ value between the max and the min.</p></li>
 <span class="gh">Out[6]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_binarize.png"><img alt="savefig/p_signal_binarize.png" src="savefig/p_signal_binarize.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_binarize.png"><img alt="savefig/p_signal_binarize.png" src="savefig/p_signal_binarize.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_binarize.py:docstring of neurokit2.signal.signal_binarize.signal_binarize</span>, line 17)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_binarize.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_binarize.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -987,7 +1036,14 @@ to 50.</p></li>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_decompose1.png"><img alt="savefig/p_signal_decompose1.png" src="savefig/p_signal_decompose1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_decompose1.png"><img alt="savefig/p_signal_decompose1.png" src="savefig/p_signal_decompose1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_decompose.py:docstring of neurokit2.signal.signal_decompose.signal_decompose</span>, line 17)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_decompose1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_decompose1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 1: Using the EMD method</span>
 <span class="gp">In [7]: </span><span class="n">components</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_decompose</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;emd&quot;</span><span class="p">)</span>
 
@@ -995,7 +1051,14 @@ to 50.</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_decompose2.png"><img alt="savefig/p_signal_decompose2.png" src="savefig/p_signal_decompose2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_decompose2.png"><img alt="savefig/p_signal_decompose2.png" src="savefig/p_signal_decompose2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_decompose.py:docstring of neurokit2.signal.signal_decompose.signal_decompose</span>, line 10)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_decompose2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_decompose2.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: USing the SSA method</span>
 <span class="gp">In [9]: </span><span class="n">components</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_decompose</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ssa&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
@@ -1003,7 +1066,14 @@ to 50.</p></li>
 <span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>  <span class="c1"># Visualize components</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_decompose3.png"><img alt="savefig/p_signal_decompose3.png" src="savefig/p_signal_decompose3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_decompose3.png"><img alt="savefig/p_signal_decompose3.png" src="savefig/p_signal_decompose3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_decompose.py:docstring of neurokit2.signal.signal_decompose.signal_decompose</span>, line 10)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_decompose3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_decompose3.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1052,7 +1122,14 @@ max SD. This can be used to filter out noise.</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>  <span class="c1"># Visualize components</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_recompose1.png"><img alt="savefig/p_signal_recompose1.png" src="savefig/p_signal_recompose1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_recompose1.png"><img alt="savefig/p_signal_recompose1.png" src="savefig/p_signal_recompose1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_recompose.py:docstring of neurokit2.signal.signal_recompose.signal_recompose</span>, line 23)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_recompose1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_recompose1.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1165,7 +1242,14 @@ by the sampling rate. By default 1000.</p></li>
 <span class="gp">   ....: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/signal_detrend1.png"><img alt="savefig/signal_detrend1.png" src="savefig/signal_detrend1.png" /></a>
+<a class="reference internal image-reference" href="savefig/signal_detrend1.png"><img alt="savefig/signal_detrend1.png" src="savefig/signal_detrend1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_detrend.py:docstring of neurokit2.signal.signal_detrend.signal_detrend</span>, line 65)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/signal_detrend1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\signal_detrend1.png'</p>
+</aside>
+</a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Tarvainen, M. P., Ranta-Aho, P. O., &amp; Karjalainen, P. A. (2002). An advanced detrending
@@ -1227,7 +1311,14 @@ between 1 and 10% of the signal duration.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_distort1.png"><img alt="savefig/p_signal_distort1.png" src="savefig/p_signal_distort1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_distort1.png"><img alt="savefig/p_signal_distort1.png" src="savefig/p_signal_distort1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_distort.py:docstring of neurokit2.signal.signal_distort.signal_distort</span>, line 20)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_distort1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_distort1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Artifacts</span>
 <span class="gp">In [6]: </span><span class="n">artifacts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;1Hz&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                                  <span class="n">artifacts_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -1239,7 +1330,14 @@ between 1 and 10% of the signal duration.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_distort2.png"><img alt="savefig/p_signal_distort2.png" src="savefig/p_signal_distort2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_distort2.png"><img alt="savefig/p_signal_distort2.png" src="savefig/p_signal_distort2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_distort.py:docstring of neurokit2.signal.signal_distort.signal_distort</span>, line 14)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_distort2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_distort2.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1346,10 +1444,17 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x255d7b53f70&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2140451ad70&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_interpolate1.png"><img alt="savefig/p_signal_interpolate1.png" src="savefig/p_signal_interpolate1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_interpolate1.png"><img alt="savefig/p_signal_interpolate1.png" src="savefig/p_signal_interpolate1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_interpolate.py:docstring of neurokit2.signal.signal_interpolate.signal_interpolate</span>, line 34)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_interpolate1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_interpolate1.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1388,7 +1493,14 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_merge_1.png"><img alt="savefig/p_signal_merge_1.png" src="savefig/p_signal_merge_1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_merge_1.png"><img alt="savefig/p_signal_merge_1.png" src="savefig/p_signal_merge_1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_merge.py:docstring of neurokit2.signal.signal_merge.signal_merge</span>, line 18)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_merge_1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_merge_1.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1451,7 +1563,14 @@ described:</p>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_noise1.png"><img alt="savefig/p_signal_noise1.png" src="savefig/p_signal_noise1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_noise1.png"><img alt="savefig/p_signal_noise1.png" src="savefig/p_signal_noise1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_noise.py:docstring of neurokit2.signal.signal_noise.signal_noise</span>, line 25)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_noise1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_noise1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize spectrum</span>
 <span class="gp">In [9]: </span><span class="n">psd_violet</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">violet</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
@@ -1464,22 +1583,29 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255d72b2e60&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x214795edf00&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c71cfa60&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21405a42440&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c71cffd0&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21405a42800&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c71cf430&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21405a41960&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c71cee00&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21405a404f0&gt;]</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_noise2.png"><img alt="savefig/p_signal_noise2.png" src="savefig/p_signal_noise2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_noise2.png"><img alt="savefig/p_signal_noise2.png" src="savefig/p_signal_noise2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_noise.py:docstring of neurokit2.signal.signal_noise.signal_noise</span>, line 30)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_noise2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_noise2.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1524,35 +1650,49 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c71a1ea0&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x214016f1690&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c71a2590&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x214016f1db0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c3575e70&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21401730880&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x255c71a2230&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x21401781ae0&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_surrogate1.png"><img alt="savefig/p_signal_surrogate1.png" src="savefig/p_signal_surrogate1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_surrogate1.png"><img alt="savefig/p_signal_surrogate1.png" src="savefig/p_signal_surrogate1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_surrogate.py:docstring of neurokit2.signal.signal_surrogate.signal_surrogate</span>, line 26)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_surrogate1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_surrogate1.png'</p>
+</aside>
+</a>
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c3597b20&gt;]</span>
+<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21400176350&gt;]</span>
 
 <span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c359ab30&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x214016f1bd0&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x255c359a2f0&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x21416840a60&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x255c3597d00&gt;</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x214012a79a0&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_surrogate2.png"><img alt="savefig/p_signal_surrogate2.png" src="savefig/p_signal_surrogate2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_surrogate2.png"><img alt="savefig/p_signal_surrogate2.png" src="savefig/p_signal_surrogate2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_surrogate.py:docstring of neurokit2.signal.signal_surrogate.signal_surrogate</span>, line 16)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_surrogate2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_surrogate2.png'</p>
+</aside>
+</a>
 <p>However, the power spectrum of the IAAFT surrogate is preserved.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">f</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
@@ -1564,7 +1704,14 @@ And their distributions are identical:</p>
 <span class="gh">Out[17]: </span><span class="go">&lt;Axes: xlabel=&#39;Frequency&#39;&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_surrogate3.png"><img alt="savefig/p_signal_surrogate3.png" src="savefig/p_signal_surrogate3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_surrogate3.png"><img alt="savefig/p_signal_surrogate3.png" src="savefig/p_signal_surrogate3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_surrogate.py:docstring of neurokit2.signal.signal_surrogate.signal_surrogate</span>, line 13)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_surrogate3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_surrogate3.png'</p>
+</aside>
+</a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Schreiber, T., &amp; Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical
@@ -1635,7 +1782,14 @@ See <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Onsets&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]],</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_findpeaks1.png"><img alt="savefig/p_signal_findpeaks1.png" src="savefig/p_signal_findpeaks1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_findpeaks1.png"><img alt="savefig/p_signal_findpeaks1.png" src="savefig/p_signal_findpeaks1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_findpeaks.py:docstring of neurokit2.signal.signal_findpeaks.signal_findpeaks</span>, line 14)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_findpeaks1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_findpeaks1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="kn">import</span> <span class="nn">scipy.datasets</span>
 
 <span class="go"># Load actual ECG Signal</span>
@@ -1652,7 +1806,14 @@ See <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info1</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">],</span> <span class="n">info2</span><span class="p">[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]],</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_findpeaks2.png"><img alt="savefig/p_signal_findpeaks2.png" src="savefig/p_signal_findpeaks2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_findpeaks2.png"><img alt="savefig/p_signal_findpeaks2.png" src="savefig/p_signal_findpeaks2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_findpeaks.py:docstring of neurokit2.signal.signal_findpeaks.signal_findpeaks</span>, line 19)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_findpeaks2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_findpeaks2.png'</p>
+</aside>
+</a>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
@@ -1726,7 +1887,14 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_fixpeaks1.png"><img alt="savefig/p_signal_fixpeaks1.png" src="savefig/p_signal_fixpeaks1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_fixpeaks1.png"><img alt="savefig/p_signal_fixpeaks1.png" src="savefig/p_signal_fixpeaks1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_fixpeaks.py:docstring of neurokit2.signal.signal_fixpeaks.signal_fixpeaks</span>, line 21)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_fixpeaks1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_fixpeaks1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize Artifact Correction</span>
 <span class="gp">In [7]: </span><span class="n">rate_corrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks_corrected</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">))</span>
 
@@ -1739,7 +1907,14 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_fixpeaks2.png"><img alt="savefig/p_signal_fixpeaks2.png" src="savefig/p_signal_fixpeaks2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_fixpeaks2.png"><img alt="savefig/p_signal_fixpeaks2.png" src="savefig/p_signal_fixpeaks2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_fixpeaks.py:docstring of neurokit2.signal.signal_fixpeaks.signal_fixpeaks</span>, line 15)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_fixpeaks2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_fixpeaks2.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="go"># Simulate Abnormal Signals</span>
@@ -1767,7 +1942,14 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 <span class="gp">In [19]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">peaks</span> <span class="o">+</span> <span class="mi">50</span><span class="p">,</span> <span class="n">peaks_corrected</span><span class="p">],</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_fixpeaks3.png"><img alt="savefig/p_signal_fixpeaks3.png" src="savefig/p_signal_fixpeaks3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_fixpeaks3.png"><img alt="savefig/p_signal_fixpeaks3.png" src="savefig/p_signal_fixpeaks3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_fixpeaks.py:docstring of neurokit2.signal.signal_fixpeaks.signal_fixpeaks</span>, line 30)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_fixpeaks3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_fixpeaks3.png'</p>
+</aside>
+</a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Lipponen, J. A., &amp; Tarvainen, M. P. (2019). A robust algorithm for heart rate variability time
@@ -1820,19 +2002,40 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [3]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;correlation&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_autocor1.png"><img alt="savefig/p_signal_autocor1.png" src="savefig/p_signal_autocor1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_autocor1.png"><img alt="savefig/p_signal_autocor1.png" src="savefig/p_signal_autocor1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_autocor.py:docstring of neurokit2.signal.signal_autocor.signal_autocor</span>, line 11)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_autocor1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_autocor1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: Using &#39;FFT&#39; Method</span>
 <span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fft&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_autocor2.png"><img alt="savefig/p_signal_autocor2.png" src="savefig/p_signal_autocor2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_autocor2.png"><img alt="savefig/p_signal_autocor2.png" src="savefig/p_signal_autocor2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_autocor.py:docstring of neurokit2.signal.signal_autocor.signal_autocor</span>, line 9)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_autocor2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_autocor2.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 3: Using &#39;unbiased&#39; Method</span>
 <span class="gp">In [6]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fft&#39;</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_autocor3.png"><img alt="savefig/p_signal_autocor3.png" src="savefig/p_signal_autocor3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_autocor3.png"><img alt="savefig/p_signal_autocor3.png" src="savefig/p_signal_autocor3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_autocor.py:docstring of neurokit2.signal.signal_autocor.signal_autocor</span>, line 7)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_autocor3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_autocor3.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1866,10 +2069,17 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span><span class="go">array([1750, 2749, 3122, 3124, 4500, 5500, 7250, 8250, 9777, 9779])</span>
+<span class="gh">Out[3]: </span><span class="go">array([1750, 2749, 4500, 5499, 7250, 8250])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_changepoints1.png"><img alt="savefig/p_signal_changepoints1.png" src="savefig/p_signal_changepoints1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_changepoints1.png"><img alt="savefig/p_signal_changepoints1.png" src="savefig/p_signal_changepoints1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_changepoints.py:docstring of neurokit2.signal.signal_changepoints.signal_changepoints</span>, line 11)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_changepoints1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_changepoints1.png'</p>
+</aside>
+</a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Killick, R., Fearnhead, P., &amp; Eckley, I. A. (2012). Optimal detection of changepoints with a
@@ -1938,7 +2148,14 @@ spline interpolation does not ensure monotonicity.</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">],</span> <span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_period.png"><img alt="savefig/p_signal_period.png" src="savefig/p_signal_period.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_period.png"><img alt="savefig/p_signal_period.png" src="savefig/p_signal_period.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_period.py:docstring of neurokit2.signal.signal_period.signal_period</span>, line 23)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_period.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_period.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -1981,7 +2198,14 @@ completion of each phase as denoted by each value.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">phase</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_phase1.png"><img alt="savefig/p_signal_phase1.png" src="savefig/p_signal_phase1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_phase1.png"><img alt="savefig/p_signal_phase1.png" src="savefig/p_signal_phase1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_phase.py:docstring of neurokit2.signal.signal_phase.signal_phase</span>, line 12)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_phase1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_phase1.png'</p>
+</aside>
+</a>
 <p>..ipython:: python</p>
 <blockquote>
 <div><p>rsp = nk.rsp_simulate(duration=30)
@@ -1999,7 +2223,14 @@ plt.close()</p>
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">phase</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_phase3.png"><img alt="savefig/p_signal_phase3.png" src="savefig/p_signal_phase3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_phase3.png"><img alt="savefig/p_signal_phase3.png" src="savefig/p_signal_phase3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_phase.py:docstring of neurokit2.signal.signal_phase.signal_phase</span>, line 11)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_phase3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_phase3.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -2050,7 +2281,14 @@ fig.savefig(“myfig.png”)</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_plot1.png"><img alt="savefig/p_signal_plot1.png" src="savefig/p_signal_plot1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_plot1.png"><img alt="savefig/p_signal_plot1.png" src="savefig/p_signal_plot1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_plot.py:docstring of neurokit2.signal.signal_plot.signal_plot</span>, line 14)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_plot1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_plot1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"> # Simulate data</span>
 <span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Signal2&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
 <span class="gp">   ...: </span>                     <span class="s2">&quot;Signal3&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
@@ -2063,7 +2301,14 @@ fig.savefig(“myfig.png”)</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">data</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_plot2.png"><img alt="savefig/p_signal_plot2.png" src="savefig/p_signal_plot2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_plot2.png"><img alt="savefig/p_signal_plot2.png" src="savefig/p_signal_plot2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_plot.py:docstring of neurokit2.signal.signal_plot.signal_plot</span>, line 15)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_plot2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_plot2.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -2110,7 +2355,14 @@ Normalization allows comparison between different PSD methods.</p></li>
 <span class="gp">In [4]: </span><span class="n">power_plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_power</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="p">[(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">22</span><span class="p">)],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_power1.png"><img alt="savefig/p_signal_power1.png" src="savefig/p_signal_power1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_power1.png"><img alt="savefig/p_signal_power1.png" src="savefig/p_signal_power1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_power.py:docstring of neurokit2.signal.signal_power.signal_power</span>, line 15)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_power1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_power1.png'</p>
+</aside>
+</a>
 <p>..ipython:: python</p>
 <blockquote>
 <div><p># Continuous (simulated signal)
@@ -2135,7 +2387,14 @@ plt.close()</p>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_power3.png"><img alt="savefig/p_signal_power3.png" src="savefig/p_signal_power3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_power3.png"><img alt="savefig/p_signal_power3.png" src="savefig/p_signal_power3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_power.py:docstring of neurokit2.signal.signal_power.signal_power</span>, line 15)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_power3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_power3.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -2196,27 +2455,62 @@ the order, rely on the default (i.e., the corrected KIC).</p></li>
 <span class="gp">In [3]: </span><span class="n">psd_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_psd1.png"><img alt="savefig/p_signal_psd1.png" src="savefig/p_signal_psd1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_psd1.png"><img alt="savefig/p_signal_psd1.png" src="savefig/p_signal_psd1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_psd.py:docstring of neurokit2.signal.signal_psd.signal_psd</span>, line 11)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_psd1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_psd1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Welch method (based on scipy)</span>
 <span class="gp">In [4]: </span><span class="n">psd_welch</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_psd2.png"><img alt="savefig/p_signal_psd2.png" src="savefig/p_signal_psd2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_psd2.png"><img alt="savefig/p_signal_psd2.png" src="savefig/p_signal_psd2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_psd.py:docstring of neurokit2.signal.signal_psd.signal_psd</span>, line 7)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_psd2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_psd2.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Multitapers method (requires MNE)</span>
 <span class="gp">In [5]: </span><span class="n">psd_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;multitapers&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_psd3.png"><img alt="savefig/p_signal_psd3.png" src="savefig/p_signal_psd3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_psd3.png"><img alt="savefig/p_signal_psd3.png" src="savefig/p_signal_psd3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_psd.py:docstring of neurokit2.signal.signal_psd.signal_psd</span>, line 7)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_psd3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_psd3.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Burg method</span>
 <span class="gp">In [6]: </span><span class="n">psd_burg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;burg&quot;</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_psd4.png"><img alt="savefig/p_signal_psd4.png" src="savefig/p_signal_psd4.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_psd4.png"><img alt="savefig/p_signal_psd4.png" src="savefig/p_signal_psd4.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_psd.py:docstring of neurokit2.signal.signal_psd.signal_psd</span>, line 7)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_psd4.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_psd4.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Lomb method (requires AstroPy)</span>
 <span class="gp">In [7]: </span><span class="n">psd_lomb</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;lomb&quot;</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_psd5.png"><img alt="savefig/p_signal_psd5.png" src="savefig/p_signal_psd5.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_psd5.png"><img alt="savefig/p_signal_psd5.png" src="savefig/p_signal_psd5.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_psd.py:docstring of neurokit2.signal.signal_psd.signal_psd</span>, line 7)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_psd5.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_psd5.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -2299,7 +2593,14 @@ spline interpolation does not ensure monotonicity.</p>
 <span class="gp">   ....: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_rate1.png"><img alt="savefig/p_signal_rate1.png" src="savefig/p_signal_rate1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_rate1.png"><img alt="savefig/p_signal_rate1.png" src="savefig/p_signal_rate1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_rate.py:docstring of neurokit2.signal.signal_rate.signal_rate</span>, line 31)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_rate1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_rate1.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -2365,12 +2666,26 @@ smoothing.</p></li>
 <span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_smooth1.png"><img alt="savefig/p_signal_smooth1.png" src="savefig/p_signal_smooth1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_smooth1.png"><img alt="savefig/p_signal_smooth1.png" src="savefig/p_signal_smooth1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_smooth.py:docstring of neurokit2.signal.signal_smooth.signal_smooth</span>, line 31)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_smooth1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_smooth1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Magnify the plot</span>
 <span class="gp">In [9]: </span><span class="n">fig_magnify</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">150</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_smooth2.png"><img alt="savefig/p_signal_smooth2.png" src="savefig/p_signal_smooth2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_smooth2.png"><img alt="savefig/p_signal_smooth2.png" src="savefig/p_signal_smooth2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_smooth.py:docstring of neurokit2.signal.signal_smooth.signal_smooth</span>, line 7)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_smooth2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_smooth2.png'</p>
+</aside>
+</a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Smith, S. W. (1997). The scientist and engineer’s guide to digital signal processing.</p></li>
@@ -2431,7 +2746,14 @@ need to select a window size.</p>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">coupling1</span><span class="p">,</span> <span class="n">coupling2</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;hilbert&quot;</span><span class="p">,</span> <span class="s2">&quot;correlation&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_synchrony1.png"><img alt="savefig/p_signal_synchrony1.png" src="savefig/p_signal_synchrony1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_synchrony1.png"><img alt="savefig/p_signal_synchrony1.png" src="savefig/p_signal_synchrony1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_synchrony.py:docstring of neurokit2.signal.signal_synchrony.signal_synchrony</span>, line 16)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_synchrony1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_synchrony1.png'</p>
+</aside>
+</a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p><a class="reference external" href="http://jinhyuncheong.com/jekyll/update/2017/12/10/Timeseries_synchrony_tutorial_and_simulations.html">http://jinhyuncheong.com/jekyll/update/2017/12/10/Timeseries_synchrony_tutorial_and_simulations.html</a></p></li>
@@ -2531,7 +2853,14 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_timefrequency1.png"><img alt="savefig/p_signal_timefrequency1.png" src="savefig/p_signal_timefrequency1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_timefrequency1.png"><img alt="savefig/p_signal_timefrequency1.png" src="savefig/p_signal_timefrequency1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_timefrequency.py:docstring of neurokit2.signal.signal_timefrequency.signal_timefrequency</span>, line 18)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_timefrequency1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_timefrequency1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># CWTM Method</span>
 <span class="gp">In [5]: </span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cwtm</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_timefrequency</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                     <span class="n">sampling_rate</span><span class="p">,</span>
@@ -2541,7 +2870,14 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_timefrequency2.png"><img alt="savefig/p_signal_timefrequency2.png" src="savefig/p_signal_timefrequency2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_timefrequency2.png"><img alt="savefig/p_signal_timefrequency2.png" src="savefig/p_signal_timefrequency2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_timefrequency.py:docstring of neurokit2.signal.signal_timefrequency.signal_timefrequency</span>, line 12)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_timefrequency2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_timefrequency2.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># WVD Method</span>
 <span class="gp">In [6]: </span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">wvd</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_timefrequency</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                    <span class="n">sampling_rate</span><span class="p">,</span>
@@ -2551,7 +2887,14 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_timefrequency3.png"><img alt="savefig/p_signal_timefrequency3.png" src="savefig/p_signal_timefrequency3.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_timefrequency3.png"><img alt="savefig/p_signal_timefrequency3.png" src="savefig/p_signal_timefrequency3.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_timefrequency.py:docstring of neurokit2.signal.signal_timefrequency.signal_timefrequency</span>, line 12)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_timefrequency3.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_timefrequency3.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># PWVD Method</span>
 <span class="gp">In [7]: </span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">pwvd</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_timefrequency</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                     <span class="n">sampling_rate</span><span class="p">,</span>
@@ -2561,7 +2904,14 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_timefrequency4.png"><img alt="savefig/p_signal_timefrequency4.png" src="savefig/p_signal_timefrequency4.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_timefrequency4.png"><img alt="savefig/p_signal_timefrequency4.png" src="savefig/p_signal_timefrequency4.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_timefrequency.py:docstring of neurokit2.signal.signal_timefrequency.signal_timefrequency</span>, line 12)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_timefrequency4.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_timefrequency4.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
@@ -2594,7 +2944,14 @@ down the rows.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">zeros</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_zerocrossings1.png"><img alt="savefig/p_signal_zerocrossings1.png" src="savefig/p_signal_zerocrossings1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_zerocrossings1.png"><img alt="savefig/p_signal_zerocrossings1.png" src="savefig/p_signal_zerocrossings1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_zerocrossings.py:docstring of neurokit2.signal.signal_zerocrossings.signal_zerocrossings</span>, line 12)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_zerocrossings1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_zerocrossings1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Only upward or downward zerocrossings</span>
 <span class="gp">In [5]: </span><span class="n">up</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">)</span>
 
@@ -2603,7 +2960,14 @@ down the rows.</p></li>
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">up</span><span class="p">,</span> <span class="n">down</span><span class="p">],</span> <span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_signal_zerocrossings2.png"><img alt="savefig/p_signal_zerocrossings2.png" src="savefig/p_signal_zerocrossings2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_signal_zerocrossings2.png"><img alt="savefig/p_signal_zerocrossings2.png" src="savefig/p_signal_zerocrossings2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\signal\signal_zerocrossings.py:docstring of neurokit2.signal.signal_zerocrossings.signal_zerocrossings</span>, line 11)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_signal_zerocrossings2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_signal_zerocrossings2.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>

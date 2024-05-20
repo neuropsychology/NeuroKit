@@ -39,7 +39,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=1b33a64c"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -524,7 +524,14 @@ accessible via the key <code class="docutils literal notranslate"><span class="p
 <span class="gp">In [3]: </span><span class="n">tm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_transition_matrix1.png"><img alt="savefig/p_transition_matrix1.png" src="savefig/p_transition_matrix1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_transition_matrix1.png"><img alt="savefig/p_transition_matrix1.png" src="savefig/p_transition_matrix1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\markov\transition_matrix.py:docstring of neurokit2.markov.transition_matrix.transition_matrix</span>, line 10)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_transition_matrix1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_transition_matrix1.png'</p>
+</aside>
+</a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">tm</span>
 <span class="gh">Out[4]: </span>
 <span class="go">      A         B         C     D</span>
@@ -599,7 +606,7 @@ replaced by a uniform distribution, but this can be turned off using the <code c
 <span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">markov_simulate</span><span class="p">(</span><span class="n">tm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">x</span>
-<span class="gh">Out[5]: </span><span class="go">array([3, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2])</span>
+<span class="gh">Out[5]: </span><span class="go">array([3, 0, 0, 3, 1, 0, 3, 2, 2, 2, 1, 2, 1, 0, 1])</span>
 </pre></div>
 </div>
 </dd></dl>

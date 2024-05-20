@@ -39,7 +39,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=1b33a64c"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -541,11 +541,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.087238  -0.070159  70.071629  ...            0      8.0   7.883953</span>
-<span class="go">1  1.038822  -0.183997  70.071629  ...            0      8.0   7.883953</span>
-<span class="go">2  0.913075  -0.310124  70.071629  ...            0      8.0   7.883953</span>
-<span class="go">3  0.733357  -0.453097  70.071629  ...            0      8.0   7.883953</span>
-<span class="go">4  0.524684  -0.610395  70.071629  ...            0      8.0   7.883953</span>
+<span class="go">0  1.075417  -0.072735  70.006223  ...            0      0.0   7.908879</span>
+<span class="go">1  1.024200  -0.192997  70.006223  ...            0      0.0   7.908879</span>
+<span class="go">2  0.891258  -0.326100  70.006223  ...            0      0.0   7.908879</span>
+<span class="go">3  0.701524  -0.476730  70.006223  ...            0      0.0   7.908879</span>
+<span class="go">4  0.481663  -0.642119  70.006223  ...            0      0.0   7.908879</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -558,7 +558,14 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_bio_process1.png"><img alt="savefig/p_bio_process1.png" src="savefig/p_bio_process1.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_bio_process1.png"><img alt="savefig/p_bio_process1.png" src="savefig/p_bio_process1.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\bio\bio_process.py:docstring of neurokit2.bio.bio_process.bio_process</span>, line 11)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_bio_process1.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_bio_process1.png'</p>
+</aside>
+</a>
 <p><strong>Example 2</strong>: Using a real dataset</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download EOG signal separately</span>
 <span class="gp">In [9]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;eog_100hz&#39;</span><span class="p">)</span>
@@ -578,7 +585,14 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="savefig/p_bio_process2.png"><img alt="savefig/p_bio_process2.png" src="savefig/p_bio_process2.png" /></a>
+<a class="reference internal image-reference" href="savefig/p_bio_process2.png"><img alt="savefig/p_bio_process2.png" src="savefig/p_bio_process2.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\bio\bio_process.py:docstring of neurokit2.bio.bio_process.bio_process</span>, line 21)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_bio_process2.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_bio_process2.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 </section>
