@@ -183,6 +183,7 @@ def ppg_methods(
         ] = (
             "The quality assessment was carried out using template-matching, approximately as described "
             + "in Orphanidou et al. (2015)."
+        )
         refs.append(
             """Orphanidou C, Bonnici T, Charlton P, Clifton D, Vallance D, Tarassenko L (2015)
             Signal-quality indices for the electrocardiogram and photoplethysmogram: Derivation
