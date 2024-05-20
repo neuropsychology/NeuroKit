@@ -50,7 +50,7 @@ def create_sample_cluster_data(random_state):
 
     # generate simple sample data
     K = 5
-    points = np.array([[0., 0.], [-0.3, -0.3], [0.3, -0.3], [0.3, 0.3], [-0.3, 0.3]])
+    points = np.array([[0.0, 0.0], [-0.3, -0.3], [0.3, -0.3], [0.3, 0.3], [-0.3, 0.3]])
     centres = np.column_stack((rng.choice(K, size=K, replace=False), rng.choice(K, size=K, replace=False)))
     angles = rng.uniform(0, 2 * np.pi, size=K)
     offset = rng.uniform(size=2)
@@ -80,11 +80,10 @@ def test_kmedoids():
     K = len(centres)
 
     # run kmedoids
-    res = nk.cluster(data, method='kmedoids', n_clusters=K, random_state=random_state_clustering)
+    res = nk.cluster(data, method="kmedoids", n_clusters=K, random_state=random_state_clustering)
 
     # check results (sort, then compare rows of res[1] and points)
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])
-
 
 
 def test_kmeans():
@@ -98,7 +97,33 @@ def test_kmeans():
     K = len(centres)
 
     # run kmeans
-    res = nk.cluster(data, method='kmeans', n_clusters=K, n_init=1, random_state=random_state_clustering)
+    res = nk.cluster(data, method="kmeans", n_clusters=K, n_init=1, random_state=random_state_clustering)
 
     # check results (sort, then compare rows of res[1] and points)
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])
+
+
+def test_cor():
+
+    # pearson
+    wiki_example_x = np.array([1, 2, 3, 5, 8])
+    wiki_example_y = np.array([0.11, 0.12, 0.13, 0.15, 0.18])
+    assert nk.cor(wiki_example_x, wiki_example_y) == 1
+
+    # spearman
+    wiki_example_x = np.array([106, 100, 86, 101, 99, 103, 97, 113, 112, 110])
+    wiki_example_y = np.array([7, 27, 2, 50, 28, 29, 20, 12, 6, 17])
+    rez = nk.cor(wiki_example_x, wiki_example_y, "spearman")
+    assert np.allclose(rez, -0.175757575, atol=0.0001)
+
+    # kendall
+    utd_example_x = np.array([1, 3, 2, 4])
+    utd_example_y = np.array([1, 4, 2, 3])
+    rez = nk.cor(utd_example_x, utd_example_y, "kendall")
+    assert np.allclose(rez, 0.6666666666666669, atol=0.0001)
+
+    # negative test for incorrect 'method' argument
+    try:
+        rez = nk.cor(wiki_example_x, wiki_example_y, "pearso")
+    except ValueError as e:
+        print(e)

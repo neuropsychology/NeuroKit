@@ -133,6 +133,7 @@ html_theme_options = {
     "use_edit_page_button": True,
     "logo_only": True,
     "show_toc_level": 1,
+    "navigation_with_keys": False,
 }
 
 
