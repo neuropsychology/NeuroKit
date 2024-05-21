@@ -56,7 +56,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
     array or str
         Vector containing the quality index ranging from 0 to 1 for ``"averageQRS"`` method,
         returns string classification (``Unacceptable``, ``Barely Acceptable`` or ``Excellent``)
-        of the signal for ``"zhao2018 method"``.
+        of the signal for ``"zhao2018"`` method.
 
     See Also
     --------
