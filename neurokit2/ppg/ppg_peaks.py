@@ -3,6 +3,7 @@ import numpy as np
 
 from ..ecg.ecg_peaks import _ecg_peaks_plot_artefacts
 from ..signal import signal_fixpeaks, signal_formatpeaks
+from ..stats import rescale
 from .ppg_findpeaks import ppg_findpeaks
 
 
@@ -143,6 +144,7 @@ def _ppg_peaks_plot(
     info=None,
     sampling_rate=1000,
     raw=None,
+    quality=None,
     ax=None,
 ):
     x_axis = np.linspace(0, len(ppg_cleaned) / sampling_rate, len(ppg_cleaned))
@@ -153,6 +155,29 @@ def _ppg_peaks_plot(
 
     ax.set_xlabel("Time (seconds)")
     ax.set_title("PPG signal and peaks")
+
+    # Quality Area -------------------------------------------------------------
+    if quality is not None:
+        quality = rescale(
+            quality,
+            to=[
+                np.min([np.min(raw), np.min(ppg_cleaned)]),
+                np.max([np.max(raw), np.max(ppg_cleaned)]),
+            ],
+        )
+        minimum_line = np.full(len(x_axis), quality.min())
+
+        # Plot quality area first
+        ax.fill_between(
+            x_axis,
+            minimum_line,
+            quality,
+            alpha=0.12,
+            zorder=0,
+            interpolate=True,
+            facecolor="#4CAF50",
+            label="Signal quality",
+        )
 
     # Raw Signal ---------------------------------------------------------------
     if raw is not None:
