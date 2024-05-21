@@ -92,6 +92,7 @@ def ppg_plot(ppg_signals, info=None, static=True):
             info=info,
             sampling_rate=info["sampling_rate"],
             raw=ppg_signals["PPG_Raw"].values,
+            quality=ppg_signals["PPG_Quality"].values,
             ax=ax0,
         )
 

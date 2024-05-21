@@ -68,13 +68,13 @@ jobs:
               run: python setup.py sdist bdist_wheel
 
             - name: Publish distribution 📦 to Test PyPI
-              uses: pypa/gh-action-pypi-publish@master
+              uses: pypa/gh-action-pypi-publish@release/v1
               with:
                   password: ${{ secrets.TEST_PYPI_PASSWORD }}
                   repository_url: https://test.pypi.org/legacy/
 
             - name: Publish distribution 📦 to PyPI
               #if: startsWith(github.event.ref, 'refs/tags')
-              uses: pypa/gh-action-pypi-publish@master
+              uses: pypa/gh-action-pypi-publish@release/v1
               with:
                   password: ${{ secrets.PYPI_PASSWORD }}

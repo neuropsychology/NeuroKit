@@ -542,7 +542,7 @@ def _hrv_nonlinear_show(rri, rri_time=None, rri_missing=False, out={}, ax=None, 
     kernel = scipy.stats.gaussian_kde(values)
     f = np.reshape(kernel(positions).T, xx.shape)
 
-    cmap = matplotlib.cm.get_cmap("Blues", 10)
+    cmap = plt.get_cmap("Blues").resampled(10)
     ax.contourf(xx, yy, f, cmap=cmap)
     ax.imshow(np.rot90(f), extent=[ax1_min, ax1_max, ax2_min, ax2_max], aspect="auto")
 

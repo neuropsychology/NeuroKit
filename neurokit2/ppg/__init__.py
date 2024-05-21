@@ -11,6 +11,7 @@ from .ppg_methods import ppg_methods
 from .ppg_peaks import ppg_peaks
 from .ppg_plot import ppg_plot
 from .ppg_process import ppg_process
+from .ppg_quality import ppg_quality
 from .ppg_segment import ppg_segment
 from .ppg_simulate import ppg_simulate
 
@@ -23,6 +24,7 @@ __all__ = [
     "ppg_rate",
     "ppg_process",
     "ppg_plot",
+    "ppg_quality",
     "ppg_methods",
     "ppg_intervalrelated",
     "ppg_eventrelated",

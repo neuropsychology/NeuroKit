@@ -16,9 +16,7 @@
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
 
-.. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
-        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
-        :alt: Maintainability
+
 
 
 **The Python Toolbox for Neurophysiological Signal Processing**
@@ -43,6 +41,7 @@ Quick Example
 
     # Compute relevant features
     results = nk.bio_analyze(processed_data, sampling_rate=100)
+
 
 And **boom** 💥 your analysis is done 😎
 
