@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.ppg.ppg_quality &#8212; NeuroKit2 0.2.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../../_static/documentation_options.js?v=1b33a64c"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/neurokit2/ppg/ppg_quality';</script>
+    <link rel="icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.9 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.9 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">Generating Abnormal 12-leads ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">Analyze Electrodermal Activity (EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">Respiratory Rate Variability (RRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">Analyze Electrooculography (EOG)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">Simulate Artificial Physiological Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ppg_report/ppg_report.html">Save Preprocessing Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">EEG Power in Frequency Bands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">EEG Complexity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">EEG Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">Fit a function to a non-linear pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">Create epochs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../functions/index.html">Functions</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/bio.html">Bio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/ecg.html">ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/ppg.html">PPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/hrv.html">HRV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/rsp.html">RSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/eda.html">EDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/emg.html">EMG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/eog.html">EOG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/eeg.html">EEG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/video.html">Video Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/microstates.html">Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/signal.html">Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/epochs.html">Epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/complexity.html">Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/markov.html">Markov Chains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/stats.html">Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/benchmark.html">Benchmarking</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../resources/index.html">Resources</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/learn_python.html">Learn Python in 10 minutes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/contributing.html">Contributing guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/recording.html">Recording good quality signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/resources.html">Additional Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../studies/index.html">Studies</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">HRV Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://psyarxiv.com/mwa6x/">HRV Indices</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">HRV Tutorial</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">Complexity Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">Complexity Indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/complexity_eeg.html">EEG Complexity: Parameters Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/erp_gam.html">EEG Analysis with GAMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/ecg_benchmark.html">ECG Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/eog_blinktemplate.html">EOG blink template</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/neuropsychology/NeuroKit">Repository</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/ppg/ppg_quality.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for neurokit2.ppg.ppg_quality</h1><div class="highlight"><pre>
+<span></span><span class="c1"># - * - coding: utf-8 - * -</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">..epochs</span> <span class="kn">import</span> <span class="n">epochs_to_df</span>
+<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_interpolate</span>
+<span class="kn">from</span> <span class="nn">.ppg_peaks</span> <span class="kn">import</span> <span class="n">ppg_peaks</span>
+<span class="kn">from</span> <span class="nn">.ppg_segment</span> <span class="kn">import</span> <span class="n">ppg_segment</span>
+
+
+<div class="viewcode-block" id="ppg_quality">
+<a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_quality">[docs]</a>
+<span class="k">def</span> <span class="nf">ppg_quality</span><span class="p">(</span>
+    <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="n">approach</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**PPG Signal Quality Assessment**</span>
+
+<span class="sd">    Assess the quality of the PPG Signal using various methods:</span>
+
+<span class="sd">    * The ``&quot;templatematch&quot;`` method (loosely based on Orphanidou et al., 2015) computes a continuous</span>
+<span class="sd">      index of quality of the PPG signal, by calculating the correlation coefficient between each</span>
+<span class="sd">      individual pulse wave and an average (template) pulse wave shape. This index is therefore</span>
+<span class="sd">      relative: 1 corresponds to pulse waves that are closest to the average pulse wave shape (i.e.</span>
+<span class="sd">      correlate exactly with it) and 0 corresponds to there being no correlation with the average</span>
+<span class="sd">      pulse wave shape. Note that 1 does not necessarily mean &quot;good&quot;: use this index with care and</span>
+<span class="sd">      plot it alongside your PPG signal to see if it makes sense.</span>
+
+<span class="sd">    * The ``&quot;disimilarity&quot;`` method (loosely based on Sabeti et al., 2019) computes a continuous index</span>
+<span class="sd">      of quality of the PPG signal, by calculating the level of disimilarity between each individual </span>
+<span class="sd">      pulse wave and an average (template) pulse wave shape (after they are normalised). A value of</span>
+<span class="sd">      zero indicates no disimilarity (i.e. equivalent pulse wave shapes), whereas values above or below</span>
+<span class="sd">      indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse</span>
+<span class="sd">      waves prior to calculating the level of dsimilarity, whereas this implementation does not currently</span>
+<span class="sd">      include this step.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ppg_cleaned : Union[list, np.array, pd.Series]</span>
+<span class="sd">        The cleaned PPG signal in the form of a vector of values.</span>
+<span class="sd">    ppg_pw_peaks : tuple or list</span>
+<span class="sd">        The list of PPG pulse wave peak samples returned by ``ppg_peaks()``. If None, peaks is computed from</span>
+<span class="sd">        the signal input.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The method for computing PPG signal quality, can be ``&quot;templatematch&quot;`` (default).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Vector containing the quality index ranging from 0 to 1 for ``&quot;templatematch&quot;`` method,</span>
+<span class="sd">        or an unbounded value (where 0 indicates high quality) for ``&quot;disimilarity&quot;`` method.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ppg_segment</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Orphanidou, C. et al. (2015). &quot;Signal-quality indices for the electrocardiogram and photoplethysmogram:</span>
+<span class="sd">      derivation and applications to wireless monitoring&quot;. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    * **Example 1:** &#39;templatematch&#39; method</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      ppg = nk.ppg_simulate(duration=30, sampling_rate=300, heart_rate=80)</span>
+<span class="sd">      ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=300)</span>
+<span class="sd">      quality = nk.ppg_quality(ppg_cleaned, sampling_rate=300, method=&quot;templatematch&quot;)</span>
+
+<span class="sd">      @savefig p_ppg_quality.png scale=100%</span>
+<span class="sd">      nk.signal_plot([ppg_cleaned, quality], standardize=True)</span>
+<span class="sd">      @suppress</span>
+<span class="sd">      plt.close()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
+
+    <span class="c1"># Run selected quality assessment method</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">]:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">_ppg_quality_templatematch</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;disimilarity&quot;</span><span class="p">]:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">_ppg_quality_disimilarity</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">quality</span></div>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Calculate a template pulse wave</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_calc_template_pw</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># Sanitize inputs</span>
+    <span class="k">if</span> <span class="n">ppg_pw_peaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Get heartbeats</span>
+    <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">ppg_segment</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">pw_data</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">)</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+        <span class="n">index</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span>
+    <span class="p">)</span>
+    <span class="n">pw_data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">pw_data</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+
+    <span class="c1"># Filter Nans</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">nonmissing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">missing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pw_data</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">nonmissing</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="c1"># Find template pulse wave</span>
+    <span class="n">templ_pw</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">templ_pw</span><span class="p">,</span> <span class="n">pw_data</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Template-matching method</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_ppg_quality_templatematch</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># Obtain individual pulse waves and template pulse wave</span>
+    <span class="n">templ_pw</span><span class="p">,</span> <span class="n">pw_data</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">_calc_template_pw</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
+    
+    <span class="c1"># Find individual correlation coefficients (CCs)</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">beat_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">pw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">beat_no</span><span class="p">],</span> <span class="n">templ_pw</span><span class="p">)</span>
+        <span class="n">cc</span><span class="p">[</span><span class="n">beat_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Interpolate beat-by-beat CCs</span>
+    <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+        <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cc</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">quality</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Disimilarity measure method</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_norm_sum_one</span><span class="p">(</span><span class="n">pw</span><span class="p">):</span>
+
+    <span class="c1"># ensure all values are positive</span>
+    <span class="n">pw</span> <span class="o">=</span> <span class="n">pw</span> <span class="o">-</span> <span class="n">pw</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># normalise pulse wave to sum to one</span>
+    <span class="n">pw</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pw</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pw</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">pw</span>
+
+<span class="k">def</span> <span class="nf">_calc_dis</span><span class="p">(</span><span class="n">pw1</span><span class="p">,</span> <span class="n">pw2</span><span class="p">):</span>
+    <span class="c1"># following the methodology in https://doi.org/10.1016/j.imu.2019.100222 (Sec. 3.1.2.5)</span>
+
+    <span class="c1"># convert to numpy arrays</span>
+    <span class="n">pw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pw1</span><span class="p">)</span>
+    <span class="n">pw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pw2</span><span class="p">)</span>
+
+    <span class="c1"># normalise to sum to one</span>
+    <span class="n">pw1</span> <span class="o">=</span> <span class="n">_norm_sum_one</span><span class="p">(</span><span class="n">pw1</span><span class="p">)</span>
+    <span class="n">pw2</span> <span class="o">=</span> <span class="n">_norm_sum_one</span><span class="p">(</span><span class="n">pw2</span><span class="p">)</span>
+    
+    <span class="c1"># ignore any elements which are zero because log(0) is -inf</span>
+    <span class="n">rel_els</span> <span class="o">=</span> <span class="p">(</span><span class="n">pw1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pw2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># calculate disimilarity measure (using pw2 as the template)</span>
+    <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pw2</span><span class="p">[</span><span class="n">rel_els</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pw2</span><span class="p">[</span><span class="n">rel_els</span><span class="p">]</span> <span class="o">/</span> <span class="n">pw1</span><span class="p">[</span><span class="n">rel_els</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">dis</span>
+
+
+<span class="k">def</span> <span class="nf">_ppg_quality_disimilarity</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+
+    <span class="c1"># Obtain individual pulse waves and template pulse wave</span>
+    <span class="n">templ_pw</span><span class="p">,</span> <span class="n">pw_data</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">_calc_template_pw</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
+    
+    <span class="c1"># Find individual disimilarity measures</span>
+    <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">beat_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">dis</span><span class="p">[</span><span class="n">beat_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">_calc_dis</span><span class="p">(</span><span class="n">pw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">beat_no</span><span class="p">],</span> <span class="n">templ_pw</span><span class="p">)</span>
+
+    <span class="c1"># Interpolate beat-by-beat dis&#39;s</span>
+    <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+        <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dis</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;previous&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">quality</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020–2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

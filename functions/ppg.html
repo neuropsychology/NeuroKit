@@ -483,6 +483,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-findpeaks"><em>ppg_findpeaks()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_findpeaks"><code class="docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_methods"><code class="docutils literal notranslate"><span class="pre">ppg_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_quality"><code class="docutils literal notranslate"><span class="pre">ppg_quality()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_segment"><code class="docutils literal notranslate"><span class="pre">ppg_segment()</span></code></a></li>
 </ul>
 </li>
@@ -507,7 +508,7 @@ document.write(`
 <h3><em>ppg_process()</em><a class="headerlink" href="#ppg-process" title="Link to this heading">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_process">
-<span class="sig-name descname"><span class="pre">ppg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_process.html#ppg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_process" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_process.html#ppg_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_process" title="Link to this definition">#</a></dt>
 <dd><p><strong>Process a photoplethysmogram (PPG)  signal</strong></p>
 <p>Convenience function that automatically processes a photoplethysmogram signal.</p>
 <dl class="field-list simple">
@@ -517,6 +518,8 @@ document.write(`
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_signal()</span></code> (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.
 Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
+<li><p><strong>method_quality</strong> (<em>str</em>) – The quality assessment approach to use. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>.</p></li>
 <li><p><strong>report</strong> (<em>str</em>) – The filename of a report containing description and figures of processing
 (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;myreport.html&quot;</span></code>). Needs to be supplied if a report file
 should be generated. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. Can also be <code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code> to
@@ -618,9 +621,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.282426           0.706888</span>
-<span class="go">2     2        10000  ...                  1.308756           0.952649</span>
-<span class="go">3     3        15000  ...                 -0.920537           0.812381</span>
+<span class="go">1     1         5000  ...                  1.719938           0.776262</span>
+<span class="go">2     2        10000  ...                  2.101926           0.936389</span>
+<span class="go">3     3        15000  ...                  0.515477           0.834641</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -879,8 +882,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 45,  90, 129, 175, 220, 263, 307, 348, 407, 484, 517, 558, 596,</span>
-<span class="go">       633, 670, 707, 741, 779, 814, 851, 887, 926, 967])</span>
+<span class="go">array([ 49,  87, 134, 176, 217, 263, 305, 351, 409, 479, 562, 593, 632,</span>
+<span class="go">       671, 707, 740, 779, 815, 849, 888, 925, 965])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -985,9 +988,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  2.408364           0.663467</span>
-<span class="go">2     2        10000  ...                 -5.169578           0.856932</span>
-<span class="go">3     3        15000  ...                  1.390312           0.851707</span>
+<span class="go">1     1         5000  ...                  0.807603           0.875860</span>
+<span class="go">2     2        10000  ...                  2.156917           0.850196</span>
+<span class="go">3     3        15000  ...                 -0.991210           0.458670</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1135,7 +1138,7 @@ periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Ne
 <p id="module-neurokit2.ppg">Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_methods">
-<span class="sig-name descname"><span class="pre">ppg_methods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_cleaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_methods.html#ppg_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_methods" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_methods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_cleaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_methods.html#ppg_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_methods" title="Link to this definition">#</a></dt>
 <dd><p><strong>PPG Preprocessing Methods</strong></p>
 <p>This function analyzes and specifies the methods used in the preprocessing, and create a
 textual description of the methods used. It is used by <a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_process()</span></code></a> to dispatch the
@@ -1156,6 +1159,10 @@ of <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit
 will be set to the value of <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.
 For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
 of <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a>.</p></li>
+<li><p><strong>method_quality</strong> (<em>str</em>) – The method used to assess PPG signal quality. If <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>,
+will be set to the value of <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>.
+For more information, see the <code class="docutils literal notranslate"><span class="pre">&quot;method&quot;</span></code> argument
+of <a class="reference internal" href="#neurokit2.ppg.ppg_quality" title="neurokit2.ppg.ppg_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_quality()</span></code></a>.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_clean()</span></code></a> and
 <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a>.</p></li>
 </ul>
@@ -1168,12 +1175,15 @@ references.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_process" title="neurokit2.ppg.ppg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_process</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_quality" title="neurokit2.ppg.ppg_quality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_quality</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">methods</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_methods</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">method_cleaning</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">methods</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_methods</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">method_cleaning</span><span class="o">=</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">,</span> <span class="n">method_quality</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+<span class="gp">   ...: </span>
 
 <span class="gp">In [3]: </span><span class="nb">print</span><span class="p">(</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">])</span>
 <span class="go"> was preprocessed using a lowpass filter (with a cutoff frequency of 40 Hz, butterworth 2nd order; following Nabian et al., 2018).</span>
@@ -1185,6 +1195,76 @@ references.</p>
 <span class="go">            PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ppg.ppg_quality">
+<span class="sig-name descname"><span class="pre">ppg_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppg_pw_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approach</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_quality.html#ppg_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_quality" title="Link to this definition">#</a></dt>
+<dd><p><strong>PPG Signal Quality Assessment</strong></p>
+<p>Assess the quality of the PPG Signal using various methods:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method (loosely based on Orphanidou et al., 2015) computes a continuous
+index of quality of the PPG signal, by calculating the correlation coefficient between each
+individual pulse wave and an average (template) pulse wave shape. This index is therefore
+relative: 1 corresponds to pulse waves that are closest to the average pulse wave shape (i.e.
+correlate exactly with it) and 0 corresponds to there being no correlation with the average
+pulse wave shape. Note that 1 does not necessarily mean “good”: use this index with care and
+plot it alongside your PPG signal to see if it makes sense.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method (loosely based on Sabeti et al., 2019) computes a continuous index
+of quality of the PPG signal, by calculating the level of disimilarity between each individual
+pulse wave and an average (template) pulse wave shape (after they are normalised). A value of
+zero indicates no disimilarity (i.e. equivalent pulse wave shapes), whereas values above or below
+indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse
+waves prior to calculating the level of dsimilarity, whereas this implementation does not currently
+include this step.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG signal in the form of a vector of values.</p></li>
+<li><p><strong>ppg_pw_peaks</strong> (<em>tuple or list</em>) – The list of PPG pulse wave peak samples returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>. If None, peaks is computed from
+the signal input.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The method for computing PPG signal quality, can be <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> (default).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>array</em> – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
+or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_segment" title="neurokit2.ppg.ppg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_segment</span></code></a></p>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Orphanidou, C. et al. (2015). “Signal-quality indices for the electrocardiogram and photoplethysmogram:
+derivation and applications to wireless monitoring”. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> ‘templatematch’ method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="savefig/p_ppg_quality.png"><img alt="savefig/p_ppg_quality.png" src="savefig/p_ppg_quality.png" />
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">D:\a\NeuroKit\NeuroKit\neurokit2\ppg\__init__.py:docstring of neurokit2.ppg.ppg_quality.ppg_quality</span>, line 14)</p>
+<p>Cannot scale image!
+  Could not get size from &quot;savefig/p_ppg_quality.png&quot;:
+  [Errno 2] No such file or directory: 'D:\\a\\NeuroKit\\NeuroKit\\docs\\savefig\\p_ppg_quality.png'</p>
+</aside>
+</a>
 </dd></dl>
 
 <dl class="py function">
@@ -1322,6 +1402,7 @@ references.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppg-findpeaks"><em>ppg_findpeaks()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_findpeaks"><code class="docutils literal notranslate"><span class="pre">ppg_findpeaks()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_methods"><code class="docutils literal notranslate"><span class="pre">ppg_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_quality"><code class="docutils literal notranslate"><span class="pre">ppg_quality()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.ppg.ppg_segment"><code class="docutils literal notranslate"><span class="pre">ppg_segment()</span></code></a></li>
 </ul>
 </li>

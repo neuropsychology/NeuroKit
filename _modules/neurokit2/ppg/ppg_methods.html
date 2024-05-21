@@ -381,6 +381,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..misc.report</span> <span class="kn">import</span> <span class="n">get_kwargs</span>
 <span class="kn">from</span> <span class="nn">.ppg_clean</span> <span class="kn">import</span> <span class="n">ppg_clean</span>
 <span class="kn">from</span> <span class="nn">.ppg_findpeaks</span> <span class="kn">import</span> <span class="n">ppg_findpeaks</span>
+<span class="kn">from</span> <span class="nn">.ppg_quality</span> <span class="kn">import</span> <span class="n">ppg_quality</span>
 
 
 <div class="viewcode-block" id="ppg_methods">
@@ -390,6 +391,7 @@ document.write(`
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span>
     <span class="n">method_cleaning</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
     <span class="n">method_peaks</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">method_quality</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**PPG Preprocessing Methods**</span>
@@ -417,6 +419,11 @@ document.write(`
 <span class="sd">        will be set to the value of ``&quot;method&quot;``. Defaults to ``&quot;default&quot;``.</span>
 <span class="sd">        For more information, see the ``&quot;method&quot;`` argument</span>
 <span class="sd">        of :func:`.ppg_findpeaks`.</span>
+<span class="sd">    method_quality: str</span>
+<span class="sd">        The method used to assess PPG signal quality. If ``&quot;default&quot;``,</span>
+<span class="sd">        will be set to the value of ``&quot;templatematch&quot;``. Defaults to ``&quot;templatematch&quot;``.</span>
+<span class="sd">        For more information, see the ``&quot;method&quot;`` argument</span>
+<span class="sd">        of :func:`.ppg_quality`.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed to :func:`.ppg_clean` and</span>
 <span class="sd">        :func:`.ppg_findpeaks`.</span>
@@ -430,7 +437,7 @@ document.write(`
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ppg_process, ppg_clean, ppg_findpeaks</span>
+<span class="sd">    ppg_process, ppg_clean, ppg_findpeaks, ppg_quality</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -438,7 +445,9 @@ document.write(`
 
 <span class="sd">      import neurokit2 as nk</span>
 
-<span class="sd">      methods = nk.ppg_methods(sampling_rate=100, method=&quot;elgendi&quot;, method_cleaning=&quot;nabian2018&quot;)</span>
+<span class="sd">      methods = nk.ppg_methods(</span>
+<span class="sd">          sampling_rate=100, method=&quot;elgendi&quot;,</span>
+<span class="sd">          method_cleaning=&quot;nabian2018&quot;, method_quality=&quot;templatematch&quot;)</span>
 <span class="sd">      print(methods[&quot;text_cleaning&quot;])</span>
 <span class="sd">      print(methods[&quot;references&quot;][0])</span>
 
@@ -450,7 +459,12 @@ document.write(`
         <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">method_peaks</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span>
+        <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">method_quality</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">method_quality</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="p">)</span>
 
     <span class="c1"># Create dictionary with all inputs</span>
@@ -459,16 +473,19 @@ document.write(`
         <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
         <span class="s2">&quot;method_cleaning&quot;</span><span class="p">:</span> <span class="n">method_cleaning</span><span class="p">,</span>
         <span class="s2">&quot;method_peaks&quot;</span><span class="p">:</span> <span class="n">method_peaks</span><span class="p">,</span>
+        <span class="s2">&quot;method_quality&quot;</span><span class="p">:</span> <span class="n">method_quality</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="c1"># Get arguments to be passed to cleaning and peak finding functions</span>
+    <span class="c1"># Get arguments to be passed to cleaning, peak finding, and quality assessment functions</span>
     <span class="n">kwargs_cleaning</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">ppg_clean</span><span class="p">)</span>
     <span class="n">kwargs_peaks</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">ppg_findpeaks</span><span class="p">)</span>
+    <span class="n">kwargs_quality</span><span class="p">,</span> <span class="n">report_info</span> <span class="o">=</span> <span class="n">get_kwargs</span><span class="p">(</span><span class="n">report_info</span><span class="p">,</span> <span class="n">ppg_quality</span><span class="p">)</span>
 
     <span class="c1"># Save keyword arguments in dictionary</span>
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_cleaning</span>
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_peaks</span>
+    <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_quality</span>
 
     <span class="c1"># Initialize refs list with NeuroKit2 reference</span>
     <span class="n">refs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,</span>
@@ -536,6 +553,41 @@ document.write(`
         <span class="n">report_info</span><span class="p">[</span>
             <span class="s2">&quot;text_peaks&quot;</span>
         <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+    <span class="c1"># 2. Quality</span>
+    <span class="c1"># ----------</span>
+    <span class="k">if</span> <span class="n">method_quality</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">]:</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_quality&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The quality assessment was carried out using template-matching, approximately as described &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;in Orphanidou et al. (2015).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Orphanidou C, Bonnici T, Charlton P, Clifton D, Vallance D, Tarassenko L (2015)</span>
+<span class="sd">            Signal-quality indices for the electrocardiogram and photoplethysmogram: Derivation</span>
+<span class="sd">            and applications to wireless monitoring</span>
+<span class="sd">            IEEE Journal of Biomedical and Health Informatics 19(3): 832–838. doi:10.1109/JBHI.2014.2338351.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method_quality</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;disimilarity&quot;</span><span class="p">]:</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_quality&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The quality assessment was carried out using a disimilarity measure of positive-peaked beats, &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;approximately as described in Sabeti et al. (2019).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Sabeti E, Reamaroon N, Mathis M, Gryak J, Sjoding M, Najarian K (2019)</span>
+<span class="sd">            Signal quality measure for pulsatile physiological signals using</span>
+<span class="sd">            morphological features: Applications in reliability measure for pulse oximetry</span>
+<span class="sd">            Informatics in Medicine Unlocked 16: 100222. doi:10.1016/j.imu.2019.100222.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method_quality</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;There was no quality assessment carried out.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">report_info</span><span class="p">[</span>
+            <span class="s2">&quot;text_quality&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The quality assessment was carried out using the method </span><span class="si">{</span><span class="n">method_quality</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">refs</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">report_info</span></div>

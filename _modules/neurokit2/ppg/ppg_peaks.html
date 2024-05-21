@@ -380,6 +380,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">..ecg.ecg_peaks</span> <span class="kn">import</span> <span class="n">_ecg_peaks_plot_artefacts</span>
 <span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
+<span class="kn">from</span> <span class="nn">..stats</span> <span class="kn">import</span> <span class="n">rescale</span>
 <span class="kn">from</span> <span class="nn">.ppg_findpeaks</span> <span class="kn">import</span> <span class="n">ppg_findpeaks</span>
 
 
@@ -523,6 +524,7 @@ document.write(`
     <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">quality</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">))</span>
@@ -533,6 +535,29 @@ document.write(`
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PPG signal and peaks&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Quality Area -------------------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">quality</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span>
+            <span class="n">quality</span><span class="p">,</span>
+            <span class="n">to</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)]),</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">minimum_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_axis</span><span class="p">),</span> <span class="n">quality</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="c1"># Plot quality area first</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+            <span class="n">x_axis</span><span class="p">,</span>
+            <span class="n">minimum_line</span><span class="p">,</span>
+            <span class="n">quality</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;#4CAF50&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Signal quality&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="c1"># Raw Signal ---------------------------------------------------------------</span>
     <span class="k">if</span> <span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

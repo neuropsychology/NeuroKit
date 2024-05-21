@@ -385,12 +385,13 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.ppg_methods</span> <span class="kn">import</span> <span class="n">ppg_methods</span>
 <span class="kn">from</span> <span class="nn">.ppg_peaks</span> <span class="kn">import</span> <span class="n">ppg_peaks</span>
 <span class="kn">from</span> <span class="nn">.ppg_plot</span> <span class="kn">import</span> <span class="n">ppg_plot</span>
+<span class="kn">from</span> <span class="nn">.ppg_quality</span> <span class="kn">import</span> <span class="n">ppg_quality</span>
 
 
 <div class="viewcode-block" id="ppg_process">
 <a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_process">[docs]</a>
 <span class="k">def</span> <span class="nf">ppg_process</span><span class="p">(</span>
-    <span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="n">method_quality</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Process a photoplethysmogram (PPG)  signal**</span>
 
@@ -405,6 +406,9 @@ document.write(`
 <span class="sd">    method : str</span>
 <span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``.</span>
 <span class="sd">        Defaults to ``&quot;elgendi&quot;``.</span>
+<span class="sd">    method_quality : str</span>
+<span class="sd">        The quality assessment approach to use. Can be one of ``&quot;templatematch&quot;``, ``&quot;disimilarity&quot;``.</span>
+<span class="sd">        Defaults to ``&quot;templatematch&quot;``.</span>
 <span class="sd">    report : str</span>
 <span class="sd">        The filename of a report containing description and figures of processing</span>
 <span class="sd">        (e.g. ``&quot;myreport.html&quot;``). Needs to be supplied if a report file</span>
@@ -448,7 +452,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
     <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">)</span>
-    <span class="n">methods</span> <span class="o">=</span> <span class="n">ppg_methods</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">methods</span> <span class="o">=</span> <span class="n">ppg_methods</span><span class="p">(</span><span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">method_quality</span><span class="o">=</span><span class="n">method_quality</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Clean signal</span>
     <span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">ppg_clean</span><span class="p">(</span>
@@ -473,12 +477,22 @@ document.write(`
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span>
     <span class="p">)</span>
 
+    <span class="c1"># Assess signal quality</span>
+    <span class="n">quality</span> <span class="o">=</span> <span class="n">ppg_quality</span><span class="p">(</span>
+        <span class="n">ppg_cleaned</span><span class="p">,</span>
+        <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_quality&quot;</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;kwargs_quality&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
     <span class="c1"># Prepare output</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s2">&quot;PPG_Raw&quot;</span><span class="p">:</span> <span class="n">ppg_signal</span><span class="p">,</span>
             <span class="s2">&quot;PPG_Clean&quot;</span><span class="p">:</span> <span class="n">ppg_cleaned</span><span class="p">,</span>
             <span class="s2">&quot;PPG_Rate&quot;</span><span class="p">:</span> <span class="n">rate</span><span class="p">,</span>
+            <span class="s2">&quot;PPG_Quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">,</span>
             <span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks_signal</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
