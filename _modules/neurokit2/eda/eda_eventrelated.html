@@ -380,9 +380,11 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..epochs.eventrelated_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">_eventrelated_addinfo</span><span class="p">,</span>
-                                         <span class="n">_eventrelated_sanitizeinput</span><span class="p">,</span>
-                                         <span class="n">_eventrelated_sanitizeoutput</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..epochs.eventrelated_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_eventrelated_addinfo</span><span class="p">,</span>
+    <span class="n">_eventrelated_sanitizeinput</span><span class="p">,</span>
+    <span class="n">_eventrelated_sanitizeoutput</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 
 
@@ -514,7 +516,7 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Input does not have an `EDA_Phasic` column.&quot;</span>
             <span class="s2">&quot; Will skip computation of maximum amplitude of phasic EDA component.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span>
 
@@ -529,7 +531,7 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Input does not have an `SCR_Amplitude` column.&quot;</span>
             <span class="s2">&quot; Will skip computation of SCR peak amplitude.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span>
 
@@ -537,7 +539,7 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Input does not have an `SCR_RecoveryTime` column.&quot;</span>
             <span class="s2">&quot; Will skip computation of SCR half-recovery times.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span>
 
@@ -545,23 +547,23 @@ document.write(`
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Input does not have an `SCR_RiseTime` column.&quot;</span>
             <span class="s2">&quot; Will skip computation of SCR rise times.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span>
 
-    <span class="c1"># Peak amplitude and Time of peak</span>
-    <span class="n">first_activation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">peak_amplitude</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">first_activation</span><span class="p">]</span>
-    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peak_Amplitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">peak_amplitude</span>
-    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peak_Amplitude_Time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">first_activation</span><span class="p">]</span>
-    <span class="c1"># Rise Time</span>
-    <span class="n">rise_time</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_RiseTime&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">first_activation</span><span class="p">]</span>
-    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_RiseTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rise_time</span>
+    <span class="n">epoch_postevent</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">[</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Peak amplitude</span>
+    <span class="n">first_peak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">epoch_postevent</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peak_Amplitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_postevent</span><span class="p">[</span><span class="s2">&quot;SCR_Amplitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">first_peak</span><span class="p">]</span>
+    <span class="c1"># Time of peak (Raw, from epoch onset)</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_Peak_Amplitude_Time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_postevent</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">first_peak</span><span class="p">]</span>
+    <span class="c1"># Rise Time (From the onset of the peak)</span>
+    <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_RiseTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_postevent</span><span class="p">[</span><span class="s2">&quot;SCR_RiseTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">first_peak</span><span class="p">]</span>
 
-    <span class="c1"># Recovery Time</span>
+    <span class="c1"># Recovery Time (from peak to half recovery time)</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">recovery_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">epoch</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">][</span><span class="n">epoch</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">recovery_time</span>
+        <span class="n">recov_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">epoch_postevent</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_postevent</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">recov_t</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">output</span><span class="p">[</span><span class="s2">&quot;SCR_RecoveryTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
