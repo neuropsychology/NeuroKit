@@ -338,10 +338,10 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
         # pass frequencies in order of lowest to highest to the scipy filter
         freqs = list(np.sort([lowcut, highcut]))
     elif lowcut is not None:
-        freqs = [lowcut]
+        freqs = lowcut
         filter_type = "highpass"
     elif highcut is not None:
-        freqs = [highcut]
+        freqs = highcut
         filter_type = "lowpass"
 
     # Normalize frequency to Nyquist Frequency (Fs/2).
