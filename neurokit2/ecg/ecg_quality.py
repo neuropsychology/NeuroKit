@@ -24,7 +24,7 @@ def ecg_quality(
       interpolating the distance of each QRS segment from the average QRS segment present in the *
       data. This index is therefore relative: 1 corresponds to heartbeats that are the closest to
       the average sample and 0 corresponds to the most distant heartbeat from that average sample.
-      Note that 1 does not necessarily means "good": if the majority of samples are bad, than being
+      Note that 1 does not necessarily means "good": if the majority of samples are bad, then being
       close to the average will likely mean bad as well. Use this index with care and plot it
       alongside your ECG signal to see if it makes sense.
 
