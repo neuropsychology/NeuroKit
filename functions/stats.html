@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
@@ -34,9 +34,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=1db4c2ab"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -127,6 +127,8 @@
         <div class="sidebar-primary-item">
 
   
+    
+  
 
 <a class="navbar-brand logo" href="../index.html">
   
@@ -148,7 +150,7 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -400,10 +402,10 @@
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
@@ -411,7 +413,7 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
@@ -1026,91 +1028,91 @@ different random state is chosen each time this function is called.</p></li>
 <span class="gp">In [15]: </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_kmeans</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[16]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034ef78ca0&gt;</span>
+<span class="gh">Out[16]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231a9624970&gt;</span>
 
 <span class="gp">In [17]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_kmeans</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_kmeans</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034ef794b0&gt;</span>
+<span class="gh">Out[17]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231a9624cd0&gt;</span>
 
 <span class="gp">In [18]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k-means&quot;</span><span class="p">)</span>
 <span class="gh">Out[18]: </span><span class="go">Text(0.5, 1.0, &#39;k-means&#39;)</span>
 
 <span class="gp">In [19]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_spectral</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[19]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034ef780d0&gt;</span>
+<span class="gh">Out[19]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231a9627700&gt;</span>
 
 <span class="gp">In [20]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_spectral</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_spectral</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[20]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034a4115a0&gt;</span>
+<span class="gh">Out[20]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231baa0ada0&gt;</span>
 
 <span class="gp">In [21]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Spectral&quot;</span><span class="p">)</span>
 <span class="gh">Out[21]: </span><span class="go">Text(0.5, 1.0, &#39;Spectral&#39;)</span>
 
 <span class="gp">In [22]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_hierarchical</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[22]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034a4493f0&gt;</span>
+<span class="gh">Out[22]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231baa0b580&gt;</span>
 
 <span class="gp">In [23]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_hierarchical</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_hierarchical</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[23]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034ef62020&gt;</span>
+<span class="gh">Out[23]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231ba9234c0&gt;</span>
 
 <span class="gp">In [24]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Hierarchical&quot;</span><span class="p">)</span>
 <span class="gh">Out[24]: </span><span class="go">Text(0.5, 1.0, &#39;Hierarchical&#39;)</span>
 
 <span class="gp">In [25]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_agglomerative</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034651c3d0&gt;</span>
+<span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b61b2980&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_agglomerative</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_agglomerative</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[26]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034ae30460&gt;</span>
+<span class="gh">Out[26]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b61b0760&gt;</span>
 
 <span class="gp">In [27]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Agglomerative&quot;</span><span class="p">)</span>
 <span class="gh">Out[27]: </span><span class="go">Text(0.5, 1.0, &#39;Agglomerative&#39;)</span>
 
 <span class="gp">In [28]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_mixture</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[28]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f2770&gt;</span>
+<span class="gh">Out[28]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b64d64d0&gt;</span>
 
 <span class="gp">In [29]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_mixture</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_mixture</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[29]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f0cd0&gt;</span>
+<span class="gh">Out[29]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b64d5f90&gt;</span>
 
 <span class="gp">In [30]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mixture&quot;</span><span class="p">)</span>
 <span class="gh">Out[30]: </span><span class="go">Text(0.5, 1.0, &#39;Mixture&#39;)</span>
 
 <span class="gp">In [31]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_bayes</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f2800&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231ba99f940&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_bayes</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_bayes</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[32]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f1a50&gt;</span>
+<span class="gh">Out[32]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b64d7400&gt;</span>
 
 <span class="gp">In [33]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Bayesian Mixture&quot;</span><span class="p">)</span>
 <span class="gh">Out[33]: </span><span class="go">Text(0.5, 1.0, &#39;Bayesian Mixture&#39;)</span>
 
 <span class="gp">In [34]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_pca</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[34]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f12d0&gt;</span>
+<span class="gh">Out[34]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b6621d20&gt;</span>
 
 <span class="gp">In [35]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_pca</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_pca</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[35]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f0340&gt;</span>
+<span class="gh">Out[35]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b6623b20&gt;</span>
 
 <span class="gp">In [36]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">)</span>
 <span class="gh">Out[36]: </span><span class="go">Text(0.5, 1.0, &#39;PCA&#39;)</span>
 
 <span class="gp">In [37]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_ica</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[37]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f2d10&gt;</span>
+<span class="gh">Out[37]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231ae2a5d20&gt;</span>
 
 <span class="gp">In [38]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_ica</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_ica</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[38]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f0d60&gt;</span>
+<span class="gh">Out[38]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b66231c0&gt;</span>
 
 <span class="gp">In [39]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ICA&quot;</span><span class="p">)</span>
 <span class="gh">Out[39]: </span><span class="go">Text(0.5, 1.0, &#39;ICA&#39;)</span>
 
 <span class="gp">In [40]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_kmod</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[40]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034a413f40&gt;</span>
+<span class="gh">Out[40]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b66229b0&gt;</span>
 
 <span class="gp">In [41]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_kmod</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_kmod</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[41]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2035ca26e90&gt;</span>
+<span class="gh">Out[41]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b64d5d80&gt;</span>
 
 <span class="gp">In [42]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;modified K-means&quot;</span><span class="p">)</span>
 <span class="gh">Out[42]: </span><span class="go">Text(0.5, 1.0, &#39;modified K-means&#39;)</span>
 
 <span class="gp">In [43]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">c</span><span class="o">=</span><span class="n">clustering_aahc</span><span class="p">[</span><span class="s1">&#39;Cluster&#39;</span><span class="p">])</span>
-<span class="gh">Out[43]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x203530f3c40&gt;</span>
+<span class="gh">Out[43]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231c2bdcf40&gt;</span>
 
 <span class="gp">In [44]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">clusters_aahc</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">clusters_aahc</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-<span class="gh">Out[44]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x2034ae31930&gt;</span>
+<span class="gh">Out[44]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x231b64d4be0&gt;</span>
 
 <span class="gp">In [45]: </span><span class="n">axes</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;AAHC (Frederic&#39;s method)&quot;</span><span class="p">)</span>
 <span class="gh">Out[45]: </span><span class="go">Text(0.5, 1.0, &quot;AAHC (Frederic&#39;s method)&quot;)</span>
@@ -1236,7 +1238,7 @@ statistic.</p></li>
 <span class="gp">In [5]: </span><span class="n">general</span>
 <span class="gh">Out[5]: </span>
 <span class="go">   n_Clusters  Score_Silhouette  ...  Score_GAP_sk  Score_GAPmod_sk</span>
-<span class="go">0         3.0          0.551192  ...      0.276033      1140.579361</span>
+<span class="go">0         3.0          0.551192  ...      0.253826      1140.840124</span>
 
 <span class="go">[1 rows x 12 columns]</span>
 </pre></div>
@@ -1526,7 +1528,7 @@ is performed to obtain kernel functional approximation (see <code class="docutil
 <span class="gp">In [3]: </span><span class="n">bw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">density_bandwidth</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">bw</span>
-<span class="gh">Out[4]: </span><span class="go">0.3995201392765134</span>
+<span class="gh">Out[4]: </span><span class="go">0.503050455709401</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">density_bandwidth</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;scott&quot;</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go">0.3981071705534972</span>
@@ -1769,8 +1771,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
