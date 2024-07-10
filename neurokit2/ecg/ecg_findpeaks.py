@@ -274,6 +274,9 @@ def _ecg_findpeaks_neurokit(
     qrs = smoothgrad > gradthreshold
     beg_qrs = np.where(np.logical_and(np.logical_not(qrs[0:-1]), qrs[1:]))[0]
     end_qrs = np.where(np.logical_and(qrs[0:-1], np.logical_not(qrs[1:])))[0]
+
+    if len(beg_qrs) == 0:
+        return []
     # Throw out QRS-ends that precede first QRS-start.
     end_qrs = end_qrs[end_qrs > beg_qrs[0]]
 
