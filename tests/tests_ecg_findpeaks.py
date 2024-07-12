@@ -3,6 +3,7 @@ import os.path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 # Trick to directly access internal functions for unit testing.
 #
@@ -24,22 +25,16 @@ def _read_csv_column(csv_name, column):
     csv_data = pd.read_csv(csv_path, header=None)
     return csv_data[column].to_numpy()
 
-def test_ecg_findpeaks_all_methods_handle_empty_input():
-    METHODS = ["neurokit", "pantompkins", "nabian", "gamboa", 
+#vgraph is not included because it currently causes CI to fail (issue 1007)    
+@pytest.mark.parametrize("method",["neurokit", "pantompkins", "nabian", "gamboa", 
                "slopesumfunction", "wqrs", "hamilton", "christov",
                "engzee", "manikandan", "elgendi", "kalidas", 
-               "martinez", "rodrigues"]
-    
-    failed_methods = []
-    for method in METHODS:
-        try:
-            method_func = _ecg_findpeaks_findmethod(method)
-            _ = method_func(np.zeros(12*240), sampling_rate=240)
-        except Exception:
-            failed_methods.append(method)
-            continue
-    if failed_methods:
-        raise Exception(f"Failed methods: {failed_methods}")
+               "martinez", "rodrigues",])
+def test_ecg_findpeaks_all_methods_handle_empty_input(method):
+    method_func = _ecg_findpeaks_findmethod(method)
+    # The test here is implicit: no exceptions means that it passed,
+    # even if the output is nonsense.
+    _ = method_func(np.zeros(12*240), sampling_rate=240)
 
 
 def test_ecg_findpeaks_MWA():
