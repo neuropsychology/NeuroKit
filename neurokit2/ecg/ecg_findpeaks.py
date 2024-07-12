@@ -274,6 +274,10 @@ def _ecg_findpeaks_neurokit(
     qrs = smoothgrad > gradthreshold
     beg_qrs = np.where(np.logical_and(np.logical_not(qrs[0:-1]), qrs[1:]))[0]
     end_qrs = np.where(np.logical_and(qrs[0:-1], np.logical_not(qrs[1:])))[0]
+
+    if len(beg_qrs) == 0:
+        return np.array([])
+    
     # Throw out QRS-ends that precede first QRS-start.
     end_qrs = end_qrs[end_qrs > beg_qrs[0]]
 
@@ -500,6 +504,14 @@ def _ecg_findpeaks_zong(signal, sampling_rate=1000, cutoff=16, window=0.13, **kw
     ret = np.pad(clt, (window_size - 1, 0), "constant", constant_values=(0, 0))
     ret = np.convolve(ret, np.ones(window_size), "valid")
 
+    # Check that ret is at least as large as the window
+    if len(ret) < window_size:
+        warn(
+            f"The signal must be at least {window_size} samples long for peak detection with the Zong method. ",
+            category=NeuroKitWarning,
+        )
+        return np.array([])
+
     for i in range(1, window_size):
         ret[i - 1] = ret[i - 1] / i
     ret[window_size - 1 :] = ret[window_size - 1 :] / window_size
@@ -635,7 +647,8 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
                 if len(RR) > 5:
                     RR.pop(0)
                 Rm = int(np.mean(RR))
-
+    if len(QRS) == 0:
+        return np.array([])
     QRS.pop(0)
     QRS = np.array(QRS, dtype="int")
     return QRS
@@ -916,6 +929,9 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
             thi = False
             thf = False
 
+    if len(r_peaks) == 0:
+        return np.array([])
+    
     r_peaks.pop(
         0
     )  # removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold
@@ -956,6 +972,12 @@ def _ecg_findpeaks_manikandan(signal, sampling_rate=1000, **kwargs):
 
     # Eq. 1: First-order differencing difference
     dn = np.append(filtered[1:], 0) - filtered
+
+    # If the signal is flat then return an empty array rather than error out
+    # with a divide by zero error.
+    if np.max(abs(dn)) == 0:
+        return np.array([])
+    
     # Eq. 2
     dtn = dn / (np.max(abs(dn)))
 
