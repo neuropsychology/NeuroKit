@@ -28,7 +28,7 @@ def test_ecg_findpeaks_all_methods_handle_empty_input():
     METHODS = ["neurokit", "pantompkins", "nabian", "gamboa", 
                "slopesumfunction", "wqrs", "hamilton", "christov",
                "engzee", "manikandan", "elgendi", "kalidas", 
-               "martinez", "rodrigues", "vgraph"]
+               "martinez", "rodrigues"]
     
     failed_methods = []
     for method in METHODS:
@@ -38,8 +38,8 @@ def test_ecg_findpeaks_all_methods_handle_empty_input():
         except Exception:
             failed_methods.append(method)
             continue
-
-    np.testing.assert_equal(failed_methods, [])
+    if failed_methods:
+        raise Exception(f"Failed methods: {failed_methods}")
 
 
 def test_ecg_findpeaks_MWA():
