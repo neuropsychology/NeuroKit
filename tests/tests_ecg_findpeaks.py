@@ -13,6 +13,7 @@ from neurokit2.ecg.ecg_findpeaks import (
     _ecg_findpeaks_MWA,
     _ecg_findpeaks_peakdetect,
     _ecg_findpeaks_hamilton,
+    _ecg_findpeaks_findmethod,
 )
 
 
@@ -22,6 +23,23 @@ def _read_csv_column(csv_name, column):
     )
     csv_data = pd.read_csv(csv_path, header=None)
     return csv_data[column].to_numpy()
+
+def test_ecg_findpeaks_all_methods_handle_empty_input():
+    METHODS = ["neurokit", "pantompkins", "nabian", "gamboa", 
+               "slopesumfunction", "wqrs", "hamilton", "christov",
+               "engzee", "manikandan", "elgendi", "kalidas", 
+               "martinez", "rodrigues", "vgraph"]
+    
+    failed_methods = []
+    for method in METHODS:
+        try:
+            method_func = _ecg_findpeaks_findmethod(method)
+            _ = method_func(np.zeros(12*240), sampling_rate=240)
+        except Exception:
+            failed_methods.append(method)
+            continue
+
+    np.testing.assert_equal(failed_methods, [])
 
 
 def test_ecg_findpeaks_MWA():
