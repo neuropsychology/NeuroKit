@@ -657,6 +657,10 @@ document.write(`
     <span class="n">qrs</span> <span class="o">=</span> <span class="n">smoothgrad</span> <span class="o">&gt;</span> <span class="n">gradthreshold</span>
     <span class="n">beg_qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">qrs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">end_qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">beg_qrs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    
     <span class="c1"># Throw out QRS-ends that precede first QRS-start.</span>
     <span class="n">end_qrs</span> <span class="o">=</span> <span class="n">end_qrs</span><span class="p">[</span><span class="n">end_qrs</span> <span class="o">&gt;</span> <span class="n">beg_qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
@@ -883,6 +887,14 @@ document.write(`
     <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">clt</span><span class="p">,</span> <span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">window_size</span><span class="p">),</span> <span class="s2">&quot;valid&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Check that ret is at least as large as the window</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">window_size</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The signal must be at least </span><span class="si">{</span><span class="n">window_size</span><span class="si">}</span><span class="s2"> samples long for peak detection with the Zong method. &quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">window_size</span><span class="p">):</span>
         <span class="n">ret</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">i</span>
     <span class="n">ret</span><span class="p">[</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">window_size</span>
@@ -1018,7 +1030,8 @@ document.write(`
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">RR</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
                     <span class="n">RR</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">Rm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">RR</span><span class="p">))</span>
-
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">QRS</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
     <span class="n">QRS</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">QRS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">QRS</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">QRS</span>
@@ -1299,6 +1312,9 @@ document.write(`
             <span class="n">thi</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">thf</span> <span class="o">=</span> <span class="kc">False</span>
 
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    
     <span class="n">r_peaks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
         <span class="mi">0</span>
     <span class="p">)</span>  <span class="c1"># removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold</span>
@@ -1339,6 +1355,12 @@ document.write(`
 
     <span class="c1"># Eq. 1: First-order differencing difference</span>
     <span class="n">dn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filtered</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">filtered</span>
+
+    <span class="c1"># If the signal is flat then return an empty array rather than error out</span>
+    <span class="c1"># with a divide by zero error.</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dn</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    
     <span class="c1"># Eq. 2</span>
     <span class="n">dtn</span> <span class="o">=</span> <span class="n">dn</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dn</span><span class="p">)))</span>
 
