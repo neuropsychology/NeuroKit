@@ -25,11 +25,11 @@ def _read_csv_column(csv_name, column):
     csv_data = pd.read_csv(csv_path, header=None)
     return csv_data[column].to_numpy()
 
-#vgraph is not included because it currently causes CI to fail (issue 1007)    
+
 @pytest.mark.parametrize("method",["neurokit", "pantompkins", "nabian", "gamboa", 
                "slopesumfunction", "wqrs", "hamilton", "christov",
                "engzee", "manikandan", "elgendi", "kalidas", 
-               "martinez", "rodrigues",])
+               "martinez", "rodrigues", "vgraph"])
 def test_ecg_findpeaks_all_methods_handle_empty_input(method):
     method_func = _ecg_findpeaks_findmethod(method)
     # The test here is implicit: no exceptions means that it passed,
