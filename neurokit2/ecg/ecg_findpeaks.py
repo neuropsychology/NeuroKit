@@ -1245,6 +1245,10 @@ def _ecg_findpeaks_visibilitygraph(
     weights = np.zeros(N)  # Empty array to store the weights
     BETA = 0.55  # Target number of nonzero elements in the resulting weight vector
 
+    # if the input signal is flat, return an empty array, otherwise the visiblity graph will fail
+    if np.max(signal) == np.min(signal):
+        return np.array([])
+
     # If input length is smaller than window, compute only one segment of this length
     if N < M:
         M, R = N, N
