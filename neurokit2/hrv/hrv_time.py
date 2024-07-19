@@ -74,10 +74,10 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
           Frequency (LF/HF) Ratio (Sollers et al., 2007).
         * **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         * **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
-        * **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of
-          RR intervals.
-        * **pNN20**: The proportion of RR intervals greater than 20ms, out of the total number of
-          RR intervals.
+        * **pNN50**: The percentage of absolute differences in successive RR intervals greater than
+          50 ms (Bigger et al., 1988; Mietus et al., 2002).
+        * **pNN20**: The percentage of absolute differences in successive RR intervals greater than
+          20 ms (Mietus et al., 2002).
         * **MinNN**: The minimum of the RR intervals (Parent, 2019; Subramaniam, 2022).
         * **MaxNN**: The maximum of the RR intervals (Parent, 2019; Subramaniam, 2022).
         * **TINN**: A geometrical parameter of the HRV, or more specifically, the baseline width of
@@ -111,6 +111,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     References
     ----------
+    * Bigger Jr, J. T., Kleiger, R. E., Fleiss, J. L., Rolnitzky, L. M., Steinman, R. C., & Miller,
+      J. P. (1988). Components of heart rate variability measured during healing of acute myocardial
+      infarction. The American journal of cardiology, 61(4), 208-215.
     * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
       Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
       https://doi.org/10.3390/s21123998
@@ -123,6 +126,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
       towards a gold standard for continuous stress assessment in the mobile environment. In
       Proceedings of the 2015 ACM international joint conference on pervasive and ubiquitous
       computing (pp. 493-504).
+    * Mietus, J. E., Peng, C. K., Henry, I., Goldsmith, R. L., & Goldberger, A. L. (2002). The pNNx
+      files: re-examining a widely used heart rate variability measure. Heart, 88(4), 378-380.
     * Parent, M., Tiwari, A., Albuquerque, I., Gagnon, J. F., Lafond, D., Tremblay, S., & Falk, T.
       H. (2019). A multimodal approach to improve the robustness of physiological stress prediction
       during physical activity. In 2019 IEEE International Conference on Systems, Man and
