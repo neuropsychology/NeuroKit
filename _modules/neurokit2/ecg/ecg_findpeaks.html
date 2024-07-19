@@ -1628,6 +1628,10 @@ document.write(`
     <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>  <span class="c1"># Empty array to store the weights</span>
     <span class="n">BETA</span> <span class="o">=</span> <span class="mf">0.55</span>  <span class="c1"># Target number of nonzero elements in the resulting weight vector</span>
 
+    <span class="c1"># if the input signal is flat, return an empty array, otherwise the visiblity graph will fail</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
     <span class="c1"># If input length is smaller than window, compute only one segment of this length</span>
     <span class="k">if</span> <span class="n">N</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">:</span>
         <span class="n">M</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span>
