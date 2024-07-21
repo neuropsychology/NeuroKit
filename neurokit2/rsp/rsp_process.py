@@ -68,7 +68,8 @@ def rsp_process(
         * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
         * ``"RSP_Phase_Completion"``: breathing phase completion, expressed in percentage (from 0 to
           1), representing the stage of the current respiratory phase.
-         * ``"RSP_RVT"``: respiratory volume per time (RVT).
+        * ``"RSP_RVT"``: respiratory volume per time (RVT).
+
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
         accessible with the keys ``"RSP_Peaks"``, and ``"RSP_Troughs"`` respectively, as well as the
