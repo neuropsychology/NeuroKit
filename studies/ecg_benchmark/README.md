@@ -93,9 +93,9 @@ rpeaks = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
 
 ## Study 1: Comparing Different R-Peaks Detection Algorithms
 
-### Procedure
+### Algorithm Comparison Procedure
 
-#### Setup Functions
+#### Algorithm Comparison Setup Functions
 
 ``` python
 import neurokit2 as nk
@@ -107,19 +107,19 @@ def neurokit(ecg, sampling_rate):
 def pantompkins1985(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="pantompkins1985")
     return info["ECG_R_Peaks"]
-    
+
 def hamilton2002(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="hamilton2002")
     return info["ECG_R_Peaks"]
-    
+
 def martinez2003(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="martinez2003")
     return info["ECG_R_Peaks"]
-    
+
 def christov2004(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="christov2004")
     return info["ECG_R_Peaks"]
-    
+
 def gamboa2008(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="gamboa2008")
     return info["ECG_R_Peaks"]
@@ -127,27 +127,27 @@ def gamboa2008(ecg, sampling_rate):
 def elgendi2010(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="elgendi2010")
     return info["ECG_R_Peaks"]
-    
+
 def engzeemod2012(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="engzeemod2012")
     return info["ECG_R_Peaks"]
-    
+
 def kalidas2017(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="kalidas2017")
     return info["ECG_R_Peaks"]
-    
+
 def rodrigues2020(ecg, sampling_rate):
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="rodrigues2020")
     return info["ECG_R_Peaks"]
 ```
 
-#### Run the Benchmarking
+#### Run the Algorithm Comparison Benchmarks
 
 *Note: This takes a long time (several hours).*
 
 ``` python
 results = []
-for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov2004, 
+for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov2004,
                gamboa2008, elgendi2010, engzeemod2012, kalidas2017, rodrigues2020]:
     for i in range(len(rpeaks)):
         data_ecg = pd.read_csv(ecgs[i])
@@ -159,33 +159,33 @@ results = pd.concat(results).reset_index(drop=True)
 results.to_csv("data_detectors.csv", index=False)
 ```
 
-### Results
+### Algorithm Comparison Results
 
 ``` r
 library(tidyverse)
 library(easystats)
 library(lme4)
 
-data <- read.csv("data_detectors.csv", stringsAsFactors = FALSE) %>% 
+data <- read.csv("data_detectors.csv", stringsAsFactors = FALSE) %>%
   mutate(Method = fct_relevel(Method, "neurokit", "pantompkins1985", "hamilton2002", "martinez2003", "christov2004", "gamboa2008", "elgendi2010", "engzeemod2012", "kalidas2017", "rodrigues2020"))
 
-colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#FF5722", "martinez2003"="#FF9800", "christov2004"="#FFC107", "gamboa2008"="#4CAF50", "elgendi2010"="#009688", "engzeemod2012"="#2196F3", "kalidas2017"="#3F51B5", "rodrigues2020"="#9C27B0") 
+colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#FF5722", "martinez2003"="#FF9800", "christov2004"="#FFC107", "gamboa2008"="#4CAF50", "elgendi2010"="#009688", "engzeemod2012"="#2196F3", "kalidas2017"="#3F51B5", "rodrigues2020"="#9C27B0")
 ```
 
 #### Errors and bugs
 
 ``` r
-data %>% 
+data %>%
   mutate(Error = case_when(
     Error == "index -1 is out of bounds for axis 0 with size 0" ~ "index -1 out of bounds",
     Error == "index 0 is out of bounds for axis 0 with size 0" ~ "index 0 out of bounds",
-    TRUE ~ Error)) %>% 
-  group_by(Database, Method) %>% 
-  mutate(n = n()) %>% 
-  group_by(Database, Method, Error) %>% 
-  summarise(Percentage = n() / unique(n)) %>% 
-  ungroup() %>% 
-  mutate(Error = fct_relevel(Error, "None")) %>% 
+    TRUE ~ Error)) %>%
+  group_by(Database, Method) %>%
+  mutate(n = n()) %>%
+  group_by(Database, Method, Error) %>%
+  summarise(Percentage = n() / unique(n)) %>%
+  ungroup() %>%
+  mutate(Error = fct_relevel(Error, "None")) %>%
   ggplot(aes(x=Error, y=Percentage, fill=Method)) +
     geom_bar(stat="identity", position = position_dodge2(preserve = "single")) +
     facet_wrap(~Database, nrow=5) +
@@ -208,14 +208,14 @@ data <- filter(data, !is.na(Score))
 
 #### Computation Time
 
-##### Descriptive Statistics
+##### Duration Descriptive Statistics
 
 ``` r
 # Normalize duration
-data <- data %>% 
-  mutate(Duration = (Duration) / (Recording_Length * Sampling_Rate)) 
+data <- data %>%
+  mutate(Duration = (Duration) / (Recording_Length * Sampling_Rate))
 
-data %>% 
+data %>%
   ggplot(aes(x=Method, y=Duration, fill=Method)) +
     geom_jitter2(aes(color=Method, group=Database), size=3, alpha=0.2, position=position_jitterdodge()) +
     geom_boxplot(aes(alpha=Database), outlier.alpha = 0) +
@@ -244,7 +244,7 @@ data %>%
 <!--     scale_y_sqrt() -->
 <!-- ``` -->
 
-##### Statistical Modelling
+##### Duration Statistical Modelling
 
 ``` r
 model <- lmer(Duration ~ Method + (1|Database) + (1|Participant), data=data)
@@ -253,7 +253,7 @@ means <- modelbased::estimate_means(model)
 
 arrange(means, Mean)
 ## Estimated Marginal Means
-## 
+##
 ## Method          |     Mean |       SE |       95% CI
 ## ----------------------------------------------------
 ## gamboa2008      | 2.90e-05 | 1.18e-05 | [0.00, 0.00]
@@ -266,10 +266,10 @@ arrange(means, Mean)
 ## pantompkins1985 | 5.64e-04 | 1.17e-05 | [0.00, 0.00]
 ## elgendi2010     | 9.80e-04 | 1.18e-05 | [0.00, 0.00]
 ## christov2004    | 1.25e-03 | 1.17e-05 | [0.00, 0.00]
-## 
+##
 ## Marginal means estimated at Method
 
-means %>% 
+means %>%
   ggplot(aes(x=Method, y=Mean, color=Method)) +
   geom_line(aes(group=1), size=1) +
   geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) +
@@ -293,14 +293,14 @@ substantially slower.
 original “true” R-peaks location. As such, the closest to zero, the
 better the accuracy.
 
-##### Descriptive Statistics
+##### Performance Descriptive Statistics
 
 ``` r
-data <- data %>% 
-  mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>% 
+data <- data %>%
+  mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>%
   filter(Outlier == 0)
 
-data %>% 
+data %>%
   ggplot(aes(x=Database, y=Score)) +
     geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=1) +
     geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.2, position=position_jitterdodge()) +
@@ -310,12 +310,12 @@ data %>%
     scale_color_manual(values=colors) +
     scale_fill_manual(values=colors) +
     scale_y_sqrt() +
-    ylab("Amount of Error") 
+    ylab("Amount of Error")
 ```
 
 ![](../../studies/ecg_benchmark/figures/unnamed-chunk-10-1.png)<!-- -->
 
-##### Statistical Modelling
+##### Performance Statistical Modelling
 
 ``` r
 model <- lmer(Score ~ Method + (1|Database) + (1|Participant), data=data)
@@ -324,7 +324,7 @@ means <- modelbased::estimate_means(model)
 
 arrange(means, abs(Mean))
 ## Estimated Marginal Means
-## 
+##
 ## Method          | Mean |       SE |       95% CI
 ## ------------------------------------------------
 ## neurokit        | 0.01 | 4.89e-03 | [0.00, 0.02]
@@ -337,10 +337,10 @@ arrange(means, abs(Mean))
 ## hamilton2002    | 0.08 | 5.18e-03 | [0.07, 0.09]
 ## elgendi2010     | 0.09 | 5.13e-03 | [0.08, 0.10]
 ## gamboa2008      | 0.22 | 8.02e-03 | [0.20, 0.24]
-## 
+##
 ## Marginal means estimated at Method
 
-means %>% 
+means %>%
   ggplot(aes(x=Method, y=Mean, color=Method)) +
   geom_line(aes(group=1), size=1) +
   geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) +
@@ -348,7 +348,7 @@ means %>%
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_color_manual(values=colors) +
-    ylab("Amount of Error") 
+    ylab("Amount of Error")
 ```
 
 ![](../../studies/ecg_benchmark/figures/unnamed-chunk-11-1.png)<!-- -->
@@ -362,7 +362,7 @@ Discrepancies could be due to the differences in data and analysis, as
 here we used more databases and modelled them by respecting their
 hierarchical structure using mixed models.
 
-### Conclusion
+### Algorithm Comparison Conclusion
 
 Based on the accuracy / execution time criterion, it seems like
 `neurokit` is the best R-peak detection method, followed by
@@ -370,9 +370,9 @@ Based on the accuracy / execution time criterion, it seems like
 
 ## Study 2: Normalization
 
-### Procedure
+### Normalization Procedure
 
-#### Setup Functions
+#### Normalization Setup Functions
 
 ``` python
 import neurokit2 as nk
@@ -385,14 +385,14 @@ def mean_detrend(ecg, sampling_rate):
     ecg = nk.signal_detrend(ecg, order=0)
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
-    
+
 def standardize(ecg, sampling_rate):
     ecg = nk.standardize(ecg)
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
 ```
 
-#### Run the Benchmarking
+#### Run the Normalization Benchmarks
 
 *Note: This takes a long time (several hours).*
 
@@ -409,33 +409,33 @@ results = pd.concat(results).reset_index(drop=True)
 results.to_csv("data_normalization.csv", index=False)
 ```
 
-### Results
+### Normalization Results
 
 ``` r
 library(tidyverse)
 library(easystats)
 library(lme4)
 
-data <- read.csv("data_normalization.csv", stringsAsFactors = FALSE) %>% 
+data <- read.csv("data_normalization.csv", stringsAsFactors = FALSE) %>%
   mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database),
          Method = fct_relevel(Method, "none", "mean_removal", "standardization"),
-         Participant = paste0(Database, Participant)) %>% 
-  filter(Error == "None") %>% 
+         Participant = paste0(Database, Participant)) %>%
+  filter(Error == "None") %>%
   filter(!is.na(Score))
 
-colors <- c("none"="#607D8B", "mean_removal"="#673AB7", "standardization"="#00BCD4") 
+colors <- c("none"="#607D8B", "mean_removal"="#673AB7", "standardization"="#00BCD4")
 ```
 
-#### Accuracy
+#### Normalized Accuracy
 
-##### Descriptive Statistics
+##### Normalized Performance Descriptive Statistics
 
 ``` r
-data <- data %>% 
-  mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>% 
+data <- data %>%
+  mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>%
   filter(Outlier == 0)
 
-data %>% 
+data %>%
   ggplot(aes(x=Database, y=Score)) +
     geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=1) +
     geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.2, position=position_jitterdodge()) +
@@ -445,62 +445,62 @@ data %>%
     scale_color_manual(values=colors) +
     scale_fill_manual(values=colors) +
     scale_y_sqrt() +
-    ylab("Amount of Error") 
+    ylab("Amount of Error")
 ```
 
 ![](../../studies/ecg_benchmark/figures/unnamed-chunk-15-1.png)<!-- -->
 
-##### Statistical Modelling
+##### Normalized Performance Statistical Modelling
 
 ``` r
 model <- lmer(Score ~ Method + (1|Database) + (1|Participant), data=data)
 
-modelbased::estimate_contrasts(model) 
+modelbased::estimate_contrasts(model)
 ## Marginal Contrasts Analysis
-## 
+##
 ## Level1       |          Level2 | Difference |        95% CI |       SE | t(553.00) |     p
 ## ------------------------------------------------------------------------------------------
 ## mean_removal | standardization |  -1.01e-07 | [ 0.00, 0.00] | 1.29e-07 |     -0.78 | 0.716
 ## none         |    mean_removal |  -8.72e-08 | [ 0.00, 0.00] | 1.29e-07 |     -0.68 | 0.777
 ## none         | standardization |  -1.88e-07 | [ 0.00, 0.00] | 1.28e-07 |     -1.47 | 0.308
-## 
+##
 ## Marginal contrasts estimated at Method
 ## p-value adjustment method: Holm (1979)
 
 means <- modelbased::estimate_means(model)
 arrange(means, abs(Mean))
 ## Estimated Marginal Means
-## 
+##
 ## Method          |     Mean |       SE |       95% CI
 ## ----------------------------------------------------
 ## none            | 5.23e-03 | 5.14e-04 | [0.00, 0.01]
 ## mean_removal    | 5.23e-03 | 5.14e-04 | [0.00, 0.01]
 ## standardization | 5.23e-03 | 5.14e-04 | [0.00, 0.01]
-## 
+##
 ## Marginal means estimated at Method
 
-means %>% 
+means %>%
   ggplot(aes(x=Method, y=Mean, color=Method)) +
   geom_line(aes(group=1), size=1) +
   geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_color_manual(values=colors) +
-    ylab("Amount of Error") 
+    ylab("Amount of Error")
 ```
 
 ![](../../studies/ecg_benchmark/figures/unnamed-chunk-16-1.png)<!-- -->
 
-### Conclusion
+### Normalization Conclusion
 
 No significant benefits added by normalization for the `neurokit`
 method.
 
 ## Study 3: Low Frequency Trends Removal
 
-### Procedure
+### Trend Removal Procedure
 
-#### Setup Functions
+#### Trend Removal Setup Functions
 
 ``` python
 import neurokit2 as nk
@@ -515,29 +515,29 @@ def polylength(ecg, sampling_rate):
     ecg = nk.signal_detrend(ecg, method="polynomial", order=int(length / 2))
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
-    
+
 def tarvainen(ecg, sampling_rate):
     ecg = nk.signal_detrend(ecg, method="tarvainen2002")
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
-    
+
 def locreg(ecg, sampling_rate):
-    ecg = nk.signal_detrend(ecg, 
-                            method="locreg", 
+    ecg = nk.signal_detrend(ecg,
+                            method="locreg",
                             window=1/0.5,
                             stepsize=0.02)
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
-    
+
 def rollingz(ecg, sampling_rate):
     ecg = nk.standardize(ecg, window=sampling_rate*2)
     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
-    
+
 # Filtering-based
 ```
 
-#### Run the Benchmarking
+#### Run the Trend Removal Benchmarks
 
 *Note: This takes a very long time (several hours).*
 
