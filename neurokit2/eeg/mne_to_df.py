@@ -83,15 +83,26 @@ def mne_to_dict(eeg):
 
       # Raw objects
       eeg = nk.mne_data("filt-0-40_raw")
-      nk.mne_to_dict(eeg)
+      eeg_dict = nk.mne_to_dict(eeg)
+
+      # Print function result summary
+      eeg_dict_view = {k: f"Signal with length: {len(v)}" for k, v in eeg_dict.items()}
+      eeg_dict_view
+
 
       # Epochs objects
       eeg = nk.mne_data("epochs")
-      nk.mne_to_dict(eeg)
+      eeg_epoch_dict = nk.mne_to_dict(eeg)
+
+      # Print function result summary
+      list(eeg_epoch_dict.items())[:2]
 
       # Evoked objects
       eeg = nk.mne_data("evoked")
-      nk.mne_to_dict(eeg)
+      eeg_evoked_dict = nk.mne_to_dict(eeg)
+
+      # Print function result summary
+      eeg_evoked_dict
 
     """
     return _mne_convert(eeg, to_what="dict")
