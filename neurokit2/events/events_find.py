@@ -137,6 +137,7 @@ def events_find(
     Convert the event condition results its human readable representation
 
     .. ipython:: python
+
       value_to_condition = {1: "Stimulus 1", 2: "Stimulus 2", 3: "Stimulus 3"}
       events["condition"] = [value_to_condition[id] for id in events["condition"]]
       events

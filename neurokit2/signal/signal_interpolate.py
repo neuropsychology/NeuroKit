@@ -32,13 +32,13 @@ def signal_interpolate(
     method : str
         Method of interpolation. Can be ``"linear"``, ``"nearest"``, ``"zero"``, ``"slinear"``,
         ``"quadratic"``, ``"cubic"``, ``"previous"``, ``"next"``, ``"monotone_cubic"``, or ``"akima"``.
-        The methods ``"zero"``, ``"slinear"``,``"quadratic"`` and ``"cubic"`` refer to a spline
+        The methods ``"zero"``, ``"slinear"``, ``"quadratic"`` and ``"cubic"`` refer to a spline
         interpolation of zeroth, first, second or third order; whereas ``"previous"`` and
         ``"next"`` simply return the previous or next value of the point. An integer specifying the
         order of the spline interpolator to use.
-        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
+        See `monotone cubic method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
-        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
+        See `akima method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         Akima1DInterpolator.html>`_ for details on the ``"akima"`` method.
     fill_value : float or tuple or str
         If a ndarray (or float), this value will be used to fill in for
@@ -87,6 +87,7 @@ def signal_interpolate(
       plt.scatter(x_values, signal, label="original datapoints", zorder=3)
       @suppress
       plt.close()
+
     """
     # Sanity checks
     if x_values is None:

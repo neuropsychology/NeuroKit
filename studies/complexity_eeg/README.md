@@ -71,7 +71,7 @@ data_delay <- read.csv("data_delay.csv") |>
 #   facet_wrap(~Metric, scales = "free_y")
 ```
 
-#### Per Channel
+#### Per Channel Delay Optimization
 
 ``` r
 delay_perchannel <- function(data_delay, dataset="Lemon") {
@@ -247,7 +247,7 @@ data_dim <- read.csv("data_dimension.csv") |>
          Area = fct_relevel(Area, c("F", "C", "T", "P", "O")))
 ```
 
-#### Per Channel
+#### Per Channel Dimension Optimization
 
 ``` r
 dim_perchannel <- function(data_dim, dataset="Lemon") {

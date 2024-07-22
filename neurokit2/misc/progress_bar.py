@@ -19,7 +19,7 @@ def progress_bar(it, prefix="", size=40, verbose=True):
 
     Examples
     --------
-    ..ipython:: python
+    .. ipython:: python
 
       import neurokit2 as nk
 
