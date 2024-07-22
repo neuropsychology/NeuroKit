@@ -788,7 +788,7 @@ percentiles.</p></li>
 <span class="gp">In [5]: </span><span class="n">plateau</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">find_plateau</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plateau</span>
-<span class="gh">Out[6]: </span><span class="go">45</span>
+<span class="gh">Out[6]: </span><span class="go">47</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_find_plateau1.png"><img alt="../_images/p_find_plateau1.png" src="../_images/p_find_plateau1.png" style="width: 640.0px; height: 480.0px;" />
@@ -907,15 +907,21 @@ inside as <code class="docutils literal notranslate"><span class="pre">**kwargs<
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>..ipython:: python</p>
-<blockquote>
-<div><p>import neurokit2 as nk</p>
-<dl class="simple">
-<dt>for i, j in nk.progress_bar([“a”, “b”, “c”], prefix=”Progress: “):</dt><dd><p>pass</p>
-</dd>
-</dl>
-<p>print(i, j)</p>
-</div></blockquote>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">nk</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;Progress: &quot;</span><span class="p">):</span>
+<span class="gp">   ...: </span>    <span class="k">pass</span>
+<span class="gp">   ...: </span>
+<span class="go">Progress: [........................................] 0/3</span>
+<span class="go">Progress: [█████████████...........................] 1/3</span>
+<span class="go">Progress: [██████████████████████████..............] 2/3</span>
+<span class="go">Progress: [████████████████████████████████████████] 3/3</span>
+
+
+<span class="gp">In [3]: </span><span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<span class="go">2 c</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -1103,7 +1109,7 @@ obtained from <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_pro
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="gp">In [3]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>  <span class="c1"># Make plot</span>
-<span class="gh">Out[3]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x19491d39cc0&gt;]</span>
+<span class="gh">Out[3]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a703ebdff0&gt;]</span>
 
 <span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>  <span class="c1"># Get current figure</span>
 

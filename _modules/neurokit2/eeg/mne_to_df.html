@@ -468,15 +468,26 @@ document.write(`
 
 <span class="sd">      # Raw objects</span>
 <span class="sd">      eeg = nk.mne_data(&quot;filt-0-40_raw&quot;)</span>
-<span class="sd">      nk.mne_to_dict(eeg)</span>
+<span class="sd">      eeg_dict = nk.mne_to_dict(eeg)</span>
+
+<span class="sd">      # Print function result summary</span>
+<span class="sd">      eeg_dict_view = {k: f&quot;Signal with length: {len(v)}&quot; for k, v in eeg_dict.items()}</span>
+<span class="sd">      eeg_dict_view</span>
+
 
 <span class="sd">      # Epochs objects</span>
 <span class="sd">      eeg = nk.mne_data(&quot;epochs&quot;)</span>
-<span class="sd">      nk.mne_to_dict(eeg)</span>
+<span class="sd">      eeg_epoch_dict = nk.mne_to_dict(eeg)</span>
+
+<span class="sd">      # Print function result summary</span>
+<span class="sd">      list(eeg_epoch_dict.items())[:2]</span>
 
 <span class="sd">      # Evoked objects</span>
 <span class="sd">      eeg = nk.mne_data(&quot;evoked&quot;)</span>
-<span class="sd">      nk.mne_to_dict(eeg)</span>
+<span class="sd">      eeg_evoked_dict = nk.mne_to_dict(eeg)</span>
+
+<span class="sd">      # Print function result summary</span>
+<span class="sd">      eeg_evoked_dict</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_mne_convert</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">to_what</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">)</span></div>

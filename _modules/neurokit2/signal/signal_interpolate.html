@@ -414,13 +414,13 @@ document.write(`
 <span class="sd">    method : str</span>
 <span class="sd">        Method of interpolation. Can be ``&quot;linear&quot;``, ``&quot;nearest&quot;``, ``&quot;zero&quot;``, ``&quot;slinear&quot;``,</span>
 <span class="sd">        ``&quot;quadratic&quot;``, ``&quot;cubic&quot;``, ``&quot;previous&quot;``, ``&quot;next&quot;``, ``&quot;monotone_cubic&quot;``, or ``&quot;akima&quot;``.</span>
-<span class="sd">        The methods ``&quot;zero&quot;``, ``&quot;slinear&quot;``,``&quot;quadratic&quot;`` and ``&quot;cubic&quot;`` refer to a spline</span>
+<span class="sd">        The methods ``&quot;zero&quot;``, ``&quot;slinear&quot;``, ``&quot;quadratic&quot;`` and ``&quot;cubic&quot;`` refer to a spline</span>
 <span class="sd">        interpolation of zeroth, first, second or third order; whereas ``&quot;previous&quot;`` and</span>
 <span class="sd">        ``&quot;next&quot;`` simply return the previous or next value of the point. An integer specifying the</span>
 <span class="sd">        order of the spline interpolator to use.</span>
-<span class="sd">        See `here &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
+<span class="sd">        See `monotone cubic method &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
 <span class="sd">        PchipInterpolator.html&gt;`_ for details on the ``&quot;monotone_cubic&quot;`` method.</span>
-<span class="sd">        See `here &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
+<span class="sd">        See `akima method &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.</span>
 <span class="sd">        Akima1DInterpolator.html&gt;`_ for details on the ``&quot;akima&quot;`` method.</span>
 <span class="sd">    fill_value : float or tuple or str</span>
 <span class="sd">        If a ndarray (or float), this value will be used to fill in for</span>
@@ -469,6 +469,7 @@ document.write(`
 <span class="sd">      plt.scatter(x_values, signal, label=&quot;original datapoints&quot;, zorder=3)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanity checks</span>
     <span class="k">if</span> <span class="n">x_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

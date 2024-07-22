@@ -561,9 +561,9 @@ see <a class="reference internal" href="#neurokit2.rsp.rsp_methods" title="neuro
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul>
+<dd class="field-even"><p><ul class="simple">
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> containing the following columns:</p>
-<ul class="simple">
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Raw&quot;</span></code>: the raw signal.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Clean&quot;</span></code>: the cleaned signal.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks&quot;</span></code>: the respiratory peaks (exhalation onsets) marked as “1” in a list of
@@ -575,12 +575,8 @@ zeros.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase&quot;</span></code>: breathing phase, marked by “1” for inspiration and “0” for expiration.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase_Completion&quot;</span></code>: breathing phase completion, expressed in percentage (from 0 to
 1), representing the stage of the current respiratory phase.</p></li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_RVT&quot;</span></code>: respiratory volume per time (RVT).</p></li>
 </ul>
-</div></blockquote>
 </li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
 accessible with the keys <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Troughs&quot;</span></code> respectively, as well as the
@@ -607,7 +603,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.1692 |       1.35345 |</span>
+<span class="go">|         15.1781 |       2.11007 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1366,8 +1362,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  995.794763      3894.7  683.747114  ...    0.888054  0.233731    1.791759</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1172.862961     4009.85  671.509319  ...    0.492385  0.018896         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1514,9 +1510,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.236080      0.025283</span>
-<span class="go">2     2        10000  ...          0.174903      0.040088</span>
-<span class="go">3     3        15000  ...          0.271912     -0.021585</span>
+<span class="go">1     1         5000  ...          0.257665     -0.008878</span>
+<span class="go">2     2        10000  ...          0.270371      0.001712</span>
+<span class="go">3     3        15000  ...          0.285331     -0.033076</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1719,8 +1715,8 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
-<span class="go">   RAV_Mean   RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  1.047491  0.05282   0.072633   0.06934</span>
+<span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
+<span class="go">0  0.939315  0.066375   0.075193  0.080051</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -442,21 +442,21 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#study-1-initial-estimation">Study 1: Initial Estimation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#methods">Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-estimation-methods">Initial Estimation Methods</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions">Define Functions</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-estimation-results">Initial Estimation Results</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#study-2-difference-between-template-and-eog-events">Study 2: Difference between Template and EOG Events</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Methods</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#template-vs-eog-event-methods">Template vs. EOG Event Methods</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#template-vs-eog-event-results">Template vs. EOG Event Results</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#study-3-optimize-the-parameters">Study 3: Optimize the Parameters</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Methods</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-optimization-methods">Parameter Optimization Methods</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-optimization-results">Parameter Optimization Results</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
@@ -500,8 +500,8 @@ the functions parameters on this cleaner subset of events.</p>
 </section>
 <section id="study-1-initial-estimation">
 <h2>Study 1: Initial Estimation<a class="headerlink" href="#study-1-initial-estimation" title="Link to this heading">#</a></h2>
-<section id="methods">
-<h3>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h3>
+<section id="initial-estimation-methods">
+<h3>Initial Estimation Methods<a class="headerlink" href="#initial-estimation-methods" title="Link to this heading">#</a></h3>
 <section id="define-functions">
 <h4>Define Functions<a class="headerlink" href="#define-functions" title="Link to this heading">#</a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import neurokit2 as nk</span>
@@ -586,8 +586,8 @@ Optimize Parameters</p>
 </div>
 </section>
 </section>
-<section id="results">
-<h3>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h3>
+<section id="initial-estimation-results">
+<h3>Initial Estimation Results<a class="headerlink" href="#initial-estimation-results" title="Link to this heading">#</a></h3>
 <p>Visualize the optimal templates for one task.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/eogdb/eogdb_task3.csv&quot;</span><span class="p">)</span>
 <span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_clean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;vEOG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;neurokit&#39;</span><span class="p">)</span>
@@ -615,8 +615,8 @@ Optimize Parameters</p>
 </section>
 <section id="study-2-difference-between-template-and-eog-events">
 <h2>Study 2: Difference between Template and EOG Events<a class="headerlink" href="#study-2-difference-between-template-and-eog-events" title="Link to this heading">#</a></h2>
-<section id="id1">
-<h3>Methods<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="template-vs-eog-event-methods">
+<h3>Template vs. EOG Event Methods<a class="headerlink" href="#template-vs-eog-event-methods" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_rmse</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span> <span class="s2">&quot;Index&quot;</span><span class="p">,</span> <span class="s2">&quot;Participant&quot;</span><span class="p">,</span> <span class="s2">&quot;Task&quot;</span><span class="p">,</span> <span class="s2">&quot;Function&quot;</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/eogdb/eogdb_task&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
@@ -655,8 +655,8 @@ Optimize Parameters</p>
 </pre></div>
 </div>
 </section>
-<section id="id2">
-<h3>Results<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="template-vs-eog-event-results">
+<h3>Template vs. EOG Event Results<a class="headerlink" href="#template-vs-eog-event-results" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">data_rmse</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;Index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Function&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;RMSE&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">kde</span><span class="p">()</span>
 <span class="n">p</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">p</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
@@ -669,8 +669,8 @@ Optimize Parameters</p>
 </section>
 <section id="study-3-optimize-the-parameters">
 <h2>Study 3: Optimize the Parameters<a class="headerlink" href="#study-3-optimize-the-parameters" title="Link to this heading">#</a></h2>
-<section id="id3">
-<h3>Methods<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="parameter-optimization-methods">
+<h3>Parameter Optimization Methods<a class="headerlink" href="#parameter-optimization-methods" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimal_gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">params_gamma</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">optimal_scr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">params_scr</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -771,8 +771,8 @@ Optimize Parameters</p>
 </pre></div>
 </div>
 </section>
-<section id="id4">
-<h3>Results<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="parameter-optimization-results">
+<h3>Parameter Optimization Results<a class="headerlink" href="#parameter-optimization-results" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/eogdb/eogdb_task3.csv&quot;</span><span class="p">)</span>
 <span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eog_clean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;vEOG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;neurokit&#39;</span><span class="p">)</span>
 <span class="n">blinks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_findpeaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">relative_height_min</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)[</span><span class="s2">&quot;Peaks&quot;</span><span class="p">]</span>
@@ -893,21 +893,21 @@ Journal of Psychophysiology</em>, <em>75</em>(3), 349–356.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#study-1-initial-estimation">Study 1: Initial Estimation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#methods">Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-estimation-methods">Initial Estimation Methods</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions">Define Functions</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-estimation-results">Initial Estimation Results</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#study-2-difference-between-template-and-eog-events">Study 2: Difference between Template and EOG Events</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Methods</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#template-vs-eog-event-methods">Template vs. EOG Event Methods</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#template-vs-eog-event-results">Template vs. EOG Event Results</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#study-3-optimize-the-parameters">Study 3: Optimize the Parameters</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Methods</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-optimization-methods">Parameter Optimization Methods</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-optimization-results">Parameter Optimization Results</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>

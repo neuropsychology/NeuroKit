@@ -1141,8 +1141,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.370             0.509</span>
-<span class="go">2     2        10000  ...         0.366             0.554</span>
+<span class="go">1     1         5000  ...         0.365             0.510</span>
+<span class="go">2     2        10000  ...         0.367             0.561</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1200,15 +1200,13 @@ sets of separately processed DataFrames.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. The analyzed
-features consist of the following:
-* <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_N&quot;</span></code>: the number of occurrences of Skin Conductance Response (SCR).
-* <code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_Amplitude_Mean&quot;</span></code>: the mean amplitude of the SCR peak occurrences.
-* <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Tonic_SD&quot;</span></code>: the mean amplitude of the SCR peak occurrences.
-* <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_sympathetic" title="neurokit2.eda.eda_sympathetic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a> (only computed if signal duration</p>
-<blockquote>
-<div><p>&gt; 64 sec).</p>
-</div></blockquote>
+features consist of the following:</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_N&quot;</span></code>: the number of occurrences of Skin Conductance Response (SCR).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_Amplitude_Mean&quot;</span></code>: the mean amplitude of the SCR peak occurrences.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Tonic_SD&quot;</span></code>: the mean amplitude of the SCR peak occurrences.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_sympathetic" title="neurokit2.eda.eda_sympathetic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a> (only computed if signal duration
+&gt; 64 sec).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Autocorrelation&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_autocor" title="neurokit2.eda.eda_autocor"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_autocor()</span></code></a> (only computed if signal duration
 &gt; 30 sec).</p></li>
 </ul>
@@ -1353,7 +1351,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.1862420584744454</span>
+<span class="gh">Out[5]: </span><span class="go">-0.121252233557716</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1405,7 +1403,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">13</span>
+<span class="gh">Out[4]: </span><span class="go">11</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" />

@@ -652,6 +652,35 @@ The higher the channel, the higher the bit representation on the channel.</p>
 <a class="reference internal image-reference" href="../_images/p_events_find4.png"><img alt="../_images/p_events_find4.png" src="../_images/p_events_find4.png" style="width: 640.0px; height: 480.0px;" />
 </a>
 <p>Convert the event condition results its human readable representation</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="n">value_to_condition</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;Stimulus 1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;Stimulus 2&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;Stimulus 3&quot;</span><span class="p">}</span>
+
+<span class="gp">In [21]: </span><span class="n">events</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_to_condition</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]]</span>
+
+<span class="gp">In [22]: </span><span class="n">events</span>
+<span class="gh">Out[22]: </span>
+<span class="go">{&#39;onset&#39;: array([ 20,  65, 100, 110, 130, 175]),</span>
+<span class="go"> &#39;duration&#39;: array([40, 15,  5, 15, 40, 15]),</span>
+<span class="go"> &#39;events_channel&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,</span>
+<span class="go">        0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 0., 0., 0., 0., 0., 2., 2., 2.,</span>
+<span class="go">        2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 0., 0., 0., 0., 0.,</span>
+<span class="go">        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1.,</span>
+<span class="go">        1., 1., 1., 0., 0., 0., 0., 0., 2., 2., 2., 2., 2., 2., 2., 2., 2.,</span>
+<span class="go">        2., 2., 2., 2., 2., 2., 0., 0., 0., 0., 0., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,</span>
+<span class="go">        0., 0., 0., 0., 0., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2., 2.,</span>
+<span class="go">        2., 2., 2., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]),</span>
+<span class="go"> &#39;condition&#39;: [&#39;Stimulus 1&#39;,</span>
+<span class="go">  &#39;Stimulus 2&#39;,</span>
+<span class="go">  &#39;Stimulus 1&#39;,</span>
+<span class="go">  &#39;Stimulus 2&#39;,</span>
+<span class="go">  &#39;Stimulus 1&#39;,</span>
+<span class="go">  &#39;Stimulus 2&#39;],</span>
+<span class="go"> &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;], dtype=&#39;&lt;U11&#39;)}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -790,7 +819,7 @@ via <code class="docutils literal notranslate"><span class="pre">raw.add_events(
 <span class="gp">In [8]: </span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_to_mne</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">event_id</span>
-<span class="gh">Out[9]: </span><span class="go">{&#39;B&#39;: 0, &#39;A&#39;: 1}</span>
+<span class="gh">Out[9]: </span><span class="go">{&#39;A&#39;: 0, &#39;B&#39;: 1}</span>
 </pre></div>
 </div>
 </dd></dl>

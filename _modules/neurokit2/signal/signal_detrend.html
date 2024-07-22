@@ -400,10 +400,12 @@ document.write(`
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Signal Detrending**</span>
+
 <span class="sd">    Apply a baseline (order = 0), linear (order = 1), or polynomial (order &gt; 1) detrending to the</span>
 <span class="sd">    signal (i.e., removing a general trend). One can also use other methods, such as smoothness</span>
 <span class="sd">    priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for</span>
 <span class="sd">    long signals.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    signal : Union[list, np.array, pd.Series]</span>

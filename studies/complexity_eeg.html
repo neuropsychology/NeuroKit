@@ -446,12 +446,12 @@ Analysis</h1>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#methods">Methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-of-delay">Optimization of Delay</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#per-channel">Per Channel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#per-channel-delay-optimization">Per Channel Delay Optimization</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attractors">Attractors</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-of-dimension">Optimization of Dimension</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Per Channel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#per-channel-dimension-optimization">Per Channel Dimension Optimization</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topological-clusters">Topological Clusters</a></li>
@@ -536,8 +536,8 @@ us!</strong></p>
 <span class="c1">#   facet_wrap(~Metric, scales = &quot;free_y&quot;)</span>
 </pre></div>
 </div>
-<section id="per-channel">
-<h4>Per Channel<a class="headerlink" href="#per-channel" title="Link to this heading">#</a></h4>
+<section id="per-channel-delay-optimization">
+<h4>Per Channel Delay Optimization<a class="headerlink" href="#per-channel-delay-optimization" title="Link to this heading">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">delay_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">group_by</span><span class="p">(</span><span class="n">Metric</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
@@ -709,8 +709,8 @@ us!</strong></p>
 <span class="w">         </span><span class="n">Area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Area</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;F&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;T&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;P&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;O&quot;</span><span class="p">)))</span>
 </pre></div>
 </div>
-<section id="id1">
-<h4>Per Channel<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<section id="per-channel-dimension-optimization">
+<h4>Per Channel Dimension Optimization<a class="headerlink" href="#per-channel-dimension-optimization" title="Link to this heading">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dim_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span>
@@ -995,12 +995,12 @@ which corresponds to a frequency of 37.037 Hz, is a possible value.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#methods">Methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-of-delay">Optimization of Delay</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#per-channel">Per Channel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#per-channel-delay-optimization">Per Channel Delay Optimization</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attractors">Attractors</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-of-dimension">Optimization of Dimension</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Per Channel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#per-channel-dimension-optimization">Per Channel Dimension Optimization</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topological-clusters">Topological Clusters</a></li>
