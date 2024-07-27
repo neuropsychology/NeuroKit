@@ -28,7 +28,7 @@ class CSVDocDirective(Directive):
 
             # Iterate through rows: add them to the codebook and add them to the page
             for line in self.content:
-                fields = line.split(',')
+                fields = line.split('|')
                 writer.writerow([field.strip() for field in fields])
 
                 if len(fields) >= 2:
