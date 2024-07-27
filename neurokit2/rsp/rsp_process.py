@@ -57,18 +57,16 @@ def rsp_process(
     signals : DataFrame
         A DataFrame of same length as :func:`.rsp_signal` containing the following columns:
 
-        * ``"RSP_Raw"``: the raw signal.
-        * ``"RSP_Clean"``: the cleaned signal.
-        * ``"RSP_Peaks"``: the respiratory peaks (exhalation onsets) marked as "1" in a list of
-          zeros.
-        * ``"RSP_Troughs"``: the respiratory troughs (inhalation onsets) marked as "1" in a list of
-          zeros.
-        * ``"RSP_Rate"``: breathing rate interpolated between inhalation peaks.
-        * ``"RSP_Amplitude"``: breathing amplitude interpolated between inhalation peaks.
-        * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
-        * ``"RSP_Phase_Completion"``: breathing phase completion, expressed in percentage (from 0 to
-          1), representing the stage of the current respiratory phase.
-        * ``"RSP_RVT"``: respiratory volume per time (RVT).
+        .. codebookadd::
+            RSP_Raw|The raw signal.
+            RSP_Clean|The raw signal.
+            RSP_Peaks|The respiratory peaks (exhalation onsets) marked as "1" in a list of zeros.
+            RSP_Troughs|The respiratory troughs (inhalation onsets) marked as "1" in a list of zeros.
+            RSP_Rate|The breathing rate interpolated between inhalation peaks.
+            RSP_Amplitude|The breathing amplitude interpolated between inhalation peaks.
+            RSP_Phase|The breathing phase, marked by "1" for inspiration and "0" for expiration.
+            RSP_Phase_Completion|The breathing phase completion, expressed in percentage (from 0 to 1), representing the stage of the current respiratory phase.
+            RSP_RVT|Respiratory volume per time (RVT).
 
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,

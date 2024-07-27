@@ -39,28 +39,25 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     signals : DataFrame
         A DataFrame of the same length as the ``ecg_signal`` containing the following columns:
 
-        * ``"ECG_Raw"``: the raw signal.
-        * ``"ECG_Clean"``: the cleaned signal.
-        * ``"ECG_Rate"``: heart rate interpolated between R-peaks.
-        * ``"ECG_Quality"``: the quality of the cleaned signal
-        * ``"ECG_R_Peaks"``: the R-peaks marked as "1" in a list of zeros.
-        * ``"ECG_P_Peaks"``: the P-peaks marked as "1" in a list of zeros
-        * ``"ECG_P_Onsets"``: the P-onsets marked as "1" in a list of zeros.
-        * ``"ECG_P_Offsets"``: the P-offsets marked as "1" in a list of zeros.
-        * ``"ECG_Q_Peaks"``: the Q-peaks marked as "1" in a list of zeros .
-        * ``"ECG_R_Onsets"``: the R-onsets marked as "1" in a list of zeros.
-        * ``"ECG_R_Offsets"``: the R-offsets marked as "1" in a list of zeros.
-        * ``"ECG_S_Peaks"``: the S-peaks marked as "1" in a list of zeros.
-        * ``"ECG_T_Peaks"``: the T-peaks marked as "1" in a list of zeros.
-        * ``"ECG_T_Onsets"``: the T-onsets marked as "1" in a list of zeros.
-        * ``"ECG_T_Offsets"``: the T-offsets marked as "1" in a list of zeros.
-        * ``"ECG_Phase_Atrial"``: cardiac phase, marked by "1" for systole and "0" for diastole.
-        * ``"ECG_Phase_Completion_Atrial"``: cardiac phase (atrial) completion, expressed in
-          percentage (from 0 to 1), representing the stage of the current cardiac phase.
-        * ``"ECG_Phase_Ventricular"``: cardiac phase, marked by "1" for systole and "0" for
-          diastole.
-        * ``"ECG_Phase_Completion_Ventricular"``: cardiac phase (ventricular) completion, expressed
-          in percentage (from 0 to 1), representing the stage of the current cardiac phase.
+        .. codebookadd::
+            ECG_Raw|The raw signal.
+            ECG_Clean|The cleaned signal.
+            ECG_Rate|Heart rate interpolated between R-peaks.
+            ECG_Quality|The quality of the cleaned signal.
+            ECG_R_Peaks|The R-peaks marked as "1" in a list of zeros.
+            ECG_R_Onsets|The R-onsets marked as "1" in a list of zeros.
+            ECG_R_Offsets|The R-offsets marked as "1" in a list of zeros.
+            ECG_P_Peaks|The P-peaks marked as "1" in a list of zeros.
+            ECG_P_Onsets|The P-onsets marked as "1" in a list of zeros.
+            ECG_P_Offsets|The P-offsets marked as "1" in a list of zeros.
+            ECG_Q_Peaks|The Q-peaks marked as "1" in a list of zeros.
+            ECG_S_Peaks|The S-peaks marked as "1" in a list of zeros.
+            ECG_T_Peaks|The T-peaks marked as "1" in a list of zeros.
+            ECG_T_Onsets|The T-onsets marked as "1" in a list of zeros.
+            ECG_T_Offsets|The T-offsets marked as "1" in a list of zeros.
+            ECG_Phase_Atrial|Cardiac phase, marked by "1" for systole and "0" for diastole.
+            ECG_Phase_Completion_Atrial|Cardiac phase (atrial) completion, expressed in percentage (from 0 to 1), representing the stage of the current cardiac phase.
+            ECG_Phase_Completion_Ventricular|Cardiac phase (ventricular) completion, expressed in percentage (from 0 to 1), representing the stage of the current cardiac phase.
 
     rpeaks : dict
         A dictionary containing the samples at which the R-peaks occur, accessible with the key
@@ -87,6 +84,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
       nk.ecg_plot(signals, info)
       @suppress
       plt.close()
+
+
 
     """
 

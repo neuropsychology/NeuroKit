@@ -35,13 +35,13 @@ def emg_process(emg_signal, sampling_rate=1000, report=None, **kwargs):
     signals : DataFrame
         A DataFrame of same length as ``emg_signal`` containing the following columns:
 
-        * ``"EMG_Raw"``: the raw signal.
-        * ``"EMG_Clean"``: the cleaned signal.
-        * ``"EMG_Amplitude"``: the signal amplitude, or the activation level of the signal.
-        * ``"EMG_Activity"``: the activity of the signal for which amplitude exceeds the threshold
-          specified,marked as "1" in a list of zeros.
-        * ``"EMG_Onsets"``: the onsets of the amplitude, marked as "1" in a list of zeros.
-        * ``"EMG_Offsets"``: the offsets of the amplitude, marked as "1" in a list of zeros.
+        .. codebookadd::
+            EMG_Raw|The raw EMG signal.
+            EMG_Clean|The cleaned EMG signal.
+            EMG_Amplitude|The signal amplitude, or the activation of the signal.
+            EMG_Activity|The activity of the signal for which amplitude exceeds the threshold specified,marked as "1" in a list of zeros.
+            EMG_Onsets|The onsets of the amplitude, marked as "1" in a list of zeros.
+            EMG_Offsets|The offsets of the amplitude, marked as "1" in a list of zeros.
 
     info : dict
         A dictionary containing the information of each amplitude onset, offset, and peak activity
