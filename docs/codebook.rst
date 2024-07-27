@@ -33,19 +33,54 @@ This codebook contains detailed descriptions of all variables, their possible va
         <table id="csvDataTable">
         </table>
     </div>
+
     <script>
+
+    function parseCSVLine(text) {
+        const cols = [];
+        let col = '';
+        let insideQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+
+            if (insideQuotes && char === '"' && text[i + 1] == '"') {
+                i++;
+                col += char;
+                continue;
+            }
+
+            if (char === '"' && text[i - 1] !== '\\') {
+                insideQuotes = !insideQuotes;
+                continue;
+            }
+
+            if (char === ',' && !insideQuotes) {
+                cols.push(col);
+                col = '';
+            } else {
+                col += char;
+            }
+        }
+        cols.push(col);
+
+        return cols.map(field => field.replace(/""/g, '"')); // Replace escaped quotes
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         fetch('_static/neurokit_codebook.csv')
             .then(response => response.text())
             .then(csv => {
                 let lines = csv.trim().split('\n');
-                let html = '<tr><th>' + lines[0].split(',').join('</th><th>') + '</th></tr>';
+                let html = '<tr><th>' + parseCSVLine(lines[0]).join('</th><th>') + '</th></tr>';
                 for (let i = 1; i < lines.length; i++) {
-                    html += '<tr><td>' + lines[i].split(',').join('</td><td>') + '</td></tr>';
+                    html += '<tr><td>' + parseCSVLine(lines[i]).join('</td><td>') + '</td></tr>';
                 }
                 document.getElementById('csvDataTable').innerHTML = html;
             })
             .catch(error => console.error('Error loading the CSV file:', error));
     });
+
+
     </script>
 
