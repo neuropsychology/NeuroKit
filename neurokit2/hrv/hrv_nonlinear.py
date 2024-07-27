@@ -144,7 +144,37 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     Returns
     -------
     DataFrame
-        Contains non-linear HRV metrics.
+        DataFrame consisting of the computed non-linear HRV metrics, which includes:
+
+        .. codebookadd::
+            HRV_SD1|Standard deviation perpendicular to the line of identity. It is an index of short-term RR interval fluctuations, i.e., beat-to-beat variability. It is equivalent (although on another scale) to RMSSD, and therefore it is redundant to report correlation with both.
+            HRV_SD2|Standard deviation along the identity line. Index of long-term HRV changes.
+            HRV_SD1SD2|Ratio of SD1 to SD2. Describes the ratio of short term to long term variations in HRV.
+            HRV_S|Area of ellipse described by *SD1* and *SD2* (``pi * SD1 * SD2``). It is proportional to *SD1SD2*.
+            HRV_CSI|The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac sympathetic function independent of vagal activity, calculated by dividing the longitudinal variability of the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).
+            HRV_CVI|The Cardiac Vagal Index (Toichi, 1997) is an index of cardiac parasympathetic function (vagal activity unaffected by sympathetic activity), and is equal equal to the logarithm of the product of longitudinal (``4*SD2``) and transverse variability (``4*SD1``).
+            HRV_CSI_Modified|The modified CSI (Jeppesen, 2014) obtained by dividing the square of the longitudinal variability by its transverse variability.
+            HRV_GI|Guzik's Index, defined as the distance of points above line of identity (LI) to LI divided by the distance of all points in Poincaré plot to LI except those that are located on LI.
+            HRV_SI|Slope Index, defined as the phase angle of points above LI divided by the phase angle of all points in Poincaré plot except those that are located on LI.
+            HRV_AI|Area Index, defined as the cumulative area of the sectors corresponding to the points that are located above LI divided by the cumulative area of sectors corresponding to all points in the Poincaré plot except those that are located on LI.
+            HRV_PI|Porta's Index, defined as the number of points below LI divided by the total number of points in Poincaré plot except those that are located on LI.
+            HRV_SD1a|Short-term variance of contributions of decelerations (prolongations of RR intervals), (Piskorski, 2011).
+            HRV_SD1d|Short-term variance of contributions of accelerations (shortenings of RR intervals), (Piskorski, 2011).
+            HRV_C1a|The contributions of heart rate accelerations to short-term HRV, (Piskorski,  2011).
+            HRV_C1d|The contributions of heart rate decelerations to short-term HRV, (Piskorski,  2011).
+            HRV_SD2a|Long-term variance of contributions of accelerations (shortenings of RR intervals), (Piskorski, 2011).
+            HRV_SD2d|Long-term variance of contributions of decelerations (prolongations of RR intervals),  (Piskorski, 2011).
+            HRV_C2a|The contributions of heart rate accelerations to long-term HRV, (Piskorski, 2011).
+            HRV_C2d|The contributions of heart rate decelerations to long-term HRV, (Piskorski, 2011).
+            HRV_SDNNa|Total variance of contributions of accelerations (shortenings of RR intervals), (Piskorski, 2011).
+            HRV_SDNNd|Total variance of contributions of decelerations (prolongations of RR intervals), (Piskorski, 2011).
+            HRV_Ca|The total contributions of heart rate accelerations to HRV.
+            HRV_Cd|The total contributions of heart rate decelerations to HRV.
+            HRV_PIP|Percentage of inflection points of the RR intervals series.
+            HRV_IALS|Inverse of the average length of the acceleration/deceleration segments.
+            HRV_PSS|Percentage of short segments.
+            HRV_PAS|Percentage of NN intervals in alternation segments.
+
 
     See Also
     --------

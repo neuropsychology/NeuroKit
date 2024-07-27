@@ -101,7 +101,19 @@ def hrv_frequency(
     Returns
     -------
     DataFrame
-        Contains frequency domain HRV metrics.
+        DataFrame consisting of the computed HRV frequency metrics, which includes:
+
+        .. codebookadd::
+            HRV_ULF|The spectral power of ultra low frequencies (by default, .0 to .0033 Hz). Very long signals are required for this to index to be extracted, otherwise, will return NaN.
+            HRV_VLF|The spectral power of very low frequencies (by default, .0033 to .04 Hz).
+            HRV_LF|The spectral power of low frequencies (by default, .04 to .15 Hz).
+            HRV_HF|The spectral power of high frequencies (by default, .15 to .4 Hz).
+            HRV_VHF|The spectral power of very high frequencies (by default, .4 to .5 Hz).
+            HRV_TP|The total spectral power.
+            HRV_LFHF|The ratio obtained by dividing the low frequency power by the high frequency power.
+            HRV_LFn|The normalized low frequency, obtained by dividing the low frequency power by the total power.
+            HRV_HFn|The normalized high frequency, obtained by dividing the low frequency power by the total power.
+            HRV_LnHF|The log transformed HF.
 
     See Also
     --------

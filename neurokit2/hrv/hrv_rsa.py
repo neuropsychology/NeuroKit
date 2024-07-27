@@ -95,16 +95,13 @@ def hrv_rsa(
     rsa : dict
         A dictionary containing the RSA features, which includes:
 
-        * ``"RSA_P2T_Values"``: the estimate of RSA during each breath cycle, produced by
-          subtracting the shortest heart period (or RR interval) from the longest heart period in
-          ms.
-        * ``"RSA_P2T_Mean"``: the mean peak-to-trough across all cycles in ms
-        * ``"RSA_P2T_Mean_log"``: the logarithm of the mean of RSA estimates.
-        * ``"RSA_P2T_SD"``: the standard deviation of all RSA estimates.
-        * ``"RSA_P2T_NoRSA"``: the number of breath cycles
-          from which RSA could not be calculated.
-        * ``"RSA_PorgesBohrer"``: the Porges-Bohrer estimate of RSA, optimal
-          when the signal to noise ratio is low, in ``ln(ms^2)``.
+        .. codebookadd::
+            RSA_P2T_Values|The estimate of RSA during each breath cycle, produced by subtracting the shortest heart period (or RR interval) from the longest heart period in ms.
+            RSA_P2T_Mean|The mean peak-to-trough across all cycles in ms.
+            RSA_P2T_Mean_log|The logarithm of the mean of RSA estimates.
+            RSA_P2T_SD|The standard deviation of all RSA estimates.
+            RSA_P2T_NoRSA|The number of breath cycles from which RSA could not be calculated.
+            RSA_PorgesBohrer|The Porges-Bohrer estimate of RSA, optimal when the signal to noise ratio is low, in ln(ms^2).
 
     Example
     ----------
