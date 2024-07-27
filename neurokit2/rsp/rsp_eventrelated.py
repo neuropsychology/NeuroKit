@@ -31,25 +31,20 @@ def rsp_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
-        * ``"RSP_Rate_Max"``: the maximum respiratory rate after stimulus onset.
-        * ``"RSP_Rate_Min"``: the minimum respiratory rate after stimulus onset.
-        * ``"RSP_Rate_Mean"``: the mean respiratory rate after stimulus onset.
-        * ``"RSP_Rate_SD"``: the standard deviation of the respiratory rate after stimulus onset.
-        * ``"RSP_Rate_Max_Time"``: the time at which maximum respiratory rate occurs.
-        * ``"RSP_Rate_Min_Time"``: the time at which minimum respiratory rate occurs.
-        * ``"RSP_Amplitude_Baseline"``: the respiratory amplitude at stimulus onset.
-        * ``"RSP_Amplitude_Max"``: the change in maximum respiratory amplitude from before stimulus
-          onset.
-        * ``"RSP_Amplitude_Min"``: the change in minimum respiratory amplitude from before stimulus
-          onset.
-        * ``"RSP_Amplitude_Mean"``: the change in mean respiratory amplitude from before stimulus
-          onset.
-        * ``"RSP_Amplitude_SD"``: the standard deviation of the respiratory amplitude after
-          stimulus onset.
-        * ``"RSP_Phase"``: indication of whether the onset of the event concurs with respiratory
-          inspiration (1) or expiration (0).
-        * ``"RSP_PhaseCompletion"``: indication of the stage of the current respiration phase (0 to
-          1) at the onset of the event.
+        .. codebookadd::
+            RSP_Rate_Max|The maximum respiratory rate after stimulus onset.
+            RSP_Rate_Min|The minimum respiratory rate after stimulus onset.
+            RSP_Rate_Mean|The mean respiratory rate after stimulus onset.
+            RSP_Rate_SD|The standard deviation of the respiratory rate after stimulus onset.
+            RSP_Rate_Max_Time|The time at which maximum respiratory rate occurs.
+            RSP_Rate_Min_Time|The time at which minimum respiratory rate occurs.
+            RSP_Amplitude_Baseline|The respiratory amplitude at stimulus onset.
+            RSP_Amplitude_Max|The change in maximum respiratory amplitude from before stimulus onset.
+            RSP_Amplitude_Min|The change in minimum respiratory amplitude from before stimulus onset.
+            RSP_Amplitude_Mean|The change in mean respiratory amplitude from before stimulus onset.
+            RSP_Amplitude_SD|The standard deviation of the respiratory amplitude after stimulus onset.
+            RSP_Phase|Indication of whether the onset of the event concurs with respiratory inspiration (1) or expiration (0).
+            RSP_PhaseCompletion|Indication of the stage of the current respiration phase (0 to 1) at the onset of the event.
 
     See Also
     --------
