@@ -56,8 +56,10 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
             ECG_T_Onsets|The T-onsets marked as "1" in a list of zeros.
             ECG_T_Offsets|The T-offsets marked as "1" in a list of zeros.
             ECG_Phase_Atrial|Cardiac phase, marked by "1" for systole and "0" for diastole.
-            ECG_Phase_Completion_Atrial|Cardiac phase (atrial) completion, expressed in percentage (from 0 to 1), representing the stage of the current cardiac phase.
-            ECG_Phase_Completion_Ventricular|Cardiac phase (ventricular) completion, expressed in percentage (from 0 to 1), representing the stage of the current cardiac phase.
+            ECG_Phase_Completion_Atrial|Cardiac phase (atrial) completion, expressed in \
+                percentage (from 0 to 1), representing the stage of the current cardiac phase.
+            ECG_Phase_Completion_Ventricular|Cardiac phase (ventricular) completion, expressed \
+                in percentage (from 0 to 1), representing the stage of the current cardiac phase.
 
     rpeaks : dict
         A dictionary containing the samples at which the R-peaks occur, accessible with the key

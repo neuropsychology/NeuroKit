@@ -37,10 +37,14 @@ def ecg_eventrelated(epochs, silent=False):
             ECG_Rate_SD|The standard deviation of the heart rate after stimulus onset.
             ECG_Rate_Max_Time|The time at which maximum heart rate occurs.
             ECG_Rate_Min_Time|The time at which minimum heart rate occurs.
-            ECG_Phase_Atrial|Indication of whether the onset of the event concurs with respiratory systole (1) or diastole (0).
-            ECG_Phase_Ventricular|Indication of whether the onset of the event concurs with respiratory systole (1) or diastole (0).
-            ECG_Phase_Atrial_Completion|Indication of the stage of the current cardiac (atrial) phase (0 to 1) at the onset of the event.
-            ECG_Phase_Ventricular_Completion|Indication of the stage of the current cardiac (ventricular) phase (0 to 1) at the onset of the event.
+            ECG_Phase_Atrial|Indication of whether the onset of the event concurs with \
+                respiratory systole (1) or diastole (0).
+            ECG_Phase_Ventricular|Indication of whether the onset of the event concurs with \
+                respiratory systole (1) or diastole (0).
+            ECG_Phase_Atrial_Completion|Indication of the stage of the current cardiac (atrial) \
+                phase (0 to 1) at the onset of the event.
+            ECG_Phase_Ventricular_Completion|Indication of the stage of the current cardiac \
+                (ventricular) phase (0 to 1) at the onset of the event.
 
         We also include the following *experimental* features related to the parameters of a
         quadratic model:
@@ -48,7 +52,8 @@ def ecg_eventrelated(epochs, silent=False):
         .. codebookadd::
             ECG_Rate_Trend_Linear|The parameter corresponding to the linear trend.
             ECG_Rate_Trend_Quadratic|The parameter corresponding to the curvature.
-            ECG_Rate_Trend_R2|The quality of the quadratic model. If too low, the parameters might not be reliable or meaningful.
+            ECG_Rate_Trend_R2|The quality of the quadratic model. If too low, the parameters \
+                might not be reliable or meaningful.
 
     See Also
     --------

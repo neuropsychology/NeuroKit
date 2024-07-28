@@ -39,7 +39,8 @@ def emg_process(emg_signal, sampling_rate=1000, report=None, **kwargs):
             EMG_Raw|The raw EMG signal.
             EMG_Clean|The cleaned EMG signal.
             EMG_Amplitude|The signal amplitude, or the activation of the signal.
-            EMG_Activity|The activity of the signal for which amplitude exceeds the threshold specified,marked as "1" in a list of zeros.
+            EMG_Activity|The activity of the signal for which amplitude exceeds the threshold \
+                specified,marked as "1" in a list of zeros.
             EMG_Onsets|The onsets of the amplitude, marked as "1" in a list of zeros.
             EMG_Offsets|The offsets of the amplitude, marked as "1" in a list of zeros.
 

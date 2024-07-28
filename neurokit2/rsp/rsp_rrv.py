@@ -44,20 +44,34 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
         .. codebookadd::
             RRV_SDBB|The standard deviation of the breath-to-breath intervals.
             RRV_RMSSD|The root mean square of successive differences of the breath-to-breath intervals.
-            RRV_SDSD|The standard deviation of the successive differences between adjacent breath-to-breath intervals.
+            RRV_SDSD|The standard deviation of the successive differences between adjacent \
+                breath-to-breath intervals.
             RRV_BBx|The number of successive interval differences that are greater than x seconds.
-            RRV_pBBx|the proportion of breath-to-breath intervals that are greater than x seconds, out of the total number of intervals.
-            RRV_VLF|Spectral power density pertaining to very low frequency band (i.e., 0 to .04 Hz) by default.
-            RRV_LF|Spectral power density pertaining to low frequency band (i.e., .04 to .15 Hz) by default.
-            RRV_HF|Spectral power density pertaining to high frequency band (i.e., .15 to .4 Hz) by default.
+            RRV_pBBx|the proportion of breath-to-breath intervals that are greater than x seconds, \
+                out of the total number of intervals.
+            RRV_VLF|Spectral power density pertaining to very low frequency band (i.e., 0 to\
+                .04 Hz) by default.
+            RRV_LF|Spectral power density pertaining to low frequency band (i.e., .04 to \
+                .15 Hz) by default.
+            RRV_HF|Spectral power density pertaining to high frequency band (i.e., .15 to \
+                .4 Hz) by default.
             RRV_LFHF|The ratio of low frequency power to high frequency power.
-            RRV_LFn|The normalized low frequency, obtained by dividing the low frequency power by the total power.
-            RRV_HFn|The normalized high frequency, obtained by dividing the low frequency power by total power.
-            RRV_SD1|SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term variability.
-            RRV_SD2|SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré plot along the line of identity. It is an index of long-term variability.
-            RRV_SD2SD1|The ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).
-            RRV_DFA_alpha1|The "short-term" fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the signal.
-            RRV_DFA_alpha2|The long-term fluctuation value. Will only be computed if mora than 640 breath cycles in the signal.
+            RRV_LFn|The normalized low frequency, obtained by dividing the low frequency power by \
+                the total power.
+            RRV_HFn|The normalized high frequency, obtained by dividing the low frequency power by \
+                total power.
+            RRV_SD1|SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré \
+                plot perpendicular to the line of identity. It is an index of short-term variability.
+            RRV_SD2|SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré \
+                plot along the line of identity. It is an index of long-term variability.
+            RRV_SD2SD1|The ratio between short and long term fluctuations of the breath-to-breath \
+                intervals (SD2 divided by SD1).
+            RRV_DFA_alpha1|The "short-term" fluctuation value generated from Detrended Fluctuation \
+                Analysis i.e. the root mean square deviation from the fitted trend of the \
+                breath-to-breath intervals. Will only be computed if mora than 160 breath cycles \
+                in the signal.
+            RRV_DFA_alpha2|The long-term fluctuation value. Will only be computed if mora than \
+                640 breath cycles in the signal.
             RRV_ApEn|The approximate entropy of RRV, calculated by :func:`.entropy_approximate`.
             RRV_SampEn|The sample entropy of RRV, calculated by :func:`.entropy_sample`.
 

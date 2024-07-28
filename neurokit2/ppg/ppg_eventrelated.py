@@ -41,7 +41,8 @@ def ppg_eventrelated(epochs, silent=False):
         .. codebookadd::
             PPG_Rate_Trend_Linear|The parameter corresponding to the linear trend.
             PPG_Rate_Trend_Quadratic|The parameter corresponding to the curvature.
-            PPG_Rate_Trend_R2|The quality of the quadratic model. If too low, the parameters might not be reliable or meaningful.
+            PPG_Rate_Trend_R2|The quality of the quadratic model. If too low, the parameters \
+                might not be reliable or meaningful.
 
     See Also
     --------

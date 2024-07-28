@@ -53,11 +53,15 @@ class CSVDocDirective(Directive):
                 for fid in range(len(fields)):
                     fields[fid] = " ".join(fields[fid].split())
 
+                # Append last fields
                 fields.append(doc_sensor)
                 fields.append(f"{doc_source_name}.py")
 
+                # Write to CSV
                 writer.writerow([field.strip() for field in fields])
 
+
+                # Prepare the documentation stylization
                 if len(fields) >= 2:
                     paragraph = nodes.paragraph()
 

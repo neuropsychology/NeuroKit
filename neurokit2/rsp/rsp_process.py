@@ -61,11 +61,13 @@ def rsp_process(
             RSP_Raw|The raw signal.
             RSP_Clean|The raw signal.
             RSP_Peaks|The respiratory peaks (exhalation onsets) marked as "1" in a list of zeros.
-            RSP_Troughs|The respiratory troughs (inhalation onsets) marked as "1" in a list of zeros.
+            RSP_Troughs|The respiratory troughs (inhalation onsets) marked as "1" in a list \
+                of zeros.
             RSP_Rate|The breathing rate interpolated between inhalation peaks.
             RSP_Amplitude|The breathing amplitude interpolated between inhalation peaks.
             RSP_Phase|The breathing phase, marked by "1" for inspiration and "0" for expiration.
-            RSP_Phase_Completion|The breathing phase completion, expressed in percentage (from 0 to 1), representing the stage of the current respiratory phase.
+            RSP_Phase_Completion|The breathing phase completion, expressed in percentage \
+                (from 0 to 1), representing the stage of the current respiratory phase.
             RSP_RVT|Respiratory volume per time (RVT).
 
     info : dict
