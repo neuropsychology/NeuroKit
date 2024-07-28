@@ -3,6 +3,17 @@ import os
 from docutils import nodes
 from docutils.parsers.rst import Directive
 
+abrv_to_sensor = {
+            "ecg": "Electrocardiography",
+            "eda": "Electrodermal Activity",
+            "rsp": "Respiration",
+            "ppg": "Photoplethysmography",
+            "eeg": "Electroencephalography",
+            "emg": "Electromyography",
+            "eog": "Electrooculography",
+            "hrv": "Heart Rate Variability",
+        }
+
 class CSVDocDirective(Directive):
     has_content = True
 
@@ -16,19 +27,29 @@ class CSVDocDirective(Directive):
         # List to hold bullet list nodes
         bullet_list = nodes.bullet_list()
 
+        doc_source_name = self.state.document.settings.env.temp_data.get('object')[0]
+
+        maybe_sensor = doc_source_name.split("_")
+        doc_sensor = "N/A"
+
+        if len(maybe_sensor) > 0 and maybe_sensor[0] in abrv_to_sensor:
+            doc_sensor = abrv_to_sensor[maybe_sensor[0]]
+
         # Open the CSV file and append the content
         with open(csv_file_path, 'a', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile)
-            # writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
 
             # Write header if file is newly created or empty
             if file_empty:
-                header = ['Field Name', 'Field Description']
+                header = ['Field Name', 'Field Description', 'Field Category', 'Source File Name']
                 writer.writerow(header)
 
             # Iterate through rows: add them to the codebook and add them to the page
             for line in self.content:
                 fields = line.split('|')
+                fields.append(doc_sensor)
+                fields.append(f"{doc_source_name}.py")
+
                 writer.writerow([field.strip() for field in fields])
 
                 if len(fields) >= 2:
