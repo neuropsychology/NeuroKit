@@ -1,7 +1,7 @@
 Codebook
 ========
 
-Here you can download the complete codebook which details the structure of data used throughout this documentation.
+Here you can download the complete codebook which details the variables that you can compute using the NeuroKit package.
 
 .. raw:: html
 
@@ -11,7 +11,11 @@ Here you can download the complete codebook which details the structure of data 
        </a>
    </div>
 
-This codebook contains detailed descriptions of all variables, their possible values, and additional metadata.
+This codebook contains detailed descriptions of all variables, their descriptions, and additional metadata.
+
+
+Codebook Table
+==============
 
 .. raw:: html
 
