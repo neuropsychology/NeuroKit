@@ -46,7 +46,13 @@ class CSVDocDirective(Directive):
 
             # Iterate through rows: add them to the codebook and add them to the page
             for line in self.content:
+
                 fields = line.split('|')
+
+                # Remove multi line long space sequences
+                for fid in range(len(fields)):
+                    fields[fid] = " ".join(fields[fid].split())
+
                 fields.append(doc_sensor)
                 fields.append(f"{doc_source_name}.py")
 
