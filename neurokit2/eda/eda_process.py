@@ -41,16 +41,16 @@ def eda_process(
         columns:
 
         .. codebookadd::
-            EDA_Raw|Electrodermal activity|The raw signal.
-            EDA_Clean|Electrodermal activity|The cleaned signal.
-            EDA_Tonic|Electrodermal activity|The tonic component of the signal, or the Tonic Skin Conductance Level (SCL).
-            EDA_Phasic|Electrodermal activity|The phasic component of the signal, or the Phasic Skin Conductance Response (SCR).
-            SCR_Onsets|Electrodermal activity|The samples at which the onsets of the peaks occur, marked as "1" in a list of zeros.
-            SCR_Peaks|Electrodermal activity|The samples at which the peaks occur, marked as "1" in a list of zeros.
-            SCR_Height|Electrodermal activity|The SCR amplitude of the signal including the Tonic component. Note that cumulative effects of close-occurring SCRs might lead to an underestimation of the amplitude.
-            SCR_Amplitude|Electrodermal activity|The SCR amplitude of the signal excluding the Tonic component.
-            SCR_RiseTime|Electrodermal activity|The SCR amplitude of the signal excluding the Tonic component.
-            SCR_Recovery|Electrodermal activity|The samples at which SCR peaks recover (decline) to half amplitude, marked  as "1" in a list of zeros.
+            EDA_Raw|The raw signal.
+            EDA_Clean|The cleaned signal.
+            EDA_Tonic|The tonic component of the signal, or the Tonic Skin Conductance Level (SCL).
+            EDA_Phasic|The phasic component of the signal, or the Phasic Skin Conductance Response (SCR).
+            SCR_Onsets|The samples at which the onsets of the peaks occur, marked as "1" in a list of zeros.
+            SCR_Peaks|The samples at which the peaks occur, marked as "1" in a list of zeros.
+            SCR_Height|The SCR amplitude of the signal including the Tonic component. Note that cumulative effects of close-occurring SCRs might lead to an underestimation of the amplitude.
+            SCR_Amplitude|The SCR amplitude of the signal excluding the Tonic component.
+            SCR_RiseTime|The SCR amplitude of the signal excluding the Tonic component.
+            SCR_Recovery|The samples at which SCR peaks recover (decline) to half amplitude, marked  as "1" in a list of zeros.
 
     info : dict
         A dictionary containing the information of each SCR peak (see :func:`eda_findpeaks`),

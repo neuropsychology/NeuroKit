@@ -34,9 +34,9 @@ def eda_intervalrelated(data, sampling_rate=1000, **kwargs):
         features consist of the following:
 
         .. codebookadd::
-            SCR_Peaks_N|Electrodermal activity|The number of occurrences of Skin Conductance Response (SCR).
-            SCR_Peaks_Amplitude_Mean|Electrodermal activity|The mean amplitude of the SCR peak occurrences.
-            EDA_Tonic_SD|Electrodermal activity|The mean amplitude of the SCR peak occurrences.
+            SCR_Peaks_N|The number of occurrences of Skin Conductance Response (SCR).
+            SCR_Peaks_Amplitude_Mean|The mean amplitude of the SCR peak occurrences.
+            EDA_Tonic_SD|The mean amplitude of the SCR peak occurrences.
 
         * ``"EDA_Sympathetic"``: see :func:`eda_sympathetic` (only computed if signal duration
           > 64 sec).

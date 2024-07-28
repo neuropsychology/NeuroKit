@@ -31,12 +31,12 @@ def eda_eventrelated(epochs, silent=False):
         the following:
 
         .. codebookadd::
-            EDA_SCR|Electrodermal activity|indication of whether Skin Conductance Response (SCR) occurs following the event (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude, time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed for the below features.
-            EDA_Peak_Amplitude|Electrodermal activity|The maximum amplitude of the phasic component of the signal.
-            SCR_Peak_Amplitude|Electrodermal activity|The peak amplitude of the first SCR in each epoch.
-            SCR_Peak_Amplitude_Time|Electrodermal activity|The timepoint of each first SCR peak amplitude.
-            SCR_RiseTime|Electrodermal activity|The risetime of each first SCR i.e., the time it takes for SCR to reach peak amplitude from onset.
-            SCR_RecoveryTime|Electrodermal activity|The half-recovery time of each first SCR i.e., the time it takes for SCR to decrease to half amplitude.
+            EDA_SCR|indication of whether Skin Conductance Response (SCR) occurs following the event (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude, time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed for the below features.
+            EDA_Peak_Amplitude|The maximum amplitude of the phasic component of the signal.
+            SCR_Peak_Amplitude|The peak amplitude of the first SCR in each epoch.
+            SCR_Peak_Amplitude_Time|The timepoint of each first SCR peak amplitude.
+            SCR_RiseTime|The risetime of each first SCR i.e., the time it takes for SCR to reach peak amplitude from onset.
+            SCR_RecoveryTime|The half-recovery time of each first SCR i.e., the time it takes for SCR to decrease to half amplitude.
 
     See Also
     --------
