@@ -450,6 +450,8 @@ document.write(`
 <span class="sd">    * Bishop, S. M., &amp; Ercole, A. (2018). Multi-scale peak and trough detection optimised for</span>
 <span class="sd">      periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Neuromonitoring XVI</span>
 <span class="sd">      (pp. 189-195). Springer International Publishing.</span>
+<span class="sd">    * Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection</span>
+<span class="sd">      Algorithm. Proc CinC.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -457,13 +459,17 @@ document.write(`
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptd&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop2018&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_bishop</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptdfast&quot;</span><span class="p">,</span> <span class="s2">&quot;msptdfastv1&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton2024&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton&quot;</span><span class="p">]:</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_charlton</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;, &#39;bishop&#39;.&quot;</span>
+            <span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;, &#39;bishop&#39;, &#39;charlton&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="c1"># Prepare output.</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">}</span>
+    <span class="k">if</span> <span class="s1">&#39;onsets&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">onsets</span>
 
     <span class="k">return</span> <span class="n">info</span></div>
 
@@ -620,6 +626,244 @@ document.write(`
         <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">onsets</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
         <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PPG Peaks (Method by Bishop et al., 2018)&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
+
+
+<span class="k">def</span> <span class="nf">_ppg_findpeaks_charlton</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Charlton et al (2024) MSPTDfast: An Efficient Photoplethysmography</span>
+<span class="sd">    Beat Detection Algorithm. 2024 Computing in Cardiology (CinC), Karlsruhe, Germany,</span>
+<span class="sd">    doi:10.1101/2024.07.18.24310627.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Inner functions</span>
+
+    <span class="k">def</span> <span class="nf">find_m_max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">max_scale</span><span class="p">,</span> <span class="n">m_max</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find local maxima scalogram for peaks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_scale</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># scalogram scales</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]:</span>
+                    <span class="n">m_max</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">m_max</span>
+
+    <span class="k">def</span> <span class="nf">find_m_min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">max_scale</span><span class="p">,</span> <span class="n">m_min</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find local minima scalogram for onsets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_scale</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># scalogram scales</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]:</span>
+                    <span class="n">m_min</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">m_min</span>
+
+    <span class="k">def</span> <span class="nf">find_lms_using_msptd_approach</span><span class="p">(</span><span class="n">max_scale</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find local maxima (or minima) scalogram(s) using the</span>
+<span class="sd">        MSPTD approach</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Setup</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># Find local maxima scalogram (if required)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_pks&quot;</span><span class="p">]:</span>
+            <span class="n">m_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">max_scale</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># matrix for maxima</span>
+            <span class="n">m_max</span> <span class="o">=</span> <span class="n">find_m_max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">max_scale</span><span class="p">,</span> <span class="n">m_max</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">m_max</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Find local minima scalogram (if required)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_trs&quot;</span><span class="p">]:</span>
+            <span class="n">m_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">max_scale</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># matrix for minima</span>
+            <span class="n">m_min</span> <span class="o">=</span> <span class="n">find_m_min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">max_scale</span><span class="p">,</span> <span class="n">m_min</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">m_min</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">m_max</span><span class="p">,</span> <span class="n">m_min</span>
+
+    <span class="k">def</span> <span class="nf">downsample</span><span class="p">(</span><span class="n">win_sig</span><span class="p">,</span> <span class="n">ds_factor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Downsamples signal by picking out every nth sample, where n is</span>
+<span class="sd">        specified by ds_factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">win_sig</span><span class="p">[::</span><span class="n">ds_factor</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">detect_peaks_and_onsets_using_msptd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect peaks and onsets in a PPG signal using a modified MSPTD approach</span>
+<span class="sd">        (where the modifications are those specified in Charlton et al. 2024)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Setup</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Step 0: Don&#39;t calculate scales outside the range of plausible HRs</span>
+
+        <span class="n">plaus_hr_hz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;plaus_hr_bpm&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">60</span>  <span class="c1"># in Hz</span>
+        <span class="n">init_scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">durn_signal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">/</span> <span class="n">fs</span>
+        <span class="n">init_scales_fs</span> <span class="o">=</span> <span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="n">init_scales</span><span class="p">)</span> <span class="o">/</span> <span class="n">durn_signal</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;use_reduced_lms_scales&#39;</span><span class="p">]:</span>
+            <span class="n">init_scales_inc_log</span> <span class="o">=</span> <span class="n">init_scales_fs</span> <span class="o">&gt;=</span> <span class="n">plaus_hr_hz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">init_scales_inc_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">init_scales_fs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>  <span class="c1"># DIDN&quot;T FULLY UNDERSTAND</span>
+
+        <span class="n">max_scale_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">init_scales_inc_log</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># DIDN&quot;T FULLY UNDERSTAND THIS AND NEXT FEW LINES</span>
+        <span class="k">if</span> <span class="n">max_scale_index</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">max_scale</span> <span class="o">=</span> <span class="n">max_scale_index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Add 1 to convert from 0-based to 1-based index</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">max_scale</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Or handle the case where no scales are valid</span>
+
+        <span class="c1"># Step 1: calculate local maxima and local minima scalograms</span>
+
+        <span class="c1"># - detrend</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+
+        <span class="c1"># - populate LMS matrices</span>
+        <span class="p">[</span><span class="n">m_max</span><span class="p">,</span> <span class="n">m_min</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_lms_using_msptd_approach</span><span class="p">(</span><span class="n">max_scale</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: find the scale with the most local maxima (or local minima)</span>
+
+        <span class="c1"># - row-wise summation (i.e. sum each row)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_pks&quot;</span><span class="p">]:</span>
+            <span class="n">gamma_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_max</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># the &quot;axis=1&quot; option makes it row-wise</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_trs&quot;</span><span class="p">]:</span>
+            <span class="n">gamma_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_min</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># - find scale with the most local maxima (or local minima)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_pks&quot;</span><span class="p">]:</span>
+            <span class="n">lambda_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">gamma_max</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_trs&quot;</span><span class="p">]:</span>
+            <span class="n">lambda_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">gamma_min</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Use lambda to remove all elements of m for which k&gt;lambda</span>
+        <span class="n">first_scale_to_include</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">init_scales_inc_log</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_pks&quot;</span><span class="p">]:</span>
+            <span class="n">m_max</span> <span class="o">=</span> <span class="n">m_max</span><span class="p">[</span><span class="n">first_scale_to_include</span><span class="p">:</span><span class="n">lambda_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_trs&quot;</span><span class="p">]:</span>
+            <span class="n">m_min</span> <span class="o">=</span> <span class="n">m_min</span><span class="p">[</span><span class="n">first_scale_to_include</span><span class="p">:</span><span class="n">lambda_min</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Step 4: Find peaks (and onsets)</span>
+        <span class="c1"># - column-wise summation</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_pks&quot;</span><span class="p">]:</span>
+            <span class="n">m_max_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_max</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">m_max_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;find_trs&quot;</span><span class="p">]:</span>
+            <span class="n">m_min_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m_min</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">m_min_sum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
+
+    <span class="c1"># ~~~ Main function ~~~</span>
+
+    <span class="c1"># Specify settings</span>
+    <span class="c1"># - version: optimal selection (CinC 2024)</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;find_trs&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># whether or not to find onsets</span>
+        <span class="s1">&#39;find_pks&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># whether or not to find peaks</span>
+        <span class="s1">&#39;do_ds&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># whether or not to do downsampling</span>
+        <span class="s1">&#39;ds_freq&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1"># the target downsampling frequency</span>
+        <span class="s1">&#39;use_reduced_lms_scales&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># whether or not to reduce the number of scales (default 30 bpm)</span>
+        <span class="s1">&#39;win_len&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># duration of individual windows for analysis</span>
+        <span class="s1">&#39;win_overlap&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="c1"># proportion of window overlap</span>
+        <span class="s1">&#39;plaus_hr_bpm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>  <span class="c1"># range of plausible HRs (only the lower bound is used)</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Split into overlapping windows</span>
+    <span class="n">no_samps_in_win</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;win_len&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">no_samps_in_win</span><span class="p">:</span>
+        <span class="n">win_starts</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">win_ends</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">win_offset</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">no_samps_in_win</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;win_overlap&quot;</span><span class="p">]))</span>
+        <span class="n">win_starts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="n">no_samps_in_win</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">win_offset</span><span class="p">))</span>
+        <span class="n">win_ends</span> <span class="o">=</span> <span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">no_samps_in_win</span> <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">win_starts</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">win_ends</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">):</span>
+            <span class="n">win_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">no_samps_in_win</span><span class="p">)</span>
+            <span class="n">win_ends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+        <span class="c1"># this ensures that the windows include the entire signal duration</span>
+
+    <span class="c1"># Set up downsampling if the sampling frequency is particularly high</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;do_ds&quot;</span><span class="p">]:</span>
+        <span class="n">min_fs</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;ds_freq&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&gt;</span> <span class="n">min_fs</span><span class="p">:</span>
+            <span class="n">ds_factor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">min_fs</span><span class="p">))</span>
+            <span class="n">ds_fs</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">min_fs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;do_ds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># detect peaks and onsets in each window</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># cycle through each window</span>
+    <span class="k">for</span> <span class="n">win_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">win_starts</span><span class="p">)):</span>
+        <span class="c1"># Extract this window&#39;s data</span>
+        <span class="n">win_sig</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">win_starts</span><span class="p">[</span><span class="n">win_no</span><span class="p">]:</span><span class="n">win_ends</span><span class="p">[</span><span class="n">win_no</span><span class="p">]]</span>
+
+        <span class="c1"># Downsample signal</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;do_ds&#39;</span><span class="p">]:</span>
+            <span class="n">rel_sig</span> <span class="o">=</span> <span class="n">downsample</span><span class="p">(</span><span class="n">win_sig</span><span class="p">,</span> <span class="n">ds_factor</span><span class="p">)</span>
+            <span class="n">rel_fs</span> <span class="o">=</span> <span class="n">ds_fs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rel_sig</span> <span class="o">=</span> <span class="n">win_sig</span>
+            <span class="n">rel_fs</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+
+        <span class="c1"># Detect peaks and onsets</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">detect_peaks_and_onsets_using_msptd</span><span class="p">(</span><span class="n">rel_sig</span><span class="p">,</span> <span class="n">rel_fs</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="c1"># Resample peaks</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;do_ds&#39;</span><span class="p">]:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">peak</span> <span class="o">*</span> <span class="n">ds_factor</span> <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">onset</span> <span class="o">*</span> <span class="n">ds_factor</span> <span class="k">for</span> <span class="n">onset</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+
+        <span class="c1"># Correct peak indices by finding highest point within tolerance either side of detected peaks</span>
+        <span class="n">tol_durn</span> <span class="o">=</span> <span class="mf">0.05</span>
+        <span class="k">if</span> <span class="n">rel_fs</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">tol_durn</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="k">elif</span> <span class="n">rel_fs</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">tol_durn</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="n">tol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">rel_fs</span> <span class="o">*</span> <span class="n">tol_durn</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">pk_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span>
+            <span class="n">segment</span> <span class="o">=</span> <span class="n">win_sig</span><span class="p">[(</span><span class="n">p</span><span class="p">[</span><span class="n">pk_no</span><span class="p">]</span> <span class="o">-</span> <span class="n">tol</span><span class="p">):(</span><span class="n">p</span><span class="p">[</span><span class="n">pk_no</span><span class="p">]</span> <span class="o">+</span> <span class="n">tol</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">pk_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">pk_no</span><span class="p">]</span> <span class="o">-</span> <span class="n">tol</span> <span class="o">+</span> <span class="n">temp</span>
+
+        <span class="c1"># Correct onset indices by finding highest point within tolerance either side of detected onsets</span>
+        <span class="k">for</span> <span class="n">onset_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="n">segment</span> <span class="o">=</span> <span class="n">win_sig</span><span class="p">[(</span><span class="n">t</span><span class="p">[</span><span class="n">onset_no</span><span class="p">]</span> <span class="o">-</span> <span class="n">tol</span><span class="p">):(</span><span class="n">t</span><span class="p">[</span><span class="n">onset_no</span><span class="p">]</span> <span class="o">+</span> <span class="n">tol</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+            <span class="n">t</span><span class="p">[</span><span class="n">onset_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">onset_no</span><span class="p">]</span> <span class="o">-</span> <span class="n">tol</span> <span class="o">+</span> <span class="n">temp</span>
+
+        <span class="c1"># Store peaks and onsets</span>
+        <span class="n">win_peaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">peak</span> <span class="o">+</span> <span class="n">win_starts</span><span class="p">[</span><span class="n">win_no</span><span class="p">]</span> <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+        <span class="n">peaks</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">win_peaks</span><span class="p">)</span>
+        <span class="n">win_onsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">onset</span> <span class="o">+</span> <span class="n">win_starts</span><span class="p">[</span><span class="n">win_no</span><span class="p">]</span> <span class="k">for</span> <span class="n">onset</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+        <span class="n">onsets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">win_onsets</span><span class="p">)</span>
+
+    <span class="c1"># Tidy up detected peaks and onsets (by ordering them and only retaining unique ones)</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">peaks</span><span class="p">))</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">onsets</span><span class="p">))</span>
+
+    <span class="c1"># Plot results (optional)</span>
+    <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax0</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;signal&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">onsets</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PPG Onsets (Method by Charlton et al., 2024)&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
 </pre></div>
