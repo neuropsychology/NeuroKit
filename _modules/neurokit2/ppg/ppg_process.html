@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -426,10 +428,11 @@ document.write(`
 <span class="sd">    signals : DataFrame</span>
 <span class="sd">        A DataFrame of same length as :func:`.ppg_signal` containing the following columns:</span>
 
-<span class="sd">        * ``&quot;PPG_Raw&quot;``: the raw signal.</span>
-<span class="sd">        * ``&quot;PPG_Clean&quot;``: the cleaned signal.</span>
-<span class="sd">        * ``&quot;PPG_Rate&quot;``: the heart rate as measured based on PPG peaks.</span>
-<span class="sd">        * ``&quot;PPG_Peaks&quot;``: the PPG peaks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            PPG_Raw|The raw signal.</span>
+<span class="sd">            PPG_Clean|The cleaned signal.</span>
+<span class="sd">            PPG_Rate|The heart rate as measured based on PPG peaks.</span>
+<span class="sd">            PPG_Peaks|The PPG peaks marked as &quot;1&quot; in a list of zeros.</span>
 
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the information of peaks and the signals&#39; sampling rate.</span>

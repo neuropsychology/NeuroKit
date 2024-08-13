@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -421,28 +423,27 @@ document.write(`
 <span class="sd">    signals : DataFrame</span>
 <span class="sd">        A DataFrame of the same length as the ``ecg_signal`` containing the following columns:</span>
 
-<span class="sd">        * ``&quot;ECG_Raw&quot;``: the raw signal.</span>
-<span class="sd">        * ``&quot;ECG_Clean&quot;``: the cleaned signal.</span>
-<span class="sd">        * ``&quot;ECG_Rate&quot;``: heart rate interpolated between R-peaks.</span>
-<span class="sd">        * ``&quot;ECG_Quality&quot;``: the quality of the cleaned signal</span>
-<span class="sd">        * ``&quot;ECG_R_Peaks&quot;``: the R-peaks marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_P_Peaks&quot;``: the P-peaks marked as &quot;1&quot; in a list of zeros</span>
-<span class="sd">        * ``&quot;ECG_P_Onsets&quot;``: the P-onsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_P_Offsets&quot;``: the P-offsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_Q_Peaks&quot;``: the Q-peaks marked as &quot;1&quot; in a list of zeros .</span>
-<span class="sd">        * ``&quot;ECG_R_Onsets&quot;``: the R-onsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_R_Offsets&quot;``: the R-offsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_S_Peaks&quot;``: the S-peaks marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_T_Peaks&quot;``: the T-peaks marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_T_Onsets&quot;``: the T-onsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_T_Offsets&quot;``: the T-offsets marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;ECG_Phase_Atrial&quot;``: cardiac phase, marked by &quot;1&quot; for systole and &quot;0&quot; for diastole.</span>
-<span class="sd">        * ``&quot;ECG_Phase_Completion_Atrial&quot;``: cardiac phase (atrial) completion, expressed in</span>
-<span class="sd">          percentage (from 0 to 1), representing the stage of the current cardiac phase.</span>
-<span class="sd">        * ``&quot;ECG_Phase_Ventricular&quot;``: cardiac phase, marked by &quot;1&quot; for systole and &quot;0&quot; for</span>
-<span class="sd">          diastole.</span>
-<span class="sd">        * ``&quot;ECG_Phase_Completion_Ventricular&quot;``: cardiac phase (ventricular) completion, expressed</span>
-<span class="sd">          in percentage (from 0 to 1), representing the stage of the current cardiac phase.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            ECG_Raw|The raw signal.</span>
+<span class="sd">            ECG_Clean|The cleaned signal.</span>
+<span class="sd">            ECG_Rate|Heart rate interpolated between R-peaks.</span>
+<span class="sd">            ECG_Quality|The quality of the cleaned signal.</span>
+<span class="sd">            ECG_R_Peaks|The R-peaks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_R_Onsets|The R-onsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_R_Offsets|The R-offsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_P_Peaks|The P-peaks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_P_Onsets|The P-onsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_P_Offsets|The P-offsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_Q_Peaks|The Q-peaks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_S_Peaks|The S-peaks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_T_Peaks|The T-peaks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_T_Onsets|The T-onsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_T_Offsets|The T-offsets marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            ECG_Phase_Atrial|Cardiac phase, marked by &quot;1&quot; for systole and &quot;0&quot; for diastole.</span>
+<span class="sd">            ECG_Phase_Completion_Atrial|Cardiac phase (atrial) completion, expressed in \</span>
+<span class="sd">                percentage (from 0 to 1), representing the stage of the current cardiac phase.</span>
+<span class="sd">            ECG_Phase_Completion_Ventricular|Cardiac phase (ventricular) completion, expressed \</span>
+<span class="sd">                in percentage (from 0 to 1), representing the stage of the current cardiac phase.</span>
 
 <span class="sd">    rpeaks : dict</span>
 <span class="sd">        A dictionary containing the samples at which the R-peaks occur, accessible with the key</span>
@@ -469,6 +470,8 @@ document.write(`
 <span class="sd">      nk.ecg_plot(signals, info)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
+
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

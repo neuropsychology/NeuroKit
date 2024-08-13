@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -477,16 +479,15 @@ document.write(`
 <span class="sd">    rsa : dict</span>
 <span class="sd">        A dictionary containing the RSA features, which includes:</span>
 
-<span class="sd">        * ``&quot;RSA_P2T_Values&quot;``: the estimate of RSA during each breath cycle, produced by</span>
-<span class="sd">          subtracting the shortest heart period (or RR interval) from the longest heart period in</span>
-<span class="sd">          ms.</span>
-<span class="sd">        * ``&quot;RSA_P2T_Mean&quot;``: the mean peak-to-trough across all cycles in ms</span>
-<span class="sd">        * ``&quot;RSA_P2T_Mean_log&quot;``: the logarithm of the mean of RSA estimates.</span>
-<span class="sd">        * ``&quot;RSA_P2T_SD&quot;``: the standard deviation of all RSA estimates.</span>
-<span class="sd">        * ``&quot;RSA_P2T_NoRSA&quot;``: the number of breath cycles</span>
-<span class="sd">          from which RSA could not be calculated.</span>
-<span class="sd">        * ``&quot;RSA_PorgesBohrer&quot;``: the Porges-Bohrer estimate of RSA, optimal</span>
-<span class="sd">          when the signal to noise ratio is low, in ``ln(ms^2)``.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            RSA_P2T_Values|The estimate of RSA during each breath cycle, produced by subtracting \</span>
+<span class="sd">                the shortest heart period (or RR interval) from the longest heart period in ms.</span>
+<span class="sd">            RSA_P2T_Mean|The mean peak-to-trough across all cycles in ms.</span>
+<span class="sd">            RSA_P2T_Mean_log|The logarithm of the mean of RSA estimates.</span>
+<span class="sd">            RSA_P2T_SD|The standard deviation of all RSA estimates.</span>
+<span class="sd">            RSA_P2T_NoRSA|The number of breath cycles from which RSA could not be calculated.</span>
+<span class="sd">            RSA_PorgesBohrer|The Porges-Bohrer estimate of RSA, optimal when the signal to noise \</span>
+<span class="sd">                ratio is low, in ln(ms^2).</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    ----------</span>

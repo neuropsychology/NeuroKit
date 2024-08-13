@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -526,10 +528,10 @@ Defaults to 1000.</p></li>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of the same length as the <code class="xref py py-func docutils literal notranslate"><span class="pre">eog_signal()</span></code> containing the following columns:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Raw&quot;</span></code>: the raw signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Clean&quot;</span></code>: the cleaned signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Blinks&quot;</span></code>: the blinks marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate&quot;</span></code>: eye blinks rate interpolated between blinks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Raw</span></code>: The raw signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Clean</span></code>: The cleaned signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Blinks</span></code>: The blinks marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate</span></code>: Eye blink rate interpolated between blinks</p></li>
 </ul>
 </li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the samples at which the eye blinks occur, accessible with the key
@@ -928,14 +930,14 @@ containing all epochs, usually obtained via <a class="reference internal" href="
 by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features
 consist of the following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Baseline&quot;</span></code>: the baseline EOG rate before stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Max&quot;</span></code>: the maximum EOG rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Min&quot;</span></code>: the minimum EOG rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Mean&quot;</span></code>: the mean EOG rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_SD&quot;</span></code>: the standard deviation of the EOG rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Max_Time&quot;</span></code>: the time at which maximum EOG rate occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Min_Time&quot;</span></code>: the time at which minimum EOG rate occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Blinks_Presence&quot;</span></code>: marked with ‘1’ if a blink occurs in the epoch, and ‘0’ if not.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Baseline</span></code>: The baseline EOG rate before stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Max</span></code>: The maximum EOG rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Min</span></code>: The minimum EOG rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Mean</span></code>: The mean EOG rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_SD</span></code>: The standard deviation of the EOG rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Max_Time</span></code>: The time at which maximum EOG rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Min_Time</span></code>: The time at which minimum EOG rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Blinks_Presence</span></code>: Marked with ‘1’ if a blink occurs in the epoch, and ‘0’ if not.</p></li>
 </ul>
 </p>
 </dd>
@@ -990,8 +992,8 @@ sets of separately processed DataFrames.</p>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EOG features. The analyzed features consist of the
 following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Rate_Mean&quot;</span></code>: the mean heart rate.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EOG_Peaks_N&quot;</span></code>: the number of blink peak occurrences.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Rate_Mean</span></code>: The mean EOG value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EOG_Peaks_N</span></code>: The number of blink peak occurrences.</p></li>
 </ul>
 </p>
 </dd>

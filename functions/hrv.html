@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -783,7 +785,20 @@ interpolated or when using the <code class="docutils literal notranslate"><span 
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>DataFrame</em> – Contains frequency domain HRV metrics.</p>
+<dd class="field-even"><p><p><em>DataFrame</em> – DataFrame consisting of the computed HRV frequency metrics, which includes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_ULF</span></code>: The spectral power of ultra low frequencies (by default, .0 to .0033 Hz). Very long signals are required for this to index to be extracted, otherwise, will return NaN.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_VLF</span></code>: The spectral power of very low frequencies (by default, .0033 to .04 Hz).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_LF</span></code>: The spectral power of low frequencies (by default, .04 to .15 Hz).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_HF</span></code>: The spectral power of high frequencies (by default, .15 to .4 Hz).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_VHF</span></code>: The spectral power of very high frequencies (by default, .4 to .5 Hz).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_TP</span></code>: The total spectral power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_LFHF</span></code>: The ratio obtained by dividing the low frequency power by the high frequency power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_LFn</span></code>: The normalized low frequency, obtained by dividing the low frequency power by the total power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_HFn</span></code>: The normalized high frequency, obtained by dividing the low frequency power by the total power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_LnHF</span></code>: The log transformed HF.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -953,7 +968,37 @@ default <code class="docutils literal notranslate"><span class="pre">False</span
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>DataFrame</em> – Contains non-linear HRV metrics.</p>
+<dd class="field-even"><p><p><em>DataFrame</em> – DataFrame consisting of the computed non-linear HRV metrics, which includes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD1</span></code>: Standard deviation perpendicular to the line of identity. It is an index of short-term RR interval fluctuations, i.e., beat-to-beat variability. It is equivalent (although on another scale) to RMSSD, and therefore it is redundant to report correlation with both.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD2</span></code>: Standard deviation along the identity line. Index of long-term HRV changes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD1SD2</span></code>: Ratio of SD1 to SD2. Describes the ratio of short term to long term variations in HRV.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_S</span></code>: Area of ellipse described by *SD1* and *SD2* (``pi * SD1 * SD2``). It is proportional to *SD1SD2*.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_CSI</span></code>: The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac sympathetic function independent of vagal activity, calculated by dividing the longitudinal variability of the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_CVI</span></code>: The Cardiac Vagal Index (Toichi, 1997) is an index of cardiac parasympathetic function (vagal activity unaffected by sympathetic activity), and is equal equal to the logarithm of the product of longitudinal (``4*SD2``) and transverse variability (``4*SD1``).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_CSI_Modified</span></code>: The modified CSI (Jeppesen, 2014) obtained by dividing the square of the longitudinal variability by its transverse variability.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_GI</span></code>: Guzik’s Index, defined as the distance of points above line of identity (LI) to LI divided by the distance of all points in Poincaré plot to LI except those that are located on LI.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SI</span></code>: Slope Index, defined as the phase angle of points above LI divided by the phase angle of all points in Poincaré plot except those that are located on LI.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_AI</span></code>: Area Index, defined as the cumulative area of the sectors corresponding to the points that are located above LI divided by the cumulative area of sectors corresponding to all points in the Poincaré plot except those that are located on LI.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_PI</span></code>: Porta’s Index, defined as the number of points below LI divided by the total number of points in Poincaré plot except those that are located on LI.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD1a</span></code>: Short-term variance of contributions of decelerations (prolongations of RR intervals), (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD1d</span></code>: Short-term variance of contributions of accelerations (shortenings of RR intervals), (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_C1a</span></code>: The contributions of heart rate accelerations to short-term HRV, (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_C1d</span></code>: The contributions of heart rate decelerations to short-term HRV, (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD2a</span></code>: Long-term variance of contributions of accelerations (shortenings of RR intervals), (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SD2d</span></code>: Long-term variance of contributions of decelerations (prolongations of RR intervals), (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_C2a</span></code>: The contributions of heart rate accelerations to long-term HRV, (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_C2d</span></code>: The contributions of heart rate decelerations to long-term HRV, (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SDNNa</span></code>: Total variance of contributions of accelerations (shortenings of RR intervals), (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_SDNNd</span></code>: Total variance of contributions of decelerations (prolongations of RR intervals), (Piskorski, 2011).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_Ca</span></code>: The total contributions of heart rate accelerations to HRV.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_Cd</span></code>: The total contributions of heart rate decelerations to HRV.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_PIP</span></code>: Percentage of inflection points of the RR intervals series.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_IALS</span></code>: Inverse of the average length of the acceleration/deceleration segments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_PSS</span></code>: Percentage of short segments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HRV_PAS</span></code>: Percentage of NN intervals in alternation segments.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1078,16 +1123,12 @@ set at 8.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><strong>rsa</strong> (<em>dict</em>) – A dictionary containing the RSA features, which includes:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_Values&quot;</span></code>: the estimate of RSA during each breath cycle, produced by
-subtracting the shortest heart period (or RR interval) from the longest heart period in
-ms.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_Mean&quot;</span></code>: the mean peak-to-trough across all cycles in ms</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_Mean_log&quot;</span></code>: the logarithm of the mean of RSA estimates.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_SD&quot;</span></code>: the standard deviation of all RSA estimates.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_P2T_NoRSA&quot;</span></code>: the number of breath cycles
-from which RSA could not be calculated.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSA_PorgesBohrer&quot;</span></code>: the Porges-Bohrer estimate of RSA, optimal
-when the signal to noise ratio is low, in <code class="docutils literal notranslate"><span class="pre">ln(ms^2)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSA_P2T_Values</span></code>: The estimate of RSA during each breath cycle, produced by subtracting the shortest heart period (or RR interval) from the longest heart period in ms.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSA_P2T_Mean</span></code>: The mean peak-to-trough across all cycles in ms.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSA_P2T_Mean_log</span></code>: The logarithm of the mean of RSA estimates.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSA_P2T_SD</span></code>: The standard deviation of all RSA estimates.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSA_P2T_NoRSA</span></code>: The number of breath cycles from which RSA could not be calculated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSA_PorgesBohrer</span></code>: The Porges-Bohrer estimate of RSA, optimal when the signal to noise ratio is low, in ln(ms^2).</p></li>
 </ul>
 </p>
 </dd>

@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -423,43 +425,40 @@ document.write(`
 <span class="sd">    DataFrame</span>
 <span class="sd">        DataFrame consisting of the computed RRV metrics, which includes:</span>
 
-<span class="sd">        * ``&quot;RRV_SDBB&quot;``: the standard deviation of the breath-to-breath intervals.</span>
-<span class="sd">        * ``&quot;RRV_RMSSD&quot;``: the root mean square of successive differences of the breath-to-breath</span>
-<span class="sd">          intervals.</span>
-<span class="sd">        * ``&quot;RRV_SDSD&quot;``: the standard deviation of the successive differences between adjacent</span>
-<span class="sd">          breath-to-breath intervals.</span>
-<span class="sd">        * ``&quot;RRV_BBx&quot;``: the number of successive interval differences that are greater than x</span>
-<span class="sd">          seconds.</span>
-<span class="sd">        * ``&quot;RRV-pBBx&quot;``: the proportion of breath-to-breath intervals that are greater than x</span>
-<span class="sd">          seconds,</span>
-<span class="sd">          out of the total number of intervals.</span>
-<span class="sd">        * ``&quot;RRV_VLF&quot;``: spectral power density pertaining to very low frequency band (i.e., 0 to .</span>
-<span class="sd">          04 Hz) by default.</span>
-<span class="sd">        * ``&quot;RRV_LF&quot;``: spectral power density pertaining to low frequency band (i.e., .04 to .15</span>
-<span class="sd">          Hz) by default.</span>
-<span class="sd">        * ``&quot;RRV_HF&quot;``: spectral power density pertaining to high frequency band (i.e., .15 to .4</span>
-<span class="sd">          Hz) by default.</span>
-<span class="sd">        * ``&quot;RRV_LFHF&quot;``: the ratio of low frequency power to high frequency power.</span>
-<span class="sd">        * ``&quot;RRV_LFn&quot;``: the normalized low frequency, obtained by dividing the low frequency</span>
-<span class="sd">          power by the total power.</span>
-<span class="sd">        * ``&quot;RRV_HFn&quot;``: the normalized high frequency, obtained by dividing the low frequency</span>
-<span class="sd">          power by total power.</span>
-<span class="sd">        * ``&quot;RRV_SD1&quot;``: SD1 is a measure of the spread of breath-to-breath intervals on the</span>
-<span class="sd">          Poincaré plot perpendicular to the line of identity. It is an index of short-term</span>
-<span class="sd">          variability.</span>
-<span class="sd">        * ``&quot;RRV_SD2&quot;``: SD2 is a measure of the spread of breath-to-breath intervals on the</span>
-<span class="sd">          Poincaré plot along the line of identity. It is an index of long-term variability.</span>
-<span class="sd">        * ``&quot;RRV_SD2SD1&quot;``: the ratio between short and long term fluctuations of the</span>
-<span class="sd">          breath-to-breath intervals (SD2 divided by SD1).</span>
-<span class="sd">        * ``&quot;RRV_ApEn&quot;``: the approximate entropy of RRV, calculated</span>
-<span class="sd">          by :func:`.entropy_approximate`.</span>
-<span class="sd">        * ``&quot;RRV_SampEn&quot;``: the sample entropy of RRV, calculated by :func:`.entropy_sample`.</span>
-<span class="sd">        * ``&quot;RRV_DFA_alpha1&quot;``: the &quot;short-term&quot; fluctuation value generated from Detrended</span>
-<span class="sd">          Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the</span>
-<span class="sd">          breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the</span>
-<span class="sd">          signal.</span>
-<span class="sd">        * ``&quot;RRV_DFA_alpha2&quot;``: the long-term fluctuation value. Will only be computed if mora</span>
-<span class="sd">          than 640 breath cycles in the signal.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            RRV_SDBB|The standard deviation of the breath-to-breath intervals.</span>
+<span class="sd">            RRV_RMSSD|The root mean square of successive differences of the breath-to-breath intervals.</span>
+<span class="sd">            RRV_SDSD|The standard deviation of the successive differences between adjacent \</span>
+<span class="sd">                breath-to-breath intervals.</span>
+<span class="sd">            RRV_BBx|The number of successive interval differences that are greater than x seconds.</span>
+<span class="sd">            RRV_pBBx|the proportion of breath-to-breath intervals that are greater than x seconds, \</span>
+<span class="sd">                out of the total number of intervals.</span>
+<span class="sd">            RRV_VLF|Spectral power density pertaining to very low frequency band (i.e., 0 to\</span>
+<span class="sd">                .04 Hz) by default.</span>
+<span class="sd">            RRV_LF|Spectral power density pertaining to low frequency band (i.e., .04 to \</span>
+<span class="sd">                .15 Hz) by default.</span>
+<span class="sd">            RRV_HF|Spectral power density pertaining to high frequency band (i.e., .15 to \</span>
+<span class="sd">                .4 Hz) by default.</span>
+<span class="sd">            RRV_LFHF|The ratio of low frequency power to high frequency power.</span>
+<span class="sd">            RRV_LFn|The normalized low frequency, obtained by dividing the low frequency power by \</span>
+<span class="sd">                the total power.</span>
+<span class="sd">            RRV_HFn|The normalized high frequency, obtained by dividing the low frequency power by \</span>
+<span class="sd">                total power.</span>
+<span class="sd">            RRV_SD1|SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré \</span>
+<span class="sd">                plot perpendicular to the line of identity. It is an index of short-term variability.</span>
+<span class="sd">            RRV_SD2|SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré \</span>
+<span class="sd">                plot along the line of identity. It is an index of long-term variability.</span>
+<span class="sd">            RRV_SD2SD1|The ratio between short and long term fluctuations of the breath-to-breath \</span>
+<span class="sd">                intervals (SD2 divided by SD1).</span>
+<span class="sd">            RRV_DFA_alpha1|The &quot;short-term&quot; fluctuation value generated from Detrended Fluctuation \</span>
+<span class="sd">                Analysis i.e. the root mean square deviation from the fitted trend of the \</span>
+<span class="sd">                breath-to-breath intervals. Will only be computed if mora than 160 breath cycles \</span>
+<span class="sd">                in the signal.</span>
+<span class="sd">            RRV_DFA_alpha2|The long-term fluctuation value. Will only be computed if mora than \</span>
+<span class="sd">                640 breath cycles in the signal.</span>
+<span class="sd">            RRV_ApEn|The approximate entropy of RRV, calculated by :func:`.entropy_approximate`.</span>
+<span class="sd">            RRV_SampEn|The sample entropy of RRV, calculated by :func:`.entropy_sample`.</span>
+
 <span class="sd">        * **MFDFA indices**: Indices related to the :func:`multifractal spectrum &lt;.fractal_dfa()&gt;`.</span>
 
 

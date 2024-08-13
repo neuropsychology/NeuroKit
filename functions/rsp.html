@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -564,18 +566,15 @@ see <a class="reference internal" href="#neurokit2.rsp.rsp_methods" title="neuro
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_signal()</span></code> containing the following columns:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Raw&quot;</span></code>: the raw signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Clean&quot;</span></code>: the cleaned signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks&quot;</span></code>: the respiratory peaks (exhalation onsets) marked as “1” in a list of
-zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Troughs&quot;</span></code>: the respiratory troughs (inhalation onsets) marked as “1” in a list of
-zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate&quot;</span></code>: breathing rate interpolated between inhalation peaks.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude&quot;</span></code>: breathing amplitude interpolated between inhalation peaks.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase&quot;</span></code>: breathing phase, marked by “1” for inspiration and “0” for expiration.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase_Completion&quot;</span></code>: breathing phase completion, expressed in percentage (from 0 to
-1), representing the stage of the current respiratory phase.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_RVT&quot;</span></code>: respiratory volume per time (RVT).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Raw</span></code>: The raw signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Clean</span></code>: The raw signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Peaks</span></code>: The respiratory peaks (exhalation onsets) marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Troughs</span></code>: The respiratory troughs (inhalation onsets) marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate</span></code>: The breathing rate interpolated between inhalation peaks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude</span></code>: The breathing amplitude interpolated between inhalation peaks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Phase</span></code>: The breathing phase, marked by “1” for inspiration and “0” for expiration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Phase_Completion</span></code>: The breathing phase completion, expressed in percentage (from 0 to 1), representing the stage of the current respiratory phase.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_RVT</span></code>: Respiratory volume per time (RVT).</p></li>
 </ul>
 </li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
@@ -603,7 +602,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         14.7777 |       1.53494 |</span>
+<span class="go">|         15.1648 |       1.48648 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1307,43 +1306,26 @@ breath-to-breath interval. Defaults to <code class="docutils literal notranslate
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – DataFrame consisting of the computed RRV metrics, which includes:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SDBB&quot;</span></code>: the standard deviation of the breath-to-breath intervals.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_RMSSD&quot;</span></code>: the root mean square of successive differences of the breath-to-breath
-intervals.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SDSD&quot;</span></code>: the standard deviation of the successive differences between adjacent
-breath-to-breath intervals.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_BBx&quot;</span></code>: the number of successive interval differences that are greater than x
-seconds.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV-pBBx&quot;</span></code>: the proportion of breath-to-breath intervals that are greater than x
-seconds,
-out of the total number of intervals.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_VLF&quot;</span></code>: spectral power density pertaining to very low frequency band (i.e., 0 to .
-04 Hz) by default.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_LF&quot;</span></code>: spectral power density pertaining to low frequency band (i.e., .04 to .15
-Hz) by default.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_HF&quot;</span></code>: spectral power density pertaining to high frequency band (i.e., .15 to .4
-Hz) by default.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_LFHF&quot;</span></code>: the ratio of low frequency power to high frequency power.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_LFn&quot;</span></code>: the normalized low frequency, obtained by dividing the low frequency
-power by the total power.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_HFn&quot;</span></code>: the normalized high frequency, obtained by dividing the low frequency
-power by total power.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SD1&quot;</span></code>: SD1 is a measure of the spread of breath-to-breath intervals on the
-Poincaré plot perpendicular to the line of identity. It is an index of short-term
-variability.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SD2&quot;</span></code>: SD2 is a measure of the spread of breath-to-breath intervals on the
-Poincaré plot along the line of identity. It is an index of long-term variability.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SD2SD1&quot;</span></code>: the ratio between short and long term fluctuations of the
-breath-to-breath intervals (SD2 divided by SD1).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_ApEn&quot;</span></code>: the approximate entropy of RRV, calculated
-by <a class="reference internal" href="complexity.html#neurokit2.complexity.entropy_approximate" title="neurokit2.complexity.entropy_approximate"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_approximate()</span></code></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_SampEn&quot;</span></code>: the sample entropy of RRV, calculated by <a class="reference internal" href="complexity.html#neurokit2.complexity.entropy_sample" title="neurokit2.complexity.entropy_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_DFA_alpha1&quot;</span></code>: the “short-term” fluctuation value generated from Detrended
-Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the
-breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the
-signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RRV_DFA_alpha2&quot;</span></code>: the long-term fluctuation value. Will only be computed if mora
-than 640 breath cycles in the signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_SDBB</span></code>: The standard deviation of the breath-to-breath intervals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_RMSSD</span></code>: The root mean square of successive differences of the breath-to-breath intervals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_SDSD</span></code>: The standard deviation of the successive differences between adjacent breath-to-breath intervals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_BBx</span></code>: The number of successive interval differences that are greater than x seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_pBBx</span></code>: the proportion of breath-to-breath intervals that are greater than x seconds, out of the total number of intervals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_VLF</span></code>: Spectral power density pertaining to very low frequency band (i.e., 0 to .04 Hz) by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_LF</span></code>: Spectral power density pertaining to low frequency band (i.e., .04 to .15 Hz) by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_HF</span></code>: Spectral power density pertaining to high frequency band (i.e., .15 to .4 Hz) by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_LFHF</span></code>: The ratio of low frequency power to high frequency power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_LFn</span></code>: The normalized low frequency, obtained by dividing the low frequency power by the total power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_HFn</span></code>: The normalized high frequency, obtained by dividing the low frequency power by total power.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_SD1</span></code>: SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term variability.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_SD2</span></code>: SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré plot along the line of identity. It is an index of long-term variability.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_SD2SD1</span></code>: The ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_DFA_alpha1</span></code>: The “short-term” fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_DFA_alpha2</span></code>: The long-term fluctuation value. Will only be computed if mora than 640 breath cycles in the signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_ApEn</span></code>: The approximate entropy of RRV, calculated by :func:`.entropy_approximate`.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RRV_SampEn</span></code>: The sample entropy of RRV, calculated by :func:`.entropy_sample`.</p></li>
+</ul>
+<ul class="simple">
 <li><p><strong>MFDFA indices</strong>: Indices related to the <a class="reference internal" href="complexity.html#neurokit2.complexity.fractal_dfa" title="neurokit2.complexity.fractal_dfa"><code class="xref py py-func docutils literal notranslate"><span class="pre">multifractal</span> <span class="pre">spectrum</span></code></a>.</p></li>
 </ul>
 </p>
@@ -1362,8 +1344,8 @@ than 640 breath cycles in the signal.</p></li>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB   RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  995.946812      4027.1  606.14953  ...    0.642477  0.353428         inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  918.158397      3984.1  678.280481  ...    1.034936  0.054067        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1471,25 +1453,19 @@ via <a class="reference internal" href="epochs.html#neurokit2.epochs.epochs_to_d
 by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features
 consist of the following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_Max&quot;</span></code>: the maximum respiratory rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_Min&quot;</span></code>: the minimum respiratory rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_Mean&quot;</span></code>: the mean respiratory rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_SD&quot;</span></code>: the standard deviation of the respiratory rate after stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_Max_Time&quot;</span></code>: the time at which maximum respiratory rate occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_Min_Time&quot;</span></code>: the time at which minimum respiratory rate occurs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude_Baseline&quot;</span></code>: the respiratory amplitude at stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude_Max&quot;</span></code>: the change in maximum respiratory amplitude from before stimulus
-onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude_Min&quot;</span></code>: the change in minimum respiratory amplitude from before stimulus
-onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude_Mean&quot;</span></code>: the change in mean respiratory amplitude from before stimulus
-onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude_SD&quot;</span></code>: the standard deviation of the respiratory amplitude after
-stimulus onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase&quot;</span></code>: indication of whether the onset of the event concurs with respiratory
-inspiration (1) or expiration (0).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_PhaseCompletion&quot;</span></code>: indication of the stage of the current respiration phase (0 to
-1) at the onset of the event.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_Max</span></code>: The maximum respiratory rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_Min</span></code>: The minimum respiratory rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_Mean</span></code>: The mean respiratory rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_SD</span></code>: The standard deviation of the respiratory rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_Max_Time</span></code>: The time at which maximum respiratory rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_Min_Time</span></code>: The time at which minimum respiratory rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude_Baseline</span></code>: The respiratory amplitude at stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude_Max</span></code>: The change in maximum respiratory amplitude from before stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude_Min</span></code>: The change in minimum respiratory amplitude from before stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude_Mean</span></code>: The change in mean respiratory amplitude from before stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude_SD</span></code>: The standard deviation of the respiratory amplitude after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Phase</span></code>: Indication of whether the onset of the event concurs with respiratory inspiration (1) or expiration (0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_PhaseCompletion</span></code>: Indication of the stage of the current respiration phase (0 to 1) at the onset of the event.</p></li>
 </ul>
 </p>
 </dd>
@@ -1510,9 +1486,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.260386      0.014981</span>
-<span class="go">2     2        10000  ...          0.239925      0.001028</span>
-<span class="go">3     3        15000  ...          0.233236     -0.019799</span>
+<span class="go">1     1         5000  ...          0.156351     -0.009831</span>
+<span class="go">2     2        10000  ...          0.231111     -0.011218</span>
+<span class="go">3     3        15000  ...          0.238519     -0.029260</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1566,13 +1542,15 @@ sets of separately processed DataFrames.</p></li>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed RSP features.
 The analyzed features consist of the following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Rate_Mean&quot;</span></code>: the mean respiratory rate.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Amplitude_Mean&quot;</span></code>: the mean respiratory amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Rate_Mean</span></code>: The mean respiratory rate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Amplitude_Mean</span></code>: The mean respiratory amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Phase_Duration_Inspiration</span></code>: The average inspiration duration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Phase_Duration_Expiration</span></code>: The average expiration duration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RSP_Phase_Duration_Ratio</span></code>: The inspiration-to-expiratory time ratio (I/E).</p></li>
+</ul>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_RRV&quot;</span></code>: the different respiratory rate variability metrices.
 See <a class="reference internal" href="#neurokit2.rsp.rsp_rrv" title="neurokit2.rsp.rsp_rrv"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_rrv()</span></code></a> docstrings for details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase_Duration_Inspiration&quot;</span></code>: the average inspiratory duration.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase_Duration_Expiration&quot;</span></code>: the average expiratory duration.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;RSP_Phase_Duration_Ratio</span> <span class="pre">&quot;</span></code>: the inspiratory-to-expiratory time ratio (I/E).</p></li>
 </ul>
 </p>
 </dd>
@@ -1716,7 +1694,7 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0   0.94171  0.092724   0.088954   0.09446</span>
+<span class="go">0  0.938471  0.046998   0.060994  0.064993</span>
 </pre></div>
 </div>
 </dd></dl>

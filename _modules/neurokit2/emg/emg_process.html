@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -417,13 +419,14 @@ document.write(`
 <span class="sd">    signals : DataFrame</span>
 <span class="sd">        A DataFrame of same length as ``emg_signal`` containing the following columns:</span>
 
-<span class="sd">        * ``&quot;EMG_Raw&quot;``: the raw signal.</span>
-<span class="sd">        * ``&quot;EMG_Clean&quot;``: the cleaned signal.</span>
-<span class="sd">        * ``&quot;EMG_Amplitude&quot;``: the signal amplitude, or the activation level of the signal.</span>
-<span class="sd">        * ``&quot;EMG_Activity&quot;``: the activity of the signal for which amplitude exceeds the threshold</span>
-<span class="sd">          specified,marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;EMG_Onsets&quot;``: the onsets of the amplitude, marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;EMG_Offsets&quot;``: the offsets of the amplitude, marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            EMG_Raw|The raw EMG signal.</span>
+<span class="sd">            EMG_Clean|The cleaned EMG signal.</span>
+<span class="sd">            EMG_Amplitude|The signal amplitude, or the activation of the signal.</span>
+<span class="sd">            EMG_Activity|The activity of the signal for which amplitude exceeds the threshold \</span>
+<span class="sd">                specified,marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            EMG_Onsets|The onsets of the amplitude, marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            EMG_Offsets|The offsets of the amplitude, marked as &quot;1&quot; in a list of zeros.</span>
 
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the information of each amplitude onset, offset, and peak activity</span>

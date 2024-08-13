@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -412,10 +414,11 @@ document.write(`
 <span class="sd">    signals : DataFrame</span>
 <span class="sd">        A DataFrame of the same length as the :func:`.eog_signal` containing the following columns:</span>
 
-<span class="sd">        * ``&quot;EOG_Raw&quot;``: the raw signal.</span>
-<span class="sd">        * ``&quot;EOG_Clean&quot;``: the cleaned signal.</span>
-<span class="sd">        * ``&quot;EOG_Blinks&quot;``: the blinks marked as &quot;1&quot; in a list of zeros.</span>
-<span class="sd">        * ``&quot;EOG_Rate&quot;``: eye blinks rate interpolated between blinks.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            EOG_Raw|The raw signal.</span>
+<span class="sd">            EOG_Clean|The cleaned signal.</span>
+<span class="sd">            EOG_Blinks|The blinks marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            EOG_Rate|Eye blink rate interpolated between blinks</span>
 
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the samples at which the eye blinks occur, accessible with the key</span>

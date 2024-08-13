@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -413,15 +415,13 @@ document.write(`
 <span class="sd">        by the `Label` column (if not present, by the `Index` column). The analyzed features consist</span>
 <span class="sd">        of the following:</span>
 
-<span class="sd">            * ``&quot;EMG_Activation*``: indication of whether there is muscular activation following</span>
-<span class="sd">              the onset of the event (1 if present, 0 if absent) and if so, its corresponding</span>
-<span class="sd">              amplitude features and the number of activations in each epoch. If there is no</span>
-<span class="sd">              activation, nans are displayed for the below features.</span>
-<span class="sd">            * ``&quot;EMG_Amplitude_Mean*``: the mean amplitude of the activity.</span>
-<span class="sd">            * ``&quot;EMG_Amplitude_Max*``: the maximum amplitude of the activity.</span>
-<span class="sd">            * ``&quot;EMG_Amplitude_SD*``: the standard deviation of the activity amplitude.</span>
-<span class="sd">            * ``&quot;EMG_Amplitude_Max_Time*``: the time of maximum amplitude.</span>
-<span class="sd">            * ``&quot;EMG_Bursts*``: the number of activations, or bursts of activity, within each epoch.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            EMG_Activation|Indication of whether there is muscular activation following.</span>
+<span class="sd">            EMG_Amplitude_Mean|The mean amplitude of the activity.</span>
+<span class="sd">            EMG_Amplitude_Max|The maximum amplitude of the activity.</span>
+<span class="sd">            EMG_Amplitude_SD|The standard deviation of the activity amplitude.</span>
+<span class="sd">            EMG_Amplitude_Max_Time|The time of maximum amplitude.</span>
+<span class="sd">            EMG_Bursts|The number of activations, or bursts of activity, within each epoch.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

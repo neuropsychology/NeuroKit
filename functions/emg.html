@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -525,13 +527,12 @@ see <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="docutils literal notranslate"><span class="pre">emg_signal</span></code> containing the following columns:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Raw&quot;</span></code>: the raw signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Clean&quot;</span></code>: the cleaned signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude&quot;</span></code>: the signal amplitude, or the activation level of the signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activity&quot;</span></code>: the activity of the signal for which amplitude exceeds the threshold
-specified,marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Onsets&quot;</span></code>: the onsets of the amplitude, marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Offsets&quot;</span></code>: the offsets of the amplitude, marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Raw</span></code>: The raw EMG signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Clean</span></code>: The cleaned EMG signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Amplitude</span></code>: The signal amplitude, or the activation of the signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Activity</span></code>: The activity of the signal for which amplitude exceeds the threshold specified,marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Onsets</span></code>: The onsets of the amplitude, marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Offsets</span></code>: The offsets of the amplitude, marked as “1” in a list of zeros.</p></li>
 </ul>
 </li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the information of each amplitude onset, offset, and peak activity
@@ -610,9 +611,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.290695         1.0</span>
+<span class="go">1     1         3000  ...                1.506803         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.970535         1.0</span>
+<span class="go">3     3         9000  ...                1.438769         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -622,7 +623,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.244001</span>
+<span class="go">0               3.0            0.239786</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -943,19 +944,14 @@ or a DataFrame containing all epochs, usually obtained via <code class="docutils
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EMG features for each epoch, with each epoch indicated
 by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features consist
 of the following:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activation*</span></code>: indication of whether there is muscular activation following
-the onset of the event (1 if present, 0 if absent) and if so, its corresponding
-amplitude features and the number of activations in each epoch. If there is no
-activation, nans are displayed for the below features.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Mean*</span></code>: the mean amplitude of the activity.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Max*</span></code>: the maximum amplitude of the activity.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_SD*</span></code>: the standard deviation of the activity amplitude.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Max_Time*</span></code>: the time of maximum amplitude.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EMG_Bursts*</span></code>: the number of activations, or bursts of activity, within each epoch.</p></li>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Activation</span></code>: Indication of whether there is muscular activation following.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Amplitude_Mean</span></code>: The mean amplitude of the activity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Amplitude_Max</span></code>: The maximum amplitude of the activity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Amplitude_SD</span></code>: The standard deviation of the activity amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Amplitude_Max_Time</span></code>: The time of maximum amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Bursts</span></code>: The number of activations, or bursts of activity, within each epoch.</p></li>
 </ul>
-</div></blockquote>
 </p>
 </dd>
 </dl>
@@ -978,9 +974,9 @@ activation, nans are displayed for the below features.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.497799         1.0</span>
+<span class="go">1     1         3000  ...                1.789945         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.543322         1.0</span>
+<span class="go">3     3         9000  ...                1.424762         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -1002,9 +998,12 @@ generated by <code class="docutils literal notranslate"><span class="pre">emg_pr
 separately processed DataFrames.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>DataFrame</em> – A dataframe containing the analyzed EMG features. The analyzed features consist of the following:
-* <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Activation_N&quot;</span></code>: the number of bursts of muscular activity.
-* <code class="docutils literal notranslate"><span class="pre">&quot;EMG_Amplitude_Mean&quot;</span></code>: the mean amplitude of the muscular activity.</p>
+<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EMG features. The analyzed features consist of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EMG_Activation_N</span></code>: The number of bursts of muscular activity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Amplitude_Mean</span></code>: The mean amplitude of the muscular activity.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1023,15 +1022,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.243991</span>
+<span class="go">0               3.0            0.237414</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.252175</span>
-<span class="go">2     2                 1            0.235772</span>
+<span class="go">1     1                 2            0.241507</span>
+<span class="go">2     2                 1            0.233291</span>
 </pre></div>
 </div>
 </dd></dl>

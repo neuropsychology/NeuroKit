@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -415,9 +417,11 @@ document.write(`
 <span class="sd">        A dataframe containing the analyzed EDA features. The analyzed</span>
 <span class="sd">        features consist of the following:</span>
 
-<span class="sd">        * ``&quot;SCR_Peaks_N&quot;``: the number of occurrences of Skin Conductance Response (SCR).</span>
-<span class="sd">        * ``&quot;SCR_Peaks_Amplitude_Mean&quot;``: the mean amplitude of the SCR peak occurrences.</span>
-<span class="sd">        * ``&quot;EDA_Tonic_SD&quot;``: the mean amplitude of the SCR peak occurrences.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            SCR_Peaks_N|The number of occurrences of Skin Conductance Response (SCR).</span>
+<span class="sd">            SCR_Peaks_Amplitude_Mean|The mean amplitude of the SCR peak occurrences.</span>
+<span class="sd">            EDA_Tonic_SD|The mean amplitude of the SCR peak occurrences.</span>
+
 <span class="sd">        * ``&quot;EDA_Sympathetic&quot;``: see :func:`eda_sympathetic` (only computed if signal duration</span>
 <span class="sd">          &gt; 64 sec).</span>
 <span class="sd">        * ``&quot;EDA_Autocorrelation&quot;``: see :func:`eda_autocor` (only computed if signal duration</span>

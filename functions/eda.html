@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -550,22 +552,16 @@ see <a class="reference internal" href="rsp.html#neurokit2.rsp.rsp_methods" titl
 <li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <code class="docutils literal notranslate"><span class="pre">&quot;eda_signal&quot;</span></code> containing the following
 columns:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Raw&quot;</span></code>: the raw signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Clean&quot;</span></code>: the cleaned signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Tonic&quot;</span></code>: the tonic component of the signal, or the Tonic Skin Conductance Level
-(SCL).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Phasic&quot;</span></code>: the phasic component of the signal, or the Phasic Skin Conductance
-Response (SCR).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Onsets&quot;</span></code>: the samples at which the onsets of the peaks occur, marked as “1” in a
-list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks&quot;</span></code>: the samples at which the peaks occur, marked as “1” in a list of zeros.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Height&quot;</span></code>: the SCR amplitude of the signal including the Tonic component. Note that
-cumulative effects of close-occurring SCRs might lead to an underestimation of the
-amplitude.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Amplitude&quot;</span></code>: the SCR amplitude of the signal excluding the Tonic component.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_RiseTime&quot;</span></code>: the time taken for SCR onset to reach peak amplitude within the SCR.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Recovery&quot;</span></code>: the samples at which SCR peaks recover (decline) to half amplitude,
-marked  as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Raw</span></code>: The raw signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Clean</span></code>: The cleaned signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Tonic</span></code>: The tonic component of the signal, or the Tonic Skin Conductance Level (SCL).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Phasic</span></code>: The phasic component of the signal, or the Phasic Skin Conductance Response (SCR).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Onsets</span></code>: The samples at which the onsets of the peaks occur, marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Peaks</span></code>: The samples at which the peaks occur, marked as “1” in a list of zeros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Height</span></code>: The SCR amplitude of the signal including the Tonic component. Note that cumulative effects of close-occurring SCRs might lead to an underestimation of the amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Amplitude</span></code>: The SCR amplitude of the signal excluding the Tonic component.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_RiseTime</span></code>: The SCR amplitude of the signal excluding the Tonic component.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Recovery</span></code>: The samples at which SCR peaks recover (decline) to half amplitude, marked as “1” in a list of zeros.</p></li>
 </ul>
 </li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the information of each SCR peak (see <a class="reference internal" href="#neurokit2.eda.eda_findpeaks" title="neurokit2.eda.eda_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_findpeaks()</span></code></a>),
@@ -1102,17 +1098,12 @@ containing all epochs, usually obtained via <code class="docutils literal notran
 by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features consist
 the following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_SCR&quot;</span></code>: indication of whether Skin Conductance Response (SCR) occurs following the event
-(1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude,
-time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed
-for the below features.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Peak_Amplitude&quot;</span></code>: the maximum amplitude of the phasic component of the signal.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peak_Amplitude&quot;</span></code>: the peak amplitude of the first SCR in each epoch.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peak_Amplitude_Time&quot;</span></code>: the timepoint of each first SCR peak amplitude.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_RiseTime&quot;</span></code>: the risetime of each first SCR i.e., the time it takes for SCR to
-reach peak amplitude from onset.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_RecoveryTime&quot;</span></code>: the half-recovery time of each first SCR i.e., the time it takes
-for SCR to decrease to half amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_SCR</span></code>: indication of whether Skin Conductance Response (SCR) occurs following the event (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude, time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed for the below features.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Peak_Amplitude</span></code>: The maximum amplitude of the phasic component of the signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Peak_Amplitude</span></code>: The peak amplitude of the first SCR in each epoch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Peak_Amplitude_Time</span></code>: The timepoint of each first SCR peak amplitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_RiseTime</span></code>: The risetime of each first SCR i.e., the time it takes for SCR to reach peak amplitude from onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_RecoveryTime</span></code>: The half-recovery time of each first SCR i.e., the time it takes for SCR to decrease to half amplitude.</p></li>
 </ul>
 </p>
 </dd>
@@ -1141,8 +1132,8 @@ for SCR to decrease to half amplitude.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.363             0.506</span>
-<span class="go">2     2        10000  ...         0.364             0.559</span>
+<span class="go">1     1         5000  ...         0.361             0.505</span>
+<span class="go">2     2        10000  ...         0.362             0.555</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1202,9 +1193,11 @@ sets of separately processed DataFrames.</p></li>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed EDA features. The analyzed
 features consist of the following:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_N&quot;</span></code>: the number of occurrences of Skin Conductance Response (SCR).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;SCR_Peaks_Amplitude_Mean&quot;</span></code>: the mean amplitude of the SCR peak occurrences.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Tonic_SD&quot;</span></code>: the mean amplitude of the SCR peak occurrences.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Peaks_N</span></code>: The number of occurrences of Skin Conductance Response (SCR).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SCR_Peaks_Amplitude_Mean</span></code>: The mean amplitude of the SCR peak occurrences.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Tonic_SD</span></code>: The mean amplitude of the SCR peak occurrences.</p></li>
+</ul>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_sympathetic" title="neurokit2.eda.eda_sympathetic"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_sympathetic()</span></code></a> (only computed if signal duration
 &gt; 64 sec).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;EDA_Autocorrelation&quot;</span></code>: see <a class="reference internal" href="#neurokit2.eda.eda_autocor" title="neurokit2.eda.eda_autocor"><code class="xref py py-func docutils literal notranslate"><span class="pre">eda_autocor()</span></code></a> (only computed if signal duration
@@ -1276,9 +1269,14 @@ frequency band.</p></li>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>dict</em> – A dictionary containing the EDA sympathetic indexes, accessible by keys
+<dd class="field-odd"><p><p><em>dict</em> – A dictionary containing the EDA sympathetic indexes, accessible by keys
 <code class="docutils literal notranslate"><span class="pre">&quot;EDA_Sympathetic&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;EDA_SympatheticN&quot;</span></code> (normalized, obtained by dividing EDA_Symp
 by total power).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_Sympathetic</span></code>: Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component of EDA signal is represented in the frequency band of 0.045-0.25Hz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EDA_SympatheticN</span></code>: normalized version of “EDA_Sympathetic” obtained by dividing EDA_Sympathetic by total power</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1351,7 +1349,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.21819138006617936</span>
+<span class="gh">Out[5]: </span><span class="go">-0.10209930879228911</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1403,7 +1401,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">20</span>
+<span class="gh">Out[4]: </span><span class="go">30</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" />

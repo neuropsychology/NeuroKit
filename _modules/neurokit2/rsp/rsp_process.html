@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -439,18 +441,18 @@ document.write(`
 <span class="sd">    signals : DataFrame</span>
 <span class="sd">        A DataFrame of same length as :func:`.rsp_signal` containing the following columns:</span>
 
-<span class="sd">        * ``&quot;RSP_Raw&quot;``: the raw signal.</span>
-<span class="sd">        * ``&quot;RSP_Clean&quot;``: the cleaned signal.</span>
-<span class="sd">        * ``&quot;RSP_Peaks&quot;``: the respiratory peaks (exhalation onsets) marked as &quot;1&quot; in a list of</span>
-<span class="sd">          zeros.</span>
-<span class="sd">        * ``&quot;RSP_Troughs&quot;``: the respiratory troughs (inhalation onsets) marked as &quot;1&quot; in a list of</span>
-<span class="sd">          zeros.</span>
-<span class="sd">        * ``&quot;RSP_Rate&quot;``: breathing rate interpolated between inhalation peaks.</span>
-<span class="sd">        * ``&quot;RSP_Amplitude&quot;``: breathing amplitude interpolated between inhalation peaks.</span>
-<span class="sd">        * ``&quot;RSP_Phase&quot;``: breathing phase, marked by &quot;1&quot; for inspiration and &quot;0&quot; for expiration.</span>
-<span class="sd">        * ``&quot;RSP_Phase_Completion&quot;``: breathing phase completion, expressed in percentage (from 0 to</span>
-<span class="sd">          1), representing the stage of the current respiratory phase.</span>
-<span class="sd">        * ``&quot;RSP_RVT&quot;``: respiratory volume per time (RVT).</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            RSP_Raw|The raw signal.</span>
+<span class="sd">            RSP_Clean|The raw signal.</span>
+<span class="sd">            RSP_Peaks|The respiratory peaks (exhalation onsets) marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            RSP_Troughs|The respiratory troughs (inhalation onsets) marked as &quot;1&quot; in a list \</span>
+<span class="sd">                of zeros.</span>
+<span class="sd">            RSP_Rate|The breathing rate interpolated between inhalation peaks.</span>
+<span class="sd">            RSP_Amplitude|The breathing amplitude interpolated between inhalation peaks.</span>
+<span class="sd">            RSP_Phase|The breathing phase, marked by &quot;1&quot; for inspiration and &quot;0&quot; for expiration.</span>
+<span class="sd">            RSP_Phase_Completion|The breathing phase completion, expressed in percentage \</span>
+<span class="sd">                (from 0 to 1), representing the stage of the current respiratory phase.</span>
+<span class="sd">            RSP_RVT|Respiratory volume per time (RVT).</span>
 
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,</span>

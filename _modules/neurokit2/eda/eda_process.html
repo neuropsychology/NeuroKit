@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -422,31 +424,20 @@ document.write(`
 <span class="sd">        A DataFrame of same length as ``&quot;eda_signal&quot;`` containing the following</span>
 <span class="sd">        columns:</span>
 
-<span class="sd">        * ``&quot;EDA_Raw&quot;``: the raw signal.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            EDA_Raw|The raw signal.</span>
+<span class="sd">            EDA_Clean|The cleaned signal.</span>
+<span class="sd">            EDA_Tonic|The tonic component of the signal, or the Tonic Skin Conductance Level (SCL).</span>
+<span class="sd">            EDA_Phasic|The phasic component of the signal, or the Phasic Skin Conductance Response (SCR).</span>
+<span class="sd">            SCR_Onsets|The samples at which the onsets of the peaks occur, marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            SCR_Peaks|The samples at which the peaks occur, marked as &quot;1&quot; in a list of zeros.</span>
+<span class="sd">            SCR_Height|The SCR amplitude of the signal including the Tonic component. Note that cumulative \</span>
+<span class="sd">                effects of close-occurring SCRs might lead to an underestimation of the amplitude.</span>
+<span class="sd">            SCR_Amplitude|The SCR amplitude of the signal excluding the Tonic component.</span>
+<span class="sd">            SCR_RiseTime|The SCR amplitude of the signal excluding the Tonic component.</span>
+<span class="sd">            SCR_Recovery|The samples at which SCR peaks recover (decline) to half amplitude, marked  as &quot;1&quot; \</span>
+<span class="sd">                in a list of zeros.</span>
 
-<span class="sd">        * ``&quot;EDA_Clean&quot;``: the cleaned signal.</span>
-
-<span class="sd">        * ``&quot;EDA_Tonic&quot;``: the tonic component of the signal, or the Tonic Skin Conductance Level</span>
-<span class="sd">          (SCL).</span>
-
-<span class="sd">        * ``&quot;EDA_Phasic&quot;``: the phasic component of the signal, or the Phasic Skin Conductance</span>
-<span class="sd">          Response (SCR).</span>
-
-<span class="sd">        * ``&quot;SCR_Onsets&quot;``: the samples at which the onsets of the peaks occur, marked as &quot;1&quot; in a</span>
-<span class="sd">          list of zeros.</span>
-
-<span class="sd">        * ``&quot;SCR_Peaks&quot;``: the samples at which the peaks occur, marked as &quot;1&quot; in a list of zeros.</span>
-
-<span class="sd">        * ``&quot;SCR_Height&quot;``: the SCR amplitude of the signal including the Tonic component. Note that</span>
-<span class="sd">          cumulative effects of close-occurring SCRs might lead to an underestimation of the</span>
-<span class="sd">          amplitude.</span>
-
-<span class="sd">        * ``&quot;SCR_Amplitude&quot;``: the SCR amplitude of the signal excluding the Tonic component.</span>
-
-<span class="sd">        * ``&quot;SCR_RiseTime&quot;``: the time taken for SCR onset to reach peak amplitude within the SCR.</span>
-
-<span class="sd">        * ``&quot;SCR_Recovery&quot;``: the samples at which SCR peaks recover (decline) to half amplitude,</span>
-<span class="sd">          marked  as &quot;1&quot; in a list of zeros.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        A dictionary containing the information of each SCR peak (see :func:`eda_findpeaks`),</span>
 <span class="sd">        as well as the signals&#39; sampling rate.</span>

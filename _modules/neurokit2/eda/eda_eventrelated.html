@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -412,22 +414,18 @@ document.write(`
 <span class="sd">        by the `Label` column (if not present, by the `Index` column). The analyzed features consist</span>
 <span class="sd">        the following:</span>
 
-<span class="sd">        * ``&quot;EDA_SCR&quot;``: indication of whether Skin Conductance Response (SCR) occurs following the event</span>
-<span class="sd">          (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude,</span>
-<span class="sd">          time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed</span>
-<span class="sd">          for the below features.</span>
-
-<span class="sd">        * ``&quot;EDA_Peak_Amplitude&quot;``: the maximum amplitude of the phasic component of the signal.</span>
-
-<span class="sd">        * ``&quot;SCR_Peak_Amplitude&quot;``: the peak amplitude of the first SCR in each epoch.</span>
-
-<span class="sd">        * ``&quot;SCR_Peak_Amplitude_Time&quot;``: the timepoint of each first SCR peak amplitude.</span>
-
-<span class="sd">        * ``&quot;SCR_RiseTime&quot;``: the risetime of each first SCR i.e., the time it takes for SCR to</span>
-<span class="sd">          reach peak amplitude from onset.</span>
-
-<span class="sd">        * ``&quot;SCR_RecoveryTime&quot;``: the half-recovery time of each first SCR i.e., the time it takes</span>
-<span class="sd">          for SCR to decrease to half amplitude.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            EDA_SCR|indication of whether Skin Conductance Response (SCR) occurs following the \</span>
+<span class="sd">                event (1 if an SCR onset is present and 0 if absent) and if so, its corresponding \</span>
+<span class="sd">                peak amplitude, time of peak, rise and recovery time. If there is no occurrence \</span>
+<span class="sd">                of SCR, nans are displayed for the below features.</span>
+<span class="sd">            EDA_Peak_Amplitude|The maximum amplitude of the phasic component of the signal.</span>
+<span class="sd">            SCR_Peak_Amplitude|The peak amplitude of the first SCR in each epoch.</span>
+<span class="sd">            SCR_Peak_Amplitude_Time|The timepoint of each first SCR peak amplitude.</span>
+<span class="sd">            SCR_RiseTime|The risetime of each first SCR i.e., the time it takes for SCR to \</span>
+<span class="sd">                reach peak amplitude from onset.</span>
+<span class="sd">            SCR_RecoveryTime|The half-recovery time of each first SCR i.e., the time it takes \</span>
+<span class="sd">                for SCR to decrease to half amplitude.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

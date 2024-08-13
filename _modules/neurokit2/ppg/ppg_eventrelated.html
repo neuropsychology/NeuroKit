@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -408,29 +410,23 @@ document.write(`
 <span class="sd">        by the `Label` column (if not present, by the `Index` column). The analyzed features</span>
 <span class="sd">        consist of the following:</span>
 
-<span class="sd">        * ``&quot;PPG_Rate_Baseline&quot;``: the baseline heart rate (at stimulus onset).</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Max&quot;``: the maximum heart rate after stimulus onset.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Min&quot;``: the minimum heart rate after stimulus onset.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Mean&quot;``: the mean heart rate after stimulus onset.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_SD&quot;``: the standard deviation of the heart rate after stimulus onset.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Max_Time&quot;``: the time at which maximum heart rate occurs.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Min_Time&quot;``: the time at which minimum heart rate occurs.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            PPG_Rate_Baseline|The baseline heart rate (at stimulus onset).</span>
+<span class="sd">            PPG_Rate_Max|The maximum heart rate after stimulus onset.</span>
+<span class="sd">            PPG_Rate_Min|The minimum heart rate after stimulus onset.</span>
+<span class="sd">            PPG_Rate_Mean|The mean heart rate after stimulus onset.</span>
+<span class="sd">            PPG_Rate_SD|The standard deviation of the heart rate after stimulus onset.</span>
+<span class="sd">            PPG_Rate_Max_Time|The time at which maximum heart rate occurs.</span>
+<span class="sd">            PPG_Rate_Min_Time|The time at which minimum heart rate occurs.</span>
 
 <span class="sd">        We also include the following *experimental* features related to the parameters of a</span>
 <span class="sd">        quadratic model:</span>
 
-<span class="sd">        * ``&quot;PPG_Rate_Trend_Linear&quot;``: The parameter corresponding to the linear trend.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Trend_Quadratic&quot;``: The parameter corresponding to the curvature.</span>
-
-<span class="sd">        * ``&quot;PPG_Rate_Trend_R2&quot;``: the quality of the quadratic model. If too low, the parameters</span>
-<span class="sd">          might not be reliable or meaningful.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            PPG_Rate_Trend_Linear|The parameter corresponding to the linear trend.</span>
+<span class="sd">            PPG_Rate_Trend_Quadratic|The parameter corresponding to the curvature.</span>
+<span class="sd">            PPG_Rate_Trend_R2|The quality of the quadratic model. If too low, the parameters \</span>
+<span class="sd">                might not be reliable or meaningful.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

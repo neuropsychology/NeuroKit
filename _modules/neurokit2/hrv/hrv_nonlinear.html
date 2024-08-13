@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -526,7 +528,62 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    DataFrame</span>
-<span class="sd">        Contains non-linear HRV metrics.</span>
+<span class="sd">        DataFrame consisting of the computed non-linear HRV metrics, which includes:</span>
+
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            HRV_SD1|Standard deviation perpendicular to the line of identity. It is an index of \</span>
+<span class="sd">                short-term RR interval fluctuations, i.e., beat-to-beat variability. It is \</span>
+<span class="sd">                equivalent (although on another scale) to RMSSD, and therefore it is redundant to \</span>
+<span class="sd">                report correlation with both.</span>
+<span class="sd">            HRV_SD2|Standard deviation along the identity line. Index of long-term HRV changes.</span>
+<span class="sd">            HRV_SD1SD2|Ratio of SD1 to SD2. Describes the ratio of short term to long term \</span>
+<span class="sd">                variations in HRV.</span>
+<span class="sd">            HRV_S|Area of ellipse described by *SD1* and *SD2* (``pi * SD1 * SD2``). It is \</span>
+<span class="sd">                proportional to *SD1SD2*.</span>
+<span class="sd">            HRV_CSI|The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac \</span>
+<span class="sd">                sympathetic function independent of vagal activity, calculated by dividing the \</span>
+<span class="sd">                longitudinal variability of the Poincaré plot (``4*SD2``) by its transverse \</span>
+<span class="sd">                variability (``4*SD1``).</span>
+<span class="sd">            HRV_CVI|The Cardiac Vagal Index (Toichi, 1997) is an index of cardiac parasympathetic \</span>
+<span class="sd">                function (vagal activity unaffected by sympathetic activity), and is equal equal \</span>
+<span class="sd">                to the logarithm of the product of longitudinal (``4*SD2``) and transverse \</span>
+<span class="sd">                variability (``4*SD1``).</span>
+<span class="sd">            HRV_CSI_Modified|The modified CSI (Jeppesen, 2014) obtained by dividing the square of \</span>
+<span class="sd">                the longitudinal variability by its transverse variability.</span>
+<span class="sd">            HRV_GI|Guzik&#39;s Index, defined as the distance of points above line of identity (LI) to \</span>
+<span class="sd">                LI divided by the distance of all points in Poincaré plot to LI except those that \</span>
+<span class="sd">                are located on LI.</span>
+<span class="sd">            HRV_SI|Slope Index, defined as the phase angle of points above LI divided by the phase \</span>
+<span class="sd">                angle of all points in Poincaré plot except those that are located on LI.</span>
+<span class="sd">            HRV_AI|Area Index, defined as the cumulative area of the sectors corresponding to the \</span>
+<span class="sd">                points that are located above LI divided by the cumulative area of sectors \</span>
+<span class="sd">                corresponding to all points in the Poincaré plot except those that are located \</span>
+<span class="sd">                on LI.</span>
+<span class="sd">            HRV_PI|Porta&#39;s Index, defined as the number of points below LI divided by the total \</span>
+<span class="sd">                number of points in Poincaré plot except those that are located on LI.</span>
+<span class="sd">            HRV_SD1a|Short-term variance of contributions of decelerations (prolongations of RR \</span>
+<span class="sd">                intervals), (Piskorski, 2011).</span>
+<span class="sd">            HRV_SD1d|Short-term variance of contributions of accelerations (shortenings of RR \</span>
+<span class="sd">                intervals), (Piskorski, 2011).</span>
+<span class="sd">            HRV_C1a|The contributions of heart rate accelerations to short-term HRV, (Piskorski, 2011).</span>
+<span class="sd">            HRV_C1d|The contributions of heart rate decelerations to short-term HRV, (Piskorski, 2011).</span>
+<span class="sd">            HRV_SD2a|Long-term variance of contributions of accelerations (shortenings of RR \</span>
+<span class="sd">                intervals), (Piskorski, 2011).</span>
+<span class="sd">            HRV_SD2d|Long-term variance of contributions of decelerations (prolongations of RR \</span>
+<span class="sd">                intervals),  (Piskorski, 2011).</span>
+<span class="sd">            HRV_C2a|The contributions of heart rate accelerations to long-term HRV, (Piskorski, 2011).</span>
+<span class="sd">            HRV_C2d|The contributions of heart rate decelerations to long-term HRV, (Piskorski, 2011).</span>
+<span class="sd">            HRV_SDNNa|Total variance of contributions of accelerations (shortenings of RR \</span>
+<span class="sd">                intervals), (Piskorski, 2011).</span>
+<span class="sd">            HRV_SDNNd|Total variance of contributions of decelerations (prolongations of RR \</span>
+<span class="sd">                intervals), (Piskorski, 2011).</span>
+<span class="sd">            HRV_Ca|The total contributions of heart rate accelerations to HRV.</span>
+<span class="sd">            HRV_Cd|The total contributions of heart rate decelerations to HRV.</span>
+<span class="sd">            HRV_PIP|Percentage of inflection points of the RR intervals series.</span>
+<span class="sd">            HRV_IALS|Inverse of the average length of the acceleration/deceleration segments.</span>
+<span class="sd">            HRV_PSS|Percentage of short segments.</span>
+<span class="sd">            HRV_PAS|Percentage of NN intervals in alternation segments.</span>
+
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

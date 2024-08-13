@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -483,7 +485,24 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    DataFrame</span>
-<span class="sd">        Contains frequency domain HRV metrics.</span>
+<span class="sd">        DataFrame consisting of the computed HRV frequency metrics, which includes:</span>
+
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            HRV_ULF|The spectral power of ultra low frequencies (by default, .0 to .0033 Hz). \</span>
+<span class="sd">                Very long signals are required for this to index to be extracted, otherwise, \</span>
+<span class="sd">                will return NaN.</span>
+<span class="sd">            HRV_VLF|The spectral power of very low frequencies (by default, .0033 to .04 Hz).</span>
+<span class="sd">            HRV_LF|The spectral power of low frequencies (by default, .04 to .15 Hz).</span>
+<span class="sd">            HRV_HF|The spectral power of high frequencies (by default, .15 to .4 Hz).</span>
+<span class="sd">            HRV_VHF|The spectral power of very high frequencies (by default, .4 to .5 Hz).</span>
+<span class="sd">            HRV_TP|The total spectral power.</span>
+<span class="sd">            HRV_LFHF|The ratio obtained by dividing the low frequency power by the high frequency \</span>
+<span class="sd">                power.</span>
+<span class="sd">            HRV_LFn|The normalized low frequency, obtained by dividing the low frequency power by \</span>
+<span class="sd">                the total power.</span>
+<span class="sd">            HRV_HFn|The normalized high frequency, obtained by dividing the low frequency power by \</span>
+<span class="sd">                the total power.</span>
+<span class="sd">            HRV_LnHF|The log transformed HF.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

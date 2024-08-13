@@ -164,6 +164,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
@@ -410,13 +412,15 @@ document.write(`
 <span class="sd">        A dataframe containing the analyzed RSP features.</span>
 <span class="sd">        The analyzed features consist of the following:</span>
 
-<span class="sd">        * ``&quot;RSP_Rate_Mean&quot;``: the mean respiratory rate.</span>
-<span class="sd">        * ``&quot;RSP_Amplitude_Mean&quot;``: the mean respiratory amplitude.</span>
+<span class="sd">        .. codebookadd::</span>
+<span class="sd">            RSP_Rate_Mean|The mean respiratory rate.</span>
+<span class="sd">            RSP_Amplitude_Mean|The mean respiratory amplitude.</span>
+<span class="sd">            RSP_Phase_Duration_Inspiration|The average inspiration duration.</span>
+<span class="sd">            RSP_Phase_Duration_Expiration|The average expiration duration.</span>
+<span class="sd">            RSP_Phase_Duration_Ratio|The inspiration-to-expiratory time ratio (I/E).</span>
+
 <span class="sd">        * ``&quot;RSP_RRV&quot;``: the different respiratory rate variability metrices.</span>
 <span class="sd">          See :func:`.rsp_rrv` docstrings for details.</span>
-<span class="sd">        * ``&quot;RSP_Phase_Duration_Inspiration&quot;``: the average inspiratory duration.</span>
-<span class="sd">        * ``&quot;RSP_Phase_Duration_Expiration&quot;``: the average expiratory duration.</span>
-<span class="sd">        * ``&quot;RSP_Phase_Duration_Ratio &quot;``: the inspiratory-to-expiratory time ratio (I/E).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
