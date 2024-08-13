@@ -28,13 +28,15 @@ def rsp_intervalrelated(data, sampling_rate=1000):
         A dataframe containing the analyzed RSP features.
         The analyzed features consist of the following:
 
-        * ``"RSP_Rate_Mean"``: the mean respiratory rate.
-        * ``"RSP_Amplitude_Mean"``: the mean respiratory amplitude.
+        .. codebookadd::
+            RSP_Rate_Mean|The mean respiratory rate.
+            RSP_Amplitude_Mean|The mean respiratory amplitude.
+            RSP_Phase_Duration_Inspiration|The average inspiration duration.
+            RSP_Phase_Duration_Expiration|The average expiration duration.
+            RSP_Phase_Duration_Ratio|The inspiration-to-expiratory time ratio (I/E).
+
         * ``"RSP_RRV"``: the different respiratory rate variability metrices.
           See :func:`.rsp_rrv` docstrings for details.
-        * ``"RSP_Phase_Duration_Inspiration"``: the average inspiratory duration.
-        * ``"RSP_Phase_Duration_Expiration"``: the average expiratory duration.
-        * ``"RSP_Phase_Duration_Ratio "``: the inspiratory-to-expiratory time ratio (I/E).
 
     See Also
     --------

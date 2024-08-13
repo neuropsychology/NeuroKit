@@ -19,8 +19,10 @@ def emg_intervalrelated(data):
     -------
     DataFrame
         A dataframe containing the analyzed EMG features. The analyzed features consist of the following:
-        * ``"EMG_Activation_N"``: the number of bursts of muscular activity.
-        * ``"EMG_Amplitude_Mean"``: the mean amplitude of the muscular activity.
+
+        .. codebookadd::
+            EMG_Activation_N|The number of bursts of muscular activity.
+            ECG_Amplitude_Mean|The mean amplitude of the muscular activity.
 
     See Also
     --------

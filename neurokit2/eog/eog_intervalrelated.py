@@ -22,9 +22,9 @@ def eog_intervalrelated(data):
         A dataframe containing the analyzed EOG features. The analyzed features consist of the
         following:
 
-        * ``"EOG_Rate_Mean"``: the mean heart rate.
-
-        * ``"EOG_Peaks_N"``: the number of blink peak occurrences.
+        .. codebookadd::
+            EOG_Rate_Mean|The mean EOG value.
+            EOG_Peaks_N|The number of blink peak occurrences.
 
     See Also
     --------

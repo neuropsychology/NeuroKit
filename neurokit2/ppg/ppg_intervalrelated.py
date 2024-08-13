@@ -23,7 +23,8 @@ def ppg_intervalrelated(data, sampling_rate=1000):
     DataFrame
         A dataframe containing the analyzed PPG features. The analyzed features consist of the following:
 
-        * ``"PPG_Rate_Mean"``: the mean heart rate.
+        .. codebookadd::
+            PPG_Rate_Mean|The mean PPG rate.
 
         * ``"HRV"``: the different heart rate variability metrices.
 

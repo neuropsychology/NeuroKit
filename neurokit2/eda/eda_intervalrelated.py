@@ -33,9 +33,11 @@ def eda_intervalrelated(data, sampling_rate=1000, **kwargs):
         A dataframe containing the analyzed EDA features. The analyzed
         features consist of the following:
 
-        * ``"SCR_Peaks_N"``: the number of occurrences of Skin Conductance Response (SCR).
-        * ``"SCR_Peaks_Amplitude_Mean"``: the mean amplitude of the SCR peak occurrences.
-        * ``"EDA_Tonic_SD"``: the mean amplitude of the SCR peak occurrences.
+        .. codebookadd::
+            SCR_Peaks_N|The number of occurrences of Skin Conductance Response (SCR).
+            SCR_Peaks_Amplitude_Mean|The mean amplitude of the SCR peak occurrences.
+            EDA_Tonic_SD|The mean amplitude of the SCR peak occurrences.
+
         * ``"EDA_Sympathetic"``: see :func:`eda_sympathetic` (only computed if signal duration
           > 64 sec).
         * ``"EDA_Autocorrelation"``: see :func:`eda_autocor` (only computed if signal duration

@@ -35,6 +35,7 @@ You can navigate to the different sections using the left panel. We recommend ch
    installation
    authors
    cite_us
+   codebook
    examples/index
    functions/index
    resources/index

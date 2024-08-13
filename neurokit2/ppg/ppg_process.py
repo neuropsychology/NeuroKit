@@ -44,10 +44,11 @@ def ppg_process(
     signals : DataFrame
         A DataFrame of same length as :func:`.ppg_signal` containing the following columns:
 
-        * ``"PPG_Raw"``: the raw signal.
-        * ``"PPG_Clean"``: the cleaned signal.
-        * ``"PPG_Rate"``: the heart rate as measured based on PPG peaks.
-        * ``"PPG_Peaks"``: the PPG peaks marked as "1" in a list of zeros.
+        .. codebookadd::
+            PPG_Raw|The raw signal.
+            PPG_Clean|The cleaned signal.
+            PPG_Rate|The heart rate as measured based on PPG peaks.
+            PPG_Peaks|The PPG peaks marked as "1" in a list of zeros.
 
     info : dict
         A dictionary containing the information of peaks and the signals' sampling rate.

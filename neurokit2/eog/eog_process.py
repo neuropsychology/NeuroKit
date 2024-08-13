@@ -30,10 +30,11 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
     signals : DataFrame
         A DataFrame of the same length as the :func:`.eog_signal` containing the following columns:
 
-        * ``"EOG_Raw"``: the raw signal.
-        * ``"EOG_Clean"``: the cleaned signal.
-        * ``"EOG_Blinks"``: the blinks marked as "1" in a list of zeros.
-        * ``"EOG_Rate"``: eye blinks rate interpolated between blinks.
+        .. codebookadd::
+            EOG_Raw|The raw signal.
+            EOG_Clean|The cleaned signal.
+            EOG_Blinks|The blinks marked as "1" in a list of zeros.
+            EOG_Rate|Eye blink rate interpolated between blinks
 
     info : dict
         A dictionary containing the samples at which the eye blinks occur, accessible with the key
