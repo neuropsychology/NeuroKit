@@ -969,7 +969,7 @@ document.write(`
         <span class="p">)</span>
         <span class="n">ATv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-        <span class="n">gammaI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>
+        <span class="n">gammaI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="n">removeIndices</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">inactiveSet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
@@ -988,7 +988,7 @@ document.write(`
             <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-12</span>
             <span class="n">gammaArr</span> <span class="o">=</span> <span class="p">(</span><span class="n">lmbda</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="n">inactiveSet</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ATv</span><span class="p">[</span><span class="n">inactiveSet</span><span class="p">]</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span>
 
-            <span class="n">gammaArr</span><span class="p">[</span><span class="n">gammaArr</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>
+            <span class="n">gammaArr</span><span class="p">[</span><span class="n">gammaArr</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
             <span class="n">gammaIc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gammaArr</span><span class="p">)</span>
             <span class="c1"># Imin = np.argmin(gammaArr)</span>
             <span class="n">newIndices</span> <span class="o">=</span> <span class="n">inactiveSet</span><span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">gammaArr</span> <span class="o">-</span> <span class="n">gammaIc</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">zeroTol</span><span class="p">)]</span>
