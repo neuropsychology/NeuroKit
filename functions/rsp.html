@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RSP &#8212; NeuroKit2 0.2.10 documentation</title>
+    <title>RSP &#8212; NeuroKit2 0.2.11 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=1db4c2ab"></script>
+    <script src="../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -141,8 +141,8 @@
       
     
     
-    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.10 documentation - Home"/>
-    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.10 documentation - Home"/>`);</script>
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -602,7 +602,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         14.3002 |       1.64362 |</span>
+<span class="go">|         15.2867 |       2.50492 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1344,8 +1344,8 @@ breath-to-breath interval. Defaults to <code class="docutils literal notranslate
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  904.483249      3866.0  523.831431  ...    0.520712  0.164821         inf</span>
+<span class="go">     RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  1061.581442      3867.5  714.585526  ...     0.84946  0.091859         inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1486,9 +1486,9 @@ consist of the following:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.188585      0.013104</span>
-<span class="go">2     2        10000  ...          0.168175      0.008332</span>
-<span class="go">3     3        15000  ...          0.187799      0.033271</span>
+<span class="go">1     1         5000  ...          0.295043     -0.022565</span>
+<span class="go">2     2        10000  ...          0.205392      0.000068</span>
+<span class="go">3     3        15000  ...          0.201320      0.028751</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1694,7 +1694,7 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  0.943138  0.038874   0.035168  0.037288</span>
+<span class="go">0  0.933204  0.083068   0.085115  0.091208</span>
 </pre></div>
 </div>
 </dd></dl>
