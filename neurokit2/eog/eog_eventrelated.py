@@ -31,21 +31,15 @@ def eog_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
-        * ``"EOG_Rate_Baseline"``: the baseline EOG rate before stimulus onset.
-
-        * ``"EOG_Rate_Max"``: the maximum EOG rate after stimulus onset.
-
-        * ``"EOG_Rate_Min"``: the minimum EOG rate after stimulus onset.
-
-        * ``"EOG_Rate_Mean"``: the mean EOG rate after stimulus onset.
-
-        * ``"EOG_Rate_SD"``: the standard deviation of the EOG rate after stimulus onset.
-
-        * ``"EOG_Rate_Max_Time"``: the time at which maximum EOG rate occurs.
-
-        * ``"EOG_Rate_Min_Time"``: the time at which minimum EOG rate occurs.
-
-        * ``"EOG_Blinks_Presence"``: marked with '1' if a blink occurs in the epoch, and '0' if not.
+        .. codebookadd::
+            EOG_Rate_Baseline|The baseline EOG rate before stimulus onset.
+            EOG_Rate_Max|The maximum EOG rate after stimulus onset.
+            EOG_Rate_Min|The minimum EOG rate after stimulus onset.
+            EOG_Rate_Mean|The mean EOG rate after stimulus onset.
+            EOG_Rate_SD|The standard deviation of the EOG rate after stimulus onset.
+            EOG_Rate_Max_Time|The time at which maximum EOG rate occurs.
+            EOG_Rate_Min_Time|The time at which minimum EOG rate occurs.
+            EOG_Blinks_Presence|Marked with '1' if a blink occurs in the epoch, and '0' if not.
 
     See Also
     --------

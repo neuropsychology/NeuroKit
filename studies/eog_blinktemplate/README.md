@@ -33,7 +33,7 @@ the functions parameters on this cleaner subset of events.
 
 ## Study 1: Initial Estimation
 
-### Methods
+### Initial Estimation Methods
 
 #### Define Functions
 
@@ -61,7 +61,7 @@ def fit_scr(x, time_peak, rise, decay1, decay2):
     ft = ft[0 : len(x)]
     y = ft / np.max(ft)
     return y
-    
+
 # Starting parameters
 plt.plot(fit_gamma(np.arange(100), 3, 3, 0.5), linewidth=2, linestyle='-', color="#4CAF50", label='Gamma')
 plt.plot(fit_scr(np.arange(100), 3.5, 0.5, 1, 1), linewidth=2, linestyle='-', color="#9C27B0", label='SCR')
@@ -121,7 +121,7 @@ for i in range(4):
         params_scr = pd.concat([params_scr, p_scr], axis=0)
 ```
 
-### Results
+### Initial Estimation Results
 
 Visualize the optimal templates for one task.
 
@@ -151,7 +151,7 @@ plt.clf()
 
 ## Study 2: Difference between Template and EOG Events
 
-### Methods
+### Template vs. EOG Event Methods
 
 ``` python
 data_rmse = pd.DataFrame(columns=["RMSE", "Index", "Participant", "Task", "Function"])
@@ -191,7 +191,7 @@ for i in range(4):
         data_rmse = pd.concat([data_rmse, rmse], axis=0)
 ```
 
-### Results
+### Template vs. EOG Event Results
 
 ``` python
 p = data_rmse.pivot(index='Index', columns='Function', values='RMSE').plot.kde()
@@ -205,7 +205,7 @@ plt.clf()
 
 ## Study 3: Optimize the Parameters
 
-### Methods
+### Parameter Optimization Methods
 
 ``` python
 optimal_gamma = np.nanmedian(params_gamma.iloc[:, [0, 1, 2]], axis=0)
@@ -308,7 +308,7 @@ print(df.median(axis=0))
 ## dtype: float64
 ```
 
-### Results
+### Parameter Optimization Results
 
 ``` python
 data = pd.read_csv("../../data/eogdb/eogdb_task3.csv")

@@ -26,29 +26,23 @@ def ppg_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
-        * ``"PPG_Rate_Baseline"``: the baseline heart rate (at stimulus onset).
-
-        * ``"PPG_Rate_Max"``: the maximum heart rate after stimulus onset.
-
-        * ``"PPG_Rate_Min"``: the minimum heart rate after stimulus onset.
-
-        * ``"PPG_Rate_Mean"``: the mean heart rate after stimulus onset.
-
-        * ``"PPG_Rate_SD"``: the standard deviation of the heart rate after stimulus onset.
-
-        * ``"PPG_Rate_Max_Time"``: the time at which maximum heart rate occurs.
-
-        * ``"PPG_Rate_Min_Time"``: the time at which minimum heart rate occurs.
+        .. codebookadd::
+            PPG_Rate_Baseline|The baseline heart rate (at stimulus onset).
+            PPG_Rate_Max|The maximum heart rate after stimulus onset.
+            PPG_Rate_Min|The minimum heart rate after stimulus onset.
+            PPG_Rate_Mean|The mean heart rate after stimulus onset.
+            PPG_Rate_SD|The standard deviation of the heart rate after stimulus onset.
+            PPG_Rate_Max_Time|The time at which maximum heart rate occurs.
+            PPG_Rate_Min_Time|The time at which minimum heart rate occurs.
 
         We also include the following *experimental* features related to the parameters of a
         quadratic model:
 
-        * ``"PPG_Rate_Trend_Linear"``: The parameter corresponding to the linear trend.
-
-        * ``"PPG_Rate_Trend_Quadratic"``: The parameter corresponding to the curvature.
-
-        * ``"PPG_Rate_Trend_R2"``: the quality of the quadratic model. If too low, the parameters
-          might not be reliable or meaningful.
+        .. codebookadd::
+            PPG_Rate_Trend_Linear|The parameter corresponding to the linear trend.
+            PPG_Rate_Trend_Quadratic|The parameter corresponding to the curvature.
+            PPG_Rate_Trend_R2|The quality of the quadratic model. If too low, the parameters \
+                might not be reliable or meaningful.
 
     See Also
     --------

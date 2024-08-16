@@ -21,7 +21,7 @@ import platform
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath("../"))
 
 
@@ -69,6 +69,7 @@ extensions = [
     "sphinxemoji.sphinxemoji",
     "sphinx_copybutton",
     "myst_nb",
+    "directives.csv_codebook_directive",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -131,7 +132,7 @@ html_theme_options = {
     "use_issues_button": True,
     "path_to_docs": "docs/",
     "use_edit_page_button": True,
-    "logo_only": True,
+    # "logo_only": True,
     "show_toc_level": 1,
     "navigation_with_keys": False,
 }

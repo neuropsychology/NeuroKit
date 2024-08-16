@@ -3,9 +3,11 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
-                                         _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 from ..misc import NeuroKitWarning
 
 
@@ -28,22 +30,18 @@ def eda_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features consist
         the following:
 
-        * ``"EDA_SCR"``: indication of whether Skin Conductance Response (SCR) occurs following the event
-          (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude,
-          time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed
-          for the below features.
-
-        * ``"EDA_Peak_Amplitude"``: the maximum amplitude of the phasic component of the signal.
-
-        * ``"SCR_Peak_Amplitude"``: the peak amplitude of the first SCR in each epoch.
-
-        * ``"SCR_Peak_Amplitude_Time"``: the timepoint of each first SCR peak amplitude.
-
-        * ``"SCR_RiseTime"``: the risetime of each first SCR i.e., the time it takes for SCR to
-          reach peak amplitude from onset.
-
-        * ``"SCR_RecoveryTime"``: the half-recovery time of each first SCR i.e., the time it takes
-          for SCR to decrease to half amplitude.
+        .. codebookadd::
+            EDA_SCR|indication of whether Skin Conductance Response (SCR) occurs following the \
+                event (1 if an SCR onset is present and 0 if absent) and if so, its corresponding \
+                peak amplitude, time of peak, rise and recovery time. If there is no occurrence \
+                of SCR, nans are displayed for the below features.
+            EDA_Peak_Amplitude|The maximum amplitude of the phasic component of the signal.
+            SCR_Peak_Amplitude|The peak amplitude of the first SCR in each epoch.
+            SCR_Peak_Amplitude_Time|The timepoint of each first SCR peak amplitude.
+            SCR_RiseTime|The risetime of each first SCR i.e., the time it takes for SCR to \
+                reach peak amplitude from onset.
+            SCR_RecoveryTime|The half-recovery time of each first SCR i.e., the time it takes \
+                for SCR to decrease to half amplitude.
 
     See Also
     --------
@@ -134,7 +132,7 @@ def _eda_eventrelated_eda(epoch, output={}):
         warn(
             "Input does not have an `EDA_Phasic` column."
             " Will skip computation of maximum amplitude of phasic EDA component.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -149,7 +147,7 @@ def _eda_eventrelated_scr(epoch, output={}):
         warn(
             "Input does not have an `SCR_Amplitude` column."
             " Will skip computation of SCR peak amplitude.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -157,7 +155,7 @@ def _eda_eventrelated_scr(epoch, output={}):
         warn(
             "Input does not have an `SCR_RecoveryTime` column."
             " Will skip computation of SCR half-recovery times.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -165,23 +163,23 @@ def _eda_eventrelated_scr(epoch, output={}):
         warn(
             "Input does not have an `SCR_RiseTime` column."
             " Will skip computation of SCR rise times.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
-    # Peak amplitude and Time of peak
-    first_activation = np.where(epoch["SCR_Amplitude"][epoch.index > 0] != 0)[0][0]
-    peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
-    output["SCR_Peak_Amplitude"] = peak_amplitude
-    output["SCR_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
-    # Rise Time
-    rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
-    output["SCR_RiseTime"] = rise_time
+    epoch_postevent = epoch[epoch.index > 0]
+    # Peak amplitude
+    first_peak = np.where(epoch_postevent["SCR_Amplitude"] != 0)[0][0]
+    output["SCR_Peak_Amplitude"] = epoch_postevent["SCR_Amplitude"].iloc[first_peak]
+    # Time of peak (Raw, from epoch onset)
+    output["SCR_Peak_Amplitude_Time"] = epoch_postevent.index[first_peak]
+    # Rise Time (From the onset of the peak)
+    output["SCR_RiseTime"] = epoch_postevent["SCR_RiseTime"].iloc[first_peak]
 
-    # Recovery Time
+    # Recovery Time (from peak to half recovery time)
     if any(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0):
-        recovery_time = np.where(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0)[0][0]
-        output["SCR_RecoveryTime"] = recovery_time
+        recov_t = np.where(epoch_postevent["SCR_RecoveryTime"] != 0)[0][0]
+        output["SCR_RecoveryTime"] = epoch_postevent["SCR_RecoveryTime"].iloc[recov_t]
     else:
         output["SCR_RecoveryTime"] = np.nan
 

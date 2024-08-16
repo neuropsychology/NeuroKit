@@ -47,6 +47,12 @@ def eda_sympathetic(
         ``"EDA_Sympathetic"`` and ``"EDA_SympatheticN"`` (normalized, obtained by dividing EDA_Symp
         by total power).
 
+        .. codebookadd::
+            EDA_Sympathetic|Derived from Posada-Quintero et al. (2016), who argue that dynamics of \
+                the sympathetic component of EDA signal is represented in the frequency band of 0.045-0.25Hz.
+            EDA_SympatheticN|normalized version of "EDA_Sympathetic" obtained by dividing \
+                EDA_Sympathetic by total power
+
     Examples
     --------
     .. ipython:: python
