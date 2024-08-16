@@ -584,7 +584,7 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
         )
         ATv = np.matmul(R.transpose(), v).flatten()
 
-        gammaI = np.Inf
+        gammaI = np.inf
         removeIndices = []
 
         inactiveSet = np.arange(0, W)
@@ -603,7 +603,7 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
             epsilon = 1e-12
             gammaArr = (lmbda - c[inactiveSet]) / (1 - ATv[inactiveSet] + epsilon)
 
-            gammaArr[gammaArr < zeroTol] = np.Inf
+            gammaArr[gammaArr < zeroTol] = np.inf
             gammaIc = np.min(gammaArr)
             # Imin = np.argmin(gammaArr)
             newIndices = inactiveSet[(np.abs(gammaArr - gammaIc) < zeroTol)]
