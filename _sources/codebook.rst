@@ -23,8 +23,6 @@ Codebook Table
     #csvDataTable {
         width: 100%;
         border-collapse: collapse;
-        .. background-color: #f8f8f8;
-        color: white;
     }
     #csvDataTable th, #csvDataTable td {
         padding: 8px 12px;
