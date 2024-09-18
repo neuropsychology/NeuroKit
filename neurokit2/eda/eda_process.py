@@ -50,7 +50,7 @@ def eda_process(
             SCR_Height|The SCR amplitude of the signal including the Tonic component. Note that cumulative \
                 effects of close-occurring SCRs might lead to an underestimation of the amplitude.
             SCR_Amplitude|The SCR amplitude of the signal excluding the Tonic component.
-            SCR_RiseTime|The SCR amplitude of the signal excluding the Tonic component.
+            SCR_RiseTime|The time taken for SCR onset to reach peak amplitude within the SCR.
             SCR_Recovery|The samples at which SCR peaks recover (decline) to half amplitude, marked  as "1" \
                 in a list of zeros.
 
