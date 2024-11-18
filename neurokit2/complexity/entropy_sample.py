@@ -6,15 +6,7 @@ from .optim_complexity_tolerance import complexity_tolerance
 from .utils_entropy import _phi, _phi_divide
 
 
-def entropy_sample(
-        signal, 
-        delay=1, 
-        dimension=2, 
-        tolerance="sd", 
-        func_name="exp",
-        fuzzy_tolerance=(0.2,2),
-        block_size=10, 
-        **kwargs):
+def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", func_name="exp", **kwargs):
     """**Sample Entropy (SampEn)**
 
     Compute the sample entropy (SampEn) of a signal. SampEn is a modification
@@ -38,6 +30,16 @@ def entropy_sample(
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
+    func_name: string
+        The name of membership functions. Choose in
+        exp    : exponential
+        gauss  : gaussian
+        cgauss : constgaussian
+        bell   : bell
+        z      : z
+        trapez : trapezoidal
+        tri    : triangular
+        sig    : sigmoid    
     **kwargs : optional
         Other arguments.
 
@@ -72,9 +74,7 @@ def entropy_sample(
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
-        )
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
     # Store parameters
     info = {
@@ -96,8 +96,6 @@ def entropy_sample(
         tolerance=info["Tolerance"],
         approximate=False,
         func_name=func_name,
-        fuzzy_tolerance=fuzzy_tolerance,
-        block_size=block_size,
         **kwargs
     )
 

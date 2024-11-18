@@ -3,16 +3,7 @@ from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 
 
-def entropy_fuzzy(
-        signal, 
-        delay=1, 
-        dimension=2, 
-        tolerance="sd", 
-        approximate=False, 
-        func_name="exp",
-        fuzzy_tolerance=(0.2,2),
-        block_size=10, 
-        **kwargs):
+def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=False, func_name="exp", **kwargs):
     """**Fuzzy Entropy (FuzzyEn)**
 
     Fuzzy entropy (FuzzyEn) of a signal stems from the combination between information theory and
@@ -39,6 +30,19 @@ def entropy_fuzzy(
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     approximate : bool
         If ``True``, will compute the fuzzy approximate entropy (FuzzyApEn).
+    func_name: string
+        The name of membership functions. Choose in
+        exp    : exponential
+        gauss  : gaussian
+        cgauss : constgaussian
+        bell   : bell
+        z      : z
+        trapez : trapezoidal
+        tri    : triangular
+        sig    : sigmoid
+
+
+
     **kwargs
         Other arguments.
 
@@ -88,8 +92,6 @@ def entropy_fuzzy(
             tolerance=tolerance,
             fuzzy=True,
             func_name=func_name,
-            fuzzy_tolerance=fuzzy_tolerance,
-            block_size=block_size,
             **kwargs,
         )
     else:
@@ -99,9 +101,6 @@ def entropy_fuzzy(
             dimension=dimension,
             tolerance=tolerance,
             fuzzy=True,
-            #func_name=func_name,
-            #fuzzy_tolerance=fuzzy_tolerance,
-            #block_size=block_size,
             **kwargs,
         )
     return out
