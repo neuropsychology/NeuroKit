@@ -3,7 +3,16 @@ from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 
 
-def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=False, **kwargs):
+def entropy_fuzzy(
+        signal, 
+        delay=1, 
+        dimension=2, 
+        tolerance="sd", 
+        approximate=False, 
+        func_name="exp",
+        fuzzy_tolerance=(0.2,2),
+        block_size=10, 
+        **kwargs):
     """**Fuzzy Entropy (FuzzyEn)**
 
     Fuzzy entropy (FuzzyEn) of a signal stems from the combination between information theory and
@@ -78,6 +87,9 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
             dimension=dimension,
             tolerance=tolerance,
             fuzzy=True,
+            func_name=func_name,
+            fuzzy_tolerance=fuzzy_tolerance,
+            block_size=block_size,
             **kwargs,
         )
     else:
@@ -87,6 +99,9 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
             dimension=dimension,
             tolerance=tolerance,
             fuzzy=True,
+            #func_name=func_name,
+            #fuzzy_tolerance=fuzzy_tolerance,
+            #block_size=block_size,
             **kwargs,
         )
     return out

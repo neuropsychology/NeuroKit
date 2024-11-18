@@ -6,7 +6,15 @@ from .optim_complexity_tolerance import complexity_tolerance
 from .utils_entropy import _phi, _phi_divide
 
 
-def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
+def entropy_sample(
+        signal, 
+        delay=1, 
+        dimension=2, 
+        tolerance="sd", 
+        func_name="exp",
+        fuzzy_tolerance=(0.2,2),
+        block_size=10, 
+        **kwargs):
     """**Sample Entropy (SampEn)**
 
     Compute the sample entropy (SampEn) of a signal. SampEn is a modification
@@ -87,6 +95,9 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
         dimension=dimension,
         tolerance=info["Tolerance"],
         approximate=False,
+        func_name=func_name,
+        fuzzy_tolerance=fuzzy_tolerance,
+        block_size=block_size,
         **kwargs
     )
 

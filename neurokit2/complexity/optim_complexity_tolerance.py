@@ -11,7 +11,12 @@ from .utils_entropy import _entropy_apen
 
 
 def complexity_tolerance(
-    signal, method="maxApEn", r_range=None, delay=None, dimension=None, show=False
+    signal, 
+    method="maxApEn", 
+    r_range=None, 
+    delay=None, 
+    dimension=None, 
+    show=False
 ):
     """**Automated selection of tolerance (r)**
 
