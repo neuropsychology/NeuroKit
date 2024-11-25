@@ -39,7 +39,7 @@ SCR_Onsets,"The samples at which the onsets of the peaks occur, marked as ""1"" 
 SCR_Peaks,"The samples at which the peaks occur, marked as ""1"" in a list of zeros.",Electrodermal Activity,eda_process.py
 SCR_Height,The SCR amplitude of the signal including the Tonic component. Note that cumulative effects of close-occurring SCRs might lead to an underestimation of the amplitude.,Electrodermal Activity,eda_process.py
 SCR_Amplitude,The SCR amplitude of the signal excluding the Tonic component.,Electrodermal Activity,eda_process.py
-SCR_RiseTime,The SCR amplitude of the signal excluding the Tonic component.,Electrodermal Activity,eda_process.py
+SCR_RiseTime,The time taken for SCR onset to reach peak amplitude within the SCR.,Electrodermal Activity,eda_process.py
 SCR_Recovery,"The samples at which SCR peaks recover (decline) to half amplitude, marked as ""1"" in a list of zeros.",Electrodermal Activity,eda_process.py
 EDA_SCR,"indication of whether Skin Conductance Response (SCR) occurs following the event (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude, time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed for the below features.",Electrodermal Activity,eda_eventrelated.py
 EDA_Peak_Amplitude,The maximum amplitude of the phasic component of the signal.,Electrodermal Activity,eda_eventrelated.py
