@@ -91,6 +91,11 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     --------
     ecg_peaks, ppg_peaks, hrv_frequency, hrv_summary, hrv_nonlinear
 
+    Notes
+    -----
+
+    Where applicable, the unit used for these metrics is the millisecond.
+
     Examples
     --------
     .. ipython:: python
