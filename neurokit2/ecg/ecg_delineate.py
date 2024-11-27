@@ -55,6 +55,7 @@ def ecg_delineate(
         The ``"prominence"`` method might be useful to detect the waves, allowing to set individual physiological
         limits (see kwargs), while the ``"dwt"`` method might be more precise for detecting the onsets and offsets
         of the waves (but might exhibit lower accuracy when there is significant variation in wave morphology).
+        The ``"peak"`` method, which uses the zero-crossings of the signal derivatives, works best with very clean signals.
     show : bool
         If ``True``, will return a plot to visualizing the delineated waves information.
     show_type: str
