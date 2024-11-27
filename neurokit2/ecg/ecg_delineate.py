@@ -49,7 +49,7 @@ def ecg_delineate(
     sampling_rate : int
         The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        Can be one of ``"peak"`` for a peak-based method, ``"prominence"`` for a peak-prominence-based method,
+        Can be one of ``"peak"`` for a peak-based method, ``"prominence"`` for a peak-prominence-based method (Emrich et al., 2024),
         ``"cwt"`` for continuous wavelet transform or ``"dwt"`` (default) for discrete wavelet transform.
     show : bool
         If ``True``, will return a plot to visualizing the delineated waves information.
@@ -753,7 +753,7 @@ def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
 
 
 # =============================================================================
-# PROMINENCE METHOD
+# PROMINENCE METHOD (Emrich et al., 2024)
 # =============================================================================
 def _prominence_ecg_delineator(ecg, rpeaks=None, sampling_rate=1000, **kwargs):
     # pysiology-informed boundaries in milliseconds, adapt if needed
