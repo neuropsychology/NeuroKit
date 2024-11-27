@@ -49,9 +49,12 @@ def ecg_delineate(
     sampling_rate : int
         The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        Can be one of ``"peak"`` for a peak-based method, ``"prominence"`` for a peak-prominence-based 
-        method (Emrich et al., 2024), ...
-        ``"cwt"`` for continuous wavelet transform or ``"dwt"`` (default) for discrete wavelet transform.
+        Can be one of ``"peak"`` for a peak-based method, ``"prominence"`` for a peak-prominence-based
+        method (Emrich et al., 2024), ``"cwt"`` for continuous wavelet transform or ``"dwt"`` (default)
+        for discrete wavelet transform.
+        The ``"prominence"`` method might be useful to detect the waves, allowing to set individual physiological
+        limits (see kwargs), while the ``"dwt"`` method might be more precise for detecting the onsets and offsets
+        of the waves (but might exhibit lower accuracy when there is significant variation in wave morphology).
     show : bool
         If ``True``, will return a plot to visualizing the delineated waves information.
     show_type: str
