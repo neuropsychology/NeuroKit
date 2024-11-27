@@ -414,8 +414,13 @@
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ecg_signal`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be one of ``&quot;peak&quot;`` for a peak-based method, ``&quot;cwt&quot;`` for continuous wavelet transform</span>
-<span class="sd">        or ``&quot;dwt&quot;`` (default) for discrete wavelet transform.</span>
+<span class="sd">        Can be one of ``&quot;peak&quot;`` for a peak-based method, ``&quot;prominence&quot;`` for a peak-prominence-based</span>
+<span class="sd">        method (Emrich et al., 2024), ``&quot;cwt&quot;`` for continuous wavelet transform or ``&quot;dwt&quot;`` (default)</span>
+<span class="sd">        for discrete wavelet transform.</span>
+<span class="sd">        The ``&quot;prominence&quot;`` method might be useful to detect the waves, allowing to set individual physiological</span>
+<span class="sd">        limits (see kwargs), while the ``&quot;dwt&quot;`` method might be more precise for detecting the onsets and offsets</span>
+<span class="sd">        of the waves (but might exhibit lower accuracy when there is significant variation in wave morphology).</span>
+<span class="sd">        The ``&quot;peak&quot;`` method, which uses the zero-crossings of the signal derivatives, works best with very clean signals.</span>
 <span class="sd">    show : bool</span>
 <span class="sd">        If ``True``, will return a plot to visualizing the delineated waves information.</span>
 <span class="sd">    show_type: str</span>
@@ -425,7 +430,16 @@
 <span class="sd">        Defaults to ``False``. If ``True``, replaces the delineated features with ``np.nan`` if its</span>
 <span class="sd">        standardized distance from R-peaks is more than 3.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        Other optional arguments.</span>
+<span class="sd">        Other optional arguments:</span>
+<span class="sd">        If using the ``&quot;prominence&quot;`` method, additional parameters (in milliseconds) can be passed to set</span>
+<span class="sd">        individual physiological limits for the search boundaries:</span>
+<span class="sd">        - ``max_qrs_interval``: The maximum allowable QRS complex interval. Defaults to 180 ms.</span>
+<span class="sd">        - ``max_pr_interval``: The maximum PR interval duration. Defaults to 300 ms.</span>
+<span class="sd">        - ``max_r_rise_time``: Maximum duration for the R-wave rise. Defaults to 120 ms.</span>
+<span class="sd">        - ``typical_st_segment``: Typical duration of the ST segment. Defaults to 150 ms.</span>
+<span class="sd">        - ``max_p_basepoint_interval``: The maximum interval between P-wave on- and offset. Defaults to 100 ms.</span>
+<span class="sd">        - ``max_r_basepoint_interval``: The maximum interval between R-wave on- and offset. Defaults to 100 ms.</span>
+<span class="sd">        - ``max_t_basepoint_interval``: The maximum interval between T-wave on- and offset. Defaults to 200 ms.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -436,7 +450,7 @@
 <span class="sd">        ``&quot;ECG_Q_Peaks&quot;``, ``&quot;ECG_S_Peaks&quot;``, ``&quot;ECG_T_Peaks&quot;``, ``&quot;ECG_P_Onsets&quot;``,</span>
 <span class="sd">        ``&quot;ECG_T_Offsets&quot;``, respectively.</span>
 
-<span class="sd">        For wavelet methods, in addition to the above information, the dictionary contains the</span>
+<span class="sd">        For the wavelet and prominence methods, in addition to the above information, the dictionary contains the</span>
 <span class="sd">        samples at which QRS-onsets and QRS-offsets occur, accessible with the key</span>
 <span class="sd">        ``&quot;ECG_P_Peaks&quot;``, ``&quot;ECG_T_Peaks&quot;``, ``&quot;ECG_P_Onsets&quot;``, ``&quot;ECG_P_Offsets&quot;``,</span>
 <span class="sd">        ``&quot;ECG_Q_Peaks&quot;``, ``&quot;ECG_S_Peaks&quot;``, ``&quot;ECG_T_Onsets&quot;``, ``&quot;ECG_T_Offsets&quot;``,</span>
@@ -479,6 +493,8 @@
 <span class="sd">    - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., &amp; Laguna, P. (2004). A wavelet-based</span>
 <span class="sd">      ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering,</span>
 <span class="sd">      51(4), 570-581.</span>
+<span class="sd">    - Emrich, J., Gargano, A., Koka, T., &amp; Muma, M. (2024). Physiology-Informed ECG Delineation Based</span>
+<span class="sd">      on Peak Prominence. 32nd European Signal Processing Conference (EUSIPCO), 1402-1406.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input for ecg_cleaned</span>
@@ -527,10 +543,12 @@
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> <span class="s2">&quot;discrete wavelet transform&quot;</span><span class="p">]:</span>
         <span class="n">waves</span> <span class="o">=</span> <span class="n">_dwt_ecg_delineator</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;prominence&quot;</span><span class="p">,</span> <span class="s2">&quot;peak-prominence&quot;</span><span class="p">,</span> <span class="s2">&quot;emrich&quot;</span><span class="p">,</span> <span class="s2">&quot;emrich2024&quot;</span><span class="p">]:</span>
+        <span class="n">waves</span> <span class="o">=</span> <span class="n">_prominence_ecg_delineator</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_delineate(): &#39;method&#39; should be one of &#39;peak&#39;,&quot;</span>
+            <span class="s2">&quot;NeuroKit error: ecg_delineate(): &#39;method&#39; should be one of &#39;peak&#39;, &#39;prominence&#39;,&quot;</span>
             <span class="s2">&quot;&#39;cwt&#39; or &#39;dwt&#39;.&quot;</span>
         <span class="p">)</span>
 
@@ -1105,6 +1123,195 @@
     <span class="p">}</span>
 
 
+<span class="c1"># =============================================================================</span>
+<span class="c1"># PROMINENCE METHOD (Emrich et al., 2024)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span> <span class="nf">_prominence_ecg_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># pysiology-informed boundaries in milliseconds, adapt if needed</span>
+    <span class="n">max_qrs_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_qrs_interval&quot;</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">max_pr_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_pr_interval&quot;</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">max_r_rise_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_r_rise_time&quot;</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">typical_st_segment</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typical_st_segment&quot;</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="c1"># max basepoint intervals</span>
+    <span class="n">max_p_basepoint_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_p_basepoint_interval&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">max_r_basepoint_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_r_basepoint_interval&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">max_t_basepoint_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_t_basepoint_interval&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+
+    <span class="n">waves</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;ECG_P_Onsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_P_Peaks&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_P_Offsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_R_Onsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_R_Offsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_S_Peaks&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_T_Onsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_T_Peaks&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="p">}</span>
+
+    <span class="c1"># calculate RR intervals</span>
+    <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)</span>
+    <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">rr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rpeaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">rr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rpeaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="c1"># iterate over all beats</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)):</span>
+        <span class="c1"># 1. split signal into segments</span>
+        <span class="n">rpeak_pos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">rpeak_pos</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">rr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">ecg_seg</span> <span class="o">=</span> <span class="n">ecg</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span><span class="p">]</span>
+
+        <span class="n">current_wave</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">:</span> <span class="n">rpeak_pos</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># 2. find local extrema in signal</span>
+        <span class="n">local_maxima</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">ecg_seg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">local_minima</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">ecg_seg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">local_extrema</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">local_maxima</span><span class="p">,</span> <span class="n">local_minima</span><span class="p">))</span>
+
+        <span class="c1"># 3. compute prominence weight</span>
+        <span class="n">weight_maxima</span> <span class="o">=</span> <span class="n">_calc_prominence</span><span class="p">(</span><span class="n">local_maxima</span><span class="p">,</span> <span class="n">ecg_seg</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">])</span>
+        <span class="n">weight_minima</span> <span class="o">=</span> <span class="n">_calc_prominence</span><span class="p">(</span><span class="n">local_minima</span><span class="p">,</span> <span class="n">ecg_seg</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">minima</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">local_extrema</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="c1"># find waves</span>
+            <span class="n">_prominence_find_q_wave</span><span class="p">(</span><span class="n">weight_minima</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">max_r_rise_time</span><span class="p">)</span>
+            <span class="n">_prominence_find_s_wave</span><span class="p">(</span><span class="n">ecg_seg</span><span class="p">,</span> <span class="n">weight_minima</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">max_qrs_interval</span><span class="p">)</span>
+            <span class="n">_prominence_find_p_wave</span><span class="p">(</span><span class="n">local_maxima</span><span class="p">,</span> <span class="n">weight_maxima</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">max_pr_interval</span><span class="p">)</span>
+            <span class="n">_prominence_find_t_wave</span><span class="p">(</span><span class="n">local_extrema</span><span class="p">,</span> <span class="p">(</span><span class="n">weight_minima</span> <span class="o">+</span> <span class="n">weight_maxima</span><span class="p">),</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">typical_st_segment</span><span class="p">)</span>
+            <span class="n">_prominence_find_on_offsets</span><span class="p">(</span>
+                <span class="n">ecg_seg</span><span class="p">,</span>
+                <span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">local_minima</span><span class="p">,</span>
+                <span class="n">current_wave</span><span class="p">,</span>
+                <span class="n">max_p_basepoint_interval</span><span class="p">,</span>
+                <span class="n">max_r_basepoint_interval</span><span class="p">,</span>
+                <span class="n">max_t_basepoint_interval</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># append waves for current beat / complex</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">waves</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">:</span>
+                <span class="n">waves</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+                <span class="n">waves</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">current_wave</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">left</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">waves</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">waves</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_prominence</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">Rpeak</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minima</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an array of the same length as sig with prominences computed for the provided peaks.</span>
+
+<span class="sd">    Prominence of the R-peak is excluded if the R-peak position is given.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">w</span>
+    <span class="c1"># get prominence</span>
+    <span class="n">_sig</span> <span class="o">=</span> <span class="o">-</span><span class="n">sig</span> <span class="k">if</span> <span class="n">minima</span> <span class="k">else</span> <span class="n">sig</span>
+    <span class="n">w</span><span class="p">[</span><span class="n">peaks</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">peak_prominences</span><span class="p">(</span><span class="n">_sig</span><span class="p">,</span> <span class="n">peaks</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># optional: set rpeak prominence to zero to emphasize other peaks</span>
+    <span class="k">if</span> <span class="n">Rpeak</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">w</span><span class="p">[</span><span class="n">Rpeak</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">w</span>
+
+
+<span class="k">def</span> <span class="nf">_prominence_find_q_wave</span><span class="p">(</span><span class="n">weight_minima</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">max_r_rise_time</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;ECG_R_Peaks&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">q_bound</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_r_rise_time</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">weight_minima</span><span class="p">[</span><span class="n">q_bound</span> <span class="p">:</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]])</span> <span class="o">+</span> <span class="n">q_bound</span>
+
+
+<span class="k">def</span> <span class="nf">_prominence_find_s_wave</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">weight_minima</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">max_qrs_interval</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;ECG_Q_Peaks&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">s_bound</span> <span class="o">=</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">max_qrs_interval</span>
+    <span class="n">s_wave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">weight_minima</span><span class="p">[</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span> <span class="p">:</span> <span class="n">s_bound</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+    <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_S_Peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span> <span class="p">:</span> <span class="n">s_bound</span><span class="p">])</span> <span class="o">+</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">s_wave</span> <span class="o">==</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+        <span class="k">else</span> <span class="n">s_wave</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_prominence_find_p_wave</span><span class="p">(</span><span class="n">local_maxima</span><span class="p">,</span> <span class="n">weight_maxima</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">max_pr_interval</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;ECG_Q_Peaks&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">p_candidates</span> <span class="o">=</span> <span class="n">local_maxima</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_pr_interval</span> <span class="o">&lt;=</span> <span class="n">local_maxima</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">local_maxima</span> <span class="o">&lt;=</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_Q_Peaks&quot;</span><span class="p">])</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">p_candidates</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_P_Peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_candidates</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">weight_maxima</span><span class="p">[</span><span class="n">p_candidates</span><span class="p">])]</span>
+
+
+<span class="k">def</span> <span class="nf">_prominence_find_t_wave</span><span class="p">(</span><span class="n">local_extrema</span><span class="p">,</span> <span class="n">weight_extrema</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">,</span> <span class="n">typical_st_segment</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;ECG_S_Peaks&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">t_candidates</span> <span class="o">=</span> <span class="n">local_extrema</span><span class="p">[(</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_S_Peaks&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">typical_st_segment</span> <span class="o">&lt;=</span> <span class="n">local_extrema</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">t_candidates</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_T_Peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_candidates</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">weight_extrema</span><span class="p">[</span><span class="n">t_candidates</span><span class="p">])]</span>
+
+
+<span class="k">def</span> <span class="nf">_prominence_find_on_offsets</span><span class="p">(</span>
+    <span class="n">sig</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="p">,</span>
+    <span class="n">local_minima</span><span class="p">,</span>
+    <span class="n">current_wave</span><span class="p">,</span>
+    <span class="n">max_p_basepoint_interval</span><span class="p">,</span>
+    <span class="n">max_r_basepoint_interval</span><span class="p">,</span>
+    <span class="n">max_t_basepoint_interval</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;ECG_P_Peaks&quot;</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">p_on</span><span class="p">,</span> <span class="n">p_off</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">peak_prominences</span><span class="p">(</span>
+            <span class="n">sig</span><span class="p">,</span> <span class="p">[</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_P_Peaks&quot;</span><span class="p">]],</span> <span class="n">wlen</span><span class="o">=</span><span class="n">max_p_basepoint_interval</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">p_on</span><span class="p">):</span>
+            <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_P_Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_on</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">p_off</span><span class="p">):</span>
+            <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_P_Offsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_off</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;ECG_T_Peaks&quot;</span> <span class="ow">in</span> <span class="n">current_wave</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_T_Peaks&quot;</span><span class="p">],</span> <span class="n">local_minima</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">t_on</span><span class="p">,</span> <span class="n">t_off</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">peak_prominences</span><span class="p">(</span>
+            <span class="n">p</span> <span class="o">*</span> <span class="n">sig</span><span class="p">,</span> <span class="p">[</span><span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_T_Peaks&quot;</span><span class="p">]],</span> <span class="n">wlen</span><span class="o">=</span><span class="n">max_t_basepoint_interval</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">t_on</span><span class="p">):</span>
+            <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_T_Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_on</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">t_off</span><span class="p">):</span>
+            <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_T_Offsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_off</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># correct R-peak position towards local maxima (otherwise prominence will be falsely computed)</span>
+    <span class="n">r_pos</span> <span class="o">=</span> <span class="n">_correct_peak</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">])</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">r_on</span><span class="p">,</span> <span class="n">r_off</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">peak_prominences</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="p">[</span><span class="n">r_pos</span><span class="p">],</span> <span class="n">wlen</span><span class="o">=</span><span class="n">max_r_basepoint_interval</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">r_on</span><span class="p">):</span>
+        <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_on</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">r_off</span><span class="p">):</span>
+        <span class="n">current_wave</span><span class="p">[</span><span class="s2">&quot;ECG_R_Offsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_off</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_correct_peak</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">peak</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Correct peak towards local maxima within provided window.&quot;&quot;&quot;</span>
+
+    <span class="n">left</span> <span class="o">=</span> <span class="n">peak</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">peak</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span><span class="p">])</span> <span class="o">+</span> <span class="n">left</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">peak</span>
+
+
 <span class="c1"># Internals</span>
 <span class="c1"># ---------------------</span>
 
@@ -1164,11 +1371,7 @@
                 <span class="n">epsilon_onset</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;peak_heights&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">leftbase</span> <span class="o">=</span> <span class="n">wt_peaks_data</span><span class="p">[</span><span class="s2">&quot;left_bases&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">index_peak</span> <span class="o">-</span> <span class="n">half_wave_width</span>
             <span class="k">if</span> <span class="n">peak_type</span> <span class="o">==</span> <span class="s2">&quot;rpeaks&quot;</span><span class="p">:</span>
-                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="n">nfirst</span>
-                    <span class="o">-</span> <span class="mi">100</span>
-                <span class="p">)</span>
+                <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span>
             <span class="k">elif</span> <span class="n">peak_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;tpeaks&quot;</span><span class="p">,</span> <span class="s2">&quot;ppeaks&quot;</span><span class="p">]:</span>
                 <span class="n">candidate_onsets</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="n">cwtmatr</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="n">nfirst</span> <span class="o">-</span> <span class="mi">100</span> <span class="p">:</span> <span class="n">nfirst</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">epsilon_onset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1489,6 +1692,7 @@
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">window_start</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span>
     <span class="n">window_end</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    import neurokit2 as nk</span>

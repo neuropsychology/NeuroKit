@@ -1361,14 +1361,28 @@ to be related to the last remnants of ventricular repolarization.</p>
 <li><p><strong>rpeaks</strong> (<em>Union[list, np.array, pd.Series]</em>) – The samples at which R-peaks occur. Accessible with the key “ECG_R_Peaks” in the info
 dictionary returned by <code class="docutils literal notranslate"><span class="pre">ecg_findpeaks()</span></code>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ecg_signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;peak&quot;</span></code> for a peak-based method, <code class="docutils literal notranslate"><span class="pre">&quot;cwt&quot;</span></code> for continuous wavelet transform
-or <code class="docutils literal notranslate"><span class="pre">&quot;dwt&quot;</span></code> (default) for discrete wavelet transform.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;peak&quot;</span></code> for a peak-based method, <code class="docutils literal notranslate"><span class="pre">&quot;prominence&quot;</span></code> for a peak-prominence-based
+method (Emrich et al., 2024), <code class="docutils literal notranslate"><span class="pre">&quot;cwt&quot;</span></code> for continuous wavelet transform or <code class="docutils literal notranslate"><span class="pre">&quot;dwt&quot;</span></code> (default)
+for discrete wavelet transform.
+The <code class="docutils literal notranslate"><span class="pre">&quot;prominence&quot;</span></code> method might be useful to detect the waves, allowing to set individual physiological
+limits (see kwargs), while the <code class="docutils literal notranslate"><span class="pre">&quot;dwt&quot;</span></code> method might be more precise for detecting the onsets and offsets
+of the waves (but might exhibit lower accuracy when there is significant variation in wave morphology).
+The <code class="docutils literal notranslate"><span class="pre">&quot;peak&quot;</span></code> method, which uses the zero-crossings of the signal derivatives, works best with very clean signals.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot to visualizing the delineated waves information.</p></li>
 <li><p><strong>show_type</strong> (<em>str</em>) – The type of delineated waves information showed in the plot.
 Can be <code class="docutils literal notranslate"><span class="pre">&quot;peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bounds_R&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bounds_T&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bounds_P&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>.</p></li>
 <li><p><strong>check</strong> (<em>bool</em>) – Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, replaces the delineated features with <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> if its
 standardized distance from R-peaks is more than 3.</p></li>
-<li><p><strong>**kwargs</strong> – Other optional arguments.</p></li>
+<li><p><strong>**kwargs</strong> – Other optional arguments:
+If using the <code class="docutils literal notranslate"><span class="pre">&quot;prominence&quot;</span></code> method, additional parameters (in milliseconds) can be passed to set
+individual physiological limits for the search boundaries:
+- <code class="docutils literal notranslate"><span class="pre">max_qrs_interval</span></code>: The maximum allowable QRS complex interval. Defaults to 180 ms.
+- <code class="docutils literal notranslate"><span class="pre">max_pr_interval</span></code>: The maximum PR interval duration. Defaults to 300 ms.
+- <code class="docutils literal notranslate"><span class="pre">max_r_rise_time</span></code>: Maximum duration for the R-wave rise. Defaults to 120 ms.
+- <code class="docutils literal notranslate"><span class="pre">typical_st_segment</span></code>: Typical duration of the ST segment. Defaults to 150 ms.
+- <code class="docutils literal notranslate"><span class="pre">max_p_basepoint_interval</span></code>: The maximum interval between P-wave on- and offset. Defaults to 100 ms.
+- <code class="docutils literal notranslate"><span class="pre">max_r_basepoint_interval</span></code>: The maximum interval between R-wave on- and offset. Defaults to 100 ms.
+- <code class="docutils literal notranslate"><span class="pre">max_t_basepoint_interval</span></code>: The maximum interval between T-wave on- and offset. Defaults to 200 ms.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1378,7 +1392,7 @@ For derivative method, the dictionary contains the samples at which P-peaks, Q-p
 S-peaks, T-peaks, P-onsets and T-offsets occur, accessible with the keys <code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Peaks&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;ECG_Q_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_S_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Onsets&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Offsets&quot;</span></code>, respectively.</p>
-<p>For wavelet methods, in addition to the above information, the dictionary contains the
+<p>For the wavelet and prominence methods, in addition to the above information, the dictionary contains the
 samples at which QRS-onsets and QRS-offsets occur, accessible with the key
 <code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Onsets&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_P_Offsets&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;ECG_Q_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_S_Peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Onsets&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ECG_T_Offsets&quot;</span></code>,
@@ -1423,6 +1437,8 @@ peaks, onsets and offsets marked as “1” in a list of zeros.</p></li>
 <li><p>Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., &amp; Laguna, P. (2004). A wavelet-based
 ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering,
 51(4), 570-581.</p></li>
+<li><p>Emrich, J., Gargano, A., Koka, T., &amp; Muma, M. (2024). Physiology-Informed ECG Delineation Based
+on Peak Prominence. 32nd European Signal Processing Conference (EUSIPCO), 1402-1406.</p></li>
 </ul>
 </dd></dl>
 
@@ -1479,32 +1495,32 @@ in percentage (from 0 to 1), representing the stage of the current cardiac phase
 <span class="gp">In [6]: </span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x13e93daf6d0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2773be61e70&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Atrial&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x13e940d7820&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2773bf39090&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Atrial&quot;</span><span class="p">],</span>
 <span class="gp">   ...: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x13e940d5180&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2773bf39f90&gt;]</span>
 
 <span class="gp">In [10]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x13e93ee6dd0&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x27743bcc400&gt;</span>
 
 <span class="gp">In [11]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x13e956827a0&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2773bf3a290&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Ventricular&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x13e95680a30&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2773bf3b4f0&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Ventricular&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ....: </span>
-<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x13e95681f60&gt;]</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x2773bf38e50&gt;]</span>
 
 <span class="gp">In [14]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x13e940b0dc0&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x27743bcfa00&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_phase.png"><img alt="../_images/p_ecg_phase.png" src="../_images/p_ecg_phase.png" style="width: 640.0px; height: 480.0px;" />
@@ -1703,9 +1719,9 @@ quadratic model:</p>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.756701          0.971868</span>
-<span class="go">2     2        10000  ...                          0.459959          0.979563</span>
-<span class="go">3     3        15000  ...                          0.135628          0.926572</span>
+<span class="go">1     1         5000  ...                          0.661191          0.977886</span>
+<span class="go">2     2        10000  ...                          0.425703          0.960208</span>
+<span class="go">3     3        15000  ...                          0.058212          0.928629</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
