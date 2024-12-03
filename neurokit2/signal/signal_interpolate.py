@@ -101,6 +101,8 @@ def signal_interpolate(
         x_values = np.squeeze(x_values.values)
     if isinstance(x_new, pd.Series):
         x_new = np.squeeze(x_new.values)
+    if isinstance(y_values, pd.Series):
+        y_values = np.squeeze(y_values.values)
 
     if len(x_values) != len(y_values):
         raise ValueError("x_values and y_values must be of the same length.")
@@ -158,7 +160,7 @@ def signal_interpolate(
             # scipy.interpolate.PchipInterpolator for constant extrapolation akin to the behavior of
             # scipy.interpolate.interp1d with fill_value=([y_values[0]], [y_values[-1]].
             fill_value = ([interpolated[first_index]], [interpolated[last_index]])
-        elif isinstance(fill_value, float) or isinstance(fill_value, int):
+        elif isinstance(fill_value, (float, int)):
             # if only a single integer or float is provided as a fill value, format as a tuple
             fill_value = ([fill_value], [fill_value])
 
