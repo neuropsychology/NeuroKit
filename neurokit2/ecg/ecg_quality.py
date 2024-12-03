@@ -157,7 +157,7 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
     # Interpolate
     quality = signal_interpolate(
-        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="linear"
+        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="previous"
     )
 
     return quality
