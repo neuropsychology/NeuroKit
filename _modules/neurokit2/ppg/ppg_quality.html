@@ -504,7 +504,7 @@
 
     <span class="c1"># Interpolate beat-by-beat CCs</span>
     <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
-        <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cc</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quadratic&quot;</span>
+        <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cc</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;previous&quot;</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">quality</span>
