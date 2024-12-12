@@ -8,10 +8,11 @@ from .ppg_clean import ppg_clean
 from .ppg_methods import ppg_methods
 from .ppg_peaks import ppg_peaks
 from .ppg_plot import ppg_plot
+from .ppg_quality import ppg_quality
 
 
 def ppg_process(
-    ppg_signal, sampling_rate=1000, method="elgendi", report=None, **kwargs
+    ppg_signal, sampling_rate=1000, method="elgendi", method_quality="templatematch", report=None, **kwargs
 ):
     """**Process a photoplethysmogram (PPG)  signal**
 
@@ -26,6 +27,9 @@ def ppg_process(
     method : str
         The processing pipeline to apply. Can be one of ``"elgendi"``.
         Defaults to ``"elgendi"``.
+    method_quality : str
+        The quality assessment approach to use. Can be one of ``"templatematch"``, ``"disimilarity"``.
+        Defaults to ``"templatematch"``.
     report : str
         The filename of a report containing description and figures of processing
         (e.g. ``"myreport.html"``). Needs to be supplied if a report file
@@ -40,10 +44,11 @@ def ppg_process(
     signals : DataFrame
         A DataFrame of same length as :func:`.ppg_signal` containing the following columns:
 
-        * ``"PPG_Raw"``: the raw signal.
-        * ``"PPG_Clean"``: the cleaned signal.
-        * ``"PPG_Rate"``: the heart rate as measured based on PPG peaks.
-        * ``"PPG_Peaks"``: the PPG peaks marked as "1" in a list of zeros.
+        .. codebookadd::
+            PPG_Raw|The raw signal.
+            PPG_Clean|The cleaned signal.
+            PPG_Rate|The heart rate as measured based on PPG peaks.
+            PPG_Peaks|The PPG peaks marked as "1" in a list of zeros.
 
     info : dict
         A dictionary containing the information of peaks and the signals' sampling rate.
@@ -69,7 +74,7 @@ def ppg_process(
     """
     # Sanitize input
     ppg_signal = as_vector(ppg_signal)
-    methods = ppg_methods(sampling_rate=sampling_rate, method=method, **kwargs)
+    methods = ppg_methods(sampling_rate=sampling_rate, method=method, method_quality=method_quality, **kwargs)
 
     # Clean signal
     ppg_cleaned = ppg_clean(
@@ -94,12 +99,22 @@ def ppg_process(
         info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned)
     )
 
+    # Assess signal quality
+    quality = ppg_quality(
+        ppg_cleaned,
+        ppg_pw_peaks=info["PPG_Peaks"],
+        sampling_rate=sampling_rate,
+        method=methods["method_quality"],
+        **methods["kwargs_quality"]
+    )
+
     # Prepare output
     signals = pd.DataFrame(
         {
             "PPG_Raw": ppg_signal,
             "PPG_Clean": ppg_cleaned,
             "PPG_Rate": rate,
+            "PPG_Quality": quality,
             "PPG_Peaks": peaks_signal["PPG_Peaks"].values,
         }
     )

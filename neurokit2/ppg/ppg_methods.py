@@ -4,6 +4,7 @@ import numpy as np
 from ..misc.report import get_kwargs
 from .ppg_clean import ppg_clean
 from .ppg_findpeaks import ppg_findpeaks
+from .ppg_quality import ppg_quality
 
 
 def ppg_methods(
@@ -11,6 +12,7 @@ def ppg_methods(
     method="elgendi",
     method_cleaning="default",
     method_peaks="default",
+    method_quality="default",
     **kwargs,
 ):
     """**PPG Preprocessing Methods**
@@ -38,6 +40,11 @@ def ppg_methods(
         will be set to the value of ``"method"``. Defaults to ``"default"``.
         For more information, see the ``"method"`` argument
         of :func:`.ppg_findpeaks`.
+    method_quality: str
+        The method used to assess PPG signal quality. If ``"default"``,
+        will be set to the value of ``"templatematch"``. Defaults to ``"templatematch"``.
+        For more information, see the ``"method"`` argument
+        of :func:`.ppg_quality`.
     **kwargs
         Other arguments to be passed to :func:`.ppg_clean` and
         :func:`.ppg_findpeaks`.
@@ -51,7 +58,7 @@ def ppg_methods(
 
     See Also
     --------
-    ppg_process, ppg_clean, ppg_findpeaks
+    ppg_process, ppg_clean, ppg_findpeaks, ppg_quality
 
     Examples
     --------
@@ -59,7 +66,9 @@ def ppg_methods(
 
       import neurokit2 as nk
 
-      methods = nk.ppg_methods(sampling_rate=100, method="elgendi", method_cleaning="nabian2018")
+      methods = nk.ppg_methods(
+          sampling_rate=100, method="elgendi",
+          method_cleaning="nabian2018", method_quality="templatematch")
       print(methods["text_cleaning"])
       print(methods["references"][0])
 
@@ -71,7 +80,12 @@ def ppg_methods(
         else str(method_cleaning).lower()
     )
     method_peaks = (
-        str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+        str(method).lower()
+        if method_peaks == "default"
+        else str(method_peaks).lower()
+    )
+    method_quality = (
+        str(method_quality).lower()
     )
 
     # Create dictionary with all inputs
@@ -80,16 +94,19 @@ def ppg_methods(
         "method": method,
         "method_cleaning": method_cleaning,
         "method_peaks": method_peaks,
+        "method_quality": method_quality,
         **kwargs,
     }
 
-    # Get arguments to be passed to cleaning and peak finding functions
+    # Get arguments to be passed to cleaning, peak finding, and quality assessment functions
     kwargs_cleaning, report_info = get_kwargs(report_info, ppg_clean)
     kwargs_peaks, report_info = get_kwargs(report_info, ppg_findpeaks)
+    kwargs_quality, report_info = get_kwargs(report_info, ppg_quality)
 
     # Save keyword arguments in dictionary
     report_info["kwargs_cleaning"] = kwargs_cleaning
     report_info["kwargs_peaks"] = kwargs_peaks
+    report_info["kwargs_quality"] = kwargs_quality
 
     # Initialize refs list with NeuroKit2 reference
     refs = ["""Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
@@ -157,6 +174,41 @@ def ppg_methods(
         report_info[
             "text_peaks"
         ] = f"The peak detection was carried out using the method {method_peaks}."
+
+    # 2. Quality
+    # ----------
+    if method_quality in ["templatematch"]:
+        report_info[
+            "text_quality"
+        ] = (
+            "The quality assessment was carried out using template-matching, approximately as described "
+            + "in Orphanidou et al. (2015)."
+        )
+        refs.append(
+            """Orphanidou C, Bonnici T, Charlton P, Clifton D, Vallance D, Tarassenko L (2015)
+            Signal-quality indices for the electrocardiogram and photoplethysmogram: Derivation
+            and applications to wireless monitoring
+            IEEE Journal of Biomedical and Health Informatics 19(3): 832–838. doi:10.1109/JBHI.2014.2338351."""
+        )
+    elif method_quality in ["disimilarity"]:
+        report_info[
+            "text_quality"
+        ] = (
+            "The quality assessment was carried out using a disimilarity measure of positive-peaked beats, "
+            + "approximately as described in Sabeti et al. (2019)."
+        )
+        refs.append(
+            """Sabeti E, Reamaroon N, Mathis M, Gryak J, Sjoding M, Najarian K (2019)
+            Signal quality measure for pulsatile physiological signals using
+            morphological features: Applications in reliability measure for pulse oximetry
+            Informatics in Medicine Unlocked 16: 100222. doi:10.1016/j.imu.2019.100222."""
+        )
+    elif method_quality in ["none"]:
+        report_info["text_quality"] = "There was no quality assessment carried out."
+    else:
+        report_info[
+            "text_quality"
+        ] = f"The quality assessment was carried out using the method {method_quality}."
 
     report_info["references"] = list(np.unique(refs))
     return report_info

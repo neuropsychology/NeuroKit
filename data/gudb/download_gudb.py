@@ -28,7 +28,7 @@ for participant in range(25):
         # creating class which loads the experiment
         ecg_class = ecg_gudb_database.GUDb(participant, experiment)
 
-        # Chest Strap Data - only donwload if R-peaks annotations are available
+        # Chest Strap Data - only download if R-peaks annotations are available
         if ecg_class.anno_cs_exists:
 
             data = pd.DataFrame({"ECG": ecg_class.cs_V2_V1})
@@ -41,7 +41,7 @@ for participant in range(25):
             anno = pd.DataFrame({"Rpeaks": ecg_class.anno_cs})
             anno["Participant"] = "GUDB_%.2i" %(participant)
             anno["Sampling_Rate"] = 250
-            anno["Database"] = "GUDB (" + experiment + ")"
+            anno["Database"] = "GUDB_" + experiment
 
             # Store with the rest
             dfs_ecg.append(data)

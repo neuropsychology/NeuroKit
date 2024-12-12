@@ -18,10 +18,12 @@ def signal_detrend(
     sampling_rate=1000,
 ):
     """**Signal Detrending**
+
     Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the
     signal (i.e., removing a general trend). One can also use other methods, such as smoothness
     priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for
     long signals.
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]

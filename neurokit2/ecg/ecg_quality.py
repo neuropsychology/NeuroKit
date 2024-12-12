@@ -24,7 +24,7 @@ def ecg_quality(
       interpolating the distance of each QRS segment from the average QRS segment present in the *
       data. This index is therefore relative: 1 corresponds to heartbeats that are the closest to
       the average sample and 0 corresponds to the most distant heartbeat from that average sample.
-      Note that 1 does not necessarily means "good": if the majority of samples are bad, than being
+      Note that 1 does not necessarily means "good": if the majority of samples are bad, then being
       close to the average will likely mean bad as well. Use this index with care and plot it
       alongside your ECG signal to see if it makes sense.
 
@@ -57,8 +57,8 @@ def ecg_quality(
     -------
     array or str
         Vector containing the quality index ranging from 0 to 1 for ``"averageQRS"`` method,
-        returns string classification (``Unacceptable``, ``Barely Acceptable`` or ``Excellent``)
-        of the signal for ``"zhao2018 method"``.
+        returns string classification (``Unacceptable``, ``Barely acceptable`` or ``Excellent``)
+        of the signal for ``"zhao2018"`` method.
 
     See Also
     --------
@@ -157,7 +157,7 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
     # Interpolate
     quality = signal_interpolate(
-        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="quadratic"
+        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="previous"
     )
 
     return quality

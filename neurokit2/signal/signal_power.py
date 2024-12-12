@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import matplotlib.cm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -193,7 +192,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
         labels = [f"{i[1]}-{i[2]} Hz" for i in labels]
 
     # Get cmap
-    cmap = matplotlib.cm.get_cmap("Set1")
+    cmap = plt.get_cmap("Set1")
     colors = cmap.colors
     colors = (
         colors[3],
@@ -253,6 +252,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
         [[signal]],
         sfreq=sampling_rate,
         freqs=np.linspace(frequency_band[0], frequency_band[1], precision),
+        zero_mean=False,
         output="power",
     )
     power = np.mean(out[0][0], axis=0)

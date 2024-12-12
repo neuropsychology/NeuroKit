@@ -32,13 +32,13 @@ def signal_interpolate(
     method : str
         Method of interpolation. Can be ``"linear"``, ``"nearest"``, ``"zero"``, ``"slinear"``,
         ``"quadratic"``, ``"cubic"``, ``"previous"``, ``"next"``, ``"monotone_cubic"``, or ``"akima"``.
-        The methods ``"zero"``, ``"slinear"``,``"quadratic"`` and ``"cubic"`` refer to a spline
+        The methods ``"zero"``, ``"slinear"``, ``"quadratic"`` and ``"cubic"`` refer to a spline
         interpolation of zeroth, first, second or third order; whereas ``"previous"`` and
         ``"next"`` simply return the previous or next value of the point. An integer specifying the
         order of the spline interpolator to use.
-        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
+        See `monotone cubic method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         PchipInterpolator.html>`_ for details on the ``"monotone_cubic"`` method.
-        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
+        See `akima method <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.
         Akima1DInterpolator.html>`_ for details on the ``"akima"`` method.
     fill_value : float or tuple or str
         If a ndarray (or float), this value will be used to fill in for
@@ -87,6 +87,7 @@ def signal_interpolate(
       plt.scatter(x_values, signal, label="original datapoints", zorder=3)
       @suppress
       plt.close()
+
     """
     # Sanity checks
     if x_values is None:
@@ -100,6 +101,8 @@ def signal_interpolate(
         x_values = np.squeeze(x_values.values)
     if isinstance(x_new, pd.Series):
         x_new = np.squeeze(x_new.values)
+    if isinstance(y_values, pd.Series):
+        y_values = np.squeeze(y_values.values)
 
     if len(x_values) != len(y_values):
         raise ValueError("x_values and y_values must be of the same length.")
@@ -157,7 +160,7 @@ def signal_interpolate(
             # scipy.interpolate.PchipInterpolator for constant extrapolation akin to the behavior of
             # scipy.interpolate.interp1d with fill_value=([y_values[0]], [y_values[-1]].
             fill_value = ([interpolated[first_index]], [interpolated[last_index]])
-        elif isinstance(fill_value, float) or isinstance(fill_value, int):
+        elif isinstance(fill_value, (float, int)):
             # if only a single integer or float is provided as a fill value, format as a tuple
             fill_value = ([fill_value], [fill_value])
 

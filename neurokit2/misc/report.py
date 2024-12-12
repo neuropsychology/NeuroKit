@@ -100,7 +100,7 @@ def summarize_table(signals):
 def text_combine(info):
     """Reformat dictionary describing processing methods as strings to be inserted into HTML file."""
     preprocessing = '<h2 style="background-color: #FB1CF0">Preprocessing</h1>'
-    for key in ["text_cleaning", "text_peaks"]:
+    for key in ["text_cleaning", "text_peaks", "text_quality"]:
         if key in info.keys():
             preprocessing += info[key] + "<br>"
     ref = '<h2 style="background-color: #FBB41C">References</h1>'
