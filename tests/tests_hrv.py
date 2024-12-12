@@ -209,3 +209,28 @@ def test_hrv_nonlinear_fragmentation():
         "PIP": 0.5714285714285714,
         "PSS": 1.0,
     }
+
+def test_hrv_symdyn():
+    # Test symbolic dynamics
+    ecg = nk.ecg_simulate(duration=60, sampling_rate=250, heart_rate=70, random_state=42)
+
+    _, peaks = nk.ecg_process(ecg, sampling_rate=250)
+    peaks = peaks["ECG_R_Peaks"]
+    hrv_symdyn = nk.hrv_symdyn(peaks)
+
+    # Expected values obtained from your test signal
+    expected_results = pd.DataFrame(
+        [[0.17910448, 0.62686567, 0.14925373, 0.04477612, 0.14925373,
+        0.43283582, 0.28358209, 0.13432836, 0.13432836, 0.58208955,
+        0.20895522, 0.07462687, 0.35820896, 0.64179104, 0., 0.]],
+        columns =['HRV_SymDynEqualPorba4_0V', 'HRV_SymDynEqualPorba4_1V',
+        'HRV_SymDynEqualPorba4_2LV', 'HRV_SymDynEqualPorba4_2UV',
+        'HRV_SymDynEqualPorba6_0V', 'HRV_SymDynEqualPorba6_1V',
+        'HRV_SymDynEqualPorba6_2LV', 'HRV_SymDynEqualPorba6_2UV',
+        'HRV_SymDynMaxMin6_0V', 'HRV_SymDynMaxMin6_1V', 'HRV_SymDynMaxMin6_2LV',
+        'HRV_SymDynMaxMin6_2UV', 'HRV_SymDynSigma0.05_0V',
+        'HRV_SymDynSigma0.05_1V', 'HRV_SymDynSigma0.05_2LV',
+        'HRV_SymDynSigma0.05_2UV']
+    )
+
+    assert np.isclose(hrv_symdyn,expected_results).all()
