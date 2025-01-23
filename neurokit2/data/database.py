@@ -26,9 +26,9 @@ def download_from_url(url, destination_path=None):
     # Download the file
     response = urllib.request.urlopen(url)
 
-    if response.status_code == 200:
+    if response.status == 200:
         with destination_path.open("wb") as file:
-            file.write(response.content)
+            file.write(response.read())
         return True
     else:
         return False
