@@ -4,7 +4,9 @@ import os
 import pickle
 import urllib
 
+import mne
 import pandas as pd
+
 from sklearn import datasets as sklearn_datasets
 
 
@@ -194,9 +196,7 @@ def data(dataset="bio_eventrelated_100hz"):
     # Dataframes ===============================
     if dataset == "iris":
         info = sklearn_datasets.load_iris()
-        data = pd.DataFrame(
-            info.data, columns=["Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"]
-        )
+        data = pd.DataFrame(info.data, columns=["Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"])
         data["Species"] = info.target_names[info.target]
         return data
 
@@ -225,11 +225,18 @@ def data(dataset="bio_eventrelated_100hz"):
     # TODO: Add more EEG (fif and edf datasets)
     if dataset in ["eeg_1min_200hz"]:
 
-        return pickle.load(
+        eeg_object = pickle.load(
             urllib.request.urlopen(
                 "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
             )
         )
+
+        # Pickle includes filename which MNE (1.9) now checks when cropping signal
+        # see https://github.com/mne-tools/mne-python/pull/12843
+        if tuple(map(int, mne.__version__.split("."))) >= (1, 9, 0):
+            eeg_object.filenames = (None,)
+
+        return eeg_object
 
     # General case
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
