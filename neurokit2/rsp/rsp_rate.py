@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
-from ..signal import (signal_filter, signal_interpolate, signal_rate,
-                      signal_resample)
+from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample
 from .rsp_peaks import rsp_peaks
 
 
@@ -16,14 +16,13 @@ def rsp_rate(
     peak_method="khodadad2018",
     interpolation_method="monotone_cubic",
 ):
-
     """**Find respiration rate**
 
     Parameters
     ----------
     rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by :func:`.rsp_clean`.
-    troughs : Union[list, np.array, pd.Series, pd.DataFrame]
+    troughs : Union[list, dict, np.array, pd.Series, pd.DataFrame]
         The respiration troughs (inhalation onsets) as returned by :func:`.rsp_peaks`.
         If None (default), inhalation onsets will be automatically identified from the
         :func:`.rsp_clean` signal.
@@ -65,13 +64,16 @@ def rsp_rate(
       rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=1000)
       rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="trough")
       rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="xcorr")
+
     """
 
     if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
         if troughs is None:
             _, troughs = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
+        if isinstance(troughs, (pd.DataFrame, dict)):
+            troughs = troughs["RSP_Troughs"]
         rate = signal_rate(
-            troughs["RSP_Troughs"],
+            troughs,
             sampling_rate=sampling_rate,
             desired_length=len(rsp_cleaned),
             interpolation_method=interpolation_method,
@@ -87,10 +89,7 @@ def rsp_rate(
         )
 
     else:
-        raise ValueError(
-            "NeuroKit error: rsp_rate(): 'method' should be"
-            " one of 'trough', or 'cross-correlation'."
-        )
+        raise ValueError("NeuroKit error: rsp_rate(): 'method' should be" " one of 'trough', or 'cross-correlation'.")
 
     return rate
 
@@ -100,16 +99,12 @@ def rsp_rate(
 # =============================================================================
 
 
-def _rsp_rate_xcorr(
-    rsp_cleaned, sampling_rate=1000, window=10, hop_size=1, interpolation_method="monotone_cubic"
-):
+def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1, interpolation_method="monotone_cubic"):
 
     N = len(rsp_cleaned)
     # Downsample data to 10Hz
     desired_sampling_rate = 10
-    rsp = signal_resample(
-        rsp_cleaned, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate
-    )
+    rsp = signal_resample(rsp_cleaned, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
 
     # Define paramters
     window_length = int(desired_sampling_rate * window)
