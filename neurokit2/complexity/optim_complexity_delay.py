@@ -301,7 +301,7 @@ def complexity_delay(
     # Get optimal tau
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
 
-    if np.isnan(optimal):
+    if np.isnan(optimal) and silent is False:
         warn(
             "No optimal time delay is found. Nan is returned."
             " Consider using a higher `delay_max`.",

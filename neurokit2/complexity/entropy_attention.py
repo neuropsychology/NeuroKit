@@ -8,7 +8,7 @@ import scipy.signal
 from ..misc import NeuroKitWarning
 
 
-def entropy_attention(signal, show=False, **kwargs):
+def entropy_attention(signal, show=False, silent=False, **kwargs):
     """**Attention Entropy (AttEn)**
 
     Yang et al. (2020) propose a conceptually new approach called **Attention Entropy (AttEn)**,
@@ -35,6 +35,10 @@ def entropy_attention(signal, show=False, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     show : bool
         If True, the local maxima and minima will be displayed.
+    silent : bool
+        If ``True``, silence possible warnings.
+    **kwargs
+        Other arguments to be passed to ``scipy.signal.find_peaks()``.
 
     Returns
     --------
@@ -88,11 +92,12 @@ def entropy_attention(signal, show=False, **kwargs):
     Xmin, _ = scipy.signal.find_peaks(-signal, **kwargs)
 
     if len(Xmax) == 0 or len(Xmin) == 0:
-        warn(
-            "No local maxima or minima was detected, which makes it impossible to compute AttEn"
-            ". Returning np.nan",
-            category=NeuroKitWarning,
-        )
+        if silent is False:
+            warn(
+                "No local maxima or minima was detected, which makes it impossible to compute AttEn"
+                ". Returning np.nan",
+                category=NeuroKitWarning,
+            )
         return np.nan, {}
 
     Txx = np.diff(Xmax)

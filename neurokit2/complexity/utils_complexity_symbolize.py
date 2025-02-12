@@ -11,7 +11,9 @@ from ..stats import standardize
 from .optim_complexity_tolerance import complexity_tolerance
 
 
-def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=False, **kwargs):
+def complexity_symbolize(
+    signal, method="mean", c=3, random_state=None, show=False, **kwargs
+):
     """**Signal Symbolization and Discretization**
 
     Many complexity indices are made to assess the recurrence and predictability of discrete -
@@ -22,7 +24,7 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
     developped to that end.
 
     * **Method 'A'** binarizes the signal by higher vs. lower values as compated to the signal's
-      mean. Equivalent tp ``method="mean"`` (``method="median"`` is also valid).
+      mean. Equivalent to ``method="mean"`` (``method="median"`` is also valid).
     * **Method 'B'** uses values that are within the mean +/- 1 SD band vs. values that are outside
       this band.
     * **Method 'C'** computes the difference between consecutive samples and binarizes depending on
@@ -167,7 +169,9 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
     if method is None:
         symbolic = signal
         if show is True:
-            df = pd.DataFrame({"Signal": signal, "Bin": signal, "Index": np.arange(len(signal))})
+            df = pd.DataFrame(
+                {"Signal": signal, "Bin": signal, "Index": np.arange(len(signal))}
+            )
             df = df.pivot_table(index="Index", columns="Bin", values="Signal")
             for i in df.columns:
                 plt.plot(df[i])
@@ -228,25 +232,41 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
             if show is True:
                 where = np.where(symbolic)[0]
                 plt.plot(signal, zorder=1 == 1)
-                plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
+                plt.scatter(
+                    where, signal[where], color="orange", label="Inversion", zorder=2
+                )
                 plt.title("Method D")
 
         elif method == "r":
-            symbolic = np.abs(np.diff(signal)) > complexity_tolerance(signal, method="sd")[0]
+            symbolic = (
+                np.abs(np.diff(signal)) > complexity_tolerance(signal, method="sd")[0]
+            )
             symbolic = symbolic.astype(int)
             if show is True:
                 where = np.where(symbolic == 1)[0]
                 plt.plot(signal, zorder=1)
-                plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
+                plt.scatter(
+                    where, signal[where], color="orange", label="Inversion", zorder=2
+                )
                 plt.title("Method based on tolerance r")
 
-        elif method in ["binning", "mep", "ncdf", "linear", "uniform", "kmeans", "equal"]:
+        elif method in [
+            "binning",
+            "mep",
+            "ncdf",
+            "linear",
+            "uniform",
+            "kmeans",
+            "equal",
+        ]:
             n = len(signal)
             if method == "binning":
                 symbolic = pd.cut(signal, bins=c, labels=False)
 
             elif method == "mep":
-                Temp = np.hstack((0, np.ceil(np.arange(1, c) * len(signal) / c) - 1)).astype(int)
+                Temp = np.hstack(
+                    (0, np.ceil(np.arange(1, c) * len(signal) / c) - 1)
+                ).astype(int)
                 symbolic = np.digitize(signal, np.sort(signal)[Temp])
             elif method == "ncdf":
                 symbolic = np.digitize(
@@ -254,11 +274,14 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
                 )
             elif method == "linear":
                 symbolic = np.digitize(
-                    signal, np.arange(np.min(signal), np.max(signal), np.ptp(signal) / c)
+                    signal,
+                    np.arange(np.min(signal), np.max(signal), np.ptp(signal) / c),
                 )
             elif method == "uniform":
                 symbolic = np.zeros(len(signal))
-                symbolic[np.argsort(signal)] = np.digitize(np.arange(n), np.arange(0, 2 * n, n / c))
+                symbolic[np.argsort(signal)] = np.digitize(
+                    np.arange(n), np.arange(0, 2 * n, n / c)
+                )
             elif method == "kmeans":
                 centroids, labels = scipy.cluster.vq.kmeans2(signal, c, seed=rng)
                 labels += 1

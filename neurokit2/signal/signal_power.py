@@ -99,7 +99,9 @@ def signal_power(
             **kwargs,
         )
     else:
-        out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
+        out = _signal_power_continuous(
+            signal, frequency_band, sampling_rate=sampling_rate
+        )
 
     out = pd.DataFrame.from_dict(out, orient="index").T
 
@@ -237,7 +239,9 @@ def _signal_power_continuous(signal, frequency_band, sampling_rate=1000):
     return out
 
 
-def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, precision=20):
+def _signal_power_continuous_get(
+    signal, frequency_band, sampling_rate=1000, precision=20
+):
 
     try:
         import mne
@@ -258,5 +262,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     power = np.mean(out[0][0], axis=0)
 
     out = {}
-    out[f"{frequency_band[0]:.2f}-{frequency_band[1]:.2f}Hz"] = power  # use literal string format
+    out[f"{frequency_band[0]:.2f}-{frequency_band[1]:.2f}Hz"] = (
+        power  # use literal string format
+    )
     return out
