@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 import pandas as pd
 
@@ -5,9 +7,7 @@ from .entropy_shannon import entropy_shannon
 from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 
 
-def entropy_permutation(
-    signal, delay=1, dimension=3, corrected=True, weighted=False, conditional=False, **kwargs
-):
+def entropy_permutation(signal, delay=1, dimension=3, corrected=True, weighted=False, conditional=False, **kwargs):
     """**Permutation Entropy (PEn), its Weighted (WPEn) and Conditional (CPEn) forms**
 
     Permutation Entropy (PEn) is a robust measure of the complexity of a dynamic system by
@@ -108,9 +108,7 @@ def entropy_permutation(
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
-        )
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
     info = {"Corrected": corrected, "Weighted": weighted, "Dimension": dimension, "Delay": delay}
 
@@ -137,10 +135,10 @@ def entropy_permutation(
         pen = pen_m1 - pen
 
         if corrected:
-            pen = pen / np.log2(np.math.factorial(dimension + 1))
+            pen = pen / np.log2(math.factorial(dimension + 1))
     else:
         if corrected:
-            pen = pen / np.log2(np.math.factorial(dimension))
+            pen = pen / np.log2(math.factorial(dimension))
 
     return pen, info
 
@@ -171,10 +169,7 @@ def _entropy_permutation(
 
         # Weighted frequencies of all permutations
         freq = np.array(
-            [
-                info["Weights"][np.all(info["Permutations"] == patterns[i], axis=1)].sum()
-                for i in range(len(patterns))
-            ]
+            [info["Weights"][np.all(info["Permutations"] == patterns[i], axis=1)].sum() for i in range(len(patterns))]
         )
         # Normalize
         freq = freq / info["Weights"].sum()
