@@ -97,7 +97,7 @@ def test_hrv_detrended_rri(detrend):
     )
 
 
-@pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 100])
+@pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 10])
 def test_hrv_interpolated_rri(interpolation_rate):
 
     ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)

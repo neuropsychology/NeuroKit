@@ -267,23 +267,23 @@ def test_rsp_eventrelated():
     rsp_eventrelated = nk.rsp_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Rate_Min"])
         < np.array(rsp_eventrelated["RSP_Rate_Mean"])
     )
 
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Rate_Mean"])
         < np.array(rsp_eventrelated["RSP_Rate_Max"])
     )
 
     # Test amplitude features
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Amplitude_Min"])
         < np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
     )
 
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
         < np.array(rsp_eventrelated["RSP_Amplitude_Max"])
     )
