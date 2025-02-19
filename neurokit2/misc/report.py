@@ -129,7 +129,7 @@ def fig_to_html(fig):
         try:
             import plotly
 
-            if isinstance(fig, plotly.graph_objs._figure.Figure):
+            if isinstance(fig, plotly.graph_objs.Figure):
                 # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
                 return fig.to_html().split("<body>")[1].split("</body>")[0]
             else:
@@ -141,7 +141,7 @@ def fig_to_html(fig):
 def html_save(contents=[], file="myreport.html"):
     """Combine figures and text in a single HTML document."""
     # https://stackoverflow.com/questions/59868987/plotly-saving-multiple-plots-into-a-single-html
-    with open(file, "w") as page:
+    with open(file, "w", encoding="utf-8") as page:
         page.write(
             r"""<html>
                            <head>
