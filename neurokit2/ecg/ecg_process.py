@@ -9,7 +9,7 @@ from .ecg_phase import ecg_phase
 from .ecg_quality import ecg_quality
 
 
-def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
+def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     """**Automated pipeline for preprocessing an ECG signal**
 
     This function runs different preprocessing steps: Cleaning (using ``ecg_clean()``),
@@ -93,7 +93,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     # Sanitize and clean input
     ecg_signal = signal_sanitize(ecg_signal)
-    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
+    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method, **kwargs)
 
     # Detect R-peaks
     instant_peaks, info = ecg_peaks(
