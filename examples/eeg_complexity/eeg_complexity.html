@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="EEG Power in Frequency Bands" href="../eeg_power/eeg_power.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -456,13 +475,13 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load packages</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span>
-<span class="kn">import</span> <span class="nn">mne</span>
-<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 </pre></div>
 </div>
 </div>
@@ -499,7 +518,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c5a7835aae85342b8413eb20635d4582b878907d009c54dfe626758427123542.png" src="../../_images/c5a7835aae85342b8413eb20635d4582b878907d009c54dfe626758427123542.png" />
+<img alt="../../_images/ae0ad360b8ec4d6178b47592c9f6e72ecb74bbfd6a4b03781e63ff1ae4006026.png" src="../../_images/ae0ad360b8ec4d6178b47592c9f6e72ecb74bbfd6a4b03781e63ff1ae4006026.png" />
 </div>
 </div>
 </section>
@@ -524,7 +543,7 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
-<img alt="../../_images/330e241b9a6561ae0f1267c3a2c6966e7ca1dd26922fff1b271c429b2b76bb63.png" src="../../_images/330e241b9a6561ae0f1267c3a2c6966e7ca1dd26922fff1b271c429b2b76bb63.png" />
+<img alt="../../_images/d701bb16c159aaf23e02c4f9cf30f5b10310ba23d35cc834d6908ce2bc5a1d84.png" src="../../_images/d701bb16c159aaf23e02c4f9cf30f5b10310ba23d35cc834d6908ce2bc5a1d84.png" />
 </div>
 </div>
 <p>Now, we can compute the complexity metrics of this signal.</p>
@@ -550,7 +569,7 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SVDEn score: 1.22
 </pre></div>
 </div>
-<img alt="../../_images/8d39be93f3734a508cc85194c91ff007aeafdc8b09c4c9b0ea667f98c4f7668b.png" src="../../_images/8d39be93f3734a508cc85194c91ff007aeafdc8b09c4c9b0ea667f98c4f7668b.png" />
+<img alt="../../_images/3cb93cf102031a14906612e9d88514a705c49875e2775193b67a7bd525074bab.png" src="../../_images/3cb93cf102031a14906612e9d88514a705c49875e2775193b67a7bd525074bab.png" />
 </div>
 </div>
 </section>
@@ -596,11 +615,11 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No projector specified for this dataset. Please consider the method self.add_proj.
 </pre></div>
 </div>
-<img alt="../../_images/36d53bf26af34a8a6836b131759c406cde31fb38927fa1ce0de663473cad486e.png" src="../../_images/36d53bf26af34a8a6836b131759c406cde31fb38927fa1ce0de663473cad486e.png" />
+<img alt="../../_images/8a4d839365e6c6ab7b266e594100c7e3782b8d4ed1108c2dadc2b8fee00d25e9.png" src="../../_images/8a4d839365e6c6ab7b266e594100c7e3782b8d4ed1108c2dadc2b8fee00d25e9.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No projector specified for this dataset. Please consider the method self.add_proj.
 </pre></div>
 </div>
-<img alt="../../_images/af9d901d008eface1535745d39e4769df0e08f316b10d176a2905742f267c3b6.png" src="../../_images/af9d901d008eface1535745d39e4769df0e08f316b10d176a2905742f267c3b6.png" />
+<img alt="../../_images/d0b7e82090cad2f252afb1a31f74c9c112e58405f4189e673c674a76e6733002.png" src="../../_images/d0b7e82090cad2f252afb1a31f74c9c112e58405f4189e673c674a76e6733002.png" />
 </div>
 </div>
 <p>Now we are going to convert the data to a Pandas dataframe and concatenate the two groups of epochs. Next, we are going to average together the EEG channels.</p>
@@ -727,7 +746,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Event-related Attractors&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/8806825200664cfbc9e5dee12f951df64166f67ead37e5cc7dacd8df92465d47.png" src="../../_images/8806825200664cfbc9e5dee12f951df64166f67ead37e5cc7dacd8df92465d47.png" />
+<img alt="../../_images/ea032b1aad0de7ccfa9fd08330f27e8dc56a1a06ba234e5da7ffe4eda3b10975.png" src="../../_images/ea032b1aad0de7ccfa9fd08330f27e8dc56a1a06ba234e5da7ffe4eda3b10975.png" />
 </div>
 </div>
 </section>
@@ -735,11 +754,11 @@
 <h3>Compute complexity indices per epoch<a class="headerlink" href="#compute-complexity-indices-per-epoch" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_sdvden</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_sdvden</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">rez</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;EEG&quot;</span><span class="p">],</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;SVDEn&#39;</span><span class="p">:</span> <span class="n">rez</span><span class="p">})</span>
 
-<span class="k">def</span> <span class="nf">get_hjorth</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_hjorth</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">rez</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;EEG&quot;</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;Hjorth&#39;</span><span class="p">:</span> <span class="n">rez</span><span class="p">})</span>
 
@@ -754,9 +773,9 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\runneradmin\AppData\Local\Temp\ipykernel_4564\1026332364.py:11: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\runneradmin\AppData\Local\Temp\ipykernel_5348\1026332364.py:11: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
   df.groupby([&quot;condition&quot;, &quot;epoch&quot;], as_index=False).apply(get_sdvden),
-C:\Users\runneradmin\AppData\Local\Temp\ipykernel_4564\1026332364.py:12: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+C:\Users\runneradmin\AppData\Local\Temp\ipykernel_5348\1026332364.py:12: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
   df.groupby([&quot;condition&quot;, &quot;epoch&quot;], as_index=False).apply(get_hjorth)
 </pre></div>
 </div>
@@ -838,7 +857,7 @@ C:\Users\runneradmin\AppData\Local\Temp\ipykernel_4564\1026332364.py:12: Depreca
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=0.3530201729161316, pvalue=0.7263454874826607, df=32.60499213593565)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TtestResult(statistic=np.float64(0.3530201729161315), pvalue=np.float64(0.7263454874826609), df=np.float64(32.60499213593566))
 </pre></div>
 </div>
 </div>
@@ -861,7 +880,7 @@ C:\Users\runneradmin\AppData\Local\Temp\ipykernel_4564\1026332364.py:12: Depreca
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;variable&#39;, ylabel=&#39;value&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/50e14dab1806bbf46b4152063875254d2c7d35aaa69ee14f266a20fcb4309562.png" src="../../_images/50e14dab1806bbf46b4152063875254d2c7d35aaa69ee14f266a20fcb4309562.png" />
+<img alt="../../_images/3ea9ca0abbb9e39a0765b7a3a428c95fa08ea9fd3bdd35b630db236ac4d91aca.png" src="../../_images/3ea9ca0abbb9e39a0765b7a3a428c95fa08ea9fd3bdd35b630db236ac4d91aca.png" />
 </div>
 </div>
 </section>
@@ -909,8 +928,7 @@ C:\Users\runneradmin\AppData\Local\Temp\ipykernel_4564\1026332364.py:12: Depreca
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -952,7 +970,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -976,8 +994,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

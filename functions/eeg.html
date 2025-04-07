@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="EOG" href="eog.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -531,7 +550,7 @@ crossings.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
@@ -565,7 +584,7 @@ is first scaled to unitary strength by dividing by the instantaneous GFP.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
@@ -623,7 +642,7 @@ using the median/MAD instead of the mean/SD.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
@@ -712,7 +731,7 @@ smoothing is requested.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Raw objects</span>
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
@@ -731,7 +750,7 @@ smoothing is requested.</p></li>
 <span class="gp">In [5]: </span><span class="n">average</span> <span class="o">=</span> <span class="n">by_channel</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">average</span><span class="p">[</span><span class="s2">&quot;Gamma&quot;</span><span class="p">]</span>
-<span class="gh">Out[6]: </span><span class="go">0.005154868723667879</span>
+<span class="gh">Out[6]: </span><span class="go">np.float64(0.00515486872366788)</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -775,7 +794,7 @@ of the mean.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
@@ -885,7 +904,7 @@ EEG signals. Frontiers in Neuroscience, 11, 425.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
@@ -924,7 +943,7 @@ specify the directory to download the folder.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="n">what</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
 
@@ -958,7 +977,7 @@ is stored in the <code class="docutils literal notranslate"><span class="pre">&q
 </dl>
 <p class="rubric">Examples</p>
 <p><strong>Raw objects</strong></p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Download MNE Raw object</span>
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
@@ -1057,9 +1076,9 @@ to add do not have the same onsets and must be aligned through some common event
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">mne</span>
+<span class="gp">In [2]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 
 <span class="gp">In [3]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
 
@@ -1113,9 +1132,9 @@ values instead. If it is set to <code class="docutils literal notranslate"><span
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">mne</span>
+<span class="gp">In [2]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 
 <span class="gp">In [3]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
 
@@ -1158,7 +1177,7 @@ specify the directory to download the folder.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="n">what</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">)</span>
 
@@ -1187,7 +1206,7 @@ templates can be used for EEG source reconstruction when no individual MRI is av
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">src</span><span class="p">,</span> <span class="n">bem</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_templateMRI</span><span class="p">()</span>
 </pre></div>
@@ -1214,7 +1233,7 @@ simulation example. Help is needed to improve this function.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
@@ -1245,9 +1264,9 @@ is stored in the ‘Time’ column.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">mne</span>
+<span class="gp">In [2]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 
 <span class="go"># Raw objects</span>
 <span class="gp">In [3]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">mne_data</span><span class="p">(</span><span class="s2">&quot;filt-0-40_raw&quot;</span><span class="p">)</span>
@@ -1328,7 +1347,7 @@ is stored in the ‘Time’ column.</p>
 <span class="go"># Print function result summary</span>
 <span class="gp">In [9]: </span><span class="nb">list</span><span class="p">(</span><span class="n">eeg_epoch_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">2</span><span class="p">]</span>
 <span class="gh">Out[9]: </span>
-<span class="go">[(0,</span>
+<span class="go">[(np.int64(0),</span>
 <span class="go">           Time    Condition  Epoch  ...   EEG 058   EEG 059   EEG 060</span>
 <span class="go">  0   -0.199795  audio/right      0  ... -0.252893 -2.647777 -0.990753</span>
 <span class="go">  1   -0.193135  audio/right      0  ... -1.866898 -2.966418 -1.344063</span>
@@ -1343,7 +1362,7 @@ is stored in the ‘Time’ column.</p>
 <span class="go">  105  0.499488  audio/right      0  ...  0.851983 -2.525927  2.537903</span>
 <span class="go">  </span>
 <span class="go">  [106 rows x 62 columns]),</span>
-<span class="go"> (1,</span>
+<span class="go"> (np.int64(1),</span>
 <span class="go">           Time    Condition  Epoch  ...    EEG 058   EEG 059   EEG 060</span>
 <span class="go">  106 -0.199795  visual/left      1  ...  -4.763071  0.593029 -8.698777</span>
 <span class="go">  107 -0.193135  visual/left      1  ...  -5.348706 -0.402868 -7.543228</span>
@@ -1439,8 +1458,7 @@ is stored in the ‘Time’ column.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1533,7 +1551,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -1557,8 +1575,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

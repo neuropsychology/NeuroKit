@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="Studies" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -521,7 +540,7 @@ us!</strong></p>
 </div>
 <section id="per-channel-delay-optimization">
 <h4>Per Channel Delay Optimization<a class="headerlink" href="#per-channel-delay-optimization" title="Link to this heading">#</a></h4>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">delay_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">delay_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">data_delay</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">group_by</span><span class="p">(</span><span class="n">Metric</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
@@ -551,9 +570,9 @@ us!</strong></p>
 <span class="w">    </span><span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
 <span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;plain&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">))</span>
 
-<span class="w">  </span><span class="nf">if</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Condition</span><span class="p">))</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">if</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">Condition</span><span class="p">))</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;free_y&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Condition</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;free_y&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="n">p</span>
@@ -653,7 +672,7 @@ us!</strong></p>
 <span class="w">         </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">z</span><span class="p">))</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">  </span><span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
 <span class="w">  </span><span class="nf">geom_path</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="n">z</span><span class="p">),</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">facet_grid</span><span class="p">(</span><span class="n">Channel</span><span class="o">~</span><span class="n">Dataset</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="o">=</span><span class="s">&quot;free&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">switch</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">facet_grid</span><span class="p">(</span><span class="n">Channel</span><span class="o">~</span><span class="n">Dataset</span><span class="p">,</span><span class="w"> </span><span class="n">scales</span><span class="o">=</span><span class="s">&quot;free&quot;</span><span class="p">,</span><span class="w"> </span><span class="kr">switch</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">  </span><span class="nf">guides</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
 <span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;EEG Attractors&quot;</span><span class="p">,</span>
 <span class="w">       </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;(30 seconds of signal)&quot;</span><span class="p">,</span>
@@ -694,7 +713,7 @@ us!</strong></p>
 </div>
 <section id="per-channel-dimension-optimization">
 <h4>Per Channel Dimension Optimization<a class="headerlink" href="#per-channel-dimension-optimization" title="Link to this heading">#</a></h4>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dim_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dim_perchannel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="o">=</span><span class="s">&quot;Lemon&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">data_dim</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">    </span><span class="nf">mutate</span><span class="p">(</span><span class="n">Score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span>
 
@@ -794,15 +813,15 @@ us!</strong></p>
 
 <span class="n">data_varex</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">()</span>
 <span class="n">data_clusters</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span>
-<span class="nf">for</span><span class="p">(</span><span class="n">dataset</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Dataset</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="kr">for</span><span class="p">(</span><span class="n">dataset</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Dataset</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">dat1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">$</span><span class="n">Dataset</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">dataset</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
 
 <span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="w">  </span><span class="n">list_clusters</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span>
-<span class="w">  </span><span class="nf">for</span><span class="p">(</span><span class="n">condition</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">dat1</span><span class="o">$</span><span class="n">Condition</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">for</span><span class="p">(</span><span class="n">condition</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">dat1</span><span class="o">$</span><span class="n">Condition</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">dat2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat1</span><span class="p">[</span><span class="n">dat1</span><span class="o">$</span><span class="n">Condition</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">condition</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
 
-<span class="w">    </span><span class="nf">for</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">dat2</span><span class="o">$</span><span class="n">Index</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">for</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">dat2</span><span class="o">$</span><span class="n">Index</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">      </span><span class="n">dat3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat2</span><span class="p">[</span><span class="n">dat2</span><span class="o">$</span><span class="n">Index</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">|&gt;</span>
 <span class="w">        </span><span class="nf">pivot_wider</span><span class="p">(</span><span class="n">values_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Value&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">names_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Channel&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span>
@@ -811,8 +830,8 @@ us!</strong></p>
 <span class="w">      </span><span class="n">dat3</span><span class="p">[</span><span class="nf">is.na</span><span class="p">(</span><span class="n">dat3</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
 
 
-<span class="w">      </span><span class="nf">for</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nf">for</span><span class="p">(</span><span class="n">method</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;hkmeans&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pam&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hclust&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kr">for</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">for</span><span class="p">(</span><span class="n">method</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;hkmeans&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pam&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hclust&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="n">rez</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">parameters</span><span class="o">::</span><span class="nf">cluster_analysis</span><span class="p">(</span><span class="n">dat3</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 <span class="w">          </span><span class="n">perf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">performance</span>
 <span class="w">          </span><span class="n">varex</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span><span class="n">Clusters</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
@@ -844,30 +863,30 @@ us!</strong></p>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-11-1.png" /><!-- --></p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">structures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span>
-<span class="nf">for</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nf">for</span><span class="p">(</span><span class="n">dataset</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Dataset</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="kr">for</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">for</span><span class="p">(</span><span class="n">dataset</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Dataset</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">structures</span><span class="p">[[</span><span class="nf">paste0</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;_&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">)]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">data_clusters</span><span class="p">[[</span><span class="n">dataset</span><span class="p">]],</span><span class="w"> </span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 
 
-<span class="n">ch_names</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">structures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">ch_names</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">structures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lapply</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
 <span class="c1"># predict.cluster_meta(m, n=4)</span>
 <span class="c1"># heatmap(m)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">TruScanEEGpy</span>
-<span class="kn">import</span> <span class="nn">mne</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">TruScanEEGpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
 
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;Agg&quot;</span><span class="p">)</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="k">def</span> <span class="nf">plot_layout</span><span class="p">(</span><span class="n">closest</span><span class="p">,</span> <span class="n">closest_names</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_layout</span><span class="p">(</span><span class="n">closest</span><span class="p">,</span> <span class="n">closest_names</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
   <span class="k">if</span> <span class="s2">&quot;Iz&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">closest_names</span><span class="p">:</span>
       <span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">(</span><span class="n">closest_names</span><span class="p">,</span> <span class="n">ch_types</span><span class="o">=</span><span class="s2">&quot;eeg&quot;</span><span class="p">,</span> <span class="n">sfreq</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
       <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">set_montage</span><span class="p">(</span><span class="n">montage</span><span class="o">=</span><span class="s2">&quot;easycap-M1&quot;</span><span class="p">)</span>
@@ -883,7 +902,7 @@ us!</strong></p>
 
   <span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">ch_groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Lemon&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_plot</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;Lemon&quot;</span><span class="p">):</span>
   <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-components&quot;</span><span class="p">)</span>
@@ -965,8 +984,7 @@ which corresponds to a frequency of 37.037 Hz, is a possible value.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1016,7 +1034,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -1040,8 +1058,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

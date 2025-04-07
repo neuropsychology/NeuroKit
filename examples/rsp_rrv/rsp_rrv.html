@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="Analyze Electrodermal Activity (EDA)" href="../eda_peaks/eda_peaks.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -446,10 +465,10 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
-<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
@@ -468,7 +487,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/50158a8a7edda358ae005011fc6fc8fb51a10e1a19c14a051c366c5bca12f5f7.png" src="../../_images/50158a8a7edda358ae005011fc6fc8fb51a10e1a19c14a051c366c5bca12f5f7.png" />
+<img alt="../../_images/d71d64c608ed2f4789ea3313edc02dffcb58d76079917a90ea761b8afde9a0a2.png" src="../../_images/d71d64c608ed2f4789ea3313edc02dffcb58d76079917a90ea761b8afde9a0a2.png" />
 </div>
 </div>
 <p>You now have the raw RSP signal in the shape of a vector (i.e., a one-dimensional array). You can then clean it using <code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code> and extract the inhalation peaks of the signal using <code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code>. This will output 1) a <em>dataframe</em> indicating the occurrences of inhalation peaks and exhalation troughs (“1” marked in a list of zeros), and 2) a <em>dictionary</em> showing the samples of peaks and troughs.</p>
@@ -493,7 +512,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/8ef71767f857132e414c20855e07d959ebd3651b53f7c3a0aadf089eab6e85e4.png" src="../../_images/8ef71767f857132e414c20855e07d959ebd3651b53f7c3a0aadf089eab6e85e4.png" />
+<img alt="../../_images/d472cfceadb9fb40c8dc9aae632644e9f20db52025f8b770617bdc154f1a41aa.png" src="../../_images/d472cfceadb9fb40c8dc9aae632644e9f20db52025f8b770617bdc154f1a41aa.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -503,7 +522,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/24716b753a862147132215b2601e0560f9d36f56080628748fecf96e68a2579f.png" src="../../_images/24716b753a862147132215b2601e0560f9d36f56080628748fecf96e68a2579f.png" />
+<img alt="../../_images/2c0ae8c28d0e9468e8663a5dab1ec87092d667767d92ad97f40611a6aa607d43.png" src="../../_images/2c0ae8c28d0e9468e8663a5dab1ec87092d667767d92ad97f40611a6aa607d43.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -513,7 +532,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/24716b753a862147132215b2601e0560f9d36f56080628748fecf96e68a2579f.png" src="../../_images/24716b753a862147132215b2601e0560f9d36f56080628748fecf96e68a2579f.png" />
+<img alt="../../_images/2c0ae8c28d0e9468e8663a5dab1ec87092d667767d92ad97f40611a6aa607d43.png" src="../../_images/2c0ae8c28d0e9468e8663a5dab1ec87092d667767d92ad97f40611a6aa607d43.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -531,7 +550,7 @@
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Breaths Per Minute&#39;)
 </pre></div>
 </div>
-<img alt="../../_images/f4978cfae56b8334d2d2e7e241efa28f955dcd8e1033eca0a2623a898daaa0c6.png" src="../../_images/f4978cfae56b8334d2d2e7e241efa28f955dcd8e1033eca0a2623a898daaa0c6.png" />
+<img alt="../../_images/1c69e1a0582a3222cd7f40914a4d627b789753a74af184bcbd551143daf3b72b.png" src="../../_images/1c69e1a0582a3222cd7f40914a4d627b789753a74af184bcbd551143daf3b72b.png" />
 </div>
 </div>
 </section>
@@ -613,8 +632,8 @@
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/56acc80835f7e9bda6d51796b4c5bef7a1f681ebea5c05d66b7275f6efd2d9c5.png" src="../../_images/56acc80835f7e9bda6d51796b4c5bef7a1f681ebea5c05d66b7275f6efd2d9c5.png" />
-<img alt="../../_images/2ba67b17d3e63b0bffe211185c1a704115e03f6755402dfa49075937bfa5a639.png" src="../../_images/2ba67b17d3e63b0bffe211185c1a704115e03f6755402dfa49075937bfa5a639.png" />
+</div></div><img alt="../../_images/4a651368515f246d09a615a8ee4514e4999c7e4ca0682e62ebae16919587c506.png" src="../../_images/4a651368515f246d09a615a8ee4514e4999c7e4ca0682e62ebae16919587c506.png" />
+<img alt="../../_images/0eea7bf2d4bad8cffa180f7a92fc2c1eda928b5ab67d2a2f2eba167af6ce67b1.png" src="../../_images/0eea7bf2d4bad8cffa180f7a92fc2c1eda928b5ab67d2a2f2eba167af6ce67b1.png" />
 </div>
 </div>
 <p>This is a simple visualization tool for short-term (SD1) and long-term variability (SD2) in respiratory rhythm.</p>
@@ -657,8 +676,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -693,7 +711,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -717,8 +735,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

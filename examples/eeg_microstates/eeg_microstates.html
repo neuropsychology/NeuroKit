@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="EEG Complexity Analysis" href="../eeg_complexity/eeg_complexity.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -452,8 +471,8 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the NeuroKit package and other useful packages</span>
-<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
 </pre></div>
 </div>
 </div>
@@ -478,17 +497,19 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply band-pass filter (1-35Hz) and re-reference the raw signal</span>
-<span class="n">eeg</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
-<span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s1">&#39;average&#39;</span><span class="p">)</span>
+<span class="n">eeg</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eeg_rereference</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">)</span>
 
-<span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">],</span> <span class="n">eeg</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">]],</span> 
-               <span class="n">labels</span> <span class="o">=</span><span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Preprocessed&quot;</span><span class="p">],</span> 
-               <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">],</span> <span class="n">eeg</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">500</span><span class="p">]],</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Preprocessed&quot;</span><span class="p">],</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="n">eeg</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">],</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/408a7812df107934dad6e08b4bd9ac8c4b49bb9b8f5e325b25038ad2f7c3c295.png" src="../../_images/408a7812df107934dad6e08b4bd9ac8c4b49bb9b8f5e325b25038ad2f7c3c295.png" />
+<img alt="../../_images/61a92b6ed2b7ef77dd3f4a26f7cca8c8e73bb9e20416ad52b533880fe6e0b213.png" src="../../_images/61a92b6ed2b7ef77dd3f4a26f7cca8c8e73bb9e20416ad52b533880fe6e0b213.png" />
 </div>
 </div>
 </section>
@@ -503,12 +524,12 @@
 <span class="n">microstates</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="c1"># Visualize the extracted microstates</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b45085e026733802891fe4fc93fc9286fecce1c6a39c3518104f89bea52cf607.png" src="../../_images/b45085e026733802891fe4fc93fc9286fecce1c6a39c3518104f89bea52cf607.png" />
+<img alt="../../_images/7aeb37b26b6e8cf9d82f0badbdc61525508e973f4fa2c7b2f264e6435045cf76.png" src="../../_images/7aeb37b26b6e8cf9d82f0badbdc61525508e973f4fa2c7b2f264e6435045cf76.png" />
 </div>
 </div>
 <p>This shows the aspect of the microstates and their sequence in the Global Field Power (GFP; see below). We can then proceed to a statistical analysis.</p>
@@ -560,28 +581,28 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.26125</td>
-      <td>0.2685</td>
-      <td>0.291167</td>
-      <td>0.179083</td>
-      <td>720.0</td>
-      <td>705.5</td>
-      <td>789.0</td>
-      <td>507.0</td>
-      <td>0.019233</td>
+      <td>0.236917</td>
+      <td>0.33125</td>
+      <td>0.263333</td>
+      <td>0.1685</td>
+      <td>667.5</td>
+      <td>831.0</td>
+      <td>723.5</td>
+      <td>481.0</td>
+      <td>0.018853</td>
       <td>0.015</td>
-      <td>0.020496</td>
+      <td>0.021889</td>
       <td>0.015</td>
-      <td>0.020034</td>
+      <td>0.019434</td>
       <td>0.015</td>
-      <td>0.017938</td>
+      <td>0.017768</td>
       <td>0.01</td>
-      <td>0.019531</td>
+      <td>0.019711</td>
       <td>0.015</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/536bf7283db0532d4dd6711cd8580e95678b406df79410966fc06dcef0515088.png" src="../../_images/536bf7283db0532d4dd6711cd8580e95678b406df79410966fc06dcef0515088.png" />
+</div></div><img alt="../../_images/738fe01a357653ea6ad7590dfede2c367b47156562404ac0fde3ab7786bfa00a.png" src="../../_images/738fe01a357653ea6ad7590dfede2c367b47156562404ac0fde3ab7786bfa00a.png" />
 </div>
 </div>
 <p>This shows computes static statistics, such as the prevalence of each microstates and the median duration time (also shown in the graph).</p>
@@ -631,26 +652,26 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.740032</td>
-      <td>0.09697</td>
-      <td>0.105263</td>
-      <td>0.057735</td>
-      <td>0.091558</td>
-      <td>0.756052</td>
-      <td>0.099628</td>
-      <td>0.052762</td>
-      <td>0.095592</td>
-      <td>0.082999</td>
-      <td>0.750429</td>
-      <td>0.070979</td>
-      <td>0.086592</td>
-      <td>0.08892</td>
-      <td>0.102886</td>
-      <td>0.721601</td>
+      <td>0.734787</td>
+      <td>0.11115</td>
+      <td>0.102005</td>
+      <td>0.052058</td>
+      <td>0.082767</td>
+      <td>0.771572</td>
+      <td>0.084528</td>
+      <td>0.061132</td>
+      <td>0.088319</td>
+      <td>0.112377</td>
+      <td>0.742957</td>
+      <td>0.056347</td>
+      <td>0.072206</td>
+      <td>0.116716</td>
+      <td>0.092483</td>
+      <td>0.718595</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/490ebc593b65f3a5957b8f56f120754ae635b76e6733b6f94c204075e9cff911.png" src="../../_images/490ebc593b65f3a5957b8f56f120754ae635b76e6733b6f94c204075e9cff911.png" />
+</div></div><img alt="../../_images/b9057e003c937585dd4355fb8480031c3c664d3cb64549ac302d3268f076f77f.png" src="../../_images/b9057e003c937585dd4355fb8480031c3c664d3cb64549ac302d3268f076f77f.png" />
 </div>
 </div>
 <p>Finally, one can compute complexity features of the sequence of microstates, such as the entropy.</p>
@@ -685,11 +706,11 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.977916</td>
+      <td>1.960054</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/ce5d0d42fb2d909ac93ad6a15755350cc631bd7ae0a3b78e5975f4f9be911a52.png" src="../../_images/ce5d0d42fb2d909ac93ad6a15755350cc631bd7ae0a3b78e5975f4f9be911a52.png" />
+</div></div><img alt="../../_images/af640062e2ad9c6b7428f0103e25c6cdcae61223d412243bce101691cb48c84a.png" src="../../_images/af640062e2ad9c6b7428f0103e25c6cdcae61223d412243bce101691cb48c84a.png" />
 </div>
 </div>
 </section>
@@ -709,24 +730,25 @@
 <span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_peaks</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">gfp</span><span class="o">=</span><span class="n">gfp</span><span class="p">)</span>
 
 <span class="c1"># Plot the peaks in the first 200 data points</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">peaks</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">],</span> <span class="n">signal</span> <span class="o">=</span> <span class="n">gfp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">])</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">events</span><span class="o">=</span><span class="n">peaks</span><span class="p">[</span><span class="n">peaks</span> <span class="o">&lt;</span> <span class="mi">200</span><span class="p">],</span> <span class="n">signal</span><span class="o">=</span><span class="n">gfp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">200</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/098984af9e14b554c7e2e52ba2d43615984670f6776094dc4f17dfc4de6711c0.png" src="../../_images/098984af9e14b554c7e2e52ba2d43615984670f6776094dc4f17dfc4de6711c0.png" />
+<img alt="../../_images/021a88a54240bc0175f382c136a7bd2cc98a025947ec635dd1c26bdf7e819e82.png" src="../../_images/021a88a54240bc0175f382c136a7bd2cc98a025947ec635dd1c26bdf7e819e82.png" />
+<img alt="../../_images/021a88a54240bc0175f382c136a7bd2cc98a025947ec635dd1c26bdf7e819e82.png" src="../../_images/021a88a54240bc0175f382c136a7bd2cc98a025947ec635dd1c26bdf7e819e82.png" />
 </div>
 </div>
 <p>By default, the microstates clustering algorithm is <strong>trained</strong> on the EEG activity at these peaks, and then applied to back-predict the state at all data points. However, this behaviour can be changed. For instance, one can decide to train the algorithm directly on all data points.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">microstates_all</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_all</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_all</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7b5c32cdf09dcbfa9f1f34964ff7c1aaa3f0d34f35a1419056f8420b4e728401.png" src="../../_images/7b5c32cdf09dcbfa9f1f34964ff7c1aaa3f0d34f35a1419056f8420b4e728401.png" />
+<img alt="../../_images/061c29a1fd6da962d0316b623e4f55877b40b53d19b38131c7830288aef8b896.png" src="../../_images/061c29a1fd6da962d0316b623e4f55877b40b53d19b38131c7830288aef8b896.png" />
 </div>
 </div>
 </section>
@@ -736,8 +758,10 @@
 <p>However, one can attempt at statistically estimating the optimal number of microstates. A variety of indices of fit can be used.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: we cropped the data as this function takes some time to compute </span>
-<span class="n">n_optimal</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_findnumber</span><span class="p">(</span><span class="n">eeg</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">n_max</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: we cropped the data as this function takes some time to compute</span>
+<span class="n">n_optimal</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_findnumber</span><span class="p">(</span>
+    <span class="n">nk</span><span class="o">.</span><span class="n">mne_crop</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span> <span class="n">n_max</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimal number of microstates: &quot;</span><span class="p">,</span> <span class="n">n_optimal</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -755,9 +779,6 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[█████████████████.......................] 3/7
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[██████████████████████..................] 4/7
 </pre></div>
 </div>
@@ -773,10 +794,13 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal number of microstates:  5.0
 </pre></div>
 </div>
-<img alt="../../_images/5c288fb1adcb8cbdd0f9466441afa1fd3da63887aa8f3b2f481b08ea7e76c6b7.png" src="../../_images/5c288fb1adcb8cbdd0f9466441afa1fd3da63887aa8f3b2f481b08ea7e76c6b7.png" />
+<img alt="../../_images/09a9cc00cee2cbc9a1cb7728b8e25e58c7d241fe84251e57ecb7529df88573bb.png" src="../../_images/09a9cc00cee2cbc9a1cb7728b8e25e58c7d241fe84251e57ecb7529df88573bb.png" />
 </div>
 </div>
 </section>
@@ -788,27 +812,27 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract microstates</span>
 <span class="n">microstates_kmeans</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
-<span class="n">microstates_kmod</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmod&quot;</span><span class="p">)</span>  
+<span class="n">microstates_kmod</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmod&quot;</span><span class="p">)</span>
 
 <span class="c1"># Global Explained Variance</span>
-<span class="n">gev_kmeans</span> <span class="o">=</span> <span class="n">microstates_kmeans</span><span class="p">[</span><span class="s1">&#39;GEV&#39;</span><span class="p">]</span>
-<span class="n">gev_kmod</span> <span class="o">=</span> <span class="n">microstates_kmod</span><span class="p">[</span><span class="s1">&#39;GEV&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">&#39; Using conventional Kmeans,  GEV = </span><span class="si">{</span><span class="n">gev_kmeans</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s1">&#39; Using modified Kmeans,  GEV = </span><span class="si">{</span><span class="n">gev_kmod</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
+<span class="n">gev_kmeans</span> <span class="o">=</span> <span class="n">microstates_kmeans</span><span class="p">[</span><span class="s2">&quot;GEV&quot;</span><span class="p">]</span>
+<span class="n">gev_kmod</span> <span class="o">=</span> <span class="n">microstates_kmod</span><span class="p">[</span><span class="s2">&quot;GEV&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Using conventional Kmeans,  GEV = </span><span class="si">{</span><span class="n">gev_kmeans</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Using modified Kmeans,  GEV = </span><span class="si">{</span><span class="n">gev_kmod</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 
 <span class="c1"># Visualize the extracted microstates</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_kmeans</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">=</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">450</span><span class="p">))</span>
-<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_kmod</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">=</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">450</span><span class="p">))</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_kmeans</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">450</span><span class="p">))</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_kmod</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">450</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 61.25%
- Using modified Kmeans,  GEV = 72.17%
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 51.06%
+ Using modified Kmeans,  GEV = 64.00%
 </pre></div>
 </div>
-<img alt="../../_images/bd2c1dce60c9f0b34734a77a86a91d737bd7ee6e60bb7ac089ac8ca4e448a13c.png" src="../../_images/bd2c1dce60c9f0b34734a77a86a91d737bd7ee6e60bb7ac089ac8ca4e448a13c.png" />
-<img alt="../../_images/7e72b5dd075884b8afe809306dca473bbbc0c06f34c2c7615a09a3cd0c49d5ab.png" src="../../_images/7e72b5dd075884b8afe809306dca473bbbc0c06f34c2c7615a09a3cd0c49d5ab.png" />
+<img alt="../../_images/557bb7857d8a89b25745702513a66a880e548a1968e85229cea2751e6ad43760.png" src="../../_images/557bb7857d8a89b25745702513a66a880e548a1968e85229cea2751e6ad43760.png" />
+<img alt="../../_images/0687db77edb496f04047616d86045d213e4a3e637a1f0000d4c4ec54dd79ffe7.png" src="../../_images/0687db77edb496f04047616d86045d213e4a3e637a1f0000d4c4ec54dd79ffe7.png" />
 </div>
 </div>
 </section>
@@ -851,8 +875,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -896,7 +919,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -920,8 +943,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

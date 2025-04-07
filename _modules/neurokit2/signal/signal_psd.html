@@ -15,30 +15,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -52,7 +49,6 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -68,8 +64,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -77,6 +84,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -84,8 +92,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -103,8 +111,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -134,17 +141,21 @@
     
     
     <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -325,16 +336,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -362,18 +381,18 @@
                   
   <h1>Source code for neurokit2.signal.signal_psd</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
 
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">NeuroKitWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 
 
 <div class="viewcode-block" id="signal_psd">
 <a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_psd">[docs]</a>
-<span class="k">def</span> <span class="nf">signal_psd</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">signal_psd</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">,</span>
@@ -434,7 +453,8 @@
 <span class="sd">        The timestamps corresponding to each sample in the signal, in seconds</span>
 <span class="sd">        (for ``&quot;lombscargle&quot;`` method). Defaults to None.</span>
 <span class="sd">    **kwargs : optional</span>
-<span class="sd">        Keyword arguments to be passed to :func:`.scipy.signal.welch`.</span>
+<span class="sd">        Keyword arguments to be passed to :func:`.scipy.signal.welch` or :func:`.np.fft.rfft` (when</span>
+<span class="sd">        method is &#39;fft&#39;, such as `n`, which determines the number of windows).</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -504,24 +524,37 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_frequency</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">sampling_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># This is to compute min_frequency if both min_frequency and sampling_rate are not provided (#800)</span>
-            <span class="n">min_frequency</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># for high frequency resolution</span>
+            <span class="n">min_frequency</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="p">)</span>  <span class="c1"># for high frequency resolution</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">min_frequency</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># for high frequency resolution</span>
+            <span class="n">min_frequency</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="p">)</span>  <span class="c1"># for high frequency resolution</span>
 
     <span class="c1"># MNE</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;multitaper&quot;</span><span class="p">,</span> <span class="s2">&quot;multitapers&quot;</span><span class="p">,</span> <span class="s2">&quot;mne&quot;</span><span class="p">]:</span>
         <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_multitaper</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span>
+            <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># FFT (Numpy)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fft&quot;</span><span class="p">]:</span>
-        <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_fft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_fft</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
     <span class="c1"># Lombscargle (AtroPy)</span>
     <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;lombscargle&quot;</span><span class="p">,</span> <span class="s2">&quot;lomb&quot;</span><span class="p">]:</span>
         <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_lomb</span><span class="p">(</span>
-            <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span>
+            <span class="n">signal</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span>
+            <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># Method that are using a window</span>
@@ -550,7 +583,11 @@
         <span class="c1"># Welch (Scipy)</span>
         <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;welch&quot;</span><span class="p">]:</span>
             <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">_signal_psd_welch</span><span class="p">(</span>
-                <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span> <span class="n">window_type</span><span class="o">=</span><span class="n">window_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="n">signal</span><span class="p">,</span>
+                <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+                <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                <span class="n">window_type</span><span class="o">=</span><span class="n">window_type</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># BURG</span>
@@ -573,11 +610,19 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Frequency&quot;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">:</span> <span class="n">power</span><span class="p">})</span>
 
     <span class="c1"># Filter</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_frequency</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">max_frequency</span><span class="p">)]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_frequency</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">max_frequency</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
     <span class="c1">#    data[&quot;Power&quot;] = 10 * np.log(data[&quot;Power&quot;])</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Power Spectral Density (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; method)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Power&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Power Spectral Density (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; method)&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spectrum&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
@@ -589,7 +634,7 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_fft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_psd_fft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># Power-spectrum density (PSD)</span>
     <span class="n">power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">power</span><span class="p">))</span>
@@ -601,15 +646,17 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_multitaper</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_psd_multitaper</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+<span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">mne</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: signal_psd(): the &#39;mne&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot; module is required for the &#39;mne&#39; method to run.&quot;</span><span class="p">,</span>
             <span class="s2">&quot; Please install it first (`pip install mne`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="n">power</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">time_frequency</span><span class="o">.</span><span class="n">psd_array_multitaper</span><span class="p">(</span>
         <span class="n">signal</span><span class="p">,</span>
@@ -629,7 +676,9 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_welch</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_type</span><span class="o">=</span><span class="s2">&quot;hann&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_psd_welch</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_type</span><span class="o">=</span><span class="s2">&quot;hann&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
     <span class="k">if</span> <span class="n">nperseg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">nfft</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nperseg</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -655,31 +704,35 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_lomb</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_psd_lomb</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">astropy.timeseries</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">astropy.timeseries</span>
 
         <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">max_frequency</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
                 <span class="n">max_frequency</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># sanitize highest frequency</span>
             <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-            <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span>
+            <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span>
+                <span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span>
                 <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">maximum_frequency</span><span class="o">=</span><span class="n">max_frequency</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># determine maximum frequency with astropy defaults for unevenly spaced data</span>
             <span class="c1"># https://docs.astropy.org/en/stable/api/astropy.timeseries.LombScargle.html#astropy.timeseries.LombScargle.autopower</span>
-            <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span>
-                <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">min_frequency</span>
-            <span class="p">)</span>
+            <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span> <span class="o">=</span> <span class="n">astropy</span><span class="o">.</span><span class="n">timeseries</span><span class="o">.</span><span class="n">LombScargle</span><span class="p">(</span>
+                <span class="n">t</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="s2">&quot;psd&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">autopower</span><span class="p">(</span><span class="n">minimum_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: signal_psd(): the &#39;astropy&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot; module is required for the &#39;lomb&#39; method to run.&quot;</span><span class="p">,</span>
             <span class="s2">&quot; Please install it first (`pip install astropy`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">return</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span>
 
@@ -689,13 +742,23 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_burg</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_psd_burg</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">order</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span>
+    <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">,</span>
+    <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="n">nfft</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nperseg</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">ar</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_signal_arma_burg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="n">corrected</span><span class="p">)</span>
-    <span class="n">psd</span> <span class="o">=</span> <span class="n">_signal_psd_from_arma</span><span class="p">(</span><span class="n">ar</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="n">side</span><span class="p">)</span>
+    <span class="n">ar</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_signal_arma_burg</span><span class="p">(</span>
+        <span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="n">corrected</span>
+    <span class="p">)</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">_signal_psd_from_arma</span><span class="p">(</span>
+        <span class="n">ar</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="n">side</span>
+    <span class="p">)</span>
 
     <span class="c1"># signal is real, not complex</span>
     <span class="k">if</span> <span class="n">nfft</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -723,7 +786,7 @@
     <span class="k">return</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">power</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_arma_burg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_arma_burg</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;KIC&quot;</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
     <span class="c1"># Sanitize order and signal</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
@@ -740,7 +803,9 @@
     <span class="n">denominator</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">N</span>
 
     <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>  <span class="c1"># AR parametric signal model estimate</span>
-    <span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>  <span class="c1"># vector K of reflection coefficients (parcor coefficients)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span>
+    <span class="p">)</span>  <span class="c1"># vector K of reflection coefficients (parcor coefficients)</span>
     <span class="n">ef</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>  <span class="c1"># forward prediction error</span>
     <span class="n">eb</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>  <span class="c1"># backward prediction error</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -760,7 +825,9 @@
 
         <span class="k">if</span> <span class="n">criteria</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># k=k+1 because order goes from 1 to P whereas k starts at 0.</span>
-            <span class="n">residual_new</span> <span class="o">=</span> <span class="n">_criteria</span><span class="p">(</span><span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">new_rho</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="n">corrected</span><span class="p">)</span>
+            <span class="n">residual_new</span> <span class="o">=</span> <span class="n">_criteria</span><span class="p">(</span>
+                <span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">new_rho</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="n">corrected</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">residual_old</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">residual_new</span><span class="p">)</span>
 
@@ -772,7 +839,9 @@
             <span class="n">residual_old</span> <span class="o">=</span> <span class="n">residual_new</span>
         <span class="n">rho</span> <span class="o">=</span> <span class="n">new_rho</span>
         <span class="k">if</span> <span class="n">rho</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found a negative value (expected positive strictly) </span><span class="si">{</span><span class="n">rho</span><span class="si">}</span><span class="s2">. Decrease the order.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found a negative value (expected positive strictly) </span><span class="si">{</span><span class="n">rho</span><span class="si">}</span><span class="s2">. Decrease the order.&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ar</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">ar</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">kp</span>
@@ -789,7 +858,9 @@
                 <span class="n">ar_previous</span> <span class="o">=</span> <span class="n">ar</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>  <span class="c1"># previous value</span>
                 <span class="n">ar</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ar_previous</span> <span class="o">+</span> <span class="n">kp</span> <span class="o">*</span> <span class="n">ar</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>  <span class="c1"># Eq. (8.2)</span>
                 <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">k</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">ar</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ar</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">kp</span> <span class="o">*</span> <span class="n">ar_previous</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>  <span class="c1"># Eq. (8.2)</span>
+                    <span class="n">ar</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">ar</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">kp</span> <span class="o">*</span> <span class="n">ar_previous</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+                    <span class="p">)</span>  <span class="c1"># Eq. (8.2)</span>
 
             <span class="c1"># Update the forward and backward prediction errors</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
@@ -809,7 +880,7 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_criteria</span><span class="p">(</span><span class="n">criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_criteria</span><span class="p">(</span><span class="n">criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Criteria to automatically select order in parametric PSD.</span>
 
 <span class="sd">    AIC, AICc, KIC and AKICc are based on information theory. They attempt to balance the complexity</span>
@@ -847,7 +918,11 @@
 
     <span class="k">elif</span> <span class="n">criteria</span> <span class="o">==</span> <span class="s2">&quot;KIC&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">corrected</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span>
+            <span class="n">residual</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">k</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+                <span class="o">+</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 
@@ -862,7 +937,9 @@
     <span class="k">return</span> <span class="n">residual</span>
 
 
-<span class="k">def</span> <span class="nf">_signal_psd_from_arma</span><span class="p">(</span><span class="n">ar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_psd_from_arma</span><span class="p">(</span>
+    <span class="n">ar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;one-sided&quot;</span>
+<span class="p">):</span>
 
     <span class="k">if</span> <span class="n">ar</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either AR or MA model must be provided&quot;</span><span class="p">)</span>
@@ -950,7 +1027,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -974,8 +1051,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

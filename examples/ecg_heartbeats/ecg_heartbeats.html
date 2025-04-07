@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="Heart Rate Variability (HRV)" href="../ecg_hrv/ecg_hrv.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -450,9 +469,9 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
-<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
@@ -503,7 +522,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e15d88b85f47fc10daa9c367708e366aa6b79e6dc9ddc5cba962c8c0dbbc4145.png" src="../../_images/e15d88b85f47fc10daa9c367708e366aa6b79e6dc9ddc5cba962c8c0dbbc4145.png" />
+<img alt="../../_images/1291c335662b46f45baba28f457b774477d568dc340a63657d0150b6163f63ca.png" src="../../_images/1291c335662b46f45baba28f457b774477d568dc340a63657d0150b6163f63ca.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -519,7 +538,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/050f20ee0743e1e74df056bc43cf7e29be9abab81347b97cb914196ea805c0af.png" src="../../_images/050f20ee0743e1e74df056bc43cf7e29be9abab81347b97cb914196ea805c0af.png" />
+<img alt="../../_images/34bb66e4295d257912f13ad1108ea61d245322b870d8a7f6cda5accd352ce262.png" src="../../_images/34bb66e4295d257912f13ad1108ea61d245322b870d8a7f6cda5accd352ce262.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -533,7 +552,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a function to create epochs</span>
-<span class="k">def</span> <span class="nf">extract_heartbeats</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_heartbeats</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> 
     <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> 
                                   <span class="n">events</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span> 
                                   <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">,</span> 
@@ -575,36 +594,36 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.211780</td>
-      <td>135</td>
+      <td>-0.195113</td>
+      <td>141</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.206182</td>
-      <td>136</td>
+      <td>-0.189386</td>
+      <td>142</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.200562</td>
-      <td>137</td>
+      <td>-0.183523</td>
+      <td>143</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.194876</td>
-      <td>138</td>
+      <td>-0.177497</td>
+      <td>144</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.189067</td>
-      <td>139</td>
+      <td>-0.171275</td>
+      <td>145</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -650,10 +669,10 @@
       <th>17</th>
       <th>18</th>
       <th>...</th>
+      <th>31</th>
       <th>32</th>
       <th>33</th>
       <th>34</th>
-      <th>35</th>
       <th>4</th>
       <th>5</th>
       <th>6</th>
@@ -689,127 +708,127 @@
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.211780</td>
-      <td>-0.139194</td>
-      <td>-0.130864</td>
-      <td>-0.136518</td>
-      <td>-0.140333</td>
-      <td>-0.139476</td>
-      <td>-0.132068</td>
-      <td>-0.133927</td>
-      <td>-0.136884</td>
-      <td>-0.138800</td>
+      <td>-0.195113</td>
+      <td>-0.130153</td>
+      <td>-0.132433</td>
+      <td>-0.140598</td>
+      <td>-0.141205</td>
+      <td>-0.131894</td>
+      <td>-0.137590</td>
+      <td>-0.138076</td>
+      <td>-0.142685</td>
+      <td>-0.141406</td>
       <td>...</td>
-      <td>-0.126825</td>
-      <td>-0.150537</td>
-      <td>-0.099231</td>
-      <td>-0.199724</td>
-      <td>-0.121202</td>
-      <td>-0.150639</td>
-      <td>-0.136116</td>
-      <td>-0.129960</td>
-      <td>-0.143432</td>
-      <td>-0.136868</td>
+      <td>-0.139858</td>
+      <td>-0.158432</td>
+      <td>-0.061863</td>
+      <td>-0.267689</td>
+      <td>-0.117390</td>
+      <td>-0.148950</td>
+      <td>-0.129941</td>
+      <td>-0.133598</td>
+      <td>-0.128724</td>
+      <td>-0.140743</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.206182</td>
-      <td>-0.137950</td>
-      <td>-0.129669</td>
-      <td>-0.135418</td>
-      <td>-0.139379</td>
-      <td>-0.139054</td>
-      <td>-0.131402</td>
-      <td>-0.133262</td>
-      <td>-0.136028</td>
-      <td>-0.138002</td>
+      <td>-0.189386</td>
+      <td>-0.129253</td>
+      <td>-0.131145</td>
+      <td>-0.139329</td>
+      <td>-0.140224</td>
+      <td>-0.130807</td>
+      <td>-0.136145</td>
+      <td>-0.137147</td>
+      <td>-0.141959</td>
+      <td>-0.140741</td>
       <td>...</td>
-      <td>-0.125963</td>
-      <td>-0.149092</td>
-      <td>-0.098558</td>
-      <td>-0.197615</td>
-      <td>-0.120082</td>
-      <td>-0.149837</td>
-      <td>-0.135740</td>
-      <td>-0.129015</td>
-      <td>-0.142262</td>
-      <td>-0.135981</td>
+      <td>-0.139093</td>
+      <td>-0.157701</td>
+      <td>-0.060969</td>
+      <td>-0.267302</td>
+      <td>-0.116504</td>
+      <td>-0.148123</td>
+      <td>-0.129279</td>
+      <td>-0.133086</td>
+      <td>-0.127833</td>
+      <td>-0.139788</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.200562</td>
-      <td>-0.136561</td>
-      <td>-0.128342</td>
-      <td>-0.134086</td>
-      <td>-0.138226</td>
-      <td>-0.138514</td>
-      <td>-0.130641</td>
-      <td>-0.132468</td>
-      <td>-0.135015</td>
-      <td>-0.137023</td>
+      <td>-0.183523</td>
+      <td>-0.128249</td>
+      <td>-0.129754</td>
+      <td>-0.137904</td>
+      <td>-0.139006</td>
+      <td>-0.129554</td>
+      <td>-0.134520</td>
+      <td>-0.136032</td>
+      <td>-0.141089</td>
+      <td>-0.139945</td>
       <td>...</td>
-      <td>-0.124925</td>
-      <td>-0.147433</td>
-      <td>-0.097765</td>
-      <td>-0.195335</td>
-      <td>-0.118787</td>
-      <td>-0.148906</td>
-      <td>-0.135233</td>
-      <td>-0.127967</td>
-      <td>-0.140871</td>
-      <td>-0.134897</td>
+      <td>-0.138182</td>
+      <td>-0.156836</td>
+      <td>-0.059949</td>
+      <td>-0.266623</td>
+      <td>-0.115488</td>
+      <td>-0.147046</td>
+      <td>-0.128471</td>
+      <td>-0.132483</td>
+      <td>-0.126859</td>
+      <td>-0.138735</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.194876</td>
-      <td>-0.134998</td>
-      <td>-0.126819</td>
-      <td>-0.132472</td>
-      <td>-0.136824</td>
-      <td>-0.137814</td>
-      <td>-0.129763</td>
-      <td>-0.131505</td>
-      <td>-0.133802</td>
-      <td>-0.135825</td>
+      <td>-0.177497</td>
+      <td>-0.127119</td>
+      <td>-0.128228</td>
+      <td>-0.136276</td>
+      <td>-0.137506</td>
+      <td>-0.128098</td>
+      <td>-0.132666</td>
+      <td>-0.134663</td>
+      <td>-0.140026</td>
+      <td>-0.138997</td>
       <td>...</td>
-      <td>-0.123643</td>
-      <td>-0.145509</td>
-      <td>-0.096822</td>
-      <td>-0.192858</td>
-      <td>-0.117276</td>
-      <td>-0.147819</td>
-      <td>-0.134570</td>
-      <td>-0.126770</td>
-      <td>-0.139194</td>
-      <td>-0.133557</td>
+      <td>-0.137094</td>
+      <td>-0.155786</td>
+      <td>-0.058776</td>
+      <td>-0.265585</td>
+      <td>-0.114280</td>
+      <td>-0.145656</td>
+      <td>-0.127465</td>
+      <td>-0.131746</td>
+      <td>-0.125755</td>
+      <td>-0.137557</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.189067</td>
-      <td>-0.133216</td>
-      <td>-0.125015</td>
-      <td>-0.130505</td>
-      <td>-0.135119</td>
-      <td>-0.136903</td>
-      <td>-0.128742</td>
-      <td>-0.130320</td>
-      <td>-0.132327</td>
-      <td>-0.134369</td>
+      <td>-0.171275</td>
+      <td>-0.125831</td>
+      <td>-0.126518</td>
+      <td>-0.134381</td>
+      <td>-0.135678</td>
+      <td>-0.126387</td>
+      <td>-0.130514</td>
+      <td>-0.132957</td>
+      <td>-0.138703</td>
+      <td>-0.137871</td>
       <td>...</td>
-      <td>-0.122039</td>
-      <td>-0.143273</td>
-      <td>-0.095679</td>
-      <td>-0.190155</td>
-      <td>-0.115489</td>
-      <td>-0.146549</td>
-      <td>-0.133717</td>
-      <td>-0.125359</td>
-      <td>-0.137146</td>
-      <td>-0.131897</td>
+      <td>-0.135783</td>
+      <td>-0.154493</td>
+      <td>-0.057421</td>
+      <td>-0.264116</td>
+      <td>-0.112791</td>
+      <td>-0.143886</td>
+      <td>-0.126186</td>
+      <td>-0.130817</td>
+      <td>-0.124461</td>
+      <td>-0.136209</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 35 columns</p>
+<p>5 rows × 34 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -833,7 +852,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2c441ce5f7e6cd3683cbd0b3576b5332239453c544df6dd314672315fd1073c0.png" src="../../_images/2c441ce5f7e6cd3683cbd0b3576b5332239453c544df6dd314672315fd1073c0.png" />
+<img alt="../../_images/6fb661abaf99fcfa93abdf9d9fa3e24a14d4164e72e41ccb97290127364351eb.png" src="../../_images/6fb661abaf99fcfa93abdf9d9fa3e24a14d4164e72e41ccb97290127364351eb.png" />
 </div>
 </div>
 </section>
@@ -897,8 +916,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -939,7 +957,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -963,8 +981,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

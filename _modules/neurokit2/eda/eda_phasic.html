@@ -15,30 +15,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -52,7 +49,6 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -68,8 +64,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -77,6 +84,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -84,8 +92,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -103,8 +111,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -134,17 +141,21 @@
     
     
     <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -325,16 +336,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -362,17 +381,17 @@
                   
   <h1>Source code for neurokit2.eda.eda_phasic</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">scipy.linalg</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.linalg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_smooth</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_resample</span><span class="p">,</span> <span class="n">signal_smooth</span>
 
 
 <div class="viewcode-block" id="eda_phasic">
 <a class="viewcode-back" href="../../../functions/eda.html#neurokit2.eda.eda_phasic">[docs]</a>
-<span class="k">def</span> <span class="nf">eda_phasic</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eda_phasic</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Electrodermal Activity (EDA) Decomposition into Phasic and Tonic Components**</span>
 
 <span class="sd">    Decompose the Electrodermal Activity (EDA) into two components, namely **Phasic** and</span>
@@ -506,7 +525,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Acqknowledge</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">smoothing_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_eda_phasic_mediansmooth</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">smoothing_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
 <span class="sd">    issue/)&quot;&quot;&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">smoothing_factor</span> <span class="o">*</span> <span class="n">sampling_rate</span>
@@ -516,7 +535,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tonic</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">phasic</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_eda_phasic_highpass</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;One of the two methods available in biopac&#39;s acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-</span>
 <span class="sd">    issue/)&quot;&quot;&quot;</span>
     <span class="n">phasic</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">)</span>
@@ -528,7 +547,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># cvxEDA (Greco et al., 2016)</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">_eda_phasic_cvxeda</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_eda_phasic_cvxeda</span><span class="p">(</span>
     <span class="n">eda_signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">tau0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
@@ -573,7 +592,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Try loading cvx</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">cvxopt</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">cvxopt</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
             <span class="s2">&quot;NeuroKit error: eda_decompose(): the &#39;cvxopt&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
@@ -581,7 +600,7 @@
         <span class="p">)</span>
 
     <span class="c1"># Internal functions</span>
-    <span class="k">def</span> <span class="nf">_cvx</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_cvx</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">spmatrix</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
 
     <span class="n">frequency</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">sampling_rate</span>
@@ -684,7 +703,7 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_eda_phasic_sparsEDA</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_eda_phasic_sparsEDA</span><span class="p">(</span>
     <span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">Kmax</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Nmin</span><span class="o">=</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.025</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;</span>
@@ -861,7 +880,7 @@
     <span class="k">return</span> <span class="n">SCL</span><span class="p">,</span> <span class="n">SCR</span>
 
 
-<span class="k">def</span> <span class="nf">lasso</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">maxIters</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lasso</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">maxIters</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">):</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="n">W</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -1039,7 +1058,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">numIters</span><span class="p">,</span> <span class="n">activationHist</span><span class="p">,</span> <span class="n">duals</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">res</span>
 
 
-<span class="k">def</span> <span class="nf">updateChol</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">explicitA</span><span class="p">,</span> <span class="n">activeSet</span><span class="p">,</span> <span class="n">newIndex</span><span class="p">,</span> <span class="n">zeroTol</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">updateChol</span><span class="p">(</span><span class="n">R_I</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">explicitA</span><span class="p">,</span> <span class="n">activeSet</span><span class="p">,</span> <span class="n">newIndex</span><span class="p">,</span> <span class="n">zeroTol</span><span class="p">):</span>
     <span class="c1"># global opts_tr, zeroTol</span>
 
     <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1097,10 +1116,10 @@
     <span class="k">return</span> <span class="n">R_I0</span><span class="p">,</span> <span class="n">flag</span>
 
 
-<span class="k">def</span> <span class="nf">downdateChol</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">downdateChol</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
     <span class="c1"># global opts_tr, zeroTol</span>
 
-    <span class="k">def</span> <span class="nf">planerot</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">planerot</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="c1"># http://statweb.stanford.edu/~susan/courses/b494/index/node30.html</span>
         <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -1163,7 +1182,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -1187,8 +1206,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

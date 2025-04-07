@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="RSP" href="rsp.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -556,7 +575,7 @@ as well as the signals’ sampling rate.</p></li>
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_phasic" title="neurokit2.eda.eda_phasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_phasic</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_findpeaks" title="neurokit2.eda.eda_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_findpeaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -608,7 +627,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <ul class="simple">
 <li><p><strong>Example 1: Data for event-related analysis</strong></p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Download the data for event-related analysis</span>
 <span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
@@ -639,7 +658,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <ul class="simple">
 <li><p><strong>Example 2: Resting-state data</strong></p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Download the resting-state data</span>
 <span class="gp">In [9]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_8min_100hz&quot;</span><span class="p">)</span>
@@ -682,7 +701,7 @@ Defaults to True.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 
@@ -729,9 +748,9 @@ allows generating multiple version of the same signal distorted by different ran
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">In [2]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="gp">In [3]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
@@ -788,9 +807,9 @@ is no high enough frequency to remove).</p></li>
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_findpeaks" title="neurokit2.eda.eda_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_findpeaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="gp">In [2]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Simulate raw signal</span>
 <span class="gp">In [3]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
@@ -859,7 +878,7 @@ for unclear reasons. Please help.</p>
 </div>
 <p class="rubric">Examples</p>
 <p><strong>Example 1</strong>: Methods comparison.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Simulate EDA signal</span>
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -957,7 +976,7 @@ as “1” in lists of zeros with the same length as <code class="docutils liter
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_phasic" title="neurokit2.eda.eda_phasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_phasic</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Get phasic component</span>
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -981,6 +1000,7 @@ as “1” in lists of zeros with the same length as <code class="docutils liter
 <span class="gp">   ...: </span>    <span class="n">neurokit</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]</span>
 <span class="gp">   ...: </span><span class="p">],</span> <span class="n">eda_phasic</span><span class="p">)</span>
 <span class="gp">   ...: </span>
+<span class="gh">Out[9]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_peaks.png"><img alt="../_images/p_eda_peaks.png" src="../_images/p_eda_peaks.png" style="width: 640.0px; height: 480.0px;" />
@@ -1032,7 +1052,7 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_phasic" title="neurokit2.eda.eda_phasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_phasic</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_findpeaks" title="neurokit2.eda.eda_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_findpeaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Get phasic component</span>
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1049,6 +1069,7 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <span class="gp">In [7]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">eda_phasic</span><span class="p">)</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_fixpeaks.png"><img alt="../_images/p_eda_fixpeaks.png" src="../_images/p_eda_fixpeaks.png" style="width: 640.0px; height: 480.0px;" />
@@ -1097,7 +1118,7 @@ the following:</p>
 <ul class="simple">
 <li><p><strong>Example 1: Simulated Data</strong></p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Example with simulated data</span>
 <span class="gp">In [2]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -1113,8 +1134,8 @@ the following:</p>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime</span>
-<span class="go">1     1         5000  ...         0.359             0.509</span>
-<span class="go">2     2        10000  ...         0.366             0.537</span>
+<span class="go">1     1         5000  ...         0.358             0.511</span>
+<span class="go">2     2        10000  ...         0.369             0.546</span>
 <span class="go">3     3        15000  ...           NaN               NaN</span>
 
 <span class="go">[3 rows x 8 columns]</span>
@@ -1123,7 +1144,7 @@ the following:</p>
 <ul class="simple">
 <li><p><strong>Example 2: Real Data</strong></p></li>
 </ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Example with real data</span>
 <span class="gp">In [7]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
@@ -1192,7 +1213,7 @@ features consist of the following:</p>
 <p><a class="reference internal" href="bio.html#neurokit2.bio_process" title="neurokit2.bio_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_eventrelated" title="neurokit2.eda.eda_eventrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_eventrelated</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Download data</span>
 <span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_8min_100hz&quot;</span><span class="p">)</span>
@@ -1261,21 +1282,21 @@ by total power).</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="gp">In [2]: </span><span class="n">eda</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s1">&#39;bio_resting_8min_100hz&#39;</span><span class="p">)[</span><span class="s1">&#39;EDA&#39;</span><span class="p">]</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;posada&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span>
-<span class="go">{&#39;EDA_Sympathetic&#39;: 0.0006638980045219654,</span>
-<span class="go"> &#39;EDA_SympatheticN&#39;: 3.7368325327637346e-05}</span>
+<span class="go">{&#39;EDA_Sympathetic&#39;: np.float64(0.0006638980045219654),</span>
+<span class="go"> &#39;EDA_SympatheticN&#39;: np.float64(3.7368325327637346e-05)}</span>
 
 <span class="gp">In [4]: </span><span class="n">results</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_sympathetic</span><span class="p">(</span><span class="n">eda</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ghiasi&#39;</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">results</span>
 <span class="gh">Out[5]: </span>
-<span class="go">{&#39;EDA_Sympathetic&#39;: 5.6544954350427365e-05,</span>
-<span class="go"> &#39;EDA_SympatheticN&#39;: 0.0019044764295758339}</span>
+<span class="go">{&#39;EDA_Sympathetic&#39;: np.float64(5.6544954350427365e-05),</span>
+<span class="go"> &#39;EDA_SympatheticN&#39;: np.float64(0.0019044764295758339)}</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_sympathetic1.png"><img alt="../_images/p_eda_sympathetic1.png" src="../_images/p_eda_sympathetic1.png" style="width: 640.0px; height: 480.0px;" />
@@ -1320,7 +1341,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Simulate EDA signal</span>
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -1330,7 +1351,7 @@ correlations approaching 1, as recommended by Halem et al. (2020).</p></li>
 <span class="gp">In [4]: </span><span class="n">cor</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_autocor</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">cor</span>
-<span class="gh">Out[5]: </span><span class="go">-0.31164969420383554</span>
+<span class="gh">Out[5]: </span><span class="go">np.float64(-0.062432482191876984)</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1374,7 +1395,7 @@ welcome.</p>
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="signal.html#neurokit2.signal_changepoints" title="neurokit2.signal_changepoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_changepoints</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Simulate EDA signal</span>
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -1382,7 +1403,7 @@ welcome.</p>
 <span class="gp">In [3]: </span><span class="n">eda_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_clean</span><span class="p">(</span><span class="n">eda_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">eda_changepoints</span><span class="p">(</span><span class="n">eda_cleaned</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">26</span>
+<span class="gh">Out[4]: </span><span class="go">12</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_changepoints1.png"><img alt="../_images/p_eda_changepoints1.png" src="../_images/p_eda_changepoints1.png" style="width: 640.0px; height: 480.0px;" />
@@ -1431,7 +1452,7 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <p><a class="reference internal" href="#neurokit2.eda.eda_simulate" title="neurokit2.eda.eda_simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_simulate</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_clean" title="neurokit2.eda.eda_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_clean</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_phasic" title="neurokit2.eda.eda_phasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_phasic</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_fixpeaks" title="neurokit2.eda.eda_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_fixpeaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_peaks" title="neurokit2.eda.eda_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_process" title="neurokit2.eda.eda_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_process</span></code></a>, <a class="reference internal" href="#neurokit2.eda.eda_plot" title="neurokit2.eda.eda_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eda_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
 <span class="go"># Get phasic component</span>
 <span class="gp">In [2]: </span><span class="n">eda_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">eda_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">scr_number</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1456,6 +1477,7 @@ samples at which the SCR onset and the SCR peaks occur. Accessible with the keys
 <span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">gamboa2008</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">kim2004</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">vanhalem2020</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>                     <span class="n">neurokit</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">],</span> <span class="n">nabian2018</span><span class="p">[</span><span class="s2">&quot;SCR_Peaks&quot;</span><span class="p">]],</span> <span class="n">eda_phasic</span><span class="p">)</span>
 <span class="gp">   ....: </span>
+<span class="gh">Out[11]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_eda_findpeaks.png"><img alt="../_images/p_eda_findpeaks.png" src="../_images/p_eda_findpeaks.png" style="width: 640.0px; height: 480.0px;" />
@@ -1518,8 +1540,7 @@ journal of translational engineering in health and medicine, 6, 2800711.</p></li
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1620,7 +1641,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -1644,8 +1665,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

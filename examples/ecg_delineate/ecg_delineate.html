@@ -16,30 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -55,7 +52,6 @@
     <link rel="prev" title="Extract and Visualize Individual Heartbeats" href="../ecg_heartbeats/ecg_heartbeats.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -71,8 +67,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -80,6 +87,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -104,8 +112,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -135,17 +142,21 @@
     
     
     <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -391,16 +402,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -449,9 +468,9 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load NeuroKit and other useful packages</span>
-<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </pre></div>
 </div>
 </div>
@@ -481,7 +500,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/cf854beead3f241822cb01a1e2ebe95f77ba2b2ee6c279525bdd77e973dbabeb.png" src="../../_images/cf854beead3f241822cb01a1e2ebe95f77ba2b2ee6c279525bdd77e973dbabeb.png" />
+<img alt="../../_images/c3f0113bc8a5400ddf2d591d611d344145ac4984b10aebd43d6788ca8caa21cb.png" src="../../_images/c3f0113bc8a5400ddf2d591d611d344145ac4984b10aebd43d6788ca8caa21cb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -492,7 +511,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/01c1a067ae172211c3cd06bab0547b441f387c9ebf1478249ee273c8e8a6168e.png" src="../../_images/01c1a067ae172211c3cd06bab0547b441f387c9ebf1478249ee273c8e8a6168e.png" />
+<img alt="../../_images/c54bbbb2a95898010ae1bc3e7567f89aa355cceabffa55c8164ee4c6bd05401c.png" src="../../_images/c54bbbb2a95898010ae1bc3e7567f89aa355cceabffa55c8164ee4c6bd05401c.png" />
 </div>
 </div>
 <p>Visually, the R-peaks seem to have been correctly identified. You can also explore searching for R-peaks using different methods provided by NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
@@ -522,7 +541,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d4d0c54474b089f98c0fc4940b96f174ba959122225d5f2f950da1bce7735aff.png" src="../../_images/d4d0c54474b089f98c0fc4940b96f174ba959122225d5f2f950da1bce7735aff.png" />
+<img alt="../../_images/27efd065a8c3f2ed8fbcef10d3b6e5c63ac30ed34dd56292d05c0169c16ca65a.png" src="../../_images/27efd065a8c3f2ed8fbcef10d3b6e5c63ac30ed34dd56292d05c0169c16ca65a.png" />
 </div>
 </div>
 <p>Visually, the ‘peak’ method seems to have correctly identified the P-peaks, Q-peaks, S-peaks and T-peaks for this signal, at least, for the first few complexes. Well done, <em>peak</em>!</p>
@@ -540,7 +559,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f9baffb54eac82946f530bae16c8678d6c84cee00f285370173e99038499898d.png" src="../../_images/f9baffb54eac82946f530bae16c8678d6c84cee00f285370173e99038499898d.png" />
+<img alt="../../_images/f10b354a54bdddcc4f2cacb602d27cf9b2937f1ba3cea2b27ba7c5acfbc6bda0.png" src="../../_images/f10b354a54bdddcc4f2cacb602d27cf9b2937f1ba3cea2b27ba7c5acfbc6bda0.png" />
 </div>
 </div>
 <p>The ‘peak’ method is doing a glamorous job with identifying all the ECG peaks for this piece of ECG signal.</p>
@@ -559,7 +578,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7e26da04027ed61475a2517bbfd04ac3e5d52af456938614822cbf2114dec1b8.png" src="../../_images/7e26da04027ed61475a2517bbfd04ac3e5d52af456938614822cbf2114dec1b8.png" />
+<img alt="../../_images/f7503abdd1856351622e1ef583fe8e260f6b65290d8a2f49b75d5aa0d412d50c.png" src="../../_images/f7503abdd1856351622e1ef583fe8e260f6b65290d8a2f49b75d5aa0d412d50c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -575,7 +594,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bd2b06c1c204bd95779747fd03b2630b0dc7b6ed68ffda2559619d4b1a405be6.png" src="../../_images/bd2b06c1c204bd95779747fd03b2630b0dc7b6ed68ffda2559619d4b1a405be6.png" />
+<img alt="../../_images/a3627f33c99de3982c74292bfcdcadc14b9cef46adff6355a388821710d5310b.png" src="../../_images/a3627f33c99de3982c74292bfcdcadc14b9cef46adff6355a388821710d5310b.png" />
 </div>
 </div>
 <p>Both the onsets of P-peaks and the offsets of T-peaks appears to have been correctly identified here. This information will be used to delineate cardiac phases in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-phase">ecg_phase()</a>.</p>
@@ -596,7 +615,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4e87bf972fc6e8984e38b864f9ffa620b5ef5a085170c1a3ab9b03cdf2d3723a.png" src="../../_images/4e87bf972fc6e8984e38b864f9ffa620b5ef5a085170c1a3ab9b03cdf2d3723a.png" />
+<img alt="../../_images/0ef1ca8ef48a858209535b9f22dd53a99ef01f6354fd3dab9d9f28dd15854397.png" src="../../_images/0ef1ca8ef48a858209535b9f22dd53a99ef01f6354fd3dab9d9f28dd15854397.png" />
 </div>
 </div>
 <p>By specifying <em>‘all’</em> in the <code class="docutils literal notranslate"><span class="pre">show_type</span></code> argument, you can plot all delineated information output by the cwt method. However, it could be hard to evaluate the accuracy of the delineated information with everyhing plotted together. Let’s tease them apart!</p>
@@ -613,7 +632,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/4438c3c179ede147cc0ece321707f4708f1527b800de39e7486fce4177f671b8.png" src="../../_images/4438c3c179ede147cc0ece321707f4708f1527b800de39e7486fce4177f671b8.png" />
+<img alt="../../_images/2bebd8590d783fe8a22c73be79af1403abda045f3b2d6741e501f27618060e0d.png" src="../../_images/2bebd8590d783fe8a22c73be79af1403abda045f3b2d6741e501f27618060e0d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -629,7 +648,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bb4ccef9f91ea7633fb583f8e7b92fdb38ce300abf3a2dcf57a16f86f8cfbc0c.png" src="../../_images/bb4ccef9f91ea7633fb583f8e7b92fdb38ce300abf3a2dcf57a16f86f8cfbc0c.png" />
+<img alt="../../_images/77411d1dbd4c79ae7731fb6478c99a7ba9d61829650d7d779eb9b58a846d3641.png" src="../../_images/77411d1dbd4c79ae7731fb6478c99a7ba9d61829650d7d779eb9b58a846d3641.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -645,7 +664,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/53a4c6985c5200b81c16f1f61e20bca501cf63c94bb1044ed8e468c9131f59d7.png" src="../../_images/53a4c6985c5200b81c16f1f61e20bca501cf63c94bb1044ed8e468c9131f59d7.png" />
+<img alt="../../_images/f55dbaf30e44ddee402cc40ccbcffc9f43c154d34ed3df9e68872d97a898af8a.png" src="../../_images/f55dbaf30e44ddee402cc40ccbcffc9f43c154d34ed3df9e68872d97a898af8a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -661,7 +680,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/652d9012006311d3f1f4faf0806c6a5e56fa2bde8b8db7a8990ab8f3e77d58eb.png" src="../../_images/652d9012006311d3f1f4faf0806c6a5e56fa2bde8b8db7a8990ab8f3e77d58eb.png" />
+<img alt="../../_images/d1832be89187905da680f9ad02112e29f4acd5c242558a2a982ee58ad98cb45a.png" src="../../_images/d1832be89187905da680f9ad02112e29f4acd5c242558a2a982ee58ad98cb45a.png" />
 </div>
 </div>
 <p><em>Unlike the peak method, the continuous wavelet method does not idenfity the Q-peaks and S-peaks. However, it provides more information regarding the boundaries of the waves</em></p>
@@ -683,7 +702,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/bb180658a7b7584b8a6b5087e1f3bb6832cbd38ceef8d3b1cd3101e1f53c55d3.png" src="../../_images/bb180658a7b7584b8a6b5087e1f3bb6832cbd38ceef8d3b1cd3101e1f53c55d3.png" />
+<img alt="../../_images/23fc768b30f56a31041a22ecb13c92b580e67d6f5c0e133b5724d1c74df20589.png" src="../../_images/23fc768b30f56a31041a22ecb13c92b580e67d6f5c0e133b5724d1c74df20589.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -699,7 +718,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d68352513f4ca2dacfe5e80b4a49753b0409ff5951df40e899f965627cb71620.png" src="../../_images/d68352513f4ca2dacfe5e80b4a49753b0409ff5951df40e899f965627cb71620.png" />
+<img alt="../../_images/073d60b544e832277177b7bb65923348339335d7d28d6ecc4680e09cd1bc20fc.png" src="../../_images/073d60b544e832277177b7bb65923348339335d7d28d6ecc4680e09cd1bc20fc.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -715,7 +734,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e9aa9d83e3d067fa3d088c1f5413d607c2ea9e689ac973805eb5c4577313caad.png" src="../../_images/e9aa9d83e3d067fa3d088c1f5413d607c2ea9e689ac973805eb5c4577313caad.png" />
+<img alt="../../_images/2f115a07fc750b51d3352f4fa388ced4f468ff237db8d7ffb18b80555d25ffe9.png" src="../../_images/2f115a07fc750b51d3352f4fa388ced4f468ff237db8d7ffb18b80555d25ffe9.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -731,7 +750,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/aa1fd8ded73f8ffc6b3ef5e8f04a6eb72436a0c7382a40474c224af3a45f84a8.png" src="../../_images/aa1fd8ded73f8ffc6b3ef5e8f04a6eb72436a0c7382a40474c224af3a45f84a8.png" />
+<img alt="../../_images/dc7435526b2c18e090eaa890ba7613fb522b826aead3e7f08bdac51c7cf9fb52.png" src="../../_images/dc7435526b2c18e090eaa890ba7613fb522b826aead3e7f08bdac51c7cf9fb52.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -747,7 +766,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/7a428bd7eb19887bdde33c8043d29c1fd516d392def3532cdfacad118cd3d0fa.png" src="../../_images/7a428bd7eb19887bdde33c8043d29c1fd516d392def3532cdfacad118cd3d0fa.png" />
+<img alt="../../_images/e652ebebf56a88d97e1f10c54ce888bd40f18d18c7b160615906a74dadfddfb6.png" src="../../_images/e652ebebf56a88d97e1f10c54ce888bd40f18d18c7b160615906a74dadfddfb6.png" />
 </div>
 </div>
 <p>Visually, from the plots above, the delineated outputs of DWT appear to be more accurate than CWT, especially for the P-peaks and P-wave boundaries.</p>
@@ -792,8 +811,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -833,7 +851,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -857,8 +875,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

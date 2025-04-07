@@ -15,30 +15,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -52,7 +49,6 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -68,8 +64,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -77,6 +84,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -84,8 +92,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -103,8 +111,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -134,17 +141,21 @@
     
     
     <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -325,16 +336,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -362,16 +381,16 @@
                   
   <h1>Source code for neurokit2.rsp.rsp_rate</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..signal</span> <span class="kn">import</span> <span class="p">(</span><span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span>
-                      <span class="n">signal_resample</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.rsp_peaks</span> <span class="kn">import</span> <span class="n">rsp_peaks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_filter</span><span class="p">,</span> <span class="n">signal_interpolate</span><span class="p">,</span> <span class="n">signal_rate</span><span class="p">,</span> <span class="n">signal_resample</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rsp_peaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">rsp_peaks</span>
 
 
 <div class="viewcode-block" id="rsp_rate">
 <a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_rate">[docs]</a>
-<span class="k">def</span> <span class="nf">rsp_rate</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rsp_rate</span><span class="p">(</span>
     <span class="n">rsp_cleaned</span><span class="p">,</span>
     <span class="n">troughs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
@@ -381,14 +400,13 @@
     <span class="n">peak_method</span><span class="o">=</span><span class="s2">&quot;khodadad2018&quot;</span><span class="p">,</span>
     <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find respiration rate**</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rsp_cleaned : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The cleaned respiration channel as returned by :func:`.rsp_clean`.</span>
-<span class="sd">    troughs : Union[list, np.array, pd.Series, pd.DataFrame]</span>
+<span class="sd">    troughs : Union[list, dict, np.array, pd.Series, pd.DataFrame]</span>
 <span class="sd">        The respiration troughs (inhalation onsets) as returned by :func:`.rsp_peaks`.</span>
 <span class="sd">        If None (default), inhalation onsets will be automatically identified from the</span>
 <span class="sd">        :func:`.rsp_clean` signal.</span>
@@ -430,13 +448,16 @@
 <span class="sd">      rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=1000)</span>
 <span class="sd">      rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method=&quot;trough&quot;)</span>
 <span class="sd">      rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method=&quot;xcorr&quot;)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;period&quot;</span><span class="p">,</span> <span class="s2">&quot;peak&quot;</span><span class="p">,</span> <span class="s2">&quot;peaks&quot;</span><span class="p">,</span> <span class="s2">&quot;trough&quot;</span><span class="p">,</span> <span class="s2">&quot;troughs&quot;</span><span class="p">,</span> <span class="s2">&quot;signal_rate&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">troughs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">troughs</span> <span class="o">=</span> <span class="n">rsp_peaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">peak_method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">troughs</span><span class="p">,</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+            <span class="n">troughs</span> <span class="o">=</span> <span class="n">troughs</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">]</span>
         <span class="n">rate</span> <span class="o">=</span> <span class="n">signal_rate</span><span class="p">(</span>
-            <span class="n">troughs</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">],</span>
+            <span class="n">troughs</span><span class="p">,</span>
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">),</span>
             <span class="n">interpolation_method</span><span class="o">=</span><span class="n">interpolation_method</span><span class="p">,</span>
@@ -452,10 +473,7 @@
         <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: rsp_rate(): &#39;method&#39; should be&quot;</span>
-            <span class="s2">&quot; one of &#39;trough&#39;, or &#39;cross-correlation&#39;.&quot;</span>
-        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NeuroKit error: rsp_rate(): &#39;method&#39; should be&quot;</span> <span class="s2">&quot; one of &#39;trough&#39;, or &#39;cross-correlation&#39;.&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">rate</span></div>
 
@@ -466,16 +484,12 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">_rsp_rate_xcorr</span><span class="p">(</span>
-    <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hop_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span>
-<span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_rsp_rate_xcorr</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hop_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">):</span>
 
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
     <span class="c1"># Downsample data to 10Hz</span>
     <span class="n">desired_sampling_rate</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span>
-        <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span>
-    <span class="p">)</span>
+    <span class="n">rsp</span> <span class="o">=</span> <span class="n">signal_resample</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_sampling_rate</span><span class="o">=</span><span class="n">desired_sampling_rate</span><span class="p">)</span>
 
     <span class="c1"># Define paramters</span>
     <span class="n">window_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">desired_sampling_rate</span> <span class="o">*</span> <span class="n">window</span><span class="p">)</span>
@@ -552,7 +566,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -576,8 +590,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

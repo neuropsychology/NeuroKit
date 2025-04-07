@@ -15,30 +15,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=a64840b6"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -52,7 +49,6 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.11" />
   </head>
   
   
@@ -68,8 +64,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -77,6 +84,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -84,8 +92,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -103,8 +111,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -134,17 +141,21 @@
     
     
     <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <img src="../../../_static/neurokit.png" class="logo__image only-dark pst-js-only" alt="NeuroKit2 0.2.11 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
@@ -325,16 +336,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -362,16 +381,17 @@
                   
   <h1>Source code for neurokit2.signal.signal_timefrequency</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
 
-<span class="kn">from</span> <span class="nn">..signal.signal_detrend</span> <span class="kn">import</span> <span class="n">signal_detrend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_detrend</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_detrend</span>
 
 
 <div class="viewcode-block" id="signal_timefrequency">
 <a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal_timefrequency">[docs]</a>
-<span class="k">def</span> <span class="nf">signal_timefrequency</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">signal_timefrequency</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">min_frequency</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
@@ -402,7 +422,10 @@
 <span class="sd">        * Wavelet Transform (WT): similar to STFT but instead of a fixed duration window function,</span>
 <span class="sd">          a varying window length by scaling the axis of the window is used. At low frequency, WT</span>
 <span class="sd">          proves high spectral resolution but poor temporal resolution. On the other hand, for high</span>
-<span class="sd">          frequencies, the WT provides high temporal resolution but poor spectral resolution.</span>
+<span class="sd">          frequencies, the WT provides high temporal resolution but poor spectral resolution. The</span>
+<span class="sd">          PyWavelet wavelet transform is used in NeuroKit and follows their naming convention of</span>
+<span class="sd">          wavelets. To adjust the wavelet type, add an underscore and the wavelet name to the</span>
+<span class="sd">          &#39;cwt&#39; method input. I.e., &#39;cwt_cgau1&#39;.</span>
 
 <span class="sd">    * Quadratic TFRs: better resolution but computationally expensive and suffers from having</span>
 <span class="sd">      cross terms between multiple signal components</span>
@@ -488,7 +511,7 @@
 <span class="sd">      f, t, cwtm = nk.signal_timefrequency(signal,</span>
 <span class="sd">                                           sampling_rate,</span>
 <span class="sd">                                           max_frequency=20,</span>
-<span class="sd">                                           method=&quot;cwt&quot;,</span>
+<span class="sd">                                           method=&quot;cwt_cmor1.5-1.0&quot;,</span>
 <span class="sd">                                           show=True)</span>
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
@@ -538,15 +561,22 @@
             <span class="n">window_type</span><span class="o">=</span><span class="n">window_type</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="c1"># CWT</span>
-    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> <span class="s2">&quot;wavelet&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="s2">&quot;cwt&quot;</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">wavelet_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">wname_split</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wname_split</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">wavelet_name</span> <span class="o">=</span> <span class="n">wname_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
         <span class="n">frequency</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tfr</span> <span class="o">=</span> <span class="n">continuous_wt</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span>
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">min_frequency</span><span class="o">=</span><span class="n">min_frequency</span><span class="p">,</span>
             <span class="n">max_frequency</span><span class="o">=</span><span class="n">max_frequency</span><span class="p">,</span>
+            <span class="n">wavelet_name</span><span class="o">=</span><span class="n">wavelet_name</span>
         <span class="p">)</span>
     <span class="c1"># WVD</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;WignerVille&quot;</span><span class="p">,</span> <span class="s2">&quot;wvd&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;WignerVille&quot;</span><span class="p">,</span> <span class="s2">&quot;wvd&quot;</span><span class="p">]:</span>
         <span class="n">frequency</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tfr</span> <span class="o">=</span> <span class="n">wvd</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span>
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
@@ -555,7 +585,7 @@
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;WignerVille&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="c1"># pseudoWVD</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pseudoWignerVille&quot;</span><span class="p">,</span> <span class="s2">&quot;pwvd&quot;</span><span class="p">]:</span>
+    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pseudoWignerVille&quot;</span><span class="p">,</span> <span class="s2">&quot;pwvd&quot;</span><span class="p">]:</span>
         <span class="n">frequency</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tfr</span> <span class="o">=</span> <span class="n">wvd</span><span class="p">(</span>
             <span class="n">signal</span><span class="p">,</span>
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
@@ -587,7 +617,7 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">short_term_ft</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">short_term_ft</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">min_frequency</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
@@ -624,10 +654,17 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">continuous_wt</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nfreqbin</span><span class="o">=</span><span class="kc">None</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">continuous_wt</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wavelet_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nfreqbin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Continuous Wavelet Transform**</span>
+
+<span class="sd">    The continuous wavelet transform utilizes the PyWavelet implementation to compute the transform.</span>
+
+<span class="sd">    The default wavelet in NeuroKit is a complex morlet wavelet with a bandwidth of 1.0 and a central</span>
+<span class="sd">    frequency of 6.0 (i.e., &#39;cmor1.0-6.0&#39;). The parameters can be adjusted by using PyWavelet wavelet notation which is</span>
+<span class="sd">    found under &#39;Continuous Wavelet Families&#39; in their documentation.</span>
+
 
 <span class="sd">     References</span>
 <span class="sd">     ----------</span>
@@ -642,29 +679,35 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># central frequency</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="mf">6.0</span>  <span class="c1"># recommended</span>
-
     <span class="k">if</span> <span class="n">nfreqbin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">nfreqbin</span> <span class="o">=</span> <span class="n">sampling_rate</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">if</span> <span class="n">wavelet_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># describe the default wavelet</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="mf">6.0</span>  <span class="c1"># recommended</span>
+
+        <span class="n">wavelet_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;cmor</span><span class="si">{</span><span class="n">B</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="c1"># frequency</span>
     <span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">min_frequency</span><span class="p">,</span> <span class="n">max_frequency</span><span class="p">,</span> <span class="n">nfreqbin</span><span class="p">)</span>
 
-    <span class="c1"># time</span>
+    <span class="c1"># scales in terms of the binned frequencies</span>
+    <span class="n">scales</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">frequency2scale</span><span class="p">(</span><span class="n">wavelet_name</span><span class="p">,</span> <span class="n">frequency</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># cwt using specified mother wavelet</span>
+    <span class="n">tfr</span><span class="p">,</span> <span class="n">tfrf</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="n">wavelet_name</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># compute time domain ticks</span>
     <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">/</span> <span class="n">sampling_rate</span>
-    <span class="n">widths</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
 
-    <span class="c1"># Mother wavelet = Morlet</span>
-    <span class="n">tfr</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">morlet2</span><span class="p">,</span> <span class="n">widths</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tfr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tfrf</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tfr</span><span class="p">)</span>
 
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Wigner-Ville Distribution</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">wvd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_freqbins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">analytical_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;WignerVille&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">wvd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_freqbins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">analytical_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;WignerVille&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wigner Ville Distribution and Pseudo-Wigner Ville Distribution.&quot;&quot;&quot;</span>
     <span class="c1"># Compute the analytical signal</span>
     <span class="k">if</span> <span class="n">analytical_signal</span><span class="p">:</span>
@@ -743,7 +786,7 @@
 <span class="c1"># =============================================================================</span>
 
 
-<span class="k">def</span> <span class="nf">smooth_pseudo_wvd</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">smooth_pseudo_wvd</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">freq_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -912,7 +955,7 @@
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Plot function</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span> <span class="nf">plot_timefrequency</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;stft&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_timefrequency</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;stft&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize a time-frequency matrix.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;stft&quot;</span><span class="p">:</span>
@@ -925,7 +968,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;STFT Magnitude&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Frequency (Hz)&quot;</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;cwt&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cwt&quot;</span><span class="p">:</span>
         <span class="n">figure_title</span> <span class="o">=</span> <span class="s2">&quot;Continuous Wavelet Transform Magnitude&quot;</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;wvd&quot;</span><span class="p">:</span>
         <span class="n">figure_title</span> <span class="o">=</span> <span class="s2">&quot;Wigner Ville Distrubution Spectrogram&quot;</span>
@@ -982,7 +1025,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2024.
+      © Copyright 2020–2025.
       <br/>
     
   </p>
@@ -1006,8 +1049,8 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
