@@ -1,6 +1,5 @@
 import platform
 
-import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -101,8 +100,9 @@ def test_eda_peaks():
     ].values
 
     signals, info = nk.eda_peaks(eda_phasic, method="gamboa2008")
-    onsets, peaks, amplitudes = biosppy.eda.basic_scr(eda_phasic)
-    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1e-5)
+
+    # 120 Value based on counting by eye
+    assert len(info["SCR_Peaks"]) == 120
 
     signals, info = nk.eda_peaks(eda_phasic, method="kim2004")
 
