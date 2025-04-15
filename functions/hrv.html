@@ -1369,12 +1369,12 @@ with the first peak occurring at sample point 0.</p>
 <span class="gp">In [3]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">intervals_to_peaks</span><span class="p">(</span><span class="n">ibi</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
 <span class="go"># We can then use NeuroKit&#39;s functionalities to compute HRV indices</span>
-<span class="gp">In [4]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">hrv_indices</span>
 <span class="gh">Out[5]: </span>
-<span class="go">    HRV_MeanNN     HRV_SDNN  HRV_SDANN1  ...  HRV_MaxNN   HRV_HTI  HRV_TINN</span>
-<span class="go">0  5285.714286  1704.336206         NaN  ...     8000.0  2.333333    2000.0</span>
+<span class="go">   HRV_MeanNN    HRV_SDNN  HRV_SDANN1  ...  HRV_MaxNN   HRV_HTI  HRV_TINN</span>
+<span class="go">0  528.571429  170.433621         NaN  ...      800.0  2.333333   203.125</span>
 
 <span class="go">[1 rows x 25 columns]</span>
 </pre></div>
