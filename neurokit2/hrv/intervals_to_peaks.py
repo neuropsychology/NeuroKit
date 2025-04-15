@@ -38,7 +38,7 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
 
       # We can then use NeuroKit's functionalities to compute HRV indices
       @savefig p_intervals_to_peaks.png scale=100%
-      hrv_indices = nk.hrv_time(peaks, sampling_rate=100, show=True)
+      hrv_indices = nk.hrv_time(peaks, sampling_rate=1000, show=True)
       @suppress
       plt.close()
 
