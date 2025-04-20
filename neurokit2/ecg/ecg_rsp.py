@@ -32,7 +32,7 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     Returns
     -------
     array
-        A Numpy array containing the derived respiratory rate.
+        A Numpy array containing the ECG-Derived Respiration signal.
 
     Examples
     --------
