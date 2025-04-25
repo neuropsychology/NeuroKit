@@ -883,6 +883,13 @@ document.write(`
     <span class="c1"># else:</span>
     <span class="c1"># dfa_windows = [(4, 11), (12, None)]</span>
     <span class="c1"># consider using dict.get() mthd directly</span>
+
+    <span class="c1"># If the signal is too short, skip it</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;DFA_alpha1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;DFA_alpha2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">out</span>
+
     <span class="n">dfa_windows</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dfa_windows&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="kc">None</span><span class="p">)])</span>
 
     <span class="c1"># Determine max beats</span>
