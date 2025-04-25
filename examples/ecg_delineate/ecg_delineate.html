@@ -483,9 +483,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve ECG data from data folder</span>
-<span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;ecg_1000hz&quot;</span><span class="p">)</span>
+<span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ecg_</span><span class="si">{</span><span class="n">SAMPLING_RATE</span><span class="si">}</span><span class="s2">hz&quot;</span><span class="p">)</span>
 <span class="c1"># Extract R-peaks locations</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -500,18 +500,18 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c3f0113bc8a5400ddf2d591d611d344145ac4984b10aebd43d6788ca8caa21cb.png" src="../../_images/c3f0113bc8a5400ddf2d591d611d344145ac4984b10aebd43d6788ca8caa21cb.png" />
+<img alt="../../_images/4b727ae61fddae9538df3c9e89518dd1ed715d91824dd13a7c766eb81fcb20b3.png" src="../../_images/4b727ae61fddae9538df3c9e89518dd1ed715d91824dd13a7c766eb81fcb20b3.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Zooming into the first 5 R-peaks</span>
-<span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="s1">&#39;ECG_R_Peaks&#39;</span><span class="p">][:</span><span class="mi">5</span><span class="p">],</span> <span class="n">ecg_signal</span><span class="p">[:</span><span class="mi">6000</span><span class="p">])</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="s1">&#39;ECG_R_Peaks&#39;</span><span class="p">][:</span><span class="mi">5</span><span class="p">],</span> <span class="n">ecg_signal</span><span class="p">[:</span><span class="mi">6</span> <span class="o">*</span> <span class="n">SAMPLING_RATE</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/c54bbbb2a95898010ae1bc3e7567f89aa355cceabffa55c8164ee4c6bd05401c.png" src="../../_images/c54bbbb2a95898010ae1bc3e7567f89aa355cceabffa55c8164ee4c6bd05401c.png" />
+<img alt="../../_images/84b6db4a60194a549199d6227b56e3de7c460eea5239802070b82f9da8b51185.png" src="../../_images/84b6db4a60194a549199d6227b56e3de7c460eea5239802070b82f9da8b51185.png" />
 </div>
 </div>
 <p>Visually, the R-peaks seem to have been correctly identified. You can also explore searching for R-peaks using different methods provided by NeuroKit <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-peaks">ecg_peaks()</a>.</p>
@@ -525,7 +525,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">waves_peak</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;peak&quot;</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">waves_peak</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;peak&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -536,12 +536,12 @@ document.write(`
 <span class="n">plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">waves_peak</span><span class="p">[</span><span class="s1">&#39;ECG_T_Peaks&#39;</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span> 
                        <span class="n">waves_peak</span><span class="p">[</span><span class="s1">&#39;ECG_P_Peaks&#39;</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span>
                        <span class="n">waves_peak</span><span class="p">[</span><span class="s1">&#39;ECG_Q_Peaks&#39;</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span>
-                       <span class="n">waves_peak</span><span class="p">[</span><span class="s1">&#39;ECG_S_Peaks&#39;</span><span class="p">][:</span><span class="mi">3</span><span class="p">]],</span> <span class="n">ecg_signal</span><span class="p">[:</span><span class="mi">4000</span><span class="p">])</span>
+                       <span class="n">waves_peak</span><span class="p">[</span><span class="s1">&#39;ECG_S_Peaks&#39;</span><span class="p">][:</span><span class="mi">3</span><span class="p">]],</span> <span class="n">ecg_signal</span><span class="p">[:</span><span class="mi">4</span> <span class="o">*</span> <span class="n">SAMPLING_RATE</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/27efd065a8c3f2ed8fbcef10d3b6e5c63ac30ed34dd56292d05c0169c16ca65a.png" src="../../_images/27efd065a8c3f2ed8fbcef10d3b6e5c63ac30ed34dd56292d05c0169c16ca65a.png" />
+<img alt="../../_images/27ce1ca72905775968194d119cf81739e06b19214c6afc331bd82f99af5a9847.png" src="../../_images/27ce1ca72905775968194d119cf81739e06b19214c6afc331bd82f99af5a9847.png" />
 </div>
 </div>
 <p>Visually, the ‘peak’ method seems to have correctly identified the P-peaks, Q-peaks, S-peaks and T-peaks for this signal, at least, for the first few complexes. Well done, <em>peak</em>!</p>
@@ -551,7 +551,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal and visualizing all peaks of ECG complexes</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">waves_peak</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                  <span class="n">rpeaks</span><span class="p">,</span> 
-                                 <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                 <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                  <span class="n">method</span><span class="o">=</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span> 
                                  <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                  <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">)</span>
@@ -559,7 +559,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f10b354a54bdddcc4f2cacb602d27cf9b2937f1ba3cea2b27ba7c5acfbc6bda0.png" src="../../_images/f10b354a54bdddcc4f2cacb602d27cf9b2937f1ba3cea2b27ba7c5acfbc6bda0.png" />
+<img alt="../../_images/c1377c68f70dbca044dabbaec71d63bf9ed7692d3c142279ab0e3dc61f72c5da.png" src="../../_images/c1377c68f70dbca044dabbaec71d63bf9ed7692d3c142279ab0e3dc61f72c5da.png" />
 </div>
 </div>
 <p>The ‘peak’ method is doing a glamorous job with identifying all the ECG peaks for this piece of ECG signal.</p>
@@ -570,7 +570,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal and visualizing all P-peaks boundaries</span>
 <span class="n">signal_peak</span><span class="p">,</span> <span class="n">waves_peak</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                            <span class="n">rpeaks</span><span class="p">,</span> 
-                                           <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                           <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span>
                                            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span> 
                                            <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                            <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_P&#39;</span><span class="p">)</span>
@@ -578,7 +578,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f7503abdd1856351622e1ef583fe8e260f6b65290d8a2f49b75d5aa0d412d50c.png" src="../../_images/f7503abdd1856351622e1ef583fe8e260f6b65290d8a2f49b75d5aa0d412d50c.png" />
+<img alt="../../_images/9685d0527fbfb9cb744d8c5cce9ec4e64cf11db6348365c0583d2d4b2f6523c6.png" src="../../_images/9685d0527fbfb9cb744d8c5cce9ec4e64cf11db6348365c0583d2d4b2f6523c6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -586,7 +586,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal and visualizing all T-peaks boundaries</span>
 <span class="n">signal_peaj</span><span class="p">,</span> <span class="n">waves_peak</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                            <span class="n">rpeaks</span><span class="p">,</span> 
-                                           <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                           <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;peak&quot;</span><span class="p">,</span> 
                                            <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                            <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_T&#39;</span><span class="p">)</span>
@@ -594,7 +594,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a3627f33c99de3982c74292bfcdcadc14b9cef46adff6355a388821710d5310b.png" src="../../_images/a3627f33c99de3982c74292bfcdcadc14b9cef46adff6355a388821710d5310b.png" />
+<img alt="../../_images/410f65a1ed8e95618017aff53a8356754e36408ca98931143ed1442a912b4931.png" src="../../_images/410f65a1ed8e95618017aff53a8356754e36408ca98931143ed1442a912b4931.png" />
 </div>
 </div>
 <p>Both the onsets of P-peaks and the offsets of T-peaks appears to have been correctly identified here. This information will be used to delineate cardiac phases in <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/ecg.html#ecg-phase">ecg_phase()</a>.</p>
@@ -607,7 +607,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal</span>
 <span class="n">signal_cwt</span><span class="p">,</span> <span class="n">waves_cwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
@@ -615,7 +615,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/0ef1ca8ef48a858209535b9f22dd53a99ef01f6354fd3dab9d9f28dd15854397.png" src="../../_images/0ef1ca8ef48a858209535b9f22dd53a99ef01f6354fd3dab9d9f28dd15854397.png" />
+<img alt="../../_images/158395bb00fef18beba04cc8baafa2f3fb3522e800870e869b35638d3a0a12a3.png" src="../../_images/158395bb00fef18beba04cc8baafa2f3fb3522e800870e869b35638d3a0a12a3.png" />
 </div>
 </div>
 <p>By specifying <em>‘all’</em> in the <code class="docutils literal notranslate"><span class="pre">show_type</span></code> argument, you can plot all delineated information output by the cwt method. However, it could be hard to evaluate the accuracy of the delineated information with everyhing plotted together. Let’s tease them apart!</p>
@@ -624,7 +624,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize P-peaks and T-peaks</span>
 <span class="n">signal_cwt</span><span class="p">,</span> <span class="n">waves_cwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">)</span>
@@ -632,7 +632,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2bebd8590d783fe8a22c73be79af1403abda045f3b2d6741e501f27618060e0d.png" src="../../_images/2bebd8590d783fe8a22c73be79af1403abda045f3b2d6741e501f27618060e0d.png" />
+<img alt="../../_images/cccede4521f3b35f9bee34c3d4a5c12cb73a0b66d754fca46edf9d4470fe84b5.png" src="../../_images/cccede4521f3b35f9bee34c3d4a5c12cb73a0b66d754fca46edf9d4470fe84b5.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -640,7 +640,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize T-waves boundaries</span>
 <span class="n">signal_cwt</span><span class="p">,</span> <span class="n">waves_cwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_T&#39;</span><span class="p">)</span>
@@ -648,7 +648,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/77411d1dbd4c79ae7731fb6478c99a7ba9d61829650d7d779eb9b58a846d3641.png" src="../../_images/77411d1dbd4c79ae7731fb6478c99a7ba9d61829650d7d779eb9b58a846d3641.png" />
+<img alt="../../_images/88855b3448bd2474eecadfc9f47d29fd62a1aeac6e11578c63fa1deee4d2cb95.png" src="../../_images/88855b3448bd2474eecadfc9f47d29fd62a1aeac6e11578c63fa1deee4d2cb95.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -656,7 +656,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize P-waves boundaries</span>
 <span class="n">signal_cwt</span><span class="p">,</span> <span class="n">waves_cwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_P&#39;</span><span class="p">)</span>
@@ -664,7 +664,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f55dbaf30e44ddee402cc40ccbcffc9f43c154d34ed3df9e68872d97a898af8a.png" src="../../_images/f55dbaf30e44ddee402cc40ccbcffc9f43c154d34ed3df9e68872d97a898af8a.png" />
+<img alt="../../_images/b3013ff94e81d0c17ffe87d64a5d278c545459cfd62270e588b649688bbd2351.png" src="../../_images/b3013ff94e81d0c17ffe87d64a5d278c545459cfd62270e588b649688bbd2351.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -672,7 +672,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize R-waves boundaries</span>
 <span class="n">signal_cwt</span><span class="p">,</span> <span class="n">waves_cwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_R&#39;</span><span class="p">)</span>
@@ -680,7 +680,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d1832be89187905da680f9ad02112e29f4acd5c242558a2a982ee58ad98cb45a.png" src="../../_images/d1832be89187905da680f9ad02112e29f4acd5c242558a2a982ee58ad98cb45a.png" />
+<img alt="../../_images/fcc65669dab4a570c84e03d46dfafc9d48c29b8b615d9c964260b397a7a63f90.png" src="../../_images/fcc65669dab4a570c84e03d46dfafc9d48c29b8b615d9c964260b397a7a63f90.png" />
 </div>
 </div>
 <p><em>Unlike the peak method, the continuous wavelet method does not idenfity the Q-peaks and S-peaks. However, it provides more information regarding the boundaries of the waves</em></p>
@@ -694,7 +694,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delineate the ECG signal</span>
 <span class="n">signal_dwt</span><span class="p">,</span> <span class="n">waves_dwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
@@ -702,7 +702,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/23fc768b30f56a31041a22ecb13c92b580e67d6f5c0e133b5724d1c74df20589.png" src="../../_images/23fc768b30f56a31041a22ecb13c92b580e67d6f5c0e133b5724d1c74df20589.png" />
+<img alt="../../_images/b7e2bb5bc0aba3f33c11826c876c3644f919d01c83dbcca8dda8cc7df231192c.png" src="../../_images/b7e2bb5bc0aba3f33c11826c876c3644f919d01c83dbcca8dda8cc7df231192c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -710,7 +710,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize P-peaks and T-peaks</span>
 <span class="n">signal_dwt</span><span class="p">,</span> <span class="n">waves_dwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">)</span>
@@ -718,7 +718,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/073d60b544e832277177b7bb65923348339335d7d28d6ecc4680e09cd1bc20fc.png" src="../../_images/073d60b544e832277177b7bb65923348339335d7d28d6ecc4680e09cd1bc20fc.png" />
+<img alt="../../_images/08a4707463a0a4b5042d1eea7f7dbcb98be746916f7dcede3b36c7b4c9680ae7.png" src="../../_images/08a4707463a0a4b5042d1eea7f7dbcb98be746916f7dcede3b36c7b4c9680ae7.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -726,7 +726,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualize T-wave boundaries</span>
 <span class="n">signal_dwt</span><span class="p">,</span> <span class="n">waves_dwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_T&#39;</span><span class="p">)</span>
@@ -734,7 +734,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2f115a07fc750b51d3352f4fa388ced4f468ff237db8d7ffb18b80555d25ffe9.png" src="../../_images/2f115a07fc750b51d3352f4fa388ced4f468ff237db8d7ffb18b80555d25ffe9.png" />
+<img alt="../../_images/c9aed2e0194614f76cc69377ceee19cbd2b6b5dc16f1d823aff078c73f143915.png" src="../../_images/c9aed2e0194614f76cc69377ceee19cbd2b6b5dc16f1d823aff078c73f143915.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -742,7 +742,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize P-wave boundaries</span>
 <span class="n">signal_dwt</span><span class="p">,</span> <span class="n">waves_dwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_P&#39;</span><span class="p">)</span>
@@ -750,7 +750,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/dc7435526b2c18e090eaa890ba7613fb522b826aead3e7f08bdac51c7cf9fb52.png" src="../../_images/dc7435526b2c18e090eaa890ba7613fb522b826aead3e7f08bdac51c7cf9fb52.png" />
+<img alt="../../_images/29f13e6d7ef328085dbeacc6282e3404381d8dbaace9ceefc5de94fcdbf65072.png" src="../../_images/29f13e6d7ef328085dbeacc6282e3404381d8dbaace9ceefc5de94fcdbf65072.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -758,7 +758,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize R-wave boundaries</span>
 <span class="n">signal_dwt</span><span class="p">,</span> <span class="n">waves_dwt</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_delineate</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> 
                                          <span class="n">rpeaks</span><span class="p">,</span> 
-                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> 
+                                         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span> 
                                          <span class="n">method</span><span class="o">=</span><span class="s2">&quot;dwt&quot;</span><span class="p">,</span> 
                                          <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                          <span class="n">show_type</span><span class="o">=</span><span class="s1">&#39;bounds_R&#39;</span><span class="p">)</span>
@@ -766,7 +766,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/e652ebebf56a88d97e1f10c54ce888bd40f18d18c7b160615906a74dadfddfb6.png" src="../../_images/e652ebebf56a88d97e1f10c54ce888bd40f18d18c7b160615906a74dadfddfb6.png" />
+<img alt="../../_images/903ea75c385b6d44f96f17162ee50d9037e1b9ded0020ae0910683320806ef3d.png" src="../../_images/903ea75c385b6d44f96f17162ee50d9037e1b9ded0020ae0910683320806ef3d.png" />
 </div>
 </div>
 <p>Visually, from the plots above, the delineated outputs of DWT appear to be more accurate than CWT, especially for the P-peaks and P-wave boundaries.</p>
