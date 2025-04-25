@@ -208,7 +208,6 @@ data/mit_long-term/ECGs.csv
 data/mit_long-term/ECGs.csv
 .DS_Store
 docs/readme/README_popularity.py
-docs/_static/neurokit_codebook.csv
 docs/jupyter_execute/
 paper/OHBM2022/OHBM2022_Makowski.mp4
 
