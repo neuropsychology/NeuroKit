@@ -393,7 +393,7 @@ document.write(`
 
 <div class="viewcode-block" id="ecg_process">
 <a class="viewcode-back" href="../../../functions/ecg.html#neurokit2.ecg.ecg_process">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ecg_process</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ecg_process</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Automated pipeline for preprocessing an ECG signal**</span>
 
 <span class="sd">    This function runs different preprocessing steps: Cleaning (using ``ecg_clean()``),</span>
@@ -477,7 +477,7 @@ document.write(`
 
     <span class="c1"># Sanitize and clean input</span>
     <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">signal_sanitize</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
-    <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Detect R-peaks</span>
     <span class="n">instant_peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span>
