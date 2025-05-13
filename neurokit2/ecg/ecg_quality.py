@@ -57,7 +57,7 @@ def ecg_quality(
     -------
     array or str
         Vector containing the quality index ranging from 0 to 1 for ``"averageQRS"`` method,
-        returns string classification (``Unacceptable``, ``Barely Acceptable`` or ``Excellent``)
+        returns string classification (``Unacceptable``, ``Barely acceptable`` or ``Excellent``)
         of the signal for ``"zhao2018"`` method.
 
     See Also
@@ -157,7 +157,7 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
     # Interpolate
     quality = signal_interpolate(
-        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="quadratic"
+        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="previous"
     )
 
     return quality

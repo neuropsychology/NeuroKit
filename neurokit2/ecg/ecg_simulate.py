@@ -4,6 +4,7 @@ import math
 import numpy as np
 import pandas as pd
 import scipy
+import pywt
 
 from ..misc import check_random_state, check_random_state_children
 from ..signal import signal_distort, signal_resample
@@ -207,7 +208,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, heart
 
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
-    cardiac = scipy.signal.daub(10)
+    cardiac = np.array(pywt.Wavelet("db10").rec_lo)
 
     # Add the gap after the pqrst when the heart is resting.
     cardiac = np.concatenate([cardiac, np.zeros(10)])

@@ -12,15 +12,26 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import (signal_autocor, signal_findpeaks, signal_psd,
-                      signal_surrogate, signal_zerocrossings)
+from ..signal import (
+    signal_autocor,
+    signal_findpeaks,
+    signal_psd,
+    signal_surrogate,
+    signal_zerocrossings,
+)
 from .entropy_kl import entropy_kl
 from .information_mutual import mutual_information
 from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_delay(
-    signal, delay_max=50, method="fraser1986", algorithm=None, show=False, **kwargs
+    signal,
+    delay_max=50,
+    method="fraser1986",
+    algorithm=None,
+    show=False,
+    silent=False,
+    **kwargs
 ):
     """**Automated selection of the optimal Delay (Tau)**
 
@@ -103,6 +114,8 @@ def complexity_delay(
         know what you are doing.
     show : bool
         If ``True``, will plot the metric values for each value of tau.
+    silent : bool
+        If ``True``, silence possible warnings.
     **kwargs : optional
         Additional arguments to be passed for C-C method.
 
@@ -291,7 +304,9 @@ def complexity_delay(
     elif method in ["aston2020", "lyle2021", "spar"]:
         return _complexity_delay_spar(signal, algorithm=algorithm, show=show, **kwargs)
     elif method in ["gautama2003", "gautama", "entropyratio"]:
-        return _complexity_delay_entropyratio(signal, delay_max=delay_max, show=show, **kwargs)
+        return _complexity_delay_entropyratio(
+            signal, delay_max=delay_max, show=show, **kwargs
+        )
     else:
         raise ValueError("complexity_delay(): 'method' not recognized.")
 
@@ -301,7 +316,7 @@ def complexity_delay(
     # Get optimal tau
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
 
-    if np.isnan(optimal):
+    if np.isnan(optimal) and silent is False:
         warn(
             "No optimal time delay is found. Nan is returned."
             " Consider using a higher `delay_max`.",
@@ -371,7 +386,9 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
     elif algorithm == "first drop below 1-(1/e) of maximum":
         try:
-            optimal = np.where(metric_values < np.nanmax(metric_values) * (1 - 1.0 / np.e))[0][0]
+            optimal = np.where(
+                metric_values < np.nanmax(metric_values) * (1 - 1.0 / np.e)
+            )[0][0]
         except IndexError:  # If no value are below that threshold
             optimal = np.nan
 
@@ -442,9 +459,14 @@ def _embedding_delay_metric(
                 dimension = 2
 
                 # Reconstruct with zero time delay.
-                tau0 = embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
+                tau0 = (
+                    embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
+                )
                 dist = np.asarray(
-                    [scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)]
+                    [
+                        scipy.spatial.distance.euclidean(i, j)
+                        for i, j in zip(embedded, tau0)
+                    ]
                 )
                 values[i] = np.mean(dist)
             else:
@@ -465,14 +487,21 @@ def _embedding_delay_cc_integral_sum(signal, dimension=3, delay=10, r=0.02):
     """
 
     # Embed signal
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=False)
+    embedded = complexity_embedding(
+        signal, delay=delay, dimension=dimension, show=False
+    )
     M = embedded.shape[0]
 
     # Prepare indices for comparing all unique pairwise vectors
     combinations = list(itertools.combinations(range(0, M), r=2))
-    first_index, second_index = np.transpose(combinations)[0], np.transpose(combinations)[1]
+    first_index, second_index = (
+        np.transpose(combinations)[0],
+        np.transpose(combinations)[1],
+    )
 
-    vectorized_integral = np.vectorize(_embedding_delay_cc_integral, excluded=["embedded", "r"])
+    vectorized_integral = np.vectorize(
+        _embedding_delay_cc_integral, excluded=["embedded", "r"]
+    )
     integral = np.sum(
         vectorized_integral(
             first_index=first_index, second_index=second_index, embedded=embedded, r=r
@@ -484,7 +513,9 @@ def _embedding_delay_cc_integral_sum(signal, dimension=3, delay=10, r=0.02):
 
 def _embedding_delay_cc_integral(first_index, second_index, embedded, r=0.02):
     M = embedded.shape[0]  # Number of embedded points
-    diff = np.linalg.norm(embedded[first_index] - embedded[second_index], ord=np.inf)  # sup-norm
+    diff = np.linalg.norm(
+        embedded[first_index] - embedded[second_index], ord=np.inf
+    )  # sup-norm
     h = np.heaviside(r - diff, 1)
     integral = (2 / (M * (M - 1))) * h  # find average
 
@@ -501,13 +532,18 @@ def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
     for sub_series in series:
         diff = _embedding_delay_cc_integral_sum(
             sub_series, dimension=dimension, delay=delay, r=r
-        ) - ((_embedding_delay_cc_integral_sum(signal, dimension=1, delay=delay, r=r)) ** dimension)
+        ) - (
+            (_embedding_delay_cc_integral_sum(signal, dimension=1, delay=delay, r=r))
+            ** dimension
+        )
         statistic += diff
 
     return statistic / delay
 
 
-def _embedding_delay_cc_deviation_max(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
+def _embedding_delay_cc_deviation_max(
+    signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3
+):
     """A measure of the variation of the dependence statistic with r using
     several representative values of r.
     """
@@ -521,8 +557,12 @@ def _embedding_delay_cc_deviation_max(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay
     return np.max(deviations) - np.min(deviations)
 
 
-def _embedding_delay_cc_deviation(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
-    return _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r_vals)
+def _embedding_delay_cc_deviation(
+    signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3
+):
+    return _embedding_delay_cc_statistic(
+        signal, delay=delay, dimension=dimension, r=r_vals
+    )
 
 
 # =============================================================================

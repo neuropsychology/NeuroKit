@@ -208,6 +208,7 @@ data/mit_long-term/ECGs.csv
 data/mit_long-term/ECGs.csv
 .DS_Store
 docs/readme/README_popularity.py
+docs/jupyter_execute/
 paper/OHBM2022/OHBM2022_Makowski.mp4
 
 
@@ -216,3 +217,4 @@ studies/complexity_structure/manuscript_cache/
 studies/complexity_eeg/data_attractor.csv
 studies/complexity_eeg/data_delay.csv
 testing.ipynb
+

@@ -498,6 +498,13 @@ def _hrv_dfa(rri, out, n_windows="default", **kwargs):
     # else:
     # dfa_windows = [(4, 11), (12, None)]
     # consider using dict.get() mthd directly
+
+    # If the signal is too short, skip it
+    if len(rri) < 12:
+        out['DFA_alpha1'] = np.nan
+        out['DFA_alpha2'] = np.nan
+        return out
+
     dfa_windows = kwargs.get("dfa_windows", [(4, 11), (12, None)])
 
     # Determine max beats

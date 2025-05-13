@@ -186,7 +186,7 @@ def data(dataset="bio_eventrelated_100hz"):
         return pd.read_csv(path + "ecg_1000hz.csv")["ECG"].values
 
     if dataset in ["ecg_3000hz", "ecg_3000hz.csv"]:
-        return pd.read_csv(path + "ecg_1000hz.csv")["ECG"].values
+        return pd.read_csv(path + "ecg_3000hz.csv")["ECG"].values
 
     if dataset in ["eog", "veog", "eog_100hz", "eog_100hz.csv"]:
         return pd.read_csv(path + "eog_100hz.csv")["vEOG"].values

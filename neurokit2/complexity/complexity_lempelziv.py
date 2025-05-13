@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import math
+
 import numpy as np
 import pandas as pd
 
@@ -116,9 +118,7 @@ def complexity_lempelziv(
 
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
-        )
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
     # Store parameters
     info = {"Permutation": permutation}
@@ -141,9 +141,7 @@ def complexity_lempelziv(
     if permutation is False:
         lzc = (info["Complexity_Kolmogorov"] * np.log2(n)) / n
     else:
-        lzc = (
-            info["Complexity_Kolmogorov"] * np.log2(n) / np.log2(np.math.factorial(dimension))
-        ) / n
+        lzc = (info["Complexity_Kolmogorov"] * np.log2(n) / np.log2(math.factorial(dimension))) / n
 
     return lzc, info
 
@@ -152,7 +150,7 @@ def complexity_lempelziv(
 # Utilities
 # =============================================================================
 def _complexity_lempelziv_count(symbolic):
-    """Computes LZC counts from symbolic sequences"""
+    """Computes LZC counts from symbolic sequences."""
 
     # TODO: I really can't imagine that there is no faster way of doing that that with a while loop
 

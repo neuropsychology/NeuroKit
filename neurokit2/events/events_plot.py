@@ -109,7 +109,7 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
         signal = pd.DataFrame({"Signal": signal})
 
     # Plot signal(s)
-    signal.plot()
+    axs = signal.plot()
 
     # Check if events is list of lists
     try:
@@ -144,3 +144,5 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
                 newLabels.append(label)
                 newHandles.append(handle)
         plt.legend(newHandles, newLabels)
+
+    return axs.get_figure()

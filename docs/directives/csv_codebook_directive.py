@@ -21,6 +21,8 @@ class CSVDocDirective(Directive):
         # Codebook path
         csv_file_path = os.path.join(os.path.abspath('.'), "_static", "neurokit_codebook.csv")
 
+        os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
+
         # Check if the file exists and whether it is empty
         file_empty = not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0
 
@@ -36,7 +38,7 @@ class CSVDocDirective(Directive):
             doc_sensor = abrv_to_sensor[maybe_sensor[0]]
 
         # Open the CSV file and append the content
-        with open(csv_file_path, 'a', newline='', encoding='utf-8') as csvfile:
+        with open(csv_file_path, 'a+', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile)
 
             # Write header if file is newly created or empty

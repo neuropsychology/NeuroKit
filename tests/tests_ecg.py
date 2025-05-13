@@ -182,12 +182,12 @@ def test_ecg_eventrelated():
     ecg_eventrelated = nk.ecg_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(
+    assert np.all(
         np.array(ecg_eventrelated["ECG_Rate_Min"])
         < np.array(ecg_eventrelated["ECG_Rate_Mean"])
     )
 
-    assert np.alltrue(
+    assert np.all(
         np.array(ecg_eventrelated["ECG_Rate_Mean"])
         < np.array(ecg_eventrelated["ECG_Rate_Max"])
     )

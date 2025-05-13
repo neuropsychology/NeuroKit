@@ -11,7 +11,7 @@ def fractal_sevcik(signal):
     (1998). This method can be used to quickly measure the complexity and randomness of a signal.
 
     .. note:: Some papers (e.g., Wang et al. 2017) suggest adding ``np.log(2)`` to the numerator,
-       but it's unclear why, so we sticked to the original formula for now. But if you have an idea,
+       but it's unclear why, so we stuck to the original formula for now. But if you have an idea,
        please let us know!
 
     Parameters

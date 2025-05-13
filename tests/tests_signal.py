@@ -208,14 +208,25 @@ def test_signal_filter_with_missing():
 
 def test_signal_interpolate():
 
+    # Test with arrays
     x_axis = np.linspace(start=10, stop=30, num=10)
     signal = np.cos(x_axis)
+    x_new = np.arange(1000)
 
-    interpolated = nk.signal_interpolate(x_axis, signal, x_new=np.arange(1000))
+    interpolated = nk.signal_interpolate(x_axis, signal, x_new)
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
     assert interpolated[-1] == signal[-1]
 
+    # Test with Series
+    x_axis = pd.Series(x_axis)
+    signal = pd.Series(signal)
+    x_new = pd.Series(x_new)
+
+    interpolated = nk.signal_interpolate(x_axis, signal, x_new)
+    assert len(interpolated) == 1000
+    assert interpolated[0] == signal.iloc[0]
+    assert interpolated[-1] == signal.iloc[-1]
 
 def test_signal_findpeaks():
 
@@ -365,6 +376,14 @@ def test_signal_timefrequency():
     indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
     indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
     assert np.sum(cwtm[indices_freq5]) < np.sum(cwtm[indices_freq20])
+
+    # Test the wavelet alternative wavelet pick a random wavelet
+    frequency, time, cwtm = nk.signal_timefrequency(
+        signal, method="cwt_cgau1", max_frequency=50, show=False
+    )
+
+    assert len(frequency) == cwtm.shape[0]
+    assert len(time) == cwtm.shape[1]
 
     # wvd
     frequency, time, wvd = nk.signal_timefrequency(

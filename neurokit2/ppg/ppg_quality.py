@@ -138,7 +138,7 @@ def _ppg_quality_templatematch(ppg_cleaned, ppg_pw_peaks=None, sampling_rate=100
 
     # Interpolate beat-by-beat CCs
     quality = signal_interpolate(
-        ppg_pw_peaks[0:-1], cc, x_new=np.arange(len(ppg_cleaned)), method="quadratic"
+        ppg_pw_peaks[0:-1], cc, x_new=np.arange(len(ppg_cleaned)), method="previous"
     )
 
     return quality
