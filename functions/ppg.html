@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>PPG &#8212; NeuroKit2 0.2.11 documentation</title>
+    <title>PPG &#8212; NeuroKit2 0.2.12 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=a64840b6"></script>
+    <script src="../_static/documentation_options.js?v=b13cc0d0"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -141,8 +141,8 @@
       
     
     
-    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.11 documentation - Home"/>
-    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.11 documentation - Home"/>`);</script>
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.12 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.12 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.098894           0.999007</span>
-<span class="go">2     2        10000  ...                  2.793276           0.882813</span>
-<span class="go">3     3        15000  ...                 -0.665018           0.679433</span>
+<span class="go">1     1         5000  ...                  0.079747           0.916049</span>
+<span class="go">2     2        10000  ...                  1.950958           0.897367</span>
+<span class="go">3     3        15000  ...                 -0.002830           0.992304</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -869,8 +869,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 46,  90, 131, 176, 220, 265, 307, 352, 408, 444, 481, 558, 596,</span>
-<span class="go">       634, 669, 706, 741, 777, 814, 851, 889, 927, 966])</span>
+<span class="go">array([ 45,  89, 133, 173, 219, 261, 305, 350, 423, 476, 516, 572, 631,</span>
+<span class="go">       671, 708, 743, 776, 814, 849, 890, 927, 964])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -956,9 +956,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  2.193127           0.621390</span>
-<span class="go">2     2        10000  ...                 -0.625710           0.933845</span>
-<span class="go">3     3        15000  ...                 -0.059388           0.714172</span>
+<span class="go">1     1         5000  ...                 -0.917650           0.844104</span>
+<span class="go">2     2        10000  ...                 -1.025039           0.889268</span>
+<span class="go">3     3        15000  ...                  1.328038           0.989197</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
