@@ -4,7 +4,6 @@ import math
 import numpy as np
 import pandas as pd
 import scipy
-import pywt
 
 from ..misc import check_random_state, check_random_state_children
 from ..signal import signal_distort, signal_resample
@@ -207,6 +206,16 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, heart
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
 
     """
+    # Try loading pywt
+    try:
+        import pywt
+    except ImportError:
+        raise ImportError(
+            "NeuroKit error: ecg_simulate(): the 'PyWavelets' module is required for this",
+            "method to run. ",
+            "Please install it first (`pip install PyWavelets`).",
+        )
+    
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
     cardiac = np.array(pywt.Wavelet("db10").rec_lo)
 

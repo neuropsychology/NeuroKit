@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
-import pywt
 import scipy.signal
 
 from ..signal.signal_detrend import signal_detrend
@@ -293,6 +292,15 @@ def continuous_wt(
       Royal Society A: Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
 
     """
+    # Try loading pywt
+    try:
+        import pywt
+    except ImportError:
+        raise ImportError(
+            "NeuroKit error: signal_timefrequency(): the 'PyWavelets' module is required for this",
+            "method to run. ",
+            "Please install it first (`pip install PyWavelets`).",
+        )
 
     if nfreqbin is None:
         nfreqbin = sampling_rate // 2
