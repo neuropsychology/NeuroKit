@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal
+import pywt
 
 from ..epochs import epochs_create, epochs_to_df
 from ..signal import (
@@ -951,15 +952,7 @@ def _correct_peak(sig, fs, peak, window=0.02):
 
 
 def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000):
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for this",
-            "method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
-        )
+
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)
@@ -1071,14 +1064,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
 
 
 def _peaks_delineator(ecg, rpeaks, sampling_rate=1000):
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for this method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
-        )
+
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)
@@ -1118,14 +1104,7 @@ def _peaks_delineator(ecg, rpeaks, sampling_rate=1000):
 
 
 def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for this method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
-        )
+
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)

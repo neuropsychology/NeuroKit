@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 import scipy.stats
+import pywt
+
 from warnings import warn
 from bisect import insort
 from collections import deque
@@ -277,7 +279,7 @@ def _ecg_findpeaks_neurokit(
 
     if len(beg_qrs) == 0:
         return np.array([])
-    
+
     # Throw out QRS-ends that precede first QRS-start.
     end_qrs = end_qrs[end_qrs > beg_qrs[0]]
 
@@ -658,14 +660,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
 # Continuous Wavelet Transform (CWT) - Martinez et al. (2004)
 # =============================================================================
 def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError as import_error:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
-            " this method to run. Please install it first (`pip install PyWavelets`)."
-        ) from import_error
+
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
@@ -931,7 +926,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
 
     if len(r_peaks) == 0:
         return np.array([])
-    
+
     r_peaks.pop(
         0
     )  # removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold
@@ -977,7 +972,7 @@ def _ecg_findpeaks_manikandan(signal, sampling_rate=1000, **kwargs):
     # with a divide by zero error.
     if np.max(abs(dn)) == 0:
         return np.array([])
-    
+
     # Eq. 2
     dtn = dn / (np.max(abs(dn)))
 
@@ -1053,14 +1048,6 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
       Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
 
     """
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError as import_error:
-        raise ImportError(
-            "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
-            " this method to run. Please install it first (`pip install PyWavelets`)."
-        ) from import_error
 
     signal_length = len(signal)
 
