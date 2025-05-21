@@ -385,6 +385,7 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">epochs_create</span><span class="p">,</span> <span class="n">epochs_to_df</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -1336,15 +1337,7 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_onset_offset_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">peak_type</span><span class="o">=</span><span class="s2">&quot;rpeaks&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="c1"># Try loading pywt</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;method to run. &quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+
     <span class="c1"># first derivative of the Gaissian signal</span>
     <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
     <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -1456,14 +1449,7 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_peaks_delineator</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="c1"># Try loading pywt</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+
     <span class="c1"># first derivative of the Gaissian signal</span>
     <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
     <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -1503,14 +1489,7 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_tppeaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">keep_tp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-    <span class="c1"># Try loading pywt</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for this method to run. &quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Please install it first (`pip install PyWavelets`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+
     <span class="c1"># first derivative of the Gaissian signal</span>
     <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
     <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>

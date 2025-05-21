@@ -385,6 +385,8 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">bisect</span><span class="w"> </span><span class="kn">import</span> <span class="n">insort</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
@@ -662,7 +664,7 @@ document.write(`
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">beg_qrs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-    
+
     <span class="c1"># Throw out QRS-ends that precede first QRS-start.</span>
     <span class="n">end_qrs</span> <span class="o">=</span> <span class="n">end_qrs</span><span class="p">[</span><span class="n">end_qrs</span> <span class="o">&gt;</span> <span class="n">beg_qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
@@ -1043,14 +1045,7 @@ document.write(`
 <span class="c1"># Continuous Wavelet Transform (CWT) - Martinez et al. (2004)</span>
 <span class="c1"># =============================================================================</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_ecg_findpeaks_WT</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="c1"># Try loading pywt</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
-    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">import_error</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_delineator(): the &#39;PyWavelets&#39; module is required for&quot;</span>
-            <span class="s2">&quot; this method to run. Please install it first (`pip install PyWavelets`).&quot;</span>
-        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">import_error</span>
+
     <span class="c1"># first derivative of the Gaissian signal</span>
     <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
     <span class="n">cwtmatr</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">pywt</span><span class="o">.</span><span class="n">cwt</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scales</span><span class="p">,</span> <span class="s2">&quot;gaus1&quot;</span><span class="p">,</span> <span class="n">sampling_period</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -1316,7 +1311,7 @@ document.write(`
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-    
+
     <span class="n">r_peaks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
         <span class="mi">0</span>
     <span class="p">)</span>  <span class="c1"># removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold</span>
@@ -1362,7 +1357,7 @@ document.write(`
     <span class="c1"># with a divide by zero error.</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dn</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-    
+
     <span class="c1"># Eq. 2</span>
     <span class="n">dtn</span> <span class="o">=</span> <span class="n">dn</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dn</span><span class="p">)))</span>
 
@@ -1438,14 +1433,6 @@ document.write(`
 <span class="sd">      Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Try loading pywt</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">pywt</span>
-    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">import_error</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: ecg_findpeaks(): the &#39;PyWavelets&#39; module is required for&quot;</span>
-            <span class="s2">&quot; this method to run. Please install it first (`pip install PyWavelets`).&quot;</span>
-        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">import_error</span>
 
     <span class="n">signal_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
