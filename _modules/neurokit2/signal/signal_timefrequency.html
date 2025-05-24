@@ -846,7 +846,7 @@ document.write(`
     <span class="n">signal_fft</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># Inverse FFT</span>
-    <span class="n">signal_ifft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">signal_fft</span><span class="p">)</span>
+    <span class="n">signal_ifft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">signal_fft</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
     <span class="n">signal_ifft</span><span class="p">[</span><span class="n">N</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># Make analytic signal</span>
