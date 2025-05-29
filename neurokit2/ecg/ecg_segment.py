@@ -71,7 +71,7 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
 
     # Pad last heartbeats with nan so that segments are equal length
     last_heartbeat_key = str(np.max(np.array(list(heartbeats.keys()), dtype=int)))
-    after_last_index = heartbeats[last_heartbeat_key]["Index"] < len(ecg_cleaned)
+    after_last_index = heartbeats[last_heartbeat_key]["Index"] >= len(ecg_cleaned)
     for col in ["Signal", "ECG_Raw", "ECG_Clean"]:
         if col in heartbeats[last_heartbeat_key].columns:
             heartbeats[last_heartbeat_key].loc[after_last_index, col] = np.nan
