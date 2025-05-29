@@ -102,9 +102,9 @@ def _ecg_findpeaks_findmethod(method):
     elif method in ["elgendi", "elgendi2010"]:
         return _ecg_findpeaks_elgendi
     elif method in ["kalidas2017", "swt", "kalidas"]:
-        return _ecg_findpeaks_khamis
-    elif method in ["khamis2016", "unsw", "khamis"]:
         return _ecg_findpeaks_kalidas
+    elif method in ["khamis2016", "unsw", "khamis"]:
+        return _ecg_findpeaks_khamis
     elif method in ["martinez2004", "martinez"]:
         return _ecg_findpeaks_WT
     elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
@@ -324,6 +324,7 @@ def _ecg_findpeaks_neurokit(
 def _ecg_findpeaks_khamis(
     signal,
     sampling_rate=1000,
+    **kwargs
 ):
     """UNSW QRS detection algorithm, developed by Khamis et al. (2016). Designed for both clinical ECGs and poorer quality telehealth ECGs.
     Adapted from the original MATLAB implementation by Khamis et al. (available under a CC0 licence).
