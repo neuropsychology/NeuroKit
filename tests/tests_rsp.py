@@ -201,6 +201,16 @@ def test_rsp_amplitude():
     assert amplitude.shape == (rsp.size,)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
+    # Test with `rsp` as pd.Series
+    amplitude = nk.rsp_amplitude(pd.Series(rsp), info)
+    assert amplitude.shape == (pd.Series(rsp).size,)
+    assert np.abs(amplitude.mean() - 1) < 0.01
+
+    # Test with `rsp` as list
+    amplitude = nk.rsp_amplitude(rsp.tolist(), info)
+    assert amplitude.shape == (len(rsp.tolist()),)
+    assert np.abs(amplitude.mean() - 1) < 0.01
+
 
 def test_rsp_rav():
     rsp = nk.rsp_simulate(
