@@ -390,9 +390,7 @@ document.write(`
 
 <div class="viewcode-block" id="rsp_amplitude">
 <a class="viewcode-back" href="../../../functions/rsp.html#neurokit2.rsp.rsp_amplitude">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">rsp_amplitude</span><span class="p">(</span>
-    <span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span>
-<span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rsp_amplitude</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Compute respiratory amplitude**</span>
 
 <span class="sd">    Compute respiratory amplitude given the raw respiration signal and its extrema. The</span>
@@ -459,6 +457,9 @@ document.write(`
 <span class="sd">      neurophysiology, 122(2), 849-861.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Make sure `rsp_cleaned` is a np.array</span>
+    <span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
+
     <span class="c1"># Format input.</span>
     <span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span> <span class="o">=</span> <span class="n">_rsp_fixpeaks_retrieve</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">troughs</span><span class="p">)</span>
 
@@ -488,9 +489,7 @@ document.write(`
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span>
-        <span class="p">)</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">amplitude</span></div>
 
