@@ -31,7 +31,8 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
       al. (2012).
     * **manikandan2012**: Algorithm by Manikandan & Soman (2012) based on the Shannon energy
       envelope (SEE).
-    * **khamis2016**: UNSW Algorithm by Khamis et al. (2016), designed for both clinical ECGs and poorer quality telehealth ECGs.
+    * **khamis2016**: UNSW Algorithm by Khamis et al. (2016), designed for both clinical ECGs and poorer quality
+      telehealth ECGs.
     * **kalidas2017**: Algorithm by Kalidas et al. (2017).
     * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.
     * **rodrigues2021**: Adaptation of the work by Sadhukhan & Mitra (2012) and Gutiérrez-Rivas et
