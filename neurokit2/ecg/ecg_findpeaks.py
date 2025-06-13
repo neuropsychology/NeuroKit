@@ -645,8 +645,6 @@ def _ecg_findpeaks_khamis(
     qrs = np.setdiff1d(qrs, finalmask)
     m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
 
-    print(f"no qrs: {len(qrs)}")
-
     # Stop if no qrs waves were detected (not in original matlab algorithm):
     if len(qrs)==0:
         peaks = np.asarray(qrs).astype(int)  # Convert to int
