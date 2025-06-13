@@ -543,7 +543,7 @@ def _ecg_findpeaks_khamis(
 
 
     # Bandpass filtering
-    def cleansignal(x, fs):
+    def cleansignal(x, fs, do_original_filtering = False):
         # cleansignal
         # Helper function:
         # baseline removal then high pass (0.7 Hz) filtering
@@ -562,8 +562,12 @@ def _ecg_findpeaks_khamis(
         # range (with LP filter order 8).
 
         # hpf - used to eliminate dc component or low frequency drift.
-        b, a = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high')
-        hpdata = myfiltfilt(b, a, meddata)
+        if do_original_filtering:
+            b, a = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high')
+            hpdata = myfiltfilt(b, a, meddata)
+        else:
+            sos = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high', output='sos')
+            hpdata = scipy.signal.sosfiltfilt(sos, meddata)
 
         # low pass linear phase filter
         b, a = scipy.signal.butter(7, 20 / (fs / 2), btype='low')
@@ -640,6 +644,8 @@ def _ecg_findpeaks_khamis(
     qrs = tpsidx[tpsidx > 0]
     qrs = np.setdiff1d(qrs, finalmask)
     m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
+
+    print(f"no qrs: {len(qrs)}")
 
     # Stop if no qrs waves were detected (not in original matlab algorithm):
     if len(qrs)==0:
