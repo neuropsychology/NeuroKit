@@ -326,9 +326,11 @@ def _ecg_findpeaks_khamis(
     sampling_rate=1000,
     **kwargs
 ):
-    """UNSW QRS detection algorithm, developed by Khamis et al. (2016). Designed for both clinical ECGs and poorer quality telehealth ECGs.
+    """UNSW QRS detection algorithm, developed by Khamis et al. (2016).
+    Designed for both clinical ECGs and poorer quality telehealth ECGs.
     Adapted from the original MATLAB implementation by Khamis et al. (available under a CC0 licence).
-    This Python implementation written by Sharon Yuen Shan Ho, Zixuan Ding, David C. Wong, and Peter H. Charlton, as reported in Ho et al. (2025).
+    This Python implementation written by Sharon Yuen Shan Ho, Zixuan Ding, David C. Wong, and Peter H. Charlton,
+    as reported in Ho et al. (2025).
 
     References
     ----------
@@ -338,8 +340,8 @@ def _ecg_findpeaks_khamis(
       https://doi.org/10.1109/TBME.2016.2549060
 
     - Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., & Redmond, S. J. (2016).
-      TELE ECG Database: 250 Telehealth ECG Records (Collected Using Dry Metal Electrodes) with Annotated QRS and Artifact Masks,
-      and MATLAB Code for the UNSW Artifact Detection and UNSW QRS Detection Algorithms.
+      TELE ECG Database: 250 Telehealth ECG Records (Collected Using Dry Metal Electrodes) with Annotated QRS and Artifact
+      Masks, and MATLAB Code for the UNSW Artifact Detection and UNSW QRS Detection Algorithms.
       Harvard Dataverse, https://doi.org/doi:10.7910/DVN/QTG0EP
 
     - Ho, S. et al. (2025).
@@ -554,9 +556,10 @@ def _ecg_findpeaks_khamis(
         baseline = sortfilt1(x, round(0.5 * fs), 50)
         meddata = x - baseline
 
-        # here, we removed the hard-coded FIR filter coefficients (and LP filter order 7), and instead calculate filter coefficients. In the
-        # original implementation hard-coded FIR filter coefficients (with LP filter order 7) were used for sampling frequencies between 400 and
-        # 600 Hz, whereas they were calculated for sampling frequencies outside this range (with LP filter order 8).
+        # here, we removed the hard-coded FIR filter coefficients (and LP filter order 7), and instead calculate filter
+        # coefficients. In the original implementation hard-coded FIR filter coefficients (with LP filter order 7) were used
+        # for sampling frequencies between 400 and 600 Hz, whereas they were calculated for sampling frequencies outside this
+        # range (with LP filter order 8).
 
         # hpf - used to eliminate dc component or low frequency drift.
         b, a = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high')
@@ -571,7 +574,7 @@ def _ecg_findpeaks_khamis(
     if sampling_rate < 50:
         raise Exception('This function requires a sampling rate of at least 50 Hz')
 
-    finalmask = []  # The original MATLAB implementation allowed a mask to optionally be inputted. This functionality hasn't been retained here.
+    finalmask = []  # The original MATLAB implementation allowed a mask to optionally be inputted.
 
     # Clean up Signal - hi pass, then low pass filter
     lphpdata = cleansignal(signal, sampling_rate)
@@ -638,6 +641,11 @@ def _ecg_findpeaks_khamis(
     qrs = np.setdiff1d(qrs, finalmask)
     m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
 
+    # Stop if no qrs waves were detected (not in original matlab algorithm):
+    if len(qrs)==0:
+        peaks = np.asarray(qrs).astype(int)  # Convert to int
+        return peaks
+
     # Back-track to find possible missed beats
     # Lower threshold
     sensitivity = 2
@@ -651,7 +659,7 @@ def _ecg_findpeaks_khamis(
     temp = np.zeros(len(diffpower2) + 2)
     temp[newmask + 1] = 1
     temp = np.concatenate(([1], temp, [1]))
-
+    
     # Fill in sections less than 1.5*mRR seconds;
 
     for i in range(1, len(temp)):
