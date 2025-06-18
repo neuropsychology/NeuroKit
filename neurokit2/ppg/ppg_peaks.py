@@ -33,8 +33,8 @@ def ppg_peaks(
     sampling_rate : int
         The sampling frequency of ``ppg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        The processing pipeline to apply. Can be one of ``"elgendi"``, ``"bishop"``. The default is
-        ``"elgendi"``.
+        The processing pipeline to apply. Can be one of ``"elgendi"``, ``"bishop"``, ``"charlton"``.
+        The default is ``"elgendi"``.
     correct_artifacts : bool
         Whether or not to identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).
@@ -95,6 +95,8 @@ def ppg_peaks(
     * Bishop, S. M., & Ercole, A. (2018). Multi-scale peak and trough detection optimised for
       periodic and quasi-periodic neuroscience data. In Intracranial Pressure & Neuromonitoring XVI
       (pp. 189-195). Springer International Publishing.
+    * Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:
+      design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.
 
     """
     # Store info
