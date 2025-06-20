@@ -85,13 +85,14 @@ def ppg_findpeaks(
         peaks, onsets = _ppg_findpeaks_charlton(ppg_cleaned, sampling_rate, win_durn=8, show=show, **kwargs)
     else:
         raise ValueError(
-            "`method` not found. Must be one of the following: 'elgendi', 'bishop', 'charlton'."
+            "`method` not found. Must be one of the following: 'elgendi', 'bishop', 'charlton', 'charlton2024'."
         )
 
     # Prepare output.
     info = {"PPG_Peaks": peaks}
     if 'onsets' in locals():
         info["PPG_Onsets"] = onsets
+        info["method_fixpeaks"] = 'Charlton2022'  # This was the default methodology used in MSPTDfastv1 and MSPTDfastv2
 
     return info
 
