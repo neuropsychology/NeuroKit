@@ -1,16 +1,8 @@
 # - * - coding: utf-8 - * -
-from warnings import warn
-
-import matplotlib.patches
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import scipy.signal
 
-from ..misc import NeuroKitWarning
-from ..stats import standardize
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
-from .signal_period import signal_period
 
 
 def signal_tidypeaksonsets(
