@@ -402,8 +402,11 @@ def _ppg_findpeaks_charlton(
         'use_reduced_lms_scales': True,  # whether or not to reduce the number of scales (default 30 bpm)
         'win_len': win_durn,  # duration of individual windows for analysis (8 secs for MSPTDfastv1; 6 secs for MSPTDfastv2)
         'win_overlap': 0.2,  # proportion of window overlap
-        'plaus_hr_bpm': [30, 200]  # range of plausible HRs (only the lower bound is used)
+        'plaus_hr_bpm': [30, 200],  # range of plausible HRs (only the lower bound is used)
+        'tol_durn': 0.05,  # tolerance window (+/- tol_durn) within which to search for true peak either side of candidate peak
     }
+
+    options['tol_durn'] = 0.15  # added for neurokit implementation
 
     # Split into overlapping windows
     no_samps_in_win = options["win_len"] * sampling_rate
@@ -454,7 +457,7 @@ def _ppg_findpeaks_charlton(
             t = [onset * ds_factor for onset in t]
 
         # Correct peak indices by finding highest point within tolerance either side of detected peaks
-        tol_durn = 0.05
+        tol_durn = options['tol_durn']  # note that this is only used if sampling frequency is 20 Hz or higher.
         if rel_fs < 10:
             tol_durn = 0.2
         elif rel_fs < 20:
