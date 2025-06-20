@@ -58,6 +58,7 @@ __all__ = [
     "signal_decompose",
     "signal_recompose",
     "signal_surrogate",
+    "signal_tidypeaksonsets",
     "signal_timefrequency",
     "signal_sanitize",
     "signal_flatline",
