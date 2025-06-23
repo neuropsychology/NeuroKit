@@ -1,0 +1,710 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>neurokit2.signal.signal_tidypeaksonsets &#8212; NeuroKit2 0.2.12 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=b13cc0d0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/neurokit2/signal/signal_tidypeaksonsets';</script>
+    <link rel="icon" href="../../../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.12 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.12 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Menu</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cite_us.html">Cite us</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../codebook.html">Codebook</a></li>
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_eventrelated/bio_eventrelated.html">Event-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_intervalrelated/bio_intervalrelated.html">Interval-related Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/bio_custom/bio_custom.html">Customize your Processing Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_hrv/ecg_hrv.html">Heart Rate Variability (HRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_heartbeats/ecg_heartbeats.html">Extract and Visualize Individual Heartbeats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_delineate/ecg_delineate.html">Locate P, Q, S and T waves in ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_edr/ecg_edr.html">ECG-Derived Respiration (EDR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ecg_generate_12leads/ecg_generate_12leads.html">Generating Abnormal 12-leads ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eda_peaks/eda_peaks.html">Analyze Electrodermal Activity (EDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/rsp_rrv/rsp_rrv.html">Respiratory Rate Variability (RRV)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eog_analyze/eog_analyze.html">Analyze Electrooculography (EOG)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/signal_simulation/signal_simulation.html">Simulate Artificial Physiological Signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/ppg_report/ppg_report.html">Save Preprocessing Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eeg_power/eeg_power.html">EEG Power in Frequency Bands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eeg_complexity/eeg_complexity.html">EEG Complexity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/eeg_microstates/eeg_microstates.html">EEG Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/misc_fit_function/misc_fit_function.html">Fit a function to a non-linear pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/misc_epochs_create/misc_epochs_create.html">Create epochs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../functions/index.html">Functions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/bio.html">Bio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/ecg.html">ECG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/ppg.html">PPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/hrv.html">HRV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/rsp.html">RSP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/eda.html">EDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/emg.html">EMG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/eog.html">EOG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/eeg.html">EEG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/video.html">Video Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/microstates.html">Microstates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/signal.html">Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/epochs.html">Epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/complexity.html">Complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/markov.html">Markov Chains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/stats.html">Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../functions/benchmark.html">Benchmarking</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../resources/index.html">Resources</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/learn_python.html">Learn Python in 10 minutes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/contributing.html">Contributing guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/recording.html">Recording good quality signals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../resources/resources.html">Additional Resources</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../studies/index.html">Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1424-8220/21/12/3998">HRV Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://psyarxiv.com/mwa6x/">HRV Indices</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9307944/">HRV Tutorial</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1111/ejn.15800">Complexity Review</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://www.mdpi.com/1099-4300/24/8/1036">Complexity Indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/complexity_eeg.html">EEG Complexity: Parameters Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/erp_gam.html">EEG Analysis with GAMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/ecg_benchmark.html">ECG Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../studies/eog_blinktemplate.html">EOG blink template</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/neuropsychology/NeuroKit">Repository</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2F_modules/neurokit2/signal/signal_tidypeaksonsets.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for neurokit2.signal.signal_tidypeaksonsets</h1><div class="highlight"><pre>
+<span></span><span class="c1"># - * - coding: utf-8 - * -</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.signal_formatpeaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">_signal_formatpeaks_sanitize</span>
+
+
+<div class="viewcode-block" id="signal_tidypeaksonsets">
+<a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal.signal_tidypeaksonsets">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">signal_tidypeaksonsets</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">onsets</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Charlton2022&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Tidy peaks and onsets**</span>
+
+<span class="sd">    Tidy up PPG peaks and onsets to make them conform to the following rules:</span>
+<span class="sd">    (i) No two points at the same time</span>
+<span class="sd">    (ii) At least one local minimum between consecutive peaks</span>
+<span class="sd">    (iii) At least one local maximum between consecutive onsets</span>
+<span class="sd">    (iv) Alternates between onsets and peaks</span>
+<span class="sd">    (v) Starts with onset, and ends with peak</span>
+<span class="sd">    (vi) Same number of peaks and onsets</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal :  Union[list, np.array, pd.Series]</span>
+<span class="sd">        The signal (i.e., a time series) that contains the peaks and onsets, in the form of a vector of values.</span>
+<span class="sd">    peaks : list or array or DataFrame or Series or dict</span>
+<span class="sd">        The samples at which the peaks occur.</span>
+<span class="sd">    onsets : list or array or DataFrame or Series or dict</span>
+<span class="sd">        The samples at which the onsets occur.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        ``&quot;Charlton2022&quot;`` uses the approach used in the ppg-beats toolbox, Zenodo, https://doi.org/10.5281/zenodo.6037646</span>
+<span class="sd">        This approach was designed for PPG signals.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Other keyword arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    peaks_clean : array</span>
+<span class="sd">        The corrected peak locations.</span>
+<span class="sd">    onsets_clean : array</span>
+<span class="sd">        The corrected onset locations.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ppg_findpeaks, ppg_peaks</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Charlton, P. H. et al. (2022). Detecting beats in the photoplethysmogram: benchmarking open-source algorithms.</span>
+<span class="sd">      Physiological Measurement, 46, 035002, doi:10.1088/1361-6579/adb89e</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Format input</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_signal_formatpeaks_sanitize</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">_signal_formatpeaks_sanitize</span><span class="p">(</span><span class="n">onsets</span><span class="p">)</span>
+
+    <span class="c1"># If method Kubios</span>
+    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;charlton2022&quot;</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span><span class="p">,</span> <span class="n">onsets_clean</span> <span class="o">=</span> <span class="n">_signal_fixpeaks_charlton</span><span class="p">(</span>
+            <span class="n">signal</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`method` not found. Must be one of the following: &#39;charlton2022&#39;.&quot;</span>
+        <span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span><span class="p">,</span> <span class="n">onsets_clean</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Methods</span>
+<span class="c1"># =============================================================================</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Charlton (2022) - main function</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_fixpeaks_charlton</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">onsets</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Charlton 2022 method – enforces consistency between peaks and onsets.</span>
+<span class="sd">    </span>
+<span class="sd">    Tidy up peaks and onsets to make them conform to the following rules:</span>
+<span class="sd">    (i) No two points at the same time</span>
+<span class="sd">    (ii) At least one local minimum between consecutive peaks</span>
+<span class="sd">    (iii) At least one local maximum between consecutive onsets</span>
+<span class="sd">    (iv) Alternates between onsets and peaks</span>
+<span class="sd">    (v) Starts with onset, and ends with peak</span>
+<span class="sd">    (vi) Same number of peaks and onsets</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># (i)  No two points at the same time</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_remove_repeated_peaks_and_onsets</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">)</span>
+
+    <span class="c1"># (ii) At least one local minimum between consecutive peaks</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ensure_extremum_between</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">other_extrema_type</span><span class="o">=</span><span class="s1">&#39;pk&#39;</span><span class="p">)</span>
+
+    <span class="c1"># (iii) At least one local maximum between consecutive onsets</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ensure_extremum_between</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">other_extrema_type</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+
+    <span class="c1"># (iv) Alternates between onsets and peaks</span>
+    <span class="c1"># If there are two consecutive peaks, then insert an onset between them</span>
+    <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">_insert_missing_extremum</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">other_extrema_type</span><span class="o">=</span><span class="s1">&#39;pk&#39;</span><span class="p">)</span>
+    <span class="c1"># If there are two consecutive onsets, then insert a peak between them</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_insert_missing_extremum</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">,</span> <span class="n">other_extrema_type</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+
+    <span class="c1"># (v) Starts with onset, and ends with peak</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ensure_starts_with_onset_ends_with_peak</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">)</span>
+
+    <span class="c1"># (vi) same number of peaks and onsets</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ensure_same_no_peaks_onsets</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">)</span>
+
+    <span class="n">peaks_clean</span> <span class="o">=</span> <span class="n">peaks</span>
+    <span class="n">onsets_clean</span> <span class="o">=</span> <span class="n">onsets</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;charlton2022&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;extra_peaks&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">peaks</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">peaks_clean</span><span class="p">],</span>
+        <span class="s2">&quot;extra_onsets&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">onsets</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">onsets_clean</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">info</span><span class="p">,</span> <span class="n">peaks_clean</span><span class="p">,</span> <span class="n">onsets_clean</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Charlton (2022) - helper functions</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_remove_repeated_peaks_and_onsets</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">):</span>
+
+    <span class="c1"># remove any repeated peaks (or onsets)</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">onsets</span><span class="p">)</span>
+
+    <span class="c1"># If there is a peak and onset at the same index, then remove them both</span>
+    <span class="n">repeated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">)</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setxor1d</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">repeated</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setxor1d</span><span class="p">(</span><span class="n">onsets</span><span class="p">,</span> <span class="n">repeated</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ensure_extremum_between</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">other_extrema</span><span class="p">,</span> <span class="n">other_extrema_type</span><span class="o">=</span><span class="s1">&#39;pk&#39;</span><span class="p">):</span>
+
+    <span class="c1"># If there are two peaks (or onsets) without a local minimum (or maximum) between them,</span>
+    <span class="c1"># then remove the lower (or higher) one</span>
+    
+    <span class="k">if</span> <span class="n">other_extrema_type</span> <span class="o">==</span> <span class="s1">&#39;pk&#39;</span><span class="p">:</span>
+        <span class="n">extrema</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">argrelmin</span><span class="p">(</span><span class="n">signal</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extrema</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">argrelmax</span><span class="p">(</span><span class="n">signal</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">other_extrema</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">other_extrema</span><span class="p">)</span>
+
+    <span class="n">finished</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">finished</span><span class="p">:</span>
+        <span class="n">els_to_remove</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">other_extrema</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">rel_els</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">other_extrema</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">other_extrema</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">rel_els</span><span class="p">,</span> <span class="n">extrema</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="n">other_extrema_vals</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">other_extrema</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">other_extrema_type</span> <span class="o">==</span> <span class="s1">&#39;pk&#39;</span><span class="p">:</span>
+                    <span class="n">el_to_remove</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">other_extrema_vals</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">el_to_remove</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">other_extrema_vals</span><span class="p">))</span>
+                <span class="n">els_to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">el_to_remove</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">els_to_remove</span><span class="p">:</span>
+            <span class="n">finished</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">els_to_remove</span><span class="p">):</span>  <span class="c1"># remove in reverse to avoid shifting</span>
+                <span class="k">del</span> <span class="n">other_extrema</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">other_extrema</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_insert_missing_extremum</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">other_extrema</span><span class="p">,</span> <span class="n">other_extrema_type</span><span class="o">=</span><span class="s1">&#39;pk&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If there are two consecutive extrema of one type (known as other_extrema),</span>
+<span class="sd">    then insert an extremum of the second type (known as extrema) between them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">other_extrema_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">other_extrema</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">extrema</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="n">els</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">other_extrema</span><span class="p">,</span> <span class="n">extrema</span><span class="p">])</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">els</span><span class="p">)</span>
+    <span class="n">els</span> <span class="o">=</span> <span class="n">els</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+    <span class="n">other_extrema_log</span> <span class="o">=</span> <span class="n">other_extrema_log</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+
+    <span class="n">bad_els</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other_extrema_log</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">other_extrema_log</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># repeated other_extrema</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bad_els</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># if there is a repeated other extrema</span>
+        <span class="k">for</span> <span class="n">bad_el_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bad_els</span><span class="p">)):</span>  <span class="c1"># cycle through each repeated other extrema</span>
+            <span class="n">curr_other_extrema</span> <span class="o">=</span> <span class="p">[</span><span class="n">els</span><span class="p">[</span><span class="n">bad_els</span><span class="p">[</span><span class="n">bad_el_no</span><span class="p">]],</span> <span class="n">els</span><span class="p">[</span><span class="n">bad_els</span><span class="p">[</span><span class="n">bad_el_no</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">curr_other_extrema</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">curr_other_extrema</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># Create baseline to remove</span>
+            <span class="n">bw_to_remove</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">start</span><span class="p">],</span> <span class="n">signal</span><span class="p">[</span><span class="n">end</span><span class="p">],</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># Detrend segment</span>
+            <span class="n">segment</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bw_to_remove</span>
+
+            <span class="c1"># Find extremum in detrended segment</span>
+            <span class="k">if</span> <span class="n">other_extrema_type</span> <span class="o">==</span> <span class="s1">&#39;pk&#39;</span><span class="p">:</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+
+            <span class="c1"># check this hasn&#39;t just detected one of the other_extrema (which can happen with strong baseline wander)</span>
+            <span class="k">if</span> <span class="n">temp</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">temp</span> <span class="o">==</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">):</span>
+                <span class="c1"># then just remove the first peak</span>
+                <span class="n">other_extrema</span> <span class="o">=</span> <span class="n">other_extrema</span><span class="p">[</span><span class="n">other_extrema</span> <span class="o">!=</span> <span class="n">start</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr_new_extrema</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">temp</span>
+                <span class="n">extrema</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extrema</span><span class="p">,</span> <span class="n">curr_new_extrema</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">extrema</span><span class="p">,</span> <span class="n">other_extrema</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ensure_starts_with_onset_ends_with_peak</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make sure that the first onset is before the first peak, and the last peak is after the last onset</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">finished</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">finished</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">onsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">finished</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">finished</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">finished</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">peaks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">onsets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">onsets</span> <span class="o">=</span> <span class="n">onsets</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">finished</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ensure_same_no_peaks_onsets</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    NB: This doesn&#39;t quite ensure the same no of peaks and onsets, it only does it for a specific condition</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if no peaks (or onsets) were detected, then don&#39;t output any indices for either</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">onsets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">onsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020–2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

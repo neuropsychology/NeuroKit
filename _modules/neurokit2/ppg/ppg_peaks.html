@@ -384,7 +384,7 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..ecg.ecg_peaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">_ecg_peaks_plot_artefacts</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_fixpeaks</span><span class="p">,</span> <span class="n">signal_formatpeaks</span><span class="p">,</span> <span class="n">signal_tidypeaksonsets</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">rescale</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.ppg_findpeaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppg_findpeaks</span>
 
@@ -417,8 +417,8 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ppg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;bishop&quot;``. The default is</span>
-<span class="sd">        ``&quot;elgendi&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;bishop&quot;``, ``&quot;charlton&quot;``.</span>
+<span class="sd">        The default is ``&quot;elgendi&quot;``.</span>
 <span class="sd">    correct_artifacts : bool</span>
 <span class="sd">        Whether or not to identify and fix artifacts, using the method by</span>
 <span class="sd">        Lipponen &amp; Tarvainen (2019).</span>
@@ -479,6 +479,8 @@ document.write(`
 <span class="sd">    * Bishop, S. M., &amp; Ercole, A. (2018). Multi-scale peak and trough detection optimised for</span>
 <span class="sd">      periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Neuromonitoring XVI</span>
 <span class="sd">      (pp. 189-195). Springer International Publishing.</span>
+<span class="sd">    * Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:</span>
+<span class="sd">      design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Store info</span>
@@ -494,7 +496,22 @@ document.write(`
         <span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="c1"># Peak correction</span>
+    <span class="c1"># Peak (and onset) correction</span>
+    <span class="c1"># - tidy up peaks and onsets</span>
+    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;method_fixpeaks&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;charlton2022&quot;</span><span class="p">:</span>  <span class="c1"># this is the default settings when using MSPTDfastv1 or MSPTDfastv2</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks_Unfixed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets_Unfixed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">fixpeaks</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal_tidypeaksonsets</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets&quot;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Charlton2022&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add prefix and merge</span>
+        <span class="n">fixpeaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_fixpeaks_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">fixpeaks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fixpeaks</span><span class="p">)</span>
+
+
+    <span class="c1"># - perform peak correction</span>
     <span class="k">if</span> <span class="n">correct_artifacts</span><span class="p">:</span>
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks_Uncorrected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -505,7 +522,7 @@ document.write(`
         <span class="c1"># Add prefix and merge</span>
         <span class="n">fixpeaks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_fixpeaks_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">fixpeaks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fixpeaks</span><span class="p">)</span>
-
+    
     <span class="c1"># Format output</span>
     <span class="n">signals</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
         <span class="nb">dict</span><span class="p">(</span><span class="n">PPG_Peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]),</span>

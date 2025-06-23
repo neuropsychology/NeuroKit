@@ -452,6 +452,8 @@ document.write(`
 <span class="sd">    * Bishop, S. M., &amp; Ercole, A. (2018). Multi-scale peak and trough detection optimised for</span>
 <span class="sd">      periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Neuromonitoring XVI</span>
 <span class="sd">      (pp. 189-195). Springer International Publishing.</span>
+<span class="sd">    * Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:</span>
+<span class="sd">      design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.</span>
 <span class="sd">    * Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection</span>
 <span class="sd">      Algorithm. Proc CinC.</span>
 
@@ -461,17 +463,20 @@ document.write(`
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptd&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop2018&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_bishop</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptdfast&quot;</span><span class="p">,</span> <span class="s2">&quot;msptdfastv1&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton2024&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton&quot;</span><span class="p">]:</span>
-        <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_charlton</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptdfast&quot;</span><span class="p">,</span> <span class="s2">&quot;msptdfastv2&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton2025&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton&quot;</span><span class="p">]:</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_charlton</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">win_durn</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptdfastv1&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton2024&quot;</span><span class="p">]:</span>
+        <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_charlton</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">win_durn</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;, &#39;bishop&#39;, &#39;charlton&#39;.&quot;</span>
+            <span class="s2">&quot;`method` not found. Must be one of the following: &#39;elgendi&#39;, &#39;bishop&#39;, &#39;charlton&#39;, &#39;charlton2024&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="c1"># Prepare output.</span>
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">}</span>
     <span class="k">if</span> <span class="s1">&#39;onsets&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">onsets</span>
+        <span class="n">info</span><span class="p">[</span><span class="s2">&quot;method_fixpeaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Charlton2022&#39;</span>  <span class="c1"># This was the default methodology used in MSPTDfastv1 and MSPTDfastv2</span>
 
     <span class="k">return</span> <span class="n">info</span></div>
 
@@ -635,11 +640,15 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">_ppg_findpeaks_charlton</span><span class="p">(</span>
     <span class="n">signal</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">win_durn</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
     <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of Charlton et al (2024) MSPTDfast: An Efficient Photoplethysmography</span>
-<span class="sd">    Beat Detection Algorithm. 2024 Computing in Cardiology (CinC), Karlsruhe, Germany,</span>
-<span class="sd">    doi:10.1101/2024.07.18.24310627.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of MSPTDfastv2, as described in:</span>
+<span class="sd">    Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm: design, benchmarking,</span>
+<span class="sd">    and open-source distribution. Physiological Measurement, 46, 035002, doi:10.1088/1361-6579/adb89e</span>
+
+<span class="sd">    Also, when win_durn=8, this is an implementation of MSPTDfastv1, as described in:</span>
+<span class="sd">    Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection Algorithm. Proc CinC.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Inner functions</span>
@@ -768,7 +777,7 @@ document.write(`
         <span class="k">return</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">onsets</span>
 
     <span class="c1"># ~~~ Main function ~~~</span>
-
+    
     <span class="c1"># Specify settings</span>
     <span class="c1"># - version: optimal selection (CinC 2024)</span>
     <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
@@ -777,10 +786,13 @@ document.write(`
         <span class="s1">&#39;do_ds&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># whether or not to do downsampling</span>
         <span class="s1">&#39;ds_freq&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1"># the target downsampling frequency</span>
         <span class="s1">&#39;use_reduced_lms_scales&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># whether or not to reduce the number of scales (default 30 bpm)</span>
-        <span class="s1">&#39;win_len&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># duration of individual windows for analysis</span>
+        <span class="s1">&#39;win_len&#39;</span><span class="p">:</span> <span class="n">win_durn</span><span class="p">,</span>  <span class="c1"># duration of individual windows for analysis (8 secs for MSPTDfastv1; 6 secs for MSPTDfastv2)</span>
         <span class="s1">&#39;win_overlap&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="c1"># proportion of window overlap</span>
-        <span class="s1">&#39;plaus_hr_bpm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>  <span class="c1"># range of plausible HRs (only the lower bound is used)</span>
+        <span class="s1">&#39;plaus_hr_bpm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span>  <span class="c1"># range of plausible HRs (only the lower bound is used)</span>
+        <span class="s1">&#39;tol_durn&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>  <span class="c1"># tolerance window (+/- tol_durn) within which to search for true peak either side of candidate peak</span>
     <span class="p">}</span>
+
+    <span class="n">options</span><span class="p">[</span><span class="s1">&#39;tol_durn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.15</span>  <span class="c1"># added for neurokit implementation</span>
 
     <span class="c1"># Split into overlapping windows</span>
     <span class="n">no_samps_in_win</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;win_len&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sampling_rate</span>
@@ -831,7 +843,7 @@ document.write(`
             <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">onset</span> <span class="o">*</span> <span class="n">ds_factor</span> <span class="k">for</span> <span class="n">onset</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
 
         <span class="c1"># Correct peak indices by finding highest point within tolerance either side of detected peaks</span>
-        <span class="n">tol_durn</span> <span class="o">=</span> <span class="mf">0.05</span>
+        <span class="n">tol_durn</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;tol_durn&#39;</span><span class="p">]</span>  <span class="c1"># note that this is only used if sampling frequency is 20 Hz or higher.</span>
         <span class="k">if</span> <span class="n">rel_fs</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="n">tol_durn</span> <span class="o">=</span> <span class="mf">0.2</span>
         <span class="k">elif</span> <span class="n">rel_fs</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
