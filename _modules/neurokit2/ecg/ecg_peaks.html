@@ -401,7 +401,7 @@ document.write(`
 
 <span class="sd">    * **neurokit** (default): QRS complexes are detected based on the steepness of the absolute</span>
 <span class="sd">      gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in</span>
-<span class="sd">      the QRS complexes. The method is unpublished, but see: (i) https://github.com/neuropsychology/NeuroKit/issues/476 </span>
+<span class="sd">      the QRS complexes. The method is unpublished, but see: (i) https://github.com/neuropsychology/NeuroKit/issues/476</span>
 <span class="sd">      for discussion of this algorithm; and (ii) https://doi.org/10.21105/joss.02621 for the original validation of</span>
 <span class="sd">      this algorithm.</span>
 <span class="sd">    * **pantompkins1985**: Algorithm by Pan &amp; Tompkins (1985).</span>
@@ -415,6 +415,8 @@ document.write(`
 <span class="sd">      al. (2012).</span>
 <span class="sd">    * **manikandan2012**: Algorithm by Manikandan &amp; Soman (2012) based on the Shannon energy</span>
 <span class="sd">      envelope (SEE).</span>
+<span class="sd">    * **khamis2016**: UNSW Algorithm by Khamis et al. (2016), designed for both clinical ECGs and poorer quality</span>
+<span class="sd">      telehealth ECGs.</span>
 <span class="sd">    * **kalidas2017**: Algorithm by Kalidas et al. (2017).</span>
 <span class="sd">    * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.</span>
 <span class="sd">    * **rodrigues2021**: Adaptation of the work by Sadhukhan &amp; Mitra (2012) and Gutiérrez-Rivas et</span>
@@ -524,6 +526,9 @@ document.write(`
 <span class="sd">      # Manikandan (2012)</span>
 <span class="sd">      _, manikandan2012 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;manikandan2012&quot;)</span>
 
+<span class="sd">      # Khamis (2016)</span>
+<span class="sd">      _, khamis2016 = nk.ecg_peaks(ecg, sampling_rate=250, method=&quot;khamis2016&quot;)</span>
+
 <span class="sd">      # kalidas2017</span>
 <span class="sd">      cleaned = nk.ecg_clean(ecg, sampling_rate=250, method=&quot;kalidas2017&quot;)</span>
 <span class="sd">      _, kalidas2017 = nk.ecg_peaks(cleaned, sampling_rate=250, method=&quot;kalidas2017&quot;)</span>
@@ -551,6 +556,7 @@ document.write(`
 <span class="sd">              gamboa2008,</span>
 <span class="sd">              elgendi2010,</span>
 <span class="sd">              engzeemod2012,</span>
+<span class="sd">              khamis2016,</span>
 <span class="sd">              kalidas2017,</span>
 <span class="sd">              rodrigues2021,</span>
 <span class="sd">              emrich2023</span>
@@ -604,6 +610,9 @@ document.write(`
 <span class="sd">    * Lourenço, A., Silva, H., Leite, P., Lourenço, R., &amp; Fred, A. L. (2012, February). Real</span>
 <span class="sd">      Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.</span>
 <span class="sd">      49-54).</span>
+<span class="sd">    * Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., &amp; Redmond, S. J. (2016).</span>
+<span class="sd">      QRS detection algorithm for telehealth electrocardiogram recordings.</span>
+<span class="sd">      IEEE Transactions on Biomedical Engineering, 63(7), 1377–1388.</span>
 <span class="sd">    * Kalidas, V., &amp; Tamil, L. (2017, October). Real-time QRS detector using stationary wavelet</span>
 <span class="sd">      transform for automated ECG analysis. In 2017 IEEE 17th International Conference on</span>
 <span class="sd">      Bioinformatics and Bioengineering (BIBE) (pp. 457-461). IEEE.</span>

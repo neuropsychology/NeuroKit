@@ -490,6 +490,8 @@ document.write(`
         <span class="k">return</span> <span class="n">_ecg_findpeaks_elgendi</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kalidas2017&quot;</span><span class="p">,</span> <span class="s2">&quot;swt&quot;</span><span class="p">,</span> <span class="s2">&quot;kalidas&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_kalidas</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;khamis2016&quot;</span><span class="p">,</span> <span class="s2">&quot;unsw&quot;</span><span class="p">,</span> <span class="s2">&quot;khamis&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">_ecg_findpeaks_khamis</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;martinez2004&quot;</span><span class="p">,</span> <span class="s2">&quot;martinez&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">_ecg_findpeaks_WT</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rodrigues2020&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues2021&quot;</span><span class="p">,</span> <span class="s2">&quot;rodrigues&quot;</span><span class="p">,</span> <span class="s2">&quot;asi&quot;</span><span class="p">]:</span>
@@ -701,6 +703,389 @@ document.write(`
         <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">signal</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
 
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to int</span>
+    <span class="k">return</span> <span class="n">peaks</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Kahmis</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_ecg_findpeaks_khamis</span><span class="p">(</span>
+    <span class="n">signal</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;UNSW QRS detection algorithm, developed by Khamis et al. (2016).</span>
+<span class="sd">    Designed for both clinical ECGs and poorer quality telehealth ECGs.</span>
+<span class="sd">    Adapted from the original MATLAB implementation by Khamis et al. (available under a CC0 licence).</span>
+<span class="sd">    This Python implementation written by Sharon Yuen Shan Ho, Zixuan Ding, David C. Wong, and Peter H. Charlton,</span>
+<span class="sd">    as reported in Ho et al. (2025).</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    - Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., &amp; Redmond, S. J. (2016).</span>
+<span class="sd">      QRS detection algorithm for telehealth electrocardiogram recordings.</span>
+<span class="sd">      IEEE Transactions on Biomedical Engineering, 63(7), 1377–1388.</span>
+<span class="sd">      https://doi.org/10.1109/TBME.2016.2549060</span>
+
+<span class="sd">    - Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., &amp; Redmond, S. J. (2016).</span>
+<span class="sd">      TELE ECG Database: 250 Telehealth ECG Records (Collected Using Dry Metal Electrodes) with Annotated QRS and Artifact</span>
+<span class="sd">      Masks, and MATLAB Code for the UNSW Artifact Detection and UNSW QRS Detection Algorithms.</span>
+<span class="sd">      Harvard Dataverse, https://doi.org/doi:10.7910/DVN/QTG0EP</span>
+
+<span class="sd">    - Ho, S. et al. (2025).</span>
+<span class="sd">      Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.</span>
+<span class="sd">      medRxiv 2025.03.10.25323655.</span>
+<span class="sd">      https://doi.org/10.1101/2025.03.10.25323655</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Additional functions ------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">turning_points</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+        <span class="c1">##</span>
+        <span class="c1"># turning_points</span>
+        <span class="c1"># Helper function - finds the locations of peaks and troughs of x</span>
+        <span class="c1"># according to the threshold</span>
+        <span class="c1">#</span>
+        <span class="c1"># Original version Stephen Redmond</span>
+        <span class="c1"># Modified by Philip de Chazal 30/5/07</span>
+        <span class="c1">#</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+        <span class="c1"># tps=1 when at a peak and tps=-1 when at a through, tps=0 elsewhere</span>
+        <span class="n">tps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)))),</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">tpidx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tps</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># index of all turning points</span>
+        <span class="n">pkth</span> <span class="o">=</span> <span class="n">tps</span><span class="p">[</span><span class="n">tpidx</span><span class="p">]</span>
+
+        <span class="c1"># start searching for turning point using threshold</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">inpeak</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">possibleidx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">confirmed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pkth</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">tpidx</span><span class="p">):</span>
+
+            <span class="c1"># The aim of the following code is to eliminate all the local peaks and</span>
+            <span class="c1"># troughs. A local peak or trough occurs when the height difference</span>
+            <span class="c1"># between a peak and trough is less than &#39;threshold&#39;s</span>
+
+            <span class="c1"># find first pk/tr</span>
+            <span class="k">if</span> <span class="n">inpeak</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="n">ref</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="n">inpeak</span> <span class="o">=</span> <span class="n">pkth</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">possibleidx</span> <span class="o">=</span> <span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">ref</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+            <span class="c1"># if looking for peak</span>
+            <span class="k">if</span> <span class="n">inpeak</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ref</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="c1"># peak found when next trough is more then threshold away from</span>
+                <span class="c1"># current peak</span>
+                <span class="n">confirmed</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">possibleidx</span> <span class="o">*</span> <span class="n">tps</span><span class="p">[</span><span class="n">possibleidx</span><span class="p">]</span>
+                <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># this lower point could be next trough</span>
+                <span class="n">possibleidx</span> <span class="o">=</span> <span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">ref</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">inpeak</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">inpeak</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">ref</span><span class="p">:</span>
+                <span class="n">possibleidx</span> <span class="o">=</span> <span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">ref</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+            <span class="c1"># if looking for trough</span>
+            <span class="k">if</span> <span class="n">inpeak</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="n">ref</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="c1"># trough found when next peak is more then threshold away from</span>
+                <span class="c1"># current trough</span>
+                <span class="n">confirmed</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">possibleidx</span> <span class="o">*</span> <span class="n">tps</span><span class="p">[</span><span class="n">possibleidx</span><span class="p">]</span>
+                <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># this higher point could be next peak</span>
+                <span class="n">possibleidx</span> <span class="o">=</span> <span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">ref</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">inpeak</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">inpeak</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">[</span><span class="n">possibleidx</span><span class="p">]:</span>
+                <span class="n">possibleidx</span> <span class="o">=</span> <span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">ref</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tpidx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">confirmed</span> <span class="o">=</span> <span class="n">confirmed</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">confirmed</span><span class="p">)]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">confirmed</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_rr_interval</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+        <span class="n">rr_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">n_sections</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">range_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">qrs</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">range_vals</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="n">rr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">qrs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">n_sections</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">rr_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rr_list</span><span class="p">)</span>
+        <span class="n">rr_list</span> <span class="o">=</span> <span class="n">rr_list</span><span class="p">[</span><span class="n">rr_list</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">fs</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rr_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">m_rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rr_list</span><span class="p">)</span>
+            <span class="n">n_rr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rr_list</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">m_rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">n_rr</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">smashECG</span><span class="p">(</span><span class="n">ECG</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="c1"># smashECG</span>
+        <span class="c1"># Helper function - splits ECG into clean sections according to the mask</span>
+        <span class="c1"># mask is the sample locations of null signal</span>
+
+        <span class="n">expandedMask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ECG</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Length of ECG + 2</span>
+        <span class="n">expandedMask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">expandedMask</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">expandedMask</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">startend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">expandedMask</span><span class="p">)</span>
+        <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">startend</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">startend</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">smashedECG</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">starts</span><span class="p">)):</span>
+            <span class="n">smashedECG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ECG</span><span class="p">[</span><span class="n">starts</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">ends</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">smashedECG</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">smashedFFT</span><span class="p">(</span><span class="n">smashedECG</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+        <span class="c1"># removed plotting functionality from MATLAB implementation</span>
+        <span class="n">Pxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">smashedECG</span><span class="p">)):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">smashedECG</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>  <span class="c1"># Flatten to 1D array</span>
+            <span class="c1"># Number of 2s windows (P) in data rounded up</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)))</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">P</span><span class="p">)</span>
+            <span class="n">y</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">P</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">fs</span><span class="p">))</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Center the data</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:],</span> <span class="n">M</span><span class="p">)</span>
+                <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>  <span class="c1"># Normalize by area</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">A</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">A</span>
+
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">/</span> <span class="n">P</span>
+            <span class="n">Pxx</span> <span class="o">=</span> <span class="n">Pxx</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z</span><span class="p">)</span>
+
+        <span class="n">F</span> <span class="o">=</span> <span class="n">Pxx</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">F</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sortfilt1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="k">elif</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">N1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">N2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">N2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">N1</span><span class="p">)</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">N2</span><span class="p">)</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">round</span><span class="p">((</span><span class="n">p</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">B</span> <span class="o">-</span> <span class="n">A</span><span class="p">))</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">A</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="n">B</span><span class="p">])</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Z</span><span class="p">[</span><span class="n">P</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">myfiltfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">*</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">y</span>
+
+
+    <span class="c1"># Bandpass filtering</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cleansignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">do_original_filtering</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># cleansignal</span>
+        <span class="c1"># Helper function:</span>
+        <span class="c1"># baseline removal then high pass (0.7 Hz) filtering</span>
+        <span class="c1"># followed by low pass (20 Hz) filtering</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># reshape so that it is the same dimension as baseline</span>
+
+        <span class="c1"># Remove baseline</span>
+        <span class="n">baseline</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">fs</span><span class="p">),</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="n">meddata</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">baseline</span>
+
+        <span class="c1"># here, we removed the hard-coded FIR filter coefficients (and LP filter order 7), and instead calculate filter</span>
+        <span class="c1"># coefficients. In the original implementation hard-coded FIR filter coefficients (with LP filter order 7) were used</span>
+        <span class="c1"># for sampling frequencies between 400 and 600 Hz, whereas they were calculated for sampling frequencies outside this</span>
+        <span class="c1"># range (with LP filter order 8).</span>
+
+        <span class="c1"># hpf - used to eliminate dc component or low frequency drift.</span>
+        <span class="k">if</span> <span class="n">do_original_filtering</span><span class="p">:</span>
+            <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">)</span>
+            <span class="n">hpdata</span> <span class="o">=</span> <span class="n">myfiltfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">meddata</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+            <span class="n">hpdata</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">meddata</span><span class="p">)</span>
+
+        <span class="c1"># low pass linear phase filter</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">20</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
+        <span class="n">lphpdata</span> <span class="o">=</span> <span class="n">myfiltfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">hpdata</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lphpdata</span>
+
+    <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;This function requires a sampling rate of at least 50 Hz&#39;</span><span class="p">)</span>
+
+    <span class="n">finalmask</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># The original MATLAB implementation allowed a mask to optionally be inputted.</span>
+
+    <span class="c1"># Clean up Signal - hi pass, then low pass filter</span>
+    <span class="n">lphpdata</span> <span class="o">=</span> <span class="n">cleansignal</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># Differentiator (to emphasise QRS)</span>
+    <span class="n">NumDiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sampling_rate</span><span class="p">))</span>
+    <span class="n">diffdata</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">NumDiff</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lphpdata</span><span class="p">)</span>
+
+    <span class="c1"># Sort filter</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">lphpdata</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">bot</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">lphpdata</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">envelope</span> <span class="o">=</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bot</span><span class="p">)</span>
+    <span class="n">envelope</span><span class="p">[</span><span class="n">envelope</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">feature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diffdata</span> <span class="o">*</span> <span class="n">envelope</span><span class="p">)</span>
+
+    <span class="n">fc</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="p">((</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.0037</span><span class="p">)</span> <span class="o">/</span> <span class="n">fc</span>
+    <span class="n">Nh</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>  <span class="c1"># Heuristic for Hamming window 3dB point</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">Nh</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Approx fc Hz low pass</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">diffpower1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">feature</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="n">smashedSig</span> <span class="o">=</span> <span class="n">smashECG</span><span class="p">(</span><span class="n">diffpower1</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">smashedFFT</span><span class="p">(</span><span class="n">smashedSig</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">13</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span>
+    <span class="n">range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">f</span> <span class="o">&gt;=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">max_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">range_indices</span><span class="p">])</span>
+    <span class="n">fftHRfreq</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">range_indices</span><span class="p">[</span><span class="n">max_idx</span><span class="p">]]</span>
+
+    <span class="c1"># Update smoother feature signal</span>
+    <span class="n">HRmin</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1"># Hz: 90 BPM  (don&#39;t want to go much below this, will miss ectopics otherwise!)</span>
+    <span class="n">HRmax</span> <span class="o">=</span> <span class="mf">4.0</span>  <span class="c1"># Hz: 240 BPM  (Shouldn&#39;t see much above this)</span>
+    <span class="n">fc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">HRmin</span><span class="p">,</span> <span class="n">fftHRfreq</span><span class="p">,</span> <span class="n">HRmax</span><span class="p">]))</span>  <span class="c1"># Kills half of second harmonic and all of the rest</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="p">((</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.0037</span><span class="p">)</span> <span class="o">/</span> <span class="n">fc</span>
+    <span class="n">Nh</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>  <span class="c1"># Heuristic for Hamming window 3dB point</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">Nh</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Approx fc Hz low pass</span>
+    <span class="n">diffpower2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">feature</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="c1"># Detect QRS points</span>
+
+    <span class="c1"># Where isn&#39;t masked</span>
+    <span class="c1"># Find valid indices</span>
+    <span class="n">valididx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">)),</span> <span class="n">finalmask</span><span class="p">)</span>
+    <span class="c1"># Maximum filter to get upper envelope</span>
+    <span class="n">Wsort</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">fftHRfreq</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">HRmax</span><span class="p">])))</span>
+    <span class="n">upperenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Morph Open</span>
+    <span class="n">upperenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">upperenv</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Morph Close</span>
+    <span class="n">lowerenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Morph Open</span>
+    <span class="n">lowerenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">lowerenv</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Morph Close</span>
+    <span class="n">QRSenv</span> <span class="o">=</span> <span class="n">upperenv</span> <span class="o">-</span> <span class="n">lowerenv</span>
+
+    <span class="c1"># First pass: high threshold</span>
+    <span class="n">sensitivity</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">featureHeight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">QRSenv</span><span class="p">[</span><span class="n">valididx</span><span class="p">])</span>
+    <span class="n">mainThreshold</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">featureHeight</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">mainThreshold</span> <span class="o">/</span> <span class="n">sensitivity</span>
+
+    <span class="n">tpsidx</span> <span class="o">=</span> <span class="n">turning_points</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+    <span class="n">qrs</span> <span class="o">=</span> <span class="n">tpsidx</span><span class="p">[</span><span class="n">tpsidx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">)</span>
+    <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span> <span class="o">=</span> <span class="n">calculate_rr_interval</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># Stop if no qrs waves were detected (not in original matlab algorithm):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to int</span>
+        <span class="k">return</span> <span class="n">peaks</span>
+
+    <span class="c1"># Back-track to find possible missed beats</span>
+    <span class="c1"># Lower threshold</span>
+    <span class="n">sensitivity</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">mainThreshold</span> <span class="o">/</span> <span class="n">sensitivity</span>
+    <span class="n">tpsidx</span> <span class="o">=</span> <span class="n">turning_points</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+    <span class="n">qrs2</span> <span class="o">=</span> <span class="n">tpsidx</span><span class="p">[</span><span class="n">tpsidx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Fill in gaps</span>
+    <span class="n">newmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">finalmask</span><span class="p">,</span> <span class="n">qrs</span><span class="p">)</span>
+    <span class="n">newmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">newmask</span><span class="p">])</span>  <span class="c1"># convert to integer array</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">temp</span><span class="p">[</span><span class="n">newmask</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">1</span><span class="p">],</span> <span class="n">temp</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    
+    <span class="c1"># Fill in sections less than 1.5*mRR seconds;</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">m_rr</span><span class="p">:</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">start</span><span class="p">:(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">newmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Only keep newly found QRS between long beats</span>
+    <span class="n">qrs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">qrs2</span><span class="p">,</span> <span class="n">newmask</span><span class="p">)</span>
+    <span class="c1"># Add them to the old QRS (found using low sensitivity)</span>
+    <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">qrs2</span><span class="p">)</span>
+    <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span> <span class="o">=</span> <span class="n">calculate_rr_interval</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+
+    <span class="c1"># 3rd pass: Highest threshold</span>
+    <span class="c1"># Back-track to remove possible wrong beats</span>
+    <span class="n">sensitivity</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">mainThreshold</span> <span class="o">/</span> <span class="n">sensitivity</span>
+    <span class="n">tpsidx</span> <span class="o">=</span> <span class="n">turning_points</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+    <span class="n">qrs3</span> <span class="o">=</span> <span class="n">tpsidx</span><span class="p">[</span><span class="n">tpsidx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">qrs3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">qrs3</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">)</span>
+
+    <span class="c1"># find indices of RR intervals that are too short</span>
+    <span class="n">short_rr_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">qrs</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">qrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">qrs</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">m_rr</span><span class="p">:</span>
+            <span class="n">short_rr_idx</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">qrs</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">qrs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="n">qrs3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">qrs3</span><span class="p">,</span> <span class="n">short_rr_idx</span><span class="p">)</span>
+    <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">short_rr_idx</span><span class="p">)</span>
+    <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">qrs3</span><span class="p">)</span>
+    <span class="c1"># removed final call to &#39;calculate_rr_interval&#39; from MATLAB implementation as its outputs are not used</span>
+
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to int</span>
     <span class="k">return</span> <span class="n">peaks</span>
 
 
