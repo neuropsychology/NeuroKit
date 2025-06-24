@@ -107,7 +107,7 @@ def _ppg_clean_elgendi(ppg_signal, sampling_rate):
         sampling_rate=sampling_rate,
         lowcut=0.5,
         highcut=8,
-        order=3,
+        order=2,
         method="butterworth",
     )
     return filtered
