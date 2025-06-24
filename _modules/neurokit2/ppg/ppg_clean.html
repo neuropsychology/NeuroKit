@@ -447,6 +447,9 @@ document.write(`
 <span class="sd">    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).</span>
 <span class="sd">      An open-source feature extraction tool for the analysis of peripheral physiological data.</span>
 <span class="sd">      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
+<span class="sd">    * M. Elgendi, I. Norton, M. Brearley, D. Abbott, and D. Schuurmans (2013).</span>
+<span class="sd">      Systolic peak detection in acceleration photoplethysmograms measured from emergency responders</span>
+<span class="sd">      in tropical conditions. PLoS ONE, 8(10), 1–11.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">)</span>
@@ -462,7 +465,7 @@ document.write(`
         <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">signal_fillmissing</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span>
 
     <span class="n">method</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="s2">&quot;elgendi2013&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_elgendi</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_nabian2018</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="n">heart_rate</span><span class="p">)</span>
@@ -483,12 +486,13 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_ppg_clean_elgendi</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Low-pass filter for continuous PPG signal preprocessing, adapted from Elgendi et al. (2013).&quot;&quot;&quot;</span>
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
         <span class="n">ppg_signal</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
         <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">highcut</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-        <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">filtered</span>

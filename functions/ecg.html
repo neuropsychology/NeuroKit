@@ -1525,32 +1525,32 @@ in percentage (from 0 to 1), representing the stage of the current cardiac phase
 <span class="gp">In [6]: </span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x266965256d0&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1698050c190&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Atrial&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26696525810&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1698050c050&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Atrial&quot;</span><span class="p">],</span>
 <span class="gp">   ...: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26696525950&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1698050efd0&gt;]</span>
 
 <span class="gp">In [10]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26696525a90&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1698050f610&gt;</span>
 
 <span class="gp">In [11]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26695f9d590&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1698018a0d0&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Ventricular&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26695f9de50&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1698018a350&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Ventricular&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ....: </span>
-<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x26695f9dd10&gt;]</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x16980189310&gt;]</span>
 
 <span class="gp">In [14]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x26695f9df90&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x169801887d0&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_phase.png"><img alt="../_images/p_ecg_phase.png" src="../_images/p_ecg_phase.png" style="width: 640.0px; height: 480.0px;" />
@@ -1749,9 +1749,9 @@ quadratic model:</p>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.691383          0.944226</span>
-<span class="go">2     2        10000  ...                          0.421712          0.967678</span>
-<span class="go">3     3        15000  ...                          0.131799          0.947624</span>
+<span class="go">1     1         5000  ...                          0.715464          0.960563</span>
+<span class="go">2     2        10000  ...                          0.405680          0.942736</span>
+<span class="go">3     3        15000  ...                          0.185714          0.976235</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>

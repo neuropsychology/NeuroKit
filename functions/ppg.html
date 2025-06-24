@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  2.688175           0.741690</span>
-<span class="go">2     2        10000  ...                  1.775816           0.894606</span>
-<span class="go">3     3        15000  ...                  0.706873           0.989536</span>
+<span class="go">1     1         5000  ...                 -1.438164           0.806900</span>
+<span class="go">2     2        10000  ...                 -1.741086           0.918155</span>
+<span class="go">3     3        15000  ...                 -0.478535           0.704377</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -638,7 +638,7 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [10]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[10]: </span>
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
+<span class="go">0      86.401345  694.686775  49.380646  ...  1.834993  2.714813  0.852819</span>
 
 <span class="go">[1 rows x 92 columns]</span>
 </pre></div>
@@ -809,6 +809,9 @@ any cleaning.</p></li>
 <li><p>Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).
 An open-source feature extraction tool for the analysis of peripheral physiological data.
 IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</p></li>
+<li><p>M. Elgendi, I. Norton, M. Brearley, D. Abbott, and D. Schuurmans (2013).
+Systolic peak detection in acceleration photoplethysmograms measured from emergency responders
+in tropical conditions. PLoS ONE, 8(10), 1–11.</p></li>
 </ul>
 </dd></dl>
 
@@ -869,8 +872,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 48,  88, 131, 173, 221, 263, 306, 351, 408, 445, 519, 559, 596,</span>
-<span class="go">       633, 670, 705, 741, 777, 816, 851, 888, 928, 964])</span>
+<span class="go">array([ 47,  89, 133, 174, 218, 263, 307, 351, 400, 445, 486, 520, 574,</span>
+<span class="go">       633, 670, 706, 742, 779, 813, 851, 888, 927, 967])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -958,9 +961,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.477531           0.758486</span>
-<span class="go">2     2        10000  ...                  1.386872           0.872479</span>
-<span class="go">3     3        15000  ...                  0.401451           0.914866</span>
+<span class="go">1     1         5000  ...                  0.590079           0.913856</span>
+<span class="go">2     2        10000  ...                 -1.704326           0.863755</span>
+<span class="go">3     3        15000  ...                  1.378775           0.794762</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1013,7 +1016,7 @@ separately processed DataFrames.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.401413  694.686775  49.380646  ...  1.834503  2.711044  0.852819</span>
+<span class="go">0      86.401345  694.686775  49.380646  ...  1.834993  2.714813  0.852819</span>
 
 <span class="go">[1 rows x 92 columns]</span>
 
@@ -1024,8 +1027,8 @@ separately processed DataFrames.</p></li>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  PPG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">1     1      86.483842   69.395349  ...  1.808904  2.306391  0.792838</span>
-<span class="go">2     2      86.318983   69.488372  ...  1.867149  3.207983  0.973029</span>
+<span class="go">1     1      86.483191   69.395349  ...  1.808681  2.303001  0.792838</span>
+<span class="go">2     2      86.319498   69.488372  ...  1.866994  3.224846  0.936991</span>
 
 <span class="go">[2 rows x 93 columns]</span>
 </pre></div>
