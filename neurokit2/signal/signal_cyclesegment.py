@@ -1,6 +1,5 @@
 # - * - coding: utf-8 - * -
 import numpy as np
-import pandas as pd
 
 from ..epochs import epochs_create
 from ..signal.signal_rate import signal_rate

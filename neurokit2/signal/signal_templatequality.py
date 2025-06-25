@@ -1,6 +1,5 @@
 # - * - coding: utf-8 - * -
 import numpy as np
-import pandas as pd
 
 from ..epochs import epochs_to_df
 from ..signal import signal_interpolate, signal_cyclesegment
