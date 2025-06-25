@@ -13,7 +13,21 @@ def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, m
 
     Assess the quality of a signal (e.g. PPG or ECG) using the specified method. You can pass an unfiltered
     signal as an input, but typically a filtered signal (e.g. cleaned using ``ppg_clean()`` or ``ecg_clean()``) will result in
-    more reliable results.
+    more reliable results. The following methods are available:
+
+    * The ``"templatematch"`` method (loosely based on Orphanidou et al., 2015) computes a continuous
+      index of quality of the PPG or ECG signal, by calculating the correlation coefficient between each
+      individual beat's morphology and an average (template) beat morphology. This index is therefore
+      relative: 1 corresponds to a signal where each individual beat's morphology is closest to the average beat morphology
+      (i.e. correlate exactly with it) and 0 corresponds to there being no correlation with the average beat morphology.
+
+    * The ``"disimilarity"`` method (loosely based on Sabeti et al., 2019) computes a continuous index
+      of quality of the PPG or ECG signal, by calculating the level of disimilarity between each individual 
+      beat's morphology and an average (template) beat morpholoy (after they are normalised). A value of
+      zero indicates no disimilarity (i.e. equivalent beat morphologies), whereas values above or below
+      indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse
+      waves prior to calculating the level of dsimilarity, whereas this implementation does not currently
+      include this step.
 
 
     Parameters

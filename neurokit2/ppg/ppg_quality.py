@@ -2,11 +2,12 @@
 
 import numpy as np
 
+from .ppg_peaks import ppg_peaks
 from ..signal.signal_templatequality import signal_templatequality
 
 
 def ppg_quality(
-    ppg_cleaned, peaks=None, sampling_rate=1000, method="templatematch", approach=None
+    ppg_cleaned, peaks=None, sampling_rate=1000, method="templatematch"
 ):
     """**PPG Signal Quality Assessment**
 
@@ -47,12 +48,14 @@ def ppg_quality(
 
     See Also
     --------
-    ppg_segment
+    signal_templatequality
 
     References
     ----------
     * Orphanidou, C. et al. (2015). "Signal-quality indices for the electrocardiogram and photoplethysmogram:
       derivation and applications to wireless monitoring". IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.
+    * Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features: 
+      Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.
 
     Examples
     --------
@@ -77,15 +80,15 @@ def ppg_quality(
 
     # Detect PPG peaks (if not done already)
     if peaks is None:
-        _, peaks = peaks(ppg_cleaned, sampling_rate=sampling_rate)
-        peaks = peaks["peaks"]
+        _, peaks = ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)
+        peaks = peaks["PPG_Peaks"]
 
     # Run selected quality assessment method
-    if method in ["templatematch"]:
+    if method in ["templatematch", "orphanidou2015"]:
         quality = signal_templatequality(
             ppg_cleaned, beat_inds=peaks, signal_type='ppg', sampling_rate=sampling_rate, method='templatematch'
         )
-    elif method in ["disimilarity"]:
+    elif method in ["disimilarity", "sabeti2019"]:
         quality = signal_templatequality(
             ppg_cleaned, beat_inds=peaks, signal_type = 'ppg', sampling_rate=sampling_rate, method='disimilarity'
         )
