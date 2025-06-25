@@ -25,6 +25,8 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
     -------
     dict
         A dict containing DataFrames for all segmented cycles.
+    average_cycle_rate : float
+        The average cycle rate (e.g. heart rate, respiratory rate) (in Hz, i.e., samples/second)
 
     See Also
     --------
@@ -69,7 +71,7 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
     after_last_index = cycles[last_cycle_key]["Index"] < len(signal_cleaned)
     cycles[last_cycle_key].loc[after_last_index, "Signal"] = np.nan
 
-    return cycles
+    return cycles, average_cycle_rate
 
 
 def _segment_window(

@@ -82,9 +82,9 @@ def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
 
     # Segment to get individual beat morphologies
     if signal_type == 'ppg':
-        heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
+        heartbeats, _ = signal_cyclesegment(signal, beat_inds, sampling_rate)
     elif signal_type == 'ecg':
-        heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
+        heartbeats, _ = signal_cyclesegment(signal, beat_inds, sampling_rate)
 
     # convert these to dataframe
     ind_morph = epochs_to_df(heartbeats).pivot(
