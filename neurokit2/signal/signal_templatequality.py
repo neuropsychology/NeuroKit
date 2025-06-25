@@ -3,9 +3,7 @@ import numpy as np
 import pandas as pd
 
 from ..epochs import epochs_to_df
-from ..ppg.ppg_segment import ppg_segment
-from ..ecg.ecg_segment import ecg_segment
-from ..signal import signal_interpolate
+from ..signal import signal_interpolate, signal_cyclesegment
 
 
 def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, method="templatematch"):
@@ -85,9 +83,9 @@ def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
 
     # Segment to get individual beat morphologies
     if signal_type == 'ppg':
-        heartbeats = ppg_segment(signal, beat_inds, sampling_rate)
+        heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
     elif signal_type == 'ecg':
-        heartbeats = ecg_segment(signal, beat_inds, sampling_rate)
+        heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
 
     # convert these to dataframe
     ind_morph = epochs_to_df(heartbeats).pivot(

@@ -2,6 +2,7 @@
 from .signal_autocor import signal_autocor
 from .signal_binarize import signal_binarize
 from .signal_changepoints import signal_changepoints
+from .signal_cyclesegment import signal_cyclesegment
 from .signal_decompose import signal_decompose
 from .signal_detrend import signal_detrend
 from .signal_distort import signal_distort
@@ -34,6 +35,7 @@ from .signal_zerocrossings import signal_zerocrossings
 __all__ = [
     "signal_simulate",
     "signal_binarize",
+    "signal_cyclesegment",
     "signal_resample",
     "signal_zerocrossings",
     "signal_smooth",
