@@ -1,10 +1,11 @@
 # - * - coding: utf-8 - * -
+import matplotlib.pyplot as plt
 import numpy as np
 
-from ..epochs import epochs_create
+from ..epochs import epochs_create, epochs_to_df
 from ..signal.signal_rate import signal_rate
 
-def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwargs):
+def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, show=False, signal_name="signal", **kwargs):
     """**Segment a signal into individual cycles**
 
     Segment a signal (e.g. ECG, PPG, respiratory) into individual cycles (e.g. heartbeats, pulse waves, breaths).
@@ -18,6 +19,11 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
         returned by ``ppg_peaks()``.
     sampling_rate : int
         The sampling frequency of ``signal_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
+    show : bool
+        If ``True``, will return a plot of cycles. Defaults to ``False``. If "return", returns
+        the axis of the plot.
+    signal_name : str
+        The name of the signal (only used for plotting).
     **kwargs
         Other arguments to be passed.
 
@@ -47,8 +53,6 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
 
     """
 
-    # To-do: This doesn't currently contain the plotting functionality of ecg_segment.
-
     if len(signal_cleaned) < sampling_rate * 4:
         raise ValueError("The data length is too small to be segmented.")
 
@@ -71,8 +75,71 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
     after_last_index = cycles[last_cycle_key]["Index"] < len(signal_cleaned)
     cycles[last_cycle_key].loc[after_last_index, "Signal"] = np.nan
 
+    # Plot or return plot axis (feature meant to be used internally in ecg_plot)
+    if show is not False:
+        ax = _segment_plot(cycles, cyclerate=average_cycle_rate, signal_name=signal_name, **kwargs)
+    if show == "return":
+        return ax
+
     return cycles, average_cycle_rate
 
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _segment_plot(cycles, cyclerate=0, signal_name="signal", color="#F44336", ax=None):
+    df = epochs_to_df(cycles)
+
+    # Get main signal column name
+    col = "Signal"
+
+    # Average cycle shape
+    mean_cycle = df.groupby("Time")[[col]].mean()
+    df_pivoted = df.pivot(index="Time", columns="Label", values=col)
+
+    # Prepare plot
+    if ax is None:
+        _, ax = plt.subplots()
+    signal_name = signal_name.lower()
+    if signal_name in ["ecg","ppg"]:
+        cycle_name = "heart beat"
+        rate_name = "heart rate"
+        rate_unit = "bpm"
+    elif signal_name == "rsp":
+        cycle_name = "breath"
+        rate_name = "respiratory rate"
+        rate_unit = "breaths per min"
+    elif signal_name == "signal":
+        cycle_name = "cycle"
+        rate_name = "cycle rate"
+        rate_unit = "per min"
+
+    ax.set_title(f"Individual {cycle_name}s (average {rate_name}: {cyclerate:0.1f} {rate_unit})")
+    ax.set_xlabel("Time (seconds)")
+    ax.set_ylabel(signal_name)
+
+    # Add Vertical line at 0
+    ax.axvline(x=0, color="grey", linestyle="--")
+
+    # Plot average cycle
+    ax.plot(
+        mean_cycle.index,
+        mean_cycle,
+        color=color,
+        linewidth=7,
+        label=f"Average {cycle_name} shape",
+        zorder=1,
+    )
+
+    # Alpha of individual cycles decreases with more cycles
+    alpha = 1 / np.log2(np.log2(1 + df_pivoted.shape[1]))
+
+    # Plot all cycles
+    ax.plot(df_pivoted, color="grey", linewidth=alpha, alpha=alpha, zorder=2)
+
+    # Legend
+    ax.legend(loc="upper right")
+    return ax
 
 def _segment_window(
     cycle_rate=None,

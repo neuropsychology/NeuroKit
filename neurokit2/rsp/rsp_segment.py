@@ -55,13 +55,6 @@ def rsp_segment(rsp_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
     if len(rsp_cleaned) < sampling_rate * 10:
         raise ValueError("The data length is too small to be segmented.")
 
-    breaths, average_rr = signal_cyclesegment(rsp_cleaned, peaks, sampling_rate=sampling_rate)
-
-    if show is not False:
-        ax = _ecg_segment_plot(
-            breaths, heartrate=average_rr, ytitle="RSP", color="#E91E63", **kwargs
-        )
-    if show == "return":
-        return ax
+    breaths, average_rr = signal_cyclesegment(rsp_cleaned, peaks, sampling_rate=sampling_rate, show=show, signal_name="rsp")
 
     return breaths
