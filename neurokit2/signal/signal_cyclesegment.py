@@ -36,12 +36,13 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
     .. ipython:: python
 
       import neurokit2 as nk
-
-      ppg = nk.ppg_simulate(duration=30, sampling_rate=100, heart_rate=80)
-      @savefig p_ppg_segment.png scale=100%
-      ppg_epochs = nk.ppg_segment(ppg, sampling_rate=100, show=True)
-      @suppress
-      plt.close()
+      
+      sampling_rate = 100
+      ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=80)
+      ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)
+      _, peaks = ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)
+      peaks = peaks["PPG_Peaks"]
+      heartbeats = signal_cyclesegment(ppg_cleaned, peaks, sampling_rate=sampling_rate)
 
     """
 
@@ -64,7 +65,7 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
         epochs_end=epochs_end,
     )
 
-    # pad last heartbeat with nan so that segments are equal length
+    # pad last cycle with nan so that segments are equal length
     last_cycle_key = str(np.max(np.array(list(cycles.keys()), dtype=int)))
     after_last_index = cycles[last_cycle_key]["Index"] < len(signal_cleaned)
     cycles[last_cycle_key].loc[after_last_index, "Signal"] = np.nan
