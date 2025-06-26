@@ -29,6 +29,7 @@ from .signal_smooth import signal_smooth
 from .signal_surrogate import signal_surrogate
 from .signal_synchrony import signal_synchrony
 from .signal_templatequality import signal_templatequality
+from .signal_tidypeaksonsets import signal_tidypeaksonsets
 from .signal_timefrequency import signal_timefrequency
 from .signal_zerocrossings import signal_zerocrossings
 
@@ -60,6 +61,7 @@ __all__ = [
     "signal_decompose",
     "signal_recompose",
     "signal_surrogate",
+    "signal_tidypeaksonsets",
     "signal_templatequality",
     "signal_timefrequency",
     "signal_sanitize",
