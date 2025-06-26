@@ -162,6 +162,6 @@ def _density_bkfe(gcounts, drv, h, a, b):
     kappam = np.fft.fft(kappam)
     Gcounts = np.fft.fft(Gcounts)
 
-    gcounter = gcounts * (np.real(np.fft.ifft(kappam * Gcounts)))[0:resol]
+    gcounter = gcounts * np.fft.ifft(kappam * Gcounts).real[0:resol]
 
     return np.nansum(gcounter) / n**2

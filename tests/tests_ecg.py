@@ -173,6 +173,10 @@ def test_ecg_findpeaks():
     info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2004")
     assert np.allclose(info_martinez["ECG_R_Peaks"].size, 69, atol=1)
 
+    # Test khamis2016 method
+    info_khamis = nk.ecg_findpeaks(ecg_cleaned, method="khamis2016")
+    assert info_khamis["ECG_R_Peaks"].size == 70
+
 
 def test_ecg_eventrelated():
     ecg, _ = nk.ecg_process(nk.ecg_simulate(duration=20, random_state=6))

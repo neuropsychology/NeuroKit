@@ -68,6 +68,8 @@ def ppg_findpeaks(
     * Bishop, S. M., & Ercole, A. (2018). Multi-scale peak and trough detection optimised for
       periodic and quasi-periodic neuroscience data. In Intracranial Pressure & Neuromonitoring XVI
       (pp. 189-195). Springer International Publishing.
+    * Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:
+      design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.
     * Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection
       Algorithm. Proc CinC.
 
@@ -77,17 +79,20 @@ def ppg_findpeaks(
         peaks = _ppg_findpeaks_elgendi(ppg_cleaned, sampling_rate, show=show, **kwargs)
     elif method in ["msptd", "bishop2018", "bishop"]:
         peaks, _ = _ppg_findpeaks_bishop(ppg_cleaned, show=show, **kwargs)
-    elif method in ["msptdfast", "msptdfastv1", "charlton2024", "charlton"]:
-        peaks, onsets = _ppg_findpeaks_charlton(ppg_cleaned, sampling_rate, show=show, **kwargs)
+    elif method in ["msptdfast", "msptdfastv2", "charlton2025", "charlton"]:
+        peaks, onsets = _ppg_findpeaks_charlton(ppg_cleaned, sampling_rate, win_durn=6, show=show, **kwargs)
+    elif method in ["msptdfastv1", "charlton2024"]:
+        peaks, onsets = _ppg_findpeaks_charlton(ppg_cleaned, sampling_rate, win_durn=8, show=show, **kwargs)
     else:
         raise ValueError(
-            "`method` not found. Must be one of the following: 'elgendi', 'bishop', 'charlton'."
+            "`method` not found. Must be one of the following: 'elgendi', 'bishop', 'charlton', 'charlton2024'."
         )
 
     # Prepare output.
     info = {"PPG_Peaks": peaks}
     if 'onsets' in locals():
         info["PPG_Onsets"] = onsets
+        info["method_fixpeaks"] = 'Charlton2022'  # This was the default methodology used in MSPTDfastv1 and MSPTDfastv2
 
     return info
 
@@ -250,11 +255,15 @@ def _ppg_findpeaks_bishop(
 def _ppg_findpeaks_charlton(
     signal,
     sampling_rate=1000,
+    win_durn=6,
     show=False,
 ):
-    """Implementation of Charlton et al (2024) MSPTDfast: An Efficient Photoplethysmography
-    Beat Detection Algorithm. 2024 Computing in Cardiology (CinC), Karlsruhe, Germany,
-    doi:10.1101/2024.07.18.24310627.
+    """Implementation of MSPTDfastv2, as described in:
+    Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm: design, benchmarking,
+    and open-source distribution. Physiological Measurement, 46, 035002, doi:10.1088/1361-6579/adb89e
+
+    Also, when win_durn=8, this is an implementation of MSPTDfastv1, as described in:
+    Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection Algorithm. Proc CinC.
     """
 
     # Inner functions
@@ -383,7 +392,7 @@ def _ppg_findpeaks_charlton(
         return peaks, onsets
 
     # ~~~ Main function ~~~
-
+    
     # Specify settings
     # - version: optimal selection (CinC 2024)
     options = {
@@ -392,10 +401,13 @@ def _ppg_findpeaks_charlton(
         'do_ds': True,  # whether or not to do downsampling
         'ds_freq': 20,  # the target downsampling frequency
         'use_reduced_lms_scales': True,  # whether or not to reduce the number of scales (default 30 bpm)
-        'win_len': 8,  # duration of individual windows for analysis
+        'win_len': win_durn,  # duration of individual windows for analysis (8 secs for MSPTDfastv1; 6 secs for MSPTDfastv2)
         'win_overlap': 0.2,  # proportion of window overlap
-        'plaus_hr_bpm': [30, 200]  # range of plausible HRs (only the lower bound is used)
+        'plaus_hr_bpm': [30, 200],  # range of plausible HRs (only the lower bound is used)
+        'tol_durn': 0.05,  # tolerance window (+/- tol_durn) within which to search for true peak either side of candidate peak
     }
+
+    options['tol_durn'] = 0.15  # added for neurokit implementation
 
     # Split into overlapping windows
     no_samps_in_win = options["win_len"] * sampling_rate
@@ -446,7 +458,7 @@ def _ppg_findpeaks_charlton(
             t = [onset * ds_factor for onset in t]
 
         # Correct peak indices by finding highest point within tolerance either side of detected peaks
-        tol_durn = 0.05
+        tol_durn = options['tol_durn']  # note that this is only used if sampling frequency is 20 Hz or higher.
         if rel_fs < 10:
             tol_durn = 0.2
         elif rel_fs < 20:
