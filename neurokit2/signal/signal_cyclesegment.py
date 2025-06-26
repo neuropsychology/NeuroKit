@@ -5,7 +5,7 @@ import numpy as np
 from ..epochs import epochs_create, epochs_to_df
 from ..signal.signal_rate import signal_rate
 
-def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, show=False, signal_name="signal", **kwargs):
+def signal_cyclesegment(signal_cleaned, cycle_indices, ratio_pre=0.5, sampling_rate=1000, show=False, signal_name="signal", **kwargs):
     """**Segment a signal into individual cycles**
 
     Segment a signal (e.g. ECG, PPG, respiratory) into individual cycles (e.g. heartbeats, pulse waves, breaths).
@@ -17,6 +17,9 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, show=
     cycle_indices : dict
         The samples indicating individual cycles (such as PPG peaks or ECG R-peaks), such as a dict
         returned by ``ppg_peaks()``.
+    ratio_pre : float
+        The proportion of the cycle window which takes place before the cycle index (e.g. the proportion of the
+        interbeat interval which takes place before the PPG pulse peak or ECG R peak).
     sampling_rate : int
         The sampling frequency of ``signal_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     show : bool

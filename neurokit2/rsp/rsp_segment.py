@@ -1,7 +1,6 @@
 # - * - coding: utf-8 - * -
 import numpy as np
 
-from ..ecg.ecg_segment import _ecg_segment_plot
 from .rsp_peaks import rsp_peaks
 from ..signal import signal_cyclesegment
 

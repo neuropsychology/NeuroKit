@@ -1,9 +1,8 @@
 # - * - coding: utf-8 - * -
 import numpy as np
 
-from ..ecg.ecg_segment import _ecg_segment_plot, _ecg_segment_window
-from ..epochs import epochs_create
 from .ppg_peaks import ppg_peaks
+from ..signal import signal_cyclesegment
 
 
 def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwargs):
@@ -53,31 +52,7 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
 
     if len(ppg_cleaned) < sampling_rate * 4:
         raise ValueError("The data length is too small to be segmented.")
-
-    epochs_start, epochs_end, average_hr = _ecg_segment_window(
-        rpeaks=peaks,
-        sampling_rate=sampling_rate,
-        desired_length=len(ppg_cleaned),
-        ratio_pre=0.3,
-    )
-    heartbeats = epochs_create(
-        ppg_cleaned,
-        peaks,
-        sampling_rate=sampling_rate,
-        epochs_start=epochs_start,
-        epochs_end=epochs_end,
-    )
-
-    # pad last heartbeat with nan so that segments are equal length
-    last_heartbeat_key = str(np.max(np.array(list(heartbeats.keys()), dtype=int)))
-    after_last_index = heartbeats[last_heartbeat_key]["Index"] < len(ppg_cleaned)
-    heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
-
-    if show is not False:
-        ax = _ecg_segment_plot(
-            heartbeats, heartrate=average_hr, ytitle="PPG", color="#E91E63", **kwargs
-        )
-    if show == "return":
-        return ax
+    
+    heartbeats, average_hr = signal_cyclesegment(ppg_cleaned, peaks, ratio_pre=0.3, sampling_rate=sampling_rate, show=show, signal_name="ppg")
 
     return heartbeats
