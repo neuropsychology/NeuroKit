@@ -66,8 +66,8 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
 
     # pad last cycle with nan so that segments are equal length
     last_cycle_key = str(np.max(np.array(list(cycles.keys()), dtype=int)))
-    after_last_index = cycles[last_cycle_key]["Index"] < len(signal_cleaned)
-    cycles[last_cycle_key].loc[after_last_index, "Signal"] = np.nan
+    outside_bounds = cycles[last_cycle_key]["Index"] >= len(signal_cleaned)
+    cycles[last_cycle_key].loc[outside_bounds, "Signal"] = np.nan
 
     return cycles
 

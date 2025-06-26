@@ -81,11 +81,8 @@ def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, m
 def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
 
     # Segment to get individual beat morphologies
-    if signal_type == 'ppg':
-        heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
-    elif signal_type == 'ecg':
-        heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
-
+    heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
+    
     # convert these to dataframe
     ind_morph = epochs_to_df(heartbeats).pivot(
         index="Label", columns="Time", values="Signal"
@@ -94,9 +91,9 @@ def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
     ind_morph = ind_morph.sort_index()
 
     # Filter Nans
-    missing = ind_morph.T.isnull().sum().values
-    nonmissing = np.where(missing == 0)[0]
-    ind_morph = ind_morph.iloc[nonmissing, :]
+    valid_beats_mask = ~ind_morph.isnull().any(axis=1)
+    ind_morph = ind_morph[valid_beats_mask]
+    beat_inds = np.array(beat_inds)[valid_beats_mask.values]
 
     # Find template pulse wave as the average pulse wave shape
     templ_pw = ind_morph.mean()
