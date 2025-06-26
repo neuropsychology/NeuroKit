@@ -1,6 +1,4 @@
 # - * - coding: utf-8 - * -
-import numpy as np
-
 from .ppg_peaks import ppg_peaks
 from ..signal import signal_cyclesegment
 

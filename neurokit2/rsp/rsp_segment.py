@@ -1,6 +1,4 @@
 # - * - coding: utf-8 - * -
-import numpy as np
-
 from .rsp_peaks import rsp_peaks
 from ..signal import signal_cyclesegment
 
