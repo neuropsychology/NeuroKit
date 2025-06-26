@@ -39,9 +39,9 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
       sampling_rate = 100
       ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=80)
       ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)
-      _, peaks = ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)
+      _, peaks = nk.ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)
       peaks = peaks["PPG_Peaks"]
-      heartbeats = signal_cyclesegment(ppg_cleaned, peaks, sampling_rate=sampling_rate)
+      heartbeats = nk.signal_cyclesegment(ppg_cleaned, peaks, sampling_rate=sampling_rate)
 
     """
 
