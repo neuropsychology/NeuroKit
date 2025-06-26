@@ -105,6 +105,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     * Vorreuther, A., Tagalidou, N., & Vukelić, M. (2025). Validation of the EmotiBit wearable
       sensor for heart-based measures under varying workload conditions. Front Neuroergonomics,
       6, 1585469. DOI: 10.3389/fnrgo.2025.1585469
+
     """
     ecg_signal = as_vector(ecg_signal)
 
@@ -404,9 +405,11 @@ def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
 # Langevin
 # =============================================================================
 def _ecg_clean_langevin(ecg_signal, sampling_rate):
-    """Notch filter by Langevin et al. (2021) implemented according to Vorreuther et al. (
-    2025)."""
-    b, a = scipy.signal.iirnotch(cutoff=.05, Q=0.005, fs=sampling_rate)
+    """Notch filter by Langevin et al.
+
+    (2021) implemented according to Vorreuther et al. ( 2025).
+
+    """
+    b, a = scipy.signal.iirnotch(cutoff=0.05, Q=0.005, fs=sampling_rate)
     clean = scipy.signal.filtfilt(b, a, ecg_signal)
     return clean
-
