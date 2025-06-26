@@ -146,6 +146,19 @@ def ppg_methods(
             An open-source feature extraction tool for the analysis of peripheral physiological data.
             IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11."""
         )
+    elif method_cleaning in ['langevin2021', 'langevin']:
+        report_info["text_cleaning"] += (
+                " was preprocessed using a bandpass filter ([0.7 - 3.5 Hz], Butterworth 2nd order;" + " adapted from "
+                                                                                                      "Langevin et al., 2021).")
+        refs.append(
+            """Langevin, A., Bégin, W., Lavallière, M., Beaulieu, L.-D., Menelas, B.-D. J., Gaboury, S.,
+              et al. (2021). “Criterion validation of an open-source wearable physiological sensors device,”
+              in Proceedings of the 9th International Conference on Sport Sciences Research and Technology
+              Support – icSPORTS (SciTePress), 95–105.
+              Vorreuther, A., Tagalidou, N., & Vukelić, M. (2025). Validation of the EmotiBit wearable
+              sensor for heart-based measures under varying workload conditions. Front Neuroergonomics,
+              6, 1585469."""
+            )
     elif method_cleaning in ["none"]:
         report_info[
             "text_cleaning"
