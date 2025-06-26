@@ -78,7 +78,7 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, ratio_pre=0.5, sampling_r
     after_last_index = cycles[last_cycle_key]["Index"] < len(signal_cleaned)
     cycles[last_cycle_key].loc[after_last_index, "Signal"] = np.nan
 
-    # Plot or return plot axis (feature meant to be used internally in ecg_plot)
+    # Plot or return plot axis
     if show is not False:
         ax = _segment_plot(cycles, cyclerate=average_cycle_rate, signal_name=signal_name, **kwargs)
     if show == "return":
@@ -105,7 +105,7 @@ def _segment_plot(cycles, cyclerate=0, signal_name="signal", color="#F44336", ax
         _, ax = plt.subplots()
     signal_name = signal_name.lower()
     if signal_name in ["ecg","ppg"]:
-        cycle_name = "heart beat"
+        cycle_name = "beat"
         rate_name = "heart rate"
         rate_unit = "bpm"
     elif signal_name == "rsp":
