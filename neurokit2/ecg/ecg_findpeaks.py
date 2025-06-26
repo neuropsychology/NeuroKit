@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 import scipy.stats
+import pywt
+
 from warnings import warn
 from bisect import insort
 from collections import deque
@@ -103,6 +105,8 @@ def _ecg_findpeaks_findmethod(method):
         return _ecg_findpeaks_elgendi
     elif method in ["kalidas2017", "swt", "kalidas"]:
         return _ecg_findpeaks_kalidas
+    elif method in ["khamis2016", "unsw", "khamis"]:
+        return _ecg_findpeaks_khamis
     elif method in ["martinez2004", "martinez"]:
         return _ecg_findpeaks_WT
     elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
@@ -277,7 +281,7 @@ def _ecg_findpeaks_neurokit(
 
     if len(beg_qrs) == 0:
         return np.array([])
-    
+
     # Throw out QRS-ends that precede first QRS-start.
     end_qrs = end_qrs[end_qrs > beg_qrs[0]]
 
@@ -314,6 +318,389 @@ def _ecg_findpeaks_neurokit(
         ax1.scatter(peaks, signal[peaks], c="r")
 
     peaks = np.asarray(peaks).astype(int)  # Convert to int
+    return peaks
+
+# =============================================================================
+# Kahmis
+# =============================================================================
+def _ecg_findpeaks_khamis(
+    signal,
+    sampling_rate=1000,
+    **kwargs
+):
+    """UNSW QRS detection algorithm, developed by Khamis et al. (2016).
+    Designed for both clinical ECGs and poorer quality telehealth ECGs.
+    Adapted from the original MATLAB implementation by Khamis et al. (available under a CC0 licence).
+    This Python implementation written by Sharon Yuen Shan Ho, Zixuan Ding, David C. Wong, and Peter H. Charlton,
+    as reported in Ho et al. (2025).
+
+    References
+    ----------
+    - Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., & Redmond, S. J. (2016).
+      QRS detection algorithm for telehealth electrocardiogram recordings.
+      IEEE Transactions on Biomedical Engineering, 63(7), 1377–1388.
+      https://doi.org/10.1109/TBME.2016.2549060
+
+    - Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., & Redmond, S. J. (2016).
+      TELE ECG Database: 250 Telehealth ECG Records (Collected Using Dry Metal Electrodes) with Annotated QRS and Artifact
+      Masks, and MATLAB Code for the UNSW Artifact Detection and UNSW QRS Detection Algorithms.
+      Harvard Dataverse, https://doi.org/doi:10.7910/DVN/QTG0EP
+
+    - Ho, S. et al. (2025).
+      Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.
+      medRxiv 2025.03.10.25323655.
+      https://doi.org/10.1101/2025.03.10.25323655
+
+    """
+
+    # Additional functions ------------------------------------------------------------
+
+    def turning_points(x, threshold):
+        ##
+        # turning_points
+        # Helper function - finds the locations of peaks and troughs of x
+        # according to the threshold
+        #
+        # Original version Stephen Redmond
+        # Modified by Philip de Chazal 30/5/07
+        #
+
+        x = np.append(x, [x[-1] + np.finfo(float).eps, x[-1]])
+
+        # tps=1 when at a peak and tps=-1 when at a through, tps=0 elsewhere
+        tps = np.concatenate(([0], -np.sign(np.diff(np.sign(np.diff(x)))), [0]))
+        tpidx = np.where(tps != 0)[0]
+
+        # index of all turning points
+        pkth = tps[tpidx]
+
+        # start searching for turning point using threshold
+        i = 0
+        inpeak = 0
+        possibleidx = None
+        ref = x[0]
+        confirmed = np.full(len(pkth), np.nan)
+        k = 0
+
+        while i < len(tpidx):
+
+            # The aim of the following code is to eliminate all the local peaks and
+            # troughs. A local peak or trough occurs when the height difference
+            # between a peak and trough is less than 'threshold's
+
+            # find first pk/tr
+            if inpeak == 0 and abs(x[tpidx[i]] - ref) > threshold:
+                inpeak = pkth[i]
+                possibleidx = tpidx[i]
+                ref = x[tpidx[i]]
+
+            # if looking for peak
+            if inpeak == 1 and (ref - x[tpidx[i]]) > threshold:
+                # peak found when next trough is more then threshold away from
+                # current peak
+                confirmed[k] = possibleidx * tps[possibleidx]
+                k += 1
+                # this lower point could be next trough
+                possibleidx = tpidx[i]
+                ref = x[tpidx[i]]
+                inpeak = -1
+            elif inpeak == 1 and x[tpidx[i]] > ref:
+                possibleidx = tpidx[i]
+                ref = x[tpidx[i]]
+
+            # if looking for trough
+            if inpeak == -1 and (x[tpidx[i]] - ref) > threshold:
+                # trough found when next peak is more then threshold away from
+                # current trough
+                confirmed[k] = possibleidx * tps[possibleidx]
+                k += 1
+                # this higher point could be next peak
+                possibleidx = tpidx[i]
+                ref = x[tpidx[i]]
+                inpeak = 1
+            elif inpeak == -1 and x[tpidx[i]] < x[possibleidx]:
+                possibleidx = tpidx[i]
+                ref = x[tpidx[i]]
+
+            i += 1
+
+        confirmed = confirmed[~np.isnan(confirmed)].astype(int)
+
+        return confirmed
+
+    def calculate_rr_interval(qrs, mask, fs):
+        rr_list = []
+        n_sections = 1
+
+        for k in range(len(qrs) - 1):
+            range_vals = np.arange(qrs[k], qrs[k + 1])
+            if not np.intersect1d(range_vals, mask).size:
+                rr_list.append(qrs[k + 1] - qrs[k])
+            else:
+                n_sections += 1
+
+        rr_list = np.array(rr_list)
+        rr_list = rr_list[rr_list < 5 * fs]
+
+        if len(rr_list) > 0:
+            m_rr = np.mean(rr_list)
+            n_rr = len(rr_list)
+        else:
+            m_rr = np.nan
+            n_rr = 0
+
+        return m_rr, rr_list, n_rr, n_sections
+
+    def smashECG(ECG, mask):
+        # smashECG
+        # Helper function - splits ECG into clean sections according to the mask
+        # mask is the sample locations of null signal
+
+        expandedMask = np.zeros(len(ECG) + 2, dtype=int)  # Length of ECG + 2
+        expandedMask[0] = 1
+        expandedMask[-1] = 1
+        expandedMask[mask] = 1
+
+        startend = np.diff(expandedMask)
+        starts = np.where(startend == -1)[0]
+        ends = np.where(startend == 1)[0] - 1
+
+        smashedECG = []
+        for i in range(len(starts)):
+            smashedECG.append(ECG[starts[i]:ends[i] + 1])
+
+        return smashedECG
+
+    def smashedFFT(smashedECG, fs, M):
+        # removed plotting functionality from MATLAB implementation
+        Pxx = np.zeros(M)
+        a = []
+
+        for i in range(len(smashedECG)):
+            x = np.array(smashedECG[i]).flatten()  # Flatten to 1D array
+            # Number of 2s windows (P) in data rounded up
+            P = int(np.ceil(len(x) / (2 * fs)))
+            y = np.zeros(2 * fs * P)
+            y[:len(x)] = x
+            y = y.reshape((P, 2 * fs))
+
+            y = y - np.mean(y, axis=1, keepdims=True)  # Center the data
+            a.append(len(x))
+            z = y
+
+            Z = np.zeros(M)
+            for j in range(P):
+                X = np.fft.fft(z[j, :], M)
+                A = np.abs(X)
+                if np.sum(A) > 0:
+                    A = A / np.sum(A)  # Normalize by area
+                else:
+                    A.fill(0)
+
+                Z = Z + A
+
+            Z = Z / P
+            Pxx = Pxx + (a[i] * Z)
+
+        F = Pxx / np.sum(a)
+
+        return F
+
+    def sortfilt1(x, n, p):
+
+        N = len(x)
+
+        if p > 100:
+            p = 100
+        elif p < 0:
+            p = 0
+
+        if n % 2 == 0:
+            N1 = int((n / 2) - 1)
+            N2 = int((n / 2))
+        else:
+            N1 = int((n - 1) / 2)
+            N2 = int((n - 1) / 2)
+
+        y = np.zeros_like(x)
+
+        y = np.zeros(N)
+        for i in range(1, N + 1):
+            A = max(1, i - N1)
+            B = min(N, i + N2)
+            P = 1 + round((p / 100) * (B - A))
+            Z = np.sort(x[A - 1:B])
+            y[i - 1] = Z[P - 1]
+
+        return y
+
+    def myfiltfilt(b, a, x):
+
+        if len(x) <= 3 * max([len(b) - 1, len(a) - 1]):
+            y = np.zeros_like(x)
+        else:
+            y = scipy.signal.filtfilt(b, a, x)
+
+        return y
+
+
+    # Bandpass filtering
+    def cleansignal(x, fs, do_original_filtering = False):
+        # cleansignal
+        # Helper function:
+        # baseline removal then high pass (0.7 Hz) filtering
+        # followed by low pass (20 Hz) filtering
+
+        x = scipy.signal.detrend(x)
+        x = x.ravel()  # reshape so that it is the same dimension as baseline
+
+        # Remove baseline
+        baseline = sortfilt1(x, round(0.5 * fs), 50)
+        meddata = x - baseline
+
+        # here, we removed the hard-coded FIR filter coefficients (and LP filter order 7), and instead calculate filter
+        # coefficients. In the original implementation hard-coded FIR filter coefficients (with LP filter order 7) were used
+        # for sampling frequencies between 400 and 600 Hz, whereas they were calculated for sampling frequencies outside this
+        # range (with LP filter order 8).
+
+        # hpf - used to eliminate dc component or low frequency drift.
+        if do_original_filtering:
+            b, a = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high')
+            hpdata = myfiltfilt(b, a, meddata)
+        else:
+            sos = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high', output='sos')
+            hpdata = scipy.signal.sosfiltfilt(sos, meddata)
+
+        # low pass linear phase filter
+        b, a = scipy.signal.butter(7, 20 / (fs / 2), btype='low')
+        lphpdata = myfiltfilt(b, a, hpdata)
+
+        return lphpdata
+
+    if sampling_rate < 50:
+        raise Exception('This function requires a sampling rate of at least 50 Hz')
+
+    finalmask = []  # The original MATLAB implementation allowed a mask to optionally be inputted.
+
+    # Clean up Signal - hi pass, then low pass filter
+    lphpdata = cleansignal(signal, sampling_rate)
+
+    # Differentiator (to emphasise QRS)
+    NumDiff = np.array([1, 0, -1]) / (2 * (1 / sampling_rate))
+    diffdata = scipy.signal.lfilter(NumDiff, [1], lphpdata)
+
+    # Sort filter
+    top = sortfilt1(lphpdata, round(sampling_rate * 0.1), 100)
+    bot = sortfilt1(lphpdata, round(sampling_rate * 0.1), 0)
+    envelope = (top - bot)
+    envelope[envelope < 0] = 0
+    feature = np.abs(diffdata * envelope)
+
+    fc = 6
+    k = ((sampling_rate / 2) * 0.0037) / fc
+    Nh = round(k * sampling_rate)  # Heuristic for Hamming window 3dB point
+    b = scipy.signal.windows.hamming(Nh, sym=True)
+    # Approx fc Hz low pass
+    b = b / np.sum(np.abs(b))
+    a = [1]
+    diffpower1 = np.abs(scipy.signal.filtfilt(b, a, feature)) ** 0.5
+
+    smashedSig = smashECG(diffpower1, finalmask)
+    F = smashedFFT(smashedSig, sampling_rate, 2 ** 14)
+    f = np.arange(0, 2 ** 13) * sampling_rate / 2 ** 14
+    range_indices = np.where((f >= 0.1) & (f < 4))[0]
+    max_idx = np.argmax(F[range_indices])
+    fftHRfreq = f[range_indices[max_idx]]
+
+    # Update smoother feature signal
+    HRmin = 1.5  # Hz: 90 BPM  (don't want to go much below this, will miss ectopics otherwise!)
+    HRmax = 4.0  # Hz: 240 BPM  (Shouldn't see much above this)
+    fc = np.median(2 * np.array([HRmin, fftHRfreq, HRmax]))  # Kills half of second harmonic and all of the rest
+    k = ((sampling_rate / 2) * 0.0037) / fc
+    Nh = round(k * sampling_rate)  # Heuristic for Hamming window 3dB point
+    b = scipy.signal.windows.hamming(Nh, sym=True)
+    b = b / np.sum(np.abs(b))
+    a = [1]  # Approx fc Hz low pass
+    diffpower2 = np.abs(scipy.signal.filtfilt(b, a, feature)) ** 0.5
+
+    # Detect QRS points
+
+    # Where isn't masked
+    # Find valid indices
+    valididx = np.setdiff1d(np.arange(len(diffpower2)), finalmask)
+    # Maximum filter to get upper envelope
+    Wsort = round(np.median(2 * np.array([sampling_rate, sampling_rate / fftHRfreq, sampling_rate / HRmax])))
+    upperenv = sortfilt1(diffpower2, Wsort, 100)  # Morph Open
+    upperenv = sortfilt1(upperenv, Wsort, 0)  # Morph Close
+    lowerenv = sortfilt1(diffpower2, Wsort, 0)  # Morph Open
+    lowerenv = sortfilt1(lowerenv, Wsort, 100)  # Morph Close
+    QRSenv = upperenv - lowerenv
+
+    # First pass: high threshold
+    sensitivity = 1
+    featureHeight = np.median(QRSenv[valididx])
+    mainThreshold = 0.2 * featureHeight
+    threshold = mainThreshold / sensitivity
+
+    tpsidx = turning_points(diffpower2, threshold)
+    qrs = tpsidx[tpsidx > 0]
+    qrs = np.setdiff1d(qrs, finalmask)
+    m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
+
+    # Stop if no qrs waves were detected (not in original matlab algorithm):
+    if len(qrs)==0:
+        peaks = np.asarray(qrs).astype(int)  # Convert to int
+        return peaks
+
+    # Back-track to find possible missed beats
+    # Lower threshold
+    sensitivity = 2
+    threshold = mainThreshold / sensitivity
+    tpsidx = turning_points(diffpower2, threshold)
+    qrs2 = tpsidx[tpsidx > 0]
+
+    # Fill in gaps
+    newmask = np.union1d(finalmask, qrs)
+    newmask = np.array([int(i) for i in newmask])  # convert to integer array
+    temp = np.zeros(len(diffpower2) + 2)
+    temp[newmask + 1] = 1
+    temp = np.concatenate(([1], temp, [1]))
+    
+    # Fill in sections less than 1.5*mRR seconds;
+
+    for i in range(1, len(temp)):
+        if temp[i] - temp[i - 1] == -1:
+            start = i
+        if temp[i] - temp[i - 1] == 1 and (i - 1) - start < 1.5 * m_rr:
+            temp[start:(i - 1)] = 1
+    newmask = np.where(temp[1:-1] == 1)[0]
+
+    # Only keep newly found QRS between long beats
+    qrs2 = np.setdiff1d(qrs2, newmask)
+    # Add them to the old QRS (found using low sensitivity)
+    qrs = np.union1d(qrs, qrs2)
+    m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
+
+    # 3rd pass: Highest threshold
+    # Back-track to remove possible wrong beats
+    sensitivity = 0.5
+    threshold = mainThreshold / sensitivity
+    tpsidx = turning_points(diffpower2, threshold)
+    qrs3 = tpsidx[tpsidx > 0]
+    qrs3 = np.setdiff1d(qrs3, finalmask)
+
+    # find indices of RR intervals that are too short
+    short_rr_idx = []
+    for i in range(1, len(qrs)):
+        if qrs[i] - qrs[i - 1] < 0.5 * m_rr:
+            short_rr_idx.extend(range(qrs[i - 1], qrs[i]))
+
+    qrs3 = np.intersect1d(qrs3, short_rr_idx)
+    qrs = np.setdiff1d(qrs, short_rr_idx)
+    qrs = np.union1d(qrs, qrs3)
+    # removed final call to 'calculate_rr_interval' from MATLAB implementation as its outputs are not used
+
+    peaks = np.asarray(qrs).astype(int)  # Convert to int
     return peaks
 
 
@@ -658,14 +1045,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
 # Continuous Wavelet Transform (CWT) - Martinez et al. (2004)
 # =============================================================================
 def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError as import_error:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
-            " this method to run. Please install it first (`pip install PyWavelets`)."
-        ) from import_error
+
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
@@ -931,7 +1311,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
 
     if len(r_peaks) == 0:
         return np.array([])
-    
+
     r_peaks.pop(
         0
     )  # removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold
@@ -977,7 +1357,7 @@ def _ecg_findpeaks_manikandan(signal, sampling_rate=1000, **kwargs):
     # with a divide by zero error.
     if np.max(abs(dn)) == 0:
         return np.array([])
-    
+
     # Eq. 2
     dtn = dn / (np.max(abs(dn)))
 
@@ -1053,14 +1433,6 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
       Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
 
     """
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError as import_error:
-        raise ImportError(
-            "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
-            " this method to run. Please install it first (`pip install PyWavelets`)."
-        ) from import_error
 
     signal_length = len(signal)
 
