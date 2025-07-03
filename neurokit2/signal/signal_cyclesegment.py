@@ -63,7 +63,7 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, ratio_pre=0.5, sampling_r
         cycle_indices=cycle_indices,
         sampling_rate=sampling_rate,
         desired_length=len(signal_cleaned),
-        ratio_pre,
+        ratio_pre=ratio_pre,
     )
     cycles = epochs_create(
         signal_cleaned,
@@ -149,21 +149,24 @@ def _segment_plot(cycles, cyclerate=0, signal_name="signal", color="#F44336", ax
     return ax
 
 def _segment_window(
-    cycle_rate=None,
     cycle_indices=None,
     sampling_rate=1000,
     desired_length=None,
     ratio_pre=0.5,
+    cycle_rate=None,
 ):
-    # Extract cycle rate
-    if cycle_rate is not None:
-        cycle_rate = np.mean(cycle_rate)
-    if cycle_indices is not None:
-        cycle_rate = np.mean(
-            signal_rate(
-                cycle_indices, sampling_rate=sampling_rate, desired_length=desired_length
+    # Determine cycle rate
+    if cycle_rate is None:
+        if cycle_indices is not None:
+            cycle_rate = np.mean(
+                signal_rate(
+                    cycle_indices, sampling_rate=sampling_rate, desired_length=desired_length
+                )
             )
-        )
+        else:
+            raise ValueError("Either `cycle_rate` or `cycle_indices` must be provided.")
+    else:
+        cycle_rate = np.mean(cycle_rate)  # In case it's an array
     
     # Modulator
     # Note: this is based on quick internal testing but could be improved
