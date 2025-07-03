@@ -135,7 +135,11 @@ def _segment_plot(cycles, cyclerate=0, signal_name="signal", color="#F44336", ax
     )
 
     # Alpha of individual cycles decreases with more cycles
-    alpha = 1 / np.log2(np.log2(1 + df_pivoted.shape[1]))
+    n_cycles = df_pivoted.shape[1]
+    if n_cycles <= 1:
+        alpha = 1.0
+    else:
+        alpha = 1 / np.log2(np.log2(1 + n_cycles))
 
     # Plot all cycles
     ax.plot(df_pivoted, color="grey", linewidth=alpha, alpha=alpha, zorder=2)
