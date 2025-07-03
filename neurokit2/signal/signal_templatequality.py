@@ -133,7 +133,7 @@ def _norm_sum_one(pw):
     pw = pw - pw.min() + 1
 
     # normalise pulse wave to sum to one
-    pw = [x / sum(pw) for x in pw]
+    pw = pw / np.sum(pw)
 
     return pw
 
