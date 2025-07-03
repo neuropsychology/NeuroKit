@@ -99,9 +99,9 @@ def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
     ind_morph = ind_morph.iloc[nonmissing, :]
 
     # Find template pulse wave as the average pulse wave shape
-    templ_pw = ind_morph.mean()
+    templ_morph = ind_morph.mean()
 
-    return templ_pw, ind_morph, beat_inds
+    return templ_morph, ind_morph, beat_inds
 
 
 # =============================================================================
