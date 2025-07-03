@@ -63,7 +63,7 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, ratio_pre=0.5, sampling_r
         cycle_indices=cycle_indices,
         sampling_rate=sampling_rate,
         desired_length=len(signal_cleaned),
-        ratio_pre=0.5,
+        ratio_pre,
     )
     cycles = epochs_create(
         signal_cleaned,
