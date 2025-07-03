@@ -115,14 +115,15 @@ def _quality_templatematch(signal, beat_inds=None, signal_type='ppg', sampling_r
         )
     
     # Find correlation coefficients (CCs) between individual beat morphologies and the template
-    cc = np.zeros(len(beat_inds)-1)
-    for beat_no in range(0,len(beat_inds)-1):
-        temp = np.corrcoef(ind_morph.iloc[beat_no], templ_morph)
-        cc[beat_no] = temp[0,1]
+    cc = np.zeros(ind_morph.shape[0])
+    for i in range(ind_morph.shape[0]):
+        temp = np.corrcoef(ind_morph.iloc[i], templ_morph)
+        cc[i] = temp[0, 1]
+    beat_inds_for_cc = beat_inds[ind_morph.index.to_numpy() - 1]
 
     # Interpolate beat-by-beat CCs
     quality = signal_interpolate(
-        beat_inds[0:-1], cc, x_new=np.arange(len(signal)), method="previous"
+        beat_inds_for_cc, cc, x_new=np.arange(len(signal)), method="previous"
     )
 
     return quality
