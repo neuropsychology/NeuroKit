@@ -171,13 +171,14 @@ def _quality_disimilarity(signal, beat_inds=None, signal_type='ppg', sampling_ra
         )
     
     # Find individual disimilarity measures
-    dis = np.zeros(len(beat_inds)-1)
-    for beat_no in range(0,len(beat_inds)-1):
-        dis[beat_no] = _calc_dis(ind_morph.iloc[beat_no], templ_morph)
+    dis = np.zeros(ind_morph.shape[0])
+    for i in range(ind_morph.shape[0]):
+        dis[i] = _calc_dis(ind_morph.iloc[i], templ_morph)
+    beat_inds_for_dis = beat_inds[ind_morph.index.to_numpy() - 1]
 
     # Interpolate beat-by-beat dis's
     quality = signal_interpolate(
-        beat_inds[0:-1], dis, x_new=np.arange(len(signal)), method="previous"
+        beat_inds_for_dis, dis, x_new=np.arange(len(signal)), method="previous"
     )
 
     return quality
