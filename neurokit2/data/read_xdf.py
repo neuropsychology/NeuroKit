@@ -52,8 +52,8 @@ def read_xdf(
     Returns
     ----------
     df : DataFrame
-        The device's BITalino file as a pandas dataframe. If multiple devices are read,
-        each device's BITalino file will be merged into one dataframe.
+        The XDF data as a pandas dataframe. If multiple streams are read,
+        they will be merged into one dataframe.
     info : dict
         The metadata information containing the sampling rate(s).
 
