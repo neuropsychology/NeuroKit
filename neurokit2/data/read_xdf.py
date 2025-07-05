@@ -73,11 +73,11 @@ def read_xdf(
     """
     try:
         import pyxdf
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "The 'pyxdf' module is required for this function to run. ",
             "Please install it first (`pip install pyxdf`).",
-        )
+        ) from e
 
     # Load file
     # if filename is a URL, stream bytes from file
