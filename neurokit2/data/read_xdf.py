@@ -84,13 +84,12 @@ def read_xdf(
     if urllib.parse.urlparse(filename).scheme != "":
         try:
             req = requests.get(filename, stream=True, timeout=10)
-        except requests.exceptions.Timeout:
-            print("The request timed out!")
-        except requests.exceptions.RequestException as e:
-            print("An error occurred:", e)
+            req.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
 
-        req.raw.decode_content = True
-        filename = io.BytesIO(req.content)
+            req.raw.decode_content = True
+            filename = io.BytesIO(req.content)
+        except requests.exceptions.RequestException as e:
+            raise IOError(f"Failed to read XDF file from URL: {filename}") from e
 
     streams, header = pyxdf.load_xdf(filename)
 
