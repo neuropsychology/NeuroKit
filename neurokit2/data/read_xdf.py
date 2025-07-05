@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import urllib
+import io
+import requests
+from typing import TypedDict
 
+class ReadXDFInfo(TypedDict):
+    sampling_rates_original: list[float]
+    sampling_rates_effective: list[float]
+    sampling_rate: int
+    datetime: str
+    data: list[pd.DataFrame]
 
-def read_xdf(filename, upsample=2, fillmissing=None):
+def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = None) -> tuple[pd.DataFrame, ReadXDFInfo]:
     """**Read and tidy an XDF file**
 
     Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.
@@ -21,7 +31,7 @@ def read_xdf(filename, upsample=2, fillmissing=None):
     Parameters
     ----------
     filename :  str
-        Path (with the extension) of an XDF file (e.g., ``"data.xdf"``).
+        Path (with the extension) or URL pointing to an XDF file (e.g., ``"data.xdf"``).
     upsample : float
         Factor by which to upsample the data. Default is 2, which means that the data will be
         resampled to 2 times the highest sampling rate. You can increase that to further reduce
@@ -35,9 +45,9 @@ def read_xdf(filename, upsample=2, fillmissing=None):
 
     Returns
     ----------
-    df : DataFrame, dict
-        The BITalino file as a pandas dataframe if one device was read, or a dictionary
-        of pandas dataframes (one dataframe per device) if multiple devices are read.
+    df : DataFrame
+        The device's BITalino file as a pandas dataframe. If multiple devices are read,
+        each device's BITalino file will be merged into one dataframe.
     info : dict
         The metadata information containing the sampling rate(s).
 
@@ -63,7 +73,11 @@ def read_xdf(filename, upsample=2, fillmissing=None):
         )
 
     # Load file
-    # TODO: would be nice to be able to stream a file from URL
+    # if filename is a URL, stream bytes from file
+    if urllib.parse.urlparse(filename).scheme != "":
+        req = requests.get(filename, stream=True)
+        req.raw.decode_content = True
+        filename = io.BytesIO(req.content)
     streams, header = pyxdf.load_xdf(filename)
 
     # Get smaller time stamp to later use as offset (zero point)
