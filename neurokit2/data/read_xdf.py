@@ -99,7 +99,7 @@ def read_xdf(
     streams, header = pyxdf.load_xdf(filename)
 
     # Get smaller time stamp to later use as offset (zero point)
-    min_ts = min([min(s["time_stamps"]) for s in streams])
+    min_ts = min(min(s["time_stamps"]) for s in streams)
 
     # Loop through all the streams and convert to dataframes
     dfs = []
