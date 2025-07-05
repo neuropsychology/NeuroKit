@@ -27,7 +27,11 @@ def read_xdf(
 
     Note that, as XDF can store streams with different sampling rates and different time stamps,
     **the function will resample all streams to 2 times (default) the highest sampling rate** (to
-    minimize aliasing). The final sampling rate can be found in the ``info`` dictionary.
+    minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it
+    may produce unexpected results, particularly if the original stream has large gaps in its time series.
+    For more discussion, see `here <https://github.com/xdf-modules/pyxdf/pull/1>`_.
+
+    The final upsampled sampling rate can be found in the ``info`` dictionary.
 
     .. note::
 
@@ -39,9 +43,10 @@ def read_xdf(
     filename :  str
         Path (with the extension) or URL pointing to an XDF file (e.g., ``"data.xdf"``).
     upsample : float
-        Factor by which to upsample the data. Default is 2, which means that the data will be
+        Factor by which to upsample the data. Default is 2.0, which means that the data will be
         resampled to 2 times the highest sampling rate. You can increase that to further reduce
-        edge-distortion, especially for high frequency signals like EEG.
+        edge-distortion, especially for high frequency signals like EEG. ``1.0`` disables upsampling
+        (but not interpolation).
     fillmissing : float
         The maximum duration in seconds of missing data to fill. ``None`` (default) will
         interpolate all missing values and prevent issues with NaNs. However, it might be important
