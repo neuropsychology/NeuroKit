@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import io
+import urllib
+
+from typing import TypedDict
+
 import numpy as np
 import pandas as pd
-import urllib
-import io
 import requests
-from typing import TypedDict
+
 
 class ReadXDFInfo(TypedDict):
     sampling_rates_original: list[float]
@@ -13,7 +16,10 @@ class ReadXDFInfo(TypedDict):
     datetime: str
     data: list[pd.DataFrame]
 
-def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = None) -> tuple[pd.DataFrame, ReadXDFInfo]:
+
+def read_xdf(
+    filename: str, upsample: float = 2.0, fillmissing: float | None = None
+) -> tuple[pd.DataFrame, ReadXDFInfo]:
     """**Read and tidy an XDF file**
 
     Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.
@@ -63,6 +69,7 @@ def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = N
 
       # data, info = nk.read_xdf("data.xdf")
       # sampling_rate = info["sampling_rate"]
+
     """
     try:
         import pyxdf
@@ -75,9 +82,16 @@ def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = N
     # Load file
     # if filename is a URL, stream bytes from file
     if urllib.parse.urlparse(filename).scheme != "":
-        req = requests.get(filename, stream=True)
+        try:
+            req = requests.get(filename, stream=True, timeout=10)
+        except requests.exceptions.Timeout:
+            print("The request timed out!")
+        except requests.exceptions.RequestException as e:
+            print("An error occurred:", e)
+
         req.raw.decode_content = True
         filename = io.BytesIO(req.content)
+
     streams, header = pyxdf.load_xdf(filename)
 
     # Get smaller time stamp to later use as offset (zero point)
@@ -97,22 +111,16 @@ def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = N
             if stream["info"]["type"][0] == "GYRO":
                 dat = dat.rename(columns={"X": "GYRO_X", "Y": "GYRO_Y", "Z": "GYRO_Z"})
                 # Compute movement
-                dat["GYRO"] = np.sqrt(
-                    dat["GYRO_X"] ** 2 + dat["GYRO_Y"] ** 2 + dat["GYRO_Z"] ** 2
-                )
+                dat["GYRO"] = np.sqrt(dat["GYRO_X"] ** 2 + dat["GYRO_Y"] ** 2 + dat["GYRO_Z"] ** 2)
 
             if stream["info"]["type"][0] == "ACC":
                 dat = dat.rename(columns={"X": "ACC_X", "Y": "ACC_Y", "Z": "ACC_Z"})
                 # Compute acceleration
-                dat["ACC"] = np.sqrt(
-                    dat["ACC_X"] ** 2 + dat["ACC_Y"] ** 2 + dat["ACC_Z"] ** 2
-                )
+                dat["ACC"] = np.sqrt(dat["ACC_X"] ** 2 + dat["ACC_Y"] ** 2 + dat["ACC_Z"] ** 2)
 
             # Muse - PPG data has three channels: ambient, infrared, red
             if stream["info"]["type"][0] == "PPG":
-                dat = dat.rename(
-                    columns={"PPG1": "LUX", "PPG2": "PPG", "PPG3": "RED", "IR": "PPG"}
-                )
+                dat = dat.rename(columns={"PPG1": "LUX", "PPG2": "PPG", "PPG3": "RED", "IR": "PPG"})
                 # Zeros suggest interruptions, better to replace with NaNs (I think?)
                 dat["PPG"] = dat["PPG"].replace(0, value=np.nan)
                 dat["LUX"] = dat["LUX"].replace(0, value=np.nan)
@@ -125,12 +133,8 @@ def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = N
 
     # Store metadata
     info = {
-        "sampling_rates_original": [
-            float(s["info"]["nominal_srate"][0]) for s in streams
-        ],
-        "sampling_rates_effective": [
-            float(s["info"]["effective_srate"]) for s in streams
-        ],
+        "sampling_rates_original": [float(s["info"]["nominal_srate"][0]) for s in streams],
+        "sampling_rates_effective": [float(s["info"]["effective_srate"]) for s in streams],
         "datetime": header["info"]["datetime"][0],
         "data": dfs,
     }
@@ -151,14 +155,8 @@ def read_xdf(filename: str, upsample: float = 2.0, fillmissing: float | None = N
         fillmissing = int(info["sampling_rate"] * fillmissing)
 
     # Create new index with evenly spaced timestamps
-    idx = pd.date_range(
-        df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms"
-    )
+    idx = pd.date_range(df.index.min(), df.index.max(), freq=str(1000 / info["sampling_rate"]) + "ms")
     # https://stackoverflow.com/questions/47148446/pandas-resample-interpolate-is-producing-nans
-    df = (
-        df.reindex(df.index.union(idx))
-        .interpolate(method="index", limit=fillmissing)
-        .reindex(idx)
-    )
+    df = df.reindex(df.index.union(idx)).interpolate(method="index", limit=fillmissing).reindex(idx)
 
     return df, info
