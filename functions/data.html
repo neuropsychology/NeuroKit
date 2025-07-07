@@ -861,13 +861,16 @@ from the last part of the URL path and downloaded to the current working directo
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_xdf">
-<span class="sig-name descname"><span class="pre">read_xdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillmissing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_xdf.html#read_xdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_xdf" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read_xdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillmissing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/neurokit2/data/read_xdf.html#read_xdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_xdf" title="Link to this definition">#</a></dt>
 <dd><p><strong>Read and tidy an XDF file</strong></p>
 <p>Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.
 The function outputs both the dataframe and the information (such as the sampling rate).</p>
 <p>Note that, as XDF can store streams with different sampling rates and different time stamps,
 <strong>the function will resample all streams to 2 times (default) the highest sampling rate</strong> (to
-minimize aliasing). The final sampling rate can be found in the <code class="docutils literal notranslate"><span class="pre">info</span></code> dictionary.</p>
+minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it
+may produce unexpected results, particularly if the original stream has large gaps in its time series.
+For more discussion, see <a class="reference external" href="https://github.com/xdf-modules/pyxdf/pull/1">here</a>.</p>
+<p>The final upsampled sampling rate can be found in the <code class="docutils literal notranslate"><span class="pre">info</span></code> dictionary.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function requires the <em>pyxdf</em> module to be installed. You can install it with
@@ -876,10 +879,11 @@ minimize aliasing). The final sampling rate can be found in the <code class="doc
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Path (with the extension) of an XDF file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.xdf&quot;</span></code>).</p></li>
-<li><p><strong>upsample</strong> (<em>float</em>) – Factor by which to upsample the data. Default is 2, which means that the data will be
+<li><p><strong>filename</strong> (<em>str</em>) – Path (with the extension) or URL pointing to an XDF file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.xdf&quot;</span></code>).</p></li>
+<li><p><strong>upsample</strong> (<em>float</em>) – Factor by which to upsample the data. Default is 2.0, which means that the data will be
 resampled to 2 times the highest sampling rate. You can increase that to further reduce
-edge-distortion, especially for high frequency signals like EEG.</p></li>
+edge-distortion, especially for high frequency signals like EEG. <code class="docutils literal notranslate"><span class="pre">1.0</span></code> disables upsampling
+(but not interpolation).</p></li>
 <li><p><strong>fillmissing</strong> (<em>float</em>) – The maximum duration in seconds of missing data to fill. <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) will
 interpolate all missing values and prevent issues with NaNs. However, it might be important
 to keep the missing intervals (e.g., <code class="docutils literal notranslate"><span class="pre">fillmissing=1</span></code> to keep interruptions of more than
@@ -889,8 +893,8 @@ from further analysis.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>df</strong> (<em>DataFrame, dict</em>) – The BITalino file as a pandas dataframe if one device was read, or a dictionary
-of pandas dataframes (one dataframe per device) if multiple devices are read.</p></li>
+<li><p><strong>df</strong> (<em>DataFrame</em>) – The XDF data as a pandas dataframe. If multiple streams are read,
+they will be merged into one dataframe.</p></li>
 <li><p><strong>info</strong> (<em>dict</em>) – The metadata information containing the sampling rate(s).</p></li>
 </ul>
 </p>

@@ -381,13 +381,19 @@ document.write(`
                   
   <h1>Source code for neurokit2.data.read_xdf</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 
 <div class="viewcode-block" id="read_xdf">
 <a class="viewcode-back" href="../../../functions/data.html#neurokit2.data.read_xdf">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_xdf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">upsample</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fillmissing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_xdf</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">upsample</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">fillmissing</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Read and tidy an XDF file**</span>
 
 <span class="sd">    Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.</span>
@@ -395,7 +401,11 @@ document.write(`
 
 <span class="sd">    Note that, as XDF can store streams with different sampling rates and different time stamps,</span>
 <span class="sd">    **the function will resample all streams to 2 times (default) the highest sampling rate** (to</span>
-<span class="sd">    minimize aliasing). The final sampling rate can be found in the ``info`` dictionary.</span>
+<span class="sd">    minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it</span>
+<span class="sd">    may produce unexpected results, particularly if the original stream has large gaps in its time series.</span>
+<span class="sd">    For more discussion, see `here &lt;https://github.com/xdf-modules/pyxdf/pull/1&gt;`_.</span>
+
+<span class="sd">    The final upsampled sampling rate can be found in the ``info`` dictionary.</span>
 
 <span class="sd">    .. note::</span>
 
@@ -405,11 +415,12 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename :  str</span>
-<span class="sd">        Path (with the extension) of an XDF file (e.g., ``&quot;data.xdf&quot;``).</span>
+<span class="sd">        Path (with the extension) or URL pointing to an XDF file (e.g., ``&quot;data.xdf&quot;``).</span>
 <span class="sd">    upsample : float</span>
-<span class="sd">        Factor by which to upsample the data. Default is 2, which means that the data will be</span>
+<span class="sd">        Factor by which to upsample the data. Default is 2.0, which means that the data will be</span>
 <span class="sd">        resampled to 2 times the highest sampling rate. You can increase that to further reduce</span>
-<span class="sd">        edge-distortion, especially for high frequency signals like EEG.</span>
+<span class="sd">        edge-distortion, especially for high frequency signals like EEG. ``1.0`` disables upsampling</span>
+<span class="sd">        (but not interpolation).</span>
 <span class="sd">    fillmissing : float</span>
 <span class="sd">        The maximum duration in seconds of missing data to fill. ``None`` (default) will</span>
 <span class="sd">        interpolate all missing values and prevent issues with NaNs. However, it might be important</span>
@@ -419,9 +430,9 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    ----------</span>
-<span class="sd">    df : DataFrame, dict</span>
-<span class="sd">        The BITalino file as a pandas dataframe if one device was read, or a dictionary</span>
-<span class="sd">        of pandas dataframes (one dataframe per device) if multiple devices are read.</span>
+<span class="sd">    df : DataFrame</span>
+<span class="sd">        The XDF data as a pandas dataframe. If multiple streams are read,</span>
+<span class="sd">        they will be merged into one dataframe.</span>
 <span class="sd">    info : dict</span>
 <span class="sd">        The metadata information containing the sampling rate(s).</span>
 
@@ -437,21 +448,32 @@ document.write(`
 
 <span class="sd">      # data, info = nk.read_xdf(&quot;data.xdf&quot;)</span>
 <span class="sd">      # sampling_rate = info[&quot;sampling_rate&quot;]</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pyxdf</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
             <span class="s2">&quot;The &#39;pyxdf&#39; module is required for this function to run. &quot;</span><span class="p">,</span>
             <span class="s2">&quot;Please install it first (`pip install pyxdf`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="c1"># Load file</span>
-    <span class="c1"># TODO: would be nice to be able to stream a file from URL</span>
+    <span class="c1"># if filename is a URL, stream bytes from file</span>
+    <span class="k">if</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">req</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raise HTTPError for bad responses (4xx or 5xx)</span>
+
+            <span class="n">req</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">decode_content</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read XDF file from URL: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
     <span class="n">streams</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="n">pyxdf</span><span class="o">.</span><span class="n">load_xdf</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
     <span class="c1"># Get smaller time stamp to later use as offset (zero point)</span>
-    <span class="n">min_ts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;time_stamps&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">])</span>
+    <span class="n">min_ts</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;time_stamps&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">)</span>
 
     <span class="c1"># Loop through all the streams and convert to dataframes</span>
     <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
