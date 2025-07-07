@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..ecg.ecg_peaks import _ecg_peaks_plot_artefacts
-from ..signal import signal_fixpeaks, signal_formatpeaks
+from ..signal import signal_fixpeaks, signal_formatpeaks, signal_tidypeaksonsets
 from ..stats import rescale
 from .ppg_findpeaks import ppg_findpeaks
 
@@ -33,8 +33,8 @@ def ppg_peaks(
     sampling_rate : int
         The sampling frequency of ``ppg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.
     method : str
-        The processing pipeline to apply. Can be one of ``"elgendi"``, ``"bishop"``. The default is
-        ``"elgendi"``.
+        The processing pipeline to apply. Can be one of ``"elgendi"``, ``"bishop"``, ``"charlton"``.
+        The default is ``"elgendi"``.
     correct_artifacts : bool
         Whether or not to identify and fix artifacts, using the method by
         Lipponen & Tarvainen (2019).
@@ -95,6 +95,8 @@ def ppg_peaks(
     * Bishop, S. M., & Ercole, A. (2018). Multi-scale peak and trough detection optimised for
       periodic and quasi-periodic neuroscience data. In Intracranial Pressure & Neuromonitoring XVI
       (pp. 189-195). Springer International Publishing.
+    * Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:
+      design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.
 
     """
     # Store info
@@ -110,7 +112,22 @@ def ppg_peaks(
         )
     )
 
-    # Peak correction
+    # Peak (and onset) correction
+    # - tidy up peaks and onsets
+    if info['method_fixpeaks'].lower() == "charlton2022":  # this is the default settings when using MSPTDfastv1 or MSPTDfastv2
+        info["PPG_Peaks_Unfixed"] = info["PPG_Peaks"].copy()
+        info["PPG_Onsets_Unfixed"] = info["PPG_Onsets"].copy()
+
+        fixpeaks, info["PPG_Peaks"], info["PPG_Onsets"] = signal_tidypeaksonsets(
+            ppg_cleaned, info["PPG_Peaks"], info["PPG_Onsets"], method="Charlton2022"
+        )
+
+        # Add prefix and merge
+        fixpeaks = {"PPG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
+        info.update(fixpeaks)
+
+
+    # - perform peak correction
     if correct_artifacts:
         info["PPG_Peaks_Uncorrected"] = info["PPG_Peaks"].copy()
 
@@ -121,7 +138,7 @@ def ppg_peaks(
         # Add prefix and merge
         fixpeaks = {"PPG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
         info.update(fixpeaks)
-
+    
     # Format output
     signals = signal_formatpeaks(
         dict(PPG_Peaks=info["PPG_Peaks"]),

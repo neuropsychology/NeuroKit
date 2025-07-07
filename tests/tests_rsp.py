@@ -192,13 +192,23 @@ def test_rsp_amplitude():
     signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
-    amplitude = nk.rsp_amplitude(rsp, signals)
-    assert amplitude.shape == (rsp.size,)
+    amplitude = nk.rsp_amplitude(rsp_cleaned, signals)
+    assert amplitude.shape == (rsp_cleaned.size,)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
-    amplitude = nk.rsp_amplitude(rsp, info)
-    assert amplitude.shape == (rsp.size,)
+    amplitude = nk.rsp_amplitude(rsp_cleaned, info)
+    assert amplitude.shape == (rsp_cleaned.size,)
+    assert np.abs(amplitude.mean() - 1) < 0.01
+
+    # Test with `rsp` as pd.Series
+    amplitude = nk.rsp_amplitude(pd.Series(rsp_cleaned), info)
+    assert amplitude.shape == (pd.Series(rsp_cleaned).size,)
+    assert np.abs(amplitude.mean() - 1) < 0.01
+
+    # Test with `rsp` as list
+    amplitude = nk.rsp_amplitude(rsp_cleaned.tolist(), info)
+    assert amplitude.shape == (len(rsp_cleaned.tolist()),)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
 

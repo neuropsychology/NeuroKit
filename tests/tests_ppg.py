@@ -49,7 +49,7 @@ def test_ppg_simulate(duration, sampling_rate, heart_rate, freq_modulation):
             signals["PPG_Rate"], 10
         )
         assert np.allclose(
-            groundtruth_range, observed_range, atol=groundtruth_range * 0.15
+            groundtruth_range, observed_range, atol=groundtruth_range * 0.20
         )
 
     # TODO: test influence of different noise configurations

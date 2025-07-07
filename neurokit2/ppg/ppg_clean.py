@@ -73,6 +73,9 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     * Vorreuther, A., Tagalidou, N., & Vukelić, M. (2025). Validation of the EmotiBit wearable
       sensor for heart-based measures under varying workload conditions. Front Neuroergonomics,
       6, 1585469.
+    * M. Elgendi, I. Norton, M. Brearley, D. Abbott, and D. Schuurmans (2013).
+      Systolic peak detection in acceleration photoplethysmograms measured from emergency responders
+      in tropical conditions. PLoS ONE, 8(10), 1–11.
 
     """
     ppg_signal = as_vector(ppg_signal)
@@ -88,7 +91,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
         ppg_signal = signal_fillmissing(ppg_signal, method="both")
 
     method = str(method).lower()
-    if method in ["elgendi"]:
+    if method in ["elgendi", "elgendi2013"]:
         clean = _ppg_clean_elgendi(ppg_signal, sampling_rate)
     elif method in ["nabian2018"]:
         clean = _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=heart_rate)
@@ -108,12 +111,13 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
 
 
 def _ppg_clean_elgendi(ppg_signal, sampling_rate):
+    """Low-pass filter for continuous PPG signal preprocessing, adapted from Elgendi et al. (2013)."""
     filtered = signal_filter(
         ppg_signal,
         sampling_rate=sampling_rate,
         lowcut=0.5,
         highcut=8,
-        order=3,
+        order=2,
         method="butterworth",
     )
     return filtered
