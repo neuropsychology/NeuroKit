@@ -129,6 +129,10 @@ def signal_psd(
       plt.close()
 
     """
+    # Sanitize signal
+    if isinstance(signal, pd.Series):
+        signal = signal.values
+
     # Constant Detrend
     signal = signal - np.mean(signal)
 
