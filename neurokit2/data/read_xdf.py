@@ -2,8 +2,6 @@
 import io
 import urllib
 
-from typing import TypedDict
-
 import numpy as np
 import pandas as pd
 import requests
