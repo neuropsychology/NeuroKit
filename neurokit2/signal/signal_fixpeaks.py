@@ -265,9 +265,8 @@ def _find_artifacts(
     # a value in a realistic range (e.g., for median filtering).
     if len(rr) > 1:
         rr[0] = np.mean(rr[1:])
-    else:
-        # Handle the case when there's only one peak
-        rr[0] = 1.0  # Default to 1 second interval
+    elif len(rr) == 1:
+        rr[0] = 1.0
 
     # Artifact identification #################################################
     ###########################################################################
@@ -276,9 +275,9 @@ def _find_artifacts(
     drrs = np.ediff1d(rr, to_begin=0)
     if len(drrs) > 1:
         drrs[0] = np.mean(drrs[1:])
-    else:
-        # Handle the case when there's only one element
-        drrs[0] = 0.0  # Default to 0 for single element case
+    elif len(drrs) == 1:
+        drrs[0] = 0.0
+
     # Normalize by threshold.
     th1 = _compute_threshold(drrs, alpha, window_width)
     np.divide(drrs, th1, out=drrs, where=th1 != 0)
