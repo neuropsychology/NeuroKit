@@ -513,6 +513,10 @@ document.write(`
 <span class="sd">      plt.close()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sanitize signal</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">values</span>
+
     <span class="c1"># Constant Detrend</span>
     <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
