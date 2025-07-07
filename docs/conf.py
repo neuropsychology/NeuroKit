@@ -14,14 +14,16 @@ import re
 import sys
 import asyncio
 import platform
+import matplotlib
 
+matplotlib.use("Agg")
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath("../"))
 
 
@@ -38,6 +40,7 @@ def find_author():
 project = "NeuroKit2"
 copyright = f"2020–{datetime.datetime.now().year}"
 author = '<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>. This documentation is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.'
+
 
 # The short X.Y version.
 def find_version():
@@ -94,7 +97,9 @@ napoleon_numpy_docstring = True
 napoleon_use_param = False
 napoleon_use_ivar = False
 napoleon_use_rtype = False
-add_module_names = False  # If true, the current module name will be prepended to all description
+add_module_names = (
+    False  # If true, the current module name will be prepended to all description
+)
 
 # -- Options for ipython directive  ----------------------------------------
 
