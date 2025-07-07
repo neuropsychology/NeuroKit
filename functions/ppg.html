@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  2.963040           0.722892</span>
-<span class="go">2     2        10000  ...                 -0.283060           0.990494</span>
-<span class="go">3     3        15000  ...                 -0.210704           0.992881</span>
+<span class="go">1     1         5000  ...                  1.743738           0.836809</span>
+<span class="go">2     2        10000  ...                 -0.399192           0.988520</span>
+<span class="go">3     3        15000  ...                  1.694371           0.960083</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -872,8 +872,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 45,  90, 130, 174, 217, 263, 309, 348, 401, 440, 481, 521, 556,</span>
-<span class="go">       598, 632, 670, 707, 740, 779, 812, 851, 887, 926, 967])</span>
+<span class="go">array([ 47,  89, 131, 177, 219, 261, 307, 350, 401, 437, 518, 556, 596,</span>
+<span class="go">       631, 669, 705, 742, 777, 814, 849, 886, 927, 967])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -961,9 +961,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.050198           0.985084</span>
-<span class="go">2     2        10000  ...                  0.137668           0.970894</span>
-<span class="go">3     3        15000  ...                 -0.512316           0.561999</span>
+<span class="go">1     1         5000  ...                 -0.782542           0.915658</span>
+<span class="go">2     2        10000  ...                  2.393172           0.931817</span>
+<span class="go">3     3        15000  ...                  1.064144           0.867663</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
