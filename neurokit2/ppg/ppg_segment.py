@@ -70,7 +70,7 @@ def ppg_segment(ppg_cleaned, peaks=None, sampling_rate=1000, show=False, **kwarg
 
     # pad last heartbeat with nan so that segments are equal length
     last_heartbeat_key = str(np.max(np.array(list(heartbeats.keys()), dtype=int)))
-    after_last_index = heartbeats[last_heartbeat_key]["Index"] < len(ppg_cleaned)
+    after_last_index = heartbeats[last_heartbeat_key]["Index"] >= len(ppg_cleaned)
     heartbeats[last_heartbeat_key].loc[after_last_index, "Signal"] = np.nan
 
     if show is not False:

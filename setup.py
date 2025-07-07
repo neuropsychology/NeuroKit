@@ -7,6 +7,7 @@ import re
 
 from setuptools import find_packages, setup
 
+
 # Utilities
 with open("README.rst") as readme_file:
     readme = readme_file.read()
@@ -25,7 +26,7 @@ def find_version():
 
 
 # Dependencies
-requirements = ["requests", "numpy", "pandas", "scipy", "scikit-learn>=1.0.0", "matplotlib"]
+requirements = ["requests", "numpy", "pandas", "scipy", "scikit-learn>=1.0.0", "matplotlib>=3.5.0", "PyWavelets>=1.4.0"]
 
 # Optional Dependencies (only needed / downloaded for testing purposes, for instance to test against some other packages)
 setup_requirements = ["pytest-runner", "numpy"]
@@ -40,11 +41,14 @@ test_requirements = requirements + [
     "nolds",
     "biosppy==0.6.1",
     "cvxopt",
-    "PyWavelets",
+    "PyWavelets>=1.4.0",
     "EMD-signal",
+    "numba>=0.61.0",
+    "llvmlite>=0.44.0",
     "astropy",
     "plotly",
     "ts2vg",
+    "wfdb",
 ]
 
 # Setup
@@ -76,8 +80,9 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13"
     ],
 )

@@ -5,6 +5,7 @@ import random
 import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -191,13 +192,23 @@ def test_rsp_amplitude():
     signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
-    amplitude = nk.rsp_amplitude(rsp, signals)
-    assert amplitude.shape == (rsp.size,)
+    amplitude = nk.rsp_amplitude(rsp_cleaned, signals)
+    assert amplitude.shape == (rsp_cleaned.size,)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
-    amplitude = nk.rsp_amplitude(rsp, info)
-    assert amplitude.shape == (rsp.size,)
+    amplitude = nk.rsp_amplitude(rsp_cleaned, info)
+    assert amplitude.shape == (rsp_cleaned.size,)
+    assert np.abs(amplitude.mean() - 1) < 0.01
+
+    # Test with `rsp` as pd.Series
+    amplitude = nk.rsp_amplitude(pd.Series(rsp_cleaned), info)
+    assert amplitude.shape == (pd.Series(rsp_cleaned).size,)
+    assert np.abs(amplitude.mean() - 1) < 0.01
+
+    # Test with `rsp` as list
+    amplitude = nk.rsp_amplitude(rsp_cleaned.tolist(), info)
+    assert amplitude.shape == (len(rsp_cleaned.tolist()),)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
 
@@ -266,23 +277,23 @@ def test_rsp_eventrelated():
     rsp_eventrelated = nk.rsp_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Rate_Min"])
         < np.array(rsp_eventrelated["RSP_Rate_Mean"])
     )
 
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Rate_Mean"])
         < np.array(rsp_eventrelated["RSP_Rate_Max"])
     )
 
     # Test amplitude features
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Amplitude_Min"])
         < np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
     )
 
-    assert np.alltrue(
+    assert np.all(
         np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
         < np.array(rsp_eventrelated["RSP_Amplitude_Max"])
     )
@@ -376,6 +387,42 @@ def test_rsp_rvt():
         assert len(rsp20) == len(rvt20)
         assert min(rvt10[~np.isnan(rvt10)]) >= 0
         assert min(rvt20[~np.isnan(rvt20)]) >= 0
+
+
+# Commented out for now: Check issue https://github.com/neuropsychology/NeuroKit/issues/1082
+# def test_rsp_rate():
+#     sampling_rate = 1000
+#     rsp_rate = 10
+#     rsp = nk.rsp_simulate(
+#         duration=60, sampling_rate=sampling_rate, respiratory_rate=10,
+#         random_state=42, noise=0
+#     )
+#     _, info = nk.rsp_peaks(rsp, sampling_rate=1000)
+#     for method in ['trough', 'xcorr']:
+#         # Test with troughs as np.array
+#         rate = nk.rsp_rate(rsp, troughs=info['RSP_Troughs'], sampling_rate=sampling_rate, method=method)
+#         assert rate.shape == (rsp.size,)
+#         assert np.abs(rate.mean()-rsp_rate) < 0.5
+#         # Test with troughs as list
+#         rate = nk.rsp_rate(rsp, troughs=info['RSP_Troughs'].tolist(), sampling_rate=sampling_rate, method=method)
+#         assert rate.shape == (rsp.size,)
+#         assert np.abs(rate.mean()-rsp_rate) < 0.5
+#         # Test with troughs as dict
+#         rate = nk.rsp_rate(rsp, troughs=info, sampling_rate=sampling_rate, method=method)
+#         assert rate.shape == (rsp.size,)
+#         assert np.abs(rate.mean()-rsp_rate) < 0.5
+#         # Test with troughs as pd.Series
+#         rate = nk.rsp_rate(rsp, troughs=pd.Series(info['RSP_Troughs']), sampling_rate=sampling_rate, method=method)
+#         assert rate.shape == (rsp.size,)
+#         assert np.abs(rate.mean()-rsp_rate) < 0.5
+#         # Test with troughs as pd.DataFrame
+#         rate = nk.rsp_rate(rsp, troughs=pd.DataFrame({'RSP_Troughs': info['RSP_Troughs']}), sampling_rate=sampling_rate, method=method)
+#         assert rate.shape == (rsp.size,)
+#         assert np.abs(rate.mean()-rsp_rate) < 0.5
+#         # Test without passing troughs as an argument
+#         rate = nk.rsp_rate(rsp, sampling_rate=sampling_rate, method=method)
+#         assert rate.shape == (rsp.size,)
+#         assert np.abs(rate.mean()-rsp_rate) < 0.5
 
 
 @pytest.mark.parametrize(

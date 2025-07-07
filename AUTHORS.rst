@@ -13,6 +13,7 @@ Current maintainers
 * `Danielle Benesch <https://github.com/danibene>`_ *(École de technologie supérieure, Canada)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
 * `Max Ngoi Zi Liang <https://github.com/Max-ZiLiang>`_ *(Nanyang Technological University, Singapore)*
+* `Johannes Herforth <https://github.com/DerAndereJohannes>`_ *(University of Luxembourg, Luxembourg)*
 
 
 Core contributors
@@ -52,7 +53,6 @@ Contributors
 * `Jannik Gut <https://github.com/rostro36>`_
 * `Nattapong Thammasan <https://github.com/Nattapong-OnePlanet>`_ *(OnePlanet, Netherlands)*
 * `Marek Sokol <https://github.com/sokolmarek>`_ *(Faculty of Biomedical Engineering of the CTU in Prague, Czech Republic)*
-* `Johannes Herforth <https://github.com/DerAndereJohannes>`_ *(University of Luxembourg, Luxembourg)*
 
 
 Thanks also to `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.

@@ -138,7 +138,11 @@ def epochs_create(
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
-        events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
+        events = _events_find_label(
+            {"onset": events},
+            event_labels=event_labels,
+            event_conditions=event_conditions,
+        )
 
     event_onsets = list(events["onset"])
     event_labels = list(events["label"])
@@ -160,16 +164,20 @@ def epochs_create(
     )
 
     # Find the maximum numbers of samples in an epoch
-    parameters["duration"] = list(np.array(parameters["end"]) - np.array(parameters["start"]))
+    parameters["duration"] = list(
+        np.array(parameters["end"]) - np.array(parameters["start"])
+    )
     epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"])))
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
 
     # First createa buffer of the same dtype as data and fill with it 0s
-    buffer = pd.DataFrame(0, index=range(length_buffer), columns=data.columns).astype(dtype=data.dtypes)
+    buffer = pd.DataFrame(0, index=range(length_buffer), columns=data.columns).astype(
+        dtype=data.dtypes
+    )
     # Only then, we convert the non-integers to nans (because regular numpy's ints cannot be nan)
-    buffer.select_dtypes(exclude="int64").replace({0.0: np.nan}, inplace=True)
+    buffer.select_dtypes(exclude=["int", "int64"]).replace({0.0: np.nan}, inplace=True)
     # Now we can combine the buffer with the data
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
 
@@ -188,7 +196,10 @@ def epochs_create(
         # Correct index
         epoch["Index"] = epoch.index.values - length_buffer
         epoch.index = np.linspace(
-            start=parameters["start"][i], stop=parameters["end"][i], num=len(epoch), endpoint=True
+            start=parameters["start"][i],
+            stop=parameters["end"][i],
+            num=len(epoch),
+            endpoint=True,
         )
 
         if baseline_correction is True:

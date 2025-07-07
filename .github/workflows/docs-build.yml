@@ -16,9 +16,9 @@ jobs:
               with:
                   fetch-depth: 0 # To be able to push refs to destination repo
             - name: Set up Python 🐍
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
-                  python-version: "3.10"
+                  python-version: "3.13"
                   cache: "pip"
 
             - name: Install dependencies 🏭
@@ -27,16 +27,16 @@ jobs:
                   pip install sphinx-book-theme
                   pip install sphinxemoji
                   pip install sphinx-copybutton
-                  pip install ipykernel==6.23.2
+                  pip install ipykernel
                   pip install ipython
                   pip install myst-parser
                   pip install myst-nb
-                  pip install numpy==1.24.3
+                  pip install numpy
                   pip install pandas
                   pip install scipy
                   pip install scikit-learn
                   pip install matplotlib
-                  pip install mne
+                  pip install mne --upgrade
                   pip install PyWavelets
                   pip install EMD-signal
                   pip install astropy

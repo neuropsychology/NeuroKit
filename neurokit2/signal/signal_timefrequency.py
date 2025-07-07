@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
+import pywt
 import scipy.signal
 
 from ..signal.signal_detrend import signal_detrend
@@ -37,7 +38,10 @@ def signal_timefrequency(
         * Wavelet Transform (WT): similar to STFT but instead of a fixed duration window function,
           a varying window length by scaling the axis of the window is used. At low frequency, WT
           proves high spectral resolution but poor temporal resolution. On the other hand, for high
-          frequencies, the WT provides high temporal resolution but poor spectral resolution.
+          frequencies, the WT provides high temporal resolution but poor spectral resolution. The
+          PyWavelet wavelet transform is used in NeuroKit and follows their naming convention of
+          wavelets. To adjust the wavelet type, add an underscore and the wavelet name to the
+          'cwt' method input. I.e., 'cwt_cgau1'.
 
     * Quadratic TFRs: better resolution but computationally expensive and suffers from having
       cross terms between multiple signal components
@@ -123,7 +127,7 @@ def signal_timefrequency(
       f, t, cwtm = nk.signal_timefrequency(signal,
                                            sampling_rate,
                                            max_frequency=20,
-                                           method="cwt",
+                                           method="cwt_cmor1.5-1.0",
                                            show=True)
       @suppress
       plt.close()
@@ -173,15 +177,22 @@ def signal_timefrequency(
             window_type=window_type,
         )
     # CWT
-    elif method.lower() in ["cwt", "wavelet"]:
+    elif "cwt" in method.lower():
+        wavelet_name = None
+        wname_split = method.lower().split("_")
+
+        if len(wname_split) == 2:
+            wavelet_name = wname_split[1]
+
         frequency, time, tfr = continuous_wt(
             signal,
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
             max_frequency=max_frequency,
+            wavelet_name=wavelet_name
         )
     # WVD
-    elif method in ["WignerVille", "wvd"]:
+    elif method.lower() in ["WignerVille", "wvd"]:
         frequency, time, tfr = wvd(
             signal,
             sampling_rate=sampling_rate,
@@ -190,7 +201,7 @@ def signal_timefrequency(
             method="WignerVille",
         )
     # pseudoWVD
-    elif method in ["pseudoWignerVille", "pwvd"]:
+    elif method.lower() in ["pseudoWignerVille", "pwvd"]:
         frequency, time, tfr = wvd(
             signal,
             sampling_rate=sampling_rate,
@@ -259,9 +270,16 @@ def short_term_ft(
 
 
 def continuous_wt(
-    signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, nfreqbin=None
+    signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, wavelet_name=None, nfreqbin=None,
 ):
     """**Continuous Wavelet Transform**
+
+    The continuous wavelet transform utilizes the PyWavelet implementation to compute the transform.
+
+    The default wavelet in NeuroKit is a complex morlet wavelet with a bandwidth of 1.0 and a central
+    frequency of 6.0 (i.e., 'cmor1.0-6.0'). The parameters can be adjusted by using PyWavelet wavelet notation which is
+    found under 'Continuous Wavelet Families' in their documentation.
+
 
      References
      ----------
@@ -276,23 +294,29 @@ def continuous_wt(
 
     """
 
-    # central frequency
-    w = 6.0  # recommended
-
     if nfreqbin is None:
         nfreqbin = sampling_rate // 2
+
+    if wavelet_name is None:
+        # describe the default wavelet
+        B = 1.0
+        w = 6.0  # recommended
+
+        wavelet_name = f"cmor{B}-{w}"
 
     # frequency
     frequency = np.linspace(min_frequency, max_frequency, nfreqbin)
 
-    # time
+    # scales in terms of the binned frequencies
+    scales = pywt.frequency2scale(wavelet_name, frequency / sampling_rate)
+
+    # cwt using specified mother wavelet
+    tfr, tfrf = pywt.cwt(signal, scales, wavelet_name, method="fft", sampling_period=1/sampling_rate)
+
+    # compute time domain ticks
     time = np.arange(len(signal)) / sampling_rate
-    widths = w * sampling_rate / (2 * frequency * np.pi)
 
-    # Mother wavelet = Morlet
-    tfr = scipy.signal.cwt(signal, scipy.signal.morlet2, widths, w=w)
-
-    return frequency, time, np.abs(tfr)
+    return tfrf, time, np.abs(tfr)
 
 
 # =============================================================================
@@ -437,7 +461,7 @@ def smooth_pseudo_wvd(
     signal_fft[N:] = 0
 
     # Inverse FFT
-    signal_ifft = np.fft.ifft(signal_fft)
+    signal_ifft = np.fft.ifft(signal_fft).real
     signal_ifft[N:] = 0
 
     # Make analytic signal
@@ -559,7 +583,7 @@ def plot_timefrequency(z, time, f, signal=None, method="stft"):
         ax.set_ylabel("STFT Magnitude")
         ax.set_xlabel("Frequency (Hz)")
 
-    elif method == "cwt":
+    elif method.lower()[:3] == "cwt":
         figure_title = "Continuous Wavelet Transform Magnitude"
     elif method == "wvd":
         figure_title = "Wigner Ville Distrubution Spectrogram"

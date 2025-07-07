@@ -109,18 +109,18 @@ def test_eog_eventrelated():
     eog_eventrelated = nk.eog_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(
+    assert np.all(
         np.array(eog_eventrelated["EOG_Rate_Min"])
         < np.array(eog_eventrelated["EOG_Rate_Mean"])
     )
 
-    assert np.alltrue(
+    assert np.all(
         np.array(eog_eventrelated["EOG_Rate_Mean"])
         < np.array(eog_eventrelated["EOG_Rate_Max"])
     )
 
     # Test blink presence
-    assert np.alltrue(
+    assert np.all(
         np.array(eog_eventrelated["EOG_Blinks_Presence"]) == np.array([1, 0, 0])
     )
 

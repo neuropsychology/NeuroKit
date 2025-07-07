@@ -96,7 +96,7 @@ def test_emg_eventrelated():
     no_activation = np.where(emg_eventrelated["EMG_Activation"] == 0)[0][0]
     assert int(pd.DataFrame(emg_eventrelated.values[no_activation]).isna().sum()) == 5
 
-    assert np.alltrue(
+    assert np.all(
         np.nansum(np.array(emg_eventrelated["EMG_Amplitude_Mean"]))
         < np.nansum(np.array(emg_eventrelated["EMG_Amplitude_Max"]))
     )

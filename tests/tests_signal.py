@@ -377,6 +377,14 @@ def test_signal_timefrequency():
     indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
     assert np.sum(cwtm[indices_freq5]) < np.sum(cwtm[indices_freq20])
 
+    # Test the wavelet alternative wavelet pick a random wavelet
+    frequency, time, cwtm = nk.signal_timefrequency(
+        signal, method="cwt_cgau1", max_frequency=50, show=False
+    )
+
+    assert len(frequency) == cwtm.shape[0]
+    assert len(time) == cwtm.shape[1]
+
     # wvd
     frequency, time, wvd = nk.signal_timefrequency(
         signal, method="wvd", max_frequency=50, show=False
