@@ -9,7 +9,7 @@ General Neuroimaging
 -----------------------
 
 - `Seven quick tips for analysis scripts in neuroimaging <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007358>`_
-- `Neuroimaging tutorials and resources <https://.github.io/tutorials-and-resources/>`_
+- `Hitchhacker's guide to the brain <https://learn-neuroimaging.github.io/hitchhackers_guide_brain>`_
 
 
 
@@ -37,5 +37,5 @@ EDA
 EEG
 ----
 
-- `Electroencephalogram (EEG) Recording Protocol (Farrens et al., 2019) <https://protocolexchange.researchsquare.com/article/pex-779/v2>`_
+- `Electroencephalogram (EEG) Recording Protocol (Farrens et al., 2020) <https://www.protocols.io/view/electroencephalogram-eeg-recording-protocol-for-co-yxmvm9pk5l3p>`_
 - `Compute the average bandpower of an EEG signal <https://raphaelvallat.com/bandpower.html>`_
