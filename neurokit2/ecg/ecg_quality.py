@@ -26,7 +26,12 @@ def ecg_quality(
       individual beat morphology and an average (template) beat morphology. This index is therefore
       relative: 1 corresponds to individual beats that are closest to the beat morphology (i.e.
       correlate exactly with it) and 0 corresponds to there being no correlation with the average
-      beat morphology.
+      beat morphology. For comparison, the ``"averageQRS"`` method forces the signal the quality to
+      vary between 0 (lowest) and 1 (highest). Therefore, even in a high quality signal, some beats will
+      have low values (e.g. 0), whereas others will have high values (e.g. 1). In contrast, ``"templatematch"``
+      computes a quality metric determined by the average of the correlations between the template beat morphology
+      and each individual beat's morphology. Therefore, it is possible that all beats exhibit high values (e.g. >0.95),
+      indicative of consistent beat morphologies across the signal.
 
     * The ``"averageQRS"`` method computes a continuous index of quality of the ECG signal, by
       interpolating the distance of each QRS segment from the average QRS segment present in the *
