@@ -461,7 +461,7 @@ def smooth_pseudo_wvd(
     signal_fft[N:] = 0
 
     # Inverse FFT
-    signal_ifft = np.fft.ifft(signal_fft)
+    signal_ifft = np.fft.ifft(signal_fft).real
     signal_ifft[N:] = 0
 
     # Make analytic signal

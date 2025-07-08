@@ -17,7 +17,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
 
     * **neurokit** (default): QRS complexes are detected based on the steepness of the absolute
       gradient of the ECG signal. Subsequently, R-peaks are detected as local maxima in
-      the QRS complexes. The method is unpublished, but see: (i) https://github.com/neuropsychology/NeuroKit/issues/476 
+      the QRS complexes. The method is unpublished, but see: (i) https://github.com/neuropsychology/NeuroKit/issues/476
       for discussion of this algorithm; and (ii) https://doi.org/10.21105/joss.02621 for the original validation of
       this algorithm.
     * **pantompkins1985**: Algorithm by Pan & Tompkins (1985).
@@ -31,6 +31,8 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
       al. (2012).
     * **manikandan2012**: Algorithm by Manikandan & Soman (2012) based on the Shannon energy
       envelope (SEE).
+    * **khamis2016**: UNSW Algorithm by Khamis et al. (2016), designed for both clinical ECGs and poorer quality
+      telehealth ECGs.
     * **kalidas2017**: Algorithm by Kalidas et al. (2017).
     * **nabian2018**: Algorithm by Nabian et al. (2018) based on the Pan-Tompkins algorithm.
     * **rodrigues2021**: Adaptation of the work by Sadhukhan & Mitra (2012) and Gutiérrez-Rivas et
@@ -140,6 +142,9 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
       # Manikandan (2012)
       _, manikandan2012 = nk.ecg_peaks(ecg, sampling_rate=250, method="manikandan2012")
 
+      # Khamis (2016)
+      _, khamis2016 = nk.ecg_peaks(ecg, sampling_rate=250, method="khamis2016")
+
       # kalidas2017
       cleaned = nk.ecg_clean(ecg, sampling_rate=250, method="kalidas2017")
       _, kalidas2017 = nk.ecg_peaks(cleaned, sampling_rate=250, method="kalidas2017")
@@ -167,6 +172,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
               gamboa2008,
               elgendi2010,
               engzeemod2012,
+              khamis2016,
               kalidas2017,
               rodrigues2021,
               emrich2023
@@ -220,6 +226,9 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
     * Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real
       Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.
       49-54).
+    * Khamis, H., Weiss, R., Xie, Y., Chang, C. W., Lovell, N. H., & Redmond, S. J. (2016).
+      QRS detection algorithm for telehealth electrocardiogram recordings.
+      IEEE Transactions on Biomedical Engineering, 63(7), 1377–1388.
     * Kalidas, V., & Tamil, L. (2017, October). Real-time QRS detector using stationary wavelet
       transform for automated ECG analysis. In 2017 IEEE 17th International Conference on
       Bioinformatics and Bioengineering (BIBE) (pp. 457-461). IEEE.

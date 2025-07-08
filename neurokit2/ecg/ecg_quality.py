@@ -8,6 +8,7 @@ from ..epochs import epochs_to_df
 from ..misc import NeuroKitWarning
 from ..signal import signal_interpolate
 from ..signal.signal_power import signal_power
+from ..signal.signal_quality import signal_quality
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
@@ -19,6 +20,18 @@ def ecg_quality(
     """**ECG Signal Quality Assessment**
 
     Assess the quality of the ECG Signal using various methods:
+
+    * The ``"templatematch"`` method (loosely based on Orphanidou et al., 2015) computes a continuous
+      index of quality of the ECG signal, by calculating the correlation coefficient between each
+      individual beat morphology and an average (template) beat morphology. This index is therefore
+      relative: 1 corresponds to individual beats that are closest to the beat morphology (i.e.
+      correlate exactly with it) and 0 corresponds to there being no correlation with the average
+      beat morphology. For comparison, the ``"averageQRS"`` method forces the signal the quality to
+      vary between 0 (lowest) and 1 (highest). Therefore, even in a high quality signal, some beats will
+      have low values (e.g. 0), whereas others will have high values (e.g. 1). In contrast, ``"templatematch"``
+      computes a quality metric determined by the average of the correlations between the template beat morphology
+      and each individual beat's morphology. Therefore, it is possible that all beats exhibit high values (e.g. >0.95),
+      indicative of consistent beat morphologies across the signal.
 
     * The ``"averageQRS"`` method computes a continuous index of quality of the ECG signal, by
       interpolating the distance of each QRS segment from the average QRS segment present in the *
@@ -62,13 +75,15 @@ def ecg_quality(
 
     See Also
     --------
-    ecg_segment, ecg_delineate
+    ecg_segment, ecg_delineate, signal_quality
 
     References
     ----------
     * Zhao, Z., & Zhang, Y. (2018). "SQI quality evaluation mechanism of single-lead ECG signal
       based on simple heuristic fusion and fuzzy comprehensive evaluation". Frontiers in
       Physiology, 9, 727.
+    * Orphanidou, C. et al. (2015). "Signal-quality indices for the electrocardiogram and photoplethysmogram:
+      derivation and applications to wireless monitoring". IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.
 
     Examples
     --------
@@ -100,7 +115,7 @@ def ecg_quality(
 
     method = method.lower()  # remove capitalised letters
 
-    # Run peak detection algorithm
+    # Run quality assessment algorithm
     if method in ["averageqrs"]:
         quality = _ecg_quality_averageQRS(
             ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate
@@ -118,6 +133,19 @@ def ecg_quality(
 
         quality = _ecg_quality_zhao2018(
             ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate, mode=approach
+        )
+    elif method in ["templatematch", "orphanidou2015"]:
+        # Detect R peaks (if not done already)
+        if rpeaks is None:
+            _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
+            rpeaks = rpeaks["ECG_R_Peaks"]
+        # Assess quality using template matching
+        quality = signal_quality(
+            ecg_cleaned,
+            beat_inds=rpeaks,
+            signal_type="ecg",
+            sampling_rate=sampling_rate,
+            method="templatematch",
         )
 
     return quality

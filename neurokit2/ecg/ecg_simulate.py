@@ -465,7 +465,7 @@ def _ecg_simulate_rrprocess(
     ph0 = 2 * np.pi * rng.uniform(size=int(n / 2 - 1))
     ph = np.concatenate([[0], ph0, [0], -np.flipud(ph0)])
     SwC = Sw * np.exp(1j * ph)
-    x = (1 / n) * np.real(np.fft.ifft(SwC))
+    x = (1 / n) * np.fft.ifft(SwC).real
 
     xstd = np.std(x)
     ratio = rrstd / xstd
