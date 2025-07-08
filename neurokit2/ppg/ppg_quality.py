@@ -1,12 +1,10 @@
 # - * - coding: utf-8 - * -
 
 from .ppg_peaks import ppg_peaks
-from ..signal.signal_templatequality import signal_templatequality
+from ..signal.signal_quality import signal_quality
 
 
-def ppg_quality(
-    ppg_cleaned, peaks=None, sampling_rate=1000, method="templatematch"
-):
+def ppg_quality(ppg_cleaned, peaks=None, sampling_rate=1000, method="templatematch"):
     """**PPG Signal Quality Assessment**
 
     Assess the quality of the PPG Signal using various methods:
@@ -19,7 +17,7 @@ def ppg_quality(
       pulse wave shape.
 
     * The ``"disimilarity"`` method (loosely based on Sabeti et al., 2019) computes a continuous index
-      of quality of the PPG signal, by calculating the level of disimilarity between each individual 
+      of quality of the PPG signal, by calculating the level of disimilarity between each individual
       pulse wave and an average (template) pulse wave shape (after they are normalised). A value of
       zero indicates no disimilarity (i.e. equivalent pulse wave shapes), whereas values above or below
       indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse
@@ -52,7 +50,7 @@ def ppg_quality(
     ----------
     * Orphanidou, C. et al. (2015). "Signal-quality indices for the electrocardiogram and photoplethysmogram:
       derivation and applications to wireless monitoring". IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.
-    * Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features: 
+    * Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:
       Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.
 
     Examples
@@ -81,14 +79,24 @@ def ppg_quality(
         _, peaks = ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)
         peaks = peaks["PPG_Peaks"]
 
-    # Run selected quality assessment method
-    if method in ["templatematch", "orphanidou2015"]:
-        quality = signal_templatequality(
-            ppg_cleaned, beat_inds=peaks, signal_type='ppg', sampling_rate=sampling_rate, method='templatematch'
+    # Sanitise method name
+    if method.lower() in ["templatematch", "orphanidou2015"]:
+        method = "templatematch"
+    elif method.lower() in ["disimilarity", "sabeti2019"]:
+        method = "disimilarity"
+    else:
+        raise ValueError(
+            f"Method '{method}' not recognised. Please use 'templatematch' or 'disimilarity'."
         )
-    elif method in ["disimilarity", "sabeti2019"]:
-        quality = signal_templatequality(
-            ppg_cleaned, beat_inds=peaks, signal_type = 'ppg', sampling_rate=sampling_rate, method='disimilarity'
-        )
+
+    # Run
+    quality = signal_quality(
+        ppg_cleaned,
+        beat_inds=peaks,
+        signal_type="ppg",
+        sampling_rate=sampling_rate,
+        method=        method = "disimilarity"
+,
+    )
 
     return quality

@@ -8,7 +8,7 @@ from ..epochs import epochs_to_df
 from ..misc import NeuroKitWarning
 from ..signal import signal_interpolate
 from ..signal.signal_power import signal_power
-from ..signal.signal_templatequality import signal_templatequality
+from ..signal.signal_quality import signal_quality
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
@@ -135,9 +135,13 @@ def ecg_quality(
             _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
             rpeaks = rpeaks["ECG_R_Peaks"]
         # Assess quality using template matching
-        quality = signal_templatequality(
-            ecg_cleaned, beat_inds=rpeaks, signal_type='ecg', sampling_rate=sampling_rate, method='templatematch'
-        )    
+        quality = signal_quality(
+            ecg_cleaned,
+            beat_inds=rpeaks,
+            signal_type="ecg",
+            sampling_rate=sampling_rate,
+            method="templatematch",
+        )
 
     return quality
 

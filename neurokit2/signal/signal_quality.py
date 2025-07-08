@@ -5,7 +5,9 @@ from ..epochs import epochs_to_df
 from ..signal import signal_interpolate, signal_cyclesegment
 
 
-def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, method="templatematch"):
+def signal_quality(
+    signal, beat_inds, signal_type, sampling_rate=1000, method="templatematch"
+):
     """**Assess quality of signal by comparing individual beat morphologies with a template**
 
     Assess the quality of a signal (e.g. PPG or ECG) using the specified method. You can pass an unfiltered
@@ -19,7 +21,7 @@ def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, m
       (i.e. correlate exactly with it) and 0 corresponds to there being no correlation with the average beat morphology.
 
     * The ``"disimilarity"`` method (loosely based on Sabeti et al., 2019) computes a continuous index
-      of quality of the PPG or ECG signal, by calculating the level of disimilarity between each individual 
+      of quality of the PPG or ECG signal, by calculating the level of disimilarity between each individual
       beat's morphology and an average (template) beat morpholoy (after they are normalised). A value of
       zero indicates no disimilarity (i.e. equivalent beat morphologies), whereas values above or below
       indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse
@@ -57,7 +59,7 @@ def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, m
     ----------
     * Orphanidou, C. et al. (2015). "Signal-quality indices for the electrocardiogram and photoplethysmogram:
       derivation and applications to wireless monitoring". IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.
-    * Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features: 
+    * Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:
       Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.
     """
 
@@ -66,14 +68,21 @@ def signal_templatequality(signal, beat_inds, signal_type, sampling_rate=1000, m
     # Run selected quality assessment method
     if method in ["templatematch"]:  # Based on the approach in Orphanidou et al. (2015)
         quality = _quality_templatematch(
-            signal, beat_inds=beat_inds, signal_type=signal_type, sampling_rate=sampling_rate,
+            signal,
+            beat_inds=beat_inds,
+            signal_type=signal_type,
+            sampling_rate=sampling_rate,
         )
     elif method in ["disimilarity"]:  # Based on the approach in Sabeti et al. (2019)
         quality = _quality_disimilarity(
-            signal, beat_inds=beat_inds, signal_type=signal_type, sampling_rate=sampling_rate
+            signal,
+            beat_inds=beat_inds,
+            signal_type=signal_type,
+            sampling_rate=sampling_rate,
         )
 
     return quality
+
 
 # =============================================================================
 # Calculate template morphology
@@ -82,7 +91,7 @@ def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
 
     # Segment to get individual beat morphologies
     heartbeats = signal_cyclesegment(signal, beat_inds, sampling_rate)
-    
+
     # convert these to dataframe
     ind_morph = epochs_to_df(heartbeats).pivot(
         index="Label", columns="Time", values="Signal"
@@ -104,18 +113,23 @@ def _calc_template_morph(signal, beat_inds, signal_type, sampling_rate=1000):
 # =============================================================================
 # Quality assessment using template-matching method
 # =============================================================================
-def _quality_templatematch(signal, beat_inds=None, signal_type='ppg', sampling_rate=1000):
+def _quality_templatematch(
+    signal, beat_inds=None, signal_type="ppg", sampling_rate=1000
+):
 
     # Obtain individual beat morphologies and template beat morphology
     templ_morph, ind_morph, beat_inds = _calc_template_morph(
-            signal, beat_inds=beat_inds, signal_type=signal_type, sampling_rate=sampling_rate
-        )
-    
+        signal,
+        beat_inds=beat_inds,
+        signal_type=signal_type,
+        sampling_rate=sampling_rate,
+    )
+
     # Find correlation coefficients (CCs) between individual beat morphologies and the template
-    cc = np.zeros(len(beat_inds)-1)
-    for beat_no in range(0,len(beat_inds)-1):
+    cc = np.zeros(len(beat_inds) - 1)
+    for beat_no in range(0, len(beat_inds) - 1):
         temp = np.corrcoef(ind_morph.iloc[beat_no], templ_morph)
-        cc[beat_no] = temp[0,1]
+        cc[beat_no] = temp[0, 1]
 
     # Interpolate beat-by-beat CCs
     quality = signal_interpolate(
@@ -123,6 +137,7 @@ def _quality_templatematch(signal, beat_inds=None, signal_type='ppg', sampling_r
     )
 
     return quality
+
 
 # =============================================================================
 # Disimilarity measure method
@@ -137,6 +152,7 @@ def _norm_sum_one(pw):
 
     return pw
 
+
 def _calc_dis(pw1, pw2):
     # following the methodology in https://doi.org/10.1016/j.imu.2019.100222 (Sec. 3.1.2.5)
 
@@ -147,7 +163,7 @@ def _calc_dis(pw1, pw2):
     # normalise to sum to one
     pw1 = _norm_sum_one(pw1)
     pw2 = _norm_sum_one(pw2)
-    
+
     # ignore any elements which are zero because log(0) is -inf
     rel_els = (pw1 != 0) & (pw2 != 0)
 
@@ -156,19 +172,25 @@ def _calc_dis(pw1, pw2):
 
     return dis
 
+
 # =============================================================================
 # Quality assessment using disimilarity method
 # =============================================================================
-def _quality_disimilarity(signal, beat_inds=None, signal_type='ppg', sampling_rate=1000):
+def _quality_disimilarity(
+    signal, beat_inds=None, signal_type="ppg", sampling_rate=1000
+):
 
     # Obtain individual beat morphologies and template beat morphology
     templ_morph, ind_morph, beat_inds = _calc_template_morph(
-            signal, beat_inds=beat_inds, signal_type=signal_type, sampling_rate=sampling_rate
-        )
-    
+        signal,
+        beat_inds=beat_inds,
+        signal_type=signal_type,
+        sampling_rate=sampling_rate,
+    )
+
     # Find individual disimilarity measures
-    dis = np.zeros(len(beat_inds)-1)
-    for beat_no in range(0,len(beat_inds)-1):
+    dis = np.zeros(len(beat_inds) - 1)
+    for beat_no in range(0, len(beat_inds) - 1):
         dis[beat_no] = _calc_dis(ind_morph.iloc[beat_no], templ_morph)
 
     # Interpolate beat-by-beat dis's
