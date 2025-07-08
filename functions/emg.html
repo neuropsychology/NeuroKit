@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>EMG &#8212; NeuroKit2 0.2.13 documentation</title>
+    <title>EMG &#8212; NeuroKit2 0.2.12 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=0ac042cd"></script>
+    <script src="../_static/documentation_options.js?v=b13cc0d0"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -141,8 +141,8 @@
       
     
     
-    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.13 documentation - Home"/>
-    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.13 documentation - Home"/>`);</script>
+    <img src="../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.12 documentation - Home"/>
+    <script>document.write(`<img src="../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.12 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -611,9 +611,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.524812         1.0</span>
+<span class="go">1     1         3000  ...                1.603852         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.715408         1.0</span>
+<span class="go">3     3         9000  ...                1.072586         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -623,7 +623,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.248984</span>
+<span class="go">0               3.0            0.243022</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -978,9 +978,9 @@ of the following:</p>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.768934         1.0</span>
+<span class="go">1     1         3000  ...                1.832966         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                1.368734         1.0</span>
+<span class="go">3     3         9000  ...                0.944522         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -1026,15 +1026,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.243376</span>
+<span class="go">0               3.0            0.246515</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.246360</span>
-<span class="go">2     2                 1            0.240412</span>
+<span class="go">1     1                 2            0.240362</span>
+<span class="go">2     2                 1            0.252650</span>
 </pre></div>
 </div>
 </dd></dl>
