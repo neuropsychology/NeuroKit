@@ -648,21 +648,25 @@ document.write(`
     <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">to_begin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
     <span class="c1"># For subsequent analysis it is important that the first element has</span>
     <span class="c1"># a value in a realistic range (e.g., for median filtering).</span>
-    <span class="n">rr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rr</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">rr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rr</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">rr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">rr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 
     <span class="c1"># Artifact identification #################################################</span>
     <span class="c1">###########################################################################</span>
 
     <span class="c1"># Compute dRRs: time series of differences of consecutive periods (dRRs).</span>
     <span class="n">drrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">to_begin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">drrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">drrs</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">drrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">drrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">drrs</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">drrs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">drrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
     <span class="c1"># Normalize by threshold.</span>
     <span class="n">th1</span> <span class="o">=</span> <span class="n">_compute_threshold</span><span class="p">(</span><span class="n">drrs</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">window_width</span><span class="p">)</span>
-    <span class="c1"># ignore division by 0 warning</span>
-    <span class="n">old_setting</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-    <span class="n">drrs</span> <span class="o">/=</span> <span class="n">th1</span>
-    <span class="c1"># return old setting</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="o">**</span><span class="n">old_setting</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">drrs</span><span class="p">,</span> <span class="n">th1</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">drrs</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">th1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">drrs</span><span class="p">[</span><span class="n">th1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="c1"># Cast dRRs to subspace s12.</span>
     <span class="c1"># Pad drrs with one element.</span>
@@ -689,7 +693,8 @@ document.write(`
     <span class="n">mrrs</span><span class="p">[</span><span class="n">mrrs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mrrs</span><span class="p">[</span><span class="n">mrrs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
     <span class="c1"># Normalize by threshold.</span>
     <span class="n">th2</span> <span class="o">=</span> <span class="n">_compute_threshold</span><span class="p">(</span><span class="n">mrrs</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">window_width</span><span class="p">)</span>
-    <span class="n">mrrs</span> <span class="o">/=</span> <span class="n">th2</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">mrrs</span><span class="p">,</span> <span class="n">th2</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">mrrs</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">th2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">mrrs</span><span class="p">[</span><span class="n">th2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="c1"># Artifact classification #################################################</span>
     <span class="c1">###########################################################################</span>
