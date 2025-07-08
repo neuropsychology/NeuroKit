@@ -44,7 +44,7 @@ def ppg_quality(ppg_cleaned, peaks=None, sampling_rate=1000, method="templatemat
 
     See Also
     --------
-    signal_templatequality
+    signal_quality
 
     References
     ----------

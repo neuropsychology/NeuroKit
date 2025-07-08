@@ -75,7 +75,7 @@ def ecg_quality(
 
     See Also
     --------
-    ecg_segment, ecg_delineate, signal_templatequality
+    ecg_segment, ecg_delineate, signal_quality
 
     References
     ----------
