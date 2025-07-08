@@ -95,8 +95,7 @@ def ppg_quality(ppg_cleaned, peaks=None, sampling_rate=1000, method="templatemat
         beat_inds=peaks,
         signal_type="ppg",
         sampling_rate=sampling_rate,
-        method=        method = "disimilarity"
-,
+        method=method,
     )
 
     return quality
