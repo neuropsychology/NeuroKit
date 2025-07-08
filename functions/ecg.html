@@ -937,6 +937,17 @@ Detectors Based on Visibility Graphs. 31st European Signal Processing Conference
 <dd><p><strong>ECG Signal Quality Assessment</strong></p>
 <p>Assess the quality of the ECG Signal using various methods:</p>
 <ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method (loosely based on Orphanidou et al., 2015) computes a continuous
+index of quality of the ECG signal, by calculating the correlation coefficient between each
+individual beat morphology and an average (template) beat morphology. This index is therefore
+relative: 1 corresponds to individual beats that are closest to the beat morphology (i.e.
+correlate exactly with it) and 0 corresponds to there being no correlation with the average
+beat morphology. For comparison, the <code class="docutils literal notranslate"><span class="pre">&quot;averageQRS&quot;</span></code> method forces the signal the quality to
+vary between 0 (lowest) and 1 (highest). Therefore, even in a high quality signal, some beats will
+have low values (e.g. 0), whereas others will have high values (e.g. 1). In contrast, <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>
+computes a quality metric determined by the average of the correlations between the template beat morphology
+and each individual beat’s morphology. Therefore, it is possible that all beats exhibit high values (e.g. &gt;0.95),
+indicative of consistent beat morphologies across the signal.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;averageQRS&quot;</span></code> method computes a continuous index of quality of the ECG signal, by
 interpolating the distance of each QRS segment from the average QRS segment present in the *
 data. This index is therefore relative: 1 corresponds to heartbeats that are the closest to
@@ -973,13 +984,15 @@ of the signal for <code class="docutils literal notranslate"><span class="pre">&
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ecg.ecg_segment" title="neurokit2.ecg.ecg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_segment</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_delineate" title="neurokit2.ecg.ecg_delineate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_delineate</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ecg.ecg_segment" title="neurokit2.ecg.ecg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_segment</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_delineate" title="neurokit2.ecg.ecg_delineate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_delineate</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_quality</span></code></p>
 </div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Zhao, Z., &amp; Zhang, Y. (2018). “SQI quality evaluation mechanism of single-lead ECG signal
 based on simple heuristic fusion and fuzzy comprehensive evaluation”. Frontiers in
 Physiology, 9, 727.</p></li>
+<li><p>Orphanidou, C. et al. (2015). “Signal-quality indices for the electrocardiogram and photoplethysmogram:
+derivation and applications to wireless monitoring”. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</p></li>
 </ul>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -1525,32 +1538,32 @@ in percentage (from 0 to 1), representing the stage of the current cardiac phase
 <span class="gp">In [6]: </span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a36a50df90&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1771d694cd0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Atrial&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a36a50de50&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1771d695310&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Atrial&quot;</span><span class="p">],</span>
 <span class="gp">   ...: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Atrial Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a36a50dbd0&gt;]</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1771d695590&gt;]</span>
 
 <span class="gp">In [10]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1a36a250050&gt;</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1771d694e10&gt;</span>
 
 <span class="gp">In [11]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a36a251950&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1771d696990&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Ventricular&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a36a251e50&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1771d697750&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cardiac_phase</span><span class="p">[</span><span class="s2">&quot;ECG_Phase_Completion_Ventricular&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>           <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ventricular Phase Completion&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
 <span class="gp">   ....: </span>
-<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1a36a252490&gt;]</span>
+<span class="gh">Out[13]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1771d6947d0&gt;]</span>
 
 <span class="gp">In [14]: </span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1a36a251810&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1771d697610&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_ecg_phase.png"><img alt="../_images/p_ecg_phase.png" src="../_images/p_ecg_phase.png" style="width: 640.0px; height: 480.0px;" />
@@ -1749,9 +1762,9 @@ quadratic model:</p>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.622951          0.968841</span>
-<span class="go">2     2        10000  ...                          0.354970          0.972369</span>
-<span class="go">3     3        15000  ...                          0.065126          0.942326</span>
+<span class="go">1     1         5000  ...                          0.731855          0.967516</span>
+<span class="go">2     2        10000  ...                          0.418891          0.942035</span>
+<span class="go">3     3        15000  ...                          0.138365          0.924858</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>

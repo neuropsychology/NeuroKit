@@ -382,19 +382,13 @@ document.write(`
   <h1>Source code for neurokit2.ppg.ppg_quality</h1><div class="highlight"><pre>
 <span></span><span class="c1"># - * - coding: utf-8 - * -</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">..epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">epochs_to_df</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_interpolate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.ppg_peaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppg_peaks</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.ppg_segment</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppg_segment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_quality</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_quality</span>
 
 
 <div class="viewcode-block" id="ppg_quality">
 <a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_quality">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ppg_quality</span><span class="p">(</span>
-    <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="n">approach</span><span class="o">=</span><span class="kc">None</span>
-<span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ppg_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**PPG Signal Quality Assessment**</span>
 
 <span class="sd">    Assess the quality of the PPG Signal using various methods:</span>
@@ -404,11 +398,10 @@ document.write(`
 <span class="sd">      individual pulse wave and an average (template) pulse wave shape. This index is therefore</span>
 <span class="sd">      relative: 1 corresponds to pulse waves that are closest to the average pulse wave shape (i.e.</span>
 <span class="sd">      correlate exactly with it) and 0 corresponds to there being no correlation with the average</span>
-<span class="sd">      pulse wave shape. Note that 1 does not necessarily mean &quot;good&quot;: use this index with care and</span>
-<span class="sd">      plot it alongside your PPG signal to see if it makes sense.</span>
+<span class="sd">      pulse wave shape.</span>
 
 <span class="sd">    * The ``&quot;disimilarity&quot;`` method (loosely based on Sabeti et al., 2019) computes a continuous index</span>
-<span class="sd">      of quality of the PPG signal, by calculating the level of disimilarity between each individual </span>
+<span class="sd">      of quality of the PPG signal, by calculating the level of disimilarity between each individual</span>
 <span class="sd">      pulse wave and an average (template) pulse wave shape (after they are normalised). A value of</span>
 <span class="sd">      zero indicates no disimilarity (i.e. equivalent pulse wave shapes), whereas values above or below</span>
 <span class="sd">      indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse</span>
@@ -419,7 +412,7 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    ppg_cleaned : Union[list, np.array, pd.Series]</span>
 <span class="sd">        The cleaned PPG signal in the form of a vector of values.</span>
-<span class="sd">    ppg_pw_peaks : tuple or list</span>
+<span class="sd">    peaks : tuple or list</span>
 <span class="sd">        The list of PPG pulse wave peak samples returned by ``ppg_peaks()``. If None, peaks is computed from</span>
 <span class="sd">        the signal input.</span>
 <span class="sd">    sampling_rate : int</span>
@@ -429,18 +422,20 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    array</span>
+<span class="sd">    quality : array</span>
 <span class="sd">        Vector containing the quality index ranging from 0 to 1 for ``&quot;templatematch&quot;`` method,</span>
 <span class="sd">        or an unbounded value (where 0 indicates high quality) for ``&quot;disimilarity&quot;`` method.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ppg_segment</span>
+<span class="sd">    signal_quality</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    * Orphanidou, C. et al. (2015). &quot;Signal-quality indices for the electrocardiogram and photoplethysmogram:</span>
 <span class="sd">      derivation and applications to wireless monitoring&quot;. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</span>
+<span class="sd">    * Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:</span>
+<span class="sd">      Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -463,122 +458,32 @@ document.write(`
 
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
 
-    <span class="c1"># Run selected quality assessment method</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">]:</span>
-        <span class="n">quality</span> <span class="o">=</span> <span class="n">_ppg_quality_templatematch</span><span class="p">(</span>
-            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="c1"># Detect PPG peaks (if not done already)</span>
+    <span class="k">if</span> <span class="n">peaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Sanitise method name</span>
+    <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="s2">&quot;orphanidou2015&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;templatematch&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;disimilarity&quot;</span><span class="p">,</span> <span class="s2">&quot;sabeti2019&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;disimilarity&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Method &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; not recognised. Please use &#39;templatematch&#39; or &#39;disimilarity&#39;.&quot;</span>
         <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;disimilarity&quot;</span><span class="p">]:</span>
-        <span class="n">quality</span> <span class="o">=</span> <span class="n">_ppg_quality_disimilarity</span><span class="p">(</span>
-            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
-        <span class="p">)</span>
+
+    <span class="c1"># Run</span>
+    <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_quality</span><span class="p">(</span>
+        <span class="n">ppg_cleaned</span><span class="p">,</span>
+        <span class="n">beat_inds</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span>
+        <span class="n">signal_type</span><span class="o">=</span><span class="s2">&quot;ppg&quot;</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">quality</span></div>
 
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Calculate a template pulse wave</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_calc_template_pw</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-
-    <span class="c1"># Sanitize inputs</span>
-    <span class="k">if</span> <span class="n">ppg_pw_peaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-        <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
-
-    <span class="c1"># Get heartbeats</span>
-    <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">ppg_segment</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
-    <span class="n">pw_data</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">heartbeats</span><span class="p">)</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
-        <span class="n">index</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Signal&quot;</span>
-    <span class="p">)</span>
-    <span class="n">pw_data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="n">pw_data</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
-
-    <span class="c1"># Filter Nans</span>
-    <span class="n">missing</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">nonmissing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">missing</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">pw_data</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">nonmissing</span><span class="p">,</span> <span class="p">:]</span>
-
-    <span class="c1"># Find template pulse wave</span>
-    <span class="n">templ_pw</span> <span class="o">=</span> <span class="n">pw_data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">templ_pw</span><span class="p">,</span> <span class="n">pw_data</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span>
-
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Template-matching method</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_ppg_quality_templatematch</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-
-    <span class="c1"># Obtain individual pulse waves and template pulse wave</span>
-    <span class="n">templ_pw</span><span class="p">,</span> <span class="n">pw_data</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">_calc_template_pw</span><span class="p">(</span>
-            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
-        <span class="p">)</span>
-    
-    <span class="c1"># Find individual correlation coefficients (CCs)</span>
-    <span class="n">cc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">beat_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">pw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">beat_no</span><span class="p">],</span> <span class="n">templ_pw</span><span class="p">)</span>
-        <span class="n">cc</span><span class="p">[</span><span class="n">beat_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># Interpolate beat-by-beat CCs</span>
-    <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
-        <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cc</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;previous&quot;</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">quality</span>
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Disimilarity measure method</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_norm_sum_one</span><span class="p">(</span><span class="n">pw</span><span class="p">):</span>
-
-    <span class="c1"># ensure all values are positive</span>
-    <span class="n">pw</span> <span class="o">=</span> <span class="n">pw</span> <span class="o">-</span> <span class="n">pw</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
-
-    <span class="c1"># normalise pulse wave to sum to one</span>
-    <span class="n">pw</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pw</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pw</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">pw</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_calc_dis</span><span class="p">(</span><span class="n">pw1</span><span class="p">,</span> <span class="n">pw2</span><span class="p">):</span>
-    <span class="c1"># following the methodology in https://doi.org/10.1016/j.imu.2019.100222 (Sec. 3.1.2.5)</span>
-
-    <span class="c1"># convert to numpy arrays</span>
-    <span class="n">pw1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pw1</span><span class="p">)</span>
-    <span class="n">pw2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pw2</span><span class="p">)</span>
-
-    <span class="c1"># normalise to sum to one</span>
-    <span class="n">pw1</span> <span class="o">=</span> <span class="n">_norm_sum_one</span><span class="p">(</span><span class="n">pw1</span><span class="p">)</span>
-    <span class="n">pw2</span> <span class="o">=</span> <span class="n">_norm_sum_one</span><span class="p">(</span><span class="n">pw2</span><span class="p">)</span>
-    
-    <span class="c1"># ignore any elements which are zero because log(0) is -inf</span>
-    <span class="n">rel_els</span> <span class="o">=</span> <span class="p">(</span><span class="n">pw1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pw2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># calculate disimilarity measure (using pw2 as the template)</span>
-    <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pw2</span><span class="p">[</span><span class="n">rel_els</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pw2</span><span class="p">[</span><span class="n">rel_els</span><span class="p">]</span> <span class="o">/</span> <span class="n">pw1</span><span class="p">[</span><span class="n">rel_els</span><span class="p">]))</span>
-
-    <span class="k">return</span> <span class="n">dis</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_ppg_quality_disimilarity</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
-
-    <span class="c1"># Obtain individual pulse waves and template pulse wave</span>
-    <span class="n">templ_pw</span><span class="p">,</span> <span class="n">pw_data</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span> <span class="o">=</span> <span class="n">_calc_template_pw</span><span class="p">(</span>
-            <span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">ppg_pw_peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
-        <span class="p">)</span>
-    
-    <span class="c1"># Find individual disimilarity measures</span>
-    <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">beat_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_pw_peaks</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">dis</span><span class="p">[</span><span class="n">beat_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">_calc_dis</span><span class="p">(</span><span class="n">pw_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">beat_no</span><span class="p">],</span> <span class="n">templ_pw</span><span class="p">)</span>
-
-    <span class="c1"># Interpolate beat-by-beat dis&#39;s</span>
-    <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
-        <span class="n">ppg_pw_peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dis</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;previous&quot;</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">quality</span>
 </pre></div>
 
                 </article>

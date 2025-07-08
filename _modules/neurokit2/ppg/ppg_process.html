@@ -486,7 +486,7 @@ document.write(`
     <span class="c1"># Assess signal quality</span>
     <span class="n">quality</span> <span class="o">=</span> <span class="n">ppg_quality</span><span class="p">(</span>
         <span class="n">ppg_cleaned</span><span class="p">,</span>
-        <span class="n">ppg_pw_peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span>
+        <span class="n">peaks</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">],</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;method_quality&quot;</span><span class="p">],</span>
         <span class="o">**</span><span class="n">methods</span><span class="p">[</span><span class="s2">&quot;kwargs_quality&quot;</span><span class="p">]</span>

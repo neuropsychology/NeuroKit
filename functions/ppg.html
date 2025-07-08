@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.120756           0.995928</span>
-<span class="go">2     2        10000  ...                  0.214880           0.989385</span>
-<span class="go">3     3        15000  ...                 -1.193349           0.471433</span>
+<span class="go">1     1         5000  ...                 -0.679878           0.820449</span>
+<span class="go">2     2        10000  ...                  4.331460           0.862186</span>
+<span class="go">3     3        15000  ...                 -0.454187           0.225190</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -872,8 +872,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 48,  88, 129, 175, 218, 262, 304, 349, 401, 447, 486, 519, 559,</span>
-<span class="go">       593, 632, 669, 705, 741, 777, 814, 852, 889, 925, 966])</span>
+<span class="go">array([ 47,  87, 134, 176, 220, 262, 309, 352, 394, 438, 479, 520, 563,</span>
+<span class="go">       597, 631, 670, 708, 740, 776, 816, 850, 889, 925, 965])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -961,9 +961,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.396894           0.938211</span>
-<span class="go">2     2        10000  ...                 -0.389706           0.946002</span>
-<span class="go">3     3        15000  ...                  1.590522           0.774580</span>
+<span class="go">1     1         5000  ...                 -2.234266           0.706255</span>
+<span class="go">2     2        10000  ...                 -2.176264           0.902119</span>
+<span class="go">3     3        15000  ...                 -0.821117           0.819784</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1166,7 +1166,7 @@ references.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_quality">
-<span class="sig-name descname"><span class="pre">ppg_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppg_pw_peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approach</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_quality.html#ppg_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_quality" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_quality.html#ppg_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_quality" title="Link to this definition">#</a></dt>
 <dd><p><strong>PPG Signal Quality Assessment</strong></p>
 <p>Assess the quality of the PPG Signal using various methods:</p>
 <ul class="simple">
@@ -1175,8 +1175,7 @@ index of quality of the PPG signal, by calculating the correlation coefficient b
 individual pulse wave and an average (template) pulse wave shape. This index is therefore
 relative: 1 corresponds to pulse waves that are closest to the average pulse wave shape (i.e.
 correlate exactly with it) and 0 corresponds to there being no correlation with the average
-pulse wave shape. Note that 1 does not necessarily mean “good”: use this index with care and
-plot it alongside your PPG signal to see if it makes sense.</p></li>
+pulse wave shape.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method (loosely based on Sabeti et al., 2019) computes a continuous index
 of quality of the PPG signal, by calculating the level of disimilarity between each individual
 pulse wave and an average (template) pulse wave shape (after they are normalised). A value of
@@ -1189,25 +1188,27 @@ include this step.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG signal in the form of a vector of values.</p></li>
-<li><p><strong>ppg_pw_peaks</strong> (<em>tuple or list</em>) – The list of PPG pulse wave peak samples returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>. If None, peaks is computed from
+<li><p><strong>peaks</strong> (<em>tuple or list</em>) – The list of PPG pulse wave peak samples returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>. If None, peaks is computed from
 the signal input.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The method for computing PPG signal quality, can be <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> (default).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>array</em> – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
+<dd class="field-even"><p><strong>quality</strong> (<em>array</em>) – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
 or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_segment" title="neurokit2.ppg.ppg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_segment</span></code></a></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_quality</span></code></p>
 </div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Orphanidou, C. et al. (2015). “Signal-quality indices for the electrocardiogram and photoplethysmogram:
 derivation and applications to wireless monitoring”. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</p></li>
+<li><p>Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:
+Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</p></li>
 </ul>
 <p class="rubric">Examples</p>
 <ul class="simple">

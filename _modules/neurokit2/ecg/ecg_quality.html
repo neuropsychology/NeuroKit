@@ -390,6 +390,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">..misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroKitWarning</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_interpolate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_power</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_power</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_quality</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_quality</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">distance</span><span class="p">,</span> <span class="n">rescale</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.ecg_peaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">ecg_peaks</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.ecg_segment</span><span class="w"> </span><span class="kn">import</span> <span class="n">ecg_segment</span>
@@ -403,6 +404,18 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**ECG Signal Quality Assessment**</span>
 
 <span class="sd">    Assess the quality of the ECG Signal using various methods:</span>
+
+<span class="sd">    * The ``&quot;templatematch&quot;`` method (loosely based on Orphanidou et al., 2015) computes a continuous</span>
+<span class="sd">      index of quality of the ECG signal, by calculating the correlation coefficient between each</span>
+<span class="sd">      individual beat morphology and an average (template) beat morphology. This index is therefore</span>
+<span class="sd">      relative: 1 corresponds to individual beats that are closest to the beat morphology (i.e.</span>
+<span class="sd">      correlate exactly with it) and 0 corresponds to there being no correlation with the average</span>
+<span class="sd">      beat morphology. For comparison, the ``&quot;averageQRS&quot;`` method forces the signal the quality to</span>
+<span class="sd">      vary between 0 (lowest) and 1 (highest). Therefore, even in a high quality signal, some beats will</span>
+<span class="sd">      have low values (e.g. 0), whereas others will have high values (e.g. 1). In contrast, ``&quot;templatematch&quot;``</span>
+<span class="sd">      computes a quality metric determined by the average of the correlations between the template beat morphology</span>
+<span class="sd">      and each individual beat&#39;s morphology. Therefore, it is possible that all beats exhibit high values (e.g. &gt;0.95),</span>
+<span class="sd">      indicative of consistent beat morphologies across the signal.</span>
 
 <span class="sd">    * The ``&quot;averageQRS&quot;`` method computes a continuous index of quality of the ECG signal, by</span>
 <span class="sd">      interpolating the distance of each QRS segment from the average QRS segment present in the *</span>
@@ -446,13 +459,15 @@ document.write(`
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ecg_segment, ecg_delineate</span>
+<span class="sd">    ecg_segment, ecg_delineate, signal_quality</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    * Zhao, Z., &amp; Zhang, Y. (2018). &quot;SQI quality evaluation mechanism of single-lead ECG signal</span>
 <span class="sd">      based on simple heuristic fusion and fuzzy comprehensive evaluation&quot;. Frontiers in</span>
 <span class="sd">      Physiology, 9, 727.</span>
+<span class="sd">    * Orphanidou, C. et al. (2015). &quot;Signal-quality indices for the electrocardiogram and photoplethysmogram:</span>
+<span class="sd">      derivation and applications to wireless monitoring&quot;. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -484,7 +499,7 @@ document.write(`
 
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
 
-    <span class="c1"># Run peak detection algorithm</span>
+    <span class="c1"># Run quality assessment algorithm</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;averageqrs&quot;</span><span class="p">]:</span>
         <span class="n">quality</span> <span class="o">=</span> <span class="n">_ecg_quality_averageQRS</span><span class="p">(</span>
             <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
@@ -502,6 +517,19 @@ document.write(`
 
         <span class="n">quality</span> <span class="o">=</span> <span class="n">_ecg_quality_zhao2018</span><span class="p">(</span>
             <span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">approach</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="s2">&quot;orphanidou2015&quot;</span><span class="p">]:</span>
+        <span class="c1"># Detect R peaks (if not done already)</span>
+        <span class="k">if</span> <span class="n">rpeaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+        <span class="c1"># Assess quality using template matching</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_quality</span><span class="p">(</span>
+            <span class="n">ecg_cleaned</span><span class="p">,</span>
+            <span class="n">beat_inds</span><span class="o">=</span><span class="n">rpeaks</span><span class="p">,</span>
+            <span class="n">signal_type</span><span class="o">=</span><span class="s2">&quot;ecg&quot;</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">quality</span></div>
