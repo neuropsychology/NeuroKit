@@ -102,7 +102,7 @@ def ppg_process(
     # Assess signal quality
     quality = ppg_quality(
         ppg_cleaned,
-        ppg_pw_peaks=info["PPG_Peaks"],
+        peaks=info["PPG_Peaks"],
         sampling_rate=sampling_rate,
         method=methods["method_quality"],
         **methods["kwargs_quality"]

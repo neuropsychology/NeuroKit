@@ -18,26 +18,28 @@ from .rsp_rate import rsp_rate
 from .rsp_rav import rsp_rav
 from .rsp_rrv import rsp_rrv
 from .rsp_rvt import rsp_rvt
+from .rsp_segment import rsp_segment
 from .rsp_simulate import rsp_simulate
 from .rsp_symmetry import rsp_symmetry
 
 __all__ = [
-    "rsp_simulate",
+    "rsp_amplitude",
+    "rsp_analyze",
     "rsp_clean",
+    "rsp_eventrelated",
     "rsp_findpeaks",
     "rsp_fixpeaks",
+    "rsp_intervalrelated",
+    "rsp_methods",
     "rsp_peaks",
     "rsp_phase",
-    "rsp_amplitude",
-    "rsp_process",
     "rsp_plot",
-    "rsp_eventrelated",
+    "rsp_process",
     "rsp_rav",
     "rsp_rrv",
     "rsp_rvt",
-    "rsp_intervalrelated",
-    "rsp_analyze",
     "rsp_rate",
+    "rsp_segment",
+    "rsp_simulate",
     "rsp_symmetry",
-    "rsp_methods",
 ]
