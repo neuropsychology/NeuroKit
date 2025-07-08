@@ -33,7 +33,7 @@ from .stats import *
 from .video import *
 
 # Info
-__version__ = "0.2.12"
+__version__ = "0.2.13"
 
 
 # Maintainer info
