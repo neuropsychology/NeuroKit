@@ -30,6 +30,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
       better description!**
     * ``'vg'``: Method used in Visibility Graph Based Detection Emrich et al. (2023)
       and Koka et al. (2022). A 4.0 Hz high-pass butterworth filter (order = 2).
+    * ``'langevin2021'``: Method according to Langevin et al. (2021) implemented by Vorreuther et al. (2025)
 
     Parameters
     ----------
@@ -40,7 +41,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     method : str
         The processing pipeline to apply. Can be one of ``"neurokit"`` (default),
         ``"biosppy"``, ``"pantompkins1985"``, ``"hamilton2002"``, ``"elgendi2010"``,
-        ``"engzeemod2012"``, ``'vg'``.
+        ``"engzeemod2012"``, ``'vg'``, `"langevin2021"``.
     **kwargs
         Other arguments to be passed to specific methods.
 
@@ -73,7 +74,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
           "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=250, method="elgendi2010"),
           "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=250, method="engzeemod2012"),
           "ECG_VG" : nk.ecg_clean(ecg, sampling_rate=250, method="vg"),
-          "ECG_TC" : nk.ecg_clean(ecg, sampling_rate=250, method="templateconvolution")
+          "ECG_TC" : nk.ecg_clean(ecg, sampling_rate=250, method="templateconvolution"),
+          "ECG_Langevin" : nk.ecg_clean(ecg, sampling_rate=250, method="langevin2021")
       })
 
       @savefig p_ecg_clean.png scale=100%
@@ -96,6 +98,13 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     * Emrich, J., Koka, T., Wirth, S., & Muma, M. (2023), Accelerated Sample-Accurate R-Peak
       Detectors Based on Visibility Graphs. 31st European Signal Processing Conference
       (EUSIPCO), 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007
+    * Langevin, A., Bégin, W., Lavallière, M., Beaulieu, L.-D., Menelas, B.-D. J., Gaboury, S.,
+      et al. (2021). “Criterion validation of an open-source wearable physiological sensors device,”
+      in Proceedings of the 9th International Conference on Sport Sciences Research and Technology
+      Support – icSPORTS (SciTePress), 95–105.
+    * Vorreuther, A., Tagalidou, N., & Vukelić, M. (2025). Validation of the EmotiBit wearable
+      sensor for heart-based measures under varying workload conditions. Front Neuroergonomics,
+      6, 1585469. DOI: 10.3389/fnrgo.2025.1585469
 
     """
     ecg_signal = as_vector(ecg_signal)
@@ -134,6 +143,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_vgraph(ecg_signal, sampling_rate)
     elif method in ["templateconvolution"]:
         clean = _ecg_clean_templateconvolution(ecg_signal, sampling_rate)
+    elif method in ["langevin", "langevin2021"]:
+        clean = _ecg_clean_langevin(ecg_signal, sampling_rate)
     elif method in [
         "christov",
         "christov2004",
@@ -388,3 +399,17 @@ def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
     # qrs = signal_resample(qrs, desired_length=sampling_rate)
 
     return scipy.signal.convolve(ecg_signal, qrs, mode="same")
+
+
+# =============================================================================
+# Langevin
+# =============================================================================
+def _ecg_clean_langevin(ecg_signal, sampling_rate):
+    """Notch filter by Langevin et al.
+
+    (2021) implemented according to Vorreuther et al. ( 2025).
+
+    """
+    b, a = scipy.signal.iirnotch(cutoff=0.05, Q=0.005, fs=sampling_rate)
+    clean = scipy.signal.filtfilt(b, a, ecg_signal)
+    return clean
