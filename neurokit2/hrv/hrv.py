@@ -8,6 +8,7 @@ from .hrv_frequency import _hrv_frequency_show, hrv_frequency
 from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
 from .hrv_rsa import hrv_rsa
 from .hrv_time import hrv_time
+from .hrv_symdyn import hrv_symdyn
 from .hrv_utils import _hrv_format_input
 from .intervals_process import intervals_process
 
@@ -105,6 +106,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     out.append(hrv_time(peaks, sampling_rate=sampling_rate))
     out.append(hrv_frequency(peaks, sampling_rate=sampling_rate))
     out.append(hrv_nonlinear(peaks, sampling_rate=sampling_rate))
+    out.append(hrv_symdyn(peaks, sampling_rate=sampling_rate))
 
     # Compute RSA if rsp data is available
     if isinstance(peaks, pd.DataFrame):
