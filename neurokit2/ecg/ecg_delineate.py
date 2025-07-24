@@ -205,7 +205,7 @@ def ecg_delineate(
 
     waves_sanitized = {}
     for feature, values in waves.items():
-        waves_sanitized[feature] = [x for x in values if x > 0 or x is np.nan]
+        waves_sanitized[feature] = [x if x > 0 else np.nan for x in values if x > 0 or x is np.nan]
 
     if show is True:
         _ecg_delineate_plot(
