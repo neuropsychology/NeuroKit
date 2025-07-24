@@ -1,6 +1,12 @@
 News
 =====
 
+-------------------
+Fixes
++++++++++++++
+
+* Resolved ecg_delineate returning fewer qpeak indices than provided rpeaks when qpeak index was 0.
+
 0.2.8
 -------------------
 New Features
