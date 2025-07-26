@@ -9,7 +9,7 @@ def markov_mixingtime(tm):
 
     The Mixing time (also known as relaxation time) is the inverse of spectral gap, which is the
     difference between the two largest eigenvalues of the transition matrix. The Mixing time of a
-    Markov chain tells us how long does it take for a run to go near the stationary distribution
+    Markov chain tells us how long it takes for a run to go near the stationary distribution
     (for convergence to happen).
 
     Parameters
