@@ -4,7 +4,9 @@ import os
 import pickle
 import urllib
 
+import numpy as np
 import pandas as pd
+
 from sklearn import datasets as sklearn_datasets
 
 
@@ -194,9 +196,7 @@ def data(dataset="bio_eventrelated_100hz"):
     # Dataframes ===============================
     if dataset == "iris":
         info = sklearn_datasets.load_iris()
-        data = pd.DataFrame(
-            info.data, columns=["Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"]
-        )
+        data = pd.DataFrame(info.data, columns=["Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"])
         data["Species"] = info.target_names[info.target]
         return data
 
@@ -224,12 +224,15 @@ def data(dataset="bio_eventrelated_100hz"):
 
     # TODO: Add more EEG (fif and edf datasets)
     if dataset in ["eeg_1min_200hz"]:
+        url = "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
+        with urllib.request.urlopen(url) as response:
+            raw = pickle.load(response)
 
-        return pickle.load(
-            urllib.request.urlopen(
-                "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
-            )
-        )
+        # Fix for MNE compatibility
+        if hasattr(raw.info, "proj_id") and isinstance(raw.info.proj_id, np.ndarray) and raw.info.proj_id.size == 1:
+            raw.info["proj_id"] = int(raw.info.proj_id[0])
+        else:
+            raw.info.proj_id = None
 
     # General case
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
