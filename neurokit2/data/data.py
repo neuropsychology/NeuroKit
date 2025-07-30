@@ -228,11 +228,11 @@ def data(dataset="bio_eventrelated_100hz"):
         with urllib.request.urlopen(url) as response:
             raw = pickle.load(response)
 
-        # Fix for MNE compatibility
         if hasattr(raw.info, "proj_id") and isinstance(raw.info.proj_id, np.ndarray) and raw.info.proj_id.size == 1:
             raw.info["proj_id"] = int(raw.info.proj_id[0])
-        else:
+        elif not hasattr(raw.info, "proj_id") or not isinstance(raw.info.proj_id, int):
             raw.info.proj_id = None
+        return raw
 
     # General case
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
