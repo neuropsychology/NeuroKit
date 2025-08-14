@@ -205,7 +205,8 @@ def ecg_delineate(
 
     waves_sanitized = {}
     for feature, values in waves.items():
-        waves_sanitized[feature] = [x if x > 0 else np.nan for x in values if x >= 0 or x is np.nan]
+        # 0 is a valid index, but nearly all cases where a qpeak is detected at 0 it is an incorrectly identified qpeak.
+        waves_sanitized[feature] = [x if x > 0 else np.nan for x in values]
 
     if show is True:
         _ecg_delineate_plot(
