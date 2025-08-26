@@ -229,7 +229,7 @@ def data(dataset="bio_eventrelated_100hz"):
     if dataset in ["eeg_1min_200hz"]:
 
         try:
-            import mne  # pylint: disable=unused-import
+            import mne  # pylint: disable=unused-import # noqa: F401
         except ImportError:
             raise ImportError(
                 "NeuroKit error: data(): the 'mne' module is required",
