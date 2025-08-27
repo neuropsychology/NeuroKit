@@ -21,6 +21,7 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
     Examples
     ---------
     .. ipython:: python
+      :verbatim:
 
       import neurokit2 as nk
       import time
