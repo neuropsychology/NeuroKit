@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Extract and Visualize Individual Heartbeats &#8212; NeuroKit2 0.2.12 documentation</title>
+    <title>Extract and Visualize Individual Heartbeats &#8212; NeuroKit2 0.2.13 documentation</title>
   
   
   
@@ -31,14 +31,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=b13cc0d0"></script>
+    <script src="../../_static/documentation_options.js?v=0ac042cd"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -141,8 +141,8 @@
       
     
     
-    <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.12 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.12 documentation - Home"/>`);</script>
+    <img src="../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.13 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.13 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -522,7 +522,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/909030317f42686ad424e210e0a4ad9abe97f9411c95b206f8d8a1175b4d2d02.png" src="../../_images/909030317f42686ad424e210e0a4ad9abe97f9411c95b206f8d8a1175b4d2d02.png" />
+<img alt="../../_images/fef84e8faca83873b603aa710a401c42ee260f59bf763174490e8eaa060a94b8.png" src="../../_images/fef84e8faca83873b603aa710a401c42ee260f59bf763174490e8eaa060a94b8.png" />
 </div>
 </div>
 <p>Once that we know where the R-peaks are located, we can create windows of signal around them (of a length of for instance 1 second, ranging from 400 ms before the R-peak), which we can refer to as <em>epochs</em>.</p>
@@ -538,7 +538,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/167f9ebb0728d4f69d69b6dca004567289ff923a6305011bf68546e530a9cada.png" src="../../_images/167f9ebb0728d4f69d69b6dca004567289ff923a6305011bf68546e530a9cada.png" />
+<img alt="../../_images/80bfbf388d91a861b07bac6867860221ab2b249fcce9b18093eb91fb72b687db.png" src="../../_images/80bfbf388d91a861b07bac6867860221ab2b249fcce9b18093eb91fb72b687db.png" />
 </div>
 </div>
 <p>This create a dictionary of dataframes for each ‘epoch’ (in this case, each heart beat).</p>
@@ -594,36 +594,36 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.207595</td>
-      <td>141</td>
+      <td>-0.198214</td>
+      <td>139</td>
       <td>1</td>
       <td>-0.300000</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.202032</td>
-      <td>142</td>
+      <td>-0.192796</td>
+      <td>140</td>
       <td>1</td>
       <td>-0.295977</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.196330</td>
-      <td>143</td>
+      <td>-0.187319</td>
+      <td>141</td>
       <td>1</td>
       <td>-0.291954</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.190406</td>
-      <td>144</td>
+      <td>-0.181724</td>
+      <td>142</td>
       <td>1</td>
       <td>-0.287931</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.184160</td>
-      <td>145</td>
+      <td>-0.175931</td>
+      <td>143</td>
       <td>1</td>
       <td>-0.283908</td>
     </tr>
@@ -669,10 +669,10 @@ document.write(`
       <th>17</th>
       <th>18</th>
       <th>...</th>
+      <th>31</th>
       <th>32</th>
       <th>33</th>
       <th>34</th>
-      <th>35</th>
       <th>4</th>
       <th>5</th>
       <th>6</th>
@@ -708,127 +708,127 @@ document.write(`
   <tbody>
     <tr>
       <th>-0.300000</th>
-      <td>-0.207595</td>
-      <td>-0.143416</td>
-      <td>-0.138790</td>
-      <td>-0.134520</td>
-      <td>-0.149271</td>
-      <td>-0.137762</td>
-      <td>-0.143328</td>
-      <td>-0.139117</td>
-      <td>-0.127986</td>
-      <td>-0.146127</td>
+      <td>-0.198214</td>
+      <td>-0.129424</td>
+      <td>-0.136427</td>
+      <td>-0.139571</td>
+      <td>-0.141067</td>
+      <td>-0.132483</td>
+      <td>-0.140749</td>
+      <td>-0.135902</td>
+      <td>-0.141352</td>
+      <td>-0.129903</td>
       <td>...</td>
-      <td>-0.134897</td>
-      <td>-0.164935</td>
-      <td>-0.080476</td>
-      <td>-0.231558</td>
-      <td>-0.118183</td>
-      <td>-0.150336</td>
-      <td>-0.134418</td>
-      <td>-0.128076</td>
-      <td>-0.133896</td>
-      <td>-0.139859</td>
+      <td>-0.133011</td>
+      <td>-0.170704</td>
+      <td>-0.026210</td>
+      <td>-0.339250</td>
+      <td>-0.108383</td>
+      <td>-0.142529</td>
+      <td>-0.145573</td>
+      <td>-0.138793</td>
+      <td>-0.138512</td>
+      <td>-0.126909</td>
     </tr>
     <tr>
       <th>-0.295977</th>
-      <td>-0.202032</td>
-      <td>-0.142365</td>
-      <td>-0.137728</td>
-      <td>-0.133594</td>
-      <td>-0.148734</td>
-      <td>-0.136833</td>
-      <td>-0.142744</td>
-      <td>-0.138219</td>
-      <td>-0.126696</td>
-      <td>-0.144962</td>
+      <td>-0.192796</td>
+      <td>-0.128154</td>
+      <td>-0.135042</td>
+      <td>-0.138371</td>
+      <td>-0.140451</td>
+      <td>-0.131359</td>
+      <td>-0.139388</td>
+      <td>-0.135249</td>
+      <td>-0.140541</td>
+      <td>-0.129043</td>
       <td>...</td>
-      <td>-0.134205</td>
-      <td>-0.164267</td>
-      <td>-0.079619</td>
-      <td>-0.228873</td>
-      <td>-0.116722</td>
-      <td>-0.149792</td>
-      <td>-0.133609</td>
-      <td>-0.127313</td>
-      <td>-0.132661</td>
-      <td>-0.138724</td>
+      <td>-0.132953</td>
+      <td>-0.169522</td>
+      <td>-0.025845</td>
+      <td>-0.339742</td>
+      <td>-0.107327</td>
+      <td>-0.141836</td>
+      <td>-0.143605</td>
+      <td>-0.138059</td>
+      <td>-0.137733</td>
+      <td>-0.126129</td>
     </tr>
     <tr>
       <th>-0.291954</th>
-      <td>-0.196330</td>
-      <td>-0.141137</td>
-      <td>-0.136530</td>
-      <td>-0.132559</td>
-      <td>-0.148038</td>
-      <td>-0.135725</td>
-      <td>-0.142056</td>
-      <td>-0.137217</td>
-      <td>-0.125254</td>
-      <td>-0.143563</td>
+      <td>-0.187319</td>
+      <td>-0.126754</td>
+      <td>-0.133437</td>
+      <td>-0.136925</td>
+      <td>-0.139711</td>
+      <td>-0.130119</td>
+      <td>-0.137838</td>
+      <td>-0.134453</td>
+      <td>-0.139646</td>
+      <td>-0.128096</td>
       <td>...</td>
-      <td>-0.133353</td>
-      <td>-0.163482</td>
-      <td>-0.078645</td>
-      <td>-0.225973</td>
-      <td>-0.115122</td>
-      <td>-0.149084</td>
-      <td>-0.132699</td>
-      <td>-0.126458</td>
-      <td>-0.131254</td>
-      <td>-0.137412</td>
+      <td>-0.132746</td>
+      <td>-0.168138</td>
+      <td>-0.025306</td>
+      <td>-0.340089</td>
+      <td>-0.106159</td>
+      <td>-0.140986</td>
+      <td>-0.141399</td>
+      <td>-0.137175</td>
+      <td>-0.136858</td>
+      <td>-0.125252</td>
     </tr>
     <tr>
       <th>-0.287931</th>
-      <td>-0.190406</td>
-      <td>-0.139689</td>
-      <td>-0.135161</td>
-      <td>-0.131378</td>
-      <td>-0.147127</td>
-      <td>-0.134397</td>
-      <td>-0.141227</td>
-      <td>-0.136087</td>
-      <td>-0.123620</td>
-      <td>-0.141888</td>
+      <td>-0.181724</td>
+      <td>-0.125191</td>
+      <td>-0.131526</td>
+      <td>-0.135156</td>
+      <td>-0.138816</td>
+      <td>-0.128708</td>
+      <td>-0.136044</td>
+      <td>-0.133459</td>
+      <td>-0.138632</td>
+      <td>-0.127046</td>
       <td>...</td>
-      <td>-0.132299</td>
-      <td>-0.162560</td>
-      <td>-0.077517</td>
-      <td>-0.222807</td>
-      <td>-0.113344</td>
-      <td>-0.148160</td>
-      <td>-0.131650</td>
-      <td>-0.125474</td>
-      <td>-0.129633</td>
-      <td>-0.135892</td>
+      <td>-0.132343</td>
+      <td>-0.166514</td>
+      <td>-0.024533</td>
+      <td>-0.340246</td>
+      <td>-0.104828</td>
+      <td>-0.139934</td>
+      <td>-0.138921</td>
+      <td>-0.136077</td>
+      <td>-0.135849</td>
+      <td>-0.124252</td>
     </tr>
     <tr>
       <th>-0.283908</th>
-      <td>-0.184160</td>
-      <td>-0.137956</td>
-      <td>-0.133572</td>
-      <td>-0.130001</td>
-      <td>-0.145915</td>
-      <td>-0.132787</td>
-      <td>-0.140210</td>
-      <td>-0.134791</td>
-      <td>-0.121739</td>
-      <td>-0.139882</td>
+      <td>-0.175931</td>
+      <td>-0.123416</td>
+      <td>-0.129211</td>
+      <td>-0.132973</td>
+      <td>-0.137724</td>
+      <td>-0.127064</td>
+      <td>-0.133929</td>
+      <td>-0.132185</td>
+      <td>-0.137450</td>
+      <td>-0.125870</td>
       <td>...</td>
-      <td>-0.130988</td>
-      <td>-0.161475</td>
-      <td>-0.076189</td>
-      <td>-0.219319</td>
-      <td>-0.111333</td>
-      <td>-0.146962</td>
-      <td>-0.130414</td>
-      <td>-0.124304</td>
-      <td>-0.127737</td>
-      <td>-0.134115</td>
+      <td>-0.131688</td>
+      <td>-0.164612</td>
+      <td>-0.023462</td>
+      <td>-0.340150</td>
+      <td>-0.103270</td>
+      <td>-0.138633</td>
+      <td>-0.136137</td>
+      <td>-0.134680</td>
+      <td>-0.134665</td>
+      <td>-0.123102</td>
     </tr>
   </tbody>
 </table>
-<p>5 rows × 35 columns</p>
+<p>5 rows × 34 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
@@ -852,7 +852,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/feb0211dc0fe2c41fd2c20d2703a7ddadea380f9b79e07bf827f81460b0b42d7.png" src="../../_images/feb0211dc0fe2c41fd2c20d2703a7ddadea380f9b79e07bf827f81460b0b42d7.png" />
+<img alt="../../_images/b257a4a7f133c8cd07ed0027994a4cdd1855c2f1e5f84918a01cfe713b20b198.png" src="../../_images/b257a4a7f133c8cd07ed0027994a4cdd1855c2f1e5f84918a01cfe713b20b198.png" />
 </div>
 </div>
 </section>

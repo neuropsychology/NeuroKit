@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>neurokit2.data.data &#8212; NeuroKit2 0.2.12 documentation</title>
+    <title>neurokit2.data.data &#8212; NeuroKit2 0.2.13 documentation</title>
   
   
   
@@ -30,14 +30,14 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=b13cc0d0"></script>
+    <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.12 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.12 documentation - Home"/>`);</script>
+    <img src="../../../_static/neurokit.png" class="logo__image only-light" alt="NeuroKit2 0.2.13 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/neurokit.png" class="logo__image only-dark" alt="NeuroKit2 0.2.13 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -386,7 +386,9 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">urllib</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span> <span class="k">as</span> <span class="n">sklearn_datasets</span>
 
 
@@ -579,7 +581,8 @@ document.write(`
     <span class="k">if</span> <span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;iris&quot;</span><span class="p">:</span>
         <span class="n">info</span> <span class="o">=</span> <span class="n">sklearn_datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-            <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sepal.Length&quot;</span><span class="p">,</span> <span class="s2">&quot;Sepal.Width&quot;</span><span class="p">,</span> <span class="s2">&quot;Petal.Length&quot;</span><span class="p">,</span> <span class="s2">&quot;Petal.Width&quot;</span><span class="p">]</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sepal.Length&quot;</span><span class="p">,</span> <span class="s2">&quot;Sepal.Width&quot;</span><span class="p">,</span> <span class="s2">&quot;Petal.Length&quot;</span><span class="p">,</span> <span class="s2">&quot;Petal.Width&quot;</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Species&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">info</span><span class="o">.</span><span class="n">target</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">data</span>
@@ -609,11 +612,28 @@ document.write(`
     <span class="c1"># TODO: Add more EEG (fif and edf datasets)</span>
     <span class="k">if</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">]:</span>
 
-        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-            <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span>
-                <span class="s2">&quot;https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>  <span class="c1"># pylint: disable=unused-import # noqa: F401</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;NeuroKit error: data(): the &#39;mne&#39; module is required&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; for this dataset to be loaded. &quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Please install it first (`pip install mne`).&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true&quot;</span>
+        <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;proj_id&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">proj_id</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">proj_id</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="p">):</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;proj_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">proj_id</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="s2">&quot;proj_id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">proj_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">proj_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">raw</span>
 
     <span class="c1"># General case</span>
     <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># pylint: disable=unused-variable</span>
