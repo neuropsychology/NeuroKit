@@ -55,8 +55,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
             ECG_T_Peaks|The T-peaks marked as "1" in a list of zeros.
             ECG_T_Onsets|The T-onsets marked as "1" in a list of zeros.
             ECG_T_Offsets|The T-offsets marked as "1" in a list of zeros.
-            ECG_Phase_Atrial|Cardiac phase(atrial), marked by "1" for systole and "0" for diastole.
-            ECG_Phase_Ventricular |Cardiac phase(ventricular), marked by "1" for systole and "0" for diastole.
+            ECG_Phase_Atrial|Cardiac phase (atrial), marked by "1" for systole and "0" for diastole.
+            ECG_Phase_Ventricular|Cardiac phase (ventricular), marked by "1" for systole and "0" for diastole.
             ECG_Phase_Completion_Atrial|Cardiac phase (atrial) completion, expressed in \
                 percentage (from 0 to 1), representing the stage of the current cardiac phase.
             ECG_Phase_Completion_Ventricular|Cardiac phase (ventricular) completion, expressed \
