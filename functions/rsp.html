@@ -602,7 +602,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.8213 |       1.75675 |</span>
+<span class="go">|         15.7361 |       3.00747 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -1346,8 +1346,8 @@ breath-to-breath interval. Defaults to <code class="docutils literal notranslate
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  713.174741      3966.6  481.556511  ...    0.856889   0.14968         inf</span>
+<span class="go">    RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  876.658745  4100.631579  561.963048  ...    0.751445  0.057158        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1488,9 +1488,9 @@ consist of the following:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.176713      0.007786</span>
-<span class="go">2     2        10000  ...          0.187099     -0.020110</span>
-<span class="go">3     3        15000  ...          0.209401     -0.010492</span>
+<span class="go">1     1         5000  ...          0.221047     -0.037448</span>
+<span class="go">2     2        10000  ...          0.239974     -0.005654</span>
+<span class="go">3     3        15000  ...          0.229995     -0.038568</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1696,7 +1696,7 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  0.944359  0.068082   0.056575  0.059908</span>
+<span class="go">0  0.988085  0.074517   0.092074  0.093184</span>
 </pre></div>
 </div>
 </dd></dl>
