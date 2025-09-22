@@ -80,7 +80,6 @@ def test_eeg_badchannels():
     assert len(bads) > 0
 
     # test with pandas DataFrame input
-    print("\nTest 2: Testing with pandas DataFrame input")
     df_data = pd.DataFrame(eeg_data.T)
     bads_df, results_df = nk.eeg_badchannels(df_data.T.values, bad_threshold=0.3, distance_threshold=0.95)
     assert len(results_df) == 5
