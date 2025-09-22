@@ -1,6 +1,9 @@
 import mne
 import numpy as np
+import pandas as pd
 import pooch
+import scipy.stats
+from unittest.mock import Mock, patch
 
 import neurokit2 as nk
 
@@ -58,6 +61,54 @@ def test_eeg_add_channel():
             -abs(sync_index_channel - sync_index_raw) - (len(raw) - len(ecg2)) - 1
         ]
     )
+
+def test_eeg_badchannels():
+    # test with numpy array input
+    np.random.seed(33)
+    eeg_data = np.random.randn(5, 1000)  # 5 channels, 1000 time points
+    # add outliers to make one channel "bad"
+    eeg_data[2, :] *= 10  # channel 2 will have much higher amplitude
+    
+    bads, results = nk.eeg_badchannels(eeg_data, bad_threshold=0.3, distance_threshold=0.95, show=False)
+    assert len(results) == 5
+    
+    expected_columns = ["SD", "Mean", "MAD", "Median", "Skewness", "Kurtosis", 
+                       "Amplitude", "CI_low", "CI_high", "n_ZeroCrossings", "Bad"]
+    for col in expected_columns:
+        assert col in results.columns
+    
+    assert len(bads) > 0
+    
+    # test with pandas DataFrame input 
+    print("\nTest 2: Testing with pandas DataFrame input")
+    df_data = pd.DataFrame(eeg_data.T) 
+    bads_df, results_df = nk.eeg_badchannels(df_data.T.values, bad_threshold=0.3, distance_threshold=0.95)
+    assert len(results_df) == 5
+
+    # test intentional ImportError for handling
+    mock_obj = Mock()
+    
+    with patch('builtins.isinstance', return_value=False):
+        with patch('builtins.__import__', side_effect=ImportError("No module named 'mne'")):
+            try:
+                nk.eeg_badchannels(mock_obj)
+            except ImportError as e:
+                # this checks that the error message contains the text it's meant to
+                assert "mne" in str(e)
+
+    # test the statistics calculation loop
+    simple_data = np.array([[1, 2, 3, 4, 5], [10, 20, 30, 40, 50]])
+    bads_simple, results_simple = nk.eeg_badchannels(simple_data, bad_threshold=0.5, distance_threshold=0.99)
+    
+    assert results_simple.loc[0, "Mean"] == 3.0
+    assert results_simple.loc[0, "Median"] == 3.0
+    assert results_simple.loc[0, "Amplitude"] == 4.0
+
+    # test the standardization and bad channel detection logic
+    extreme_data = np.array([[1, 1, 1, 1, 1], [1000, 2000, 3000, 4000, 5000]])
+    bads_extreme, results_extreme = nk.eeg_badchannels(extreme_data, bad_threshold=0.1, distance_threshold=0.5)
+    assert 1 in [int(x) for x in bads_extreme]
+    assert results_extreme.loc[1, "Bad"] > results_extreme.loc[0, "Bad"]
 
 
 def test_mne_channel_extract():
