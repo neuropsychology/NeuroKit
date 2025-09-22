@@ -290,7 +290,7 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
 def test_signal_period():
     # Test warning path of no peaks
     with pytest.warns(nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."):
-        nk.signal_period(np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+        nk.signal_period(np.array([0, 0, 0]))
 
 
 def test_signal_plot():
