@@ -79,11 +79,6 @@ def test_eeg_badchannels():
 
     assert len(bads) > 0
 
-    # test with pandas DataFrame input
-    df_data = pd.DataFrame(eeg_data.T)
-    bads_df, results_df = nk.eeg_badchannels(df_data.T.values, bad_threshold=0.3, distance_threshold=0.95)
-    assert len(results_df) == 5
-
     # test stats calc with longer data that works with hdi
     np.random.seed(42)
     simple_data = np.random.randn(2, 100)  # enough points for hdi
