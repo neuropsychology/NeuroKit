@@ -29,7 +29,7 @@ class CSVDocDirective(Directive):
         # List to hold bullet list nodes
         bullet_list = nodes.bullet_list()
 
-        doc_source_name = self.state.document.settings.env.temp_data.get('object')[0]
+        doc_source_name = self.state.document.settings.env.temp_data.get('object')
 
         maybe_sensor = doc_source_name.split("_")
         doc_sensor = "N/A"
