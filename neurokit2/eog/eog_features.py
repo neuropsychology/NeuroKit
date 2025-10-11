@@ -149,15 +149,15 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
         max_frame = epochs[i]["Index"].loc[epochs[i]["Signal"] == max_value]
         max_frame = np.array(max_frame)
         if len(max_frame) > 1:
-            max_frame = max_frame[0]  # If two points achieve max value, first one is blink
+            max_frame = max_frame[0].item()  # If two points achieve max value, first one is blink
         else:
-            max_frame = int(max_frame)
+            max_frame = max_frame.item()
 
         # left and right zero markers
         crossings = signal_zerocrossings(epochs[i].Signal)
         crossings_idx = epochs[i]["Index"].iloc[crossings]
         crossings_idx = np.sort(np.append([np.array(crossings_idx)], [max_frame]))
-        max_position = int(np.where(crossings_idx == max_frame)[0])
+        max_position = np.where(crossings_idx == max_frame)[0].item()
 
         if (max_position - 1) >= 0:  # crosses zero point
             leftzero = crossings_idx[max_position - 1]
@@ -167,7 +167,7 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
             leftzero = sliced_before["Index"].loc[
                 sliced_before["Signal"] == sliced_before["Signal"].min()
             ]
-            leftzero = int(np.array(leftzero))
+            leftzero = np.array(leftzero).item()
 
         if (max_position + 1) < len(crossings_idx):  # crosses zero point
             rightzero = crossings_idx[max_position + 1]
@@ -178,7 +178,7 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
             rightzero = sliced_after["Index"].loc[
                 sliced_after["Signal"] == sliced_after["Signal"].min()
             ]
-            rightzero = int(np.array(rightzero))
+            rightzero = np.array(rightzero).item()
 
         # upstroke and downstroke markers
         upstroke_idx = list(np.arange(leftzero, max_frame))
