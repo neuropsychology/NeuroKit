@@ -8,7 +8,7 @@ from .signal_period import signal_period
 def signal_rate(
     peaks,
     sampling_rate=1000,
-    desired_length=None,
+    desired_length=(),
     interpolation_method="monotone_cubic",
     show=False,
 ):

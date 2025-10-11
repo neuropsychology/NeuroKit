@@ -11,7 +11,7 @@ from .signal_interpolate import signal_interpolate
 def signal_period(
     peaks,
     sampling_rate=1000,
-    desired_length=None,
+    desired_length=(),
     interpolation_method="monotone_cubic",
 ):
     """**Calculate signal period from a series of peaks**
@@ -100,7 +100,7 @@ def signal_period(
     period[0] = np.mean(period[1:])
 
     # Interpolate all statistics to desired length.
-    if desired_length is not None:
+    if desired_length != ():
         period = signal_interpolate(
             peaks, period, x_new=np.arange(desired_length), method=interpolation_method
         )

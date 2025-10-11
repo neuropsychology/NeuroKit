@@ -35,7 +35,7 @@ def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwa
     .. ipython:: python
 
       import neurokit2 as nk
-      
+
       sampling_rate = 100
       ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=80)
       ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)
@@ -76,7 +76,7 @@ def _segment_window(
     cycle_rate=None,
     cycle_indices=None,
     sampling_rate=1000,
-    desired_length=None,
+    desired_length=(),
     ratio_pre=0.5,
 ):
     # Extract cycle rate
@@ -88,7 +88,7 @@ def _segment_window(
                 cycle_indices, sampling_rate=sampling_rate, desired_length=desired_length
             )
         )
-    
+
     # Modulator
     # Note: this is based on quick internal testing but could be improved
     window_size = 60 / cycle_rate  # Cycles per second

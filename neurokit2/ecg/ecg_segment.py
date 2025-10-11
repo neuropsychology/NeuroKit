@@ -152,7 +152,7 @@ def _ecg_segment_window(
     heart_rate=None,
     rpeaks=None,
     sampling_rate=1000,
-    desired_length=None,
+    desired_length=(),
     ratio_pre=0.35,
 ):
     # Extract heart rate

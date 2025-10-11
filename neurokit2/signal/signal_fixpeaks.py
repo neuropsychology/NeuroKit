@@ -647,12 +647,12 @@ def _remove_small(
         return peaks
     if interval_min is not None:
         interval = signal_period(
-            peaks, sampling_rate=sampling_rate, desired_length=None
+            peaks, sampling_rate=sampling_rate, desired_length=()
         )
         peaks = peaks[interval > interval_min]
     if relative_interval_min is not None:
         interval = signal_period(
-            peaks, sampling_rate=sampling_rate, desired_length=None
+            peaks, sampling_rate=sampling_rate, desired_length=()
         )
         peaks = peaks[standardize(interval, robust=robust) > relative_interval_min]
     return peaks
@@ -669,7 +669,7 @@ def _interpolate_big(
         return peaks
     else:
         interval = signal_period(
-            peaks, sampling_rate=sampling_rate, desired_length=None
+            peaks, sampling_rate=sampling_rate, desired_length=()
         )
         if relative_interval_max is not None:
             outliers = standardize(interval, robust=robust) > relative_interval_max
