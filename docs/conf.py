@@ -81,7 +81,7 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build"]
+exclude_patterns = ["_build", "jupyter_execute", ".jupyter_cache"]
 
 # Ignore duplicated sections warning
 suppress_warnings = ["epub.duplicated_toc_entry"]
@@ -108,7 +108,7 @@ add_module_names = (
 # ipython_promptout = ">"  # "Out [%d]:"
 
 # -- Options for myst_nb ---------------------------------------------------
-nb_execution_mode = "force"
+nb_execution_mode = os.getenv("NB_EXECUTION_MODE", "force")
 nb_execution_raise_on_error = True
 
 # googleanalytics_id = "G-DVXSEGN5M9"
