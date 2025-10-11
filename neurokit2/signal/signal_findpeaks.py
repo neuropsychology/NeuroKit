@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import scipy.misc
 import scipy.signal
 
 from ..misc import as_vector, find_closest
