@@ -3,6 +3,7 @@ import json
 import os
 import pickle
 import urllib
+import pathlib
 
 import numpy as np
 import pandas as pd
@@ -239,7 +240,15 @@ def data(dataset="bio_eventrelated_100hz"):
 
         url = "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
         with urllib.request.urlopen(url) as response:
-            raw = pickle.load(response)
+
+            # handle if system is posix (Windows paths are used in the pickle)
+            if os.name == "posix":
+                windows_backup = pathlib.WindowsPath
+                pathlib.WindowsPath = pathlib.PosixPath
+                raw = pickle.load(response)
+                pathlib.WindowsPath = windows_backup
+            else:
+                raw = pickle.load(response)
 
         if (
             hasattr(raw.info, "proj_id")
