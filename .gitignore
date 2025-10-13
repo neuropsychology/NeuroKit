@@ -64,8 +64,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/_build/
 docs/savefig/
+docs/.jupyter_cache/
 
 # PyBuilder
 target/
