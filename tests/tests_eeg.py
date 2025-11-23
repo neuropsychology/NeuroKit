@@ -77,12 +77,14 @@ def test_eeg_badchannels():
     for col in expected_columns:
         assert col in results.columns
 
-    assert len(bads) > 0
+    assert bads == [2]
 
     # test stats calc with longer data that works with hdi
-    np.random.seed(42)
     simple_data = np.random.randn(2, 100)  # enough points for hdi
     bads_simple, results_simple = nk.eeg_badchannels(simple_data, bad_threshold=0.8, distance_threshold=0.99)
+
+    # No bads
+    assert len(bads_simple) == 0
 
     # check all stats computed
     assert not np.isnan(results_simple.loc[0, "Mean"])
@@ -93,6 +95,9 @@ def test_eeg_badchannels():
     extreme_data = np.random.randn(2, 100)
     extreme_data[1, :] *= 50  # make channel 1 extreme
     bads_extreme, results_extreme = nk.eeg_badchannels(extreme_data, bad_threshold=0.1, distance_threshold=0.7)
+
+    # All bads
+    assert len(bads_extreme) == 2
 
     # check bad scores calculated
     assert "Bad" in results_extreme.columns
