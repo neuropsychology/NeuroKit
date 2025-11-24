@@ -1032,12 +1032,12 @@ document.write(`
         <span class="k">return</span> <span class="n">peaks</span>
     <span class="k">if</span> <span class="n">interval_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">interval</span> <span class="o">&gt;</span> <span class="n">interval_min</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">relative_interval_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">standardize</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">relative_interval_min</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">peaks</span>
@@ -1054,7 +1054,7 @@ document.write(`
         <span class="k">return</span> <span class="n">peaks</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">interval</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
-            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span>
+            <span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">relative_interval_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">outliers</span> <span class="o">=</span> <span class="n">standardize</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="n">robust</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">relative_interval_max</span>

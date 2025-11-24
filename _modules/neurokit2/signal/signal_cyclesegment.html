@@ -419,7 +419,7 @@ document.write(`
 <span class="sd">    .. ipython:: python</span>
 
 <span class="sd">      import neurokit2 as nk</span>
-<span class="sd">      </span>
+
 <span class="sd">      sampling_rate = 100</span>
 <span class="sd">      ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=80)</span>
 <span class="sd">      ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)</span>
@@ -461,7 +461,7 @@ document.write(`
     <span class="n">cycle_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">cycle_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">desired_length</span><span class="o">=</span><span class="p">(),</span>
     <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="c1"># Extract cycle rate</span>
@@ -473,7 +473,7 @@ document.write(`
                 <span class="n">cycle_indices</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">desired_length</span>
             <span class="p">)</span>
         <span class="p">)</span>
-    
+
     <span class="c1"># Modulator</span>
     <span class="c1"># Note: this is based on quick internal testing but could be improved</span>
     <span class="n">window_size</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">cycle_rate</span>  <span class="c1"># Cycles per second</span>

@@ -443,6 +443,9 @@ document.write(`
         <span class="n">selection</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">pick_types</span><span class="p">(</span><span class="n">eeg</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">ch_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">eeg</span><span class="o">.</span><span class="n">ch_names</span><span class="p">)[</span><span class="n">selection</span><span class="p">]</span>
         <span class="n">eeg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eeg</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">ch_names</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">eeg</span> <span class="o">=</span> <span class="n">eeg</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ch_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eeg</span><span class="p">))</span>
 

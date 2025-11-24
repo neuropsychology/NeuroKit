@@ -395,7 +395,7 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">signal_period</span><span class="p">(</span>
     <span class="n">peaks</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">desired_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">desired_length</span><span class="o">=</span><span class="p">(),</span>
     <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;monotone_cubic&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Calculate signal period from a series of peaks**</span>
@@ -483,8 +483,9 @@ document.write(`
     <span class="n">period</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">to_begin</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
     <span class="n">period</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">period</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
+
     <span class="c1"># Interpolate all statistics to desired length.</span>
-    <span class="k">if</span> <span class="n">desired_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">desired_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="p">():</span>
         <span class="n">period</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
             <span class="n">peaks</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">desired_length</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="n">interpolation_method</span>
         <span class="p">)</span>
