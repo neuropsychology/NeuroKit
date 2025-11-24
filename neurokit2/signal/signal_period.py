@@ -99,8 +99,9 @@ def signal_period(
     period = np.ediff1d(peaks, to_begin=0) / sampling_rate
     period[0] = np.mean(period[1:])
 
+
     # Interpolate all statistics to desired length.
-    if desired_length != ():
+    if desired_length is not (): # noqa: F632
         period = signal_interpolate(
             peaks, period, x_new=np.arange(desired_length), method=interpolation_method
         )

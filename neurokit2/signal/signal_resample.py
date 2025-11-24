@@ -104,7 +104,7 @@ def signal_resample(
                                  sampling_rate=1000, desired_sampling_rate=500)
 
     """
-    if desired_length == ():
+    if desired_length is (): # noqa: F632
         desired_length = int(np.round(len(signal) * desired_sampling_rate / sampling_rate))
 
     # Sanity checks
