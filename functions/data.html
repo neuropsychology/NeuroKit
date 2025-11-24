@@ -861,43 +861,91 @@ from the last part of the URL path and downloaded to the current working directo
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.data.read_xdf">
-<span class="sig-name descname"><span class="pre">read_xdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillmissing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/neurokit2/data/read_xdf.html#read_xdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_xdf" title="Link to this definition">#</a></dt>
-<dd><p><strong>Read and tidy an XDF file</strong></p>
-<p>Reads and tidies an XDF file with multiple streams into a Pandas DataFrame.
-The function outputs both the dataframe and the information (such as the sampling rate).</p>
-<p>Note that, as XDF can store streams with different sampling rates and different time stamps,
-<strong>the function will resample all streams to 2 times (default) the highest sampling rate</strong> (to
-minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it
-may produce unexpected results, particularly if the original stream has large gaps in its time series.
-For more discussion, see <a class="reference external" href="https://github.com/xdf-modules/pyxdf/pull/1">here</a>.</p>
-<p>The final upsampled sampling rate can be found in the <code class="docutils literal notranslate"><span class="pre">info</span></code> dictionary.</p>
+<span class="sig-name descname"><span class="pre">read_xdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dejitter_timestamps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synchronize_clocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle_clock_resets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ffill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillmissing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'circular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'precise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/data/read_xdf.html#read_xdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.data.read_xdf" title="Link to this definition">#</a></dt>
+<dd><p>Loads an XDF file, sanitizes stream data, and resamples all streams onto a
+common, synchronized timebase.</p>
+<p>This function handles complex synchronization issues including clock offsets,
+jitter removal (selective or global), and differing sampling rates. It produces
+a single pandas DataFrame containing all aligned data.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function requires the <em>pyxdf</em> module to be installed. You can install it with
 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyxdf</span></code>.</p>
 </div>
-<dl class="field-list simple">
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that, as XDF can store streams with different sampling rates and different time stamps,
+<strong>the function will resample all streams to 2 times (default) the highest sampling rate</strong> (to
+minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it
+may produce unexpected results, particularly if the original stream has large gaps in its time series.
+For more discussion, see <a class="reference external" href="https://github.com/xdf-modules/pyxdf/pull/1">here</a>.</p>
+</div>
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Path (with the extension) or URL pointing to an XDF file (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;data.xdf&quot;</span></code>).</p></li>
-<li><p><strong>upsample</strong> (<em>float</em>) – Factor by which to upsample the data. Default is 2.0, which means that the data will be
-resampled to 2 times the highest sampling rate. You can increase that to further reduce
-edge-distortion, especially for high frequency signals like EEG. <code class="docutils literal notranslate"><span class="pre">1.0</span></code> disables upsampling
-(but not interpolation).</p></li>
-<li><p><strong>fillmissing</strong> (<em>float</em>) – The maximum duration in seconds of missing data to fill. <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) will
-interpolate all missing values and prevent issues with NaNs. However, it might be important
-to keep the missing intervals (e.g., <code class="docutils literal notranslate"><span class="pre">fillmissing=1</span></code> to keep interruptions of more than
-1 s) typically corresponding to signal loss or streaming interruptions and exclude them
-from further analysis.</p></li>
+<dd class="field-odd"><ul>
+<li><p><strong>filename</strong> (<em>str</em>) – Path to the .xdf file to load.</p></li>
+<li><p><strong>dejitter_timestamps</strong> (<em>bool or list, optional</em>) – Controls jitter removal (processing of timestamp irregularities).
+- If bool: Passed directly to pyxdf (True applies to all streams, False to none).
+- If list: A list of stream names (str) or indices (int). Dejittering is</p>
+<blockquote>
+<div><p>applied <em>only</em> to these specific streams.
+Note: Using a list triggers a double-load of the file, increasing memory
+usage and loading time. Default is True.</p>
+</div></blockquote>
+</li>
+<li><p><strong>synchronize_clocks</strong> (<em>bool, optional</em>) – If True, attempts to synchronize clocks using LSL clock offset data.
+Passed to pyxdf.load_xdf. Default is True.</p></li>
+<li><p><strong>handle_clock_resets</strong> (<em>bool, optional</em>) – If True, handles clock resets (e.g., from hardware restarts) during recording.
+Passed to pyxdf.load_xdf. Default is True.</p></li>
+<li><p><strong>upsample_factor</strong> (<em>float, optional</em>) – Determines the target sampling rate for the final DataFrame. The target rate
+is calculated as: <cite>max(nominal_srate) * upsample_factor</cite>.
+Higher factors reduce aliasing but increase memory usage. Default is 2.0.</p></li>
+<li><p><strong>fill_method</strong> (<em>{‘ffill’, ‘bfill’, None}, optional</em>) – Method used to fill NaNs arising from resampling (e.g., zero-order hold).
+Default is ‘ffill’ (forward fill).</p></li>
+<li><p><strong>fill_value</strong> (<em>float or int, optional</em>) – Value used to fill remaining NaNs (e.g., at the start of the recording before
+the first sample). Default is 0.</p></li>
+<li><p><strong>fillmissing</strong> (<em>float or int, optional</em>) – DEPRECATED: This argument is deprecated and has no direct equivalent in the new
+implementation. It previously controlled filling of gaps larger than a threshold.</p></li>
+<li><p><strong>interpolation_method</strong> (<em>{‘linear’, ‘previous’}, optional</em>) – Method used for interpolating data onto the new timebase.</p></li>
+<li><p><strong>timestamp_reset</strong> (<em>bool, optional</em>) –</p>
+<ul class="simple">
+<li><p>If True (default): Shifts all timestamps so the recording starts at t=0.0.
+Useful for analysis relative to the start of the specific file.</p></li>
+<li><p>If False: Preserves the absolute LSL timestamps (Unix epoch). Useful when
+synchronizing this data with other files or external clocks.</p></li>
+</ul>
+</li>
+<li><p><strong>timestamp_method</strong> (<em>{‘circular’, ‘anchored’}, optional</em>) – Algorithm used to generate the new time axis.
+- ‘circular’: Uses a weighted circular mean to find the optimal phase alignment</p>
+<blockquote>
+<div><p>across all streams. Minimizes global interpolation error.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>‘anchored’: Aligns the grid strictly to the stream with the highest effective
+sampling rate.</p></li>
+</ul>
+<p>Default is ‘circular’.</p>
+</li>
+<li><p><strong>mode</strong> (<em>{‘precise’, ‘fast’}, optional</em>) –</p>
+<ul class="simple">
+<li><p>‘precise’: Uses float64 for all data. Preserves precision but uses more memory.</p></li>
+<li><p>‘fast’: Uses float32. Reduces memory usage by ~50% but may lose precision
+for very large values.</p></li>
+</ul>
+<p>Default is ‘precise’.</p>
+</li>
+<li><p><strong>verbose</strong> (<em>bool, optional</em>) – If True, prints progress, target sampling rates, and categorical mappings to console.
+Default is True.</p></li>
+<li><p><strong>show</strong> (<em>list of str, optional</em>) – A list of channel names to plot for visual quality control after resampling.
+If None, no plots are generated.</p></li>
+<li><p><strong>show_start</strong> (<em>float, optional</em>) – The start time (in seconds) for the visual control plot window.
+If None, defaults to the middle of the recording.</p></li>
+<li><p><strong>show_duration</strong> (<em>float, optional</em>) – Duration of the visual control window in seconds. Default is 1 second.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>df</strong> (<em>DataFrame</em>) – The XDF data as a pandas dataframe. If multiple streams are read,
-they will be merged into one dataframe.</p></li>
-<li><p><strong>info</strong> (<em>dict</em>) – The metadata information containing the sampling rate(s).</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>resampled_df</strong> (<em>pandas.DataFrame</em>) – A single DataFrame containing all streams resampled to the common timebase.
+The index is the timestamp (seconds).</p>
 </dd>
 </dl>
 <div class="admonition seealso">

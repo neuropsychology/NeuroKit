@@ -388,7 +388,9 @@ document.write(`
 
 <div class="viewcode-block" id="epochs_average">
 <a class="viewcode-back" href="../../../functions/epochs.html#neurokit2.epochs.epochs_average">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">epochs_average</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">epochs_average</span><span class="p">(</span>
+    <span class="n">epochs</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;ci&quot;</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Compute Grand Average**</span>
 
 <span class="sd">    Average epochs and returns the grand average, as well as the SD and the confidence interval.</span>
@@ -436,14 +438,19 @@ document.write(`
         <span class="n">which</span> <span class="o">=</span> <span class="p">[</span><span class="n">which</span><span class="p">]</span>
 
     <span class="c1"># Define quantile functions</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">q1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.025</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;ci&quot;</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">q2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.975</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">q1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.025</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">q2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.975</span><span class="p">)</span>
+
+        <span class="n">indices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;ci&quot;</span><span class="p">)</span>
+        <span class="n">indices</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">])</span>
 
     <span class="c1"># Format which</span>
-    <span class="n">what</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">which</span><span class="p">}</span>
+    <span class="n">what</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">indices</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">which</span><span class="p">}</span>
 
     <span class="c1"># Group by and average</span>
     <span class="n">av</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Time&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">what</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
@@ -451,6 +458,7 @@ document.write(`
 
     <span class="c1"># Format</span>
     <span class="n">av</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;_Mean&quot;</span><span class="p">)</span>
+    <span class="n">av</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_median&quot;</span><span class="p">,</span> <span class="s2">&quot;_Median&quot;</span><span class="p">)</span>
     <span class="n">av</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_std&quot;</span><span class="p">,</span> <span class="s2">&quot;_SD&quot;</span><span class="p">)</span>
     <span class="n">av</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_q1&quot;</span><span class="p">,</span> <span class="s2">&quot;_CI_low&quot;</span><span class="p">)</span>
     <span class="n">av</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_q2&quot;</span><span class="p">,</span> <span class="s2">&quot;_CI_high&quot;</span><span class="p">)</span>
@@ -459,12 +467,13 @@ document.write(`
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">which</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">av</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">],</span> <span class="n">av</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_Mean&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
-                <span class="n">av</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">],</span>
-                <span class="n">av</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_CI_low&quot;</span><span class="p">],</span>
-                <span class="n">av</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_CI_high&quot;</span><span class="p">],</span>
-                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_CI_low&quot;</span> <span class="ow">in</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_CI_high&quot;</span> <span class="ow">in</span> <span class="n">av</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+                    <span class="n">av</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">],</span>
+                    <span class="n">av</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_CI_low&quot;</span><span class="p">],</span>
+                    <span class="n">av</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_CI_high&quot;</span><span class="p">],</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">av</span></div>
