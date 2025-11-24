@@ -1,6 +1,7 @@
 import mne
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 import neurokit2 as nk
 
@@ -81,6 +82,7 @@ def test_eeg_badchannels():
 
     # test stats calc with longer data that works with hdi
     simple_data = np.random.randn(2, 100)  # enough points for hdi
+    prev_fignums = len(plt.get_fignums())
     bads_simple, results_simple = nk.eeg_badchannels(simple_data, bad_threshold=0.8, distance_threshold=0.99)
 
     # No bads
@@ -90,6 +92,34 @@ def test_eeg_badchannels():
     assert not np.isnan(results_simple.loc[0, "Mean"])
     assert not np.isnan(results_simple.loc[0, "SD"])
     assert results_simple.loc[0, "Amplitude"] > 0
+
+    # Test mne Raw object input and test the show command
+    mne_info = mne.create_info(
+        ch_names = ['0', '1'],
+        sfreq = 100,
+        ch_types = ['eeg'] * 2
+    )
+
+    mne_raw = mne.io.RawArray(data=simple_data, info=mne_info)
+
+    bads_mne, results_mne = nk.eeg_badchannels(mne_raw, show=True)
+
+    # Check if a figure opened
+    assert len(plt.get_fignums()) == prev_fignums + 1
+    plt.close('all')
+
+    # Check if results are the same as above
+    assert bads_mne == bads_simple
+    assert results_mne.equals(results_simple)
+
+    # Test Pandas DataFrame
+    df_simple = pd.DataFrame(simple_data.T, columns = ['0', '1'])
+
+    bads_pandas, results_pandas = nk.eeg_badchannels(df_simple)
+
+    # Check if results are the same as above
+    assert bads_pandas == bads_simple
+    assert results_pandas.equals(results_simple)
 
     # test bad channel detection logic
     extreme_data = np.random.randn(2, 100)

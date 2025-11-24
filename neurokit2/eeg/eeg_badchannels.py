@@ -59,6 +59,9 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
         selection = mne.pick_types(eeg.info, eeg=True)
         ch_names = np.array(eeg.ch_names)[selection]
         eeg, _ = eeg[selection]
+    elif isinstance(eeg, pd.DataFrame):
+        ch_names = eeg.columns
+        eeg = eeg.values.T
     else:
         ch_names = np.arange(len(eeg))
 
