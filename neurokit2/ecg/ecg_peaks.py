@@ -198,6 +198,24 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
       @suppress
       plt.close()
 
+    * **Example 4**: Quick start example (simple usage)
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate 5 seconds of ECG
+      ecg = nk.ecg_simulate(duration=5, sampling_rate=1000)
+
+      # Clean the ECG
+      cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
+
+      # Detect R-peaks
+      peaks, info = nk.ecg_peaks(cleaned, sampling_rate=1000)
+
+      # Show first few R-peak indices
+      peaks["ECG_R_Peaks"][0:5]
+
     References
     ----------
     * Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions
