@@ -211,10 +211,10 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
       cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
 
       # Detect R-peaks
-      peaks, info = nk.ecg_peaks(cleaned, sampling_rate=1000)
+      signals, info = nk.ecg_peaks(cleaned, sampling_rate=1000)
 
       # Show first few R-peak indices
-      peaks["ECG_R_Peaks"][0:5]
+      info["ECG_R_Peaks"][0:5]
 
     References
     ----------
