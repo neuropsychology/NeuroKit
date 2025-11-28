@@ -133,6 +133,7 @@ def read_xdf(
     try:
         import pyxdf
     except ImportError as e:
+        pyxdf = None
         raise ImportError(
             "The 'pyxdf' module is required for this function to run. ",
             "Please install it first (`pip install pyxdf`).",
