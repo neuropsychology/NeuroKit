@@ -85,7 +85,11 @@ def microstates_clean(
 
     # Get GFP
     gfp = eeg_gfp(
-        eeg, sampling_rate=sampling_rate, normalize=normalize, method=gfp_method, **kwargs
+        eeg,
+        sampling_rate=sampling_rate,
+        normalize=normalize,
+        method=gfp_method,
+        **kwargs
     )
 
     # If train is a custom of vector (assume it's the pre-computed peaks)

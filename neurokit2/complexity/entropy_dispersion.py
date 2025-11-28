@@ -7,7 +7,14 @@ from .utils_complexity_symbolize import complexity_symbolize
 
 
 def entropy_dispersion(
-    signal, delay=1, dimension=3, c=6, symbolize="NCDF", fluctuation=False, rho=1, **kwargs
+    signal,
+    delay=1,
+    dimension=3,
+    c=6,
+    symbolize="NCDF",
+    fluctuation=False,
+    rho=1,
+    **kwargs
 ):
     """**Dispersion Entropy (DispEn)**
 
@@ -88,7 +95,9 @@ def entropy_dispersion(
         Ym = np.zeros((len(signal) - (dimension - 1) * delay, dimension))
         for k in range(dimension):
             Ym[:, k] = symbolic[k * delay : len(signal) - ((dimension - k - 1) * delay)]
-        Yi = np.floor(np.max(abs(np.diff(Ym)), axis=1) / (rho * np.std(abs(np.diff(signal)))))
+        Yi = np.floor(
+            np.max(abs(np.diff(Ym)), axis=1) / (rho * np.std(abs(np.diff(signal))))
+        )
         embedded = complexity_embedding(symbolic, dimension=dimension, delay=delay)
         Yi = np.expand_dims(Yi, axis=1)
         embedded = np.hstack((embedded, Yi))
@@ -109,10 +118,10 @@ def entropy_dispersion(
     if fluctuation is True:
         rden = np.sum((freq - (1 / ((2 * c - 1) ** (dimension - 1)))) ** 2)
     else:
-        rden = np.sum((freq - (1 / (c ** dimension))) ** 2)
+        rden = np.sum((freq - (1 / (c**dimension))) ** 2)
 
     # Normalize
-    DispEn = DispEn / np.log(c ** dimension)
-    info["RDEn"] = rden / (1 - (1 / (c ** dimension)))
+    DispEn = DispEn / np.log(c**dimension)
+    info["RDEn"] = rden / (1 - (1 / (c**dimension)))
 
     return DispEn, info

@@ -1,4 +1,5 @@
 """Submodule for NeuroKit."""
+
 import functools
 
 from .complexity import complexity

@@ -140,7 +140,9 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
                 "NeuroKit error: eeg_rereference(): the 'mne' module (version > 0.20) is required "
                 "for this function to run. Please install it first (`pip install mne`).",
             ) from e
-        old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
+        old_verbosity_level = mne.set_log_level(
+            verbose="WARNING", return_old_level=True
+        )
         eeg = mne.preprocessing.compute_current_source_density(eeg, **kwargs)
 
         # Reconvert CSD type to EEG (https://github.com/mne-tools/mne-python/issues/11426)

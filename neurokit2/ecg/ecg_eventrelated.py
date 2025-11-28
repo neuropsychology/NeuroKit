@@ -144,10 +144,12 @@ def _ecg_eventrelated_phase(epoch, output={}):
     ].iloc[0]
 
     # Indication of ventricular systole
-    output["ECG_Phase_Ventricular"] = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Completion_Ventricular"] = epoch["ECG_Phase_Completion_Ventricular"][
+    output["ECG_Phase_Ventricular"] = epoch["ECG_Phase_Ventricular"][
         epoch.index > 0
     ].iloc[0]
+    output["ECG_Phase_Completion_Ventricular"] = epoch[
+        "ECG_Phase_Completion_Ventricular"
+    ][epoch.index > 0].iloc[0]
 
     return output
 

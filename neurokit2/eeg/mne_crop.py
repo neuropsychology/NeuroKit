@@ -70,7 +70,13 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
 
         # Convert time to first and last samples
         new_smin, new_smax = np.where(
-            _time_mask(raw.times, tmin, tmax, sfreq=raw.info["sfreq"], include_tmax=include_tmax)
+            _time_mask(
+                raw.times,
+                tmin,
+                tmax,
+                sfreq=raw.info["sfreq"],
+                include_tmax=include_tmax,
+            )
         )[0][[0, -1]]
 
     if smin is None:
@@ -81,12 +87,16 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
         smax += 1
 
     # Re-create the Raw object (note that mne does smin : smin + 1)
-    raw = mne.io.RawArray(raw._data[:, int(smin) : int(smax)].copy(), raw.info, verbose="WARNING")
+    raw = mne.io.RawArray(
+        raw._data[:, int(smin) : int(smax)].copy(), raw.info, verbose="WARNING"
+    )
 
     return raw
 
 
-def _time_mask(times, tmin=None, tmax=None, sfreq=None, raise_error=True, include_tmax=True):
+def _time_mask(
+    times, tmin=None, tmax=None, sfreq=None, raise_error=True, include_tmax=True
+):
     """Copied from https://github.com/mne-tools/mne-python/mne/utils/numerics.py#L466."""
     orig_tmin = tmin
     orig_tmax = tmax
@@ -106,7 +116,9 @@ def _time_mask(times, tmin=None, tmax=None, sfreq=None, raise_error=True, includ
     else:
         assert include_tmax  # can only be used when sfreq is known
     if raise_error and tmin > tmax:
-        raise ValueError(f"tmin ({orig_tmin}) must be less than or equal to tmax ({orig_tmax})")
+        raise ValueError(
+            f"tmin ({orig_tmin}) must be less than or equal to tmax ({orig_tmax})"
+        )
     mask = times >= tmin
     mask &= times <= tmax
     if raise_error and not mask.any():

@@ -142,7 +142,7 @@ def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, rng=No
         surrogate = sort[np.argsort(np.argsort(s))]
 
         t = np.fft.rfft(surrogate)
-        current_error = np.sqrt(np.mean((amplitudes ** 2 - np.abs(t) ** 2) ** 2))
+        current_error = np.sqrt(np.mean((amplitudes**2 - np.abs(t) ** 2) ** 2))
 
         # Check convergence
         if abs(current_error - previous_error) <= atol + rtol * abs(previous_error):
@@ -150,5 +150,5 @@ def _signal_surrogate_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10, rng=No
         previous_error = current_error
 
     # Normalize error w.r.t. mean of the "true" power spectrum.
-    rmsd = current_error / np.mean(amplitudes ** 2)
+    rmsd = current_error / np.mean(amplitudes**2)
     return surrogate, i, rmsd

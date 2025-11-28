@@ -211,7 +211,9 @@ def _signal_findpeaks_distances(peaks):
     else:
         distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
         distances_prev = np.concatenate([distances_next[1:], [np.nan]])
-        distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
+        distances = np.array(
+            [np.nanmin(i) for i in list(zip(distances_next, distances_prev))]
+        )
 
     return distances
 

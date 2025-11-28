@@ -97,7 +97,11 @@ def events_plot(events, signal=None, color="red", linestyle="--"):
             events_list = []
             for condition in set(events["condition"]):
                 events_list.append(
-                    [x for x, y in zip(events["onset"], events["condition"]) if y == condition]
+                    [
+                        x
+                        for x, y in zip(events["onset"], events["condition"])
+                        if y == condition
+                    ]
                 )
             events = events_list
         else:

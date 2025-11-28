@@ -114,7 +114,9 @@ def ppg_peaks(
 
     # Peak (and onset) correction
     # - tidy up peaks and onsets
-    if info['method_fixpeaks'].lower() == "charlton2022":  # this is the default settings when using MSPTDfastv1 or MSPTDfastv2
+    if (
+        info["method_fixpeaks"].lower() == "charlton2022"
+    ):  # this is the default settings when using MSPTDfastv1 or MSPTDfastv2
         info["PPG_Peaks_Unfixed"] = info["PPG_Peaks"].copy()
         info["PPG_Onsets_Unfixed"] = info["PPG_Onsets"].copy()
 
@@ -125,7 +127,6 @@ def ppg_peaks(
         # Add prefix and merge
         fixpeaks = {"PPG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
         info.update(fixpeaks)
-
 
     # - perform peak correction
     if correct_artifacts:
@@ -138,7 +139,7 @@ def ppg_peaks(
         # Add prefix and merge
         fixpeaks = {"PPG_fixpeaks_" + str(key): val for key, val in fixpeaks.items()}
         info.update(fixpeaks)
-    
+
     # Format output
     signals = signal_formatpeaks(
         dict(PPG_Peaks=info["PPG_Peaks"]),

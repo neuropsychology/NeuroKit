@@ -51,14 +51,21 @@ def create_sample_cluster_data(random_state):
     # generate simple sample data
     K = 5
     points = np.array([[0.0, 0.0], [-0.3, -0.3], [0.3, -0.3], [0.3, 0.3], [-0.3, 0.3]])
-    centres = np.column_stack((rng.choice(K, size=K, replace=False), rng.choice(K, size=K, replace=False)))
+    centres = np.column_stack(
+        (rng.choice(K, size=K, replace=False), rng.choice(K, size=K, replace=False))
+    )
     angles = rng.uniform(0, 2 * np.pi, size=K)
     offset = rng.uniform(size=2)
 
     # place a cluster at each centre
     data = []
     for i in range(K):
-        rotation = np.array([[np.cos(angles[i]), np.sin(angles[i])], [-np.sin(angles[i]), np.cos(angles[i])]])
+        rotation = np.array(
+            [
+                [np.cos(angles[i]), np.sin(angles[i])],
+                [-np.sin(angles[i]), np.cos(angles[i])],
+            ]
+        )
         data.extend(centres[i] + points @ rotation)
     rng.shuffle(data)
 
@@ -80,7 +87,9 @@ def test_kmedoids():
     K = len(centres)
 
     # run kmedoids
-    res = nk.cluster(data, method="kmedoids", n_clusters=K, random_state=random_state_clustering)
+    res = nk.cluster(
+        data, method="kmedoids", n_clusters=K, random_state=random_state_clustering
+    )
 
     # check results (sort, then compare rows of res[1] and points)
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])
@@ -97,7 +106,13 @@ def test_kmeans():
     K = len(centres)
 
     # run kmeans
-    res = nk.cluster(data, method="kmeans", n_clusters=K, n_init=1, random_state=random_state_clustering)
+    res = nk.cluster(
+        data,
+        method="kmeans",
+        n_clusters=K,
+        n_init=1,
+        random_state=random_state_clustering,
+    )
 
     # check results (sort, then compare rows of res[1] and points)
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])

@@ -73,6 +73,8 @@ def entropy_differential(signal, base=2, **kwargs):
     else:
         method = "vasicek"
 
-    diffen = scipy.stats.differential_entropy(signal, method=method, base=base, **kwargs)
+    diffen = scipy.stats.differential_entropy(
+        signal, method=method, base=base, **kwargs
+    )
 
     return diffen, {"Method": method, "Base": base}

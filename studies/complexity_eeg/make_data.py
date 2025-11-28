@@ -27,7 +27,9 @@ datasets = [
 
 def optimize_delay(raw, channel="Fp1"):
     signal = raw.get_data(picks=channel)[0]
-    vals = np.unique(np.round(np.linspace(1, 80, 80) / (1000 / raw.info["sfreq"]), 0)).astype(int)
+    vals = np.unique(
+        np.round(np.linspace(1, 80, 80) / (1000 / raw.info["sfreq"]), 0)
+    ).astype(int)
     vals = vals[vals > 0]
     delay, out = nk.complexity_delay(signal, delay_max=vals, method="fraser1986")
 

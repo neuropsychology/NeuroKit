@@ -5,7 +5,9 @@ import scipy.stats
 # ==============================================================================
 # THIS IS WIP and we would like to implement an EOG simulator. Please help!
 # ==============================================================================
-def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameters="default"):
+def _eog_simulate_blink(
+    sampling_rate=1000, length=None, method="scr", parameters="default"
+):
     """**Simulate a canonical blink from vertical EOG**
 
     Recommended parameters:
@@ -48,6 +50,8 @@ def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameter
     else:
         if isinstance(parameters, str):
             parameters = [2.659, 5.172, 0.317]
-        gamma = scipy.stats.gamma.pdf(x, a=parameters[1], loc=parameters[0], scale=parameters[2])
+        gamma = scipy.stats.gamma.pdf(
+            x, a=parameters[1], loc=parameters[0], scale=parameters[2]
+        )
         y = gamma / np.max(gamma)
     return y

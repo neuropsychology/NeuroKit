@@ -130,7 +130,7 @@ def fractal_nld(signal, corrected=False):
             )
             nld = np.nan
         else:
-            nld = a * (nld_diff ** k)
+            nld = a * (nld_diff**k)
 
     # Compute fd
     return nld, {}

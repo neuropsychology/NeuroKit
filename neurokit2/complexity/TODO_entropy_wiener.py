@@ -74,7 +74,7 @@ def entropy_wiener(signal, sampling_rate=1000, **kwargs):
     power = 2
     amin = 1e-10
 
-    S_thresh = np.maximum(amin, stft ** power)
+    S_thresh = np.maximum(amin, stft**power)
     gmean = np.exp(np.mean(np.log(S_thresh), axis=-2, keepdims=True))[0][0]
     amean = np.mean(S_thresh, axis=-2, keepdims=True)[0][0]
 

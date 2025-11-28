@@ -3,7 +3,9 @@ import numpy as np
 from .utils_complexity_embedding import complexity_embedding
 
 
-def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksort", **kwargs):
+def complexity_ordinalpatterns(
+    signal, delay=1, dimension=3, algorithm="quicksort", **kwargs
+):
     """**Find Ordinal Patterns for Permutation Procedures**
 
     The seminal work by Bandt and Pompe (2002) introduced a symbolization approach to obtain a
@@ -100,6 +102,9 @@ def _bubblesort(embedded):
         for t in range(n_dim - 1):
             for kk in range(n_dim - t - 1):
                 if embedded[y, kk] > embedded[y, kk + 1]:
-                    embedded[y, kk], embedded[y, kk + 1] = embedded[y, kk + 1], embedded[y, kk]
+                    embedded[y, kk], embedded[y, kk + 1] = (
+                        embedded[y, kk + 1],
+                        embedded[y, kk],
+                    )
                     swaps[y] += 1
     return swaps

@@ -28,4 +28,6 @@ def test_microstates_peaks():
 
     peaks_frederic = locmax(gfp)
 
-    assert all(elem in peaks_frederic for elem in peaks_nk)  # only works when distance_between = 0.01
+    assert all(
+        elem in peaks_frederic for elem in peaks_nk
+    )  # only works when distance_between = 0.01

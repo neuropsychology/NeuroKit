@@ -6,7 +6,9 @@ import numpy as np
 import pandas as pd
 
 
-def create_report(file="myreport.html", signals=None, info={"sampling_rate": 1000}, fig=None):
+def create_report(
+    file="myreport.html", signals=None, info={"sampling_rate": 1000}, fig=None
+):
     """**Reports**
 
     Create report containing description and figures of processing.
@@ -84,8 +86,9 @@ def summarize_table(signals):
         summary[rate_col + "_SD"] = np.std(signals[rate_col])
         summary_table = pd.DataFrame(summary, index=[0])
         # Make HTML and Markdown versions
-        html = '<h2 style="background-color: #D60574">Summary table</h1>' + summary_table.to_html(
-            index=None
+        html = (
+            '<h2 style="background-color: #D60574">Summary table</h1>'
+            + summary_table.to_html(index=None)
         )
 
         try:

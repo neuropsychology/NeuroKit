@@ -83,7 +83,9 @@ def fractal_sda(signal, scales=None, show=False):
     if scales is None:
         scale_min = 1
         scale_max = int(np.floor(np.log2(n / 2)))
-        scales = np.append(1, 2 ** np.arange(scale_min, scale_max + 1))  # include binsize = 1 too
+        scales = np.append(
+            1, 2 ** np.arange(scale_min, scale_max + 1)
+        )  # include binsize = 1 too
 
     # sanitize scales
     scales = scales[scales <= n / 2]

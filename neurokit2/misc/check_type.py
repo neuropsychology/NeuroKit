@@ -41,7 +41,7 @@ def is_string(x):
     if isinstance(x, list):
         out = [isinstance(member, str) for member in x]
     elif isinstance(x, pd.DataFrame):
-        out = [member == 'object' for member in list(x.dtypes)]
+        out = [member == "object" for member in list(x.dtypes)]
     elif isinstance(x, pd.Series):
         out = [x.dtype == "object"]
     elif isinstance(x, np.ndarray):

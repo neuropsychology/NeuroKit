@@ -6,7 +6,14 @@ from ..stats import rescale
 from .ecg_findpeaks import ecg_findpeaks
 
 
-def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False, show=False, **kwargs):
+def ecg_peaks(
+    ecg_cleaned,
+    sampling_rate=1000,
+    method="neurokit",
+    correct_artifacts=False,
+    show=False,
+    **kwargs
+):
     """**Find R-peaks in an ECG signal**
 
     Find R-peaks in an ECG signal using the specified method. You can pass an unfiltered ECG
@@ -280,7 +287,14 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
     info = {"method_peaks": method.lower(), "method_fixpeaks": "None"}
 
     # First peak detection
-    info.update(ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=info["method_peaks"], **kwargs))
+    info.update(
+        ecg_findpeaks(
+            ecg_cleaned,
+            sampling_rate=sampling_rate,
+            method=info["method_peaks"],
+            **kwargs
+        )
+    )
 
     # Peak correction
     if correct_artifacts:
@@ -443,7 +457,10 @@ def _ecg_peaks_plot_artefacts(
     if len(raw) == 0:
         return "No bad peaks"
     if any([i < len(signal) for i in raw]):
-        return "Peak indices longer than signal. Signals might have been cropped. " + "Better skip plotting."
+        return (
+            "Peak indices longer than signal. Signals might have been cropped. "
+            + "Better skip plotting."
+        )
 
     extra = [i for i in raw if i not in peaks]
     if len(extra) > 0:

@@ -70,9 +70,13 @@ def rsp_methods(
     """
     # Sanitize inputs
     method_cleaning = (
-        str(method).lower() if method_cleaning == "default" else str(method_cleaning).lower()
+        str(method).lower()
+        if method_cleaning == "default"
+        else str(method_cleaning).lower()
     )
-    method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    method_peaks = (
+        str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
+    )
     method_rvt = str(method_rvt).lower()
 
     # Create dictionary with all inputs
@@ -96,18 +100,20 @@ def rsp_methods(
     report_info["kwargs_rvt"] = kwargs_rvt
 
     # Initialize refs list with NeuroKit2 reference
-    refs = ["""Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+    refs = [
+        """Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
     Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
     Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
-    """]
+    """
+    ]
 
     # 1. Cleaning
     # ------------
     report_info["text_cleaning"] = f"The raw signal, sampled at {sampling_rate} Hz,"
     if method_cleaning in ["khodadad", "khodadad2018"]:
-        report_info["text_cleaning"] += (
-            " was preprocessed using a second order 0.05-3 Hz bandpass Butterworth filter."
-        )
+        report_info[
+            "text_cleaning"
+        ] += " was preprocessed using a second order 0.05-3 Hz bandpass Butterworth filter."
     elif method_cleaning in ["hampel", "power", "power2020"]:
         report_info["text_cleaning"] += (
             " was preprocessed using a median-based Hampel filter by replacing values which"
@@ -137,53 +143,53 @@ def rsp_methods(
     # 2. Peaks
     # ----------
     if method_peaks in ["khodadad", "khodadad2018"]:
-        report_info[
-            "text_peaks"
-        ] = "The peak detection was carried out using the method described in Khoadadad et al. (2018)."
+        report_info["text_peaks"] = (
+            "The peak detection was carried out using the method described in Khoadadad et al. (2018)."
+        )
         refs.append(
             """Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... & Bayford, R. (2018).
             Optimized breath detection algorithm in electrical impedance tomography.
             Physiological measurement, 39(9), 094001."""
         )
     elif method_peaks in ["biosppy"]:
-        report_info[
-            "text_peaks"
-        ] = "The peak detection was carried out using the method provided by the Python library BioSPpy (/signals/resp.py)."
+        report_info["text_peaks"] = (
+            "The peak detection was carried out using the method provided by the Python library BioSPpy (/signals/resp.py)."
+        )
     elif method_peaks in ["scipy"]:
-        report_info[
-            "text_peaks"
-        ] = "The peak detection was carried out using the method provided by the Python library SciPy (signal.find_peaks)."
+        report_info["text_peaks"] = (
+            "The peak detection was carried out using the method provided by the Python library SciPy (signal.find_peaks)."
+        )
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
-        report_info[
-            "text_peaks"
-        ] = f"The peak detection was carried out using the method {method_peaks}."
+        report_info["text_peaks"] = (
+            f"The peak detection was carried out using the method {method_peaks}."
+        )
 
     # 3. RVT
     # ----------
     if method_rvt in ["harrison", "harrison2021"]:
-        report_info[
-            "text_rvt"
-        ] = "The respiratory volume per time computation was carried out using the method described in Harrison et al. (2021)."
+        report_info["text_rvt"] = (
+            "The respiratory volume per time computation was carried out using the method described in Harrison et al. (2021)."
+        )
         refs.append(
             """Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., & Kasper, L. (2021).
             A Hilbert-based method for processing respiratory timeseries.
             Neuroimage, 230, 117787."""
         )
     elif method_rvt in ["birn", "birn2006"]:
-        report_info[
-            "text_rvt"
-        ] = "The respiratory volume per time computation was carried out using the method described in Birn et al. (2006)."
+        report_info["text_rvt"] = (
+            "The respiratory volume per time computation was carried out using the method described in Birn et al. (2006)."
+        )
         refs.append(
             """Birn, R. M., Diamond, J. B., Smith, M. A., & Bandettini, P. A. (2006).
             Separating respiratory-variation-related fluctuations from neuronal-activity-related fluctuations in
             fMRI. Neuroimage, 31(4), 1536-1548."""
         )
     elif method_rvt in ["power", "power2020"]:
-        report_info[
-            "text_rvt"
-        ] = "The respiratory volume per time computation was carried out using the method described in Power at al. (2020)."
+        report_info["text_rvt"] = (
+            "The respiratory volume per time computation was carried out using the method described in Power at al. (2020)."
+        )
         refs.append(
             """Power, J. D., Lynch, C. J., Dubin, M. J., Silver, B. M., Martin, A., & Jones, R. M. (2020).
             Characteristics of respiratory measures in young adults scanned at rest, including systematic
@@ -192,9 +198,9 @@ def rsp_methods(
     elif method_rvt in ["none"]:
         report_info["text_rvt"] = "Respiratory volume per time was not computed."
     else:
-        report_info[
-            "text_rvt"
-        ] = f"The respiratory volume per time computation was carried out using the method described in {method_rvt}."
+        report_info["text_rvt"] = (
+            f"The respiratory volume per time computation was carried out using the method described in {method_rvt}."
+        )
 
     report_info["references"] = list(np.unique(refs))
     return report_info

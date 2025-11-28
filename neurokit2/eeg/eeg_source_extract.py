@@ -1,7 +1,9 @@
 import pandas as pd
 
 
-def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING", **kwargs):
+def eeg_source_extract(
+    stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING", **kwargs
+):
     """**Extract the activity from an anatomical source**
 
     Returns a dataframe with the activity from each source in the segmentation.

@@ -131,7 +131,14 @@ def transition_matrix(sequence, order=1, adjust=True, show=False):
                     color = "white"
                 else:
                     color = "black"
-                ax.text(j, i, f"{tm.loc[row, col]:.2f}", ha="center", va="center", color=color)
+                ax.text(
+                    j,
+                    i,
+                    f"{tm.loc[row, col]:.2f}",
+                    ha="center",
+                    va="center",
+                    color=color,
+                )
         ax.set_title("Transition Matrix")
         fig.tight_layout()
 

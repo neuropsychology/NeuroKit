@@ -3,7 +3,9 @@ import numpy as np
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_renyi(signal=None, alpha=1, symbolize=None, show=False, freq=None, **kwargs):
+def entropy_renyi(
+    signal=None, alpha=1, symbolize=None, show=False, freq=None, **kwargs
+):
     """**Rényi entropy (REn or H)**
 
     In information theory, the Rényi entropy *H* generalizes the Hartley entropy, the Shannon

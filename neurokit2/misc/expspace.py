@@ -35,7 +35,10 @@ def expspace(start, stop, num=50, out=int, base=1):
 
     """
     if base == 1:
-        seq = np.exp(np.linspace(np.log(1 + start), np.log(1 + stop), num, endpoint=True)) - 1
+        seq = (
+            np.exp(np.linspace(np.log(1 + start), np.log(1 + stop), num, endpoint=True))
+            - 1
+        )
     else:
         seq = np.exp2(
             np.linspace(np.log2(1 + start), np.log2(1 + stop), num, endpoint=True) - 1

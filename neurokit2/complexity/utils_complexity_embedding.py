@@ -5,8 +5,7 @@ import numpy as np
 
 from ..misc import NeuroKitWarning
 from ..signal import signal_sanitize
-from .utils_complexity_attractor import (_attractor_equation,
-                                         complexity_attractor)
+from .utils_complexity_attractor import _attractor_equation, complexity_attractor
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
@@ -132,10 +131,15 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
 
     # Sanity checks
     if isinstance(delay, float):
-        warn("`delay` must be an integer. Running `int(delay)`", category=NeuroKitWarning)
+        warn(
+            "`delay` must be an integer. Running `int(delay)`", category=NeuroKitWarning
+        )
         delay = int(delay)
     if isinstance(dimension, float):
-        warn("`dimension` must be an integer. Running `int(dimension)`", category=NeuroKitWarning)
+        warn(
+            "`dimension` must be an integer. Running `int(dimension)`",
+            category=NeuroKitWarning,
+        )
         dimension = int(dimension)
     if dimension * delay > N:
         raise ValueError(
@@ -143,7 +147,9 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
             " the length of the signal.",
         )
     if delay < 1:
-        raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
+        raise ValueError(
+            "NeuroKit error: complexity_embedding(): 'delay' has to be at least 1."
+        )
 
     Y = np.zeros((dimension, N - (dimension - 1) * delay))
     for i in range(dimension):

@@ -1,4 +1,6 @@
-def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", **kwargs):
+def eeg_source(
+    raw, src, bem, method="sLORETA", show=False, verbose="WARNING", **kwargs
+):
     """**Source Reconstruction for EEG data**
 
     Currently only for mne.Raw objects.
@@ -59,7 +61,7 @@ def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", *
     stc = mne.minimum_norm.apply_inverse_raw(
         raw,
         inverse_operator,
-        lambda2=1.0 / snr ** 2,
+        lambda2=1.0 / snr**2,
         method=method,  # sLORETA method (could also be MNE or dSPM)
         verbose=verbose,
         **kwargs

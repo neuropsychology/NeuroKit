@@ -53,7 +53,9 @@ def markov_test_random(fm):
 
     # Expect transition matrix (theoretical)
     out["Random_Matrix"] = scipy.stats.contingency.expected_freq(fm.values)
-    out["Random_Matrix"] = pd.DataFrame(out["Random_Matrix"], index=fm.index, columns=fm.columns)
+    out["Random_Matrix"] = pd.DataFrame(
+        out["Random_Matrix"], index=fm.index, columns=fm.columns
+    )
 
     # Chi-square test
     results = scipy.stats.chisquare(f_obs=fm, f_exp=out["Random_Matrix"], axis=None)

@@ -110,7 +110,9 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
     rrv = {}  # Initialize empty dict
     rrv.update(_rsp_rrv_time(bbi))
     rrv.update(
-        _rsp_rrv_frequency(rsp_period, sampling_rate=sampling_rate, show=show, silent=silent)
+        _rsp_rrv_frequency(
+            rsp_period, sampling_rate=sampling_rate, show=show, silent=silent
+        )
     )
     rrv.update(_rsp_rrv_nonlinear(bbi))
 
@@ -187,7 +189,9 @@ def _rsp_rrv_frequency(
             if out[frequency] == 0.0:
                 warn(
                     "The duration of recording is too short to allow"
-                    " reliable computation of signal power in frequency band " + frequency + "."
+                    " reliable computation of signal power in frequency band "
+                    + frequency
+                    + "."
                     " Its power is returned as zero.",
                     category=NeuroKitWarning,
                 )
@@ -207,7 +211,9 @@ def _rsp_rrv_nonlinear(bbi):
 
     # Poincaré plot
     out["SD1"] = np.sqrt(np.std(diff_bbi, ddof=1) ** 2 * 0.5)
-    out["SD2"] = np.sqrt(2 * np.std(bbi, ddof=1) ** 2 - 0.5 * np.std(diff_bbi, ddof=1) ** 2)
+    out["SD2"] = np.sqrt(
+        2 * np.std(bbi, ddof=1) ** 2 - 0.5 * np.std(diff_bbi, ddof=1) ** 2
+    )
     out["SD2SD1"] = out["SD2"] / out["SD1"]
 
     # CSI / CVI
@@ -219,11 +225,15 @@ def _rsp_rrv_nonlinear(bbi):
 
     # Entropy
     out["ApEn"] = entropy_approximate(bbi, dimension=2)[0]
-    out["SampEn"] = entropy_sample(bbi, dimension=2, tolerance=0.2 * np.std(bbi, ddof=1))[0]
+    out["SampEn"] = entropy_sample(
+        bbi, dimension=2, tolerance=0.2 * np.std(bbi, ddof=1)
+    )[0]
 
     # DFA
     if len(bbi) / 10 > 16:
-        out["DFA_alpha1"] = fractal_dfa(bbi, scale=np.arange(4, 17), multifractal=False)[0]
+        out["DFA_alpha1"] = fractal_dfa(
+            bbi, scale=np.arange(4, 17), multifractal=False
+        )[0]
         # For multifractal
         mdfa_alpha1, _ = fractal_dfa(
             bbi, multifractal=True, q=np.arange(-5, 6), scale=np.arange(4, 17)
@@ -232,7 +242,9 @@ def _rsp_rrv_nonlinear(bbi):
             out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
     if len(bbi) > 65:
-        out["DFA_alpha2"] = fractal_dfa(bbi, scale=np.arange(16, 65), multifractal=False)[0]
+        out["DFA_alpha2"] = fractal_dfa(
+            bbi, scale=np.arange(16, 65), multifractal=False
+        )[0]
         # For multifractal
         mdfa_alpha2, _ = fractal_dfa(
             bbi, multifractal=True, q=np.arange(-5, 6), scale=np.arange(16, 65)

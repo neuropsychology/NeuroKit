@@ -125,7 +125,9 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
         return output
 
     # Get baseline
-    zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
+    zero = find_closest(
+        0, epoch.index.values, return_index=True
+    )  # Find index closest to 0
     baseline = epoch["RSP_Amplitude"].iloc[zero]
     signal = epoch["RSP_Amplitude"].values[zero + 1 : :]
 
@@ -153,7 +155,9 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
 
     # Indication of inspiration
     output["RSP_Phase"] = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
-    output["RSP_Phase_Completion"] = epoch["RSP_Phase_Completion"][epoch.index > 0].iloc[0]
+    output["RSP_Phase_Completion"] = epoch["RSP_Phase_Completion"][
+        epoch.index > 0
+    ].iloc[0]
 
     return output
 
@@ -169,7 +173,9 @@ def _rsp_eventrelated_rvt(epoch, output={}):
         return output
 
     # Get baseline
-    zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
+    zero = find_closest(
+        0, epoch.index.values, return_index=True
+    )  # Find index closest to 0
     baseline = epoch["RSP_RVT"].iloc[zero]
     signal = epoch["RSP_RVT"].values[zero + 1 : :]
 
@@ -192,7 +198,9 @@ def _rsp_eventrelated_symmetry(epoch, output={}):
         return output
 
     # Get baseline
-    zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
+    zero = find_closest(
+        0, epoch.index.values, return_index=True
+    )  # Find index closest to 0
     baseline1 = epoch["RSP_Symmetry_PeakTrough"].iloc[zero]
     signal1 = epoch["RSP_Symmetry_PeakTrough"].values[zero + 1 : :]
 

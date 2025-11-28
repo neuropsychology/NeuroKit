@@ -76,7 +76,9 @@ def fractal_capacity(signal, delay=1, rounding=3, show=False):
 def _fractal_capacity_boxcount(Z, k):
     # From https://github.com/rougier/numpy-100 (#87)
     S = np.add.reduceat(
-        np.add.reduceat(Z, np.arange(0, Z.shape[0], k), axis=0), np.arange(0, Z.shape[1], k), axis=1
+        np.add.reduceat(Z, np.arange(0, Z.shape[0], k), axis=0),
+        np.arange(0, Z.shape[1], k),
+        axis=1,
     )
 
     # We count non-empty (0) and non-full boxes (k*k)

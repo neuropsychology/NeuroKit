@@ -69,7 +69,8 @@ def emg_eventrelated(epochs, silent=False):
         # Activation following event
         if "EMG_Onsets" not in epochs[i]:
             warn(
-                "Input does not have an `EMG_Onsets` column." " Unable to process EMG features.",
+                "Input does not have an `EMG_Onsets` column."
+                " Unable to process EMG features.",
                 category=NeuroKitWarning,
             )
             data[i]["EMG_Activation"] = 0
@@ -113,8 +114,12 @@ def _emg_eventrelated_features(epoch, output={}):
     # Peak amplitude and Time of peak
     activations = len(np.where(epoch["EMG_Onsets"][epoch.index > 0] == 1)[0])
     activated_signal = np.where(epoch["EMG_Activity"][epoch.index > 0] == 1)
-    mean = np.array(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]).mean()
-    maximum = np.array(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]).max()
+    mean = np.array(
+        epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]
+    ).mean()
+    maximum = np.array(
+        epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]
+    ).max()
 
     index_time = np.where(epoch["EMG_Amplitude"][epoch.index > 0] == maximum)[0]
     time = np.array(epoch["EMG_Amplitude"][epoch.index > 0].index[index_time])[0]

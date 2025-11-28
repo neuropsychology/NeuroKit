@@ -95,12 +95,17 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 
     # Get basic
     info = eda_findpeaks(
-        eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min
+        eda_phasic,
+        sampling_rate=sampling_rate,
+        method=method,
+        amplitude_min=amplitude_min,
     )
     info = eda_fixpeaks(info)
 
     # Get additional features (rise time, half recovery time, etc.)
-    info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate, recovery_percentage=0.5)
+    info = _eda_peaks_getfeatures(
+        info, eda_phasic, sampling_rate, recovery_percentage=0.5
+    )
 
     # Prepare output.
     peak_signal = signal_formatpeaks(
@@ -119,7 +124,9 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 # =============================================================================
 
 
-def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percentage=0.5):
+def _eda_peaks_getfeatures(
+    info, eda_phasic, sampling_rate=1000, recovery_percentage=0.5
+):
     # Sanity checks -----------------------------------------------------------
 
     # Peaks (remove peaks before first onset)
@@ -130,7 +137,9 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
 
     # Onsets (remove onsets with after last peak)
     valid_onsets = ~np.isnan(info["SCR_Onsets"])
-    valid_onsets[valid_onsets] = info["SCR_Onsets"][valid_onsets] < np.nanmax(info["SCR_Peaks"])
+    valid_onsets[valid_onsets] = info["SCR_Onsets"][valid_onsets] < np.nanmax(
+        info["SCR_Peaks"]
+    )
     onsets = info["SCR_Onsets"][valid_onsets].astype(int)
 
     if len(onsets) != len(peaks):
@@ -158,7 +167,9 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
     # (Half) Recovery times
     recovery = np.full(len(info["SCR_Peaks"]), np.nan)
     recovery_time = np.full(len(info["SCR_Peaks"]), np.nan)
-    recovery_values = eda_phasic[onsets] + (amplitude[valid_peaks] * recovery_percentage)
+    recovery_values = eda_phasic[onsets] + (
+        amplitude[valid_peaks] * recovery_percentage
+    )
 
     for i, peak_index in enumerate(peaks):
         # Get segment between peak and next peak

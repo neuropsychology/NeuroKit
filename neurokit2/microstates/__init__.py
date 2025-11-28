@@ -11,12 +11,14 @@ from .microstates_plot import microstates_plot
 from .microstates_findnumber import microstates_findnumber
 
 
-__all__ = ["microstates_clean",
-           "microstates_peaks",
-           "microstates_static",
-           "microstates_dynamic",
-           "microstates_complexity",
-           "microstates_segment",
-           "microstates_classify",
-           "microstates_plot",
-           "microstates_findnumber"]
+__all__ = [
+    "microstates_clean",
+    "microstates_peaks",
+    "microstates_static",
+    "microstates_dynamic",
+    "microstates_complexity",
+    "microstates_segment",
+    "microstates_classify",
+    "microstates_plot",
+    "microstates_findnumber",
+]

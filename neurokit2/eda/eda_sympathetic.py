@@ -13,7 +13,11 @@ from ..stats import standardize
 
 
 def eda_sympathetic(
-    eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], method="posada", show=False
+    eda_signal,
+    sampling_rate=1000,
+    frequency_band=[0.045, 0.25],
+    method="posada",
+    show=False,
 ):
     """**Sympathetic Nervous System Index from Electrodermal activity (EDA)**
 
@@ -86,15 +90,22 @@ def eda_sympathetic(
 
     if method.lower() in ["ghiasi", "ghiasi2018"]:
         out = _eda_sympathetic_ghiasi(
-            eda_signal, sampling_rate=sampling_rate, frequency_band=frequency_band, show=show
+            eda_signal,
+            sampling_rate=sampling_rate,
+            frequency_band=frequency_band,
+            show=show,
         )
     elif method.lower() in ["posada", "posada-quintero", "quintero", "posada2016"]:
         out = _eda_sympathetic_posada(
-            eda_signal, sampling_rate=sampling_rate, frequency_band=frequency_band, show=show
+            eda_signal,
+            sampling_rate=sampling_rate,
+            frequency_band=frequency_band,
+            show=show,
         )
     else:
         raise ValueError(
-            "NeuroKit error: eda_sympathetic(): 'method' should be " "one of 'ghiasi', 'posada'."
+            "NeuroKit error: eda_sympathetic(): 'method' should be "
+            "one of 'ghiasi', 'posada'."
         )
 
     return out
@@ -128,12 +139,21 @@ def _eda_sympathetic_posada(
     eda_signal_filtered = scipy.signal.sosfilt(sos, eda_signal_400hz)
 
     # First step of downsampling
-    downsampled_1 = scipy.signal.decimate(eda_signal_filtered, q=10, n=8)  # Keep every 10th sample
-    downsampled_2 = scipy.signal.decimate(downsampled_1, q=20, n=8)  # Keep every 20th sample
+    downsampled_1 = scipy.signal.decimate(
+        eda_signal_filtered, q=10, n=8
+    )  # Keep every 10th sample
+    downsampled_2 = scipy.signal.decimate(
+        downsampled_1, q=20, n=8
+    )  # Keep every 20th sample
 
     # High pass filter
     eda_filtered = signal_filter(
-        downsampled_2, sampling_rate=2, lowcut=0.01, highcut=None, method="butterworth", order=8
+        downsampled_2,
+        sampling_rate=2,
+        lowcut=0.01,
+        highcut=None,
+        method="butterworth",
+        order=8,
     )
 
     nperseg = 128
@@ -141,23 +161,35 @@ def _eda_sympathetic_posada(
 
     # Compute psd
     frequency, power = _signal_psd_welch(
-        eda_filtered, sampling_rate=2, nperseg=nperseg, window_type="blackman", noverlap=overlap
+        eda_filtered,
+        sampling_rate=2,
+        nperseg=nperseg,
+        window_type="blackman",
+        noverlap=overlap,
     )
     psd = pd.DataFrame({"Frequency": frequency, "Power": power})
 
     # Get sympathetic nervous system indexes
-    eda_symp = _signal_power_instant_compute(psd, (frequency_band[0], frequency_band[1]))
+    eda_symp = _signal_power_instant_compute(
+        psd, (frequency_band[0], frequency_band[1])
+    )
 
     # Compute normalized psd
     psd["Power"] /= np.max(psd["Power"])
-    eda_symp_normalized = _signal_power_instant_compute(psd, (frequency_band[0], frequency_band[1]))
+    eda_symp_normalized = _signal_power_instant_compute(
+        psd, (frequency_band[0], frequency_band[1])
+    )
 
     psd_plot = psd.loc[
-        np.logical_and(psd["Frequency"] >= frequency_band[0], psd["Frequency"] <= frequency_band[1])
+        np.logical_and(
+            psd["Frequency"] >= frequency_band[0], psd["Frequency"] <= frequency_band[1]
+        )
     ]
 
     if show is True:
-        ax = psd_plot.plot(x="Frequency", y="Power", title="EDA Power Spectral Density (us^2/Hz)")
+        ax = psd_plot.plot(
+            x="Frequency", y="Power", title="EDA Power Spectral Density (us^2/Hz)"
+        )
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
     out = {"EDA_Sympathetic": eda_symp, "EDA_SympatheticN": eda_symp_normalized}
@@ -174,7 +206,9 @@ def _eda_sympathetic_ghiasi(
     # Downsample, normalize, filter
     desired_sampling_rate = 50
     downsampled = signal_resample(
-        eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate
+        eda_signal,
+        sampling_rate=sampling_rate,
+        desired_sampling_rate=desired_sampling_rate,
     )
     normalized = standardize(downsampled)
     filtered = signal_filter(

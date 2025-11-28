@@ -5,7 +5,11 @@ isort:skip_file (since isort-ing the imports generates circular imports)
 """
 
 from ._warnings import NeuroKitWarning
-from .check_random_state import check_random_state, check_random_state_children, spawn_random_state
+from .check_random_state import (
+    check_random_state,
+    check_random_state_children,
+    spawn_random_state,
+)
 from .check_type import check_type
 from .copyfunction import copyfunction
 from .expspace import expspace

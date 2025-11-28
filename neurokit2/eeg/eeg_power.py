@@ -6,7 +6,10 @@ from .utils import _sanitize_eeg
 
 
 def eeg_power(
-    eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"], **kwargs
+    eeg,
+    sampling_rate=None,
+    frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"],
+    **kwargs,
 ):
     """**EEG Power in Different Frequency Bands**
 

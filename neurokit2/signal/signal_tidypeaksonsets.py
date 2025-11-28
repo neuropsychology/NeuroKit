@@ -66,13 +66,14 @@ def signal_tidypeaksonsets(
         raise ValueError(
             "`method` not found. Must be one of the following: 'charlton2022'."
         )
-        
+
     return info, peaks_clean, onsets_clean
 
 
 # =============================================================================
 # Methods
 # =============================================================================
+
 
 # =============================================================================
 # Charlton (2022) - main function
@@ -83,7 +84,7 @@ def _signal_fixpeaks_charlton(
     onsets,
 ):
     """Charlton 2022 method – enforces consistency between peaks and onsets.
-    
+
     Tidy up peaks and onsets to make them conform to the following rules:
     (i) No two points at the same time
     (ii) At least one local minimum between consecutive peaks
@@ -91,23 +92,27 @@ def _signal_fixpeaks_charlton(
     (iv) Alternates between onsets and peaks
     (v) Starts with onset, and ends with peak
     (vi) Same number of peaks and onsets
-    
+
     """
 
     # (i)  No two points at the same time
     peaks, onsets = _remove_repeated_peaks_and_onsets(peaks, onsets)
 
     # (ii) At least one local minimum between consecutive peaks
-    peaks = _ensure_extremum_between(signal, peaks, other_extrema_type='pk')
+    peaks = _ensure_extremum_between(signal, peaks, other_extrema_type="pk")
 
     # (iii) At least one local maximum between consecutive onsets
-    onsets = _ensure_extremum_between(signal, onsets, other_extrema_type='on')
+    onsets = _ensure_extremum_between(signal, onsets, other_extrema_type="on")
 
     # (iv) Alternates between onsets and peaks
     # If there are two consecutive peaks, then insert an onset between them
-    onsets, peaks = _insert_missing_extremum(signal, onsets, peaks, other_extrema_type='pk')
+    onsets, peaks = _insert_missing_extremum(
+        signal, onsets, peaks, other_extrema_type="pk"
+    )
     # If there are two consecutive onsets, then insert a peak between them
-    peaks, onsets = _insert_missing_extremum(signal, peaks, onsets, other_extrema_type='on')
+    peaks, onsets = _insert_missing_extremum(
+        signal, peaks, onsets, other_extrema_type="on"
+    )
 
     # (v) Starts with onset, and ends with peak
     peaks, onsets = _ensure_starts_with_onset_ends_with_peak(peaks, onsets)
@@ -126,6 +131,7 @@ def _signal_fixpeaks_charlton(
 
     return info, peaks_clean, onsets_clean
 
+
 # =============================================================================
 # Charlton (2022) - helper functions
 # =============================================================================
@@ -142,12 +148,12 @@ def _remove_repeated_peaks_and_onsets(peaks, onsets):
     return peaks, onsets
 
 
-def _ensure_extremum_between(signal, other_extrema, other_extrema_type='pk'):
+def _ensure_extremum_between(signal, other_extrema, other_extrema_type="pk"):
 
     # If there are two peaks (or onsets) without a local minimum (or maximum) between them,
     # then remove the lower (or higher) one
-    
-    if other_extrema_type == 'pk':
+
+    if other_extrema_type == "pk":
         extrema = scipy.signal.argrelmin(signal)[0]
     else:
         extrema = scipy.signal.argrelmax(signal)[0]
@@ -160,8 +166,8 @@ def _ensure_extremum_between(signal, other_extrema, other_extrema_type='pk'):
         for i in range(len(other_extrema) - 1):
             rel_els = np.arange(other_extrema[i] + 1, other_extrema[i + 1])
             if not np.intersect1d(rel_els, extrema).size:
-                other_extrema_vals = signal[other_extrema[i:i+2]]
-                if other_extrema_type == 'pk':
+                other_extrema_vals = signal[other_extrema[i : i + 2]]
+                if other_extrema_type == "pk":
                     el_to_remove = int(np.argmin(other_extrema_vals))
                 else:
                     el_to_remove = int(np.argmax(other_extrema_vals))
@@ -174,27 +180,28 @@ def _ensure_extremum_between(signal, other_extrema, other_extrema_type='pk'):
     return np.array(other_extrema)
 
 
-def _insert_missing_extremum(signal, extrema, other_extrema, other_extrema_type='pk'):
+def _insert_missing_extremum(signal, extrema, other_extrema, other_extrema_type="pk"):
     """
     If there are two consecutive extrema of one type (known as other_extrema),
     then insert an extremum of the second type (known as extrema) between them.
     """
 
-    other_extrema_log = np.concatenate([
-        np.ones(len(other_extrema), dtype=bool),
-        np.zeros(len(extrema), dtype=bool)
-    ])
+    other_extrema_log = np.concatenate(
+        [np.ones(len(other_extrema), dtype=bool), np.zeros(len(extrema), dtype=bool)]
+    )
     els = np.concatenate([other_extrema, extrema])
     order = np.argsort(els)
     els = els[order]
     other_extrema_log = other_extrema_log[order]
 
-    bad_els = np.where(
-        (np.diff(other_extrema_log) == 0) & (other_extrema_log[:-1])
-    )[0]  # repeated other_extrema
-    
+    bad_els = np.where((np.diff(other_extrema_log) == 0) & (other_extrema_log[:-1]))[
+        0
+    ]  # repeated other_extrema
+
     if len(bad_els) > 0:  # if there is a repeated other extrema
-        for bad_el_no in range(len(bad_els)):  # cycle through each repeated other extrema
+        for bad_el_no in range(
+            len(bad_els)
+        ):  # cycle through each repeated other extrema
             curr_other_extrema = [els[bad_els[bad_el_no]], els[bad_els[bad_el_no] + 1]]
             start = curr_other_extrema[0]
             end = curr_other_extrema[1]
@@ -203,10 +210,10 @@ def _insert_missing_extremum(signal, extrema, other_extrema, other_extrema_type=
             bw_to_remove = np.linspace(signal[start], signal[end], end - start + 1)
 
             # Detrend segment
-            segment = signal[start:end+1] - bw_to_remove
+            segment = signal[start : end + 1] - bw_to_remove
 
             # Find extremum in detrended segment
-            if other_extrema_type == 'pk':
+            if other_extrema_type == "pk":
                 temp = np.argmin(segment)
             else:
                 temp = np.argmax(segment)
@@ -220,6 +227,7 @@ def _insert_missing_extremum(signal, extrema, other_extrema, other_extrema_type=
                 extrema = np.sort(np.append(extrema, curr_new_extrema))
 
     return extrema, other_extrema
+
 
 def _ensure_starts_with_onset_ends_with_peak(peaks, onsets):
     """
@@ -241,6 +249,7 @@ def _ensure_starts_with_onset_ends_with_peak(peaks, onsets):
             finished = True
 
     return peaks, onsets
+
 
 def _ensure_same_no_peaks_onsets(peaks, onsets):
     """

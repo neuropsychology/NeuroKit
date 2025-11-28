@@ -115,12 +115,17 @@ def entropy_symbolicdynamic(signal, dimension=3, symbolize="MEP", c=6, **kwargs)
         Ordx = np.any(embedded - unique[i, :], axis=1) == 0
         counter1[i] = sum(Ordx) / (n - ((dimension - 1) * delay))
         Temp = embedded[
-            np.hstack((np.zeros(dimension * delay, dtype=bool), Ordx[: -(dimension * delay)])), 0
+            np.hstack(
+                (np.zeros(dimension * delay, dtype=bool), Ordx[: -(dimension * delay)])
+            ),
+            0,
         ]
         counter2[i, :], _ = np.histogram(Temp, Bins)
 
     Temp = np.sum(counter2, axis=1)
-    counter2[Temp > 0, :] = counter2[Temp > 0, :] / np.tile(Temp[Temp > 0], (c, 1)).transpose()
+    counter2[Temp > 0, :] = (
+        counter2[Temp > 0, :] / np.tile(Temp[Temp > 0], (c, 1)).transpose()
+    )
     counter2[np.isnan(counter2)] = 0
 
     # 4. Based on the Shannon entropy [39], we define the SDE as the sum of the state entropy and

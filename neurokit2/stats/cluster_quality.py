@@ -10,7 +10,9 @@ import sklearn.model_selection
 from ..misc import check_random_state
 
 
-def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, random_state=None, **kwargs):
+def cluster_quality(
+    data, clustering, clusters=None, info=None, n_random=10, random_state=None, **kwargs
+):
     """**Assess Clustering Quality**
 
     Compute quality of the clustering using several metrics.
@@ -86,20 +88,31 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, ran
 
     # Individual distance from centroid
     distance = _cluster_quality_distance(data, clusters)
-    distance = {"Clustering_Distance_" + str(i): distance[:, i] for i in range(distance.shape[1])}
+    distance = {
+        "Clustering_Distance_" + str(i): distance[:, i]
+        for i in range(distance.shape[1])
+    }
     individual.update(distance)
     individual = pd.DataFrame(individual)
 
     # Variance explained
-    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters, clustering)
+    general["Score_VarianceExplained"] = _cluster_quality_variance(
+        data, clusters, clustering
+    )
     general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, **kwargs)
-    general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
+    general["Score_CrossValidation"] = _cluster_quality_crossvalidation(
+        data, clusters, clustering
+    )
 
     # Dispersion
     general["Dispersion"] = _cluster_quality_dispersion(data, clustering, **kwargs)
 
     # Gap statistic
-    general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random, rng=rng))
+    general.update(
+        _cluster_quality_gap(
+            data, clusters, clustering, info, n_random=n_random, rng=rng
+        )
+    )
 
     # Mixture models
     if "sklearn_model" in info:
@@ -125,7 +138,9 @@ def _cluster_quality_sklearn(data, clustering, clusters):
     if n_clusters == 1:
         individual["Clustering_Silhouette"] = np.full(len(clustering), np.nan)
     else:
-        individual["Clustering_Silhouette"] = sklearn.metrics.silhouette_samples(data, clustering)
+        individual["Clustering_Silhouette"] = sklearn.metrics.silhouette_samples(
+            data, clustering
+        )
 
     # General clustering quality scores
     general = {"n_Clusters": n_clusters}
@@ -135,8 +150,12 @@ def _cluster_quality_sklearn(data, clustering, clusters):
         general["Score_Bouldin"] = np.nan
     else:
         general["Score_Silhouette"] = sklearn.metrics.silhouette_score(data, clustering)
-        general["Score_Calinski"] = sklearn.metrics.calinski_harabasz_score(data, clustering)
-        general["Score_Bouldin"] = sklearn.metrics.davies_bouldin_score(data, clustering)
+        general["Score_Calinski"] = sklearn.metrics.calinski_harabasz_score(
+            data, clustering
+        )
+        general["Score_Bouldin"] = sklearn.metrics.davies_bouldin_score(
+            data, clustering
+        )
 
     return individual, general
 
@@ -223,7 +242,9 @@ def _cluster_quality_gap(data, clusters, clustering, info, n_random=10, rng=None
     gap = np.mean(np.log(dispersion_random)) - np.log(dispersion)
 
     # Compute standard deviation
-    sd_k = np.sqrt(np.mean((np.log(dispersion_random) - np.mean(np.log(dispersion_random))) ** 2.0))
+    sd_k = np.sqrt(
+        np.mean((np.log(dispersion_random) - np.mean(np.log(dispersion_random))) ** 2.0)
+    )
     s_k = np.sqrt(1.0 + 1.0 / n_random) * sd_k
 
     # Calculate Gap* statistic by Mohajer (2011)
@@ -247,7 +268,9 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
     leads to an error when the denominator is 0.
     """
     n_rows, n_cols = data.shape  # n_sample, n_channel
-    var = np.nansum(data**2) - np.nansum(np.nansum(clusters[clustering, :] * data, axis=1) ** 2)
+    var = np.nansum(data**2) - np.nansum(
+        np.nansum(clusters[clustering, :] * data, axis=1) ** 2
+    )
     var /= n_rows * (n_cols - 1)
     denominator = (n_cols - len(clusters) - 1) ** 2
     if np.abs(denominator) > 0:

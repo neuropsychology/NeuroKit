@@ -4,32 +4,37 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 
 abrv_to_sensor = {
-            "ecg": "Electrocardiography",
-            "eda": "Electrodermal Activity",
-            "rsp": "Respiration",
-            "ppg": "Photoplethysmography",
-            "eeg": "Electroencephalography",
-            "emg": "Electromyography",
-            "eog": "Electrooculography",
-            "hrv": "Heart Rate Variability",
-        }
+    "ecg": "Electrocardiography",
+    "eda": "Electrodermal Activity",
+    "rsp": "Respiration",
+    "ppg": "Photoplethysmography",
+    "eeg": "Electroencephalography",
+    "emg": "Electromyography",
+    "eog": "Electrooculography",
+    "hrv": "Heart Rate Variability",
+}
+
 
 class CSVDocDirective(Directive):
     has_content = True
 
     def run(self):
         # Codebook path
-        csv_file_path = os.path.join(os.path.abspath('.'), "_static", "neurokit_codebook.csv")
+        csv_file_path = os.path.join(
+            os.path.abspath("."), "_static", "neurokit_codebook.csv"
+        )
 
         os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
 
         # Check if the file exists and whether it is empty
-        file_empty = not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0
+        file_empty = (
+            not os.path.exists(csv_file_path) or os.stat(csv_file_path).st_size == 0
+        )
 
         # List to hold bullet list nodes
         bullet_list = nodes.bullet_list()
 
-        doc_source_name = self.state.document.settings.env.temp_data.get('object')
+        doc_source_name = self.state.document.settings.env.temp_data.get("object")
 
         maybe_sensor = doc_source_name.split("_")
         doc_sensor = "N/A"
@@ -38,18 +43,23 @@ class CSVDocDirective(Directive):
             doc_sensor = abrv_to_sensor[maybe_sensor[0]]
 
         # Open the CSV file and append the content
-        with open(csv_file_path, 'a+', newline='', encoding='utf-8') as csvfile:
+        with open(csv_file_path, "a+", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
 
             # Write header if file is newly created or empty
             if file_empty:
-                header = ['Field Name', 'Field Description', 'Field Category', 'Source File Name']
+                header = [
+                    "Field Name",
+                    "Field Description",
+                    "Field Category",
+                    "Source File Name",
+                ]
                 writer.writerow(header)
 
             # Iterate through rows: add them to the codebook and add them to the page
             for line in self.content:
 
-                fields = line.split('|')
+                fields = line.split("|")
 
                 # Remove multi line long space sequences
                 for fid in range(len(fields)):
@@ -62,16 +72,15 @@ class CSVDocDirective(Directive):
                 # Write to CSV
                 writer.writerow([field.strip() for field in fields])
 
-
                 # Prepare the documentation stylization
                 if len(fields) >= 2:
                     paragraph = nodes.paragraph()
 
                     # Create backtick formatting around the field name
-                    field1 = nodes.literal('', '', nodes.Text(fields[0].strip()))
+                    field1 = nodes.literal("", "", nodes.Text(fields[0].strip()))
 
                     # Add the remainder of the line
-                    colon_space = nodes.Text(': ')
+                    colon_space = nodes.Text(": ")
                     field2 = nodes.Text(fields[1].strip())
 
                     # Add all the parts to the paragraph

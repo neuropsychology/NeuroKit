@@ -59,7 +59,9 @@ def distance(X=None, method="mahalanobis"):
     elif method in ["mean", "center", "average"]:
         dist = _distance_mean(X)
     else:
-        raise ValueError("NeuroKit error: distance(): 'method' should be one of 'mahalanobis'.")
+        raise ValueError(
+            "NeuroKit error: distance(): 'method' should be one of 'mahalanobis'."
+        )
 
     return dist
 
@@ -77,7 +79,9 @@ def _distance_mahalanobis(X=None):
 
     dist = np.full(len(X), np.nan)
     for i in range(len(X)):
-        dist[i] = scipy.spatial.distance.mahalanobis(X.iloc[i, :].values, col_means, cov) ** 2
+        dist[i] = (
+            scipy.spatial.distance.mahalanobis(X.iloc[i, :].values, col_means, cov) ** 2
+        )
     return dist
 
 

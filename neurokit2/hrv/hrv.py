@@ -142,7 +142,9 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
 
     ax_psd = fig.add_subplot(spec[1, :-1])
 
-    spec_within = gs.GridSpecFromSubplotSpec(4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05)
+    spec_within = gs.GridSpecFromSubplotSpec(
+        4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05
+    )
     ax_poincare = fig.add_subplot(spec_within[1:4, 0:3])
     ax_marg_x = fig.add_subplot(spec_within[0, 0:3])
     ax_marg_x.set_title("Poincaré Plot")
@@ -156,11 +158,23 @@ def _hrv_plot(peaks, out, sampling_rate=1000, interpolation_rate=100, **kwargs):
 
     # Poincare plot
     out.columns = [col.replace("HRV_", "") for col in out.columns]
-    _hrv_nonlinear_show(rri, rri_time=rri_time, rri_missing=rri_missing, out=out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
+    _hrv_nonlinear_show(
+        rri,
+        rri_time=rri_time,
+        rri_missing=rri_missing,
+        out=out,
+        ax=ax_poincare,
+        ax_marg_x=ax_marg_x,
+        ax_marg_y=ax_marg_y,
+    )
 
     # PSD plot
     rri, rri_time, sampling_rate = intervals_process(
-        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
+        rri,
+        intervals_time=rri_time,
+        interpolate=True,
+        interpolation_rate=interpolation_rate,
+        **kwargs
     )
 
     frequency_bands = out[["ULF", "VLF", "LF", "HF", "VHF"]]

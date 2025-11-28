@@ -70,7 +70,9 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     if method.lower() in ["hilbert", "phase"]:
         coupling = _signal_synchrony_hilbert(signal1, signal2)
     elif method.lower() in ["correlation"]:
-        coupling = _signal_synchrony_correlation(signal1, signal2, window_size=int(window_size))
+        coupling = _signal_synchrony_correlation(
+            signal1, signal2, window_size=int(window_size)
+        )
 
     else:
         raise ValueError(
@@ -112,7 +114,9 @@ def _signal_synchrony_correlation(signal1, signal2, window_size, center=False):
     synchrony = rolled["y1"].loc[rolled.index.get_level_values(1) == "y2"].values
 
     # Realign
-    synchrony = np.append(synchrony[int(window_size / 2) :], np.full(int(window_size / 2), np.nan))
+    synchrony = np.append(
+        synchrony[int(window_size / 2) :], np.full(int(window_size / 2), np.nan)
+    )
     synchrony[np.isnan(synchrony)] = np.nanmean(synchrony)
 
     return synchrony

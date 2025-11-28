@@ -153,8 +153,12 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000, cutoff=0.05):
     """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-
     issue/)"""
-    phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=cutoff, method="butter")
-    tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=cutoff, method="butter")
+    phasic = signal_filter(
+        eda_signal, sampling_rate=sampling_rate, lowcut=cutoff, method="butter"
+    )
+    tonic = signal_filter(
+        eda_signal, sampling_rate=sampling_rate, highcut=cutoff, method="butter"
+    )
 
     return tonic, phasic
 
@@ -237,12 +241,18 @@ def _eda_phasic_cvxeda(
 
     # matrices for ARMA model
     i = np.arange(2, n)
-    A = cvxopt.spmatrix(np.tile(ar, (n - 2, 1)), np.c_[i, i, i], np.c_[i, i - 1, i - 2], (n, n))
-    M = cvxopt.spmatrix(np.tile(ma, (n - 2, 1)), np.c_[i, i, i], np.c_[i, i - 1, i - 2], (n, n))
+    A = cvxopt.spmatrix(
+        np.tile(ar, (n - 2, 1)), np.c_[i, i, i], np.c_[i, i - 1, i - 2], (n, n)
+    )
+    M = cvxopt.spmatrix(
+        np.tile(ma, (n - 2, 1)), np.c_[i, i, i], np.c_[i, i - 1, i - 2], (n, n)
+    )
 
     # spline
     delta_knot_s = int(round(delta_knot / frequency))
-    spl = np.r_[np.arange(1.0, delta_knot_s), np.arange(delta_knot_s, 0.0, -1.0)]  # order 1
+    spl = np.r_[
+        np.arange(1.0, delta_knot_s), np.arange(delta_knot_s, 0.0, -1.0)
+    ]  # order 1
     spl = np.convolve(spl, spl, "full")
     spl /= max(spl)
     # matrix of spline regressors
@@ -273,14 +283,21 @@ def _eda_phasic_cvxeda(
                 [_cvx(n + 2, nC), C, _cvx(nB + 2, nC)],
                 [_cvx(n, 1), -1, 1, _cvx(n + nB + 2, 1)],
                 [_cvx(2 * n + 2, 1), -1, 1, _cvx(nB, 1)],
-                [_cvx(n + 2, nB), B, _cvx(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))],
+                [
+                    _cvx(n + 2, nB),
+                    B,
+                    _cvx(2, nB),
+                    cvxopt.spmatrix(1.0, range(nB), range(nB)),
+                ],
             ]
         )
         h = cvxopt.matrix([_cvx(n, 1), 0.5, 0.5, eda, 0.5, 0.5, _cvx(nB, 1)])
         c = cvxopt.matrix(
             [(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)]
         )
-        res = cvxopt.solvers.conelp(c, G, h, dims={"l": n, "q": [n + 2, nB + 2], "s": []})
+        res = cvxopt.solvers.conelp(
+            c, G, h, dims={"l": n, "q": [n + 2, nB + 2], "s": []}
+        )
     else:
         # Use qp
         Mt, Ct, Bt = M.T, C.T, B.T
@@ -288,7 +305,11 @@ def _eda_phasic_cvxeda(
             [
                 [Mt * M, Ct * M, Bt * M],
                 [Mt * C, Ct * C, Bt * C],
-                [Mt * B, Ct * B, Bt * B + gamma * cvxopt.spmatrix(1.0, range(nB), range(nB))],
+                [
+                    Mt * B,
+                    Ct * B,
+                    Bt * B + gamma * cvxopt.spmatrix(1.0, range(nB), range(nB)),
+                ],
             ]
         )
         f = cvxopt.matrix(
@@ -358,7 +379,9 @@ def _eda_phasic_sparsEDA(
         raise AssertionError("Signal contains NaN")
 
     # Resample to 8 Hz
-    eda_signal = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=8)
+    eda_signal = signal_resample(
+        eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=8
+    )
     new_sr = 8
 
     # Preprocessing
@@ -466,7 +489,7 @@ def _eda_phasic_sparsEDA(
 
     SCRaux = driverAux[pointerS:pointerE]
     SCL = slcAux[pointerS:pointerE]
-    #MSE = resAux[pointerS:pointerE]
+    # MSE = resAux[pointerS:pointerE]
 
     # PP
     ind = np.argwhere(SCRaux > 0).reshape(-1)
@@ -489,7 +512,7 @@ def _eda_phasic_sparsEDA(
     driver[driver < threshold] = 0
 
     # Resample back to original sampling rate
-    SCR = eda_signal-SCL
+    SCR = eda_signal - SCL
     SCR = signal_resample(SCR, desired_length=original_length)
     SCL = signal_resample(SCL, desired_length=original_length)
     return SCL, SCR
@@ -525,7 +548,9 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
     duals = []
     res = s
 
-    if (lmbdaStop > 0 and lmbda < lmbdaStop) or ((epsilon > 0) and (np.linalg.norm(res) < epsilon)):
+    if (lmbdaStop > 0 and lmbda < lmbdaStop) or (
+        (epsilon > 0) and (np.linalg.norm(res) < epsilon)
+    ):
         activationHist = []
         numIters = 0
 
@@ -547,7 +572,9 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
             activeSet = []
             for j in range(0, len(newIndices)):
                 iter = iter + 1
-                R_I, flag = updateChol(R_I, N, W, R, 1, activeSet, newIndices[j], zeroTol)
+                R_I, flag = updateChol(
+                    R_I, N, W, R, 1, activeSet, newIndices[j], zeroTol
+                )
                 activeSet.append(newIndices[j])
             [activationHist.append(ele) for ele in activeSet]
         else:
@@ -580,7 +607,8 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
             ).flatten()
 
         v = np.matmul(
-            R[:, np.array(activeSet).flatten()], dx[np.array(activeSet).flatten()].reshape(-1, 1)
+            R[:, np.array(activeSet).flatten()],
+            dx[np.array(activeSet).flatten()].reshape(-1, 1),
         )
         ATv = np.matmul(R.transpose(), v).flatten()
 
@@ -630,14 +658,24 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
             done = 1
             if np.linalg.norm(res[sampling_rate * 20 : sampling_rate * 40]) <= resStop2:
                 done = 1
-                if np.linalg.norm(res[sampling_rate * 40 : sampling_rate * 60]) <= resStop2:
+                if (
+                    np.linalg.norm(res[sampling_rate * 40 : sampling_rate * 60])
+                    <= resStop2
+                ):
                     done = 1
 
         if gammaIc <= gammaI and len(newIndices) > 0:
             for j in range(0, len(newIndices)):
                 iter = iter + 1
                 R_I, flag = updateChol(
-                    R_I, N, W, R, 1, np.array(activeSet).flatten(), newIndices[j], zeroTol
+                    R_I,
+                    N,
+                    W,
+                    R,
+                    1,
+                    np.array(activeSet).flatten(),
+                    newIndices[j],
+                    zeroTol,
                 )
 
                 if flag:
@@ -649,7 +687,9 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
         if gammaI <= gammaIc:
             for j in range(0, len(removeIndices)):
                 iter = iter + 1
-                col = np.argwhere(np.array(activeSet).flatten() == removeIndices[j]).flatten()
+                col = np.argwhere(
+                    np.array(activeSet).flatten() == removeIndices[j]
+                ).flatten()
 
                 R_I = downdateChol(R_I, col)
                 activeSet.pop(col)

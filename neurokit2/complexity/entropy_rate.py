@@ -131,7 +131,9 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     if knee == len(info["k"]) - 1:
         info["MaxRatEn"], intercept2 = raten, np.nan
     else:
-        info["MaxRatEn"], intercept2 = np.polyfit(info["k"][0:knee], info["Entropy"][0:knee], 1)
+        info["MaxRatEn"], intercept2 = np.polyfit(
+            info["k"][0:knee], info["Entropy"][0:knee], 1
+        )
 
     # Store knee
     info["Knee"] = knee

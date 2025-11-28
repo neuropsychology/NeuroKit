@@ -15,8 +15,11 @@ import numpy as np
 import wfdb
 import os
 
-data_files = ["mit-bih-normal-sinus-rhythm-database-1.0.0/" + file for file in os.listdir("mit-bih-normal-sinus-rhythm-database-1.0.0") if ".dat" in file]
-
+data_files = [
+    "mit-bih-normal-sinus-rhythm-database-1.0.0/" + file
+    for file in os.listdir("mit-bih-normal-sinus-rhythm-database-1.0.0")
+    if ".dat" in file
+]
 
 
 dfs_ecg = []
@@ -26,32 +29,31 @@ for participant, file in enumerate(data_files):
 
     print("Participant: " + str(participant + 1) + "/" + str(len(data_files)))
 
-
     # Get signal
     data = pd.DataFrame({"ECG": wfdb.rdsamp(file[:-4])[0][:, 1]})
-    data["Participant"] = "MIT-Normal_%.2i" %(participant)
+    data["Participant"] = "MIT-Normal_%.2i" % (participant)
     data["Sample"] = range(len(data))
     data["Sampling_Rate"] = 128
     data["Database"] = "MIT-Normal"
 
     # getting annotations
-    anno = wfdb.rdann(file[:-4], 'atr')
+    anno = wfdb.rdann(file[:-4], "atr")
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
-    anno["Participant"] = "MIT-Normal_%.2i" %(participant)
+    anno["Participant"] = "MIT-Normal_%.2i" % (participant)
     anno["Sampling_Rate"] = 128
     anno["Database"] = "MIT-Normal"
 
     # Select only 1h of recording (otherwise it's too big)
-    data = data[460800:460800*3].reset_index(drop=True)
-    anno = anno[(anno["Rpeaks"] > 460800) & (anno["Rpeaks"] <= 460800*2)].reset_index(drop=True)
+    data = data[460800 : 460800 * 3].reset_index(drop=True)
+    anno = anno[(anno["Rpeaks"] > 460800) & (anno["Rpeaks"] <= 460800 * 2)].reset_index(
+        drop=True
+    )
     anno["Rpeaks"] = anno["Rpeaks"] - 460800
-
 
     # Store with the rest
     dfs_ecg.append(data)
     dfs_rpeaks.append(anno)
-
 
 
 # Save
@@ -60,5 +62,5 @@ dfs_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
 
 
 # Quick test
-#import neurokit2 as nk
-#nk.events_plot(anno["Rpeaks"][anno["Rpeaks"] <= 1000], data["ECG"][0:1001])
+# import neurokit2 as nk
+# nk.events_plot(anno["Rpeaks"][anno["Rpeaks"] <= 1000], data["ECG"][0:1001])

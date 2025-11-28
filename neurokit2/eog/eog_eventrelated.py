@@ -77,7 +77,11 @@ def eog_eventrelated(epochs, silent=False):
 
         # Number of blinks per epoch
         data[i] = _eog_eventrelated_features(epochs[i], data[i])
-        for x in ["EOG_Rate_Trend_Quadratic", "EOG_Rate_Trend_Linear", "EOG_Rate_Trend_R2"]:
+        for x in [
+            "EOG_Rate_Trend_Quadratic",
+            "EOG_Rate_Trend_Linear",
+            "EOG_Rate_Trend_R2",
+        ]:
             data[i].pop(x, None)
 
         # Fill with more info
@@ -96,14 +100,16 @@ def _eog_eventrelated_features(epoch, output={}):
     # Sanitize input
     if "EOG_Blinks" not in epoch:
         warn(
-            "Input does not have an `EOG_Blinks` column." " Unable to process blink features.",
+            "Input does not have an `EOG_Blinks` column."
+            " Unable to process blink features.",
             category=NeuroKitWarning,
         )
         return output
 
     if "EOG_Rate" not in epoch:
         warn(
-            "Input does not have an `EOG_Rate` column." " Will skip computation of EOG rate.",
+            "Input does not have an `EOG_Rate` column."
+            " Will skip computation of EOG rate.",
             category=NeuroKitWarning,
         )
         return output

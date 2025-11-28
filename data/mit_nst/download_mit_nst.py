@@ -15,8 +15,11 @@ import numpy as np
 import wfdb
 import os
 
-data_files = ["mit-bih-noise-stress-test-database-1.0.0/" + file for file in os.listdir("mit-bih-noise-stress-test-database-1.0.0") if ".dat" in file]
-
+data_files = [
+    "mit-bih-noise-stress-test-database-1.0.0/" + file
+    for file in os.listdir("mit-bih-noise-stress-test-database-1.0.0")
+    if ".dat" in file
+]
 
 
 dfs_ecg = []
@@ -24,11 +27,13 @@ dfs_rpeaks = []
 
 for participant, file in enumerate(data_files):
 
-    if ('mit-bih-noise-stress-test-database-1.0.0/119' in file or 'mit-bih-noise-stress-test-database-1.0.0/118' in file) is False:
+    if (
+        "mit-bih-noise-stress-test-database-1.0.0/119" in file
+        or "mit-bih-noise-stress-test-database-1.0.0/118" in file
+    ) is False:
         break
 
-    print("Record: " + str(participant + 1) + "/" + str(len(data_files)-3))
-
+    print("Record: " + str(participant + 1) + "/" + str(len(data_files) - 3))
 
     # Get signal
     data = pd.DataFrame({"ECG": wfdb.rdsamp(file[:-4])[0][:, 0]})
@@ -38,8 +43,35 @@ for participant, file in enumerate(data_files):
     data["Database"] = "MIT-NST"
 
     # getting annotations
-    anno = wfdb.rdann(file[:-4], 'atr')
-    anno = np.unique(anno.sample[np.in1d(anno.symbol, ['N', 'L', 'R', 'B', 'A', 'a', 'J', 'S', 'V', 'r', 'F', 'e', 'j', 'n', 'E', '/', 'f', 'Q', '?'])])
+    anno = wfdb.rdann(file[:-4], "atr")
+    anno = np.unique(
+        anno.sample[
+            np.in1d(
+                anno.symbol,
+                [
+                    "N",
+                    "L",
+                    "R",
+                    "B",
+                    "A",
+                    "a",
+                    "J",
+                    "S",
+                    "V",
+                    "r",
+                    "F",
+                    "e",
+                    "j",
+                    "n",
+                    "E",
+                    "/",
+                    "f",
+                    "Q",
+                    "?",
+                ],
+            )
+        ]
+    )
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "MIT-NST_118" if "118e" in file else "MIT-NST_119"
     anno["Sampling_Rate"] = 360
@@ -55,5 +87,5 @@ df_ecg = pd.concat(dfs_ecg).to_csv("ECGs.csv", index=False)
 dfs_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
 
 # Quick test
-#import neurokit2 as nk
-#nk.events_plot(anno["Rpeaks"][anno["Rpeaks"] <= 1000], data["ECG"][0:1002])
+# import neurokit2 as nk
+# nk.events_plot(anno["Rpeaks"][anno["Rpeaks"] <= 1000], data["ECG"][0:1002])

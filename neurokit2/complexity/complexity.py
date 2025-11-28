@@ -11,7 +11,9 @@ from .fractal_dfa import fractal_dfa
 from .fractal_linelength import fractal_linelength
 
 
-def complexity(signal, which="makowski2022", delay=1, dimension=2, tolerance="sd", **kwargs):
+def complexity(
+    signal, which="makowski2022", delay=1, dimension=2, tolerance="sd", **kwargs
+):
     """**Complexity and Chaos Analysis**
 
     Measuring the complexity of a signal refers to the quantification of various aspects related to
@@ -172,7 +174,9 @@ def complexity(signal, which="makowski2022", delay=1, dimension=2, tolerance="sd
         df["LL"], info["LL"] = fractal_linelength(signal)
         df["Hjorth"], info["Hjorth"] = complexity_hjorth(signal)
         df["AttEn"], info["AttEn"] = entropy_attention(signal)
-        df["SVDEn"], info["SVDEn"] = entropy_svd(signal, delay=delay, dimension=dimension)
+        df["SVDEn"], info["SVDEn"] = entropy_svd(
+            signal, delay=delay, dimension=dimension
+        )
         df["BubbEn"], info["BubbEn"] = entropy_bubble(
             signal, delay=delay, dimension=dimension, **kwargs
         )

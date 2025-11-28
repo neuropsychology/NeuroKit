@@ -24,13 +24,18 @@ raw = raw.drop_channels(["124", "125"])
 
 # Montage
 mne.rename_channels(
-    raw.info, dict(zip(raw.info["ch_names"], TruScanEEGpy.convert_to_tenfive(raw.info["ch_names"])))
+    raw.info,
+    dict(
+        zip(raw.info["ch_names"], TruScanEEGpy.convert_to_tenfive(raw.info["ch_names"]))
+    ),
 )
 montage = TruScanEEGpy.montage_mne_128(TruScanEEGpy.layout_128(names="10-5"))
 extra_channels = np.array(raw.info["ch_names"])[
     np.array([i not in montage.ch_names for i in raw.info["ch_names"]])
 ]
-raw = raw.drop_channels(extra_channels[np.array([i not in ["EOG"] for i in extra_channels])])
+raw = raw.drop_channels(
+    extra_channels[np.array([i not in ["EOG"] for i in extra_channels])]
+)
 raw = raw.set_montage(montage)
 
 

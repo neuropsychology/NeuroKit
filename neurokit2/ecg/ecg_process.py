@@ -94,7 +94,9 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
 
     # Sanitize and clean input
     ecg_signal = signal_sanitize(ecg_signal)
-    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method, **kwargs)
+    ecg_cleaned = ecg_clean(
+        ecg_signal, sampling_rate=sampling_rate, method=method, **kwargs
+    )
 
     # Detect R-peaks
     instant_peaks, info = ecg_peaks(

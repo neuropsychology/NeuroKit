@@ -24,7 +24,7 @@ def test_events_find():
 
     # No events found warning
     signal = np.zeros(1000)
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r'No events found.*'):
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"No events found.*"):
         nk.events_find(signal)
 
 
@@ -89,9 +89,7 @@ def test_stim_events_find():
     assert stim_events["condition"] == [1, 3, 7]
 
     # test array of array channels input
-    stim_events = nk.events_find(
-                                   np.array([channel1, channel2, channel3])
-                                )
+    stim_events = nk.events_find(np.array([channel1, channel2, channel3]))
 
     assert list(stim_events["onset"]) == [10, 60, 150]
     assert list(stim_events["duration"]) == [20, 20, 20]
@@ -99,11 +97,9 @@ def test_stim_events_find():
 
     # test for pandas dataframe
     stim_events = nk.events_find(
-            pd.DataFrame({"c1": channel1, "c2": channel2, "c3": channel3})
-                                )
+        pd.DataFrame({"c1": channel1, "c2": channel2, "c3": channel3})
+    )
 
     assert list(stim_events["onset"]) == [10, 60, 150]
     assert list(stim_events["duration"]) == [20, 20, 20]
     assert stim_events["condition"] == [1, 3, 7]
-
-

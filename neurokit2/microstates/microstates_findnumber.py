@@ -9,7 +9,13 @@ from .microstates_segment import microstates_segment
 
 
 def microstates_findnumber(
-    eeg, n_max=12, method="GEV", clustering_method="kmod", show=False, verbose=True, **kwargs
+    eeg,
+    n_max=12,
+    method="GEV",
+    clustering_method="kmod",
+    show=False,
+    verbose=True,
+    **kwargs,
 ):
     """**Estimate optimal number of microstates**
 
@@ -103,7 +109,9 @@ def microstates_findnumber(
         # KL(k) = abs(dispersion_diff(k) / dispersion_diff(k+1))
         rez["KL_Criterion"] = np.nan
         if idx not in [0]:
-            results[idx - 1]["KL_Criterion"] = np.abs(dispersion_diff_previous / dispersion_diff)
+            results[idx - 1]["KL_Criterion"] = np.abs(
+                dispersion_diff_previous / dispersion_diff
+            )
         # Update for next round
         dispersion_previous = dispersion_current.copy()
         dispersion_diff_previous = dispersion_diff.copy()

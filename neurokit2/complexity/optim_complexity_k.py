@@ -177,7 +177,9 @@ def _complexity_k_plot(k_range, slope_values, k_optimal, ax=None):
     ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
     for i, _ in enumerate(k_range):
         ax.scatter(k_range[i], slope_values[i], color=colors[i], marker="o", zorder=2)
-    ax.axvline(x=k_optimal, color="#E91E63", label="Optimal $k_{max}$: " + str(k_optimal))
+    ax.axvline(
+        x=k_optimal, color="#E91E63", label="Optimal $k_{max}$: " + str(k_optimal)
+    )
     ax.legend(loc="upper right")
 
     return fig

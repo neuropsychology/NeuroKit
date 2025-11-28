@@ -80,7 +80,9 @@ def signal_phase(signal, method="radians"):
 # =============================================================================
 def _signal_phase_binary(signal):
 
-    phase = itertools.chain.from_iterable(np.linspace(0, 1, sum([1 for i in v])) for _, v in itertools.groupby(signal))
+    phase = itertools.chain.from_iterable(
+        np.linspace(0, 1, sum([1 for i in v])) for _, v in itertools.groupby(signal)
+    )
     phase = np.array(list(phase))
 
     # Convert to radiant

@@ -133,7 +133,9 @@ def _mne_convert(eeg, to_what="df"):
     # If epoch object
     elif isinstance(eeg, mne.Epochs):
         data = eeg.to_data_frame(time_format=None)
-        data = data.rename(columns={"time": "Time", "condition": "Condition", "epoch": "Epoch"})
+        data = data.rename(
+            columns={"time": "Time", "condition": "Condition", "epoch": "Epoch"}
+        )
         if to_what == "dict":
             out = {}
             for epoch in data["Epoch"].unique():

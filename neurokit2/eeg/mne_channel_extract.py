@@ -89,7 +89,9 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
             channels = pd.concat([fill, channels], axis=0)
         elif isinstance(channels, pd.DataFrame):
             fill = pd.DataFrame(
-                add_firstsamples, index=range(-raw.first_samp, 0), columns=channels.columns
+                add_firstsamples,
+                index=range(-raw.first_samp, 0),
+                columns=channels.columns,
             )
             channels = pd.concat([fill, channels], axis=0)
 

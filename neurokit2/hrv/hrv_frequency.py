@@ -187,7 +187,11 @@ def hrv_frequency(
 
     # Process R-R intervals (interpolated at 100 Hz by default)
     rri, rri_time, sampling_rate = intervals_process(
-        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate, **kwargs
+        rri,
+        intervals_time=rri_time,
+        interpolate=True,
+        interpolation_rate=interpolation_rate,
+        **kwargs
     )
 
     if interpolation_rate is None:
@@ -223,7 +227,9 @@ def hrv_frequency(
             if out[frequency] == 0.0:
                 warn(
                     "The duration of recording is too short to allow"
-                    " reliable computation of signal power in frequency band " + frequency + "."
+                    " reliable computation of signal power in frequency band "
+                    + frequency
+                    + "."
                     " Its power is returned as zero.",
                     category=NeuroKitWarning,
                 )
@@ -287,7 +293,9 @@ def _hrv_frequency_show(
 
     # Compute sampling rate for plot windows
     if sampling_rate is None:
-        med_sampling_rate = np.median(np.diff(t))  # This is just for visualization purposes (#800)
+        med_sampling_rate = np.median(
+            np.diff(t)
+        )  # This is just for visualization purposes (#800)
     else:
         med_sampling_rate = sampling_rate
 

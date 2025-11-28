@@ -62,7 +62,7 @@ def fishershannon_information(signal, **kwargs):
     gx = np.gradient(fx)
 
     # Fisher
-    fi = gx ** 2 / fx
+    fi = gx**2 / fx
     fi = scipy.integrate.simpson(fi, x=x_range)
     info.update({"FI": fi})
 

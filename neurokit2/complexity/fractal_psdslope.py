@@ -111,7 +111,9 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
         fd = 3 / 2 + ((14 / 33) * np.tanh(slope * np.log(1 + np.sqrt(2))))
 
     if show:
-        _fractal_psdslope_plot(psd["Frequency"], psd["Power"], slope, intercept, fd, ax=None)
+        _fractal_psdslope_plot(
+            psd["Frequency"], psd["Power"], slope, intercept, fd, ax=None
+        )
 
     return fd, {"Slope": slope, "Method": method}
 
@@ -124,12 +126,16 @@ def _fractal_psdslope_plot(frequency, psd, slope, intercept, fd, ax=None):
     if ax is None:
         fig, ax = plt.subplots()
         fig.suptitle(
-            "Power Spectral Density (PSD) slope analysis" + ", slope = " + str(np.round(slope, 2))
+            "Power Spectral Density (PSD) slope analysis"
+            + ", slope = "
+            + str(np.round(slope, 2))
         )
     else:
         fig = None
         ax.set_title(
-            "Power Spectral Density (PSD) slope analysis" + ", slope = " + str(np.round(slope, 2))
+            "Power Spectral Density (PSD) slope analysis"
+            + ", slope = "
+            + str(np.round(slope, 2))
         )
 
     ax.set_ylabel(r"$\log_{10}$(Power)")

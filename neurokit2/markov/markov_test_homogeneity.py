@@ -49,7 +49,9 @@ def markov_test_homogeneity(sequence, size=10):
     n = len(sequence)
     r = int(np.floor(n / size))  # number of blocks
     if r < 5:
-        raise ValueError("The size of the blocks is too high. Decrease the 'size' argument.")
+        raise ValueError(
+            "The size of the blocks is too high. Decrease the 'size' argument."
+        )
     f_ijk = np.zeros((r, n_states, n_states))
     f_ij = np.zeros((r, n_states))
     f_jk = np.zeros((n_states, n_states))
@@ -73,9 +75,14 @@ def markov_test_homogeneity(sequence, size=10):
         # conditional homogeneity
         f = f_ijk[i, j, k] * f_j[j] * f_ij[i, j] * f_jk[j, k]
         if f > 0:
-            T += f_ijk[i, j, k] * np.log((f_ijk[i, j, k] * f_j[j]) / (f_ij[i, j] * f_jk[j, k]))
+            T += f_ijk[i, j, k] * np.log(
+                (f_ijk[i, j, k] * f_j[j]) / (f_ij[i, j] * f_jk[j, k])
+            )
 
-    out = {"Homogeneity_t": T * 2.0, "Homogeneity_df": (r - 1) * (n_states - 1) * n_states}
+    out = {
+        "Homogeneity_t": T * 2.0,
+        "Homogeneity_df": (r - 1) * (n_states - 1) * n_states,
+    }
     out["Homogeneity_p"] = scipy.stats.chi2.sf(
         out["Homogeneity_t"], out["Homogeneity_df"], loc=0, scale=1
     )

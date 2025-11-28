@@ -158,7 +158,9 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
         elif method in ["knn"]:
             mi = _mutual_information_knn(x, y, **kwargs)
         else:
-            raise ValueError("NeuroKit error: mutual_information(): 'method' not recognized.")
+            raise ValueError(
+                "NeuroKit error: mutual_information(): 'method' not recognized."
+            )
 
     return mi
 
@@ -190,7 +192,10 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
     s2 = np.sum(jh, axis=1).reshape((jh.shape[1], -1))
 
     if normalized:
-        mi = ((np.sum(s1 * np.log(s1)) + np.sum(s2 * np.log(s2))) / np.sum(jh * np.log(jh))) - 1
+        mi = (
+            (np.sum(s1 * np.log(s1)) + np.sum(s2 * np.log(s2)))
+            / np.sum(jh * np.log(jh))
+        ) - 1
     else:
         mi = np.sum(jh * np.log(jh)) - np.sum(s1 * np.log(s1)) - np.sum(s2 * np.log(s2))
 
@@ -230,7 +235,9 @@ def _mutual_information_knn(x, y, k=3):
     points = np.array([x, y]).T
 
     # Find nearest neighbors in joint space, p=inf means max-norm
-    dvec = sklearn.neighbors.KDTree(points, metric="chebyshev").query(points, k=k + 1)[0][:, k]
+    dvec = sklearn.neighbors.KDTree(points, metric="chebyshev").query(points, k=k + 1)[
+        0
+    ][:, k]
 
     a = np.array([x]).T
     a = sklearn.neighbors.KDTree(a, metric="chebyshev").query_radius(

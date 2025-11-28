@@ -19,19 +19,25 @@ def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=No
             x in str(feature) for x in ["Peak", "Onset", "Offset", "Trough", "Recovery"]
         ):
             signals[feature] = _signal_from_indices(values, desired_length, 1)
-            signals[feature] = signals[feature].astype("int64")  # indexing of feature using 1 and 0
+            signals[feature] = signals[feature].astype(
+                "int64"
+            )  # indexing of feature using 1 and 0
 
         # Get values of features
         elif "RecoveryTime" in feature:
             # Sanitize indices and values
             other_indices, values = _signal_sanitize_indices(other_indices, values)
             # Append recovery time values to signal
-            signals[feature] = _signal_from_indices(other_indices, desired_length, values)
+            signals[feature] = _signal_from_indices(
+                other_indices, desired_length, values
+            )
         else:
             # Sanitize indices and values
             peak_indices, values = _signal_sanitize_indices(peak_indices, values)
             # Append peak values to signal
-            signals[feature] = _signal_from_indices(peak_indices, desired_length, values)
+            signals[feature] = _signal_from_indices(
+                peak_indices, desired_length, values
+            )
 
     signals = pd.DataFrame(signals)
     return signals
@@ -88,7 +94,9 @@ def _signal_from_indices(indices, desired_length=(), value=1):
     return signal
 
 
-def _signal_formatpeaks_sanitize(peaks, key="Peaks"):  # FIXME: private function not used in this module
+def _signal_formatpeaks_sanitize(
+    peaks, key="Peaks"
+):  # FIXME: private function not used in this module
     # Attempt to retrieve column.
     if isinstance(peaks, tuple):
         if isinstance(peaks[0], (dict, pd.DataFrame)):

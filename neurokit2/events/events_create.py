@@ -3,7 +3,9 @@ import numpy as np
 from .events_find import _events_find_label
 
 
-def events_create(event_onsets, event_durations=None, event_labels=None, event_conditions=None):
+def events_create(
+    event_onsets, event_durations=None, event_labels=None, event_conditions=None
+):
     """**Create events dictionnary from list of onsets**
 
     Parameters

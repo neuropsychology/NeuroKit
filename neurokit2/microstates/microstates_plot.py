@@ -72,7 +72,9 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
 
     # Sanity checks
     if gfp is None:
-        raise ValueError("GFP data must be passed to 'gfp' in order to plot the segmentation.")
+        raise ValueError(
+            "GFP data must be passed to 'gfp' in order to plot the segmentation."
+        )
 
     # Prepare figure layout
     n = len(microstates)
@@ -102,7 +104,10 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
     cmap = plt.get_cmap("plasma").resampled(n)
     # Plot the GFP line above the area
     ax["GFP"].plot(
-        times[epoch[0] : epoch[1]], gfp[epoch[0] : epoch[1]], color="black", linewidth=0.5
+        times[epoch[0] : epoch[1]],
+        gfp[epoch[0] : epoch[1]],
+        color="black",
+        linewidth=0.5,
     )
     # Plot area
     for state, color in zip(range(n), cmap.colors):

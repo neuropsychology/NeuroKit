@@ -5,7 +5,9 @@ import scipy.stats
 from .utils_complexity_symbolize import complexity_symbolize
 
 
-def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, **kwargs):
+def entropy_shannon(
+    signal=None, base=2, symbolize=None, show=False, freq=None, **kwargs
+):
     """**Shannon entropy (SE or ShanEn)**
 
     Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
@@ -109,7 +111,10 @@ def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, 
     if freq is None:
         _, freq = _entropy_freq(signal, symbolize=symbolize, show=show)
 
-    return scipy.stats.entropy(freq, base=base), {"Symbolization": symbolize, "Base": base}
+    return scipy.stats.entropy(freq, base=base), {
+        "Symbolization": symbolize,
+        "Base": base,
+    }
 
 
 # =============================================================================

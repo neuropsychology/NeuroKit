@@ -123,7 +123,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
         ecg_data = data.copy()
         if window_lengths != "constant":
             if "ECG" in window_lengths.keys():  # only for epochs
-                ecg_data = _bio_analyze_slicewindow(ecg_data, window_lengths, signal="ECG")
+                ecg_data = _bio_analyze_slicewindow(
+                    ecg_data, window_lengths, signal="ECG"
+                )
 
         ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, ecg_analyzed], axis=1, sort=False)
@@ -134,7 +136,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
         if window_lengths != "constant":
             if "RSP" in window_lengths.keys():  # only for epochs
-                rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal="RSP")
+                rsp_data = _bio_analyze_slicewindow(
+                    rsp_data, window_lengths, signal="RSP"
+                )
 
         rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, rsp_analyzed], axis=1, sort=False)
@@ -145,7 +149,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
         if window_lengths != "constant":
             if "EDA" in window_lengths.keys():  # only for epochs
-                eda_data = _bio_analyze_slicewindow(eda_data, window_lengths, signal="EDA")
+                eda_data = _bio_analyze_slicewindow(
+                    eda_data, window_lengths, signal="EDA"
+                )
 
         eda_analyzed = eda_analyze(eda_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, eda_analyzed], axis=1, sort=False)
@@ -156,7 +162,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
         if window_lengths != "constant":
             if "EMG" in window_lengths.keys():  # only for epochs
-                emg_data = _bio_analyze_slicewindow(emg_data, window_lengths, signal="EMG")
+                emg_data = _bio_analyze_slicewindow(
+                    emg_data, window_lengths, signal="EMG"
+                )
 
         emg_analyzed = emg_analyze(emg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, emg_analyzed], axis=1, sort=False)
@@ -167,7 +175,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
         if window_lengths != "constant":
             if "PPG" in window_lengths.keys():  # only for epochs
-                ppg_data = _bio_analyze_slicewindow(ppg_data, window_lengths, signal="PPG")
+                ppg_data = _bio_analyze_slicewindow(
+                    ppg_data, window_lengths, signal="PPG"
+                )
 
         ppg_analyzed = ppg_analyze(ppg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, ppg_analyzed], axis=1, sort=False)
@@ -178,7 +188,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
         if window_lengths != "constant":
             if "EOG" in window_lengths.keys():  # only for epochs
-                eog_data = _bio_analyze_slicewindow(eog_data, window_lengths, signal="EOG")
+                eog_data = _bio_analyze_slicewindow(
+                    eog_data, window_lengths, signal="EOG"
+                )
 
         eog_analyzed = eog_analyze(eog_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, eog_analyzed], axis=1, sort=False)
@@ -224,7 +236,9 @@ def _bio_analyze_slicewindow(data, window_lengths, signal="ECG"):
         epochs = {}
         for _, label in enumerate(data):
             # Slice window
-            epoch = data[label].loc[(data[label].index > start) & (data[label].index < end)]
+            epoch = data[label].loc[
+                (data[label].index > start) & (data[label].index < end)
+            ]
             epochs[label] = epoch
 
     return epochs
@@ -235,7 +249,9 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
     if isinstance(data, pd.DataFrame):
         if "Label" in data.columns:
             labels = data["Label"].unique()
-            durations = [len(data[data["Label"] == label]) / sampling_rate for label in labels]
+            durations = [
+                len(data[data["Label"] == label]) / sampling_rate for label in labels
+            ]
         else:
             durations = [len(data) / sampling_rate]
 
@@ -257,7 +273,9 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
         for index in data:
             rsa[index] = {}  # Initialize empty container
             data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
-            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate, continuous=False)
+            rsa[index] = hrv_rsa(
+                data[index], sampling_rate=sampling_rate, continuous=False
+            )
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     return rsa

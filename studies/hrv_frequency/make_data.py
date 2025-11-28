@@ -3,10 +3,12 @@ import numpy as np
 import neurokit2 as nk
 
 # Load True R-peaks location
-datafiles = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
-             pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
-             pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
-             pd.read_csv("../../data/fantasia/Rpeaks.csv")]
+datafiles = [
+    pd.read_csv("../../data/gudb/Rpeaks.csv"),
+    pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
+    pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
+    pd.read_csv("../../data/fantasia/Rpeaks.csv"),
+]
 
 # Get results
 all_results = pd.DataFrame()
@@ -26,7 +28,9 @@ for file in datafiles:
             # Interpolate
             rri = np.diff(rpeaks) / sampling_rate * 1000
             desired_length = int(np.rint(rpeaks[-1] / sampling_rate * sampling_rate))
-            rri = nk.signal_interpolate(rpeaks[1:], rri, x_new=np.arange(desired_length))
+            rri = nk.signal_interpolate(
+                rpeaks[1:], rri, x_new=np.arange(desired_length)
+            )
 
             # Get PSD
             psd = nk.signal_psd(rri, sampling_rate=sampling_rate)
@@ -38,8 +42,4 @@ for file in datafiles:
 #
 #            all_results = pd.concat([all_results, results], axis=0)
 #
-#all_results.to_csv("data.csv", index=False)
-
-
-
-
+# all_results.to_csv("data.csv", index=False)

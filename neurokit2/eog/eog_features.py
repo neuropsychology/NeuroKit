@@ -90,7 +90,9 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
         nAVR_list.append(nAVR)
 
         # Duration
-        blink_full = np.hstack([np.array(upstrokes[i].Signal), np.array(downstrokes[i].Signal)])
+        blink_full = np.hstack(
+            [np.array(upstrokes[i].Signal), np.array(downstrokes[i].Signal)]
+        )
         duration_full = len(blink_full) / sampling_rate  # in seconds
         duration_list.append(duration_full)
 
@@ -149,7 +151,9 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
         max_frame = epochs[i]["Index"].loc[epochs[i]["Signal"] == max_value]
         max_frame = np.array(max_frame)
         if len(max_frame) > 1:
-            max_frame = max_frame[0].item()  # If two points achieve max value, first one is blink
+            max_frame = max_frame[
+                0
+            ].item()  # If two points achieve max value, first one is blink
         else:
             max_frame = max_frame.item()
 
@@ -192,7 +196,9 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
         #        leftbase_min = leftbase_signal['Signal'].min()
         #        leftbase = np.array(leftbase_signal['Index'].loc[leftbase_signal['Signal'] == leftbase_min])[0]
 
-        rightbase_idx = list(np.arange(rightzero, epochs[i]["Index"].iloc[epochs[i].shape[0] - 1]))
+        rightbase_idx = list(
+            np.arange(rightzero, epochs[i]["Index"].iloc[epochs[i].shape[0] - 1])
+        )
         rightbase_signal = epochs[i].loc[epochs[i]["Index"].isin(rightbase_idx)]
         #        rightbase_min = rightbase_signal['Signal'].min()
         #        rightbase = np.array(rightbase_signal['Index'].loc[rightbase_signal['Signal'] == rightbase_min])[0]
@@ -202,7 +208,10 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
         inside_blink = epochs[i].loc[epochs[i]["Index"].isin(inside_blink_idx)]
         outside_blink = pd.concat([leftbase_signal, rightbase_signal], axis=0)
 
-        BAR = inside_blink.Signal.mean() / outside_blink.Signal[outside_blink["Signal"] > 0].mean()
+        BAR = (
+            inside_blink.Signal.mean()
+            / outside_blink.Signal[outside_blink["Signal"] > 0].mean()
+        )
 
         # Features of all candidates
         BARs.append(BAR)

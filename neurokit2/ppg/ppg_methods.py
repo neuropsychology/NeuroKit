@@ -80,13 +80,9 @@ def ppg_methods(
         else str(method_cleaning).lower()
     )
     method_peaks = (
-        str(method).lower()
-        if method_peaks == "default"
-        else str(method_peaks).lower()
+        str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
     )
-    method_quality = (
-        str(method_quality).lower()
-    )
+    method_quality = str(method_quality).lower()
 
     # Create dictionary with all inputs
     report_info = {
@@ -109,10 +105,12 @@ def ppg_methods(
     report_info["kwargs_quality"] = kwargs_quality
 
     # Initialize refs list with NeuroKit2 reference
-    refs = ["""Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+    refs = [
+        """Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
     Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
     Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
-    """]
+    """
+    ]
 
     # 1. Cleaning
     # ------------
@@ -159,9 +157,9 @@ def ppg_methods(
     # 2. Peaks
     # ----------
     if method_peaks in ["elgendi", "elgendi13"]:
-        report_info[
-            "text_peaks"
-        ] = "The peak detection was carried out using the method described in Elgendi et al. (2013)."
+        report_info["text_peaks"] = (
+            "The peak detection was carried out using the method described in Elgendi et al. (2013)."
+        )
         refs.append(
             """Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013)
             Systolic Peak Detection in Acceleration Photoplethysmograms
@@ -171,16 +169,14 @@ def ppg_methods(
     elif method_peaks in ["none"]:
         report_info["text_peaks"] = "There was no peak detection carried out."
     else:
-        report_info[
-            "text_peaks"
-        ] = f"The peak detection was carried out using the method {method_peaks}."
+        report_info["text_peaks"] = (
+            f"The peak detection was carried out using the method {method_peaks}."
+        )
 
     # 2. Quality
     # ----------
     if method_quality in ["templatematch"]:
-        report_info[
-            "text_quality"
-        ] = (
+        report_info["text_quality"] = (
             "The quality assessment was carried out using template-matching, approximately as described "
             + "in Orphanidou et al. (2015)."
         )
@@ -191,9 +187,7 @@ def ppg_methods(
             IEEE Journal of Biomedical and Health Informatics 19(3): 832–838. doi:10.1109/JBHI.2014.2338351."""
         )
     elif method_quality in ["disimilarity"]:
-        report_info[
-            "text_quality"
-        ] = (
+        report_info["text_quality"] = (
             "The quality assessment was carried out using a disimilarity measure of positive-peaked beats, "
             + "approximately as described in Sabeti et al. (2019)."
         )
@@ -206,9 +200,9 @@ def ppg_methods(
     elif method_quality in ["none"]:
         report_info["text_quality"] = "There was no quality assessment carried out."
     else:
-        report_info[
-            "text_quality"
-        ] = f"The quality assessment was carried out using the method {method_quality}."
+        report_info["text_quality"] = (
+            f"The quality assessment was carried out using the method {method_quality}."
+        )
 
     report_info["references"] = list(np.unique(refs))
     return report_info

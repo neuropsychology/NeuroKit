@@ -130,7 +130,9 @@ def entropy_phase(signal, delay=1, k=4, show=False, **kwargs):
         for i in range(k):
             plt.plot(x[Tx[i, :]], y[Tx[i, :]], ".", color=tuple(colors[i, :]))
             plt.plot(
-                np.vstack((np.zeros(k + 1), Xs)), np.vstack((np.zeros(k + 1), Ys)), color="red"
+                np.vstack((np.zeros(k + 1), Xs)),
+                np.vstack((np.zeros(k + 1), Ys)),
+                color="red",
             )
         plt.axis([-limx, limx, -limx, limx])
         plt.gca().set_aspect("equal", "box")

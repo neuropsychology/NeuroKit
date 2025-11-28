@@ -3,7 +3,9 @@ import numpy as np
 from ..misc import check_random_state
 
 
-def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_state=None):
+def eeg_simulate(
+    duration=1, length=None, sampling_rate=1000, noise=0.1, random_state=None
+):
     """**EEG Signal Simulation**
 
     Simulate an artificial EEG signal. This is a crude implementation based on the MNE-Python raw
@@ -73,7 +75,9 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_
         n = 0  # harmonic number
         n_samp = len(times)
         window = np.zeros(n_samp)
-        start, stop = [int(ii * float(n_samp) / (2 * n_dipoles)) for ii in (2 * n, 2 * n + 1)]
+        start, stop = [
+            int(ii * float(n_samp) / (2 * n_dipoles)) for ii in (2 * n, 2 * n + 1)
+        ]
         window[start:stop] = 1.0
         n += 1
         data = 25e-9 * np.sin(2.0 * np.pi * 10.0 * n * times)
@@ -91,9 +95,13 @@ def eeg_simulate(duration=1, length=None, sampling_rate=1000, noise=0.1, random_
     )
 
     # Repeat the source activation multiple times.
-    raw_sim = mne.simulation.simulate_raw(raw.info, [stc] * int(np.ceil(duration / 2)), forward=fwd, verbose=False)
+    raw_sim = mne.simulation.simulate_raw(
+        raw.info, [stc] * int(np.ceil(duration / 2)), forward=fwd, verbose=False
+    )
     cov = mne.make_ad_hoc_cov(raw_sim.info, std=noise / 1000000)
-    raw_sim = mne.simulation.add_noise(raw_sim, cov, iir_filter=[0.2, -0.2, 0.04], verbose=False, random_state=rng)
+    raw_sim = mne.simulation.add_noise(
+        raw_sim, cov, iir_filter=[0.2, -0.2, 0.04], verbose=False, random_state=rng
+    )
 
     # Resample
     raw_sim = raw_sim.resample(sampling_rate, verbose=False)

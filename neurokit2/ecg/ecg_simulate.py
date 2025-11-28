@@ -121,7 +121,10 @@ def ecg_simulate(
     # Run appropriate method
     if method.lower() in ["simple", "daubechies"]:
         signals = _ecg_simulate_daubechies(
-            duration=duration, length=length, sampling_rate=sampling_rate, heart_rate=heart_rate
+            duration=duration,
+            length=length,
+            sampling_rate=sampling_rate,
+            heart_rate=heart_rate,
         )
     else:
         approx_number_beats = int(np.round(duration * (heart_rate / 60)))
@@ -172,7 +175,9 @@ def ecg_simulate(
     # Add random noise
     if noise > 0:
         # Seed for random noise
-        random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=len(signals))
+        random_state_distort = check_random_state_children(
+            random_state, random_state_distort, n_children=len(signals)
+        )
         # Call signal_distort on each signal
         for i in range(len(signals)):
             signals[i] = signal_distort(
@@ -191,7 +196,20 @@ def ecg_simulate(
     else:
         ecg = pd.DataFrame(
             np.array(signals).T,
-            columns=["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+            columns=[
+                "I",
+                "II",
+                "III",
+                "aVR",
+                "aVL",
+                "aVF",
+                "V1",
+                "V2",
+                "V3",
+                "V4",
+                "V5",
+                "V6",
+            ],
         )
 
     return ecg
@@ -200,7 +218,9 @@ def ecg_simulate(
 # =============================================================================
 # Daubechies
 # =============================================================================
-def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, heart_rate=70):
+def _ecg_simulate_daubechies(
+    duration=10, length=None, sampling_rate=1000, heart_rate=70
+):
     """Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
 
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
@@ -342,7 +362,9 @@ def _ecg_simulate_ecgsyn(
     rrmean = 60 / hrmean
     n = 2 ** (np.ceil(np.log2(N * rrmean / trr)))
 
-    rr0 = _ecg_simulate_rrprocess(flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n, rng)
+    rr0 = _ecg_simulate_rrprocess(
+        flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n, rng
+    )
 
     # Upsample rr time series from 1 Hz to sfint Hz
     rr = signal_resample(rr0, sampling_rate=1, desired_sampling_rate=sfint)
@@ -382,7 +404,9 @@ def _ecg_simulate_ecgsyn(
         # as passing extra arguments to derivative function is not supported yet in solve_ivp
         # lambda function is used to serve the purpose
         result = scipy.integrate.solve_ivp(
-            lambda t, x: _ecg_simulate_derivsecgsyn(t, x, rrn, ti, sfint, gamma[lead] * ai, bi),
+            lambda t, x: _ecg_simulate_derivsecgsyn(
+                t, x, rrn, ti, sfint, gamma[lead] * ai, bi
+            ),
             Tspan,
             x0,
             t_eval=t_eval,
@@ -456,8 +480,8 @@ def _ecg_simulate_rrprocess(
     dw1 = w - w1
     dw2 = w - w2
 
-    Hw1 = sig1 * np.exp(-0.5 * (dw1 / c1) ** 2) / np.sqrt(2 * np.pi * c1 ** 2)
-    Hw2 = sig2 * np.exp(-0.5 * (dw2 / c2) ** 2) / np.sqrt(2 * np.pi * c2 ** 2)
+    Hw1 = sig1 * np.exp(-0.5 * (dw1 / c1) ** 2) / np.sqrt(2 * np.pi * c1**2)
+    Hw2 = sig2 * np.exp(-0.5 * (dw2 / c2) ** 2) / np.sqrt(2 * np.pi * c2**2)
     Hw = Hw1 + Hw2
     Hw0 = np.concatenate((Hw[0 : int(n / 2)], Hw[int(n / 2) - 1 :: -1]))
     Sw = (sfrr / 2) * np.sqrt(Hw0)

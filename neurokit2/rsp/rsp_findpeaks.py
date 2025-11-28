@@ -124,14 +124,18 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
     """https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta"""
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
-    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=amplitude_min)
+    extrema, amplitudes = _rsp_findpeaks_outliers(
+        rsp_cleaned, extrema, amplitude_min=amplitude_min
+    )
     peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
 
     info = {"RSP_Peaks": peaks, "RSP_Troughs": troughs}
     return info
 
 
-def _rsp_findpeaks_scipy(rsp_cleaned, sampling_rate, peak_distance=0.8, peak_prominence=0.5):
+def _rsp_findpeaks_scipy(
+    rsp_cleaned, sampling_rate, peak_distance=0.8, peak_prominence=0.5
+):
     """https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html"""
     peak_distance = sampling_rate * peak_distance
     peaks, _ = scipy.signal.find_peaks(

@@ -9,7 +9,13 @@ from .utils_recurrence_matrix import recurrence_matrix
 
 
 def complexity_rqa(
-    signal, dimension=3, delay=1, tolerance="sd", min_linelength=2, method="python", show=False
+    signal,
+    dimension=3,
+    delay=1,
+    tolerance="sd",
+    min_linelength=2,
+    method="python",
+    show=False,
 ):
     """**Recurrence Quantification Analysis (RQA)**
 
@@ -180,7 +186,9 @@ def _complexity_rqa_features(rc, min_linelength=2):
         diag = np.diagonal(rc, offset=i)  # Get diagonal
         recdiag[i - 1] = np.sum(diag) / len(diag)
         diag = find_groups(diag)  # Split into consecutives
-        diag_lines.extend([diag[i] for i in range(len(diag)) if diag[i][0] == 1])  # Store 1s
+        diag_lines.extend(
+            [diag[i] for i in range(len(diag)) if diag[i][0] == 1]
+        )  # Store 1s
 
     # Diagonal Recurrence Rates (Diag %REC)
     # Tomashin et al. (2022)
@@ -279,7 +287,9 @@ def _complexity_rqa_pyrqa(signal, dimension=3, delay=1, tolerance=0.1, linelengt
     r = pyrqa.neighbourhood.FixedRadius(tolerance)
 
     # Convert signal to time series
-    signal = pyrqa.time_series.TimeSeries(signal, embedding_dimension=dimension, time_delay=delay)
+    signal = pyrqa.time_series.TimeSeries(
+        signal, embedding_dimension=dimension, time_delay=delay
+    )
 
     settings = pyrqa.settings.Settings(
         signal,

@@ -73,7 +73,9 @@ def eda_changepoints(eda_cleaned, penalty=10000, show=False):
         eda_cleaned = np.array(eda_cleaned)
 
     # Calculate changepoints based on mean and variance
-    changepoints = signal_changepoints(eda_cleaned, change="meanvar", show=show, penalty=penalty)
+    changepoints = signal_changepoints(
+        eda_cleaned, change="meanvar", show=show, penalty=penalty
+    )
 
     number = len(changepoints)
 

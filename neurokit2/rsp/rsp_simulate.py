@@ -78,7 +78,9 @@ def rsp_simulate(
     """
     # Seed the random generator for reproducible results
     rng = check_random_state(random_state)
-    random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=1)
+    random_state_distort = check_random_state_children(
+        random_state, random_state_distort, n_children=1
+    )
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -86,7 +88,9 @@ def rsp_simulate(
 
     if method.lower() in ["sinusoidal", "sinus", "simple"]:
         rsp = _rsp_simulate_sinusoidal(
-            duration=duration, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
+            duration=duration,
+            sampling_rate=sampling_rate,
+            respiratory_rate=respiratory_rate,
         )
     else:
         rsp = _rsp_simulate_breathmetrics(
@@ -201,23 +205,33 @@ def _rsp_simulate_breathmetrics_original(
 
     # Normalize variance by average breath amplitude
     amplitude_variance_normed = average_amplitude * amplitude_variance
-    amplitudes_with_noise = rng.standard_normal(nCycles) * amplitude_variance_normed + average_amplitude
+    amplitudes_with_noise = (
+        rng.standard_normal(nCycles) * amplitude_variance_normed + average_amplitude
+    )
     amplitudes_with_noise[amplitudes_with_noise < 0] = 0
 
     # Normalize phase by average breath length
     phase_variance_normed = phase_variance * sample_phase
-    phases_with_noise = np.round(rng.standard_normal(nCycles) * phase_variance_normed + sample_phase).astype(int)
+    phases_with_noise = np.round(
+        rng.standard_normal(nCycles) * phase_variance_normed + sample_phase
+    ).astype(int)
     phases_with_noise[phases_with_noise < 0] = 0
 
     # Normalize pause lengths by phase and variation
-    inhale_pauseLength_variance_normed = inhale_pause_phase * inhale_pauseLength_variance
+    inhale_pauseLength_variance_normed = (
+        inhale_pause_phase * inhale_pauseLength_variance
+    )
     inhale_pauseLengths_with_noise = np.round(
-        rng.standard_normal(nCycles) * inhale_pauseLength_variance_normed + inhale_pause_phase
+        rng.standard_normal(nCycles) * inhale_pauseLength_variance_normed
+        + inhale_pause_phase
     ).astype(int)
     inhale_pauseLengths_with_noise[inhale_pauseLengths_with_noise < 0] = 0
-    exhale_pauseLength_variance_normed = exhale_pause_phase * exhale_pauseLength_variance
+    exhale_pauseLength_variance_normed = (
+        exhale_pause_phase * exhale_pauseLength_variance
+    )
     exhale_pauseLengths_with_noise = np.round(
-        rng.standard_normal(nCycles) * exhale_pauseLength_variance_normed + inhale_pause_phase
+        rng.standard_normal(nCycles) * exhale_pauseLength_variance_normed
+        + inhale_pause_phase
     ).astype(int)
 
     # why inhale pause phase?
@@ -249,7 +263,10 @@ def _rsp_simulate_breathmetrics_original(
         # Determine length of inhale pause for this cycle
         if rng.uniform() < inhale_pause_percent:
             this_inhale_pauseLength = inhale_pauseLengths_with_noise[c]
-            this_inhale_pause = rng.standard_normal(this_inhale_pauseLength) * pause_amplitude_variance_normed
+            this_inhale_pause = (
+                rng.standard_normal(this_inhale_pauseLength)
+                * pause_amplitude_variance_normed
+            )
             this_inhale_pause[this_inhale_pause < 0] = 0
         else:
             this_inhale_pauseLength = 0
@@ -258,7 +275,10 @@ def _rsp_simulate_breathmetrics_original(
         # Determine length of exhale pause for this cycle
         if rng.uniform() < exhale_pause_percent:
             this_exhale_pauseLength = exhale_pauseLengths_with_noise[c]
-            this_exhale_pause = rng.standard_normal(this_exhale_pauseLength) * pause_amplitude_variance_normed
+            this_exhale_pause = (
+                rng.standard_normal(this_exhale_pauseLength)
+                * pause_amplitude_variance_normed
+            )
             this_exhale_pause[this_exhale_pause < 0] = 0
         else:
             this_exhale_pauseLength = 0
@@ -266,7 +286,9 @@ def _rsp_simulate_breathmetrics_original(
 
         # Determine length of inhale and exhale for this cycle to main
         # breathing rate
-        cycle_length = phases_with_noise[c] - (this_inhale_pauseLength + this_exhale_pauseLength)
+        cycle_length = phases_with_noise[c] - (
+            this_inhale_pauseLength + this_exhale_pauseLength
+        )
 
         # If pauses are longer than the time alloted for this breath, set them
         # to 0 so a real breath can be simulated. This will deviate the
@@ -282,7 +304,9 @@ def _rsp_simulate_breathmetrics_original(
             )
 
         # Compute inhale and exhale for this cycle
-        this_cycle = np.sin(np.linspace(0, 2 * np.pi, cycle_length)) * amplitudes_with_noise[c]
+        this_cycle = (
+            np.sin(np.linspace(0, 2 * np.pi, cycle_length)) * amplitudes_with_noise[c]
+        )
         half_cycle = np.round(len(this_cycle) / 2).astype(int)
         this_inhale = this_cycle[0:half_cycle]
         this_inhale_length = len(this_inhale)
@@ -310,7 +334,9 @@ def _rsp_simulate_breathmetrics_original(
             exhale_pause_onsets[c] = np.nan
 
         # Compose breath from parameters
-        this_breath = np.hstack([this_inhale, this_inhale_pause, this_exhale, this_exhale_pause])
+        this_breath = np.hstack(
+            [this_inhale, this_inhale_pause, this_exhale, this_exhale_pause]
+        )
 
         # Compute max flow for inhale and exhale for this breath
         max_ID = np.argmax(this_breath)
@@ -331,7 +357,9 @@ def _rsp_simulate_breathmetrics_original(
         signal_noise = 0.0001
 
     noise_vector = rng.uniform(size=simulated_respiration.shape) * average_amplitude
-    simulated_respiration = simulated_respiration * (1 - signal_noise) + noise_vector * signal_noise
+    simulated_respiration = (
+        simulated_respiration * (1 - signal_noise) + noise_vector * signal_noise
+    )
     raw_features = {
         "Inhale Onsets": inhale_onsets,
         "Exhale Onsets": exhale_onsets,
@@ -366,7 +394,9 @@ def _rsp_simulate_breathmetrics_original(
     return simulated_respiration, raw_features, feature_stats
 
 
-def _rsp_simulate_breathmetrics(duration=10, sampling_rate=1000, respiratory_rate=15, rng=None):
+def _rsp_simulate_breathmetrics(
+    duration=10, sampling_rate=1000, respiratory_rate=15, rng=None
+):
 
     n_cycles = int(respiratory_rate / 60 * duration)
 

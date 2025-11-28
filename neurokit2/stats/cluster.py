@@ -14,7 +14,9 @@ from ..misc import check_random_state
 from .cluster_quality import _cluster_quality_distance
 
 
-def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):
+def cluster(
+    data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs
+):
     """**Data Clustering**
 
     Performs clustering of data using different algorithms.
@@ -131,39 +133,61 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
     method = method.lower()
     # K-means
     if method in ["kmeans", "k", "k-means", "kmean"]:
-        out = _cluster_kmeans(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+        out = _cluster_kmeans(
+            data, n_clusters=n_clusters, random_state=random_state, **kwargs
+        )
 
     # Modified k-means
     elif method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
         out = _cluster_kmod(
-            data, n_clusters=n_clusters, random_state=random_state, optimize=optimize, **kwargs
+            data,
+            n_clusters=n_clusters,
+            random_state=random_state,
+            optimize=optimize,
+            **kwargs
         )
     # K-medoids
     elif method in ["kmedoids", "k-medoids", "k-centers"]:
-        out = _cluster_kmedoids(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+        out = _cluster_kmedoids(
+            data, n_clusters=n_clusters, random_state=random_state, **kwargs
+        )
 
     # PCA
     elif method in ["pca", "principal", "principal component analysis"]:
-        out = _cluster_pca(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+        out = _cluster_pca(
+            data, n_clusters=n_clusters, random_state=random_state, **kwargs
+        )
 
     # ICA
     elif method in ["ica", "independent", "independent component analysis"]:
-        out = _cluster_pca(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+        out = _cluster_pca(
+            data, n_clusters=n_clusters, random_state=random_state, **kwargs
+        )
 
     # Mixture
     elif method in ["mixture", "mixt"]:
         out = _cluster_mixture(
-            data, n_clusters=n_clusters, bayesian=False, random_state=random_state, **kwargs
+            data,
+            n_clusters=n_clusters,
+            bayesian=False,
+            random_state=random_state,
+            **kwargs
         )
 
     # Frederic's AAHC
     elif method in ["aahc_frederic", "aahc_eegmicrostates"]:
-        out = _cluster_aahc(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+        out = _cluster_aahc(
+            data, n_clusters=n_clusters, random_state=random_state, **kwargs
+        )
 
     # Bayesian
     elif method in ["bayesianmixture", "bayesmixt", "mixturebayesian", "mixturebayes"]:
         out = _cluster_mixture(
-            data, n_clusters=n_clusters, bayesian=True, random_state=random_state, **kwargs
+            data,
+            n_clusters=n_clusters,
+            bayesian=True,
+            random_state=random_state,
+            **kwargs
         )
 
     # Others
@@ -204,7 +228,11 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, n_init="auto", **kwar
 
     # Copy function with given parameters
     clustering_function = functools.partial(
-        _cluster_kmeans, n_clusters=n_clusters, random_state=random_state, n_init=n_init, **kwargs
+        _cluster_kmeans,
+        n_clusters=n_clusters,
+        random_state=random_state,
+        n_init=n_init,
+        **kwargs
     )
 
     # Info dump
@@ -223,7 +251,9 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, n_init="auto", **kwar
 # =============================================================================
 
 
-def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
+def _cluster_kmedoids(
+    data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs
+):
     """Peforms k-medoids clustering which is based on the most centrally located object in a cluster.
     Less sensitive to outliers than K-means clustering.
 
@@ -258,7 +288,9 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
         ids_of_medoids = np.full(n_clusters, -1, dtype=int)
         for i in range(n_clusters):
             indices = np.where(segmentation == i)[0]
-            distances = find_distance(data[indices, None, :], data[None, indices, :]).sum(axis=0)
+            distances = find_distance(
+                data[indices, None, :], data[None, indices, :]
+            ).sum(axis=0)
             ids_of_medoids[i] = indices[np.argmin(distances)]
 
         # Step 3: Reassign objects to medoids
@@ -419,7 +451,9 @@ def _cluster_kmod(
 
     # De-normalize
     clusters_unnormalized = _cluster_getclusters(data, segmentation)
-    prediction = _cluster_quality_distance(data, clusters_unnormalized, to_dataframe=True)
+    prediction = _cluster_quality_distance(
+        data, clusters_unnormalized, to_dataframe=True
+    )
     prediction["Cluster"] = segmentation
 
     # Copy function with given parameters
@@ -542,7 +576,9 @@ def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
     """Spectral clustering"""
     # Initialize clustering function
     if method in ["spectral"]:
-        clustering_model = sklearn.cluster.SpectralClustering(n_clusters=n_clusters, **kwargs)
+        clustering_model = sklearn.cluster.SpectralClustering(
+            n_clusters=n_clusters, **kwargs
+        )
     elif method in ["hierarchical", "ward"]:
         clustering_model = sklearn.cluster.AgglomerativeClustering(
             n_clusters=n_clusters, linkage="ward", **kwargs
@@ -563,7 +599,9 @@ def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
     prediction["Cluster"] = clustering
 
     # Else, copy function
-    clustering_function = functools.partial(_cluster_sklearn, n_clusters=n_clusters, **kwargs)
+    clustering_function = functools.partial(
+        _cluster_sklearn, n_clusters=n_clusters, **kwargs
+    )
 
     # Info dump
     info = {
@@ -766,4 +804,6 @@ def _cluster_aahc(
 def _cluster_getclusters(data, clustering):
     """Get average representatives of clusters"""
     n_clusters = len(np.unique(clustering))
-    return np.asarray([np.mean(data[np.where(clustering == i)], axis=0) for i in range(n_clusters)])
+    return np.asarray(
+        [np.mean(data[np.where(clustering == i)], axis=0) for i in range(n_clusters)]
+    )

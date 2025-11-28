@@ -118,7 +118,9 @@ def complexity_lempelziv(
 
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
 
     # Store parameters
     info = {"Permutation": permutation}
@@ -128,7 +130,9 @@ def complexity_lempelziv(
         info["Dimension"] = dimension
         info["Delay"] = delay
         # Permutation on the signal (i.e., converting to ordinal pattern).
-        _, info = complexity_ordinalpatterns(signal, delay=delay, dimension=dimension, **kwargs)
+        _, info = complexity_ordinalpatterns(
+            signal, delay=delay, dimension=dimension, **kwargs
+        )
         symbolic = info["Uniques"]
     else:
         # Binarize the signal
@@ -141,7 +145,11 @@ def complexity_lempelziv(
     if permutation is False:
         lzc = (info["Complexity_Kolmogorov"] * np.log2(n)) / n
     else:
-        lzc = (info["Complexity_Kolmogorov"] * np.log2(n) / np.log2(math.factorial(dimension))) / n
+        lzc = (
+            info["Complexity_Kolmogorov"]
+            * np.log2(n)
+            / np.log2(math.factorial(dimension))
+        ) / n
 
     return lzc, info
 

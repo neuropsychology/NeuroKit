@@ -142,10 +142,12 @@ def _fractal_correlation_get_r(radius, signal, dist):
             min_r, max_r, factor = 0.1 * sd, 0.5 * sd, 1.03
 
             r_n = int(np.floor(np.log(1.0 * max_r / min_r) / np.log(factor)))
-            r_vals = np.array([min_r * (factor ** i) for i in range(r_n + 1)])
+            r_vals = np.array([min_r * (factor**i) for i in range(r_n + 1)])
 
         elif radius == "Corr_Dim":
-            r_min, r_max = np.min(dist[np.where(dist > 0)]), np.exp(np.floor(np.log(np.max(dist))))
+            r_min, r_max = np.min(dist[np.where(dist > 0)]), np.exp(
+                np.floor(np.log(np.max(dist)))
+            )
 
             n_r = int(np.floor(np.log(r_max / r_min))) + 1
 
@@ -158,7 +160,9 @@ def _fractal_correlation_get_r(radius, signal, dist):
 
     if isinstance(radius, int):
         dist_range = np.max(dist) - np.min(dist)
-        r_min, r_max = (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
+        r_min, r_max = (np.min(dist) + 0.025 * dist_range), (
+            np.min(dist) + 0.5 * dist_range
+        )
         r_vals = expspace(r_min, r_max, radius, base=2, out="float")
 
     return r_vals

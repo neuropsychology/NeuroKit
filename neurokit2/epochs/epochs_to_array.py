@@ -51,10 +51,22 @@ def epochs_to_array(epochs):
     if example_array.shape[1] == 2:
         array = np.full((example_array.shape[0], len(epochs)), np.nan)
         for i, key in enumerate(epochs):
-            array[:, i] = epochs[key].select_dtypes(include=["number"]).drop("Index", axis=1).values[:, 0]
+            array[:, i] = (
+                epochs[key]
+                .select_dtypes(include=["number"])
+                .drop("Index", axis=1)
+                .values[:, 0]
+            )
     else:
-        array = np.full((example_array.shape[0], example_array.shape[1] - 1, len(epochs)), np.nan)
+        array = np.full(
+            (example_array.shape[0], example_array.shape[1] - 1, len(epochs)), np.nan
+        )
         for i, key in enumerate(epochs):
-            array[:, :, i] = epochs[key].select_dtypes(include=["number"]).drop("Index", axis=1).values
+            array[:, :, i] = (
+                epochs[key]
+                .select_dtypes(include=["number"])
+                .drop("Index", axis=1)
+                .values
+            )
 
     return array

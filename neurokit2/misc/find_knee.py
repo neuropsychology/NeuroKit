@@ -79,7 +79,9 @@ def find_knee(y, x=None, S=1, show=False, verbose=True):
 
     if show is True:
         plt.plot(x, y, label="Original")
-        plt.plot(x, rescale(smoothed, to=[np.nanmin(y), np.nanmax(y)]), label="Smoothed")
+        plt.plot(
+            x, rescale(smoothed, to=[np.nanmin(y), np.nanmax(y)]), label="Smoothed"
+        )
         plt.plot(x, rescale(Y_d, to=[np.nanmin(y), np.nanmax(y)]), label="Difference")
         plt.axvline(x=x[knee], color="red", linestyle="--")
         plt.legend()

@@ -12,7 +12,12 @@ from .ppg_quality import ppg_quality
 
 
 def ppg_process(
-    ppg_signal, sampling_rate=1000, method="elgendi", method_quality="templatematch", report=None, **kwargs
+    ppg_signal,
+    sampling_rate=1000,
+    method="elgendi",
+    method_quality="templatematch",
+    report=None,
+    **kwargs
 ):
     """**Process a photoplethysmogram (PPG)  signal**
 
@@ -74,7 +79,12 @@ def ppg_process(
     """
     # Sanitize input
     ppg_signal = as_vector(ppg_signal)
-    methods = ppg_methods(sampling_rate=sampling_rate, method=method, method_quality=method_quality, **kwargs)
+    methods = ppg_methods(
+        sampling_rate=sampling_rate,
+        method=method,
+        method_quality=method_quality,
+        **kwargs
+    )
 
     # Clean signal
     ppg_cleaned = ppg_clean(

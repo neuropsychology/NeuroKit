@@ -51,7 +51,8 @@ def find_closest(
     list_to_search_in = pd.Series(as_vector(list_to_search_in))
 
     out = [
-        _find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_to
+        _find_closest(i, list_to_search_in, direction, strictly, return_index)
+        for i in closest_to
     ]
 
     if len(out) == 1:

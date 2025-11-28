@@ -116,7 +116,9 @@ def _entropy_coalition_synchrony(signal):
 
     # Create random binary matrix for normalization
     y = np.random.rand(n_channels - 1, n_samples)
-    random_binarized = np.array([_signal_binarize_threshold(i, threshold=0.5) for i in y])
+    random_binarized = np.array(
+        [_signal_binarize_threshold(i, threshold=0.5) for i in y]
+    )
     norm = entropy_shannon(_entropy_coalition_map(random_binarized))[0]
 
     # Compute shannon entropy
@@ -174,6 +176,6 @@ def _entropy_coalition_map(binary_sequence):
     mapped = np.zeros(n_samples)
     for t in range(n_samples):
         for j in range(n_channels):
-            mapped[t] += binary_sequence[j, t] * (2 ** j)
+            mapped[t] += binary_sequence[j, t] * (2**j)
 
     return mapped

@@ -60,7 +60,9 @@ def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **
         clusters = _signal_recompose_wcorr(components, threshold=threshold, **kwargs)
         recomposed = _signal_recompose_sum(components, clusters)
     else:
-        raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
+        raise ValueError(
+            "NeuroKit error: signal_decompose(): 'method' should be one of 'emd'"
+        )
 
     if keep_sd is not None:
         recomposed = _signal_recompose_filter_sd(components, threshold=keep_sd)
@@ -80,7 +82,8 @@ def _signal_recompose_sum(components, clusters):
 
     if len(clusters) == 0:
         raise ValueError(
-            "Not enough clusters of components detected. Please decrease the " "`threshold`."
+            "Not enough clusters of components detected. Please decrease the "
+            "`threshold`."
         )
     # Initialize components matrix
     recomposed = np.zeros((len(components), len(clusters)))
@@ -92,6 +95,7 @@ def _signal_recompose_sum(components, clusters):
 # =============================================================================
 # Clustering Methods
 # =============================================================================
+
 
 # Weighted Correlation
 # ----------------------------------------------------------------------------
@@ -124,14 +128,16 @@ def _signal_recompose_get_wcorr(components, show=False):
     K = components.shape[0] - L + 1
 
     # Calculate the weights
-    w = np.array(list(np.arange(L) + 1) + [L] * (K - L - 1) + list(np.arange(L) + 1)[::-1])
+    w = np.array(
+        list(np.arange(L) + 1) + [L] * (K - L - 1) + list(np.arange(L) + 1)[::-1]
+    )
 
     def w_inner(F_i, F_j):
         return w.dot(F_i * F_j)
 
     # Calculated weighted norms, ||F_i||_w, then invert.
     F_wnorms = np.array([w_inner(components[:, i], components[:, i]) for i in range(L)])
-    F_wnorms = F_wnorms ** -0.5
+    F_wnorms = F_wnorms**-0.5
 
     # Calculate Wcorr.
     Wcorr = np.identity(L)

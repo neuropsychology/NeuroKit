@@ -244,7 +244,11 @@ def microstates_segment(
     else:
         # Run clustering algorithm on subset
         _, microstates, info = cluster(
-            data[:, indices].T, method=method, n_clusters=n_microstates, random_state=random_state, **kwargs
+            data[:, indices].T,
+            method=method,
+            n_clusters=n_microstates,
+            random_state=random_state,
+            **kwargs
         )
 
         # Run segmentation on the whole dataset

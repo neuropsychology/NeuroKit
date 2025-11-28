@@ -13,13 +13,18 @@ import neurokit2 as nk
 
 def test_eeg_add_channel():
 
-    raw = mne.io.read_raw_fif(str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True)
+    raw = mne.io.read_raw_fif(
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif",
+        preload=True,
+    )
 
     # len(channel) > len(raw)
     ecg1 = nk.ecg_simulate(length=170000)
 
     # sync_index_raw > sync_index_channel
-    raw1 = nk.mne_channel_add(raw.copy(), ecg1, channel_type="ecg", sync_index_raw=100, sync_index_channel=0)
+    raw1 = nk.mne_channel_add(
+        raw.copy(), ecg1, channel_type="ecg", sync_index_raw=100, sync_index_channel=0
+    )
     df1 = raw1.to_data_frame()
 
     # test if the column of channel is added
@@ -30,13 +35,17 @@ def test_eeg_add_channel():
     sync_index_channel = 0
     for i in df1["Added_Channel"].head(abs(sync_index_channel - sync_index_raw)):
         assert np.isnan(i)
-    assert np.isfinite(df1["Added_Channel"].iloc[abs(sync_index_channel - sync_index_raw)])
+    assert np.isfinite(
+        df1["Added_Channel"].iloc[abs(sync_index_channel - sync_index_raw)]
+    )
 
     # len(channel) < len(raw)
     ecg2 = nk.ecg_simulate(length=166790)
 
     # sync_index_raw < sync_index_channel
-    raw2 = nk.mne_channel_add(raw.copy(), ecg2, channel_type="ecg", sync_index_raw=0, sync_index_channel=100)
+    raw2 = nk.mne_channel_add(
+        raw.copy(), ecg2, channel_type="ecg", sync_index_raw=0, sync_index_channel=100
+    )
     df2 = raw2.to_data_frame()
 
     # test if the column of channel is added
@@ -45,10 +54,14 @@ def test_eeg_add_channel():
     # test if the NaN is appended properly to the added channel to account for difference in distance between two signals + difference in length
     sync_index_raw = 0
     sync_index_channel = 100
-    for i in df2["Added_Channel"].tail(abs(sync_index_channel - sync_index_raw) + (len(raw) - len(ecg2))):
+    for i in df2["Added_Channel"].tail(
+        abs(sync_index_channel - sync_index_raw) + (len(raw) - len(ecg2))
+    ):
         assert np.isnan(i)
     assert np.isfinite(
-        df2["Added_Channel"].iloc[-abs(sync_index_channel - sync_index_raw) - (len(raw) - len(ecg2)) - 1]
+        df2["Added_Channel"].iloc[
+            -abs(sync_index_channel - sync_index_raw) - (len(raw) - len(ecg2)) - 1
+        ]
     )
 
 
@@ -59,7 +72,9 @@ def test_eeg_badchannels():
     # add outliers to make one channel "bad"
     eeg_data[2, :] *= 10  # channel 2 will have much higher amplitude
 
-    bads, results = nk.eeg_badchannels(eeg_data, bad_threshold=0.3, distance_threshold=0.95, show=False)
+    bads, results = nk.eeg_badchannels(
+        eeg_data, bad_threshold=0.3, distance_threshold=0.95, show=False
+    )
     assert len(results) == 5
 
     expected_columns = [
@@ -83,7 +98,9 @@ def test_eeg_badchannels():
     # test stats calc with longer data that works with hdi
     simple_data = np.random.randn(2, 100)  # enough points for hdi
     prev_fignums = len(plt.get_fignums())
-    bads_simple, results_simple = nk.eeg_badchannels(simple_data, bad_threshold=0.8, distance_threshold=0.99)
+    bads_simple, results_simple = nk.eeg_badchannels(
+        simple_data, bad_threshold=0.8, distance_threshold=0.99
+    )
 
     # No bads
     assert len(bads_simple) == 0
@@ -94,11 +111,7 @@ def test_eeg_badchannels():
     assert results_simple.loc[0, "Amplitude"] > 0
 
     # Test mne Raw object input and test the show command
-    mne_info = mne.create_info(
-        ch_names = ['0', '1'],
-        sfreq = 100,
-        ch_types = ['eeg'] * 2
-    )
+    mne_info = mne.create_info(ch_names=["0", "1"], sfreq=100, ch_types=["eeg"] * 2)
 
     mne_raw = mne.io.RawArray(data=simple_data, info=mne_info)
 
@@ -106,14 +119,14 @@ def test_eeg_badchannels():
 
     # Check if a figure opened
     assert len(plt.get_fignums()) == prev_fignums + 1
-    plt.close('all')
+    plt.close("all")
 
     # Check if results are the same as above
     assert bads_mne == bads_simple
     assert results_mne.equals(results_simple)
 
     # Test Pandas DataFrame
-    df_simple = pd.DataFrame(simple_data.T, columns = ['0', '1'])
+    df_simple = pd.DataFrame(simple_data.T, columns=["0", "1"])
 
     bads_pandas, results_pandas = nk.eeg_badchannels(df_simple)
 
@@ -124,7 +137,9 @@ def test_eeg_badchannels():
     # test bad channel detection logic
     extreme_data = np.random.randn(2, 100)
     extreme_data[1, :] *= 50  # make channel 1 extreme
-    bads_extreme, results_extreme = nk.eeg_badchannels(extreme_data, bad_threshold=0.1, distance_threshold=0.7)
+    bads_extreme, results_extreme = nk.eeg_badchannels(
+        extreme_data, bad_threshold=0.1, distance_threshold=0.7
+    )
 
     # All bads
     assert len(bads_extreme) == 2
@@ -142,7 +157,10 @@ def test_eeg_badchannels():
 
 def test_mne_channel_extract():
 
-    raw = mne.io.read_raw_fif(str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif", preload=True)
+    raw = mne.io.read_raw_fif(
+        str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_raw.fif",
+        preload=True,
+    )
 
     # Extract 1 channel
     what = "EEG 053"
@@ -155,7 +173,9 @@ def test_mne_channel_extract():
 
     raw_channel2 = nk.mne_channel_extract(raw, what2)
     assert len(raw_channel2.columns) == 3
-    assert all(elem in what2 for elem in np.array(raw_channel2.columns.values, dtype=str))
+    assert all(
+        elem in what2 for elem in np.array(raw_channel2.columns.values, dtype=str)
+    )
 
     # Extract a category of channels
     what3 = "EEG"
@@ -169,10 +189,16 @@ def test_mne_channel_extract():
 
 def test_mne_to_df():
 
-    raw = mne.io.read_raw_fif(str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_filt-0-40_raw.fif")
+    raw = mne.io.read_raw_fif(
+        str(mne.datasets.sample.data_path())
+        + "/MEG/sample/sample_audvis_filt-0-40_raw.fif"
+    )
     assert len(nk.mne_to_df(raw)) == 41700
 
-    events = mne.read_events(str(mne.datasets.sample.data_path()) + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif")
+    events = mne.read_events(
+        str(mne.datasets.sample.data_path())
+        + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif"
+    )
     event_id = {"audio/left": 1, "audio/right": 2, "visual/left": 3, "visual/right": 4}
 
     # Create epochs (100 ms baseline + 500 ms)

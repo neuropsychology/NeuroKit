@@ -41,7 +41,9 @@ def read_video(filename="video.mp4"):
         )
 
     # Check if file exists
-    assert os.path.isfile(filename) is True, f"No file found with the specified name ({filename})."
+    assert (
+        os.path.isfile(filename) is True
+    ), f"No file found with the specified name ({filename})."
 
     capture = cv2.VideoCapture(filename)
     sampling_rate = int(capture.get(cv2.CAP_PROP_FPS))

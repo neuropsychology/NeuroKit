@@ -247,7 +247,10 @@ def fractal_dfa(
         knee = np.repeat(len(scale), fluctuations.shape[1])
         for i in range(fluctuations.shape[1]):
             knee[i] = find_knee(
-                y=np.log2(fluctuations[:, i]), x=np.log2(scale), show=False, verbose=False
+                y=np.log2(fluctuations[:, i]),
+                x=np.log2(scale),
+                show=False,
+                verbose=False,
             )
         knee = np.exp2(np.nanmax(knee))
         # Cut fluctuations
@@ -322,7 +325,9 @@ def _fractal_dfa_findscales(n, scale="default"):
 
     # Sanity checks (return warning for too short scale)
     if len(scale) < 2:
-        raise ValueError("NeuroKit error: more than one window is needed. Increase 'scale'.")
+        raise ValueError(
+            "NeuroKit error: more than one window is needed. Increase 'scale'."
+        )
 
     if np.min(scale) < 2:
         raise ValueError(
@@ -381,7 +386,9 @@ def _fractal_dfa_getwindow(signal, n, window, overlap=True):
     # TODO: see whether this step could be integrated within complexity_coarsegraining
 
     if overlap:
-        segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
+        segments = np.array(
+            [signal[i : i + window] for i in np.arange(0, n - window, window // 2)]
+        )
     else:
         segments = signal[: n - (n % window)]
         segments = segments.reshape((signal.shape[0] // window, window))
@@ -426,7 +433,9 @@ def _fractal_dfa_fluctuation(segments, trends, q=2):
     # When q = 2 (i.e., multifractal = False)
     # The formula is equivalent to np.sqrt(np.mean(var))
     # And corresponds to the Root Mean Square (RMS)
-    fluctuation = np.float_power(np.mean(np.float_power(var, q_non0 / 2), axis=1), 1 / q_non0.T)
+    fluctuation = np.float_power(
+        np.mean(np.float_power(var, q_non0 / 2), axis=1), 1 / q_non0.T
+    )
 
     if np.sum(is0) > 0:
         fluc0 = np.exp(0.5 * np.mean(np.log(var)))
@@ -533,7 +542,9 @@ def _fractal_dfa_plot(info, scale, fluctuations):
     plt.loglog(scale, fluctuations, "o", c="#90A4AE")
     plt.xlabel(r"$\log_{2}$(Scale)")
     plt.ylabel(r"$\log_{2}$(Fluctuations)")
-    plt.loglog(scale, fluctfit, c="#E91E63", label=r"$\alpha$ = {:.3f}".format(info["Alpha"]))
+    plt.loglog(
+        scale, fluctfit, c="#E91E63", label=r"$\alpha$ = {:.3f}".format(info["Alpha"])
+    )
 
     plt.legend(loc="lower right")
     plt.title("Detrended Fluctuation Analysis (DFA)")
@@ -573,7 +584,9 @@ def _fractal_mdfa_plot(info, scale, fluctuations, q):
         # Plot the polyfit line
         polyfit = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)
         fluctfit = 2 ** np.polyval(polyfit, np.log2(scale))
-        ax_fluctuation.loglog(scale, fluctfit, c=colors[i], base=2, label="_no_legend_", zorder=2)
+        ax_fluctuation.loglog(
+            scale, fluctfit, c=colors[i], base=2, label="_no_legend_", zorder=2
+        )
 
         # Add labels for max and min
         if i == 0:

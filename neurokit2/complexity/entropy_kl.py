@@ -123,6 +123,11 @@ def entropy_kl(signal, delay=1, dimension=2, norm="euclidean", **kwargs):
     # (Also I don't fully understand the code below)
     # It was used in https://github.com/paulbrodersen/entropy_estimators/continuous.py
     sum_dist = np.sum(np.log(2 * nearest))
-    klen = sum_dist * (d / n) - scipy.special.digamma(k) + scipy.special.digamma(n) + log_c_d
+    klen = (
+        sum_dist * (d / n)
+        - scipy.special.digamma(k)
+        + scipy.special.digamma(n)
+        + log_c_d
+    )
 
     return klen, info

@@ -162,9 +162,13 @@ def rsp_symmetry(
         plt.plot(normalized, color="grey", label="Respiration (normalized)")
         plt.scatter(peaks, normalized[peaks], color="red")
         plt.scatter(troughs, normalized[troughs], color="blue")
-        plt.scatter(halfway_locations, normalized[halfway_locations.astype(int)], color="orange")
         plt.scatter(
-            halfway_locations2, normalized[halfway_locations2.astype(int)], color="darkgreen"
+            halfway_locations, normalized[halfway_locations.astype(int)], color="orange"
+        )
+        plt.scatter(
+            halfway_locations2,
+            normalized[halfway_locations2.astype(int)],
+            color="darkgreen",
         )
 
         plt.plot(risedecay_symmetry, color="purple", label="Rise-decay symmetry")

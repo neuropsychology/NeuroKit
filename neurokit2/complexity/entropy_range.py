@@ -2,7 +2,9 @@ from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 
 
-def entropy_range(signal, dimension=3, delay=1, tolerance="sd", approximate=False, **kwargs):
+def entropy_range(
+    signal, dimension=3, delay=1, tolerance="sd", approximate=False, **kwargs
+):
     """**Range Entropy (RangEn)**
 
     Introduced by Omidvarnia et al. (2018), Range Entropy (RangEn or RangeEn) refers to a modified

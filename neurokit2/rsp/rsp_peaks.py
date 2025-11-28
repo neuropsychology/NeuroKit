@@ -72,7 +72,9 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", **kwargs):
       Physiological measurement, 39(9), 094001.
 
     """
-    info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
+    info = rsp_findpeaks(
+        rsp_cleaned, sampling_rate=sampling_rate, method=method, **kwargs
+    )
     info = rsp_fixpeaks(info)
     peak_signal = signal_formatpeaks(
         info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"]

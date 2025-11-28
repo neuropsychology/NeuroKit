@@ -6,7 +6,13 @@ from ..signal import signal_interpolate
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
-def rsp_amplitude(rsp_cleaned, peaks, troughs=None, method="standard", interpolation_method="monotone_cubic"):
+def rsp_amplitude(
+    rsp_cleaned,
+    peaks,
+    troughs=None,
+    method="standard",
+    interpolation_method="monotone_cubic",
+):
     """**Compute respiratory amplitude**
 
     Compute respiratory amplitude given the raw respiration signal and its extrema. The
@@ -105,6 +111,11 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, method="standard", interpola
     if len(peaks) == 1:
         amplitude = np.full(rsp_cleaned.shape, amplitude[0])
     else:
-        amplitude = signal_interpolate(peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method)
+        amplitude = signal_interpolate(
+            peaks,
+            amplitude,
+            x_new=np.arange(len(rsp_cleaned)),
+            method=interpolation_method,
+        )
 
     return amplitude

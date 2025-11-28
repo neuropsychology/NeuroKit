@@ -115,11 +115,16 @@ def complexity_simulate(
     method = method.lower()
     if method in ["fractal", "fractional", "hurst", "ornsteinuhlenbeck", "ornstein"]:
         signal = _complexity_simulate_ornstein(
-            duration=duration, sampling_rate=sampling_rate, hurst_exponent=hurst_exponent, **kwargs
+            duration=duration,
+            sampling_rate=sampling_rate,
+            hurst_exponent=hurst_exponent,
+            **kwargs
         )
     elif method in ["lorenz"]:
         # x-dimension of Lorenz system
-        signal = _attractor_lorenz(sampling_rate=sampling_rate, duration=duration, **kwargs)[:, 0]
+        signal = _attractor_lorenz(
+            sampling_rate=sampling_rate, duration=duration, **kwargs
+        )[:, 0]
     elif method in ["mackeyglass"]:
         signal = _complexity_simulate_mackeyglass(
             duration=duration, sampling_rate=sampling_rate, **kwargs
@@ -133,7 +138,14 @@ def complexity_simulate(
 # Methods
 # =============================================================================
 def _complexity_simulate_mackeyglass(
-    duration=10, sampling_rate=1000, x0="fixed", a=0.2, b=0.1, c=10.0, n=1000, discard=250
+    duration=10,
+    sampling_rate=1000,
+    x0="fixed",
+    a=0.2,
+    b=0.1,
+    c=10.0,
+    n=1000,
+    discard=250,
 ):
     """Generate time series using the Mackey-Glass equation. Generates time series using the discrete approximation of
     the Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
@@ -222,7 +234,7 @@ def _complexity_simulate_ornstein(
     length = duration * sampling_rate
 
     # The fractional Gaussian noise
-    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(
+    dB = (duration**hurst_exponent) * _complexity_simulate_fractionalnoise(
         size=length, hurst_exponent=hurst_exponent
     )
 
@@ -276,7 +288,9 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     )
 
     # Eigenvalues of the correlation function
-    eigenvals = np.sqrt(np.fft.fft(np.concatenate([cor[:], 0, cor[1:][::-1]], axis=None).real))
+    eigenvals = np.sqrt(
+        np.fft.fft(np.concatenate([cor[:], 0, cor[1:][::-1]], axis=None).real)
+    )
 
     # Two normal distributed noises to be convoluted
     gn = np.random.normal(0.0, 1.0, size)
@@ -288,7 +302,8 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
             (eigenvals[0] / np.sqrt(2 * size)) * gn[0],
             (eigenvals[1:size] / np.sqrt(4 * size)) * (gn[1:] + 1j * gn2[1:]),
             (eigenvals[size] / np.sqrt(2 * size)) * gn2[0],
-            (eigenvals[size + 1 :] / np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1]),
+            (eigenvals[size + 1 :] / np.sqrt(4 * size))
+            * (gn[1:][::-1] - 1j * gn2[1:][::-1]),
         ],
         axis=None,
     )

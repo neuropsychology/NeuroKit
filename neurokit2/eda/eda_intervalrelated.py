@@ -79,7 +79,9 @@ def eda_intervalrelated(data, sampling_rate=1000, **kwargs):
             # Add label info
             results[index]["Label"] = data[index]["Label"].iloc[0]
 
-            results[index] = _eda_intervalrelated(data[index], results[index], sampling_rate=sampling_rate, **kwargs)
+            results[index] = _eda_intervalrelated(
+                data[index], results[index], sampling_rate=sampling_rate, **kwargs
+            )
 
         results = pd.DataFrame.from_dict(results, orient="index")
 
@@ -91,7 +93,9 @@ def eda_intervalrelated(data, sampling_rate=1000, **kwargs):
 # =============================================================================
 
 
-def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic="posada", **kwargs):
+def _eda_intervalrelated(
+    data, output={}, sampling_rate=1000, method_sympathetic="posada", **kwargs
+):
     """Format input for dictionary."""
     # Sanitize input
     colnames = data.columns.values
@@ -117,7 +121,9 @@ def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic
         peaks_idx = data["SCR_Peaks"] == 1
         # Mean amplitude is only computed over peaks. If no peaks, return NaN
         if peaks_idx.sum() > 0:
-            output["SCR_Peaks_Amplitude_Mean"] = np.nanmean(data[peaks_idx]["SCR_Amplitude"].values)
+            output["SCR_Peaks_Amplitude_Mean"] = np.nanmean(
+                data[peaks_idx]["SCR_Amplitude"].values
+            )
         else:
             output["SCR_Peaks_Amplitude_Mean"] = np.nan
 
@@ -126,7 +132,9 @@ def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic
         output["EDA_Tonic_SD"] = np.nanstd(data["EDA_Tonic"].values)
 
     # EDA Sympathetic
-    output.update({"EDA_Sympathetic": np.nan, "EDA_SympatheticN": np.nan})  # Default values
+    output.update(
+        {"EDA_Sympathetic": np.nan, "EDA_SympatheticN": np.nan}
+    )  # Default values
     if len(data) > sampling_rate * 64:
         if "EDA_Clean" in colnames:
             output.update(
@@ -150,9 +158,13 @@ def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic
     output.update({"EDA_Autocorrelation": np.nan})  # Default values
     if len(data) > sampling_rate * 30:  # 30 seconds minimum (NOTE: somewhat arbitrary)
         if "EDA_Clean" in colnames:
-            output["EDA_Autocorrelation"] = eda_autocor(data["EDA_Clean"], sampling_rate=sampling_rate, **kwargs)
+            output["EDA_Autocorrelation"] = eda_autocor(
+                data["EDA_Clean"], sampling_rate=sampling_rate, **kwargs
+            )
         elif "EDA_Raw" in colnames:
             # If not clean signal, use raw
-            output["EDA_Autocorrelation"] = eda_autocor(data["EDA_Raw"], sampling_rate=sampling_rate, **kwargs)
+            output["EDA_Autocorrelation"] = eda_autocor(
+                data["EDA_Raw"], sampling_rate=sampling_rate, **kwargs
+            )
 
     return output

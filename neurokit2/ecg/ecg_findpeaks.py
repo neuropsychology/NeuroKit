@@ -320,14 +320,11 @@ def _ecg_findpeaks_neurokit(
     peaks = np.asarray(peaks).astype(int)  # Convert to int
     return peaks
 
+
 # =============================================================================
 # Kahmis
 # =============================================================================
-def _ecg_findpeaks_khamis(
-    signal,
-    sampling_rate=1000,
-    **kwargs
-):
+def _ecg_findpeaks_khamis(signal, sampling_rate=1000, **kwargs):
     """UNSW QRS detection algorithm, developed by Khamis et al. (2016).
     Designed for both clinical ECGs and poorer quality telehealth ECGs.
     Adapted from the original MATLAB implementation by Khamis et al. (available under a CC0 licence).
@@ -467,7 +464,7 @@ def _ecg_findpeaks_khamis(
 
         smashedECG = []
         for i in range(len(starts)):
-            smashedECG.append(ECG[starts[i]:ends[i] + 1])
+            smashedECG.append(ECG[starts[i] : ends[i] + 1])
 
         return smashedECG
 
@@ -481,7 +478,7 @@ def _ecg_findpeaks_khamis(
             # Number of 2s windows (P) in data rounded up
             P = int(np.ceil(len(x) / (2 * fs)))
             y = np.zeros(2 * fs * P)
-            y[:len(x)] = x
+            y[: len(x)] = x
             y = y.reshape((P, 2 * fs))
 
             y = y - np.mean(y, axis=1, keepdims=True)  # Center the data
@@ -529,7 +526,7 @@ def _ecg_findpeaks_khamis(
             A = max(1, i - N1)
             B = min(N, i + N2)
             P = 1 + round((p / 100) * (B - A))
-            Z = np.sort(x[A - 1:B])
+            Z = np.sort(x[A - 1 : B])
             y[i - 1] = Z[P - 1]
 
         return y
@@ -543,9 +540,8 @@ def _ecg_findpeaks_khamis(
 
         return y
 
-
     # Bandpass filtering
-    def cleansignal(x, fs, do_original_filtering = False):
+    def cleansignal(x, fs, do_original_filtering=False):
         # cleansignal
         # Helper function:
         # baseline removal then high pass (0.7 Hz) filtering
@@ -565,22 +561,24 @@ def _ecg_findpeaks_khamis(
 
         # hpf - used to eliminate dc component or low frequency drift.
         if do_original_filtering:
-            b, a = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high')
+            b, a = scipy.signal.butter(7, 0.7 / (fs / 2), btype="high")
             hpdata = myfiltfilt(b, a, meddata)
         else:
-            sos = scipy.signal.butter(7, 0.7 / (fs / 2), btype='high', output='sos')
+            sos = scipy.signal.butter(7, 0.7 / (fs / 2), btype="high", output="sos")
             hpdata = scipy.signal.sosfiltfilt(sos, meddata)
 
         # low pass linear phase filter
-        b, a = scipy.signal.butter(7, 20 / (fs / 2), btype='low')
+        b, a = scipy.signal.butter(7, 20 / (fs / 2), btype="low")
         lphpdata = myfiltfilt(b, a, hpdata)
 
         return lphpdata
 
     if sampling_rate < 50:
-        raise Exception('This function requires a sampling rate of at least 50 Hz')
+        raise Exception("This function requires a sampling rate of at least 50 Hz")
 
-    finalmask = []  # The original MATLAB implementation allowed a mask to optionally be inputted.
+    finalmask = (
+        []
+    )  # The original MATLAB implementation allowed a mask to optionally be inputted.
 
     # Clean up Signal - hi pass, then low pass filter
     lphpdata = cleansignal(signal, sampling_rate)
@@ -592,7 +590,7 @@ def _ecg_findpeaks_khamis(
     # Sort filter
     top = sortfilt1(lphpdata, round(sampling_rate * 0.1), 100)
     bot = sortfilt1(lphpdata, round(sampling_rate * 0.1), 0)
-    envelope = (top - bot)
+    envelope = top - bot
     envelope[envelope < 0] = 0
     feature = np.abs(diffdata * envelope)
 
@@ -606,8 +604,8 @@ def _ecg_findpeaks_khamis(
     diffpower1 = np.abs(scipy.signal.filtfilt(b, a, feature)) ** 0.5
 
     smashedSig = smashECG(diffpower1, finalmask)
-    F = smashedFFT(smashedSig, sampling_rate, 2 ** 14)
-    f = np.arange(0, 2 ** 13) * sampling_rate / 2 ** 14
+    F = smashedFFT(smashedSig, sampling_rate, 2**14)
+    f = np.arange(0, 2**13) * sampling_rate / 2**14
     range_indices = np.where((f >= 0.1) & (f < 4))[0]
     max_idx = np.argmax(F[range_indices])
     fftHRfreq = f[range_indices[max_idx]]
@@ -615,7 +613,9 @@ def _ecg_findpeaks_khamis(
     # Update smoother feature signal
     HRmin = 1.5  # Hz: 90 BPM  (don't want to go much below this, will miss ectopics otherwise!)
     HRmax = 4.0  # Hz: 240 BPM  (Shouldn't see much above this)
-    fc = np.median(2 * np.array([HRmin, fftHRfreq, HRmax]))  # Kills half of second harmonic and all of the rest
+    fc = np.median(
+        2 * np.array([HRmin, fftHRfreq, HRmax])
+    )  # Kills half of second harmonic and all of the rest
     k = ((sampling_rate / 2) * 0.0037) / fc
     Nh = round(k * sampling_rate)  # Heuristic for Hamming window 3dB point
     b = scipy.signal.windows.hamming(Nh, sym=True)
@@ -629,7 +629,14 @@ def _ecg_findpeaks_khamis(
     # Find valid indices
     valididx = np.setdiff1d(np.arange(len(diffpower2)), finalmask)
     # Maximum filter to get upper envelope
-    Wsort = round(np.median(2 * np.array([sampling_rate, sampling_rate / fftHRfreq, sampling_rate / HRmax])))
+    Wsort = round(
+        np.median(
+            2
+            * np.array(
+                [sampling_rate, sampling_rate / fftHRfreq, sampling_rate / HRmax]
+            )
+        )
+    )
     upperenv = sortfilt1(diffpower2, Wsort, 100)  # Morph Open
     upperenv = sortfilt1(upperenv, Wsort, 0)  # Morph Close
     lowerenv = sortfilt1(diffpower2, Wsort, 0)  # Morph Open
@@ -645,10 +652,12 @@ def _ecg_findpeaks_khamis(
     tpsidx = turning_points(diffpower2, threshold)
     qrs = tpsidx[tpsidx > 0]
     qrs = np.setdiff1d(qrs, finalmask)
-    m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
+    m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(
+        qrs, finalmask, sampling_rate
+    )
 
     # Stop if no qrs waves were detected (not in original matlab algorithm):
-    if len(qrs)==0:
+    if len(qrs) == 0:
         peaks = np.asarray(qrs).astype(int)  # Convert to int
         return peaks
 
@@ -665,21 +674,23 @@ def _ecg_findpeaks_khamis(
     temp = np.zeros(len(diffpower2) + 2)
     temp[newmask + 1] = 1
     temp = np.concatenate(([1], temp, [1]))
-    
+
     # Fill in sections less than 1.5*mRR seconds;
 
     for i in range(1, len(temp)):
         if temp[i] - temp[i - 1] == -1:
             start = i
         if temp[i] - temp[i - 1] == 1 and (i - 1) - start < 1.5 * m_rr:
-            temp[start:(i - 1)] = 1
+            temp[start : (i - 1)] = 1
     newmask = np.where(temp[1:-1] == 1)[0]
 
     # Only keep newly found QRS between long beats
     qrs2 = np.setdiff1d(qrs2, newmask)
     # Add them to the old QRS (found using low sensitivity)
     qrs = np.union1d(qrs, qrs2)
-    m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(qrs, finalmask, sampling_rate)
+    m_rr, rr_list, n_rr, n_sections = calculate_rr_interval(
+        qrs, finalmask, sampling_rate
+    )
 
     # 3rd pass: Highest threshold
     # Back-track to remove possible wrong beats

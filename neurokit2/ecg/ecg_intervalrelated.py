@@ -79,7 +79,9 @@ def ecg_intervalrelated(data, sampling_rate=1000):
             intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             # Rate
-            intervals[index] = _ecg_intervalrelated_formatinput(data[index], intervals[index])
+            intervals[index] = _ecg_intervalrelated_formatinput(
+                data[index], intervals[index]
+            )
 
             # HRV
             intervals[index] = _ecg_intervalrelated_hrv(

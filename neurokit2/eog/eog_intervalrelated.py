@@ -70,7 +70,9 @@ def eog_intervalrelated(data):
             intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             # Rate and Blinks quantity
-            intervals[index] = _eog_intervalrelated_formatinput(data[index], intervals[index])
+            intervals[index] = _eog_intervalrelated_formatinput(
+                data[index], intervals[index]
+            )
 
         eog_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 

@@ -4,6 +4,7 @@ import numpy as np
 from ..epochs import epochs_create
 from ..signal.signal_rate import signal_rate
 
+
 def signal_cyclesegment(signal_cleaned, cycle_indices, sampling_rate=1000, **kwargs):
     """**Segment a signal into individual cycles**
 
@@ -85,7 +86,9 @@ def _segment_window(
     if cycle_indices is not None:
         cycle_rate = np.mean(
             signal_rate(
-                cycle_indices, sampling_rate=sampling_rate, desired_length=desired_length
+                cycle_indices,
+                sampling_rate=sampling_rate,
+                desired_length=desired_length,
             )
         )
 

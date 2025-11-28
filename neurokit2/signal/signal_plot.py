@@ -166,7 +166,9 @@ def signal_plot(
             signal[continuous_columns] = nk_standardize(signal[continuous_columns])
 
         if subplots is True:
-            _, axes = plt.subplots(nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs)
+            _, axes = plt.subplots(
+                nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs
+            )
             for ax, col, color in zip(axes, continuous_columns, colors):
                 ax.plot(signal[col], c=color, **kwargs)
         else:

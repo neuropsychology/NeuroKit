@@ -35,7 +35,8 @@ for participant in range(200):
 
     # Get annotations
     anno = wfdb.rdann(
-        "./lobachevsky-university-electrocardiography-database-1.0.1/data/" + filename, "i"
+        "./lobachevsky-university-electrocardiography-database-1.0.1/data/" + filename,
+        "i",
     )
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})

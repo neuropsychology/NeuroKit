@@ -22,9 +22,9 @@ dfs_ecg = []
 dfs_rpeaks = []
 
 for participant in range(25):
-    print("Participant: " + str(participant+1) + "/25")
+    print("Participant: " + str(participant + 1) + "/25")
     for i, experiment in enumerate(ecg_gudb_database.GUDb.experiments):
-        print("  - Condition " + str(i+1) + "/5")
+        print("  - Condition " + str(i + 1) + "/5")
         # creating class which loads the experiment
         ecg_class = ecg_gudb_database.GUDb(participant, experiment)
 
@@ -32,14 +32,14 @@ for participant in range(25):
         if ecg_class.anno_cs_exists:
 
             data = pd.DataFrame({"ECG": ecg_class.cs_V2_V1})
-            data["Participant"] = "GUDB_%.2i" %(participant)
+            data["Participant"] = "GUDB_%.2i" % (participant)
             data["Sample"] = range(len(data))
             data["Sampling_Rate"] = 250
             data["Database"] = "GUDB_" + experiment
 
             # getting annotations
             anno = pd.DataFrame({"Rpeaks": ecg_class.anno_cs})
-            anno["Participant"] = "GUDB_%.2i" %(participant)
+            anno["Participant"] = "GUDB_%.2i" % (participant)
             anno["Sampling_Rate"] = 250
             anno["Database"] = "GUDB_" + experiment
 
@@ -53,7 +53,6 @@ for participant in range(25):
 #            einthoven_i = ecg_class.einthoven_I
 #            einthoven_ii = ecg_class.einthoven_II
 #            einthoven_iii = ecg_class.einthoven_III
-
 
 
 # Save

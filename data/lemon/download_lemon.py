@@ -67,7 +67,9 @@ for sub in os.listdir("lemon/"):
         data = np.vstack([raw.get_data(), missing_data])
         ch_names = raw.info["ch_names"] + missing_channels
         ch_types = raw.get_channel_types() + ["eeg"] * len(missing_channels)
-        info = mne.create_info(ch_names=ch_names, ch_types=ch_types, sfreq=raw.info["sfreq"])
+        info = mne.create_info(
+            ch_names=ch_names, ch_types=ch_types, sfreq=raw.info["sfreq"]
+        )
         raw = mne.io.RawArray(data=data, info=info)
         raw.info["bads"].extend(missing_channels)
 

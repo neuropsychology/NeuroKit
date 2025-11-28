@@ -67,9 +67,18 @@ def rsp_rate(
 
     """
 
-    if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
+    if method.lower() in [
+        "period",
+        "peak",
+        "peaks",
+        "trough",
+        "troughs",
+        "signal_rate",
+    ]:
         if troughs is None:
-            _, troughs = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
+            _, troughs = rsp_peaks(
+                rsp_cleaned, sampling_rate=sampling_rate, method=peak_method
+            )
         if isinstance(troughs, (pd.DataFrame, dict)):
             troughs = troughs["RSP_Troughs"]
         rate = signal_rate(
@@ -89,7 +98,10 @@ def rsp_rate(
         )
 
     else:
-        raise ValueError("NeuroKit error: rsp_rate(): 'method' should be" " one of 'trough', or 'cross-correlation'.")
+        raise ValueError(
+            "NeuroKit error: rsp_rate(): 'method' should be"
+            " one of 'trough', or 'cross-correlation'."
+        )
 
     return rate
 
@@ -99,12 +111,22 @@ def rsp_rate(
 # =============================================================================
 
 
-def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1, interpolation_method="monotone_cubic"):
+def _rsp_rate_xcorr(
+    rsp_cleaned,
+    sampling_rate=1000,
+    window=10,
+    hop_size=1,
+    interpolation_method="monotone_cubic",
+):
 
     N = len(rsp_cleaned)
     # Downsample data to 10Hz
     desired_sampling_rate = 10
-    rsp = signal_resample(rsp_cleaned, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
+    rsp = signal_resample(
+        rsp_cleaned,
+        sampling_rate=sampling_rate,
+        desired_sampling_rate=desired_sampling_rate,
+    )
 
     # Define paramters
     window_length = int(desired_sampling_rate * window)
@@ -135,9 +157,13 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1, inte
 
     x = np.arange(len(rsp_rate))
     y = rsp_rate
-    rsp_rate = signal_interpolate(x, y, x_new=len(rsp_cleaned), method=interpolation_method)
+    rsp_rate = signal_interpolate(
+        x, y, x_new=len(rsp_cleaned), method=interpolation_method
+    )
     # Smoothing
-    rsp_rate = signal_filter(rsp_rate, highcut=0.1, order=4, sampling_rate=sampling_rate)
+    rsp_rate = signal_filter(
+        rsp_rate, highcut=0.1, order=4, sampling_rate=sampling_rate
+    )
 
     # Convert to Brpm
     rsp_rate = np.multiply(rsp_rate, 60)

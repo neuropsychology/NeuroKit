@@ -36,11 +36,29 @@ def summary_plot(x, errorbars=0, **kwargs):
 
     # Histogram
     counts, bins = np.histogram(x, **kwargs)
-    bin_centers = 0.5*(bins[1:] + bins[:-1])
+    bin_centers = 0.5 * (bins[1:] + bins[:-1])
     if errorbars > 0:
-        samperr = np.std(counts) / np.sqrt(counts) * (st.norm.ppf(1-(1-errorbars)/2))
-        ax.errorbar(bin_centers, counts, yerr=samperr, ecolor="#FF8C00", fmt='.', capsize=5, capthick=2)
-    ax.hist(bins[:-1], bins, weights=counts, color="#2196F3", edgecolor="white", zorder=1, **kwargs)
+        samperr = (
+            np.std(counts) / np.sqrt(counts) * (st.norm.ppf(1 - (1 - errorbars) / 2))
+        )
+        ax.errorbar(
+            bin_centers,
+            counts,
+            yerr=samperr,
+            ecolor="#FF8C00",
+            fmt=".",
+            capsize=5,
+            capthick=2,
+        )
+    ax.hist(
+        bins[:-1],
+        bins,
+        weights=counts,
+        color="#2196F3",
+        edgecolor="white",
+        zorder=1,
+        **kwargs
+    )
 
     # Density
     x_axis, y_axis = density(x, **kwargs)

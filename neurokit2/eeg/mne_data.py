@@ -58,20 +58,31 @@ def mne_data(what="raw", path=None):
 
     # Epochs
     elif what in ["epochs", "evoked"]:
-        raw = mne.io.read_raw_fif(path + "/MEG/sample/sample_audvis_filt-0-40_raw.fif").pick_types(
-            meg=False, eeg=True
+        raw = mne.io.read_raw_fif(
+            path + "/MEG/sample/sample_audvis_filt-0-40_raw.fif"
+        ).pick_types(meg=False, eeg=True)
+
+        events = mne.read_events(
+            path + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif"
         )
+        event_id = {
+            "audio/left": 1,
+            "audio/right": 2,
+            "visual/left": 3,
+            "visual/right": 4,
+        }
 
-        events = mne.read_events(path + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif")
-        event_id = {"audio/left": 1, "audio/right": 2, "visual/left": 3, "visual/right": 4}
-
-        data = mne.Epochs(raw, events, event_id, tmin=-0.2, tmax=0.5, baseline=(None, 0))
+        data = mne.Epochs(
+            raw, events, event_id, tmin=-0.2, tmax=0.5, baseline=(None, 0)
+        )
 
         if what in ["evoked"]:
             data = [data[name].average() for name in ("audio", "visual")]
 
     else:
-        raise ValueError("NeuroKit error: mne_data(): the 'what' argument not recognized.")
+        raise ValueError(
+            "NeuroKit error: mne_data(): the 'what' argument not recognized."
+        )
 
     mne.set_log_level(old_verbosity_level)
     return data

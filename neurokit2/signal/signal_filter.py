@@ -147,25 +147,43 @@ def signal_filter(
     signal_sanitized, missing = _signal_filter_missing(signal)
 
     if method in ["sg", "savgol", "savitzky-golay"]:
-        filtered = _signal_filter_savgol(signal_sanitized, sampling_rate, order, window_size=window_size)
+        filtered = _signal_filter_savgol(
+            signal_sanitized, sampling_rate, order, window_size=window_size
+        )
     elif method in ["powerline"]:
         filtered = _signal_filter_powerline(signal_sanitized, sampling_rate, powerline)
     else:
 
         # Sanity checks
         if lowcut is None and highcut is None:
-            raise ValueError("NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'.")
+            raise ValueError(
+                "NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'."
+            )
 
         if method in ["butter", "butterworth"]:
-            filtered = _signal_filter_butterworth(signal_sanitized, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_butterworth(
+                signal_sanitized, sampling_rate, lowcut, highcut, order
+            )
         elif method in ["butter_ba", "butterworth_ba"]:
-            filtered = _signal_filter_butterworth_ba(signal_sanitized, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_butterworth_ba(
+                signal_sanitized, sampling_rate, lowcut, highcut, order
+            )
         elif method in ["butter_zi", "butterworth_zi"]:
-            filtered = _signal_filter_butterworth_zi(signal_sanitized, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_butterworth_zi(
+                signal_sanitized, sampling_rate, lowcut, highcut, order
+            )
         elif method in ["bessel"]:
-            filtered = _signal_filter_bessel(signal_sanitized, sampling_rate, lowcut, highcut, order)
+            filtered = _signal_filter_bessel(
+                signal_sanitized, sampling_rate, lowcut, highcut, order
+            )
         elif method in ["fir"]:
-            filtered = _signal_filter_fir(signal_sanitized, sampling_rate, lowcut, highcut, window_size=window_size)
+            filtered = _signal_filter_fir(
+                signal_sanitized,
+                sampling_rate,
+                lowcut,
+                highcut,
+                window_size=window_size,
+            )
         else:
             raise ValueError(
                 "NeuroKit error: signal_filter(): 'method' should be",
@@ -195,18 +213,24 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="defa
     <https://arxiv.org/ftp/arxiv/papers/1808/1808.10489.pdf>`_.
 
     """
-    window_size = _signal_filter_windowsize(window_size=window_size, sampling_rate=sampling_rate)
+    window_size = _signal_filter_windowsize(
+        window_size=window_size, sampling_rate=sampling_rate
+    )
     if window_size % 2 == 0:
         window_size += 1  # Make sure it's odd
 
-    filtered = scipy.signal.savgol_filter(signal, window_length=int(window_size), polyorder=order)
+    filtered = scipy.signal.savgol_filter(
+        signal, window_length=int(window_size), polyorder=order
+    )
     return filtered
 
 
 # =============================================================================
 # FIR
 # =============================================================================
-def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_size="default"):
+def _signal_filter_fir(
+    signal, sampling_rate=1000, lowcut=None, highcut=None, window_size="default"
+):
     """Filter a signal using a FIR filter."""
     try:
         import mne
@@ -242,20 +266,32 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
 # =============================================================================
 
 
-def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
+def _signal_filter_butterworth(
+    signal, sampling_rate=1000, lowcut=None, highcut=None, order=5
+):
     """Filter a signal using IIR Butterworth SOS method."""
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
-    sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
+    freqs, filter_type = _signal_filter_sanitize(
+        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
+    )
+    sos = scipy.signal.butter(
+        order, freqs, btype=filter_type, output="sos", fs=sampling_rate
+    )
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
 
 
-def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
+def _signal_filter_butterworth_ba(
+    signal, sampling_rate=1000, lowcut=None, highcut=None, order=5
+):
     """Filter a signal using IIR Butterworth B/A method."""
     # Get coefficients
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
+    freqs, filter_type = _signal_filter_sanitize(
+        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
+    )
 
-    b, a = scipy.signal.butter(order, freqs, btype=filter_type, output="ba", fs=sampling_rate)
+    b, a = scipy.signal.butter(
+        order, freqs, btype=filter_type, output="ba", fs=sampling_rate
+    )
     try:
         filtered = scipy.signal.filtfilt(b, a, signal, method="gust")
     except ValueError:
@@ -264,12 +300,18 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
     return filtered
 
 
-def _signal_filter_butterworth_zi(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
+def _signal_filter_butterworth_zi(
+    signal, sampling_rate=1000, lowcut=None, highcut=None, order=5
+):
     """Filter a signal using IIR Butterworth SOS method, given initial state (zi)."""
 
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
+    freqs, filter_type = _signal_filter_sanitize(
+        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
+    )
 
-    sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
+    sos = scipy.signal.butter(
+        order, freqs, btype=filter_type, output="sos", fs=sampling_rate
+    )
 
     zi_coeff = scipy.signal.sosfilt_zi(sos)
     zi = zi_coeff * np.mean(signal)
@@ -282,10 +324,16 @@ def _signal_filter_butterworth_zi(signal, sampling_rate=1000, lowcut=None, highc
 # =============================================================================
 
 
-def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
+def _signal_filter_bessel(
+    signal, sampling_rate=1000, lowcut=None, highcut=None, order=5
+):
+    freqs, filter_type = _signal_filter_sanitize(
+        lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate
+    )
 
-    sos = scipy.signal.bessel(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
+    sos = scipy.signal.bessel(
+        order, freqs, btype=filter_type, output="sos", fs=sampling_rate
+    )
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
 
@@ -311,11 +359,15 @@ def _signal_filter_powerline(signal, sampling_rate, powerline=50):
 # =============================================================================
 # Utility
 # =============================================================================
-def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, normalize=False):
+def _signal_filter_sanitize(
+    lowcut=None, highcut=None, sampling_rate=1000, normalize=False
+):
 
     # Sanity checks
     if lowcut is not None or highcut is not None:
-        if sampling_rate <= 2 * np.nanmax(np.array([lowcut, highcut], dtype=np.float64)):
+        if sampling_rate <= 2 * np.nanmax(
+            np.array([lowcut, highcut], dtype=np.float64)
+        ):
             warn(
                 "The sampling rate is too low. Sampling rate"
                 " must exceed the Nyquist rate to avoid aliasing problem."

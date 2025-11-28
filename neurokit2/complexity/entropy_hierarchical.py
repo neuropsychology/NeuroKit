@@ -105,11 +105,13 @@ def entropy_hierarchical(
     for T in range(len(Q)):
         Temp = Q[T, : int(N / (2 ** (int(np.log2(T + 1)))))]
         # This could be exposed to have different type of entropy estimators
-        HEns[T], _ = entropy_sample(Temp, delay=1, dimension=dimension, tolerance=info["Tolerance"])
+        HEns[T], _ = entropy_sample(
+            Temp, delay=1, dimension=dimension, tolerance=info["Tolerance"]
+        )
 
     Sn = np.zeros(scale)
     for t in range(scale):
-        vals = HEns[(2 ** t) - 1 : (2 ** (t + 1)) - 1]
+        vals = HEns[(2**t) - 1 : (2 ** (t + 1)) - 1]
         Sn[t] = np.mean(vals[np.isfinite(vals)])
 
     # The HEn index is quantified as the area under the curve (AUC),
@@ -150,11 +152,14 @@ def entropy_hierarchical(
             P = int((k) // 2) - 1
             if k > 1:
                 if k % 2:
-                    x[k - 1] = x[P] + N / (2 ** Q)
+                    x[k - 1] = x[P] + N / (2**Q)
                 else:
-                    x[k - 1] = x[P] - N / (2 ** Q)
+                    x[k - 1] = x[P] - N / (2**Q)
 
-        Edges = np.vstack((np.repeat(np.arange(1, N), 2), np.arange(2, 2 * N))).transpose() - 1
+        Edges = (
+            np.vstack((np.repeat(np.arange(1, N), 2), np.arange(2, 2 * N))).transpose()
+            - 1
+        )
         labx = ["".join(k) for k in np.round(HEns, 3).astype(str)]
         ax2 = plt.subplot(G[3:, :])
         for k in range(len(x) - 1):
@@ -186,12 +191,12 @@ def _hierarchical_decomposition(signal, scale=3):
             " subtree. Consider reducing the value of scale."
         )
 
-    Q = np.zeros(((2 ** scale) - 1, N))
+    Q = np.zeros(((2**scale) - 1, N))
     Q[0, :] = signal[:N]
     p = 1
     for k in range(scale - 1):
-        for n in range(2 ** k):
-            Temp = Q[(2 ** k) + n - 1, :]
+        for n in range(2**k):
+            Temp = Q[(2**k) + n - 1, :]
             # 1. We define an averaging operator Q0. It is the the low frequency component.
             Q[p, : N // 2] = (Temp[::2] + Temp[1::2]) / 2
             # 2. We define a difference frequency component. It is the the high frequency component.

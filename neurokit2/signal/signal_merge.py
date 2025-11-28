@@ -57,10 +57,14 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     # Fill beginning
     if time1[0] < time2[0]:
-        beginning = np.full(int(np.round(sampling_rate * (time2[0] - time1[0]))), signal2[0])
+        beginning = np.full(
+            int(np.round(sampling_rate * (time2[0] - time1[0]))), signal2[0]
+        )
         signal2 = np.concatenate((beginning, signal2))
     elif time2[0] < time1[0]:
-        beginning = np.full(int(np.round(sampling_rate * (time1[0] - time2[0]))), signal1[0])
+        beginning = np.full(
+            int(np.round(sampling_rate * (time1[0] - time2[0]))), signal1[0]
+        )
         signal1 = np.concatenate((beginning, signal1))
 
     # Fill end

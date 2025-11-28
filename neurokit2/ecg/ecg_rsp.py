@@ -96,7 +96,9 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
         rsp = signal_filter(ecg_rate, sampling_rate, lowcut=0.1, highcut=0.7, order=6)
     elif method in ["charlton2016"]:
         # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5390977/#__ffn_sectitle
-        rsp = signal_filter(ecg_rate, sampling_rate, lowcut=4 / 60, highcut=60 / 60, order=6)
+        rsp = signal_filter(
+            ecg_rate, sampling_rate, lowcut=4 / 60, highcut=60 / 60, order=6
+        )
     elif method in ["soni2019"]:
         # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6329220/
         rsp = signal_filter(ecg_rate, sampling_rate, highcut=0.5, order=6)

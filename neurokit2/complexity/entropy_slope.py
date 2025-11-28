@@ -101,7 +101,9 @@ def entropy_slope(signal, dimension=3, thresholds=[0.1, 45], **kwargs):
             symbols[Tx > thresholds[q]] = q + 1
             symbols[Tx < -thresholds[q]] = -(q + 1)
 
-    unique = np.array([symbols[k : N - dimension + k + 1] for k in range(dimension - 1)]).T
+    unique = np.array(
+        [symbols[k : N - dimension + k + 1] for k in range(dimension - 1)]
+    ).T
     _, freq = np.unique(unique, axis=0, return_counts=True)
 
     # Shannon Entropy

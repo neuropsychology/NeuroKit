@@ -31,7 +31,7 @@ if not os.path.exists(database_path):
         )
 
 files = os.listdir(database_path)
-files = [s.replace('.dat', '') for s in files if ".dat" in s]
+files = [s.replace(".dat", "") for s in files if ".dat" in s]
 
 dfs_ecg = []
 dfs_rpeaks = []
@@ -46,15 +46,15 @@ for i, participant in enumerate(files):
     data = data[["ECG"]]
     data["Participant"] = "Fantasia_" + participant
     data["Sample"] = range(len(data))
-    data["Sampling_Rate"] = info['fs']
+    data["Sampling_Rate"] = info["fs"]
     data["Database"] = "Fantasia"
 
     # Get annotations
-    anno = wfdb.rdann(str(pathlib.Path(database_path, participant)), 'ecg')
+    anno = wfdb.rdann(str(pathlib.Path(database_path, participant)), "ecg")
     anno = anno.sample[np.where(np.array(anno.symbol) == "N")[0]]
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = "Fantasia_" + participant
-    anno["Sampling_Rate"] = info['fs']
+    anno["Sampling_Rate"] = info["fs"]
     anno["Database"] = "Fantasia"
 
     # Store with the rest

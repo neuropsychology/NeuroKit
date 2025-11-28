@@ -75,7 +75,9 @@ def _emg_amplitude_tkeo(emg_cleaned):
     tkeo = emg_cleaned.copy()
 
     # Teager–Kaiser Energy operator
-    tkeo[1:-1] = emg_cleaned[1:-1] * emg_cleaned[1:-1] - emg_cleaned[:-2] * emg_cleaned[2:]
+    tkeo[1:-1] = (
+        emg_cleaned[1:-1] * emg_cleaned[1:-1] - emg_cleaned[:-2] * emg_cleaned[2:]
+    )
 
     # Correct the data in the extremities
     tkeo[0], tkeo[-1] = tkeo[1], tkeo[-2]

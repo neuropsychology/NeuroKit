@@ -189,7 +189,7 @@ def signal_timefrequency(
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
             max_frequency=max_frequency,
-            wavelet_name=wavelet_name
+            wavelet_name=wavelet_name,
         )
     # WVD
     elif method.lower() in ["WignerVille", "wvd"]:
@@ -270,7 +270,12 @@ def short_term_ft(
 
 
 def continuous_wt(
-    signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, wavelet_name=None, nfreqbin=None,
+    signal,
+    sampling_rate=1000,
+    min_frequency=0.04,
+    max_frequency=None,
+    wavelet_name=None,
+    nfreqbin=None,
 ):
     """**Continuous Wavelet Transform**
 
@@ -311,7 +316,9 @@ def continuous_wt(
     scales = pywt.frequency2scale(wavelet_name, frequency / sampling_rate)
 
     # cwt using specified mother wavelet
-    tfr, tfrf = pywt.cwt(signal, scales, wavelet_name, method="fft", sampling_period=1/sampling_rate)
+    tfr, tfrf = pywt.cwt(
+        signal, scales, wavelet_name, method="fft", sampling_period=1 / sampling_rate
+    )
 
     # compute time domain ticks
     time = np.arange(len(signal)) / sampling_rate
@@ -322,7 +329,13 @@ def continuous_wt(
 # =============================================================================
 # Wigner-Ville Distribution
 # =============================================================================
-def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, method="WignerVille"):
+def wvd(
+    signal,
+    sampling_rate=1000,
+    n_freqbins=None,
+    analytical_signal=True,
+    method="WignerVille",
+):
     """Wigner Ville Distribution and Pseudo-Wigner Ville Distribution."""
     # Compute the analytical signal
     if analytical_signal:
@@ -338,7 +351,9 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
         windows_length = n_freqbins // 4
         windows_length = windows_length - windows_length % 2 + 1
         windows = np.hamming(windows_length)
-        fwindows[fwindows_mpts + np.arange(-windows_length // 2, windows_length // 2)] = windows
+        fwindows[
+            fwindows_mpts + np.arange(-windows_length // 2, windows_length // 2)
+        ] = windows
     else:
         fwindows = np.ones(n_freqbins + 1)
         fwindows_mpts = len(fwindows) // 2
@@ -347,12 +362,16 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
 
     # This is discrete frequency (should we return?)
     if n_freqbins % 2 == 0:
-        frequency = np.hstack((np.arange(n_freqbins / 2), np.arange(-n_freqbins / 2, 0)))
+        frequency = np.hstack(
+            (np.arange(n_freqbins / 2), np.arange(-n_freqbins / 2, 0))
+        )
     else:
         frequency = np.hstack(
             (np.arange((n_freqbins - 1) / 2), np.arange(-(n_freqbins - 1) / 2, 0))
         )
-    tfr = np.zeros((n_freqbins, time.shape[0]), dtype=complex)  # the time-frequency matrix
+    tfr = np.zeros(
+        (n_freqbins, time.shape[0]), dtype=complex
+    )  # the time-frequency matrix
 
     tausec = round(n_freqbins / 2.0)
     winlength = tausec - 1
@@ -501,7 +520,9 @@ def smooth_pseudo_wvd(
     midpt_time = (len(time_window) - 1) // 2
 
     # Create arrays
-    time_array = np.arange(start=0, stop=N, step=segment_step, dtype=int) / sampling_rate
+    time_array = (
+        np.arange(start=0, stop=N, step=segment_step, dtype=int) / sampling_rate
+    )
     # frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
     frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / N
     pwvd = np.zeros((nfreqbin, len(time_array)), dtype=complex)
@@ -514,7 +535,9 @@ def smooth_pseudo_wvd(
         )
         # time-lag list
         tau = np.arange(
-            start=-np.min([midpt_time, N - t]), stop=np.min([midpt_time, t - 1]) + 1, dtype="int"
+            start=-np.min([midpt_time, N - t]),
+            stop=np.min([midpt_time, t - 1]) + 1,
+            dtype="int",
         )
         time_pts = (midpt_time + tau).astype(int)
         g2 = time_window[time_pts]

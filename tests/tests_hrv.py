@@ -7,8 +7,12 @@ from neurokit2 import misc
 
 
 def test_hrv_time():
-    ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=60, random_state=42)
-    ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=150, random_state=42)
+    ecg_slow = nk.ecg_simulate(
+        duration=60, sampling_rate=1000, heart_rate=60, random_state=42
+    )
+    ecg_fast = nk.ecg_simulate(
+        duration=60, sampling_rate=1000, heart_rate=150, random_state=42
+    )
 
     _, peaks_slow = nk.ecg_process(ecg_slow, sampling_rate=1000)
     _, peaks_fast = nk.ecg_process(ecg_fast, sampling_rate=1000)
@@ -32,7 +36,9 @@ def test_hrv_time():
 
 def test_hrv_frequency():
     # Test frequency domain
-    ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
+    ecg1 = nk.ecg_simulate(
+        duration=60, sampling_rate=2000, heart_rate=70, random_state=42
+    )
     _, peaks1 = nk.ecg_process(ecg1, sampling_rate=2000)
     hrv1 = nk.hrv_frequency(peaks1, sampling_rate=2000)
 
@@ -49,7 +55,9 @@ def test_hrv_frequency():
 
 def test_hrv():
 
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg = nk.ecg_simulate(
+        duration=120, sampling_rate=1000, heart_rate=110, random_state=42
+    )
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
 
@@ -60,7 +68,9 @@ def test_hrv():
 
 def test_rri_input_hrv():
 
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg = nk.ecg_simulate(
+        duration=120, sampling_rate=1000, heart_rate=110, random_state=42
+    )
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
     peaks = peaks["ECG_R_Peaks"]
@@ -77,7 +87,9 @@ def test_rri_input_hrv():
 @pytest.mark.parametrize("detrend", ["polynomial", "loess"])
 def test_hrv_detrended_rri(detrend):
 
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg = nk.ecg_simulate(
+        duration=120, sampling_rate=1000, heart_rate=110, random_state=42
+    )
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
     peaks = peaks["ECG_R_Peaks"]
@@ -85,7 +97,11 @@ def test_hrv_detrended_rri(detrend):
     rri_time = peaks[1:] / 1000
 
     rri_processed, rri_processed_time, _ = nk.intervals_process(
-        rri, intervals_time=rri_time, interpolate=False, interpolation_rate=None, detrend=detrend
+        rri,
+        intervals_time=rri_time,
+        interpolate=False,
+        interpolation_rate=None,
+        detrend=detrend,
     )
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
@@ -100,7 +116,9 @@ def test_hrv_detrended_rri(detrend):
 @pytest.mark.parametrize("interpolation_rate", ["from_mean_rri", 1, 4, 10])
 def test_hrv_interpolated_rri(interpolation_rate):
 
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg = nk.ecg_simulate(
+        duration=120, sampling_rate=1000, heart_rate=110, random_state=42
+    )
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
     peaks = peaks["ECG_R_Peaks"]
@@ -111,7 +129,10 @@ def test_hrv_interpolated_rri(interpolation_rate):
         interpolation_rate = 1000 / np.mean(rri)
 
     rri_processed, rri_processed_time, _ = nk.intervals_process(
-        rri, intervals_time=rri_time, interpolate=True, interpolation_rate=interpolation_rate
+        rri,
+        intervals_time=rri_time,
+        interpolate=True,
+        interpolation_rate=interpolation_rate,
     )
 
     ecg_hrv = nk.hrv({"RRI": rri_processed, "RRI_Time": rri_processed_time})
@@ -140,7 +161,9 @@ def test_hrv_missing():
     # remove some intervals and their corresponding timestamps
     missing = rng.choice(len(rri), size=int(len(rri) / 5))
     rri_missing = rri[np.array([i for i in range(len(rri)) if i not in missing])]
-    rri_time_missing = rri_time[np.array([i for i in range(len(rri_time)) if i not in missing])]
+    rri_time_missing = rri_time[
+        np.array([i for i in range(len(rri_time)) if i not in missing])
+    ]
 
     orig_hrv = nk.hrv_time(peaks, sampling_rate=sampling_rate)
     miss_only_rri_hrv = nk.hrv_time({"RRI": rri_missing})
@@ -151,10 +174,24 @@ def test_hrv_missing():
     miss_rri_time_hrv = nk.hrv_time({"RRI": rri_missing, "RRI_Time": rri_time_missing})
 
     abs_diff_only_rri = np.mean(
-        np.abs(np.diff([orig_hrv["HRV_RMSSD"].values[0], miss_only_rri_hrv["HRV_RMSSD"].values[0]]))
+        np.abs(
+            np.diff(
+                [
+                    orig_hrv["HRV_RMSSD"].values[0],
+                    miss_only_rri_hrv["HRV_RMSSD"].values[0],
+                ]
+            )
+        )
     )
     abs_diff_rri_time = np.mean(
-        np.abs(np.diff([orig_hrv["HRV_RMSSD"].values[0], miss_rri_time_hrv["HRV_RMSSD"].values[0]]))
+        np.abs(
+            np.diff(
+                [
+                    orig_hrv["HRV_RMSSD"].values[0],
+                    miss_rri_time_hrv["HRV_RMSSD"].values[0],
+                ]
+            )
+        )
     )
 
     assert abs_diff_only_rri > abs_diff_rri_time
@@ -186,13 +223,25 @@ def test_hrv_rsa():
     with pytest.warns(misc.NeuroKitWarning, match=r"RSP signal not found. For this.*"):
         nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)
 
-    with pytest.warns(misc.NeuroKitWarning, match=r"RSP signal not found. For this time.*"):
-        nk.hrv_rsa(ecg_signals, pd.DataFrame(), rpeaks=info, sampling_rate=100, continuous=False)
+    with pytest.warns(
+        misc.NeuroKitWarning, match=r"RSP signal not found. For this time.*"
+    ):
+        nk.hrv_rsa(
+            ecg_signals,
+            pd.DataFrame(),
+            rpeaks=info,
+            sampling_rate=100,
+            continuous=False,
+        )
 
     # Test missing rsp onsets/centers
-    with pytest.warns(misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
+    with pytest.warns(
+        misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"
+    ):
         rsp_signals["RSP_Peaks"] = 0
-        _ = nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
+        _ = nk.hrv_rsa(
+            ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False
+        )
 
 
 def test_hrv_nonlinear_fragmentation():

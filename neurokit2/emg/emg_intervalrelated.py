@@ -72,7 +72,9 @@ def emg_intervalrelated(data):
                 "`EMG_Amplitude` and `EMG_Activity` columns."
             )
 
-        emg_intervals = pd.DataFrame.from_dict(intervals, orient="index").T.add_prefix("EMG_")
+        emg_intervals = pd.DataFrame.from_dict(intervals, orient="index").T.add_prefix(
+            "EMG_"
+        )
 
     elif isinstance(data, dict):
         for index in data:
@@ -81,7 +83,9 @@ def emg_intervalrelated(data):
             # Add label info
             intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
-            intervals[index] = _emg_intervalrelated_formatinput(data[index], intervals[index])
+            intervals[index] = _emg_intervalrelated_formatinput(
+                data[index], intervals[index]
+            )
         emg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return emg_intervals

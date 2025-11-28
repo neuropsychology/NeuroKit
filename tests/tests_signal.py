@@ -17,13 +17,15 @@ import neurokit2 as nk
 def test_signal_simulate():
     # Warning for nyquist criterion
     with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r"Skipping requested frequency.*cannot be resolved.*"
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested frequency.*cannot be resolved.*",
     ):
         nk.signal_simulate(sampling_rate=100, frequency=11, silent=False)
 
     # Warning for period duration
     with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r"Skipping requested frequency.*since its period of.*"
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested frequency.*since its period of.*",
     ):
         nk.signal_simulate(duration=1, frequency=0.1, silent=False)
 
@@ -88,7 +90,10 @@ def test_signal_resample():
         downsampled_numpy, method="numpy", sampling_rate=500, desired_sampling_rate=1000
     )
     upsampled_pandas = nk.signal_resample(
-        downsampled_pandas, method="pandas", sampling_rate=500, desired_sampling_rate=1000
+        downsampled_pandas,
+        method="pandas",
+        sampling_rate=500,
+        desired_sampling_rate=1000,
     )
     upsampled_fft = nk.signal_resample(
         downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000
@@ -167,13 +172,19 @@ def test_signal_filter():
     order = 2
 
     signal_bandstop = nk.signal_filter(
-        signal_corrupted, sampling_rate=sampling_rate, lowcut=lowcut, highcut=highcut, method="butterworth",
-        order=order
+        signal_corrupted,
+        sampling_rate=sampling_rate,
+        lowcut=lowcut,
+        highcut=highcut,
+        method="butterworth",
+        order=order,
     )
 
     freqs = [highcut, lowcut]
     filter_type = "bandstop"
-    sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
+    sos = scipy.signal.butter(
+        order, freqs, btype=filter_type, output="sos", fs=sampling_rate
+    )
     signal_bandstop_scipy = scipy.signal.sosfiltfilt(sos, signal_corrupted)
 
     # figure, (ax0, ax1, ax2, ax3) = plt.subplots(nrows=4, ncols=1, sharex=True)
@@ -186,16 +197,27 @@ def test_signal_filter():
 
     assert np.allclose(signal_bandstop, signal_bandstop_scipy, atol=0.2)
 
+
 def test_signal_filter_with_missing():
     sampling_rate = 100
     duration_not_missing = 10
     frequency = 2
     signal = np.concatenate(
-    [
-        nk.signal_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, frequency=frequency, random_state=42),
-        [np.nan] * 1000,
-        nk.signal_simulate(duration=duration_not_missing, sampling_rate=sampling_rate, frequency=frequency, random_state=43),
-    ]
+        [
+            nk.signal_simulate(
+                duration=duration_not_missing,
+                sampling_rate=sampling_rate,
+                frequency=frequency,
+                random_state=42,
+            ),
+            [np.nan] * 1000,
+            nk.signal_simulate(
+                duration=duration_not_missing,
+                sampling_rate=sampling_rate,
+                frequency=frequency,
+                random_state=43,
+            ),
+        ]
     )
     samples = np.arange(len(signal))
     powerline = np.sin(2 * np.pi * 50 * (samples / sampling_rate))
@@ -205,6 +227,7 @@ def test_signal_filter_with_missing():
     )
     assert signal_clean.size == signal.size
     assert np.allclose(signal_clean, signal, atol=0.2, equal_nan=True)
+
 
 def test_signal_interpolate():
 
@@ -227,6 +250,7 @@ def test_signal_interpolate():
     assert len(interpolated) == 1000
     assert interpolated[0] == signal.iloc[0]
     assert interpolated[-1] == signal.iloc[-1]
+
 
 def test_signal_findpeaks():
 
@@ -255,9 +279,13 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     # Test with array.
     duration = 10
     sampling_rate = 1000
-    signal = nk.signal_simulate(duration=duration, sampling_rate=sampling_rate, frequency=1)
+    signal = nk.signal_simulate(
+        duration=duration, sampling_rate=sampling_rate, frequency=1
+    )
     info = nk.signal_findpeaks(signal)
-    rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000, desired_length=len(signal))
+    rate = nk.signal_rate(
+        peaks=info["Peaks"], sampling_rate=1000, desired_length=len(signal)
+    )
     assert rate.shape[0] == duration * sampling_rate
 
     # Test with dictionary.produced from signal_findpeaks.
@@ -289,7 +317,9 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
 
 def test_signal_period():
     # Test warning path of no peaks
-    with pytest.warns(nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."):
+    with pytest.warns(
+        nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."
+    ):
         nk.signal_period(np.array([0, 0, 0]))
 
 
@@ -313,7 +343,9 @@ def test_signal_plot():
         {
             "Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
             "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
-            "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000))),
+            "Signal4": nk.signal_binarize(
+                np.cos(np.linspace(start=0, stop=40, num=1000))
+            ),
         }
     )
     nk.signal_plot(data, sampling_rate=None)
@@ -420,13 +452,15 @@ def test_signal_distort():
 
     # Warning for nyquist criterion
     with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*cannot be resolved.*"
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested noise frequency.*cannot be resolved.*",
     ):
         nk.signal_distort(signal, sampling_rate=10, noise_amplitude=1, silent=False)
 
     # Warning for period duration
     with pytest.warns(
-        nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*since its period of.*"
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested noise frequency.*since its period of.*",
     ):
         signal = nk.signal_simulate(duration=1, frequency=1, sampling_rate=10)
         nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)
@@ -449,12 +483,15 @@ def test_signal_surrogate():
     assert np.allclose(np.var(x), np.var(surrogate))
     # Check distribution
     assert np.allclose(
-        np.histogram(x, 10, (0, 1))[0],
-        np.histogram(surrogate, 10, (0, 1))[0],
-        atol=1
+        np.histogram(x, 10, (0, 1))[0], np.histogram(surrogate, 10, (0, 1))[0], atol=1
     )
     # Check spectrum
     assert (
-        np.mean(np.abs(np.abs(np.fft.rfft(surrogate - np.mean(surrogate)))
-                       - np.abs(np.fft.rfft(x - np.mean(x))))) < 0.1
+        np.mean(
+            np.abs(
+                np.abs(np.fft.rfft(surrogate - np.mean(surrogate)))
+                - np.abs(np.fft.rfft(x - np.mean(x)))
+            )
+        )
+        < 0.1
     )

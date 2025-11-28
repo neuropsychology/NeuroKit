@@ -81,16 +81,18 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
             "Amplitude": [np.max(channel) - np.min(channel)],
             "CI_low": [hdi_values[0]],
             "CI_high": [hdi_values[1]],
-            "n_ZeroCrossings": [len(signal_zerocrossings(channel - np.nanmean(channel)))],
+            "n_ZeroCrossings": [
+                len(signal_zerocrossings(channel - np.nanmean(channel)))
+            ],
         }
         results.append(pd.DataFrame(info))
     results = pd.concat(results, axis=0)
     results = results.set_index("Channel")
 
     z = standardize(results)
-    results["Bad"] = (z.abs() > scipy.stats.norm.ppf(distance_threshold)).sum(axis=1) / len(
-        results.columns
-    )
+    results["Bad"] = (z.abs() > scipy.stats.norm.ppf(distance_threshold)).sum(
+        axis=1
+    ) / len(results.columns)
     bads = ch_names[np.where(results["Bad"] >= bad_threshold)[0]]
 
     if show:
@@ -125,7 +127,9 @@ def _plot_eeg_badchannels(eeg, bads, ch_names):
     # Plot bad channels
     for i, bad in enumerate(bads_list):
         channel = eeg[bad, :]
-        ax.plot(np.arange(1, len(channel) + 1), channel, c=colors_bad[i], label=ch_names[i])
+        ax.plot(
+            np.arange(1, len(channel) + 1), channel, c=colors_bad[i], label=ch_names[i]
+        )
 
     ax.legend(loc="upper right")
 

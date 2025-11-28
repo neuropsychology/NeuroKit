@@ -71,7 +71,9 @@ def information_gain(signal, delay=1, dimension=4, symbolize="mean"):
     binary = complexity_symbolize(signal, method=symbolize)
 
     # Get overlapping windows of a given width
-    embedded = complexity_embedding(binary, dimension=dimension, delay=delay).astype(int)
+    embedded = complexity_embedding(binary, dimension=dimension, delay=delay).astype(
+        int
+    )
 
     # Convert into strings
     states = ["".join(list(state)) for state in embedded.astype(str)]
@@ -82,7 +84,9 @@ def information_gain(signal, delay=1, dimension=4, symbolize="mean"):
     states_prob = states_prob / np.sum(states_prob)
     s_prob = {k: states_prob[i] for i, k in enumerate(states_unique)}
 
-    transitions_unique, transitions_prob = np.unique(transitions, axis=0, return_counts=True)
+    transitions_unique, transitions_prob = np.unique(
+        transitions, axis=0, return_counts=True
+    )
     transitions_prob = transitions_prob / np.sum(transitions_prob)
     t_prob = {tuple(k): transitions_prob[i] for i, k in enumerate(transitions_unique)}
 

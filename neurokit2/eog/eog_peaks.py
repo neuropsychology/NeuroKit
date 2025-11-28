@@ -95,10 +95,14 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
       extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience, 11, 12.
 
     """
-    peaks = eog_findpeaks(veog_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
+    peaks = eog_findpeaks(
+        veog_cleaned, sampling_rate=sampling_rate, method=method, **kwargs
+    )
     info = {"EOG_Blinks": peaks}
 
-    instant_peaks = signal_formatpeaks(info, desired_length=len(veog_cleaned), peak_indices=peaks)
+    instant_peaks = signal_formatpeaks(
+        info, desired_length=len(veog_cleaned), peak_indices=peaks
+    )
     signals = instant_peaks
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 

@@ -102,7 +102,11 @@ def complexity_optimize(
 
     # Optimize dimension
     dimension_seq, optimize_indices, out["Dimension"] = _complexity_dimension(
-        signal, delay=out["Delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
+        signal,
+        delay=out["Delay"],
+        dimension_max=dimension_max,
+        method=dimension_method,
+        **kwargs
     )
 
     # Optimize r
@@ -158,7 +162,10 @@ def _complexity_plot(
     # Prepare figure
     fig = plt.figure(constrained_layout=False)
     spec = matplotlib.gridspec.GridSpec(
-        ncols=2, nrows=3, height_ratios=[1, 1, 1], width_ratios=[1 - 1.2 / np.pi, 1.2 / np.pi]
+        ncols=2,
+        nrows=3,
+        height_ratios=[1, 1, 1],
+        width_ratios=[1 - 1.2 / np.pi, 1.2 / np.pi],
     )
 
     ax_tau = fig.add_subplot(spec[0, :-1])
@@ -210,7 +217,9 @@ def _complexity_plot(
         )
 
     # Plot r optimization
-    _optimize_tolerance_plot(out["Tolerance"], {"Values": r_range, "Scores": ApEn}, ax=ax_r)
+    _optimize_tolerance_plot(
+        out["Tolerance"], {"Values": r_range, "Scores": ApEn}, ax=ax_r
+    )
 
     return fig
 
@@ -285,11 +294,15 @@ def _complexity_dimension(
         f1, f2, f3 = _embedding_dimension_ffn(
             signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs
         )
-        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        min_dimension = [
+            i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x
+        ][0]
         optimize_indices = [f1, f2, f3]
         return dimension_seq, optimize_indices, min_dimension
     else:
-        raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
+        raise ValueError(
+            "NeuroKit error: complexity_dimension(): 'method' not recognized."
+        )
 
 
 def _complexity_tolerance(signal, delay=None, dimension=None):

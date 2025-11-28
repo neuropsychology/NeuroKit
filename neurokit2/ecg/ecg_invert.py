@@ -77,7 +77,9 @@ def _ecg_inverted(ecg_signal, sampling_rate=1000, window_time=2.0):
     # take the median of the original value of the maximum of the squared signal
     # over a window where we would expect at least one heartbeat
     med_max_squared = np.nanmedian(
-        _roll_orig_max_squared(ecg_cleaned_meanzero, window=int(window_time * sampling_rate))
+        _roll_orig_max_squared(
+            ecg_cleaned_meanzero, window=int(window_time * sampling_rate)
+        )
     )
     # if median is negative, assume inverted
     return med_max_squared < 0
@@ -89,4 +91,6 @@ def _roll_orig_max_squared(x, window=2000):
     # https://stackoverflow.com/questions/61703879/in-numpy-how-to-select-elements-based-on-the-maximum-of-their-absolute-values
     shape = np.array(x_rolled.shape)
     shape[-1] = -1
-    return np.take_along_axis(x_rolled, np.square(x_rolled).argmax(-1).reshape(shape), axis=-1)
+    return np.take_along_axis(
+        x_rolled, np.square(x_rolled).argmax(-1).reshape(shape), axis=-1
+    )

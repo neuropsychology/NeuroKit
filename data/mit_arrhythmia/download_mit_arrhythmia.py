@@ -29,29 +29,56 @@ if not os.path.exists(database_path):
             "and unzip it in the same folder as this script."
         )
 
-data_files = [database_path + file for file in os.listdir(database_path) if ".dat" in file]
+data_files = [
+    database_path + file for file in os.listdir(database_path) if ".dat" in file
+]
+
 
 def read_file(file, participant):
-    """Utility function
-    """
+    """Utility function"""
     # Get signal
     data = pd.DataFrame({"ECG": wfdb.rdsamp(file[:-4])[0][:, 0]})
-    data["Participant"] = "MIT-Arrhythmia_%.2i" %(participant)
+    data["Participant"] = "MIT-Arrhythmia_%.2i" % (participant)
     data["Sample"] = range(len(data))
     data["Sampling_Rate"] = 360
     data["Database"] = "MIT-Arrhythmia-x" if "x_mitdb" in file else "MIT-Arrhythmia"
 
     # getting annotations
-    anno = wfdb.rdann(file[:-4], 'atr')
-    anno = np.unique(anno.sample[np.in1d(anno.symbol, ['N', 'L', 'R', 'B', 'A', 'a', 'J', 'S', 'V', 'r', 'F', 'e', 'j', 'n', 'E', '/', 'f', 'Q', '?'])])
+    anno = wfdb.rdann(file[:-4], "atr")
+    anno = np.unique(
+        anno.sample[
+            np.in1d(
+                anno.symbol,
+                [
+                    "N",
+                    "L",
+                    "R",
+                    "B",
+                    "A",
+                    "a",
+                    "J",
+                    "S",
+                    "V",
+                    "r",
+                    "F",
+                    "e",
+                    "j",
+                    "n",
+                    "E",
+                    "/",
+                    "f",
+                    "Q",
+                    "?",
+                ],
+            )
+        ]
+    )
     anno = pd.DataFrame({"Rpeaks": anno})
-    anno["Participant"] = "MIT-Arrhythmia_%.2i" %(participant)
+    anno["Participant"] = "MIT-Arrhythmia_%.2i" % (participant)
     anno["Sampling_Rate"] = 360
     anno["Database"] = "MIT-Arrhythmia-x" if "x_mitdb" in file else "MIT-Arrhythmia"
 
     return data, anno
-
-
 
 
 dfs_ecg = []
@@ -70,11 +97,13 @@ for participant, file in enumerate(data_files):
     # Store additional recording if available
     if "x_" + file.replace(database_path, "") in os.listdir(database_path + "x_mitdb/"):
         print("  - Additional recording detected.")
-        data, anno = read_file(database_path + "/x_mitdb/" + "x_" + file.replace(database_path, ""), participant)
+        data, anno = read_file(
+            database_path + "/x_mitdb/" + "x_" + file.replace(database_path, ""),
+            participant,
+        )
         # Store with the rest
         dfs_ecg.append(data)
         dfs_rpeaks.append(anno)
-
 
 
 # Save
@@ -82,5 +111,5 @@ df_ecg = pd.concat(dfs_ecg).to_csv("ECGs.csv", index=False)
 dfs_rpeaks = pd.concat(dfs_rpeaks).to_csv("Rpeaks.csv", index=False)
 
 # Quick test
-#import neurokit2 as nk
-#nk.events_plot(anno["Rpeaks"][anno["Rpeaks"] <= 1000], data["ECG"][0:1002])
+# import neurokit2 as nk
+# nk.events_plot(anno["Rpeaks"][anno["Rpeaks"] <= 1000], data["ECG"][0:1002])

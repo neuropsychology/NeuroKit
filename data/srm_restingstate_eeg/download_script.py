@@ -1,6 +1,7 @@
 """
 https://openneuro.org/datasets/ds003775/versions/1.0.0
 """
+
 import os
 import shutil
 
@@ -25,7 +26,9 @@ for sub in os.listdir(path):
         continue
     print(f"Participant: {sub}")
     file = [f for f in os.listdir(path + sub + "/ses-t1/eeg/") if ".edf" in f][0]
-    raw = mne.io.read_raw_edf(path + sub + "/ses-t1/eeg/" + file, preload=True, verbose=False)
+    raw = mne.io.read_raw_edf(
+        path + sub + "/ses-t1/eeg/" + file, preload=True, verbose=False
+    )
     raw = raw.set_montage("biosemi64")
 
     # Clean
@@ -33,7 +36,7 @@ for sub in os.listdir(path):
     raw.info["bads"], _ = nk.eeg_badchannels(
         raw, bad_threshold=0.33, distance_threshold=0.99, show=False
     )
-    print("Bad channels: " + str(len(raw.info['bads'])))
+    print("Bad channels: " + str(len(raw.info["bads"])))
     raw = raw.interpolate_bads()
 
     raw.save("eeg/" + sub + "_raw.fif", overwrite=True)

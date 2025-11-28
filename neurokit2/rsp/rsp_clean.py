@@ -173,7 +173,9 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
 # =============================================================================
 # Hampel filter
 # =============================================================================
-def _rsp_clean_hampel(rsp_signal, sampling_rate=1000, window_length=0.1, threshold=3, **kwargs):
+def _rsp_clean_hampel(
+    rsp_signal, sampling_rate=1000, window_length=0.1, threshold=3, **kwargs
+):
     """Explanation MatLabs' https://www.mathworks.com/help/dsp/ref/hampelfilter.html. From
     https://stackoverflow.com/a/51731332.
 

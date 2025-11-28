@@ -61,5 +61,7 @@ def markov_test_symmetry(fm):
 
     # Run test
     out = {"Symmetry_t": t * 2.0, "Symmetry_df": len(fm) * (len(fm) - 1) / 2}
-    out["Symmetry_p"] = scipy.stats.chi2.sf(out["Symmetry_t"], out["Symmetry_df"], loc=0, scale=1)
+    out["Symmetry_p"] = scipy.stats.chi2.sf(
+        out["Symmetry_t"], out["Symmetry_df"], loc=0, scale=1
+    )
     return out

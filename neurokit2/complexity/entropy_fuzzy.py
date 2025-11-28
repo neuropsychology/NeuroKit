@@ -3,7 +3,9 @@ from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 
 
-def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=False, **kwargs):
+def entropy_fuzzy(
+    signal, delay=1, dimension=2, tolerance="sd", approximate=False, **kwargs
+):
     """**Fuzzy Entropy (FuzzyEn)**
 
     Fuzzy entropy (FuzzyEn) of a signal stems from the combination between information theory and

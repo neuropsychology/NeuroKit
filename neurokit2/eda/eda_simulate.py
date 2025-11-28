@@ -74,7 +74,9 @@ def eda_simulate(
     """
     # Seed the random generator for reproducible results
     rng = check_random_state(random_state)
-    random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=1)
+    random_state_distort = check_random_state_children(
+        random_state, random_state_distort, n_children=1
+    )
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
@@ -88,7 +90,9 @@ def eda_simulate(
 
     for start_peak in start_peaks:
         relative_time_peak = np.abs(rng.normal(0, 5, size=1)) + 3.0745
-        scr = _eda_simulate_scr(sampling_rate=sampling_rate, time_peak=relative_time_peak)
+        scr = _eda_simulate_scr(
+            sampling_rate=sampling_rate, time_peak=relative_time_peak
+        )
         time_scr = [start_peak, start_peak + 9]
         if time_scr[0] < 0:
             scr = scr[int(np.round(np.abs(time_scr[0]) * sampling_rate)) : :]
@@ -114,7 +118,13 @@ def eda_simulate(
     return eda
 
 
-def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.7013, decay=[3.1487, 14.1257]):
+def _eda_simulate_scr(
+    sampling_rate=1000,
+    length=None,
+    time_peak=3.0745,
+    rise=0.7013,
+    decay=[3.1487, 14.1257],
+):
     """Simulate a canonical skin conductance response (SCR)
 
     Based on `Bach (2010)
@@ -149,7 +159,7 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
         length = 9 * sampling_rate
     t = np.linspace(sampling_rate / 10000, 90, length)
 
-    gt = np.exp(-((t - time_peak) ** 2) / (2 * rise ** 2))
+    gt = np.exp(-((t - time_peak) ** 2) / (2 * rise**2))
     ht = np.exp(-t / decay[0]) + np.exp(-t / decay[1])  # pylint: disable=E1130
 
     ft = np.convolve(gt, ht)

@@ -56,7 +56,9 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     out = {}
 
     out, lifetimes = _microstates_prevalence(microstates, out=out)
-    out, durations, types = _microstates_duration(microstates, sampling_rate=sampling_rate, out=out)
+    out, durations, types = _microstates_duration(
+        microstates, sampling_rate=sampling_rate, out=out
+    )
 
     if show is True:
         fig = plt.figure(constrained_layout=False)
@@ -69,7 +71,9 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
         ax2 = fig.add_subplot(spec[0, 1])
 
         _microstates_duration_plot(durations, types, ax=ax0)
-        _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=ax1, ax_distrib=ax2)
+        _microstates_prevalence_plot(
+            microstates, lifetimes, out, ax_prop=ax1, ax_distrib=ax2
+        )
         plt.tight_layout()
 
     df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
@@ -120,7 +124,11 @@ def _microstates_duration_plot(durations, types, ax=None):
         fig = None
 
     parts = ax.violinplot(
-        data, positions=range(len(states)), vert=False, showmedians=True, showextrema=False
+        data,
+        positions=range(len(states)),
+        vert=False,
+        showmedians=True,
+        showextrema=False,
     )
     for component in parts:
         if isinstance(parts[component], list):
@@ -156,7 +164,9 @@ def _microstates_prevalence(microstates, out=None):
     return out, lifetimes
 
 
-def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_distrib=None):
+def _microstates_prevalence_plot(
+    microstates, lifetimes, out, ax_prop=None, ax_distrib=None
+):
     states = np.unique(microstates)
 
     # Plot

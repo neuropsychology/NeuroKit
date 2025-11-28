@@ -57,7 +57,9 @@ def video_ppg(video, sampling_rate=30, verbose=True):
         end = start + chunk_size
         if end > len(video):
             end = len(video)
-        ppg[start:end] = _video_ppg(video[start:end, :, :, :], sampling_rate, window=1.6)
+        ppg[start:end] = _video_ppg(
+            video[start:end, :, :, :], sampling_rate, window=1.6
+        )
     return ppg
 
 

@@ -98,7 +98,7 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1, random_state=None):
     # Calculate theoretical output standard deviation from scaling
     w = f[1:].copy()
     w[-1] *= (1 + (n % 2)) / 2.0  # correct f = +-0.5
-    sigma = 2 * np.sqrt(np.sum(w ** 2)) / n
+    sigma = 2 * np.sqrt(np.sum(w**2)) / n
 
     # Generate scaled random power + phase, adjusting size to
     # generate one Fourier component per frequency

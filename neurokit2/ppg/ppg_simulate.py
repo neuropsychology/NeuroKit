@@ -92,7 +92,9 @@ def ppg_simulate(
     """
     # Seed the random generator for reproducible results
     rng = check_random_state(random_state)
-    random_state_distort = check_random_state_children(random_state, random_state_distort, n_children=4)
+    random_state_distort = check_random_state_children(
+        random_state, random_state_distort, n_children=4
+    )
 
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
@@ -149,7 +151,9 @@ def ppg_simulate(
     # Interpolate a continuous signal between the landmarks (i.e., Cartesian
     # coordinates).
     samples = np.arange(int(np.ceil(duration * sampling_rate)))
-    ppg = signal_interpolate(x_values=x_all, y_values=y_all, x_new=samples, method="akima")
+    ppg = signal_interpolate(
+        x_values=x_all, y_values=y_all, x_new=samples, method="akima"
+    )
     # Remove NAN (values outside interpolation range, i.e., after last sample).
     ppg[np.isnan(ppg)] = np.nanmean(ppg)
 

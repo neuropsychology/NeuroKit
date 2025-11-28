@@ -180,7 +180,9 @@ def ecg_delineate(
     elif method in ["dwt", "discrete wavelet transform"]:
         waves = _dwt_ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=sampling_rate)
     elif method in ["prominence", "peak-prominence", "emrich", "emrich2024"]:
-        waves = _prominence_ecg_delineator(ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate, **kwargs)
+        waves = _prominence_ecg_delineator(
+            ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate, **kwargs
+        )
 
     else:
         raise ValueError(
@@ -766,11 +768,19 @@ def _prominence_ecg_delineator(ecg, rpeaks=None, sampling_rate=1000, **kwargs):
     max_qrs_interval = int(kwargs.get("max_qrs_interval", 180) * sampling_rate / 1000)
     max_pr_interval = int(kwargs.get("max_pr_interval", 300) * sampling_rate / 1000)
     max_r_rise_time = int(kwargs.get("max_r_rise_time", 120) * sampling_rate / 1000)
-    typical_st_segment = int(kwargs.get("typical_st_segment", 150) * sampling_rate / 1000)
+    typical_st_segment = int(
+        kwargs.get("typical_st_segment", 150) * sampling_rate / 1000
+    )
     # max basepoint intervals
-    max_p_basepoint_interval = int(kwargs.get("max_p_basepoint_interval", 100) * sampling_rate / 1000)
-    max_r_basepoint_interval = int(kwargs.get("max_r_basepoint_interval", 100) * sampling_rate / 1000)
-    max_t_basepoint_interval = int(kwargs.get("max_t_basepoint_interval", 200) * sampling_rate / 1000)
+    max_p_basepoint_interval = int(
+        kwargs.get("max_p_basepoint_interval", 100) * sampling_rate / 1000
+    )
+    max_r_basepoint_interval = int(
+        kwargs.get("max_r_basepoint_interval", 100) * sampling_rate / 1000
+    )
+    max_t_basepoint_interval = int(
+        kwargs.get("max_t_basepoint_interval", 200) * sampling_rate / 1000
+    )
 
     waves = {
         "ECG_P_Onsets": [],
@@ -809,15 +819,28 @@ def _prominence_ecg_delineator(ecg, rpeaks=None, sampling_rate=1000, **kwargs):
         local_extrema = np.concatenate((local_maxima, local_minima))
 
         # 3. compute prominence weight
-        weight_maxima = _calc_prominence(local_maxima, ecg_seg, current_wave["ECG_R_Peaks"])
-        weight_minima = _calc_prominence(local_minima, ecg_seg, current_wave["ECG_R_Peaks"], minima=True)
+        weight_maxima = _calc_prominence(
+            local_maxima, ecg_seg, current_wave["ECG_R_Peaks"]
+        )
+        weight_minima = _calc_prominence(
+            local_minima, ecg_seg, current_wave["ECG_R_Peaks"], minima=True
+        )
 
         if local_extrema.any():
             # find waves
             _prominence_find_q_wave(weight_minima, current_wave, max_r_rise_time)
-            _prominence_find_s_wave(ecg_seg, weight_minima, current_wave, max_qrs_interval)
-            _prominence_find_p_wave(local_maxima, weight_maxima, current_wave, max_pr_interval)
-            _prominence_find_t_wave(local_extrema, (weight_minima + weight_maxima), current_wave, typical_st_segment)
+            _prominence_find_s_wave(
+                ecg_seg, weight_minima, current_wave, max_qrs_interval
+            )
+            _prominence_find_p_wave(
+                local_maxima, weight_maxima, current_wave, max_pr_interval
+            )
+            _prominence_find_t_wave(
+                local_extrema,
+                (weight_minima + weight_maxima),
+                current_wave,
+                typical_st_segment,
+            )
             _prominence_find_on_offsets(
                 ecg_seg,
                 sampling_rate,
@@ -864,16 +887,22 @@ def _prominence_find_q_wave(weight_minima, current_wave, max_r_rise_time):
         return
     q_bound = max(current_wave["ECG_R_Peaks"] - max_r_rise_time, 0)
 
-    current_wave["ECG_Q_Peaks"] = np.argmax(weight_minima[q_bound : current_wave["ECG_R_Peaks"]]) + q_bound
+    current_wave["ECG_Q_Peaks"] = (
+        np.argmax(weight_minima[q_bound : current_wave["ECG_R_Peaks"]]) + q_bound
+    )
 
 
 def _prominence_find_s_wave(sig, weight_minima, current_wave, max_qrs_interval):
     if "ECG_Q_Peaks" not in current_wave:
         return
     s_bound = current_wave["ECG_Q_Peaks"] + max_qrs_interval
-    s_wave = np.argmax(weight_minima[current_wave["ECG_R_Peaks"] : s_bound] > 0) + current_wave["ECG_R_Peaks"]
+    s_wave = (
+        np.argmax(weight_minima[current_wave["ECG_R_Peaks"] : s_bound] > 0)
+        + current_wave["ECG_R_Peaks"]
+    )
     current_wave["ECG_S_Peaks"] = (
-        np.argmin(sig[current_wave["ECG_R_Peaks"] : s_bound]) + current_wave["ECG_R_Peaks"]
+        np.argmin(sig[current_wave["ECG_R_Peaks"] : s_bound])
+        + current_wave["ECG_R_Peaks"]
         if s_wave == current_wave["ECG_R_Peaks"]
         else s_wave
     )
@@ -883,18 +912,27 @@ def _prominence_find_p_wave(local_maxima, weight_maxima, current_wave, max_pr_in
     if "ECG_Q_Peaks" not in current_wave:
         return
     p_candidates = local_maxima[
-        (current_wave["ECG_Q_Peaks"] - max_pr_interval <= local_maxima) & (local_maxima <= current_wave["ECG_Q_Peaks"])
+        (current_wave["ECG_Q_Peaks"] - max_pr_interval <= local_maxima)
+        & (local_maxima <= current_wave["ECG_Q_Peaks"])
     ]
     if p_candidates.any():
-        current_wave["ECG_P_Peaks"] = p_candidates[np.argmax(weight_maxima[p_candidates])]
+        current_wave["ECG_P_Peaks"] = p_candidates[
+            np.argmax(weight_maxima[p_candidates])
+        ]
 
 
-def _prominence_find_t_wave(local_extrema, weight_extrema, current_wave, typical_st_segment):
+def _prominence_find_t_wave(
+    local_extrema, weight_extrema, current_wave, typical_st_segment
+):
     if "ECG_S_Peaks" not in current_wave:
         return
-    t_candidates = local_extrema[(current_wave["ECG_S_Peaks"] + typical_st_segment <= local_extrema)]
+    t_candidates = local_extrema[
+        (current_wave["ECG_S_Peaks"] + typical_st_segment <= local_extrema)
+    ]
     if t_candidates.any():
-        current_wave["ECG_T_Peaks"] = t_candidates[np.argmax(weight_extrema[t_candidates])]
+        current_wave["ECG_T_Peaks"] = t_candidates[
+            np.argmax(weight_extrema[t_candidates])
+        ]
 
 
 def _prominence_find_on_offsets(
@@ -928,7 +966,9 @@ def _prominence_find_on_offsets(
 
     # correct R-peak position towards local maxima (otherwise prominence will be falsely computed)
     r_pos = _correct_peak(sig, sampling_rate, current_wave["ECG_R_Peaks"])
-    _, r_on, r_off = scipy.signal.peak_prominences(sig, [r_pos], wlen=max_r_basepoint_interval)
+    _, r_on, r_off = scipy.signal.peak_prominences(
+        sig, [r_pos], wlen=max_r_basepoint_interval
+    )
     if not np.isnan(r_on):
         current_wave["ECG_R_Onsets"] = r_on[0]
 
@@ -998,7 +1038,11 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                 epsilon_onset = 0.25 * wt_peaks_data["peak_heights"][-1]
             leftbase = wt_peaks_data["left_bases"][-1] + index_peak - half_wave_width
             if peak_type == "rpeaks":
-                candidate_onsets = np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
+                candidate_onsets = (
+                    np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0]
+                    + nfirst
+                    - 100
+                )
             elif peak_type in ["tpeaks", "ppeaks"]:
                 candidate_onsets = (
                     np.where(-cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0]

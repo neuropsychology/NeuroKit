@@ -108,9 +108,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     last_element = np.where(~np.isnan(atrial))[0][
         -1
     ]  # Avoid filling beyond the last peak/trough
-    atrial[0:last_element] = (
-        pd.Series(atrial).ffill().values[0:last_element]
-    )
+    atrial[0:last_element] = pd.Series(atrial).ffill().values[0:last_element]
 
     # Atrial Phase Completion
     atrial_completion = signal_phase(atrial, method="percent")
@@ -123,9 +121,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     last_element = np.where(~np.isnan(ventricular))[0][
         -1
     ]  # Avoid filling beyond the last peak/trough
-    ventricular[0:last_element] = (
-        pd.Series(ventricular).ffill().values[0:last_element]
-    )
+    ventricular[0:last_element] = pd.Series(ventricular).ffill().values[0:last_element]
 
     # Ventricular Phase Completion
     ventricular_comletion = signal_phase(ventricular, method="percent")

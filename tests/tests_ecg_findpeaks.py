@@ -26,15 +26,32 @@ def _read_csv_column(csv_name, column):
     return csv_data[column].to_numpy()
 
 
-@pytest.mark.parametrize("method",["neurokit", "pantompkins", "nabian", "gamboa",
-               "slopesumfunction", "wqrs", "hamilton", "christov",
-               "engzee", "manikandan", "elgendi", "kalidas", "khamis",
-               "martinez", "rodrigues", "vgraph"])
+@pytest.mark.parametrize(
+    "method",
+    [
+        "neurokit",
+        "pantompkins",
+        "nabian",
+        "gamboa",
+        "slopesumfunction",
+        "wqrs",
+        "hamilton",
+        "christov",
+        "engzee",
+        "manikandan",
+        "elgendi",
+        "kalidas",
+        "khamis",
+        "martinez",
+        "rodrigues",
+        "vgraph",
+    ],
+)
 def test_ecg_findpeaks_all_methods_handle_empty_input(method):
     method_func = _ecg_findpeaks_findmethod(method)
     # The test here is implicit: no exceptions means that it passed,
     # even if the output is nonsense.
-    _ = method_func(np.zeros(12*240), sampling_rate=240)
+    _ = method_func(np.zeros(12 * 240), sampling_rate=240)
 
 
 def test_ecg_findpeaks_MWA():

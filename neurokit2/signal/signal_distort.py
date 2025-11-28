@@ -199,7 +199,9 @@ def _signal_distort_artifacts(
 
     min_duration = int(np.rint(len(artifacts) * 0.001))
     max_duration = int(np.rint(len(artifacts) * 0.01))
-    artifact_durations = rng.choice(range(min_duration, max_duration), size=artifacts_number)
+    artifact_durations = rng.choice(
+        range(min_duration, max_duration), size=artifacts_number
+    )
 
     artifact_onsets = rng.choice(len(artifacts) - max_duration, size=artifacts_number)
     artifact_offsets = artifact_onsets + artifact_durations
@@ -255,7 +257,9 @@ def _signal_distort_noise_multifrequency(
 ):
     base_noise = np.zeros(len(signal))
     params = listify(
-        noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape
+        noise_amplitude=noise_amplitude,
+        noise_frequency=noise_frequency,
+        noise_shape=noise_shape,
     )
 
     for i in range(len(params["noise_amplitude"])):
@@ -335,5 +339,7 @@ def _signal_distort_noise(
         )
 
     if len(_noise) != n_samples:
-        _noise = signal_resample(_noise, desired_length=n_samples, method="interpolation")
+        _noise = signal_resample(
+            _noise, desired_length=n_samples, method="interpolation"
+        )
     return _noise

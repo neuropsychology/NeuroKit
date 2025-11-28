@@ -4,7 +4,12 @@ import scipy
 
 
 def complexity_attractor(
-    embedded="lorenz", alpha="time", color="last_dim", shadows=True, linewidth=1, **kwargs
+    embedded="lorenz",
+    alpha="time",
+    color="last_dim",
+    shadows=True,
+    linewidth=1,
+    **kwargs
 ):
     """**Attractor Graph**
 
@@ -159,7 +164,11 @@ def complexity_attractor(
         # Fast
         if len(np.unique(colors)) == 1 and len(np.unique(alpha)) == 1:
             ax.plot(
-                embedded[:, 0], embedded[:, 1], color=colors[0], alpha=alpha[0], linewidth=linewidth
+                embedded[:, 0],
+                embedded[:, 1],
+                color=colors[0],
+                alpha=alpha[0],
+                linewidth=linewidth,
             )
         # Slow (color and/or alpha)
         else:
@@ -169,7 +178,9 @@ def complexity_attractor(
         ax = plt.axes(projection="3d")
         # Fast
         if len(np.unique(colors)) == 1 and len(np.unique(alpha)) == 1:
-            ax = _attractor_3D_fast(ax, embedded, embedded, 0, colors, alpha, shadows, linewidth)
+            ax = _attractor_3D_fast(
+                ax, embedded, embedded, 0, colors, alpha, shadows, linewidth
+            )
         else:
             ax = _attractor_3D(ax, embedded, colors, alpha, shadows, linewidth)
 
@@ -253,11 +264,15 @@ def _attractor_3D_fast(ax, embedded, seg, i, colors, alpha, shadows, linewidth):
 
 def _attractor_3D(ax, embedded, colors, alpha=0.8, shadows=True, linewidth=1.5):
     # Create a set of line segments
-    points = np.array([embedded[:, 0], embedded[:, 1], embedded[:, 2]]).T.reshape(-1, 1, 3)
+    points = np.array([embedded[:, 0], embedded[:, 1], embedded[:, 2]]).T.reshape(
+        -1, 1, 3
+    )
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
 
     for i in range(len(segments)):
-        ax = _attractor_3D_fast(ax, embedded, segments[i], i, colors, alpha, shadows, linewidth)
+        ax = _attractor_3D_fast(
+            ax, embedded, segments[i], i, colors, alpha, shadows, linewidth
+        )
 
     return ax
 
@@ -274,7 +289,9 @@ def _attractor_equation(name, **kwargs):
         return _attractor_rossler(**kwargs)
 
 
-def _attractor_lorenz(duration=1, sampling_rate=1000, sigma=10.0, beta=8.0 / 3, rho=28.0):
+def _attractor_lorenz(
+    duration=1, sampling_rate=1000, sigma=10.0, beta=8.0 / 3, rho=28.0
+):
     """Simulate Data from Lorenz System"""
 
     def lorenz_equation(coord, t0, sigma, beta, rho):
@@ -293,14 +310,20 @@ def _attractor_rossler(duration=1, sampling_rate=1000, a=0.1, b=0.1, c=14):
     """Simulate Data from Rössler System"""
 
     def rossler_equation(coord, t0, a, b, c):
-        return [-coord[1] - coord[2], coord[0] + a * coord[1], b + coord[2] * (coord[0] - c)]
+        return [
+            -coord[1] - coord[2],
+            coord[0] + a * coord[1],
+            b + coord[2] * (coord[0] - c),
+        ]
 
     x0 = [0.1, 0.0, 0.1]  # starting vector
     t = np.linspace(0, duration * 500, int(duration * sampling_rate))
     return scipy.integrate.odeint(rossler_equation, x0, t, args=(a, b, c))
 
 
-def _attractor_clifford(duration=1, sampling_rate=1000, a=-1.4, b=1.6, c=1.0, d=0.7, x0=0, y0=0):
+def _attractor_clifford(
+    duration=1, sampling_rate=1000, a=-1.4, b=1.6, c=1.0, d=0.7, x0=0, y0=0
+):
     """Simulate Data from Clifford System
 
     >>> import neurokit2 as nk

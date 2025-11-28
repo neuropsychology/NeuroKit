@@ -180,7 +180,9 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000, **kwargs):
         order=5,
     )
 
-    clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs)
+    clean = signal_filter(
+        signal=clean, sampling_rate=sampling_rate, method="powerline", **kwargs
+    )
     return clean
 
 
@@ -204,7 +206,9 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = (
+        2 * np.array(frequency) / sampling_rate
+    )  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
@@ -368,10 +372,14 @@ def _ecg_clean_templateconvolution(ecg_signal, sampling_rate=1000):
     )
 
     # Detect peaks
-    peaks, _ = scipy.signal.find_peaks(filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered))
+    peaks, _ = scipy.signal.find_peaks(
+        filtered, distance=sampling_rate / 3, height=0.5 * np.std(filtered)
+    )
     peaks = peaks[peaks + 0.6 * sampling_rate < len(ecg_signal)]
 
-    idx = [np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks]
+    idx = [
+        np.arange(p - int(sampling_rate / 2), p + int(sampling_rate / 2)) for p in peaks
+    ]
     epochs = np.array([filtered[i] for i in idx])
     qrs = np.mean(epochs, axis=0)
 

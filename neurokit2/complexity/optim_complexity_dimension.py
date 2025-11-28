@@ -7,7 +7,9 @@ from .fractal_correlation import fractal_correlation
 from .utils_complexity_embedding import complexity_embedding
 
 
-def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
+def complexity_dimension(
+    signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs
+):
     """**Automated selection of the optimal Embedding Dimension (m)**
 
     The Embedding Dimension (*m*, sometimes referred to as *d* or *order*) is the second
@@ -153,13 +155,17 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     if method in ["afnn", "afn"]:
         # Append value (as it gets cropped afterwards anyway)
         dimension_seq = np.append(dimension_seq, [dimension_seq[-1] + 1])
-        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
+        E, Es = _embedding_dimension_afn(
+            signal, dimension_seq=dimension_seq, delay=delay, **kwargs
+        )
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
 
         # To find where E1 saturates, set a threshold of difference
         # threshold = 0.1 * (np.max(E1) - np.min(E1))
-        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.nanmax(E1)) if x][0] + 1
+        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.nanmax(E1)) if x][
+            0
+        ] + 1
 
         # To standardize the length of dimension_seq with E1 and E2
         dimension_seq = dimension_seq[:-1]
@@ -177,9 +183,13 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             )
 
     elif method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
+        f1, f2, f3 = _embedding_dimension_ffn(
+            signal, dimension_seq=dimension_seq, delay=delay, **kwargs
+        )
 
-        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        min_dimension = [
+            i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x
+        ][0]
 
         # Store information
         info = {"Method": method, "Values": dimension_seq, "f1": f1, "f2": f2, "f3": f3}
@@ -195,7 +205,9 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             )
 
     elif method in ["correlation", "cd"]:
-        CDs = _embedding_dimension_correlation(signal, dimension_seq, delay=delay, **kwargs)
+        CDs = _embedding_dimension_correlation(
+            signal, dimension_seq, delay=delay, **kwargs
+        )
 
         # Find elbow (TODO: replace by better method of elbow localization)
         min_dimension = dimension_seq[np.where(CDs >= 0.66 * np.max(CDs))[0][0]]
@@ -212,7 +224,9 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             )
 
     else:
-        raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
+        raise ValueError(
+            "NeuroKit error: complexity_dimension(): 'method' not recognized."
+        )
 
     return min_dimension, info
 
@@ -232,14 +246,19 @@ def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     """AFN."""
     values = np.asarray(
-        [_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]
+        [
+            _embedding_dimension_afn_d(signal, dimension, delay, **kwargs)
+            for dimension in dimension_seq
+        ]
     ).T
     E, Es = values[0, :], values[1, :]
 
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs):
+def _embedding_dimension_afn_d(
+    signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs
+):
     """Returns E(d) and E^*(d) for the AFN method for a single d.
 
     E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
@@ -247,7 +266,9 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", w
     E2(d) = E*(d + 1)/E*(d).
 
     """
-    d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
+    d, dist, index, y2 = _embedding_dimension_d(
+        signal, dimension, delay, metric, window, maxnum
+    )
 
     # Compute the ratio of near-neighbor distances in d + 1 over d dimension
     # Its average is E(d)
@@ -276,16 +297,30 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, **kw
 
     """
     values = np.asarray(
-        [_embedding_dimension_ffn_d(signal, dimension, delay, R=R, A=A, **kwargs) for dimension in dimension_seq]
+        [
+            _embedding_dimension_ffn_d(signal, dimension, delay, R=R, A=A, **kwargs)
+            for dimension in dimension_seq
+        ]
     ).T
     f1, f2, f3 = values[0, :], values[1, :], values[2, :]
 
     return f1, f2, f3
 
 
-def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
+def _embedding_dimension_ffn_d(
+    signal,
+    dimension,
+    delay=1,
+    R=10.0,
+    A=2.0,
+    metric="euclidean",
+    window=10,
+    maxnum=None,
+):
     """Return fraction of false nearest neighbors for a single d."""
-    d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
+    d, dist, index, y2 = _embedding_dimension_d(
+        signal, dimension, delay, metric, window, maxnum
+    )
 
     # Find all potential false neighbors using Kennel et al.'s tests.
     dist[dist == 0] = np.nan  # assign nan to avoid divide by zero error in next line
@@ -299,7 +334,9 @@ def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
 # =============================================================================
 # Internals
 # =============================================================================
-def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
+def _embedding_dimension_d(
+    signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None
+):
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.
@@ -307,7 +344,9 @@ def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", windo
     y2 = complexity_embedding(signal, delay=delay, dimension=dimension + 1)
 
     # Find near neighbors in dimension d.
-    index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
+    index, dist = _embedding_dimension_neighbors(
+        y1, metric=metric, window=window, maxnum=maxnum
+    )
 
     # Compute the near-neighbor distances in d + 1 dimension
     # TODO: is there a way to make this faster?
@@ -316,7 +355,9 @@ def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", windo
     return np.asarray(d), dist, index, y2
 
 
-def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None, show=False):
+def _embedding_dimension_neighbors(
+    y, metric="chebyshev", window=0, maxnum=None, show=False
+):
     """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
     array using SciPy's KDTree search.
 
@@ -359,7 +400,10 @@ def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None,
     elif metric == "euclidean":
         p = 2
     else:
-        raise ValueError('Unknown metric. Should be one of "cityblock", ' '"euclidean", or "chebyshev".')
+        raise ValueError(
+            'Unknown metric. Should be one of "cityblock", '
+            '"euclidean", or "chebyshev".'
+        )
 
     tree = scipy.spatial.cKDTree(y)  # pylint: disable=E1102
     n = len(y)
@@ -435,7 +479,11 @@ def _embedding_dimension_plot(
             ax.plot(dimension_seq, 100 * f2, "^--", label="Test II", color="#f44336")
             ax.plot(dimension_seq, 100 * f3, "s-", label="Test I + II", color="#852b01")
 
-    ax.axvline(x=min_dimension, color="#E91E63", label="Optimal dimension: " + str(min_dimension))
+    ax.axvline(
+        x=min_dimension,
+        color="#E91E63",
+        label="Optimal dimension: " + str(min_dimension),
+    )
     ax.legend(loc="upper right")
 
     return fig

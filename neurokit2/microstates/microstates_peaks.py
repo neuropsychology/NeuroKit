@@ -6,7 +6,9 @@ import scipy.signal
 from ..eeg import eeg_gfp
 
 
-def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, **kwargs):
+def microstates_peaks(
+    eeg, gfp=None, sampling_rate=None, distance_between=0.01, **kwargs
+):
     """**Find peaks of stability using the GFP**
 
     Peaks in the global field power (GFP) are often used to find microstates.
@@ -101,7 +103,9 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
 # =============================================================================
 def _microstates_peaks_gfp(gfp=None, sampling_rate=None, distance_between=0.01):
 
-    minimum_separation = int(distance_between * sampling_rate)  # 10 ms (Microstate EEGlab toolbox)
+    minimum_separation = int(
+        distance_between * sampling_rate
+    )  # 10 ms (Microstate EEGlab toolbox)
     if minimum_separation == 0:
         minimum_separation = 1
 
