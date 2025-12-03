@@ -49,6 +49,7 @@ def read_xdf(
         This function requires the *pyxdf* module to be installed. You can install it with
         ``pip install pyxdf``.
 
+
     .. warning::
 
         Note that, as XDF can store streams with different sampling rates and different time stamps,
@@ -130,12 +131,13 @@ def read_xdf(
 
     Examples
     --------
+
     .. ipython:: python
 
-      import neurokit2 as nk
+        import neurokit2 as nk
 
-      # data, info = nk.read_xdf("data.xdf")
-      # sampling_rate = info["sampling_rate"]
+        # data, info = nk.read_xdf("data.xdf")
+        # sampling_rate = info["sampling_rate"]
     """
 
     if pyxdf is None:
