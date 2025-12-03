@@ -1,3 +1,4 @@
+
 import warnings
 import numpy as np
 import time
@@ -8,6 +9,12 @@ import scipy.interpolate
 import urllib.parse
 import requests
 import io
+
+# Try to import pyxdf at the module level for flake8 compliance
+try:
+    import pyxdf
+except ImportError:
+    pyxdf = None
 
 
 def read_xdf(
@@ -130,14 +137,13 @@ def read_xdf(
       # data, info = nk.read_xdf("data.xdf")
       # sampling_rate = info["sampling_rate"]
     """
-    try:
-        import pyxdf
-    except ImportError as e:
-        pyxdf = None
+
+    if pyxdf is None:
         raise ImportError(
-            "The 'pyxdf' module is required for this function to run. ",
-            "Please install it first (`pip install pyxdf`).",
-        ) from e
+            "The 'pyxdf' module is required for this function to run. "
+            "Please install it first (`pip install pyxdf`)."
+        )
+
 
     # DEPRECATION WARNING
     if fillmissing is not None:
@@ -912,10 +918,17 @@ def _load_xdf(
         if hasattr(f, "seek"):
             f.seek(0)
 
+
+    # If pyxdf import failed earlier, stop immediately
+    if pyxdf is None:
+        raise ImportError(
+            "The 'pyxdf' module is required for reading XDF files. "
+            "Install it using `pip install pyxdf`."
+        )
+
     # --- Case 1: Boolean (Standard pyxdf behavior) ---
-    # If the user passed a simple True/False, we avoid the overhead of double-loading.
+    # If the user passed a True/False, we avoid double-loading.
     if isinstance(dejitter_timestamps, bool):
-        # Good practice to rewind just in case, though technically it's the first read so usually safe.
         _rewind(filename)
         return pyxdf.load_xdf(
             filename,
@@ -925,9 +938,9 @@ def _load_xdf(
         )
 
     # --- Case 2: List (Selective Dejittering) ---
-    # 1. Load the "Raw" data (Dejitter OFF)
-    # We use this as the base object to return.
-    _rewind(filename)  # Ensure we start at 0
+
+    # 1. Load the raw data with dejitter OFF
+    _rewind(filename)
     streams, header = pyxdf.load_xdf(
         filename,
         synchronize_clocks=synchronize_clocks,
@@ -935,29 +948,25 @@ def _load_xdf(
         dejitter_timestamps=False,
     )
 
-    # 2. Identify which streams need processing
-    # We use a set to store indices to ensure we don't process the same index twice
-    # if the user provided both the name and the index for the same stream.
+    # 2. Identify which streams should be dejittered
     indices_to_process = set()
 
     for i, s in enumerate(streams):
-        # Extract stream name safely
         stream_name = s["info"].get("name", ["Unnamed"])[0]
 
-        # Check if index is in list OR if name is in list
         if i in dejitter_timestamps or stream_name in dejitter_timestamps:
             indices_to_process.add(i)
 
-    # 3. Optimization Check
-    # If no streams matched the user's criteria, return the raw data immediately.
+    # 3. If none matched, return raw data
     if not indices_to_process:
         warnings.warn(
-            "No matching streams found for dejittering. Make sure you typed the correct name. Returning raw data."
+            "No matching streams found for dejittering. "
+            "Make sure the names or indices are correct. Returning raw data."
         )
         return streams, header
 
-    # 4. Load the "Clean" data (Dejitter ON)
-    _rewind(filename)  # Reset cursor to zero
+    # 4. Load the clean data with dejitter ON
+    _rewind(filename)
     streams_clean, _ = pyxdf.load_xdf(
         filename,
         synchronize_clocks=synchronize_clocks,
@@ -965,8 +974,7 @@ def _load_xdf(
         dejitter_timestamps=True,
     )
 
-    # 5. Splice the data
-    # Replace the raw streams with the clean streams only at the identified indices.
+    # 5. Replace only selected streams
     for i in indices_to_process:
         streams[i] = streams_clean[i]
 
