@@ -36,7 +36,6 @@ def read_xdf(
     show_duration=1.0,
 ):
     """
-
     Loads an XDF file, sanitizes stream data, and resamples all streams onto a
     common, synchronized timebase.
 
@@ -46,17 +45,17 @@ def read_xdf(
 
     .. note::
 
-        This function requires the *pyxdf* module to be installed. You can install it with
-        ``pip install pyxdf``.
+       This function requires the *pyxdf* module to be installed. You can install it with
+       ``pip install pyxdf``.
 
 
     .. warning::
 
-        Note that, as XDF can store streams with different sampling rates and different time stamps,
-        **the function will resample all streams to 2 times (default) the highest sampling rate** (to
-        minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it
-        may produce unexpected results, particularly if the original stream has large gaps in its time series.
-        For more discussion, see `here <https://github.com/xdf-modules/pyxdf/pull/1>`_.
+       Note that, as XDF can store streams with different sampling rates and different time stamps,
+       **the function will resample all streams to 2 times (default) the highest sampling rate** (to
+       minimize aliasing) and then interpolate based on an evenly spaced index. While this is generally safe, it
+       may produce unexpected results, particularly if the original stream has large gaps in its time series.
+       For more discussion, see `here <https://github.com/xdf-modules/pyxdf/pull/1>`_.
 
     Parameters
     ----------
@@ -64,58 +63,74 @@ def read_xdf(
         Path to the .xdf file to load.
     dejitter_timestamps : bool or list, optional
         Controls jitter removal (processing of timestamp irregularities).
+
         - If bool: Passed directly to pyxdf (True applies to all streams, False to none).
         - If list: A list of stream names (str) or indices (int). Dejittering is
           applied *only* to these specific streams.
           Note: Using a list triggers a double-load of the file, increasing memory
           usage and loading time. Default is True.
+
     synchronize_clocks : bool, optional
         If True, attempts to synchronize clocks using LSL clock offset data.
         Passed to pyxdf.load_xdf. Default is True.
+
     handle_clock_resets : bool, optional
         If True, handles clock resets (e.g., from hardware restarts) during recording.
         Passed to pyxdf.load_xdf. Default is True.
+
     upsample_factor : float, optional
         Determines the target sampling rate for the final DataFrame. The target rate
         is calculated as: `max(nominal_srate) * upsample_factor`.
         Higher factors reduce aliasing but increase memory usage. Default is 2.0.
+
     fill_method : {'ffill', 'bfill', None}, optional
         Method used to fill NaNs arising from resampling (e.g., zero-order hold).
         Default is 'ffill' (forward fill).
+
     fill_value : float or int, optional
         Value used to fill remaining NaNs (e.g., at the start of the recording before
         the first sample). Default is 0.
+
     fillmissing : float or int, optional
         DEPRECATED: This argument is deprecated and has no direct equivalent in the new
         implementation. It previously controlled filling of gaps larger than a threshold.
+
     interpolation_method : {'linear', 'previous'}, optional
         Method used for interpolating data onto the new timebase.
+
     timestamp_reset : bool, optional
         - If True (default): Shifts all timestamps so the recording starts at t=0.0.
           Useful for analysis relative to the start of the specific file.
         - If False: Preserves the absolute LSL timestamps (Unix epoch). Useful when
           synchronizing this data with other files or external clocks.
+
     timestamp_method : {'circular', 'anchored'}, optional
         Algorithm used to generate the new time axis.
+
         - 'circular': Uses a weighted circular mean to find the optimal phase alignment
           across all streams. Minimizes global interpolation error.
         - 'anchored': Aligns the grid strictly to the stream with the highest effective
           sampling rate.
         Default is 'circular'.
+
     mode : {'precise', 'fast'}, optional
         - 'precise': Uses float64 for all data. Preserves precision but uses more memory.
         - 'fast': Uses float32. Reduces memory usage by ~50% but may lose precision
           for very large values.
         Default is 'precise'.
+
     verbose : bool, optional
         If True, prints progress, target sampling rates, and categorical mappings to console.
         Default is True.
+
     show : list of str, optional
         A list of channel names to plot for visual quality control after resampling.
         If None, no plots are generated.
+
     show_start : float, optional
         The start time (in seconds) for the visual control plot window.
         If None, defaults to the middle of the recording.
+
     show_duration : float, optional
         Duration of the visual control window in seconds. Default is 1 second.
 
@@ -132,10 +147,9 @@ def read_xdf(
     Examples
     --------
 
-    .. ipython:: python
+    .. code-block:: python
 
         import neurokit2 as nk
-
         # data, info = nk.read_xdf("data.xdf")
         # sampling_rate = info["sampling_rate"]
     """

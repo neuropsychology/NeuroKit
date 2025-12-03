@@ -15,15 +15,15 @@ def mne_templateMRI(verbose="WARNING"):
     verbose : str
         Verbosity level for MNE.
 
-    Examples
-    ---------
-    .. ipython:: python
+        Examples
+        ---------
+        .. ipython:: python
+             :okexcept:
 
-      import neurokit2 as nk
+             import neurokit2 as nk
+             src, bem = nk.mne_templateMRI()
 
-      src, bem = nk.mne_templateMRI()
-
-    """
+        """
     # Try loading mne (requires also the 'pooch' package)
     try:
         import mne
