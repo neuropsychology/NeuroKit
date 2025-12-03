@@ -1,0 +1,4 @@
+nolds>=0.5.2,<1.0
+scipy==1.9.3
+pytest
+# Add other test/dev dependencies as needed

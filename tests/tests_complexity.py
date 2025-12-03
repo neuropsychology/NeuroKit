@@ -1,7 +1,9 @@
+
 from collections.abc import Iterable
 
+import pytest
+nolds = pytest.importorskip("nolds", minversion="0.5.2", reason="nolds missing or incompatible")
 import antropy
-import nolds
 import numpy as np
 import pandas as pd
 import sklearn.neighbors
