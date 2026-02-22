@@ -384,11 +384,10 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroKitWarning</span><span class="p">,</span> <span class="n">as_vector</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_filter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_fillmissing</span><span class="p">,</span> <span class="n">signal_filter</span>
 
 
 <div class="viewcode-block" id="ecg_clean">
@@ -404,12 +403,13 @@ document.write(`
 <span class="sd">    * ``&#39;biosppy&#39;``: Method used in the BioSPPy package. A FIR filter ([0.67, 45] Hz; order = 1.5 *</span>
 <span class="sd">      SR). The 0.67 Hz cutoff value was selected based on the fact that there are no morphological</span>
 <span class="sd">      features below the heartrate (assuming a minimum heart rate of 40 bpm).</span>
-<span class="sd">    * ``&#39;pantompkins1985&#39;``: Method used in Pan &amp; Tompkins (1985). **Please help providing a better</span>
-<span class="sd">      description!**</span>
-<span class="sd">    * ``&#39;hamilton2002&#39;``: Method used in Hamilton (2002). **Please help providing a better</span>
-<span class="sd">      description!**</span>
-<span class="sd">    * ``&#39;elgendi2010&#39;``: Method used in Elgendi et al. (2010). **Please help providing a better</span>
-<span class="sd">      description!**</span>
+<span class="sd">    * ``&#39;pantompkins1985&#39;``: Method used in Pan &amp; Tompkins (1985): band-pass filter between 5 and 15 Hz</span>
+<span class="sd">      using a Butterworth filter (with zi provided - initial zero-input response provided to avoid </span>
+<span class="sd">      transient artifact at beginning).</span>
+<span class="sd">    * ``&#39;hamilton2002&#39;``: Method used in Hamilton (2002): band-pass filter between 8 and 16 Hz</span>
+<span class="sd">      using a Butterworth filter (with zi provided).</span>
+<span class="sd">    * ``&#39;elgendi2010&#39;``: Method used in Elgendi et al. (2010): band-pass filter between 8 and 20 Hz</span>
+<span class="sd">      using a Butterworth filter (with zi provided). </span>
 <span class="sd">    * ``&#39;engzeemod2012&#39;``: Method used in Engelse &amp; Zeelenberg (1979). **Please help providing a</span>
 <span class="sd">      better description!**</span>
 <span class="sd">    * ``&#39;vg&#39;``: Method used in Visibility Graph Based Detection Emrich et al. (2023)</span>
@@ -489,10 +489,10 @@ document.write(`
     <span class="k">if</span> <span class="n">n_missing</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;There are &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_missing</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; missing data points in your signal.&quot;</span>
-            <span class="s2">&quot; Filling missing values by using the forward filling method.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot; Filling missing values using `signal_fillmissing`.&quot;</span><span class="p">,</span>
             <span class="n">category</span><span class="o">=</span><span class="n">NeuroKitWarning</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">_ecg_clean_missing</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
+        <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">signal_fillmissing</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span>
 
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nk&quot;</span><span class="p">,</span> <span class="s2">&quot;nk2&quot;</span><span class="p">,</span> <span class="s2">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s2">&quot;neurokit2&quot;</span><span class="p">]:</span>
@@ -541,15 +541,6 @@ document.write(`
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">clean</span></div>
 
-
-
-<span class="c1"># =============================================================================</span>
-<span class="c1"># Handle missing data</span>
-<span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_ecg_clean_missing</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">):</span>
-    <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">ecg_signal</span>
 
 
 <span class="c1"># =============================================================================</span>

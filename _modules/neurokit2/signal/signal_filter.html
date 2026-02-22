@@ -423,12 +423,12 @@ document.write(`
 <span class="sd">    highcut : float</span>
 <span class="sd">        Upper cutoff frequency in Hz. The default is ``None``.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Can be one of ``&quot;butterworth&quot;``, ``&quot;fir&quot;``, ``&quot;bessel&quot;`` or ``&quot;savgol&quot;``. Note that for</span>
-<span class="sd">        Butterworth, the function uses the SOS method from :func:`.scipy.signal.sosfiltfilt`,</span>
+<span class="sd">        Can be one of ``&quot;butterworth&quot;``, ``&quot;fir&quot;``, ``&quot;bessel&quot;``, ``&quot;chebyshevii&quot;`` or ``&quot;savgol&quot;``. Note that for</span>
+<span class="sd">        Butterworth and Chebyshev, the function uses the SOS method from :func:`.scipy.signal.sosfiltfilt`,</span>
 <span class="sd">        recommended for general purpose filtering. One can also specify ``&quot;butterworth_ba&quot;`` for a</span>
 <span class="sd">        more traditional and legacy method (often implemented in other software).</span>
 <span class="sd">    order : int</span>
-<span class="sd">        Only used if ``method`` is ``&quot;butterworth&quot;`` or ``&quot;savgol&quot;``. Order of the filter (default</span>
+<span class="sd">        Only used if ``method`` is ``&quot;butterworth&quot;``, ``&quot;chebyshevii&quot;`` or ``&quot;savgol&quot;``. Order of the filter (default</span>
 <span class="sd">        is 2).</span>
 <span class="sd">    window_size : int</span>
 <span class="sd">        Only used if ``method`` is ``&quot;savgol&quot;``. The length of the filter window (i.e. the number of</span>
@@ -550,10 +550,12 @@ document.write(`
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_bessel</span><span class="p">(</span><span class="n">signal_sanitized</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fir&quot;</span><span class="p">]:</span>
             <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_fir</span><span class="p">(</span><span class="n">signal_sanitized</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chebyshevii&quot;</span><span class="p">]:</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="n">_signal_filter_chebyshevii</span><span class="p">(</span><span class="n">signal_sanitized</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;NeuroKit error: signal_filter(): &#39;method&#39; should be&quot;</span><span class="p">,</span>
-                <span class="s2">&quot; one of &#39;butterworth&#39;, &#39;butterworth_ba&#39;, &#39;butterworth_zi&#39;, &#39;bessel&#39;,&quot;</span><span class="p">,</span>
+                <span class="s2">&quot; one of &#39;butterworth&#39;, &#39;butterworth_ba&#39;, &#39;butterworth_zi&#39;, &#39;bessel&#39;, &#39;chebyshevii&#39;&quot;</span><span class="p">,</span>
                 <span class="s2">&quot; &#39;savgol&#39; or &#39;fir&#39;.&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -752,6 +754,20 @@ document.write(`
         <span class="k">return</span> <span class="n">signal_interpolate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">),</span> <span class="n">missing</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">signal</span><span class="p">,</span> <span class="n">missing</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Chebyshev</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_signal_filter_chebyshevii</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">lowcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter a signal using IIR Chebyshev Type II SOS method.&quot;&quot;&quot;</span>
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">filter_type</span> <span class="o">=</span> <span class="n">_signal_filter_sanitize</span><span class="p">(</span><span class="n">lowcut</span><span class="o">=</span><span class="n">lowcut</span><span class="p">,</span> <span class="n">highcut</span><span class="o">=</span><span class="n">highcut</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="c1"># rs value of 20 was used in pyPPG:</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">cheby2</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="n">filter_type</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>  
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filtered</span>
 </pre></div>
 
                 </article>

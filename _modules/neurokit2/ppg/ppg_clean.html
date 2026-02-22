@@ -394,7 +394,14 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">ppg_clean</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Clean a photoplethysmogram (PPG) signal**</span>
 
-<span class="sd">    Prepare a raw PPG signal for systolic peak detection.</span>
+<span class="sd">    Clean a raw PPG signal for analysis by filtering to remove noise. This improves the accuracy of subsequent analyses,</span>
+<span class="sd">    such as systolic peak detection.</span>
+
+<span class="sd">    * ``&#39;elgendi&#39;`` (default): Bandpass filter the signal between 0.5 and 8 Hz using a Butterworth filter.</span>
+<span class="sd">    * ``&#39;nabian2018&#39;``: Lowpass filter the signal below 40 Hz. If `heart_rate` is provided then the function</span>
+<span class="sd">      checks whether 40 Hz is at least 10 times the cardiac frequency and less than half of the sampling frequency, and</span>
+<span class="sd">      raises an error if not.</span>
+<span class="sd">    * ``&#39;goda2024&#39;``: Bandpass filter the signal between 0.5 and 12 Hz using a fourth-order Chebyshev Type II filter.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -404,11 +411,10 @@ document.write(`
 <span class="sd">        The heart rate of the PPG signal. Applicable only if method is ``&quot;nabian2018&quot;`` to check</span>
 <span class="sd">        that filter frequency is appropriate.</span>
 <span class="sd">    sampling_rate : int</span>
-<span class="sd">        The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.</span>
+<span class="sd">        The sampling frequency of ``ppg_signal`` (in Hz, i.e., samples/second). The default is 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;nabian2018&quot;``, or ``&quot;none&quot;``.</span>
-<span class="sd">        The default is ``&quot;elgendi&quot;``. If ``&quot;none&quot;`` is passed, the raw signal will be returned without</span>
-<span class="sd">        any cleaning.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;`` (default), ``&quot;nabian2018&quot;``, ``&quot;goda2024&quot;``,</span>
+<span class="sd">        or ``&quot;none&quot;``. If ``&quot;none&quot;`` is passed, the raw signal will be returned without any cleaning.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -450,6 +456,9 @@ document.write(`
 <span class="sd">    * M. Elgendi, I. Norton, M. Brearley, D. Abbott, and D. Schuurmans (2013).</span>
 <span class="sd">      Systolic peak detection in acceleration photoplethysmograms measured from emergency responders</span>
 <span class="sd">      in tropical conditions. PLoS ONE, 8(10), 1–11.</span>
+<span class="sd">    * M.A. Goda, P.H. Charlton, and J. Behar (2024).</span>
+<span class="sd">      pyPPG: a Python toolbox for comprehensive photoplethysmography signal analysis. Physiological Measurement,</span>
+<span class="sd">      45 (4), 045001. doi: https://doi.org/10.1088/1361-6579/ad33a2</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ppg_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">)</span>
@@ -469,11 +478,13 @@ document.write(`
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_elgendi</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_nabian2018</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="n">heart_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;goda&quot;</span><span class="p">,</span> <span class="s2">&quot;goda2024&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_goda</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">ppg_signal</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;`method` not found. Must be one of &#39;elgendi&#39;, &#39;nabian2018&#39;, or &#39;none&#39;.&quot;</span>
+            <span class="s2">&quot;`method` not found. Must be one of &#39;elgendi&#39;, &#39;nabian2018&#39;, &#39;goda2024&#39;, or &#39;none&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span></div>
@@ -508,7 +519,7 @@ document.write(`
     <span class="k">if</span> <span class="n">heart_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">heart_rate</span> <span class="o">=</span> <span class="n">heart_rate</span> <span class="o">/</span> <span class="mi">60</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">highcut</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">heart_rate</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">highcut</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">highcut</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">heart_rate</span> <span class="ow">and</span> <span class="n">highcut</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Highcut value should be at least 10 times heart rate and&quot;</span>
                 <span class="s2">&quot; less than 0.5 times sampling rate.&quot;</span>
@@ -523,6 +534,19 @@ document.write(`
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">filtered</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ppg_clean_goda</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Band-pass filter for continuous PPG signal preprocessing, adapted from Goda et al. (2024).&quot;&quot;&quot;</span>
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">ppg_signal</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">highcut</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;chebyshevII&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">filtered</span>
 </pre></div>
 
