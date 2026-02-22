@@ -39,8 +39,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -546,11 +546,11 @@ as well as the signals’ sampling rate.</p></li>
 <span class="gp">In [7]: </span><span class="n">bio_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="gh">Out[7]: </span>
 <span class="go">    ECG_Raw  ECG_Clean   ECG_Rate  ...  EMG_Offsets  RSA_P2T  RSA_Gates</span>
-<span class="go">0  1.065431  -0.065348  70.013484  ...            0     12.0   7.926889</span>
-<span class="go">1  1.012436  -0.188599  70.013484  ...            0     12.0   7.926889</span>
-<span class="go">2  0.875428  -0.324126  70.013484  ...            0     12.0   7.926889</span>
-<span class="go">3  0.681615  -0.475916  70.013484  ...            0     12.0   7.926889</span>
-<span class="go">4  0.459908  -0.640497  70.013484  ...            0     12.0   7.926889</span>
+<span class="go">0  1.046975  -0.072206  70.013484  ...            0     24.0   7.966052</span>
+<span class="go">1  0.995849  -0.192160  70.013484  ...            0     24.0   7.966052</span>
+<span class="go">2  0.863170  -0.324870  70.013484  ...            0     24.0   7.966052</span>
+<span class="go">3  0.673920  -0.474961  70.013484  ...            0     24.0   7.966052</span>
+<span class="go">4  0.454800  -0.639635  70.013484  ...            0     24.0   7.966052</span>
 
 <span class="go">[5 rows x 49 columns]</span>
 </pre></div>
@@ -563,7 +563,7 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" src="../_images/p_bio_process1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_bio_process1.png"><img alt="../_images/p_bio_process1.png" height="480" src="../_images/p_bio_process1.png" width="640" />
 </a>
 <p><strong>Example 2</strong>: Using a real dataset</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download EOG signal separately</span>
@@ -584,7 +584,7 @@ as well as the signals’ sampling rate.</p></li>
 <span class="go">       &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_bio_process2.png"><img alt="../_images/p_bio_process2.png" src="../_images/p_bio_process2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_bio_process2.png"><img alt="../_images/p_bio_process2.png" height="480" src="../_images/p_bio_process2.png" width="640" />
 </a>
 </dd></dl>
 
@@ -653,7 +653,7 @@ produced by <a class="reference internal" href="hrv.html#neurokit2.hrv.hrv_rsa" 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">bio_analyze</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label Condition  Event_Onset  ...  SCR_RecoveryTime    RSA_P2T     RSA_Gates</span>
-<span class="go">1     1  Negative         1024  ...               NaN   7.111969  1.776357e-15</span>
+<span class="go">1     1  Negative         1024  ...               NaN   7.111969 -1.776357e-15</span>
 <span class="go">2     2   Neutral         4957  ...               NaN -15.476818  1.203761e-02</span>
 <span class="go">3     3   Neutral         9224  ...               NaN  -6.685871  2.738234e-02</span>
 <span class="go">4     4  Negative        12984  ...               NaN  -0.397892 -5.451553e-03</span>
@@ -763,7 +763,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

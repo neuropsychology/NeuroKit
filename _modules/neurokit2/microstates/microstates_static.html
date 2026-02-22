@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -440,7 +440,9 @@ document.write(`
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">out</span><span class="p">,</span> <span class="n">lifetimes</span> <span class="o">=</span> <span class="n">_microstates_prevalence</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">,</span> <span class="n">durations</span><span class="p">,</span> <span class="n">types</span> <span class="o">=</span> <span class="n">_microstates_duration</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">durations</span><span class="p">,</span> <span class="n">types</span> <span class="o">=</span> <span class="n">_microstates_duration</span><span class="p">(</span>
+        <span class="n">microstates</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -453,7 +455,9 @@ document.write(`
         <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
         <span class="n">_microstates_duration_plot</span><span class="p">(</span><span class="n">durations</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax0</span><span class="p">)</span>
-        <span class="n">_microstates_prevalence_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">lifetimes</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax_prop</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax_distrib</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+        <span class="n">_microstates_prevalence_plot</span><span class="p">(</span>
+            <span class="n">microstates</span><span class="p">,</span> <span class="n">lifetimes</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax_prop</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax_distrib</span><span class="o">=</span><span class="n">ax2</span>
+        <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;Microstate_&quot;</span><span class="p">)</span>
@@ -505,7 +509,11 @@ document.write(`
         <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">parts</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span>
-        <span class="n">data</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">)),</span> <span class="n">vert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showmedians</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">showextrema</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">positions</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">)),</span>
+        <span class="n">vert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">showmedians</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">showextrema</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="n">component</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
@@ -541,7 +549,9 @@ document.write(`
     <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">lifetimes</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_microstates_prevalence_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">lifetimes</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax_prop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_distrib</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_microstates_prevalence_plot</span><span class="p">(</span>
+    <span class="n">microstates</span><span class="p">,</span> <span class="n">lifetimes</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ax_prop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_distrib</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
     <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">microstates</span><span class="p">)</span>
 
     <span class="c1"># Plot</span>
@@ -600,8 +610,9 @@ document.write(`
     <span class="c1"># Get Area under curve (AUCs)</span>
     <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">trapezoid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapezoid</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="s2">&quot;trapezoid&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
-        <span class="n">out</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_LifetimeDistribution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">lifetimes</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+        <span class="n">out</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_LifetimeDistribution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trapezoid</span><span class="p">(</span><span class="n">lifetimes</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">lifetimes</span>
 </pre></div>
@@ -642,7 +653,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

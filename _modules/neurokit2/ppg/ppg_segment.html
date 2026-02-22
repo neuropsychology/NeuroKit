@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -381,17 +381,14 @@ document.write(`
                   
   <h1>Source code for neurokit2.ppg.ppg_segment</h1><div class="highlight"><pre>
 <span></span><span class="c1"># - * - coding: utf-8 - * -</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">..ecg.ecg_segment</span><span class="w"> </span><span class="kn">import</span> <span class="n">_ecg_segment_plot</span><span class="p">,</span> <span class="n">_ecg_segment_window</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">epochs_create</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.ppg_peaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppg_peaks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_cyclesegment</span>
 
 
 <div class="viewcode-block" id="ppg_segment">
 <a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_segment">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ppg_segment</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Segment an PPG signal into single heartbeats**</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Segment a PPG signal into single heartbeats**</span>
 
 <span class="sd">    Segment a PPG signal into single heartbeats. Convenient for visualizing all the heart beats.</span>
 
@@ -438,31 +435,14 @@ document.write(`
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The data length is too small to be segmented.&quot;</span><span class="p">)</span>
 
-    <span class="n">epochs_start</span><span class="p">,</span> <span class="n">epochs_end</span><span class="p">,</span> <span class="n">average_hr</span> <span class="o">=</span> <span class="n">_ecg_segment_window</span><span class="p">(</span>
-        <span class="n">rpeaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">,</span>
-        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-        <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">),</span>
-        <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">heartbeats</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
-        <span class="n">ppg_cleaned</span><span class="p">,</span>
-        <span class="n">peaks</span><span class="p">,</span>
-        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
-        <span class="n">epochs_start</span><span class="o">=</span><span class="n">epochs_start</span><span class="p">,</span>
-        <span class="n">epochs_end</span><span class="o">=</span><span class="n">epochs_end</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">signal_cyclesegment</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">signal_name</span><span class="o">=</span><span class="s2">&quot;ppg&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="c1"># pad last heartbeat with nan so that segments are equal length</span>
-    <span class="n">last_heartbeat_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">heartbeats</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
-    <span class="n">after_last_index</span> <span class="o">=</span> <span class="n">heartbeats</span><span class="p">[</span><span class="n">last_heartbeat_key</span><span class="p">][</span><span class="s2">&quot;Index&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">)</span>
-    <span class="n">heartbeats</span><span class="p">[</span><span class="n">last_heartbeat_key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">after_last_index</span><span class="p">,</span> <span class="s2">&quot;Signal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-
-    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">_ecg_segment_plot</span><span class="p">(</span>
-            <span class="n">heartbeats</span><span class="p">,</span> <span class="n">heartrate</span><span class="o">=</span><span class="n">average_hr</span><span class="p">,</span> <span class="n">ytitle</span><span class="o">=</span><span class="s2">&quot;PPG&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+    <span class="c1"># if asked to return an axis handle</span>
     <span class="k">if</span> <span class="n">show</span> <span class="o">==</span> <span class="s2">&quot;return&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ax</span>
+        <span class="k">return</span> <span class="n">output</span>
+    
+    <span class="c1"># else, extract heartbeats</span>
+    <span class="n">heartbeats</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">output</span>
 
     <span class="k">return</span> <span class="n">heartbeats</span></div>
 
@@ -504,7 +484,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

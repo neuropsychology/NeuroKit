@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -401,6 +401,7 @@ document.write(`
 <span class="sd">      ``resp()`` function.</span>
 <span class="sd">    * **scipy** Uses the `scipy &lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html&gt;`_</span>
 <span class="sd">      peak-detection function.</span>
+<span class="sd">    * **schafer2008**: Uses the count-orig algorithm proposed in Schafer et al. (2008).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -409,8 +410,8 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;biosppy&quot;``</span>
-<span class="sd">        or ``&quot;scipy&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;biosppy&quot;``,</span>
+<span class="sd">        ``&quot;scipy&quot;``, or ``&quot;schafer2008&quot;``.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed to the different peak finding methods. See</span>
 <span class="sd">        :func:`.rsp_findpeaks`.</span>
@@ -454,10 +455,27 @@ document.write(`
 <span class="sd">    * Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., ... &amp; Bayford,</span>
 <span class="sd">      R. (2018). Optimized breath detection algorithm in electrical impedance tomography.</span>
 <span class="sd">      Physiological measurement, 39(9), 094001.</span>
+<span class="sd">    * Schafer, A. and Kratky K.W. (2008). Estimation of breathing rate from respiratory sinus arrhythmia:</span>
+<span class="sd">      comparison of various methods. Annals of Biomedical Engineering, 36(3), 476–85.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="c1"># Store info</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;method_peaks&quot;</span><span class="p">:</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;method_fixpeaks&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">}</span>
+
+    <span class="c1"># Find peaks</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">rsp_findpeaks</span><span class="p">(</span>
+            <span class="n">rsp_cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Fix peaks</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">rsp_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+
+    <span class="c1"># Format peaks</span>
     <span class="n">peak_signal</span> <span class="o">=</span> <span class="n">signal_formatpeaks</span><span class="p">(</span>
         <span class="n">info</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">),</span> <span class="n">peak_indices</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">]</span>
     <span class="p">)</span>
@@ -504,7 +522,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

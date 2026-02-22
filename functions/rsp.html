@@ -39,8 +39,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -513,7 +513,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-intervalrelated"><em>rsp_intervalrelated()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_intervalrelated"><code class="docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_methods"><code class="docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_quality"><code class="docutils literal notranslate"><span class="pre">rsp_quality()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rav"><code class="docutils literal notranslate"><span class="pre">rsp_rav()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_segment"><code class="docutils literal notranslate"><span class="pre">rsp_segment()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -602,7 +604,7 @@ signals’ sampling rate.</p></li>
 
 <span class="go">|   RSP_Rate_Mean |   RSP_Rate_SD |</span>
 <span class="go">|----------------:|--------------:|</span>
-<span class="go">|         15.3346 |       1.53305 |</span>
+<span class="go">|         14.8243 |       1.65731 |</span>
 
 <span class="go">References</span>
 <span class="go">- Harrison, S. J., Bianchi, S., Heinzle, J., Stephan, K. E., Iglesias, S., &amp; Kasper, L. (2021).</span>
@@ -619,7 +621,7 @@ signals’ sampling rate.</p></li>
 <span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_process_1.png"><img alt="../_images/p_rsp_process_1.png" src="../_images/p_rsp_process_1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_process_1.png"><img alt="../_images/p_rsp_process_1.png" height="480" src="../_images/p_rsp_process_1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -751,7 +753,7 @@ allows generating multiple version of the same signal distorted by different ran
 <span class="gh">Out[5]: </span><span class="go">array([&lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_simulate1.png"><img alt="../_images/p_rsp_simulate1.png" src="../_images/p_rsp_simulate1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_simulate1.png"><img alt="../_images/p_rsp_simulate1.png" height="480" src="../_images/p_rsp_simulate1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -800,7 +802,7 @@ Defaults to True.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_plot</span><span class="p">(</span><span class="n">rsp_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_plot1.png"><img alt="../_images/p_rsp_plot1.png" src="../_images/p_rsp_plot1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_plot1.png"><img alt="../_images/p_rsp_plot1.png" height="480" src="../_images/p_rsp_plot1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -822,6 +824,8 @@ implementation differs from the referenced paper (see issue #950).</p></li>
 detrending).</p></li>
 <li><p><strong>hampel</strong>: Applies a median-based Hampel filter by replacing values which are 3 (can be
 changed via <code class="docutils literal notranslate"><span class="pre">threshold</span></code>) <a class="reference internal" href="stats.html#neurokit2.mad" title="neurokit2.mad"><code class="xref py py-func docutils literal notranslate"><span class="pre">mad()</span></code></a> away from the rolling median.</p></li>
+<li><p><strong>charlton2021</strong>: Second order 1 Hz lowpass Butterworth filter. Note that is doesn’t include
+the Tukey window step proposed in Charlton et al.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -860,7 +864,7 @@ changed via <code class="docutils literal notranslate"><span class="pre">thresho
 <span class="gh">Out[5]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_clean1.png"><img alt="../_images/p_rsp_clean1.png" src="../_images/p_rsp_clean1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_clean1.png"><img alt="../_images/p_rsp_clean1.png" height="480" src="../_images/p_rsp_clean1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -871,6 +875,8 @@ Physiological measurement, 39(9), 094001.</p></li>
 Characteristics of respiratory measures in young adults scanned at rest,
 including systematic changes and “missed” deep breaths.
 NeuroImage, Volume 204, 116234</p></li>
+<li><p>Charlton, P.H, et al. (2021). An impedance pneumography signal quality index: Design, assessment
+and application to respiratory rate monitoring. Biomedical Signal Processing and Control, 65, 102339.</p></li>
 </ul>
 </dd></dl>
 
@@ -924,14 +930,14 @@ or “undershoots” in the y-direction). In contrast, the widely used cubic spl
 <span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">rsp</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">,</span> <span class="s2">&quot;Amplitude&quot;</span><span class="p">],</span> <span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_amp1.png"><img alt="../_images/p_rsp_amp1.png" src="../_images/p_rsp_amp1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_amp1.png"><img alt="../_images/p_rsp_amp1.png" height="480" src="../_images/p_rsp_amp1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">amp2</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_amplitude</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">peak_signals</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;prepost&quot;</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">amp2</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span> <span class="s2">&quot;Prepost&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_amp2.png"><img alt="../_images/p_rsp_amp2.png" src="../_images/p_rsp_amp2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_amp2.png"><img alt="../_images/p_rsp_amp2.png" height="480" src="../_images/p_rsp_amp2.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -956,14 +962,15 @@ using different sets of parameters, such as:</p>
 <code class="docutils literal notranslate"><span class="pre">resp()</span></code> function.</p></li>
 <li><p><strong>scipy</strong> Uses the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html">scipy</a>
 peak-detection function.</p></li>
+<li><p><strong>schafer2008</strong>: Uses the count-orig algorithm proposed in Schafer et al. (2008).</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_cleaned()</span></code> (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>
-or <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;schafer2008&quot;</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed to the different peak finding methods. See
 <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_findpeaks()</span></code></a>.</p></li>
 </ul>
@@ -1001,13 +1008,15 @@ length as <code class="xref py py-func docutils literal notranslate"><span class
 <span class="gp">In [7]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_peaks1.png"><img alt="../_images/p_rsp_peaks1.png" src="../_images/p_rsp_peaks1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_peaks1.png"><img alt="../_images/p_rsp_peaks1.png" height="480" src="../_images/p_rsp_peaks1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Khodadad, D., Nordebo, S., Müller, B., Waldmann, A., Yerworth, R., Becher, T., … &amp; Bayford,
 R. (2018). Optimized breath detection algorithm in electrical impedance tomography.
 Physiological measurement, 39(9), 094001.</p></li>
+<li><p>Schafer, A. and Kratky K.W. (2008). Estimation of breathing rate from respiratory sinus arrhythmia:
+comparison of various methods. Annals of Biomedical Engineering, 36(3), 476–85.</p></li>
 </ul>
 </dd></dl>
 
@@ -1026,8 +1035,8 @@ parameters. See <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" ti
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiration channel as returned by <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_clean()</span></code></a>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="xref py py-func docutils literal notranslate"><span class="pre">rsp_cleaned()</span></code> (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code> or
-<code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;scipy&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;biosppy&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;bettermann1996&quot;</span></code>.</p></li>
 <li><p><strong>amplitude_min</strong> (<em>float</em>) – Only applies if method is <code class="docutils literal notranslate"><span class="pre">&quot;khodadad2018&quot;</span></code>. Extrema that have a vertical distance smaller
 than(outlier_threshold * average vertical distance) to any direct neighbour are removed as
 false positive outliers. I.e., outlier_threshold should be a float with positive sign (the
@@ -1061,7 +1070,7 @@ onsets and exhalation onsets occur, accessible with the keys <code class="docuti
 <span class="gh">Out[5]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_findpeaks1.png"><img alt="../_images/p_rsp_findpeaks1.png" src="../_images/p_rsp_findpeaks1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_findpeaks1.png"><img alt="../_images/p_rsp_findpeaks1.png" height="480" src="../_images/p_rsp_findpeaks1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1110,7 +1119,7 @@ and <code class="docutils literal notranslate"><span class="pre">&quot;RSP_Peaks
 <span class="gh">Out[6]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_fixpeaks1.png"><img alt="../_images/p_rsp_fixpeaks1.png" src="../_images/p_rsp_fixpeaks1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_fixpeaks1.png"><img alt="../_images/p_rsp_fixpeaks1.png" height="480" src="../_images/p_rsp_fixpeaks1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1163,7 +1172,7 @@ to 1), representing the stage of the current respiratory phase.</p></li>
 <span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">rsp</span><span class="p">,</span> <span class="n">phase</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_phase1.png"><img alt="../_images/p_rsp_phase1.png" src="../_images/p_rsp_phase1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_phase1.png"><img alt="../_images/p_rsp_phase1.png" height="480" src="../_images/p_rsp_phase1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1273,7 +1282,7 @@ or “undershoots” in the y-direction). In contrast, the widely used cubic spl
 <span class="gp">In [5]: </span><span class="n">symmetry</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_symmetry</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">peak_signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_symmetry1.png"><img alt="../_images/p_rsp_symmetry1.png" src="../_images/p_rsp_symmetry1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_symmetry1.png"><img alt="../_images/p_rsp_symmetry1.png" height="480" src="../_images/p_rsp_symmetry1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1346,8 +1355,8 @@ breath-to-breath interval. Defaults to <code class="docutils literal notranslate
 
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_rrv</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">    RRV_RMSSD   RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
-<span class="go">0  604.900635  4058.473684  374.393045  ...    0.668982  0.157908         inf</span>
+<span class="go">    RRV_RMSSD  RRV_MeanBB    RRV_SDBB  ...  RRV_SD2SD1  RRV_ApEn  RRV_SampEn</span>
+<span class="go">0  871.171081     4016.55  666.882494  ...    1.105053  0.054067        -inf</span>
 
 <span class="go">[1 rows x 20 columns]</span>
 </pre></div>
@@ -1412,11 +1421,11 @@ to remove high frequencies. Synthetic samples often take less than 3.</p></li>
 <span class="gh">Out[5]: </span><span class="go">array([nan, nan, nan, ..., nan, nan, nan], shape=(60000,))</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" src="../_images/p_rsp_rvt1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_rvt1.png"><img alt="../_images/p_rsp_rvt1.png" height="480" src="../_images/p_rsp_rvt1.png" width="640" />
 </a>
-<a class="reference internal image-reference" href="../_images/p_rsp_rvt2.png"><img alt="../_images/p_rsp_rvt2.png" src="../_images/p_rsp_rvt2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_rvt2.png"><img alt="../_images/p_rsp_rvt2.png" height="480" src="../_images/p_rsp_rvt2.png" width="640" />
 </a>
-<a class="reference internal image-reference" href="../_images/p_rsp_rvt3.png"><img alt="../_images/p_rsp_rvt3.png" src="../_images/p_rsp_rvt3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_rsp_rvt3.png"><img alt="../_images/p_rsp_rvt3.png" height="480" src="../_images/p_rsp_rvt3.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1488,9 +1497,9 @@ consist of the following:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  RSP_RVT_Baseline  RSP_RVT_Mean</span>
-<span class="go">1     1         5000  ...          0.279308      0.008430</span>
-<span class="go">2     2        10000  ...          0.232878      0.043755</span>
-<span class="go">3     3        15000  ...          0.225020     -0.016628</span>
+<span class="go">1     1         5000  ...          0.249745     -0.021944</span>
+<span class="go">2     2        10000  ...          0.308414     -0.072779</span>
+<span class="go">3     3        15000  ...          0.142243      0.056243</span>
 
 <span class="go">[3 rows x 22 columns]</span>
 </pre></div>
@@ -1650,6 +1659,72 @@ references.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.rsp.rsp_quality">
+<span class="sig-name descname"><span class="pre">rsp_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_quality.html#rsp_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_quality" title="Link to this definition">#</a></dt>
+<dd><p><strong>RSP Signal Quality Assessment</strong></p>
+<p>Assess the quality of the RSP Signal. using template matching:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method (loosely based on Charlton et al., 2021) computes a continuous
+index of quality of the RSP signal, by calculating the correlation coefficient between each
+individual breath and an average (template) breath shape. This index is therefore
+relative: 1 corresponds to breaths that are closest to the average breath shape (i.e.
+correlate exactly with it) and 0 corresponds to there being no correlation with the average
+breath shape. Note that for pre-processing, Charlton et al. cleaned the signal with a low-pass filter
+below 1 Hz (the “charlton2021” method in rsp_clean), and used the “bettermann1996” breath detection
+algorithm (the “bettermann1996” method in rsp_peaks).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method (borrowed from Sabeti et al., 2019, who proposed it for the PPG signal)
+computes a continuous index of quality of the RSP signal, by calculating the level of dissimilarity between
+each individual breath and an average (template) breath shape (after they are normalised). A value of
+zero indicates no dissimilarity (i.e. equivalent breath shapes), whereas values above or below
+indicate increasing dissimilarity.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned RSP signal in the form of a vector of values.</p></li>
+<li><p><strong>peaks</strong> (<em>tuple or list</em>) – The list of RSP peak samples returned by <code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code>. If None, peaks is computed from
+the signal input.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The method for computing RSP signal quality. The only option is <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> (default).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>quality</strong> (<em>array</em>) – Vector containing the quality index ranging from 0 to 1.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_quality</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a></p>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Charlton, P.H, et al. (2021). An impedance pneumography signal quality index: Design, assessment
+and application to respiratory rate monitoring. Biomedical Signal Processing and Control, 65, 102339.</p></li>
+<li><p>Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:
+Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> ‘templatematch’ method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">50</span>
+
+<span class="gp">In [3]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;charlton&quot;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_quality</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_rsp_quality.png"><img alt="../_images/p_rsp_quality.png" height="480" src="../_images/p_rsp_quality.png" width="640" />
+</a>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.rsp.rsp_rav">
 <span class="sig-name descname"><span class="pre">rsp_rav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amplitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_rav.html#rsp_rav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_rav" title="Link to this definition">#</a></dt>
 <dd><p><strong>Respiratory Amplitude Variability (RAV)</strong></p>
@@ -1696,9 +1771,46 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <span class="gp">In [7]: </span><span class="n">rav</span>
 <span class="gh">Out[7]: </span>
 <span class="go">   RAV_Mean    RAV_SD  RAV_RMSSD  RAV_CVSD</span>
-<span class="go">0  0.959469  0.040064   0.050177  0.052297</span>
+<span class="go">0  0.959187  0.065831   0.056803   0.05922</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.rsp.rsp_segment">
+<span class="sig-name descname"><span class="pre">rsp_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsp_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/rsp/rsp_segment.html#rsp_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.rsp.rsp_segment" title="Link to this definition">#</a></dt>
+<dd><p><strong>Segment a respiratory signal into individual breaths</strong></p>
+<p>Segment a respiratory signal into individual breaths. Convenient for visualizing all the breaths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rsp_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned respiratory channel as returned by <code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code>.</p></li>
+<li><p><strong>peaks</strong> (<em>dict</em>) – The samples at which the peaks (exhalation onsets) occur. Dict returned by <code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">rsp_cleaned</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot of breaths. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all segmented breaths.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_peaks" title="neurokit2.rsp.rsp_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_peaks</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span>
+
+<span class="gp">In [3]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">rsp_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_segment</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_rsp_segment.png"><img alt="../_images/p_rsp_segment.png" height="480" src="../_images/p_rsp_segment.png" width="640" />
+</a>
 </dd></dl>
 
 </section>
@@ -1820,7 +1932,9 @@ be inferred from the <code class="docutils literal notranslate"><span class="pre
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rsp-intervalrelated"><em>rsp_intervalrelated()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_intervalrelated"><code class="docutils literal notranslate"><span class="pre">rsp_intervalrelated()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_methods"><code class="docutils literal notranslate"><span class="pre">rsp_methods()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_quality"><code class="docutils literal notranslate"><span class="pre">rsp_quality()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_rav"><code class="docutils literal notranslate"><span class="pre">rsp_rav()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.rsp.rsp_segment"><code class="docutils literal notranslate"><span class="pre">rsp_segment()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1849,7 +1963,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -449,7 +449,9 @@ document.write(`
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">_benchmark_ecg_preprocessing_databases</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">_benchmark_ecg_preprocessing</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">_benchmark_ecg_preprocessing</span><span class="p">(</span>
+            <span class="n">function</span><span class="p">,</span> <span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">results</span></div>
 
@@ -466,8 +468,13 @@ document.write(`
         <span class="k">for</span> <span class="n">database</span> <span class="ow">in</span> <span class="n">ecgs</span><span class="p">[</span><span class="n">ecgs</span><span class="p">[</span><span class="s2">&quot;Participant&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">participant</span><span class="p">][</span><span class="s2">&quot;Database&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
 
             <span class="c1"># Extract the right slice of data</span>
-            <span class="n">ecg_slice</span> <span class="o">=</span> <span class="n">ecgs</span><span class="p">[(</span><span class="n">ecgs</span><span class="p">[</span><span class="s2">&quot;Participant&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">participant</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ecgs</span><span class="p">[</span><span class="s2">&quot;Database&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">database</span><span class="p">)]</span>
-            <span class="n">rpeaks_slice</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[(</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;Participant&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">participant</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;Database&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">database</span><span class="p">)]</span>
+            <span class="n">ecg_slice</span> <span class="o">=</span> <span class="n">ecgs</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">ecgs</span><span class="p">[</span><span class="s2">&quot;Participant&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">participant</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ecgs</span><span class="p">[</span><span class="s2">&quot;Database&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">database</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">rpeaks_slice</span> <span class="o">=</span> <span class="n">rpeaks</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;Participant&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">participant</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">rpeaks</span><span class="p">[</span><span class="s2">&quot;Database&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">database</span><span class="p">)</span>
+            <span class="p">]</span>
             <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">ecg_slice</span><span class="p">[</span><span class="s2">&quot;Sampling_Rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Extract values</span>
@@ -505,7 +512,9 @@ document.write(`
         <span class="p">)</span>
 
     <span class="c1"># Compare R peaks</span>
-    <span class="n">score</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">benchmark_ecg_compareRpeaks</span><span class="p">(</span><span class="n">rpeak</span><span class="p">,</span> <span class="n">found_rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">score</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">benchmark_ecg_compareRpeaks</span><span class="p">(</span>
+        <span class="n">rpeak</span><span class="p">,</span> <span class="n">found_rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">{</span>
@@ -526,13 +535,19 @@ document.write(`
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">found_rpeaks</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s2">&quot;R-peaks detected &lt;= 3&quot;</span>
 
-    <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">true_rpeaks</span><span class="p">,</span> <span class="n">found_rpeaks</span><span class="p">]))</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">true_rpeaks</span><span class="p">,</span> <span class="n">found_rpeaks</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">1</span>
 
     <span class="n">true_interpolated</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
-        <span class="n">true_rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span>
+        <span class="n">true_rpeaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+        <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">found_interpolated</span> <span class="o">=</span> <span class="n">signal_period</span><span class="p">(</span>
-        <span class="n">found_rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span> <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span>
+        <span class="n">found_rpeaks</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">desired_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+        <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">found_interpolated</span> <span class="o">-</span> <span class="n">true_interpolated</span><span class="p">)),</span> <span class="s2">&quot;None&quot;</span>
@@ -574,7 +589,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

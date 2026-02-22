@@ -39,8 +39,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -562,7 +562,7 @@ see <a class="reference internal" href="#neurokit2.ppg.ppg_methods" title="neuro
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_process1.png"><img alt="../_images/p_ppg_process1.png" src="../_images/p_ppg_process1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_process1.png"><img alt="../_images/p_ppg_process1.png" height="480" src="../_images/p_ppg_process1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.050274           0.990968</span>
-<span class="go">2     2        10000  ...                  1.058193           0.928790</span>
-<span class="go">3     3        15000  ...                  0.298743           0.363923</span>
+<span class="go">1     1         5000  ...                 -0.685726           0.712197</span>
+<span class="go">2     2        10000  ...                  0.418850           0.981860</span>
+<span class="go">3     3        15000  ...                  0.326847           0.847810</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -743,7 +743,7 @@ Defaults to True.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" src="../_images/p_ppg_plot1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_plot1.png"><img alt="../_images/p_ppg_plot1.png" height="480" src="../_images/p_ppg_plot1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -802,7 +802,7 @@ any cleaning.</p></li>
 <span class="gh">Out[8]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_clean1.png"><img alt="../_images/p_ppg_clean1.png" src="../_images/p_ppg_clean1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_clean1.png"><img alt="../_images/p_ppg_clean1.png" height="480" src="../_images/p_ppg_clean1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -872,8 +872,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 46,  90, 131, 177, 219, 260, 306, 351, 404, 438, 482, 517, 559,</span>
-<span class="go">       596, 631, 669, 707, 740, 779, 816, 851, 889, 926, 967])</span>
+<span class="go">array([ 48,  90, 134, 176, 217, 263, 305, 348, 408, 480, 529, 594, 630,</span>
+<span class="go">       669, 706, 743, 777, 816, 852, 889, 927, 963])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -882,11 +882,11 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 <span class="gp">In [8]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_peaks1.png"><img alt="../_images/p_ppg_peaks1.png" src="../_images/p_ppg_peaks1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_peaks1.png"><img alt="../_images/p_ppg_peaks1.png" height="480" src="../_images/p_ppg_peaks1.png" width="640" />
 </a>
-<a class="reference internal image-reference" href="../_images/p_ppg_peaks2.png"><img alt="../_images/p_ppg_peaks2.png" src="../_images/p_ppg_peaks2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_peaks2.png"><img alt="../_images/p_ppg_peaks2.png" height="480" src="../_images/p_ppg_peaks2.png" width="640" />
 </a>
-<a class="reference internal image-reference" href="../_images/p_ppg_peaks3.png"><img alt="../_images/p_ppg_peaks3.png" src="../_images/p_ppg_peaks3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_peaks3.png"><img alt="../_images/p_ppg_peaks3.png" height="480" src="../_images/p_ppg_peaks3.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -961,9 +961,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.638300           0.674669</span>
-<span class="go">2     2        10000  ...                  0.571157           0.921942</span>
-<span class="go">3     3        15000  ...                  0.643336           0.877907</span>
+<span class="go">1     1         5000  ...                 -0.291803           0.940472</span>
+<span class="go">2     2        10000  ...                 -0.417140           0.950220</span>
+<span class="go">3     3        15000  ...                 -0.185400           0.944200</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1082,9 +1082,9 @@ peaks occur, accessible with the key <code class="docutils literal notranslate">
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_findpeaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" src="../_images/p_ppg_findpeaks1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks1.png"><img alt="../_images/p_ppg_findpeaks1.png" height="480" src="../_images/p_ppg_findpeaks1.png" width="640" />
 </a>
-<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks2.png"><img alt="../_images/p_ppg_findpeaks2.png" src="../_images/p_ppg_findpeaks2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_findpeaks2.png"><img alt="../_images/p_ppg_findpeaks2.png" height="480" src="../_images/p_ppg_findpeaks2.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1176,13 +1176,21 @@ individual pulse wave and an average (template) pulse wave shape. This index is 
 relative: 1 corresponds to pulse waves that are closest to the average pulse wave shape (i.e.
 correlate exactly with it) and 0 corresponds to there being no correlation with the average
 pulse wave shape.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method (loosely based on Sabeti et al., 2019) computes a continuous index
-of quality of the PPG signal, by calculating the level of disimilarity between each individual
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method (loosely based on Sabeti et al., 2019) computes a continuous index
+of quality of the PPG signal, by calculating the level of dissimilarity between each individual
 pulse wave and an average (template) pulse wave shape (after they are normalised). A value of
-zero indicates no disimilarity (i.e. equivalent pulse wave shapes), whereas values above or below
-indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse
+zero indicates no dissimilarity (i.e. equivalent pulse wave shapes), whereas values above or below
+indicate increasing dissimilarity. The original method used dynamic time-warping to align the pulse
 waves prior to calculating the level of dsimilarity, whereas this implementation does not currently
 include this step.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code> method (Ho et al., 2025) assesses PPG quality on a beat-by-beat basis by predicting
+whether each interbeat-interval (IBI) is accurate. To do so, beats are detected using a primary beat detector,
+and each IBI is predicted to be accurate only if a secondary beat detector detects beats
+in the same positions (within a tolerance). In this implementation, all signal samples within an
+IBI are rated as high quality (1) if that IBI is predicted to be accurate, or low
+quality (0) if that IBI is predicted to be inaccurate. Ho et al. proposed this approach for the ECG, and here
+it has been applied to the PPG. The general approach was derived by Ho et al from the previously proposed bSQI
+approach.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1191,17 +1199,19 @@ include this step.</p></li>
 <li><p><strong>peaks</strong> (<em>tuple or list</em>) – The list of PPG pulse wave peak samples returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>. If None, peaks is computed from
 the signal input.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The method for computing PPG signal quality, can be <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> (default).</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The method for computing PPG signal quality, can be <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>quality</strong> (<em>array</em>) – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
-or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method.</p>
+or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method,
+or zeros and ones (where 1 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code> method.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_quality</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_quality</span></code>, <a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a></p>
 </div>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1209,6 +1219,8 @@ or an unbounded value (where 0 indicates high quality) for <code class="docutils
 derivation and applications to wireless monitoring”. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</p></li>
 <li><p>Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:
 Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</p></li>
+<li><p>Ho, S.Y.S et al. (2025). “Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.
+medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.org/10.1101/2025.03.10.25323655">https://doi.org/10.1101/2025.03.10.25323655</a></p></li>
 </ul>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -1216,23 +1228,25 @@ Applications in reliability measure for pulse oximetry. Informatics in Medicine 
 </ul>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
-<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="gp">In [2]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">100</span>
 
-<span class="gp">In [3]: </span><span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 
-<span class="gp">In [4]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [5]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_quality.png"><img alt="../_images/p_ppg_quality.png" src="../_images/p_ppg_quality.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_quality.png"><img alt="../_images/p_ppg_quality.png" height="480" src="../_images/p_ppg_quality.png" width="640" />
 </a>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_segment">
 <span class="sig-name descname"><span class="pre">ppg_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_segment.html#ppg_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_segment" title="Link to this definition">#</a></dt>
-<dd><p><strong>Segment an PPG signal into single heartbeats</strong></p>
+<dd><p><strong>Segment a PPG signal into single heartbeats</strong></p>
 <p>Segment a PPG signal into single heartbeats. Convenient for visualizing all the heart beats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1260,7 +1274,7 @@ Applications in reliability measure for pulse oximetry. Informatics in Medicine 
 <span class="gp">In [3]: </span><span class="n">ppg_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_segment</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_ppg_segment.png"><img alt="../_images/p_ppg_segment.png" src="../_images/p_ppg_segment.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_ppg_segment.png"><img alt="../_images/p_ppg_segment.png" height="480" src="../_images/p_ppg_segment.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1388,7 +1402,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

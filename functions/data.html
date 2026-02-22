@@ -39,8 +39,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -569,28 +569,28 @@ data (from the MNE-sample dataset).</p></li>
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_datasets1.png"><img alt="../_images/p_datasets1.png" src="../_images/p_datasets1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_datasets1.png"><img alt="../_images/p_datasets1.png" height="480" src="../_images/p_datasets1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;rsp_1000hz&quot;</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">rsp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_datasets2.png"><img alt="../_images/p_datasets2.png" src="../_images/p_datasets2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_datasets2.png"><img alt="../_images/p_datasets2.png" height="480" src="../_images/p_datasets2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">eeg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_150hz&quot;</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_data3.png"><img alt="../_images/p_data3.png" src="../_images/p_data3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_data3.png"><img alt="../_images/p_data3.png" height="480" src="../_images/p_data3.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">eog</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eog_100hz&quot;</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">eog</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_data4.png"><img alt="../_images/p_data4.png" src="../_images/p_data4.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_data4.png"><img alt="../_images/p_data4.png" height="480" src="../_images/p_data4.png" width="640" />
 </a>
 <p><strong>DataFrames</strong></p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -610,7 +610,7 @@ data (from the MNE-sample dataset).</p></li>
 <span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4000</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_datasets5.png"><img alt="../_images/p_datasets5.png" src="../_images/p_datasets5.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_datasets5.png"><img alt="../_images/p_datasets5.png" height="480" src="../_images/p_datasets5.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
 
@@ -618,7 +618,7 @@ data (from the MNE-sample dataset).</p></li>
 <span class="gh">Out[15]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_datasets6.png"><img alt="../_images/p_datasets6.png" src="../_images/p_datasets6.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_datasets6.png"><img alt="../_images/p_datasets6.png" height="480" src="../_images/p_datasets6.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;bio_resting_8min_100hz&quot;</span><span class="p">)</span>
 
@@ -626,7 +626,7 @@ data (from the MNE-sample dataset).</p></li>
 <span class="gh">Out[17]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_datasets7.png"><img alt="../_images/p_datasets7.png" src="../_images/p_datasets7.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_datasets7.png"><img alt="../_images/p_datasets7.png" height="480" src="../_images/p_datasets7.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_8min_200hz&quot;</span><span class="p">)</span>
 
@@ -649,14 +649,14 @@ data (from the MNE-sample dataset).</p></li>
 <span class="gh">Out[22]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_data8.png"><img alt="../_images/p_data8.png" src="../_images/p_data8.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_data8.png"><img alt="../_images/p_data8.png" height="480" src="../_images/p_data8.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">raw</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;eeg_1min_200hz&quot;</span><span class="p">)</span>
 
 <span class="gp">In [24]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_data9.png"><img alt="../_images/p_data9.png" src="../_images/p_data9.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_data9.png"><img alt="../_images/p_data9.png" height="480" src="../_images/p_data9.png" width="640" />
 </a>
 </dd></dl>
 
@@ -880,19 +880,15 @@ minimize aliasing) and then interpolate based on an evenly spaced index. While t
 may produce unexpected results, particularly if the original stream has large gaps in its time series.
 For more discussion, see <a class="reference external" href="https://github.com/xdf-modules/pyxdf/pull/1">here</a>.</p>
 </div>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – Path to the .xdf file to load.</p></li>
 <li><p><strong>dejitter_timestamps</strong> (<em>bool or list, optional</em>) – Controls jitter removal (processing of timestamp irregularities).
-- If bool: Passed directly to pyxdf (True applies to all streams, False to none).
-- If list: A list of stream names (str) or indices (int). Dejittering is</p>
-<blockquote>
-<div><p>applied <em>only</em> to these specific streams.
-Note: Using a list triggers a double-load of the file, increasing memory
-usage and loading time. Default is True.</p>
-</div></blockquote>
-</li>
+If <code class="docutils literal notranslate"><span class="pre">bool</span></code>, passed directly to pyxdf (<code class="docutils literal notranslate"><span class="pre">True</span></code> applies to all streams, <code class="docutils literal notranslate"><span class="pre">False</span></code> to none).
+If <code class="docutils literal notranslate"><span class="pre">list</span></code>, a list of stream names (str) or indices (int); dejittering is applied <em>only</em>
+to these specific streams. Note: using a list triggers a double-load of the file, increasing
+memory usage and loading time. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>synchronize_clocks</strong> (<em>bool, optional</em>) – If True, attempts to synchronize clocks using LSL clock offset data.
 Passed to pyxdf.load_xdf. Default is True.</p></li>
 <li><p><strong>handle_clock_resets</strong> (<em>bool, optional</em>) – If True, handles clock resets (e.g., from hardware restarts) during recording.
@@ -907,33 +903,18 @@ the first sample). Default is 0.</p></li>
 <li><p><strong>fillmissing</strong> (<em>float or int, optional</em>) – DEPRECATED: This argument is deprecated and has no direct equivalent in the new
 implementation. It previously controlled filling of gaps larger than a threshold.</p></li>
 <li><p><strong>interpolation_method</strong> (<em>{‘linear’, ‘previous’}, optional</em>) – Method used for interpolating data onto the new timebase.</p></li>
-<li><p><strong>timestamp_reset</strong> (<em>bool, optional</em>) –</p>
-<ul class="simple">
-<li><p>If True (default): Shifts all timestamps so the recording starts at t=0.0.
-Useful for analysis relative to the start of the specific file.</p></li>
-<li><p>If False: Preserves the absolute LSL timestamps (Unix epoch). Useful when
+<li><p><strong>timestamp_reset</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), shifts all timestamps so the recording starts at t=0.0,
+useful for analysis relative to the start of the specific file.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, preserves the absolute LSL timestamps (Unix epoch), useful when
 synchronizing this data with other files or external clocks.</p></li>
-</ul>
-</li>
 <li><p><strong>timestamp_method</strong> (<em>{‘circular’, ‘anchored’}, optional</em>) – Algorithm used to generate the new time axis.
-- ‘circular’: Uses a weighted circular mean to find the optimal phase alignment</p>
-<blockquote>
-<div><p>across all streams. Minimizes global interpolation error.</p>
-</div></blockquote>
-<ul class="simple">
-<li><p>‘anchored’: Aligns the grid strictly to the stream with the highest effective
-sampling rate.</p></li>
-</ul>
-<p>Default is ‘circular’.</p>
-</li>
-<li><p><strong>mode</strong> (<em>{‘precise’, ‘fast’}, optional</em>) –</p>
-<ul class="simple">
-<li><p>‘precise’: Uses float64 for all data. Preserves precision but uses more memory.</p></li>
-<li><p>‘fast’: Uses float32. Reduces memory usage by ~50% but may lose precision
-for very large values.</p></li>
-</ul>
-<p>Default is ‘precise’.</p>
-</li>
+<code class="docutils literal notranslate"><span class="pre">'circular'</span></code> uses a weighted circular mean to find the optimal phase alignment
+across all streams, minimizing global interpolation error.
+<code class="docutils literal notranslate"><span class="pre">'anchored'</span></code> aligns the grid strictly to the stream with the highest effective
+sampling rate. Default is <code class="docutils literal notranslate"><span class="pre">'circular'</span></code>.</p></li>
+<li><p><strong>mode</strong> (<em>{‘precise’, ‘fast’}, optional</em>) – <code class="docutils literal notranslate"><span class="pre">'precise'</span></code> uses float64 for all data, preserving precision but using more memory.
+<code class="docutils literal notranslate"><span class="pre">'fast'</span></code> uses float32, reducing memory usage by ~50% but may lose precision
+for very large values. Default is <code class="docutils literal notranslate"><span class="pre">'precise'</span></code>.</p></li>
 <li><p><strong>verbose</strong> (<em>bool, optional</em>) – If True, prints progress, target sampling rates, and categorical mappings to console.
 Default is True.</p></li>
 <li><p><strong>show</strong> (<em>list of str, optional</em>) – A list of channel names to plot for visual quality control after resampling.
@@ -1065,7 +1046,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

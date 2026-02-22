@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -440,11 +440,10 @@ document.write(`
 <span class="sd">        Path to the .xdf file to load.</span>
 <span class="sd">    dejitter_timestamps : bool or list, optional</span>
 <span class="sd">        Controls jitter removal (processing of timestamp irregularities).</span>
-<span class="sd">        - If bool: Passed directly to pyxdf (True applies to all streams, False to none).</span>
-<span class="sd">        - If list: A list of stream names (str) or indices (int). Dejittering is</span>
-<span class="sd">          applied *only* to these specific streams.</span>
-<span class="sd">          Note: Using a list triggers a double-load of the file, increasing memory</span>
-<span class="sd">          usage and loading time. Default is True.</span>
+<span class="sd">        If ``bool``, passed directly to pyxdf (``True`` applies to all streams, ``False`` to none).</span>
+<span class="sd">        If ``list``, a list of stream names (str) or indices (int); dejittering is applied *only*</span>
+<span class="sd">        to these specific streams. Note: using a list triggers a double-load of the file, increasing</span>
+<span class="sd">        memory usage and loading time. Default is ``True``.</span>
 <span class="sd">    synchronize_clocks : bool, optional</span>
 <span class="sd">        If True, attempts to synchronize clocks using LSL clock offset data.</span>
 <span class="sd">        Passed to pyxdf.load_xdf. Default is True.</span>
@@ -467,22 +466,20 @@ document.write(`
 <span class="sd">    interpolation_method : {&#39;linear&#39;, &#39;previous&#39;}, optional</span>
 <span class="sd">        Method used for interpolating data onto the new timebase.</span>
 <span class="sd">    timestamp_reset : bool, optional</span>
-<span class="sd">        - If True (default): Shifts all timestamps so the recording starts at t=0.0.</span>
-<span class="sd">          Useful for analysis relative to the start of the specific file.</span>
-<span class="sd">        - If False: Preserves the absolute LSL timestamps (Unix epoch). Useful when</span>
-<span class="sd">          synchronizing this data with other files or external clocks.</span>
+<span class="sd">        If ``True`` (default), shifts all timestamps so the recording starts at t=0.0,</span>
+<span class="sd">        useful for analysis relative to the start of the specific file.</span>
+<span class="sd">        If ``False``, preserves the absolute LSL timestamps (Unix epoch), useful when</span>
+<span class="sd">        synchronizing this data with other files or external clocks.</span>
 <span class="sd">    timestamp_method : {&#39;circular&#39;, &#39;anchored&#39;}, optional</span>
 <span class="sd">        Algorithm used to generate the new time axis.</span>
-<span class="sd">        - &#39;circular&#39;: Uses a weighted circular mean to find the optimal phase alignment</span>
-<span class="sd">          across all streams. Minimizes global interpolation error.</span>
-<span class="sd">        - &#39;anchored&#39;: Aligns the grid strictly to the stream with the highest effective</span>
-<span class="sd">          sampling rate.</span>
-<span class="sd">        Default is &#39;circular&#39;.</span>
+<span class="sd">        ``&#39;circular&#39;`` uses a weighted circular mean to find the optimal phase alignment</span>
+<span class="sd">        across all streams, minimizing global interpolation error.</span>
+<span class="sd">        ``&#39;anchored&#39;`` aligns the grid strictly to the stream with the highest effective</span>
+<span class="sd">        sampling rate. Default is ``&#39;circular&#39;``.</span>
 <span class="sd">    mode : {&#39;precise&#39;, &#39;fast&#39;}, optional</span>
-<span class="sd">        - &#39;precise&#39;: Uses float64 for all data. Preserves precision but uses more memory.</span>
-<span class="sd">        - &#39;fast&#39;: Uses float32. Reduces memory usage by ~50% but may lose precision</span>
-<span class="sd">          for very large values.</span>
-<span class="sd">        Default is &#39;precise&#39;.</span>
+<span class="sd">        ``&#39;precise&#39;`` uses float64 for all data, preserving precision but using more memory.</span>
+<span class="sd">        ``&#39;fast&#39;`` uses float32, reducing memory usage by ~50% but may lose precision</span>
+<span class="sd">        for very large values. Default is ``&#39;precise&#39;``.</span>
 <span class="sd">    verbose : bool, optional</span>
 <span class="sd">        If True, prints progress, target sampling rates, and categorical mappings to console.</span>
 <span class="sd">        Default is True.</span>
@@ -514,21 +511,13 @@ document.write(`
 <span class="sd">      # data, info = nk.read_xdf(&quot;data.xdf&quot;)</span>
 <span class="sd">      # sampling_rate = info[&quot;sampling_rate&quot;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">pyxdf</span>
-    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;The &#39;pyxdf&#39; module is required for this function to run. &quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Please install it first (`pip install pyxdf`).&quot;</span><span class="p">,</span>
-        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-
     <span class="c1"># DEPRECATION WARNING</span>
     <span class="k">if</span> <span class="n">fillmissing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;The &#39;fillmissing&#39; argument is deprecated and has no direct equivalent in the new optimized implementation. &quot;</span>
             <span class="s2">&quot;This function uses &#39;scipy.interpolate&#39; which interpolates across all gaps regardless of duration. &quot;</span>
             <span class="s2">&quot;If you need to mask large gaps, please do so on the returned DataFrame.&quot;</span><span class="p">,</span>
-            <span class="n">Category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1277,6 +1266,14 @@ document.write(`
 <span class="sd">    Extended wrapper for pyxdf.load_xdf that allows selective stream dejittering.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pyxdf</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;pyxdf&#39; module is required for this function to run. &quot;</span>
+            <span class="s2">&quot;Please install it first (`pip install pyxdf`).&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
     <span class="c1"># Check if filename is a URL string</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">in</span> <span class="p">(</span>
         <span class="s2">&quot;http&quot;</span><span class="p">,</span>
@@ -1393,7 +1390,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

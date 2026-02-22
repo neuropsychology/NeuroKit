@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -409,8 +409,8 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of :func:`.rsp_cleaned` (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;scipy&quot;`` or</span>
-<span class="sd">        ``&quot;biosppy&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;khodadad2018&quot;`` (default), ``&quot;scipy&quot;``,</span>
+<span class="sd">        ``&quot;biosppy&quot;``, or ``&quot;bettermann1996&quot;``.</span>
 <span class="sd">    amplitude_min : float</span>
 <span class="sd">        Only applies if method is ``&quot;khodadad2018&quot;``. Extrema that have a vertical distance smaller</span>
 <span class="sd">        than(outlier_threshold * average vertical distance) to any direct neighbour are removed as</span>
@@ -474,9 +474,12 @@ document.write(`
             <span class="n">peak_distance</span><span class="o">=</span><span class="n">peak_distance</span><span class="p">,</span>
             <span class="n">peak_prominence</span><span class="o">=</span><span class="n">peak_prominence</span><span class="p">,</span>
         <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bettermann&quot;</span><span class="p">,</span> <span class="s2">&quot;bettermann1996&quot;</span><span class="p">]:</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">_rsp_findpeaks_bettermann</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: rsp_findpeaks(): &#39;method&#39; should be one of &#39;khodadad2018&#39;, &#39;scipy&#39; or &#39;biosppy&#39;.&quot;</span>
+            <span class="s2">&quot;NeuroKit error: rsp_findpeaks(): &#39;method&#39; should be one of &#39;khodadad2018&#39;, &#39;scipy&#39;, &#39;biosppy&#39;, &quot;</span>
+            <span class="s2">&quot;or &#39;bettermann1996&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">info</span></div>
@@ -502,6 +505,50 @@ document.write(`
     <span class="n">troughs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">troughs</span><span class="p">,</span> <span class="n">outlier_idcs</span><span class="p">)</span>
 
     <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">:</span> <span class="n">peaks</span><span class="p">,</span> <span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">:</span> <span class="n">troughs</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_rsp_findpeaks_bettermann</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Respiratory peak and trough detection based on Bettermann et al. (1996)</span>
+<span class="sd">    https://doi.org/10.1515/bmte.1996.41.11.319</span>
+
+<span class="sd">    As described in Schafer et al. (2008)</span>
+<span class="sd">    https://doi.org/10.1007/s10439-007-9428-1</span>
+
+<span class="sd">    Based on Charlton&#39;s MATLAB implementation at:</span>
+<span class="sd">    https://github.com/peterhcharlton/impSQI/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First differences</span>
+    <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">)</span>
+
+    <span class="c1"># Identify peaks</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">diffs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">diffs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">left</span> <span class="o">&amp;</span> <span class="n">right</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># +1 to align with original indexing</span>
+
+    <span class="c1"># Identify troughs</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">diffs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">diffs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">troughs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">left</span> <span class="o">&amp;</span> <span class="n">right</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># Keep only relevant peaks: above threshold</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">q3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">peaks</span><span class="p">],</span> <span class="mi">75</span><span class="p">)</span>
+        <span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">q3</span>
+        <span class="n">rel_peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">peaks</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rel_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># Keep only relevant troughs: below threshold</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">troughs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">q3t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">troughs</span><span class="p">],</span> <span class="mi">25</span><span class="p">)</span>
+        <span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">q3t</span>
+        <span class="n">rel_troughs</span> <span class="o">=</span> <span class="n">troughs</span><span class="p">[</span><span class="n">rsp_cleaned</span><span class="p">[</span><span class="n">troughs</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rel_troughs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">:</span> <span class="n">rel_peaks</span><span class="p">,</span> <span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">:</span> <span class="n">rel_troughs</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">info</span>
 
 
@@ -662,7 +709,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

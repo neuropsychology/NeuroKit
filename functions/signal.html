@@ -39,8 +39,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -627,7 +627,7 @@ document.write(`
 <span class="gh">Out[3]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_simulate1.png"><img alt="../_images/p_signal_simulate1.png" src="../_images/p_signal_simulate1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_simulate1.png"><img alt="../_images/p_signal_simulate1.png" height="480" src="../_images/p_signal_simulate1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -700,7 +700,7 @@ The powerline frequency (normally 50 Hz or 60Hz).</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_filter1.png"><img alt="../_images/p_signal_filter1.png" src="../_images/p_signal_filter1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_filter1.png"><img alt="../_images/p_signal_filter1.png" height="480" src="../_images/p_signal_filter1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize Highpass Filtered Signal using Different Methods</span>
 <span class="gp">In [7]: </span><span class="n">fig2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Raw&quot;</span><span class="p">:</span> <span class="n">signal</span><span class="p">,</span>
@@ -718,7 +718,7 @@ The powerline frequency (normally 50 Hz or 60Hz).</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_filter2.png"><img alt="../_images/p_signal_filter2.png" src="../_images/p_signal_filter2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_filter2.png"><img alt="../_images/p_signal_filter2.png" height="480" src="../_images/p_signal_filter2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Using Bandpass Filtering in real-life scenarios</span>
 <span class="go"># Simulate noisy respiratory signal</span>
@@ -748,7 +748,7 @@ The powerline frequency (normally 50 Hz or 60Hz).</p></li>
 <span class="gp">   ....: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_filter3.png"><img alt="../_images/p_signal_filter3.png" src="../_images/p_signal_filter3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_filter3.png"><img alt="../_images/p_signal_filter3.png" height="480" src="../_images/p_signal_filter3.png" width="640" />
 </a>
 </dd></dl>
 
@@ -837,7 +837,7 @@ increases. In contrast, <code class="docutils literal notranslate"><span class="
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_resample1.png"><img alt="../_images/p_signal_resample1.png" src="../_images/p_signal_resample1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_resample1.png"><img alt="../_images/p_signal_resample1.png" height="480" src="../_images/p_signal_resample1.png" width="640" />
 </a>
 <p><strong>Example 2</strong>: Upsampling</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -852,7 +852,7 @@ increases. In contrast, <code class="docutils literal notranslate"><span class="
 <span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()],</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_resample2.png"><img alt="../_images/p_signal_resample2.png" src="../_images/p_signal_resample2.png" style="width: 1200.0px; height: 1200.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_resample2.png"><img alt="../_images/p_signal_resample2.png" height="1200" src="../_images/p_signal_resample2.png" width="1200" />
 </a>
 <p><strong>Example 3</strong>: Benchmark</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -954,7 +954,7 @@ value between the max and the min.</p></li>
 <span class="gh">Out[6]: </span><span class="go">&lt;Axes: &gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_binarize.png"><img alt="../_images/p_signal_binarize.png" src="../_images/p_signal_binarize.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_binarize.png"><img alt="../_images/p_signal_binarize.png" height="480" src="../_images/p_signal_binarize.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1002,7 +1002,7 @@ to 50.</p></li>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_decompose1.png"><img alt="../_images/p_signal_decompose1.png" src="../_images/p_signal_decompose1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_decompose1.png"><img alt="../_images/p_signal_decompose1.png" height="480" src="../_images/p_signal_decompose1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 1: Using the EMD method</span>
 <span class="gp">In [7]: </span><span class="n">components</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_decompose</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;emd&quot;</span><span class="p">)</span>
@@ -1011,7 +1011,7 @@ to 50.</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_decompose2.png"><img alt="../_images/p_signal_decompose2.png" src="../_images/p_signal_decompose2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_decompose2.png"><img alt="../_images/p_signal_decompose2.png" height="480" src="../_images/p_signal_decompose2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: USing the SSA method</span>
 <span class="gp">In [9]: </span><span class="n">components</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_decompose</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ssa&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -1020,7 +1020,7 @@ to 50.</p></li>
 <span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>  <span class="c1"># Visualize components</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_decompose3.png"><img alt="../_images/p_signal_decompose3.png" src="../_images/p_signal_decompose3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_decompose3.png"><img alt="../_images/p_signal_decompose3.png" height="480" src="../_images/p_signal_decompose3.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1070,7 +1070,7 @@ max SD. This can be used to filter out noise.</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>  <span class="c1"># Visualize components</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_recompose1.png"><img alt="../_images/p_signal_recompose1.png" src="../_images/p_signal_recompose1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_recompose1.png"><img alt="../_images/p_signal_recompose1.png" height="480" src="../_images/p_signal_recompose1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1184,7 +1184,7 @@ by the sampling rate. By default 1000.</p></li>
 <span class="gp">   ....: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/signal_detrend1.png"><img alt="../_images/signal_detrend1.png" src="../_images/signal_detrend1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/signal_detrend1.png"><img alt="../_images/signal_detrend1.png" height="480" src="../_images/signal_detrend1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1247,7 +1247,7 @@ between 1 and 10% of the signal duration.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_distort1.png"><img alt="../_images/p_signal_distort1.png" src="../_images/p_signal_distort1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_distort1.png"><img alt="../_images/p_signal_distort1.png" height="480" src="../_images/p_signal_distort1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Artifacts</span>
 <span class="gp">In [6]: </span><span class="n">artifacts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;1Hz&quot;</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_distort</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">noise_amplitude</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1260,7 +1260,7 @@ between 1 and 10% of the signal duration.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_distort2.png"><img alt="../_images/p_signal_distort2.png" src="../_images/p_signal_distort2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_distort2.png"><img alt="../_images/p_signal_distort2.png" height="480" src="../_images/p_signal_distort2.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1368,10 +1368,10 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x18b8c3f25d0&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x25f9ce65450&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" src="../_images/p_signal_interpolate1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" height="480" src="../_images/p_signal_interpolate1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1411,7 +1411,7 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_merge_1.png"><img alt="../_images/p_signal_merge_1.png" src="../_images/p_signal_merge_1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_merge_1.png"><img alt="../_images/p_signal_merge_1.png" height="480" src="../_images/p_signal_merge_1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1475,7 +1475,7 @@ described:</p>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_noise1.png"><img alt="../_images/p_signal_noise1.png" src="../_images/p_signal_noise1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_noise1.png"><img alt="../_images/p_signal_noise1.png" height="480" src="../_images/p_signal_noise1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize spectrum</span>
 <span class="gp">In [9]: </span><span class="n">psd_violet</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">violet</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
@@ -1489,22 +1489,22 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18b96f32d50&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f913ca710&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18b891b6e90&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f99708690&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18b891b6d50&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f997087d0&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18b891b6c10&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f99708910&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18b891b6ad0&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f99708a50&gt;]</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" src="../_images/p_signal_noise2.png" style="width: 1200.0px; height: 1200.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" height="1200" src="../_images/p_signal_noise2.png" width="1200" />
 </a>
 </dd></dl>
 
@@ -1550,36 +1550,36 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18b8c767ed0&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f9970b4d0&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18be1530550&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f9be81810&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18be1530690&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f9be81950&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x18be1530050&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x25f9be81a90&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_surrogate1.png"><img alt="../_images/p_signal_surrogate1.png" src="../_images/p_signal_surrogate1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_surrogate1.png"><img alt="../_images/p_signal_surrogate1.png" height="480" src="../_images/p_signal_surrogate1.png" width="640" />
 </a>
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18be8fba5d0&gt;]</span>
+<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f9be06990&gt;]</span>
 
 <span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18bf14120d0&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f9ba45bd0&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x18bf1411f90&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x25f9ba45d10&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x18bf1411e50&gt;</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x25f9ba45e50&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" src="../_images/p_signal_surrogate2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" height="480" src="../_images/p_signal_surrogate2.png" width="640" />
 </a>
 <p>However, the power spectrum of the IAAFT surrogate is preserved.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">f</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -1592,7 +1592,7 @@ And their distributions are identical:</p>
 <span class="gh">Out[17]: </span><span class="go">&lt;Axes: xlabel=&#39;Frequency&#39;&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_surrogate3.png"><img alt="../_images/p_signal_surrogate3.png" src="../_images/p_signal_surrogate3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_surrogate3.png"><img alt="../_images/p_signal_surrogate3.png" height="480" src="../_images/p_signal_surrogate3.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1665,7 +1665,7 @@ See <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_findpeaks1.png"><img alt="../_images/p_signal_findpeaks1.png" src="../_images/p_signal_findpeaks1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_findpeaks1.png"><img alt="../_images/p_signal_findpeaks1.png" height="480" src="../_images/p_signal_findpeaks1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">scipy.datasets</span>
 
@@ -1684,7 +1684,7 @@ See <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <span class="gh">Out[10]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_findpeaks2.png"><img alt="../_images/p_signal_findpeaks2.png" src="../_images/p_signal_findpeaks2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_findpeaks2.png"><img alt="../_images/p_signal_findpeaks2.png" height="480" src="../_images/p_signal_findpeaks2.png" width="640" />
 </a>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -1759,7 +1759,7 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks1.png"><img alt="../_images/p_signal_fixpeaks1.png" src="../_images/p_signal_fixpeaks1.png" style="width: 1700.0px; height: 1200.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks1.png"><img alt="../_images/p_signal_fixpeaks1.png" height="1200" src="../_images/p_signal_fixpeaks1.png" width="1700" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Visualize Artifact Correction</span>
 <span class="gp">In [7]: </span><span class="n">rate_corrected</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks_corrected</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">))</span>
@@ -1773,7 +1773,7 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks2.png"><img alt="../_images/p_signal_fixpeaks2.png" src="../_images/p_signal_fixpeaks2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks2.png"><img alt="../_images/p_signal_fixpeaks2.png" height="480" src="../_images/p_signal_fixpeaks2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -1803,7 +1803,7 @@ with the keys <code class="docutils literal notranslate"><span class="pre">&quot
 <span class="gh">Out[19]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks3.png"><img alt="../_images/p_signal_fixpeaks3.png" src="../_images/p_signal_fixpeaks3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_fixpeaks3.png"><img alt="../_images/p_signal_fixpeaks3.png" height="480" src="../_images/p_signal_fixpeaks3.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1857,7 +1857,7 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [3]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;correlation&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_autocor1.png"><img alt="../_images/p_signal_autocor1.png" src="../_images/p_signal_autocor1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_autocor1.png"><img alt="../_images/p_signal_autocor1.png" height="480" src="../_images/p_signal_autocor1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 2: Using &#39;FFT&#39; Method</span>
 <span class="gp">In [4]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
@@ -1865,13 +1865,13 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [5]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fft&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_autocor2.png"><img alt="../_images/p_signal_autocor2.png" src="../_images/p_signal_autocor2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_autocor2.png"><img alt="../_images/p_signal_autocor2.png" height="480" src="../_images/p_signal_autocor2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Example 3: Using &#39;unbiased&#39; Method</span>
 <span class="gp">In [6]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_autocor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fft&#39;</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_autocor3.png"><img alt="../_images/p_signal_autocor3.png" src="../_images/p_signal_autocor3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_autocor3.png"><img alt="../_images/p_signal_autocor3.png" height="480" src="../_images/p_signal_autocor3.png" width="640" />
 </a>
 </dd></dl>
 
@@ -1906,10 +1906,10 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span><span class="go">array([1750, 2750, 4500, 5500, 7135, 7250, 8250])</span>
+<span class="gh">Out[3]: </span><span class="go">array([1750, 1977, 1981, 2750, 3446, 4500, 5041, 5500, 7251, 8250])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_changepoints1.png"><img alt="../_images/p_signal_changepoints1.png" src="../_images/p_signal_changepoints1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_changepoints1.png"><img alt="../_images/p_signal_changepoints1.png" height="480" src="../_images/p_signal_changepoints1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1979,7 +1979,7 @@ spline interpolation does not ensure monotonicity.</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">period1</span><span class="p">,</span> <span class="n">period2</span><span class="p">],</span> <span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_period.png"><img alt="../_images/p_signal_period.png" src="../_images/p_signal_period.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_period.png"><img alt="../_images/p_signal_period.png" height="480" src="../_images/p_signal_period.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2023,7 +2023,7 @@ completion of each phase as denoted by each value.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">phase</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_phase1.png"><img alt="../_images/p_signal_phase1.png" src="../_images/p_signal_phase1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_phase1.png"><img alt="../_images/p_signal_phase1.png" height="480" src="../_images/p_signal_phase1.png" width="640" />
 </a>
 <p>..ipython:: python</p>
 <blockquote>
@@ -2042,7 +2042,7 @@ plt.close()</p>
 <span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">phase</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_phase3.png"><img alt="../_images/p_signal_phase3.png" src="../_images/p_signal_phase3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_phase3.png"><img alt="../_images/p_signal_phase3.png" height="480" src="../_images/p_signal_phase3.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2094,7 +2094,7 @@ fig.savefig(“myfig.png”)</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_plot1.png"><img alt="../_images/p_signal_plot1.png" src="../_images/p_signal_plot1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_plot1.png"><img alt="../_images/p_signal_plot1.png" height="480" src="../_images/p_signal_plot1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"> # Simulate data</span>
 <span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Signal2&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
@@ -2108,7 +2108,7 @@ fig.savefig(“myfig.png”)</p></li>
 <span class="gp">In [8]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span> <span class="n">data</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_plot2.png"><img alt="../_images/p_signal_plot2.png" src="../_images/p_signal_plot2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_plot2.png"><img alt="../_images/p_signal_plot2.png" height="480" src="../_images/p_signal_plot2.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2156,7 +2156,7 @@ Normalization allows comparison between different PSD methods.</p></li>
 <span class="gp">In [4]: </span><span class="n">power_plot</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_power</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">frequency_band</span><span class="o">=</span><span class="p">[(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">22</span><span class="p">)],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_power1.png"><img alt="../_images/p_signal_power1.png" src="../_images/p_signal_power1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_power1.png"><img alt="../_images/p_signal_power1.png" height="480" src="../_images/p_signal_power1.png" width="640" />
 </a>
 <p>..ipython:: python</p>
 <blockquote>
@@ -2182,7 +2182,7 @@ plt.close()</p>
 <span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_power3.png"><img alt="../_images/p_signal_power3.png" src="../_images/p_signal_power3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_power3.png"><img alt="../_images/p_signal_power3.png" height="480" src="../_images/p_signal_power3.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2245,31 +2245,31 @@ method is ‘fft’, such as <cite>n</cite>, which determines the number of wind
 <span class="gp">In [3]: </span><span class="n">psd_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_psd1.png"><img alt="../_images/p_signal_psd1.png" src="../_images/p_signal_psd1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_psd1.png"><img alt="../_images/p_signal_psd1.png" height="480" src="../_images/p_signal_psd1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Welch method (based on scipy)</span>
 <span class="gp">In [4]: </span><span class="n">psd_welch</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;welch&quot;</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_psd2.png"><img alt="../_images/p_signal_psd2.png" src="../_images/p_signal_psd2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_psd2.png"><img alt="../_images/p_signal_psd2.png" height="480" src="../_images/p_signal_psd2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Multitapers method (requires MNE)</span>
 <span class="gp">In [5]: </span><span class="n">psd_multitapers</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;multitapers&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_psd3.png"><img alt="../_images/p_signal_psd3.png" src="../_images/p_signal_psd3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_psd3.png"><img alt="../_images/p_signal_psd3.png" height="480" src="../_images/p_signal_psd3.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Burg method</span>
 <span class="gp">In [6]: </span><span class="n">psd_burg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;burg&quot;</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_psd4.png"><img alt="../_images/p_signal_psd4.png" src="../_images/p_signal_psd4.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_psd4.png"><img alt="../_images/p_signal_psd4.png" height="480" src="../_images/p_signal_psd4.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Lomb method (requires AstroPy)</span>
 <span class="gp">In [7]: </span><span class="n">psd_lomb</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;lomb&quot;</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_psd5.png"><img alt="../_images/p_signal_psd5.png" src="../_images/p_signal_psd5.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_psd5.png"><img alt="../_images/p_signal_psd5.png" height="480" src="../_images/p_signal_psd5.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2353,7 +2353,7 @@ spline interpolation does not ensure monotonicity.</p>
 <span class="gp">   ....: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_rate1.png"><img alt="../_images/p_signal_rate1.png" src="../_images/p_signal_rate1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_rate1.png"><img alt="../_images/p_signal_rate1.png" height="480" src="../_images/p_signal_rate1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2420,13 +2420,13 @@ smoothing.</p></li>
 <span class="gp">In [8]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_smooth1.png"><img alt="../_images/p_signal_smooth1.png" src="../_images/p_signal_smooth1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_smooth1.png"><img alt="../_images/p_signal_smooth1.png" height="480" src="../_images/p_signal_smooth1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Magnify the plot</span>
 <span class="gp">In [9]: </span><span class="n">fig_magnify</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">150</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_smooth2.png"><img alt="../_images/p_signal_smooth2.png" src="../_images/p_signal_smooth2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_smooth2.png"><img alt="../_images/p_signal_smooth2.png" height="480" src="../_images/p_signal_smooth2.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -2488,7 +2488,7 @@ need to select a window size.</p>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">coupling1</span><span class="p">,</span> <span class="n">coupling2</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;hilbert&quot;</span><span class="p">,</span> <span class="s2">&quot;correlation&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_synchrony1.png"><img alt="../_images/p_signal_synchrony1.png" src="../_images/p_signal_synchrony1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_synchrony1.png"><img alt="../_images/p_signal_synchrony1.png" height="480" src="../_images/p_signal_synchrony1.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -2592,7 +2592,7 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_timefrequency1.png"><img alt="../_images/p_signal_timefrequency1.png" src="../_images/p_signal_timefrequency1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_timefrequency1.png"><img alt="../_images/p_signal_timefrequency1.png" height="480" src="../_images/p_signal_timefrequency1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># CWTM Method</span>
 <span class="gp">In [5]: </span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">cwtm</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_timefrequency</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
@@ -2603,7 +2603,7 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_timefrequency2.png"><img alt="../_images/p_signal_timefrequency2.png" src="../_images/p_signal_timefrequency2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_timefrequency2.png"><img alt="../_images/p_signal_timefrequency2.png" height="480" src="../_images/p_signal_timefrequency2.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># WVD Method</span>
 <span class="gp">In [6]: </span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">wvd</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_timefrequency</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
@@ -2614,7 +2614,7 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_timefrequency3.png"><img alt="../_images/p_signal_timefrequency3.png" src="../_images/p_signal_timefrequency3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_timefrequency3.png"><img alt="../_images/p_signal_timefrequency3.png" height="480" src="../_images/p_signal_timefrequency3.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># PWVD Method</span>
 <span class="gp">In [7]: </span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">pwvd</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_timefrequency</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
@@ -2625,7 +2625,7 @@ down the rows.</p></li>
 <span class="gp">   ...: </span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_timefrequency4.png"><img alt="../_images/p_signal_timefrequency4.png" src="../_images/p_signal_timefrequency4.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_timefrequency4.png"><img alt="../_images/p_signal_timefrequency4.png" height="480" src="../_images/p_signal_timefrequency4.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2660,7 +2660,7 @@ down the rows.</p></li>
 <span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_zerocrossings1.png"><img alt="../_images/p_signal_zerocrossings1.png" src="../_images/p_signal_zerocrossings1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_zerocrossings1.png"><img alt="../_images/p_signal_zerocrossings1.png" height="480" src="../_images/p_signal_zerocrossings1.png" width="640" />
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Only upward or downward zerocrossings</span>
 <span class="gp">In [5]: </span><span class="n">up</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_zerocrossings</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">)</span>
@@ -2671,7 +2671,7 @@ down the rows.</p></li>
 <span class="gh">Out[7]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_signal_zerocrossings2.png"><img alt="../_images/p_signal_zerocrossings2.png" src="../_images/p_signal_zerocrossings2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_signal_zerocrossings2.png"><img alt="../_images/p_signal_zerocrossings2.png" height="480" src="../_images/p_signal_zerocrossings2.png" width="640" />
 </a>
 </dd></dl>
 
@@ -2679,7 +2679,7 @@ down the rows.</p></li>
 <p id="module-neurokit2.signal">Submodule for NeuroKit.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal.signal_cyclesegment">
-<span class="sig-name descname"><span class="pre">signal_cyclesegment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_cyclesegment.html#signal_cyclesegment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal.signal_cyclesegment" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">signal_cyclesegment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio_pre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'signal'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_cyclesegment.html#signal_cyclesegment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal.signal_cyclesegment" title="Link to this definition">#</a></dt>
 <dd><p><strong>Segment a signal into individual cycles</strong></p>
 <p>Segment a signal (e.g. ECG, PPG, respiratory) into individual cycles (e.g. heartbeats, pulse waves, breaths).</p>
 <dl class="field-list simple">
@@ -2688,12 +2688,21 @@ down the rows.</p></li>
 <li><p><strong>signal_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned signal channel, such as that returned by <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code> or <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>.</p></li>
 <li><p><strong>cycle_indices</strong> (<em>dict</em>) – The samples indicating individual cycles (such as PPG peaks or ECG R-peaks), such as a dict
 returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>.</p></li>
+<li><p><strong>ratio_pre</strong> (<em>float</em>) – The proportion of the cycle window which takes place before the cycle index (e.g. the proportion of the
+interbeat interval which takes place before the PPG pulse peak or ECG R peak).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">signal_cleaned</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot of cycles. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>. If “return”, returns
+the axis of the plot.</p></li>
+<li><p><strong>signal_name</strong> (<em>str</em>) – The name of the signal (only used for plotting).</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to be passed.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all segmented cycles.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>dict</em> – A dict containing DataFrames for all segmented cycles.</p></li>
+<li><p><strong>average_cycle_rate</strong> (<em>float</em>) – The average cycle rate (e.g. heart rate, respiratory rate) (in Hz, i.e., samples/second)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -2709,7 +2718,7 @@ returned by <code class="docutils literal notranslate"><span class="pre">ppg_pea
 
 <span class="gp">In [4]: </span><span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
-<span class="gp">In [5]: </span><span class="n">_</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+<span class="gp">In [5]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
@@ -2761,45 +2770,60 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal.signal_quality">
-<span class="sig-name descname"><span class="pre">signal_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beat_inds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_quality.html#signal_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal.signal_quality" title="Link to this definition">#</a></dt>
-<dd><p><strong>Assess quality of signal by comparing individual beat morphologies with a template</strong></p>
-<p>Assess the quality of a signal (e.g. PPG or ECG) using the specified method. You can pass an unfiltered
-signal as an input, but typically a filtered signal (e.g. cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code> or <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>) will result in
-more reliable results. The following methods are available:</p>
+<span class="sig-name descname"><span class="pre">signal_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_inds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondary_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance_window_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_quality.html#signal_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal.signal_quality" title="Link to this definition">#</a></dt>
+<dd><p><strong>Assess quality of signal by comparing individual cycle morphologies with a template</strong></p>
+<p>Assess the quality of a quasi-periodic signal (e.g. PPG, ECG or RSP) using the specified method. You can pass an
+unfiltered signal as an input, but typically a filtered signal (e.g. cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>, <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code> or
+<code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code>) will result in more reliable results. The following methods are available:</p>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method (loosely based on Orphanidou et al., 2015) computes a continuous
 index of quality of the PPG or ECG signal, by calculating the correlation coefficient between each
-individual beat’s morphology and an average (template) beat morphology. This index is therefore
-relative: 1 corresponds to a signal where each individual beat’s morphology is closest to the average beat morphology
-(i.e. correlate exactly with it) and 0 corresponds to there being no correlation with the average beat morphology.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method (loosely based on Sabeti et al., 2019) computes a continuous index
-of quality of the PPG or ECG signal, by calculating the level of disimilarity between each individual
-beat’s morphology and an average (template) beat morpholoy (after they are normalised). A value of
-zero indicates no disimilarity (i.e. equivalent beat morphologies), whereas values above or below
-indicate increasing disimilarity. The original method used dynamic time-warping to align the pulse
+individual cycle’s (i.e. beat’s) morphology and an average (template) cycle morphology. This index is therefore
+relative: 1 corresponds to a signal where each individual cycle’s morphology is closest to the average cycle morphology
+(i.e. correlate exactly with it) and 0 corresponds to there being no correlation with the average cycle morphology.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method (loosely based on Sabeti et al., 2019) computes a continuous index
+of quality of the PPG or ECG signal, by calculating the level of dissimilarity between each individual
+cycle’s (i.e. beat’s) morphology and an average (template) cycle morphology (after they are normalised). A value of
+zero indicates no dissimilarity (i.e. equivalent cycle morphologies), whereas values above or below
+indicate increasing dissimilarity. The original method used dynamic time-warping to align the pulse
 waves prior to calculating the level of dsimilarity, whereas this implementation does not currently
 include this step.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;ici&quot;</span></code> method (based on Ho et al., 2025) assesses signal quality on a cycle-by-cycle (e.g. beat-by-beat)
+basis by predicting whether each intercycle-interval (ICI) (e.g. interbeat-intervals, IBIs) is accurate.
+To do so, cycles (e.g. beats) are detected using a primary detector, and each ICI is predicted to be accurate
+only if a secondary detector detects cycles in the same positions (within a tolerance). In this implementation,
+all signal samples within an ICI are rated as high quality (1) if that ICI is predicted to be accurate, or low
+quality (0) if that ICI is predicted to be inaccurate. This approach was derived from the previously
+proposed bSQI approach. The resulting quality signal is 1-padded, with all samples before the first cycle
+and after the last cycle set to 1.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned signal, such as that returned by <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code> or <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>.</p></li>
-<li><p><strong>beat_inds</strong> (<em>tuple or list</em>) – The list of beat samples (e.g. PPG or ECG peaks returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code> or <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>).</p></li>
-<li><p><strong>signal_type</strong> (<em>str</em>) – The signal type (e.g. ‘ppg’ or ‘ecg’).</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">signal</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>. The default is
+<li><p><strong>cycle_inds</strong> (<em>tuple or list</em>) – The list of cycle samples (e.g. beat or breath samples, such as PPG or ECG peaks returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, or RSP peaks returned by <code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code>).</p></li>
+<li><p><strong>signal_type</strong> (<em>str</em>) – The signal type (e.g. ‘ppg’, ‘ecg’, or ‘rsp’).</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>. The default is
 <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>.</p></li>
+<li><p><strong>primary_detector</strong> (<em>str</em>) – The name of the primary cycle (i.e. beat or breath) detector (e.g. the defaults are <code class="docutils literal notranslate"><span class="pre">&quot;unsw&quot;</span></code> for the ECG, and
+<code class="docutils literal notranslate"><span class="pre">&quot;charlton&quot;</span></code> for the PPG).</p></li>
+<li><p><strong>secondary_detector</strong> (<em>str</em>) – The name of the secondary cycle detector (e.g. the defaults are <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code> for the ECG, and <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>
+for the PPG).</p></li>
+<li><p><strong>tolerance_window_ms</strong> (<em>int</em>) – The tolerance window size (in milliseconds) for use with the “ici” method when assessing agreement between
+primary and secondary cycle detectors.</p></li>
 <li><p><strong>**kwargs</strong> – Additional keyword arguments, usually specific for each method.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>quality</strong> (<em>array</em>) – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
-or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;disimilarity&quot;</span></code> method.</p>
+or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_quality</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_quality</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_quality</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_quality</span></code></p>
 </div>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -2807,7 +2831,70 @@ or an unbounded value (where 0 indicates high quality) for <code class="docutils
 derivation and applications to wireless monitoring”. IEEE Journal of Biomedical and Health Informatics, 19(3), 832-8.</p></li>
 <li><p>Sabeti E. et al. (2019). Signal quality measure for pulsatile physiological signals using morphological features:
 Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</p></li>
+<li><p>Ho, S.Y.S et al. (2025). “Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.
+medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.org/10.1101/2025.03.10.25323655">https://doi.org/10.1101/2025.03.10.25323655</a></p></li>
 </ul>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> Using ICI method to assess PPG signal quality</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="gp">In [3]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">motion_amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">burst_number</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">12</span>
+<span class="gp">   ...: </span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_quality</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ici&quot;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ppg</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> Using template-matching method to assess ECG signal quality</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [8]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="gp">In [9]: </span><span class="n">duration</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="gp">In [10]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [11]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_quality</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ecg</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> Using template-matching method to assess RSP signal quality</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [15]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="gp">In [16]: </span><span class="n">duration</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="gp">In [17]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;breathmetrics&quot;</span><span class="p">)</span>
+
+<span class="gp">In [18]: </span><span class="n">rsp_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;charlton&quot;</span><span class="p">)</span>
+
+<span class="gp">In [19]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_quality</span><span class="p">(</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">)</span>
+
+<span class="gp">In [20]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [21]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -3057,7 +3144,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

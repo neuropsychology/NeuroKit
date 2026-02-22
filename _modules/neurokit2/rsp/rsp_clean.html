@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -405,6 +405,8 @@ document.write(`
 <span class="sd">      detrending).</span>
 <span class="sd">    * **hampel**: Applies a median-based Hampel filter by replacing values which are 3 (can be</span>
 <span class="sd">      changed via ``threshold``) :func:`.mad` away from the rolling median.</span>
+<span class="sd">    * **charlton2021**: Second order 1 Hz lowpass Butterworth filter. Note that is doesn&#39;t include</span>
+<span class="sd">      the Tukey window step proposed in Charlton et al.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -455,6 +457,8 @@ document.write(`
 <span class="sd">      Characteristics of respiratory measures in young adults scanned at rest,</span>
 <span class="sd">      including systematic changes and “missed” deep breaths.</span>
 <span class="sd">      NeuroImage, Volume 204, 116234</span>
+<span class="sd">    * Charlton, P.H, et al. (2021). An impedance pneumography signal quality index: Design, assessment</span>
+<span class="sd">      and application to respiratory rate monitoring. Biomedical Signal Processing and Control, 65, 102339.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">)</span>
@@ -475,15 +479,14 @@ document.write(`
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;biosppy&quot;</span><span class="p">:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_biosppy</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;power2020&quot;</span><span class="p">,</span> <span class="s2">&quot;hampel&quot;</span><span class="p">]:</span>
-        <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_hampel</span><span class="p">(</span>
-            <span class="n">rsp_signal</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_hampel</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;charlton&quot;</span><span class="p">,</span> <span class="s2">&quot;charlton2021&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_rsp_clean_charlton2021</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">rsp_signal</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;NeuroKit error: rsp_clean(): &#39;method&#39; should be one of &#39;khodadad2018&#39;, &#39;biosppy&#39; or &#39;hampel&#39;.&quot;</span>
+            <span class="s2">&quot;NeuroKit error: rsp_clean(): &#39;method&#39; should be one of &#39;charlton2021&#39;, &#39;khodadad2018&#39;, &#39;biosppy&#39; or &#39;hampel&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span></div>
@@ -498,6 +501,28 @@ document.write(`
     <span class="n">rsp_signal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">rsp_signal</span>
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Charlton et al. (2021)</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_rsp_clean_charlton2021</span><span class="p">(</span><span class="n">rsp_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The algorithm is a low-pass filter with cutoff of 1 Hz (i.e. 60 breaths per minute).</span>
+<span class="sd">    It is loosely based on that described in `Charlton et al. (2021)</span>
+
+<span class="sd">    &lt;https://doi.org/10.1016/j.bspc.2020.102339&gt;`_.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">rsp_signal</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">highcut</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span>  <span class="c1"># Whereas Charlton et al used an FIR filter designed using the Kaiser window method</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">clean</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -626,7 +651,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

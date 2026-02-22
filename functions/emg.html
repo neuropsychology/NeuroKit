@@ -39,8 +39,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -555,7 +555,7 @@ see <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_process1.png"><img alt="../_images/p_emg_process1.png" src="../_images/p_emg_process1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_process1.png"><img alt="../_images/p_emg_process1.png" height="480" src="../_images/p_emg_process1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -611,9 +611,9 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [7]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[7]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.631866         1.0</span>
+<span class="go">1     1         3000  ...                1.297699         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.987544         1.0</span>
+<span class="go">3     3         9000  ...                1.033567         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 
@@ -623,7 +623,7 @@ each epoch is indicated by the <cite>Label</cite> column. See <a class="referenc
 <span class="gp">In [9]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[9]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.248538</span>
+<span class="go">0               3.0            0.237181</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -663,7 +663,7 @@ durations for each bursts.</p></li>
 <span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">emg</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_simulate1.png"><img alt="../_images/p_emg_simulate1.png" src="../_images/p_emg_simulate1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_simulate1.png"><img alt="../_images/p_emg_simulate1.png" height="480" src="../_images/p_emg_simulate1.png" width="640" />
 </a>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -714,7 +714,7 @@ Defaults to True.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_plot</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_plot.png"><img alt="../_images/p_emg_plot.png" src="../_images/p_emg_plot.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_plot.png"><img alt="../_images/p_emg_plot.png" height="480" src="../_images/p_emg_plot.png" width="640" />
 </a>
 </dd></dl>
 
@@ -764,7 +764,7 @@ any cleaning.</p></li>
 <span class="gp">In [5]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_clean1.png"><img alt="../_images/p_emg_clean1.png" src="../_images/p_emg_clean1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_clean1.png"><img alt="../_images/p_emg_clean1.png" height="480" src="../_images/p_emg_clean1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -803,7 +803,7 @@ linear envelope of the signal.</p>
 <span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EMG&quot;</span><span class="p">:</span> <span class="n">emg</span><span class="p">,</span> <span class="s2">&quot;Amplitude&quot;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_amplitude1.png"><img alt="../_images/p_emg_amplitude1.png" src="../_images/p_emg_amplitude1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_amplitude1.png"><img alt="../_images/p_emg_amplitude1.png" height="480" src="../_images/p_emg_amplitude1.png" width="640" />
 </a>
 </dd></dl>
 
@@ -883,7 +883,7 @@ the same length as <code class="docutils literal notranslate"><span class="pre">
 <span class="gh">Out[6]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_activation1.png"><img alt="../_images/p_emg_activation1.png" src="../_images/p_emg_activation1.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_activation1.png"><img alt="../_images/p_emg_activation1.png" height="480" src="../_images/p_emg_activation1.png" width="640" />
 </a>
 <ul class="simple">
 <li><p><strong>Example 2:</strong> Pelt method</p></li>
@@ -894,7 +894,7 @@ the same length as <code class="docutils literal notranslate"><span class="pre">
 <span class="gh">Out[8]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_activation2.png"><img alt="../_images/p_emg_activation2.png" src="../_images/p_emg_activation2.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_activation2.png"><img alt="../_images/p_emg_activation2.png" height="480" src="../_images/p_emg_activation2.png" width="640" />
 </a>
 <ul class="simple">
 <li><p><strong>Example 3:</strong> Biosppy method</p></li>
@@ -905,7 +905,7 @@ the same length as <code class="docutils literal notranslate"><span class="pre">
 <span class="gh">Out[10]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_activation3.png"><img alt="../_images/p_emg_activation3.png" src="../_images/p_emg_activation3.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_activation3.png"><img alt="../_images/p_emg_activation3.png" height="480" src="../_images/p_emg_activation3.png" width="640" />
 </a>
 <ul class="simple">
 <li><p><strong>Example 4:</strong> Silva method</p></li>
@@ -916,7 +916,7 @@ the same length as <code class="docutils literal notranslate"><span class="pre">
 <span class="gh">Out[12]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_emg_activation4.png"><img alt="../_images/p_emg_activation4.png" src="../_images/p_emg_activation4.png" style="width: 640.0px; height: 480.0px;" />
+<a class="reference internal image-reference" href="../_images/p_emg_activation4.png"><img alt="../_images/p_emg_activation4.png" height="480" src="../_images/p_emg_activation4.png" width="640" />
 </a>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -978,9 +978,9 @@ of the following:</p>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span>
 <span class="go">  Label  Event_Onset  ...  EMG_Amplitude_Max_Time  EMG_Bursts</span>
-<span class="go">1     1         3000  ...                1.712906         1.0</span>
+<span class="go">1     1         3000  ...                1.851976         1.0</span>
 <span class="go">2     2         6000  ...                     NaN         NaN</span>
-<span class="go">3     3         9000  ...                0.851476         1.0</span>
+<span class="go">3     3         9000  ...                1.189645         1.0</span>
 
 <span class="go">[3 rows x 8 columns]</span>
 </pre></div>
@@ -1026,15 +1026,15 @@ separately processed DataFrames.</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">   EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">0               3.0            0.250909</span>
+<span class="go">0               3.0            0.239353</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">emg_signals</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">emg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  EMG_Activation_N  EMG_Amplitude_Mean</span>
-<span class="go">1     1                 2            0.249709</span>
-<span class="go">2     2                 1            0.252113</span>
+<span class="go">1     1                 2            0.227099</span>
+<span class="go">2     2                 1            0.251808</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1159,7 +1159,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>

@@ -38,8 +38,8 @@
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../../_static/documentation_options.js?v=0ac042cd"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -381,14 +381,15 @@ document.write(`
                   
   <h1>Source code for neurokit2.signal.signal_cyclesegment</h1><div class="highlight"><pre>
 <span></span><span class="c1"># - * - coding: utf-8 - * -</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">..epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">epochs_create</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">epochs_create</span><span class="p">,</span> <span class="n">epochs_to_df</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_rate</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_rate</span>
 
 <div class="viewcode-block" id="signal_cyclesegment">
 <a class="viewcode-back" href="../../../functions/signal.html#neurokit2.signal.signal_cyclesegment">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">signal_cyclesegment</span><span class="p">(</span><span class="n">signal_cleaned</span><span class="p">,</span> <span class="n">cycle_indices</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">signal_cyclesegment</span><span class="p">(</span><span class="n">signal_cleaned</span><span class="p">,</span> <span class="n">cycle_indices</span><span class="p">,</span> <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">signal_name</span><span class="o">=</span><span class="s2">&quot;signal&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Segment a signal into individual cycles**</span>
 
 <span class="sd">    Segment a signal (e.g. ECG, PPG, respiratory) into individual cycles (e.g. heartbeats, pulse waves, breaths).</span>
@@ -400,8 +401,16 @@ document.write(`
 <span class="sd">    cycle_indices : dict</span>
 <span class="sd">        The samples indicating individual cycles (such as PPG peaks or ECG R-peaks), such as a dict</span>
 <span class="sd">        returned by ``ppg_peaks()``.</span>
+<span class="sd">    ratio_pre : float</span>
+<span class="sd">        The proportion of the cycle window which takes place before the cycle index (e.g. the proportion of the</span>
+<span class="sd">        interbeat interval which takes place before the PPG pulse peak or ECG R peak).</span>
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``signal_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        If ``True``, will return a plot of cycles. Defaults to ``False``. If &quot;return&quot;, returns</span>
+<span class="sd">        the axis of the plot.</span>
+<span class="sd">    signal_name : str</span>
+<span class="sd">        The name of the signal (only used for plotting).</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        Other arguments to be passed.</span>
 
@@ -409,6 +418,8 @@ document.write(`
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
 <span class="sd">        A dict containing DataFrames for all segmented cycles.</span>
+<span class="sd">    average_cycle_rate : float</span>
+<span class="sd">        The average cycle rate (e.g. heart rate, respiratory rate) (in Hz, i.e., samples/second)</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -423,13 +434,11 @@ document.write(`
 <span class="sd">      sampling_rate = 100</span>
 <span class="sd">      ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=80)</span>
 <span class="sd">      ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)</span>
-<span class="sd">      _, peaks = nk.ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)</span>
+<span class="sd">      signals, peaks = nk.ppg_peaks(ppg_cleaned, sampling_rate=sampling_rate)</span>
 <span class="sd">      peaks = peaks[&quot;PPG_Peaks&quot;]</span>
 <span class="sd">      heartbeats = nk.signal_cyclesegment(ppg_cleaned, peaks, sampling_rate=sampling_rate)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># To-do: This doesn&#39;t currently contain the plotting functionality of ecg_segment.</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal_cleaned</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">sampling_rate</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The data length is too small to be segmented.&quot;</span><span class="p">)</span>
@@ -438,7 +447,7 @@ document.write(`
         <span class="n">cycle_indices</span><span class="o">=</span><span class="n">cycle_indices</span><span class="p">,</span>
         <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
         <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signal_cleaned</span><span class="p">),</span>
-        <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">ratio_pre</span><span class="o">=</span><span class="n">ratio_pre</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">cycles</span> <span class="o">=</span> <span class="n">epochs_create</span><span class="p">(</span>
         <span class="n">signal_cleaned</span><span class="p">,</span>
@@ -453,27 +462,97 @@ document.write(`
     <span class="n">outside_bounds</span> <span class="o">=</span> <span class="n">cycles</span><span class="p">[</span><span class="n">last_cycle_key</span><span class="p">][</span><span class="s2">&quot;Index&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal_cleaned</span><span class="p">)</span>
     <span class="n">cycles</span><span class="p">[</span><span class="n">last_cycle_key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">outside_bounds</span><span class="p">,</span> <span class="s2">&quot;Signal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">return</span> <span class="n">cycles</span></div>
+    <span class="c1"># Plot or return plot axis</span>
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">_segment_plot</span><span class="p">(</span><span class="n">cycles</span><span class="p">,</span> <span class="n">cyclerate</span><span class="o">=</span><span class="n">average_cycle_rate</span><span class="p">,</span> <span class="n">signal_name</span><span class="o">=</span><span class="n">signal_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">show</span> <span class="o">==</span> <span class="s2">&quot;return&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="k">return</span> <span class="n">cycles</span><span class="p">,</span> <span class="n">average_cycle_rate</span></div>
 
 
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Internals</span>
+<span class="c1"># =============================================================================</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_segment_plot</span><span class="p">(</span><span class="n">cycles</span><span class="p">,</span> <span class="n">cyclerate</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">signal_name</span><span class="o">=</span><span class="s2">&quot;signal&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F44336&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">epochs_to_df</span><span class="p">(</span><span class="n">cycles</span><span class="p">)</span>
+
+    <span class="c1"># Get main signal column name</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot;Signal&quot;</span>
+
+    <span class="c1"># Average cycle shape</span>
+    <span class="n">mean_cycle</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)[[</span><span class="n">col</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">df_pivoted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+
+    <span class="c1"># Prepare plot</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">signal_name</span> <span class="o">=</span> <span class="n">signal_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">signal_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ecg&quot;</span><span class="p">,</span> <span class="s2">&quot;ppg&quot;</span><span class="p">]:</span>
+        <span class="n">cycle_name</span> <span class="o">=</span> <span class="s2">&quot;beat&quot;</span>
+        <span class="n">rate_name</span> <span class="o">=</span> <span class="s2">&quot;heart rate&quot;</span>
+        <span class="n">rate_unit</span> <span class="o">=</span> <span class="s2">&quot;bpm&quot;</span>
+    <span class="k">elif</span> <span class="n">signal_name</span> <span class="o">==</span> <span class="s2">&quot;rsp&quot;</span><span class="p">:</span>
+        <span class="n">cycle_name</span> <span class="o">=</span> <span class="s2">&quot;breath&quot;</span>
+        <span class="n">rate_name</span> <span class="o">=</span> <span class="s2">&quot;respiratory rate&quot;</span>
+        <span class="n">rate_unit</span> <span class="o">=</span> <span class="s2">&quot;breaths per min&quot;</span>
+    <span class="k">elif</span> <span class="n">signal_name</span> <span class="o">==</span> <span class="s2">&quot;signal&quot;</span><span class="p">:</span>
+        <span class="n">cycle_name</span> <span class="o">=</span> <span class="s2">&quot;cycle&quot;</span>
+        <span class="n">rate_name</span> <span class="o">=</span> <span class="s2">&quot;cycle rate&quot;</span>
+        <span class="n">rate_unit</span> <span class="o">=</span> <span class="s2">&quot;per min&quot;</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Individual </span><span class="si">{</span><span class="n">cycle_name</span><span class="si">}</span><span class="s2">s (average </span><span class="si">{</span><span class="n">rate_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cyclerate</span><span class="si">:</span><span class="s2">0.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rate_unit</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (seconds)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">signal_name</span><span class="p">)</span>
+
+    <span class="c1"># Add Vertical line at 0</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot average cycle</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">mean_cycle</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="n">mean_cycle</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Average </span><span class="si">{</span><span class="n">cycle_name</span><span class="si">}</span><span class="s2"> shape&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Alpha of individual cycles decreases with more cycles</span>
+    <span class="n">n_cycles</span> <span class="o">=</span> <span class="n">df_pivoted</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">n_cycles</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_cycles</span><span class="p">))</span>
+
+    <span class="c1"># Plot all cycles</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_pivoted</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Legend</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_segment_window</span><span class="p">(</span>
-    <span class="n">cycle_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">cycle_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">desired_length</span><span class="o">=</span><span class="p">(),</span>
     <span class="n">ratio_pre</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">cycle_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="c1"># Extract cycle rate</span>
-    <span class="k">if</span> <span class="n">cycle_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cycle_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cycle_rate</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">cycle_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cycle_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
-            <span class="n">signal_rate</span><span class="p">(</span>
-                <span class="n">cycle_indices</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">desired_length</span>
+    <span class="c1"># Determine cycle rate</span>
+    <span class="k">if</span> <span class="n">cycle_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cycle_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cycle_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                <span class="n">signal_rate</span><span class="p">(</span>
+                    <span class="n">cycle_indices</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="n">desired_length</span>
+                <span class="p">)</span>
             <span class="p">)</span>
-        <span class="p">)</span>
-
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either `cycle_rate` or `cycle_indices` must be provided.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cycle_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cycle_rate</span><span class="p">)</span>  <span class="c1"># In case it&#39;s an array</span>
+    
     <span class="c1"># Modulator</span>
     <span class="c1"># Note: this is based on quick internal testing but could be improved</span>
     <span class="n">window_size</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">cycle_rate</span>  <span class="c1"># Cycles per second</span>
@@ -521,7 +600,7 @@ By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the
 
   <p class="copyright">
     
-      © Copyright 2020–2025.
+      © Copyright 2020–2026.
       <br/>
     
   </p>
