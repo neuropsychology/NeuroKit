@@ -30,6 +30,9 @@ Sub-domains
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_rqa
 
+*hrv_symdyn()*
+""""""""""""""""""
+.. autofunction:: neurokit2.hrv.hrv_symdyn
 
 Intervals
 ^^^^^^^^^^^^^^^^

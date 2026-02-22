@@ -587,7 +587,7 @@ document.write(`
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary</span>
+<span class="sd">    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary, hrv_symbolic</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -642,6 +642,13 @@ document.write(`
 <span class="sd">      R-R interval. Journal of the autonomic nervous system, 62(1-2), 79-84.</span>
 <span class="sd">    * Acharya, R. U., Lim, C. M., &amp; Joseph, P. (2002). Heart rate variability analysis using</span>
 <span class="sd">      correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-339.</span>
+<span class="sd">    * Cysarz, D., Porta, A., Montano, N., van Leeuwen, P., Kurths, J., &amp; Wessel, N. (2013).</span>
+<span class="sd">      Quantifying heart rate dynamics using different approaches of symbolic dynamics. Eur. Phys.</span>
+<span class="sd">      J. Spec. Top. 222, 487–500. doi: 10.1140/epjst/e2013-01854-7</span>
+<span class="sd">    * Porta, A., Tobaldini, E., Guzzetti, S., Furlan, R., Montano, N., &amp; Gnecchi-Ruscone, T.</span>
+<span class="sd">      (2007). Assessment of cardiac autonomic modulation during graded head-up tilt by symbolic</span>
+<span class="sd">      analysis of heart rate variability. Am. J. Physiol. Heart Circ. Physiol. 293, H702–H708.</span>
+<span class="sd">      doi: 10.1152/ajpheart.00006.2007</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize input</span>
@@ -659,13 +666,19 @@ document.write(`
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Poincaré features (SD1, SD2, etc.)</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span>
+    <span class="p">)</span>
 
     <span class="c1"># Heart Rate Fragmentation</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_fragmentation</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_fragmentation</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span>
+    <span class="p">)</span>
 
     <span class="c1"># Heart Rate Asymmetry</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare_hra</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_nonlinear_poincare_hra</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span>
+    <span class="p">)</span>
 
     <span class="c1"># DFA</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_dfa</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -676,14 +689,23 @@ document.write(`
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SampEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_sample</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;ShanEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_shannon</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;FuzzyEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_fuzzy</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MSEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSEn&quot;</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CMSEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;CMSEn&quot;</span><span class="p">)</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MSEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSEn&quot;</span>
+    <span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CMSEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;CMSEn&quot;</span>
+    <span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;RCMSEn&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">entropy_multiscale</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RCMSEn&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;CD&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_correlation</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;HFD&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_higuchi</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">k_max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;KFD&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_katz</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;LZC&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Symbolic dynamics</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_symbolic_dynamics</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
         <span class="n">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
@@ -769,7 +791,9 @@ document.write(`
     <span class="n">dist_all</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Calculate the angles</span>
-    <span class="n">theta_all</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">x</span><span class="p">))</span>  <span class="c1"># phase angle LI - phase angle of i-th point</span>
+    <span class="n">theta_all</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">x</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># phase angle LI - phase angle of i-th point</span>
     <span class="c1"># Calculate the radius</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="c1"># Sector areas</span>
@@ -886,8 +910,8 @@ document.write(`
 
     <span class="c1"># If the signal is too short, skip it</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
-        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;DFA_alpha1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;DFA_alpha2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="n">dfa_windows</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dfa_windows&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="kc">None</span><span class="p">)])</span>
@@ -907,11 +931,17 @@ document.write(`
         <span class="n">n_windows_long</span> <span class="o">=</span> <span class="n">n_windows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Compute DFA alpha1</span>
-    <span class="n">short_window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">dfa_windows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dfa_windows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">n_windows_short</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">short_window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+        <span class="n">dfa_windows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dfa_windows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">n_windows_short</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="c1"># For monofractal</span>
-    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">short_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha1&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">short_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
     <span class="c1"># For multifractal</span>
-    <span class="n">mdfa_alpha1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">short_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">mdfa_alpha1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">short_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mdfa_alpha1</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MFDFA_alpha1_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -927,11 +957,17 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">long_window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">dfa_windows</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_beats</span><span class="p">),</span> <span class="n">n_windows_long</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">long_window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+            <span class="n">dfa_windows</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_beats</span><span class="p">),</span> <span class="n">n_windows_long</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="c1"># For monofractal</span>
-        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">long_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;DFA_alpha2&quot;</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
+            <span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">long_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
         <span class="c1"># For multifractal</span>
-        <span class="n">mdfa_alpha2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">long_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">mdfa_alpha2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fractal_dfa</span><span class="p">(</span>
+            <span class="n">rri</span><span class="p">,</span> <span class="n">multifractal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">long_window</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mdfa_alpha2</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">out</span><span class="p">[</span><span class="s2">&quot;MFDFA_alpha2_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdfa_alpha2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -939,9 +975,218 @@ document.write(`
 
 
 <span class="c1"># =============================================================================</span>
+<span class="c1"># Symbolic Dynamics</span>
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="hrv_symbolic">
+<a class="viewcode-back" href="../../../functions/hrv.html#neurokit2.hrv.hrv_symbolic">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">hrv_symbolic</span><span class="p">(</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">quantization_level_equal_prob</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,),</span>
+    <span class="n">quantization_level_max_min</span><span class="o">=</span><span class="p">(),</span>
+    <span class="n">sigma_rate</span><span class="o">=</span><span class="p">(),</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;**Symbolic dynamics indices of Heart Rate Variability (HRV)**</span>
+
+<span class="sd">    Computes symbolic dynamics HRV indices based on three quantization methods: equal-probability,</span>
+<span class="sd">    max-min, and sigma. R-R intervals are converted to symbol sequences, and consecutive 3-symbol</span>
+<span class="sd">    words are classified into four variation families:</span>
+
+<span class="sd">    * **0V**: no variation — all three symbols equal.</span>
+<span class="sd">    * **1V**: one variation — exactly one adjacent pair differs.</span>
+<span class="sd">    * **2LV**: two like variations — all three differ and monotone (rising or falling).</span>
+<span class="sd">    * **2UV**: two unlike variations — all three differ and non-monotone (peak or valley, including</span>
+<span class="sd">      patterns like [a, b, a]).</span>
+
+<span class="sd">    Symbolic dynamics indices were developed to address limitations of both time-domain and</span>
+<span class="sd">    frequency-domain HRV methods, which assume stationarity and perform poorly on short or noisy</span>
+<span class="sd">    recordings. By coarse-graining the RR interval series into discrete symbols, the approach</span>
+<span class="sd">    captures nonlinear and non-stationary dynamics that linear methods miss, while remaining</span>
+<span class="sd">    computationally simple and interpretable. The variation families have clear physiological</span>
+<span class="sd">    correlates: 0V patterns (no variation) increase with sympathetic dominance, while 2V patterns</span>
+<span class="sd">    (high variation) increase with parasympathetic activity, a dissociation validated against</span>
+<span class="sd">    pharmacological autonomic blockade and head-up tilt protocols. Importantly, symbolic indices</span>
+<span class="sd">    track autonomic modulation even in short recordings of a few minutes where spectral LF/HF</span>
+<span class="sd">    ratios become unreliable. Proposed clinical and applied uses include monitoring autonomic</span>
+<span class="sd">    changes during postural stress, exercise, and sleep, assessing cardiac autonomic neuropathy,</span>
+<span class="sd">    and as a complement to entropy-based nonlinear indices. The three quantization methods</span>
+<span class="sd">    (equal-probability, max-min, sigma) differ in their sensitivity to distributional properties</span>
+<span class="sd">    of the RR series; equal-probability quantization has been generally recommended when comparing</span>
+<span class="sd">    across individuals or conditions, as it is invariant to the marginal distribution of RR</span>
+<span class="sd">    intervals.</span>
+
+<span class="sd">    The following parameterizations have been used in the literature:</span>
+
+<span class="sd">    * ``quantization_level_equal_prob=(4,)`` is the most common choice and is recommended for </span>
+<span class="sd">      cross-subject comparisons due to its invariance to the RR interval distribution (Cysarz et </span>
+<span class="sd">      al., 2018).</span>
+<span class="sd">    * ``quantization_level_equal_prob=(4, 6)`` together with ``quantization_level_max_min=(6,)``</span>
+<span class="sd">      and ``sigma_rate=(0.05,)`` allows direct comparison across all three quantization methods</span>
+<span class="sd">      at matched levels, as done in Cysarz et al. (2013).</span>
+<span class="sd">    * The sigma method with ``sigma_rate=0.05`` was used in the original autonomic blockade</span>
+<span class="sd">      validation work (Porta et al., 2007) and is the most physiologically interpreted variant,</span>
+<span class="sd">      with 0V linked to sympathetic and 2V to parasympathetic dominance.</span>
+<span class="sd">    * ``quantization_level_max_min=(6,)`` should generally be avoided for cross-subject</span>
+<span class="sd">      comparisons as it is sensitive to outliers in the RR series.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    peaks : dict or list</span>
+<span class="sd">        Samples at which cardiac extrema (e.g., R-peaks) occur. Can be a list of indices or a</span>
+<span class="sd">        dict containing the keys ``RRI`` and ``RRI_Time``.</span>
+<span class="sd">    sampling_rate : int, optional</span>
+<span class="sd">        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Default 1000.</span>
+<span class="sd">    quantization_level_equal_prob : tuple of int, optional</span>
+<span class="sd">        Quantization levels for the equal-probability method. Default ``(4,)`` (the most commonly</span>
+<span class="sd">        reported variant). Pass e.g. ``(4, 6)`` to include additional levels.</span>
+<span class="sd">    quantization_level_max_min : tuple of int, optional</span>
+<span class="sd">        Quantization levels for the max-min method. Default ``()`` (disabled). Pass e.g. ``(6,)``</span>
+<span class="sd">        to enable.</span>
+<span class="sd">    sigma_rate : tuple of float, optional</span>
+<span class="sd">        Sigma rates for the sigma method. Default ``()`` (disabled). Pass e.g. ``(0.05,)`` to</span>
+<span class="sd">        enable.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DataFrame</span>
+<span class="sd">        Contains the HRV symbolic dynamics indices. Column names follow the pattern</span>
+<span class="sd">        ``HRV_SymDyn_{Method}{Level}_{Family}``, e.g.:</span>
+
+<span class="sd">        * **HRV_Symbolic_EqualProb4_0V / _1V / _2LV / _2UV** (default)</span>
+<span class="sd">        * **HRV_Symbolic_EqualProb6_0V / _1V / _2LV / _2UV** (if level 6 requested)</span>
+<span class="sd">        * **HRV_Symbolic_MaxMin6_0V / _1V / _2LV / _2UV** (if max-min enabled)</span>
+<span class="sd">        * **HRV_Symbolic_Sigma05_0V / _1V / _2LV / _2UV** (if sigma enabled; ``05`` = rate × 100)</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ecg_peaks, ppg_peaks, hrv_nonlinear, hrv_time, hrv_frequency, hrv_symbolic</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      data = nk.data(&quot;bio_resting_5min_100hz&quot;)</span>
+<span class="sd">      peaks, info = nk.ecg_peaks(data[&quot;ECG&quot;], sampling_rate=100)</span>
+<span class="sd">      hrv = nk.hrv_symbolic(peaks, sampling_rate=100)</span>
+<span class="sd">      hrv</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    * Cysarz, D., Edelhäuser, F., Javorka, M., Montano, N., &amp; Porta, A. (2018). On the relevance</span>
+<span class="sd">      of symbolizing heart rate variability by means of a percentile-based coarse graining approach.</span>
+<span class="sd">      Physiol. Meas. 39:105010. doi: 10.1088/1361-6579/aae302</span>
+<span class="sd">    * Cysarz, D., Porta, A., Montano, N., van Leeuwen, P., Kurths, J., &amp; Wessel, N. (2013).</span>
+<span class="sd">      Quantifying heart rate dynamics using different approaches of symbolic dynamics. Eur. Phys.</span>
+<span class="sd">      J. Spec. Top. 222, 487–500. doi: 10.1140/epjst/e2013-01854-7</span>
+<span class="sd">    * Wessel, N., Malberg, H., Bauernschmitt, R., &amp; Kurths, J. (2007). Nonlinear methods of</span>
+<span class="sd">      cardiovascular physics and their clinical applicability. Int. J. Bifurc. Chaos 17, 3325–3371.</span>
+<span class="sd">      doi: 10.1142/s0218127407019093</span>
+<span class="sd">    * Porta, A., Tobaldini, E., Guzzetti, S., Furlan, R., Montano, N., &amp; Gnecchi-Ruscone, T.</span>
+<span class="sd">      (2007). Assessment of cardiac autonomic modulation during graded head-up tilt by symbolic</span>
+<span class="sd">      analysis of heart rate variability. Am. J. Physiol. Heart Circ. Physiol. 293, H702–H708.</span>
+<span class="sd">      doi: 10.1152/ajpheart.00006.2007</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rri</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_hrv_format_input</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_hrv_symbolic_dynamics</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span>
+        <span class="n">quantization_level_equal_prob</span><span class="o">=</span><span class="n">quantization_level_equal_prob</span><span class="p">,</span>
+        <span class="n">quantization_level_max_min</span><span class="o">=</span><span class="n">quantization_level_max_min</span><span class="p">,</span>
+        <span class="n">sigma_rate</span><span class="o">=</span><span class="n">sigma_rate</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">add_prefix</span><span class="p">(</span><span class="s2">&quot;HRV_&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_symbolic_dynamics</span><span class="p">(</span>
+    <span class="n">rri</span><span class="p">,</span>
+    <span class="n">quantization_level_equal_prob</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,),</span>
+    <span class="n">quantization_level_max_min</span><span class="o">=</span><span class="p">(),</span>
+    <span class="n">sigma_rate</span><span class="o">=</span><span class="p">(),</span>
+    <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Populate *out* dict with symbolic dynamics indices (no HRV_ prefix).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">ql</span> <span class="ow">in</span> <span class="n">quantization_level_equal_prob</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_hrv_symbolic_equal_prob</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">ql</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Symbolic_EqualProb</span><span class="si">{</span><span class="n">ql</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">for</span> <span class="n">ql</span> <span class="ow">in</span> <span class="n">quantization_level_max_min</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_hrv_symbolic_max_min</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">ql</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Symbolic_MaxMin</span><span class="si">{</span><span class="n">ql</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">for</span> <span class="n">sr</span> <span class="ow">in</span> <span class="n">sigma_rate</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">sr</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_hrv_symbolic_sigma</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Symbolic_Sigma</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_symbolic_classify</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Classify 3-symbol words into 0V / 1V / 2LV / 2UV families.</span>
+
+<span class="sd">    * **0V**: ``a == b == c`` — no variation.</span>
+<span class="sd">    * **1V**: ``(a==b, b!=c)`` or ``(a!=b, b==c)`` — exactly one adjacent change.</span>
+<span class="sd">    * **2LV**: ``a!=b``, ``b!=c``, and monotone — two like variations.</span>
+<span class="sd">    * **2UV**: ``a!=b``, ``b!=c``, and non-monotone — two unlike variations.</span>
+<span class="sd">      This correctly includes patterns such as ``[a, b, a]`` (peak or valley) which have</span>
+<span class="sd">      two unique values but two variations, not one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">words</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">words</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">words</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">two_changes</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">c</span><span class="p">)</span>
+    <span class="n">monotone</span> <span class="o">=</span> <span class="p">((</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">c</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;0V&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="p">)))</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span>
+        <span class="s2">&quot;1V&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">c</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">a</span> <span class="o">!=</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="p">))))</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span>
+        <span class="s2">&quot;2LV&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">two_changes</span> <span class="o">&amp;</span> <span class="n">monotone</span><span class="p">))</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span>
+        <span class="s2">&quot;2UV&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">two_changes</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">monotone</span><span class="p">))</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_symbolic_equal_prob</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">quantization_level</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quantize RRI by equal-probability percentile bins.&quot;&quot;&quot;</span>
+    <span class="n">percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">quantization_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">percentiles</span><span class="p">)</span>
+    <span class="n">symbols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">pv</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">quantization_level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">symbols</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">_hrv_symbolic_classify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_symbolic_max_min</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">quantization_level</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quantize RRI into uniform bins between signal min and max.&quot;&quot;&quot;</span>
+    <span class="n">thresholds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">rri</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">rri</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">quantization_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">symbols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">symbols</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">_hrv_symbolic_classify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_symbolic_sigma</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">sigma_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Quantize RRI by deviation from the mean, scaled by sigma_rate.&quot;&quot;&quot;</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
+    <span class="n">symbols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rri</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">symbols</span><span class="p">[</span><span class="n">rri</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">sigma_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">symbols</span><span class="p">[(</span><span class="n">mu</span> <span class="o">&lt;</span> <span class="n">rri</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rri</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">sigma_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">symbols</span><span class="p">[(</span><span class="n">rri</span> <span class="o">&lt;=</span> <span class="n">mu</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rri</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sigma_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">symbols</span><span class="p">[</span><span class="n">rri</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sigma_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">symbols</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">_hrv_symbolic_classify</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================================</span>
 <span class="c1"># Plot</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="p">{},</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_marg_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_marg_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_hrv_nonlinear_show</span><span class="p">(</span>
+    <span class="n">rri</span><span class="p">,</span>
+    <span class="n">rri_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rri_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">out</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax_marg_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ax_marg_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 
     <span class="n">mean_heart_period</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">rri</span><span class="p">)</span>
     <span class="n">sd1</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;SD1&quot;</span><span class="p">]</span>
@@ -994,7 +1239,14 @@ document.write(`
     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">ax1_min</span><span class="p">,</span> <span class="n">ax1_max</span><span class="p">,</span> <span class="n">ax2_min</span><span class="p">,</span> <span class="n">ax2_max</span><span class="p">],</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
 
     <span class="c1"># Marginal densities</span>
-    <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ccdff0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
+        <span class="n">ax1</span><span class="p">,</span>
+        <span class="n">bins</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ccdff0&quot;</span><span class="p">,</span>
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">ax_marg_y</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
         <span class="n">ax2</span><span class="p">,</span>
         <span class="n">bins</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span>
@@ -1009,11 +1261,21 @@ document.write(`
     <span class="n">x1_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ax1_min</span><span class="p">,</span> <span class="n">ax1_max</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ax1</span><span class="p">))</span>
     <span class="n">x1_dens</span> <span class="o">=</span> <span class="n">kde1</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x1_plot</span><span class="p">)</span>
 
-    <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">x1_plot</span><span class="p">,</span> <span class="n">x1_dens</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;#1b6aaf&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+        <span class="n">x1_plot</span><span class="p">,</span> <span class="n">x1_dens</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;#1b6aaf&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span>
     <span class="n">kde2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">gaussian_kde</span><span class="p">(</span><span class="n">ax2</span><span class="p">)</span>
     <span class="n">x2_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ax2_min</span><span class="p">,</span> <span class="n">ax2_max</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ax2</span><span class="p">))</span>
     <span class="n">x2_dens</span> <span class="o">=</span> <span class="n">kde2</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x2_plot</span><span class="p">)</span>
-    <span class="n">ax_marg_y</span><span class="o">.</span><span class="n">fill_betweenx</span><span class="p">(</span><span class="n">x2_plot</span><span class="p">,</span> <span class="n">x2_dens</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;#1b6aaf&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax_marg_y</span><span class="o">.</span><span class="n">fill_betweenx</span><span class="p">(</span>
+        <span class="n">x2_plot</span><span class="p">,</span>
+        <span class="n">x2_dens</span><span class="p">,</span>
+        <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;#1b6aaf&quot;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Turn off marginal axes labels</span>
     <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
@@ -1024,7 +1286,9 @@ document.write(`
     <span class="n">width</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sd2</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">height</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sd1</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">mean_heart_period</span><span class="p">,</span> <span class="n">mean_heart_period</span><span class="p">)</span>
-    <span class="n">ellipse</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Ellipse</span><span class="p">(</span><span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ellipse</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Ellipse</span><span class="p">(</span>
+        <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
     <span class="n">ellipse</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">ellipse</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">&quot;#2196F3&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ellipse</span><span class="p">)</span>

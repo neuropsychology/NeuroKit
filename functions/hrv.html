@@ -471,6 +471,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.hrv.hrv_rqa"><code class="docutils literal notranslate"><span class="pre">hrv_rqa()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hrv-symdyn"><em>hrv_symdyn()</em></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervals">Intervals</a><ul class="nav section-nav flex-column">
@@ -480,6 +481,7 @@ document.write(`
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intervals-to-peaks"><em>intervals_to_peaks()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.hrv.intervals_to_peaks"><code class="docutils literal notranslate"><span class="pre">intervals_to_peaks()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.hrv.hrv_symbolic"><code class="docutils literal notranslate"><span class="pre">hrv_symbolic()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -568,7 +570,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <span class="go">   HRV_MeanNN   HRV_SDNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
 <span class="go">0  694.756381  49.036043  ...            2.045955      0.156187</span>
 
-<span class="go">[1 rows x 99 columns]</span>
+<span class="go">[1 rows x 103 columns]</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1005,7 +1007,7 @@ default <code class="docutils literal notranslate"><span class="pre">False</span
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_symbolic" title="neurokit2.hrv.hrv_symbolic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_symbolic</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
@@ -1024,10 +1026,10 @@ default <code class="docutils literal notranslate"><span class="pre">False</span
 </a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hrv</span>
 <span class="gh">Out[5]: </span>
-<span class="go">     HRV_SD1    HRV_SD2  HRV_SD1SD2  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0  49.341281  72.597435    0.679656  ...  1.856372  1.913071  0.854475</span>
+<span class="go">     HRV_SD1  ...  HRV_Symbolic_EqualProb4_2UV</span>
+<span class="go">0  49.341281  ...                     0.161215</span>
 
-<span class="go">[1 rows x 56 columns]</span>
+<span class="go">[1 rows x 60 columns]</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1059,6 +1061,13 @@ autonomic function and its comparison with spectral analysis and coefficient of 
 R-R interval. Journal of the autonomic nervous system, 62(1-2), 79-84.</p></li>
 <li><p>Acharya, R. U., Lim, C. M., &amp; Joseph, P. (2002). Heart rate variability analysis using
 correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-339.</p></li>
+<li><p>Cysarz, D., Porta, A., Montano, N., van Leeuwen, P., Kurths, J., &amp; Wessel, N. (2013).
+Quantifying heart rate dynamics using different approaches of symbolic dynamics. Eur. Phys.
+J. Spec. Top. 222, 487–500. doi: 10.1140/epjst/e2013-01854-7</p></li>
+<li><p>Porta, A., Tobaldini, E., Guzzetti, S., Furlan, R., Montano, N., &amp; Gnecchi-Ruscone, T.
+(2007). Assessment of cardiac autonomic modulation during graded head-up tilt by symbolic
+analysis of heart rate variability. Am. J. Physiol. Heart Circ. Physiol. 293, H702–H708.
+doi: 10.1152/ajpheart.00006.2007</p></li>
 </ul>
 </dd></dl>
 
@@ -1266,6 +1275,9 @@ Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 </dd></dl>
 
 </section>
+<section id="hrv-symdyn">
+<h3><em>hrv_symdyn()</em><a class="headerlink" href="#hrv-symdyn" title="Link to this heading">#</a></h3>
+</section>
 </section>
 <section id="intervals">
 <h2>Intervals<a class="headerlink" href="#intervals" title="Link to this heading">#</a></h2>
@@ -1393,7 +1405,116 @@ with the first peak occurring at sample point 0.</p>
 </dd></dl>
 
 <p><em>Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.</em></p>
-<span class="target" id="module-neurokit2.hrv"></span></section>
+<dl class="py function" id="module-neurokit2.hrv">
+<dt class="sig sig-object py" id="neurokit2.hrv.hrv_symbolic">
+<span class="sig-name descname"><span class="pre">hrv_symbolic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantization_level_equal_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantization_level_max_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/hrv/hrv_nonlinear.html#hrv_symbolic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.hrv.hrv_symbolic" title="Link to this definition">#</a></dt>
+<dd><p><strong>Symbolic dynamics indices of Heart Rate Variability (HRV)</strong></p>
+<p>Computes symbolic dynamics HRV indices based on three quantization methods: equal-probability,
+max-min, and sigma. R-R intervals are converted to symbol sequences, and consecutive 3-symbol
+words are classified into four variation families:</p>
+<ul class="simple">
+<li><p><strong>0V</strong>: no variation — all three symbols equal.</p></li>
+<li><p><strong>1V</strong>: one variation — exactly one adjacent pair differs.</p></li>
+<li><p><strong>2LV</strong>: two like variations — all three differ and monotone (rising or falling).</p></li>
+<li><p><strong>2UV</strong>: two unlike variations — all three differ and non-monotone (peak or valley, including
+patterns like [a, b, a]).</p></li>
+</ul>
+<p>Symbolic dynamics indices were developed to address limitations of both time-domain and
+frequency-domain HRV methods, which assume stationarity and perform poorly on short or noisy
+recordings. By coarse-graining the RR interval series into discrete symbols, the approach
+captures nonlinear and non-stationary dynamics that linear methods miss, while remaining
+computationally simple and interpretable. The variation families have clear physiological
+correlates: 0V patterns (no variation) increase with sympathetic dominance, while 2V patterns
+(high variation) increase with parasympathetic activity, a dissociation validated against
+pharmacological autonomic blockade and head-up tilt protocols. Importantly, symbolic indices
+track autonomic modulation even in short recordings of a few minutes where spectral LF/HF
+ratios become unreliable. Proposed clinical and applied uses include monitoring autonomic
+changes during postural stress, exercise, and sleep, assessing cardiac autonomic neuropathy,
+and as a complement to entropy-based nonlinear indices. The three quantization methods
+(equal-probability, max-min, sigma) differ in their sensitivity to distributional properties
+of the RR series; equal-probability quantization has been generally recommended when comparing
+across individuals or conditions, as it is invariant to the marginal distribution of RR
+intervals.</p>
+<p>The following parameterizations have been used in the literature:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">quantization_level_equal_prob=(4,)</span></code> is the most common choice and is recommended for
+cross-subject comparisons due to its invariance to the RR interval distribution (Cysarz et
+al., 2018).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quantization_level_equal_prob=(4,</span> <span class="pre">6)</span></code> together with <code class="docutils literal notranslate"><span class="pre">quantization_level_max_min=(6,)</span></code>
+and <code class="docutils literal notranslate"><span class="pre">sigma_rate=(0.05,)</span></code> allows direct comparison across all three quantization methods
+at matched levels, as done in Cysarz et al. (2013).</p></li>
+<li><p>The sigma method with <code class="docutils literal notranslate"><span class="pre">sigma_rate=0.05</span></code> was used in the original autonomic blockade
+validation work (Porta et al., 2007) and is the most physiologically interpreted variant,
+with 0V linked to sympathetic and 2V to parasympathetic dominance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quantization_level_max_min=(6,)</span></code> should generally be avoided for cross-subject
+comparisons as it is sensitive to outliers in the RR series.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>dict or list</em>) – Samples at which cardiac extrema (e.g., R-peaks) occur. Can be a list of indices or a
+dict containing the keys <code class="docutils literal notranslate"><span class="pre">RRI</span></code> and <code class="docutils literal notranslate"><span class="pre">RRI_Time</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Default 1000.</p></li>
+<li><p><strong>quantization_level_equal_prob</strong> (<em>tuple of int, optional</em>) – Quantization levels for the equal-probability method. Default <code class="docutils literal notranslate"><span class="pre">(4,)</span></code> (the most commonly
+reported variant). Pass e.g. <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">6)</span></code> to include additional levels.</p></li>
+<li><p><strong>quantization_level_max_min</strong> (<em>tuple of int, optional</em>) – Quantization levels for the max-min method. Default <code class="docutils literal notranslate"><span class="pre">()</span></code> (disabled). Pass e.g. <code class="docutils literal notranslate"><span class="pre">(6,)</span></code>
+to enable.</p></li>
+<li><p><strong>sigma_rate</strong> (<em>tuple of float, optional</em>) – Sigma rates for the sigma method. Default <code class="docutils literal notranslate"><span class="pre">()</span></code> (disabled). Pass e.g. <code class="docutils literal notranslate"><span class="pre">(0.05,)</span></code> to
+enable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><em>DataFrame</em> – Contains the HRV symbolic dynamics indices. Column names follow the pattern
+<code class="docutils literal notranslate"><span class="pre">HRV_SymDyn_{Method}{Level}_{Family}</span></code>, e.g.:</p>
+<ul class="simple">
+<li><p><strong>HRV_Symbolic_EqualProb4_0V / _1V / _2LV / _2UV</strong> (default)</p></li>
+<li><p><strong>HRV_Symbolic_EqualProb6_0V / _1V / _2LV / _2UV</strong> (if level 6 requested)</p></li>
+<li><p><strong>HRV_Symbolic_MaxMin6_0V / _1V / _2LV / _2UV</strong> (if max-min enabled)</p></li>
+<li><p><strong>HRV_Symbolic_Sigma05_0V / _1V / _2LV / _2UV</strong> (if sigma enabled; <code class="docutils literal notranslate"><span class="pre">05</span></code> = rate × 100)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_symbolic" title="neurokit2.hrv.hrv_symbolic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_symbolic</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">hrv</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_symbolic</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">hrv</span>
+<span class="gh">Out[5]: </span>
+<span class="go">   HRV_Symbolic_EqualProb4_0V  ...  HRV_Symbolic_EqualProb4_2UV</span>
+<span class="go">0                    0.212617  ...                     0.161215</span>
+
+<span class="go">[1 rows x 4 columns]</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Cysarz, D., Edelhäuser, F., Javorka, M., Montano, N., &amp; Porta, A. (2018). On the relevance
+of symbolizing heart rate variability by means of a percentile-based coarse graining approach.
+Physiol. Meas. 39:105010. doi: 10.1088/1361-6579/aae302</p></li>
+<li><p>Cysarz, D., Porta, A., Montano, N., van Leeuwen, P., Kurths, J., &amp; Wessel, N. (2013).
+Quantifying heart rate dynamics using different approaches of symbolic dynamics. Eur. Phys.
+J. Spec. Top. 222, 487–500. doi: 10.1140/epjst/e2013-01854-7</p></li>
+<li><p>Wessel, N., Malberg, H., Bauernschmitt, R., &amp; Kurths, J. (2007). Nonlinear methods of
+cardiovascular physics and their clinical applicability. Int. J. Bifurc. Chaos 17, 3325–3371.
+doi: 10.1142/s0218127407019093</p></li>
+<li><p>Porta, A., Tobaldini, E., Guzzetti, S., Furlan, R., Montano, N., &amp; Gnecchi-Ruscone, T.
+(2007). Assessment of cardiac autonomic modulation during graded head-up tilt by symbolic
+analysis of heart rate variability. Am. J. Physiol. Heart Circ. Physiol. 293, H702–H708.
+doi: 10.1152/ajpheart.00006.2007</p></li>
+</ul>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
@@ -1470,6 +1591,7 @@ with the first peak occurring at sample point 0.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.hrv.hrv_rqa"><code class="docutils literal notranslate"><span class="pre">hrv_rqa()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hrv-symdyn"><em>hrv_symdyn()</em></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intervals">Intervals</a><ul class="nav section-nav flex-column">
@@ -1479,6 +1601,7 @@ with the first peak occurring at sample point 0.</p>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intervals-to-peaks"><em>intervals_to_peaks()</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.hrv.intervals_to_peaks"><code class="docutils literal notranslate"><span class="pre">intervals_to_peaks()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#neurokit2.hrv.hrv_symbolic"><code class="docutils literal notranslate"><span class="pre">hrv_symbolic()</span></code></a></li>
 </ul>
 </li>
 </ul>

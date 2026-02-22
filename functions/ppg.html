@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.767372           0.850843</span>
-<span class="go">2     2        10000  ...                 -0.398735           0.991871</span>
-<span class="go">3     3        15000  ...                 -0.206794           0.727572</span>
+<span class="go">1     1         5000  ...                 -1.717174           0.796281</span>
+<span class="go">2     2        10000  ...                  1.146357           0.938978</span>
+<span class="go">3     3        15000  ...                 -1.258575           0.823959</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -637,10 +637,10 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 
 <span class="gp">In [10]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[10]: </span>
-<span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.401345  694.686775  49.380646  ...  1.834993  2.714813  0.852819</span>
+<span class="go">   PPG_Rate_Mean  ...  HRV_Symbolic_EqualProb4_2UV</span>
+<span class="go">0      86.401345  ...                     0.109557</span>
 
-<span class="go">[1 rows x 92 columns]</span>
+<span class="go">[1 rows x 96 columns]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -905,8 +905,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 48,  90, 132, 174, 218, 261, 307, 350, 403, 477, 514, 554, 594,</span>
-<span class="go">       631, 669, 707, 740, 777, 815, 850, 887, 926, 967])</span>
+<span class="go">array([ 45,  89, 132, 176, 220, 262, 306, 349, 410, 443, 480, 517, 558,</span>
+<span class="go">       594, 632, 672, 704, 742, 777, 815, 850, 889, 925, 965])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -996,9 +996,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.213793           0.698691</span>
-<span class="go">2     2        10000  ...                  0.414600           0.777699</span>
-<span class="go">3     3        15000  ...                 -0.266966           0.705478</span>
+<span class="go">1     1         5000  ...                  1.289665           0.629052</span>
+<span class="go">2     2        10000  ...                 -0.655236           0.989012</span>
+<span class="go">3     3        15000  ...                 -1.455946           0.954281</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1050,10 +1050,10 @@ separately processed DataFrames.</p></li>
 <span class="go"># Single dataframe is passed</span>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
-<span class="go">   PPG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.401345  694.686775  49.380646  ...  1.834993  2.714813  0.852819</span>
+<span class="go">   PPG_Rate_Mean  ...  HRV_Symbolic_EqualProb4_2UV</span>
+<span class="go">0      86.401345  ...                     0.109557</span>
 
-<span class="go">[1 rows x 92 columns]</span>
+<span class="go">[1 rows x 96 columns]</span>
 
 <span class="gp">In [5]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
 <span class="gp">   ...: </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
@@ -1061,11 +1061,11 @@ separately processed DataFrames.</p></li>
 
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span>
-<span class="go">  Label  PPG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">1     1      86.483191   69.395349  ...  1.808681  2.303001  0.792838</span>
-<span class="go">2     2      86.319498   69.488372  ...  1.866994  3.224846  0.936991</span>
+<span class="go">  Label  ...  HRV_Symbolic_EqualProb4_2UV</span>
+<span class="go">1     1  ...                     0.112676</span>
+<span class="go">2     2  ...                     0.145540</span>
 
-<span class="go">[2 rows x 93 columns]</span>
+<span class="go">[2 rows x 97 columns]</span>
 </pre></div>
 </div>
 </dd></dl>

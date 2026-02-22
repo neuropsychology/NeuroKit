@@ -387,7 +387,7 @@ document.write(`
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">summary_plot</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.hrv_frequency</span><span class="w"> </span><span class="kn">import</span> <span class="n">_hrv_frequency_show</span><span class="p">,</span> <span class="n">hrv_frequency</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.hrv_nonlinear</span><span class="w"> </span><span class="kn">import</span> <span class="n">_hrv_nonlinear_show</span><span class="p">,</span> <span class="n">hrv_nonlinear</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.hrv_nonlinear</span><span class="w"> </span><span class="kn">import</span> <span class="n">_hrv_nonlinear_show</span><span class="p">,</span> <span class="n">hrv_nonlinear</span><span class="p">,</span> <span class="n">hrv_symbolic</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.hrv_rsa</span><span class="w"> </span><span class="kn">import</span> <span class="n">hrv_rsa</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.hrv_time</span><span class="w"> </span><span class="kn">import</span> <span class="n">hrv_time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.hrv_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_hrv_format_input</span>
@@ -527,7 +527,9 @@ document.write(`
 
     <span class="n">ax_psd</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-    <span class="n">spec_within</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">subplot_spec</span><span class="o">=</span><span class="n">spec</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">spec_within</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSpecFromSubplotSpec</span><span class="p">(</span>
+        <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">subplot_spec</span><span class="o">=</span><span class="n">spec</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.05</span>
+    <span class="p">)</span>
     <span class="n">ax_poincare</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec_within</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
     <span class="n">ax_marg_x</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec_within</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
     <span class="n">ax_marg_x</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Poincaré Plot&quot;</span><span class="p">)</span>
@@ -541,11 +543,23 @@ document.write(`
 
     <span class="c1"># Poincare plot</span>
     <span class="n">out</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;HRV_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-    <span class="n">_hrv_nonlinear_show</span><span class="p">(</span><span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_poincare</span><span class="p">,</span> <span class="n">ax_marg_x</span><span class="o">=</span><span class="n">ax_marg_x</span><span class="p">,</span> <span class="n">ax_marg_y</span><span class="o">=</span><span class="n">ax_marg_y</span><span class="p">)</span>
+    <span class="n">_hrv_nonlinear_show</span><span class="p">(</span>
+        <span class="n">rri</span><span class="p">,</span>
+        <span class="n">rri_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span>
+        <span class="n">rri_missing</span><span class="o">=</span><span class="n">rri_missing</span><span class="p">,</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax_poincare</span><span class="p">,</span>
+        <span class="n">ax_marg_x</span><span class="o">=</span><span class="n">ax_marg_x</span><span class="p">,</span>
+        <span class="n">ax_marg_y</span><span class="o">=</span><span class="n">ax_marg_y</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># PSD plot</span>
     <span class="n">rri</span><span class="p">,</span> <span class="n">rri_time</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">intervals_process</span><span class="p">(</span>
-        <span class="n">rri</span><span class="p">,</span> <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span> <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="n">rri</span><span class="p">,</span>
+        <span class="n">intervals_time</span><span class="o">=</span><span class="n">rri_time</span><span class="p">,</span>
+        <span class="n">interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">interpolation_rate</span><span class="o">=</span><span class="n">interpolation_rate</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="n">frequency_bands</span> <span class="o">=</span> <span class="n">out</span><span class="p">[[</span><span class="s2">&quot;ULF&quot;</span><span class="p">,</span> <span class="s2">&quot;VLF&quot;</span><span class="p">,</span> <span class="s2">&quot;LF&quot;</span><span class="p">,</span> <span class="s2">&quot;HF&quot;</span><span class="p">,</span> <span class="s2">&quot;VHF&quot;</span><span class="p">]]</span>
