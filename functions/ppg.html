@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.597507           0.906246</span>
-<span class="go">2     2        10000  ...                 -0.505911           0.993327</span>
-<span class="go">3     3        15000  ...                 -1.009377           0.959839</span>
+<span class="go">1     1         5000  ...                  0.049206           0.995043</span>
+<span class="go">2     2        10000  ...                 -2.340616           0.975222</span>
+<span class="go">3     3        15000  ...                  0.667630           0.543772</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -882,8 +882,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 45,  86, 132, 176, 218, 261, 305, 352, 392, 446, 514, 555, 596,</span>
-<span class="go">       631, 669, 706, 742, 777, 814, 852, 888, 926, 966])</span>
+<span class="go">array([ 48,  89, 133, 176, 219, 261, 306, 351, 405, 444, 480, 514, 557,</span>
+<span class="go">       598, 632, 669, 706, 741, 779, 849, 889, 925, 964])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -971,9 +971,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -0.564130           0.876823</span>
-<span class="go">2     2        10000  ...                 -2.569570           0.924896</span>
-<span class="go">3     3        15000  ...                 -0.249174           0.655305</span>
+<span class="go">1     1         5000  ...                 -1.114673           0.882738</span>
+<span class="go">2     2        10000  ...                 -0.527438           0.983828</span>
+<span class="go">3     3        15000  ...                 -0.681633           0.872547</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>
@@ -1176,7 +1176,7 @@ references.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_quality">
-<span class="sig-name descname"><span class="pre">ppg_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_quality.html#ppg_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_quality" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ppg_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_sec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_sec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppg_raw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_quality.html#ppg_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_quality" title="Link to this definition">#</a></dt>
 <dd><p><strong>PPG Signal Quality Assessment</strong></p>
 <p>Assess the quality of the PPG Signal using various methods:</p>
 <ul class="simple">
@@ -1201,6 +1201,22 @@ IBI are rated as high quality (1) if that IBI is predicted to be accurate, or lo
 quality (0) if that IBI is predicted to be inaccurate. Ho et al. proposed this approach for the ECG, and here
 it has been applied to the PPG. The general approach was derived by Ho et al from the previously proposed bSQI
 approach.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code> method (based on Selveraj, 2011 and Elgendi, 2016) computes the skewness of the PPG signal.
+The skewness is a measure of the asymmetry of the probability distribution of the signal’s amplitude values.
+In Elgendi (2016), higher quality signals were generally found to have higher skewness values.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code> method (based on Selveraj, 2011 and Elgendi, 2016) computes the kurtosis of the PPG signal.
+The kurtosis is a measure of the “tailedness” of the probability distribution of the signal’s amplitude values.
+In Elgendi (2016), higher quality signals were generally found to have higher kurtosis values.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code> method (based on Selvaraj et al., 2011, and inspired by Elgendi, 2016) computes the entropy of the
+signal in moving windows. The entropy is a measure of the randomness in the signal’s amplitude values.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;perfusion&quot;</span></code> method (based on Elgendi, 2016) computes the perfusion index of the PPG signal.
+The perfusion index is the ratio of the amplitude of the pulsatile (AC) component of the PPG to its baseline (DC)
+amplitude, expressed as a percentage. It is calculated over moving windows (default: 3 seconds window, 2 seconds
+overlap). Requires raw PPG signal.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;relative_power&quot;</span></code> method (based on Elgendi, 2016) computes the relative power of the PPG signal.
+The relative power is the ratio of the power in the 1-2.25 Hz band to the power in the 0-8 Hz band, giving a value
+between 0 and 1. It is calculated over moving windows (default: 60 seconds window, 30 seconds overlap). Requires
+raw PPG signal.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1210,13 +1226,22 @@ approach.</p></li>
 the signal input.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal (in Hz, i.e., samples/second).</p></li>
 <li><p><strong>method</strong> (<em>str</em>) – The method for computing PPG signal quality, can be <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code>,
-or <code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;perfusion&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;relative_power&quot;</span></code>.</p></li>
+<li><p><strong>window_sec</strong> (<em>float, optional</em>) – Window length in seconds for windowed metrics. Default is 3 seconds for <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;perfusion&quot;</span></code>, and 60 seconds for <code class="docutils literal notranslate"><span class="pre">&quot;relative_power&quot;</span></code>.</p></li>
+<li><p><strong>overlap_sec</strong> (<em>float, optional</em>) – Overlap between windows in seconds for windowed metrics. Default is 2 seconds for <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;perfusion&quot;</span></code>, and 30 seconds for <code class="docutils literal notranslate"><span class="pre">&quot;relative_power&quot;</span></code>.</p></li>
+<li><p><strong>no_bins</strong> (<em>int, optional</em>) – Number of bins for <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code> calculation (default: 16).</p></li>
+<li><p><strong>ppg_raw</strong> (<em>Union[list, np.array, pd.Series], optional</em>) – The raw PPG signal: used for the <code class="docutils literal notranslate"><span class="pre">&quot;perfusion&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;relative_power&quot;</span></code> methods.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>quality</strong> (<em>array</em>) – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
 or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method,
-or zeros and ones (where 1 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code> method.</p>
+or zeros and ones (where 1 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;ho2025&quot;</span></code> method,
+or an unbounded value for <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code>,
+or a value between 0 and 100% for <code class="docutils literal notranslate"><span class="pre">&quot;perfusion&quot;</span></code> method (100% being high quality),
+or a value between 0 and 1 for <code class="docutils literal notranslate"><span class="pre">&quot;relative_power&quot;</span></code> method.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -1231,6 +1256,10 @@ derivation and applications to wireless monitoring”. IEEE Journal of Biomedica
 Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</p></li>
 <li><p>Ho, S.Y.S et al. (2025). “Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.
 medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.org/10.1101/2025.03.10.25323655">https://doi.org/10.1101/2025.03.10.25323655</a></p></li>
+<li><p>Elgendi, M. et al. (2016). “Optimal signal quality index for photoplethysmogram signals”.
+Bioengineering, 3(4), 1–15. doi: <a class="reference external" href="https://doi.org/10.3390/bioengineering3040021">https://doi.org/10.3390/bioengineering3040021</a></p></li>
+<li><p>Selvaraj, N. et al. (2011). “Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram”.
+Proc IEEE EMBC; pp. 4972–4975.</p></li>
 </ul>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -1251,6 +1280,24 @@ medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.or
 </div>
 <a class="reference internal image-reference" href="../_images/p_ppg_quality.png"><img alt="../_images/p_ppg_quality.png" height="480" src="../_images/p_ppg_quality.png" width="640" />
 </a>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> ‘skewness’ method</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [8]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="gp">In [9]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+<span class="gp">In [11]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;skewness&quot;</span><span class="p">,</span> <span class="n">window_sec</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">overlap_sec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">

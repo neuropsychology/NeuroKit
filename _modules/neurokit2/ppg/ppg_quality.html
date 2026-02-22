@@ -384,11 +384,23 @@ document.write(`
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.ppg_peaks</span><span class="w"> </span><span class="kn">import</span> <span class="n">ppg_peaks</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_quality</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_quality</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_interpolate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..signal.signal_power</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_power</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
 <div class="viewcode-block" id="ppg_quality">
 <a class="viewcode-back" href="../../../functions/ppg.html#neurokit2.ppg.ppg_quality">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ppg_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ppg_quality</span><span class="p">(</span>
+    <span class="n">ppg_cleaned</span><span class="p">,</span>
+    <span class="n">peaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span>
+    <span class="n">window_sec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">overlap_sec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">no_bins</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">ppg_raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**PPG Signal Quality Assessment**</span>
 
 <span class="sd">    Assess the quality of the PPG Signal using various methods:</span>
@@ -417,6 +429,27 @@ document.write(`
 <span class="sd">      it has been applied to the PPG. The general approach was derived by Ho et al from the previously proposed bSQI</span>
 <span class="sd">      approach.</span>
 
+<span class="sd">    * The ``&quot;skewness&quot;`` method (based on Selveraj, 2011 and Elgendi, 2016) computes the skewness of the PPG signal.</span>
+<span class="sd">      The skewness is a measure of the asymmetry of the probability distribution of the signal&#39;s amplitude values.</span>
+<span class="sd">      In Elgendi (2016), higher quality signals were generally found to have higher skewness values.</span>
+
+<span class="sd">    * The ``&quot;kurtosis&quot;`` method (based on Selveraj, 2011 and Elgendi, 2016) computes the kurtosis of the PPG signal.</span>
+<span class="sd">      The kurtosis is a measure of the &quot;tailedness&quot; of the probability distribution of the signal&#39;s amplitude values.</span>
+<span class="sd">      In Elgendi (2016), higher quality signals were generally found to have higher kurtosis values.</span>
+
+<span class="sd">    * The ``&quot;entropy&quot;`` method (based on Selvaraj et al., 2011, and inspired by Elgendi, 2016) computes the entropy of the</span>
+<span class="sd">      signal in moving windows. The entropy is a measure of the randomness in the signal&#39;s amplitude values.</span>
+
+<span class="sd">    * The ``&quot;perfusion&quot;`` method (based on Elgendi, 2016) computes the perfusion index of the PPG signal.</span>
+<span class="sd">      The perfusion index is the ratio of the amplitude of the pulsatile (AC) component of the PPG to its baseline (DC)</span>
+<span class="sd">      amplitude, expressed as a percentage. It is calculated over moving windows (default: 3 seconds window, 2 seconds</span>
+<span class="sd">      overlap). Requires raw PPG signal.</span>
+
+<span class="sd">    * The ``&quot;relative_power&quot;`` method (based on Elgendi, 2016) computes the relative power of the PPG signal.</span>
+<span class="sd">      The relative power is the ratio of the power in the 1-2.25 Hz band to the power in the 0-8 Hz band, giving a value</span>
+<span class="sd">      between 0 and 1. It is calculated over moving windows (default: 60 seconds window, 30 seconds overlap). Requires</span>
+<span class="sd">      raw PPG signal.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    ppg_cleaned : Union[list, np.array, pd.Series]</span>
@@ -428,14 +461,27 @@ document.write(`
 <span class="sd">        The sampling frequency of the signal (in Hz, i.e., samples/second).</span>
 <span class="sd">    method : str</span>
 <span class="sd">        The method for computing PPG signal quality, can be ``&quot;templatematch&quot;`` (default), ``&quot;dissimilarity&quot;``,</span>
-<span class="sd">        or ``&quot;ho2025&quot;``.</span>
+<span class="sd">        ``&quot;ho2025&quot;``, ``&quot;skewness&quot;``, ``&quot;kurtosis&quot;``, ``&quot;entropy&quot;``, ``&quot;perfusion&quot;``, or ``&quot;relative_power&quot;``.</span>
+<span class="sd">    window_sec : float, optional</span>
+<span class="sd">        Window length in seconds for windowed metrics. Default is 3 seconds for ``&quot;skewness&quot;``, ``&quot;kurtosis&quot;``,</span>
+<span class="sd">        ``&quot;perfusion&quot;``, and 60 seconds for ``&quot;relative_power&quot;``.</span>
+<span class="sd">    overlap_sec : float, optional</span>
+<span class="sd">        Overlap between windows in seconds for windowed metrics. Default is 2 seconds for ``&quot;skewness&quot;``, ``&quot;kurtosis&quot;``,</span>
+<span class="sd">        ``&quot;perfusion&quot;``, and 30 seconds for ``&quot;relative_power&quot;``.</span>
+<span class="sd">    no_bins : int, optional</span>
+<span class="sd">        Number of bins for ``&quot;entropy&quot;`` calculation (default: 16).</span>
+<span class="sd">    ppg_raw : Union[list, np.array, pd.Series], optional</span>
+<span class="sd">        The raw PPG signal: used for the ``&quot;perfusion&quot;`` and ``&quot;relative_power&quot;`` methods.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    quality : array</span>
 <span class="sd">        Vector containing the quality index ranging from 0 to 1 for ``&quot;templatematch&quot;`` method,</span>
 <span class="sd">        or an unbounded value (where 0 indicates high quality) for ``&quot;dissimilarity&quot;`` method,</span>
-<span class="sd">        or zeros and ones (where 1 indicates high quality) for ``&quot;ho2025&quot;`` method.</span>
+<span class="sd">        or zeros and ones (where 1 indicates high quality) for ``&quot;ho2025&quot;`` method,</span>
+<span class="sd">        or an unbounded value for ``&quot;skewness&quot;``, ``&quot;kurtosis&quot;``, or ``&quot;entropy&quot;``,</span>
+<span class="sd">        or a value between 0 and 100% for ``&quot;perfusion&quot;`` method (100% being high quality),</span>
+<span class="sd">        or a value between 0 and 1 for ``&quot;relative_power&quot;`` method.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -449,6 +495,10 @@ document.write(`
 <span class="sd">      Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</span>
 <span class="sd">    * Ho, S.Y.S et al. (2025). &quot;Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.</span>
 <span class="sd">      medRxiv, 2025.03.10.25323655. https://doi.org/10.1101/2025.03.10.25323655</span>
+<span class="sd">    * Elgendi, M. et al. (2016). &quot;Optimal signal quality index for photoplethysmogram signals&quot;.</span>
+<span class="sd">      Bioengineering, 3(4), 1–15. doi: https://doi.org/10.3390/bioengineering3040021</span>
+<span class="sd">    * Selvaraj, N. et al. (2011). &quot;Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram&quot;.</span>
+<span class="sd">      Proc IEEE EMBC; pp. 4972–4975.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -468,14 +518,23 @@ document.write(`
 <span class="sd">      @suppress</span>
 <span class="sd">      plt.close()</span>
 
+<span class="sd">    * **Example 2:** &#39;skewness&#39; method</span>
+
+<span class="sd">    .. ipython:: python</span>
+
+<span class="sd">      import neurokit2 as nk</span>
+
+<span class="sd">      sampling_rate = 100</span>
+<span class="sd">      ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=80)</span>
+<span class="sd">      ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)</span>
+<span class="sd">      quality = nk.ppg_quality(ppg_cleaned, sampling_rate=sampling_rate, method=&quot;skewness&quot;, window_sec=3, overlap_sec=2)</span>
+
+<span class="sd">      nk.signal_plot([ppg_cleaned, quality], standardize=True)</span>
+<span class="sd">      plt.close()</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># remove capitalised letters</span>
-
-    <span class="c1"># Detect PPG peaks (if not done already)</span>
-    <span class="k">if</span> <span class="n">peaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
-        <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
     <span class="c1"># Sanitise method name</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="s2">&quot;orphanidou2015&quot;</span><span class="p">]:</span>
@@ -484,10 +543,43 @@ document.write(`
         <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;dissimilarity&quot;</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ho2025&quot;</span><span class="p">,</span> <span class="s2">&quot;ho&quot;</span><span class="p">,</span> <span class="s2">&quot;ibi&quot;</span><span class="p">,</span> <span class="s2">&quot;ici&quot;</span><span class="p">]:</span>
         <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;ici&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;skewness&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;skewness&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kurtosis&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;kurtosis&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;entropy&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;entropy&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;perfusion&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;perfusion&quot;</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;relative_power&quot;</span><span class="p">]:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;relative_power&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Method &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; not recognised. Please use &#39;templatematch&#39;, &#39;dissimilarity&#39;, or &#39;ho2025&#39;.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Method &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; not recognised. Please use &#39;templatematch&#39;, &#39;dissimilarity&#39;, &#39;ici&#39;, &#39;skewness&#39;,&quot;</span>
+            <span class="s2">&quot; &#39;kurtosis&#39;, &#39;entropy&#39;, &#39;perfusion&#39;, or &#39;relative_power&#39;.&quot;</span>
         <span class="p">)</span>
+
+    <span class="c1"># Check that raw PPG signal has been provided if required</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;perfusion&quot;</span><span class="p">,</span> <span class="s2">&quot;relative_power&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ppg_raw</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ppg_raw must be provided for the </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> method.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set default window values based on method if not provided</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;relative_power&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">window_sec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">window_sec</span> <span class="o">=</span> <span class="mi">60</span>
+        <span class="k">if</span> <span class="n">overlap_sec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">overlap_sec</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;skewness&quot;</span><span class="p">,</span> <span class="s2">&quot;kurtosis&quot;</span><span class="p">,</span> <span class="s2">&quot;perfusion&quot;</span><span class="p">,</span> <span class="s2">&quot;entropy&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">window_sec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">window_sec</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">if</span> <span class="n">overlap_sec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">overlap_sec</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># Detect PPG peaks (if not done already, and if required for the specified quality-assessment method)</span>
+    <span class="k">if</span> <span class="n">peaks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="s2">&quot;dissimilarity&quot;</span><span class="p">,</span> <span class="s2">&quot;ici&quot;</span><span class="p">]:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 
     <span class="c1"># Run &#39;templatematch&#39; and &#39;dissimilarity&#39; methods</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">,</span> <span class="s2">&quot;dissimilarity&quot;</span><span class="p">]:</span>
@@ -508,9 +600,178 @@ document.write(`
             <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ici&quot;</span><span class="p">,</span>
         <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;skewness&quot;</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_quality</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">signal_type</span><span class="o">=</span><span class="s2">&quot;ppg&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;skewness&quot;</span><span class="p">,</span>
+            <span class="n">window_sec</span><span class="o">=</span><span class="n">window_sec</span><span class="p">,</span>
+            <span class="n">overlap_sec</span><span class="o">=</span><span class="n">overlap_sec</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;kurtosis&quot;</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_quality</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">signal_type</span><span class="o">=</span><span class="s2">&quot;ppg&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kurtosis&quot;</span><span class="p">,</span>
+            <span class="n">window_sec</span><span class="o">=</span><span class="n">window_sec</span><span class="p">,</span>
+            <span class="n">overlap_sec</span><span class="o">=</span><span class="n">overlap_sec</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;entropy&quot;</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">signal_quality</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">signal_type</span><span class="o">=</span><span class="s2">&quot;ppg&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;entropy&quot;</span><span class="p">,</span>
+            <span class="n">window_sec</span><span class="o">=</span><span class="n">window_sec</span><span class="p">,</span>
+            <span class="n">overlap_sec</span><span class="o">=</span><span class="n">overlap_sec</span><span class="p">,</span>
+            <span class="n">no_bins</span><span class="o">=</span><span class="n">no_bins</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;perfusion&quot;</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">_windowed_metric</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span>
+            <span class="n">ppg_raw</span><span class="p">,</span>
+            <span class="n">_perfusion_func</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">window_sec</span><span class="o">=</span><span class="n">window_sec</span><span class="p">,</span>
+            <span class="n">overlap_sec</span><span class="o">=</span><span class="n">overlap_sec</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;relative_power&quot;</span><span class="p">:</span>
+        <span class="n">quality</span> <span class="o">=</span> <span class="n">_windowed_metric</span><span class="p">(</span>
+            <span class="n">ppg_cleaned</span><span class="p">,</span>
+            <span class="n">ppg_raw</span><span class="p">,</span>
+            <span class="n">_rel_power_func</span><span class="p">,</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">window_sec</span><span class="o">=</span><span class="n">window_sec</span><span class="p">,</span>
+            <span class="n">overlap_sec</span><span class="o">=</span><span class="n">overlap_sec</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">quality</span></div>
 
+
+
+<span class="c1"># Common window calculation for perfusion and relative_power</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_windowed_metric</span><span class="p">(</span>
+    <span class="n">clean_signal</span><span class="p">,</span> <span class="n">raw_signal</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">window_sec</span><span class="p">,</span> <span class="n">overlap_sec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+
+    <span class="c1"># check that clean_signal and raw_signal have the same length</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clean_signal</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw_signal</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Clean and raw signals must have the same length.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># setup windows</span>
+    <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window_sec</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">step_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">window_sec</span> <span class="o">-</span> <span class="n">overlap_sec</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">clean_signal</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="n">window_size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Signal length (</span><span class="si">{</span><span class="n">n_samples</span><span class="si">}</span><span class="s2"> samples) is shorter than window size (</span><span class="si">{</span><span class="n">window_size</span><span class="si">}</span><span class="s2"> samples).&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># calculate metric for each window</span>
+    <span class="n">metric_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">step_size</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">func</span> <span class="o">==</span> <span class="n">_rel_power_func</span><span class="p">:</span>
+            <span class="n">metric_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">func</span><span class="p">(</span>
+                    <span class="n">raw_signal</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">metric_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">func</span><span class="p">(</span>
+                    <span class="n">raw_signal</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">],</span>
+                    <span class="n">clean_signal</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="c1"># interpolate window to provide a continuous output (same length as input signal)</span>
+    <span class="n">window_centers</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span> <span class="o">+</span> <span class="n">window_size</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">signal_interpolate</span><span class="p">(</span>
+        <span class="n">x_values</span><span class="o">=</span><span class="n">window_centers</span><span class="p">,</span>
+        <span class="n">y_values</span><span class="o">=</span><span class="n">metric_values</span><span class="p">,</span>
+        <span class="n">x_new</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_samples</span><span class="p">),</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;previous&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">output</span><span class="p">[:</span> <span class="n">window_centers</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">metric_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_perfusion_func</span><span class="p">(</span><span class="n">raw_ppg</span><span class="p">,</span> <span class="n">cleaned_ppg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute perfusion index for PPG signal quality in moving windows.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_ppg : array-like</span>
+<span class="sd">        Raw PPG signal</span>
+<span class="sd">    cleaned_ppg : array-like</span>
+<span class="sd">        Cleaned PPG signal</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    perfusion : np.ndarray</span>
+<span class="sd">        Perfusion index values for each window, interpolated to signal length.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">raw_ppg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;raw_ppg must be provided for perfusion calculation.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># calculate baseline</span>
+    <span class="n">x_bar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">raw_ppg</span><span class="p">)</span>
+
+    <span class="c1"># avoid dividing by zero</span>
+    <span class="k">if</span> <span class="n">x_bar</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c1"># calculate perfusion</span>
+    <span class="n">perfusion</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cleaned_ppg</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cleaned_ppg</span><span class="p">))</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x_bar</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">return</span> <span class="n">perfusion</span>
+
+
+<span class="c1"># Define relative power function for a window</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_rel_power_func</span><span class="p">(</span><span class="n">raw_ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute relative power for PPG signal quality.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_ppg : array-like</span>
+<span class="sd">        Raw PPG signal.</span>
+<span class="sd">    sampling_rate : int</span>
+<span class="sd">        Sampling frequency (Hz).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    relative_power : float</span>
+<span class="sd">        Relative power: power in 1-2.25 Hz band divided by power in 0-8 Hz band.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Compute power in both bands</span>
+    <span class="n">power</span> <span class="o">=</span> <span class="n">signal_power</span><span class="p">(</span>
+        <span class="n">raw_ppg</span><span class="p">,</span>
+        <span class="n">frequency_band</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">power_1_2_25</span> <span class="o">=</span> <span class="n">power</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Hz_1_2.25&quot;</span><span class="p">]</span>
+    <span class="n">power_0_8</span> <span class="o">=</span> <span class="n">power</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Hz_0_8&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Avoid division by zero</span>
+    <span class="k">if</span> <span class="n">power_0_8</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="c1"># calculate relative power</span>
+    <span class="n">rel_power</span> <span class="o">=</span> <span class="n">power_1_2_25</span> <span class="o">/</span> <span class="n">power_0_8</span>
+
+    <span class="k">return</span> <span class="n">rel_power</span>
 </pre></div>
 
                 </article>

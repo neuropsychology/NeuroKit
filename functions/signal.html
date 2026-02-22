@@ -1368,7 +1368,7 @@ If not provided, then the default is ([y_values[0]], [y_values[-1]]).</p></li>
 
 <span class="go"># Add original data points</span>
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original datapoints&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1e9d3a3dd10&gt;</span>
+<span class="gh">Out[8]: </span><span class="go">&lt;matplotlib.collections.PathCollection at 0x1d8338de850&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_interpolate1.png"><img alt="../_images/p_signal_interpolate1.png" height="480" src="../_images/p_signal_interpolate1.png" width="640" />
@@ -1489,19 +1489,19 @@ described:</p>
 <span class="gp">In [13]: </span><span class="n">psd_brown</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_psd</span><span class="p">(</span><span class="n">brown</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_violet</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">)</span>
-<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d32b1d10&gt;]</span>
+<span class="gh">Out[14]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8335202d0&gt;]</span>
 
 <span class="gp">In [15]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_blue</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d37842d0&gt;]</span>
+<span class="gh">Out[15]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8329a1d10&gt;]</span>
 
 <span class="gp">In [16]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_white</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
-<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d3784410&gt;]</span>
+<span class="gh">Out[16]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8329a1e50&gt;]</span>
 
 <span class="gp">In [17]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_pink</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d3784550&gt;]</span>
+<span class="gh">Out[17]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8329a1f90&gt;]</span>
 
 <span class="gp">In [18]: </span><span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Frequency&quot;</span><span class="p">],</span> <span class="n">psd_brown</span><span class="p">[</span><span class="s2">&quot;Power&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">)</span>
-<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d3784690&gt;]</span>
+<span class="gh">Out[18]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8329a20d0&gt;]</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_noise2.png"><img alt="../_images/p_signal_noise2.png" height="1200" src="../_images/p_signal_noise2.png" width="1200" />
@@ -1550,16 +1550,16 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <span class="gp">In [5]: </span><span class="n">surrogate_random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_surrogate</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d3787610&gt;]</span>
+<span class="gh">Out[6]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d832951090&gt;]</span>
 
 <span class="gp">In [7]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d15e2850&gt;]</span>
+<span class="gh">Out[7]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8326e02d0&gt;]</span>
 
 <span class="gp">In [8]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d15e2990&gt;]</span>
+<span class="gh">Out[8]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8326e0410&gt;]</span>
 
 <span class="gp">In [9]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1e9d15e2ad0&gt;</span>
+<span class="gh">Out[9]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1d8326e0550&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate1.png"><img alt="../_images/p_signal_surrogate1.png" height="480" src="../_images/p_signal_surrogate1.png" width="640" />
@@ -1567,16 +1567,16 @@ It is a phase randomized, amplitude adjusted surrogates that have the same power
 <p>As we can see, the signal pattern is destroyed by random surrogates, but not in the IAAFT one.
 And their distributions are identical:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Original&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d16679d0&gt;]</span>
+<span class="gh">Out[10]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d832639450&gt;]</span>
 
 <span class="gp">In [11]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_iaaft</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;IAAFT Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d1593390&gt;]</span>
+<span class="gh">Out[11]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d832691590&gt;]</span>
 
 <span class="gp">In [12]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">nk</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">surrogate_random</span><span class="p">),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Random Surrogate&quot;</span><span class="p">)</span>
-<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1e9d15934d0&gt;]</span>
+<span class="gh">Out[12]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x1d8326916d0&gt;]</span>
 
 <span class="gp">In [13]: </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1e9d1593610&gt;</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;matplotlib.legend.Legend at 0x1d832691810&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_surrogate2.png"><img alt="../_images/p_signal_surrogate2.png" height="480" src="../_images/p_signal_surrogate2.png" width="640" />
@@ -1906,7 +1906,7 @@ if lag is not <code class="docutils literal notranslate"><span class="pre">None<
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">emg_simulate</span><span class="p">(</span><span class="n">burst_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_changepoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gh">Out[3]: </span><span class="go">array([1340, 1345, 1750, 2749, 2750, 4500, 5500, 5690, 7250, 8149, 8250])</span>
+<span class="gh">Out[3]: </span><span class="go">array([1750, 2750, 4500, 5500, 7250, 8250, 8994, 9649, 9653])</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_signal_changepoints1.png"><img alt="../_images/p_signal_changepoints1.png" height="480" src="../_images/p_signal_changepoints1.png" width="640" />
@@ -2770,8 +2770,8 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.signal.signal_quality">
-<span class="sig-name descname"><span class="pre">signal_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_inds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondary_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance_window_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_quality.html#signal_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal.signal_quality" title="Link to this definition">#</a></dt>
-<dd><p><strong>Assess quality of signal by comparing individual cycle morphologies with a template</strong></p>
+<span class="sig-name descname"><span class="pre">signal_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycle_inds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templatematch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secondary_detector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance_window_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_sec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_sec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/signal/signal_quality.html#signal_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.signal.signal_quality" title="Link to this definition">#</a></dt>
+<dd><p><strong>Assess quality of signal using various metrics</strong></p>
 <p>Assess the quality of a quasi-periodic signal (e.g. PPG, ECG or RSP) using the specified method. You can pass an
 unfiltered signal as an input, but typically a filtered signal (e.g. cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>, <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code> or
 <code class="docutils literal notranslate"><span class="pre">rsp_clean()</span></code>) will result in more reliable results. The following methods are available:</p>
@@ -2796,6 +2796,16 @@ all signal samples within an ICI are rated as high quality (1) if that ICI is pr
 quality (0) if that ICI is predicted to be inaccurate. This approach was derived from the previously
 proposed bSQI approach. The resulting quality signal is 1-padded, with all samples before the first cycle
 and after the last cycle set to 1.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code> method (based on Selveraj, 2011 and Elgendi, 2016) computes the skewness of the signal in moving
+windows. The skewness is a measure of the asymmetry of the probability distribution of the signal’s amplitude values.
+For the PPG, higher quality signals were generally found to have higher skewness values (Elgendi, 2016).
+The window length and overlap can be adjusted using the <code class="docutils literal notranslate"><span class="pre">window_sec</span></code> and <code class="docutils literal notranslate"><span class="pre">overlap_sec</span></code> parameters.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code> method (based on Selveraj, 2011 and Elgendi, 2016) computes the kurtosis of the signal in moving
+windows. The kurtosis is a measure of the “tailedness” of the probability distribution of the signal’s amplitude values.
+For the PPG, higher quality signals are generally found to have higher kurtosis values (Elgendi, 2016).
+The window length and overlap can be adjusted using the <code class="docutils literal notranslate"><span class="pre">window_sec</span></code> and <code class="docutils literal notranslate"><span class="pre">overlap_sec</span></code> parameters.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code> method (based on Selvaraj et al., 2011, and inspired by Elgendi, 2016) computes the entropy of the
+signal in moving windows. The entropy is a measure of the randomness in the signal’s amplitude values.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2805,20 +2815,26 @@ and after the last cycle set to 1.</p></li>
 <li><p><strong>cycle_inds</strong> (<em>tuple or list</em>) – The list of cycle samples (e.g. beat or breath samples, such as PPG or ECG peaks returned by <code class="docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>
 or <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, or RSP peaks returned by <code class="docutils literal notranslate"><span class="pre">rsp_peaks()</span></code>).</p></li>
 <li><p><strong>signal_type</strong> (<em>str</em>) – The signal type (e.g. ‘ppg’, ‘ecg’, or ‘rsp’).</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>. The default is
-<code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ici&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code>.</p></li>
 <li><p><strong>primary_detector</strong> (<em>str</em>) – The name of the primary cycle (i.e. beat or breath) detector (e.g. the defaults are <code class="docutils literal notranslate"><span class="pre">&quot;unsw&quot;</span></code> for the ECG, and
 <code class="docutils literal notranslate"><span class="pre">&quot;charlton&quot;</span></code> for the PPG).</p></li>
 <li><p><strong>secondary_detector</strong> (<em>str</em>) – The name of the secondary cycle detector (e.g. the defaults are <code class="docutils literal notranslate"><span class="pre">&quot;neurokit&quot;</span></code> for the ECG, and <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>
 for the PPG).</p></li>
 <li><p><strong>tolerance_window_ms</strong> (<em>int</em>) – The tolerance window size (in milliseconds) for use with the “ici” method when assessing agreement between
 primary and secondary cycle detectors.</p></li>
+<li><p><strong>window_sec</strong> (<em>float, optional</em>) – Window length in seconds for windowed metrics (default: 3). Used for the <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code> methods.</p></li>
+<li><p><strong>overlap_sec</strong> (<em>float, optional</em>) – Overlap between windows in seconds for windowed metrics (default: 2). Used for the <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>
+methods.</p></li>
+<li><p><strong>no_bins</strong> (<em>int</em>) – Number of bins for <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code> calculation (default: 16).</p></li>
 <li><p><strong>**kwargs</strong> – Additional keyword arguments, usually specific for each method.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>quality</strong> (<em>array</em>) – Vector containing the quality index ranging from 0 to 1 for <code class="docutils literal notranslate"><span class="pre">&quot;templatematch&quot;</span></code> method,
-or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method.</p>
+or an unbounded value (where 0 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;dissimilarity&quot;</span></code> method,
+or zeros and ones (where 1 indicates high quality) for <code class="docutils literal notranslate"><span class="pre">&quot;ici&quot;</span></code> method,
+or an unbounded value for <code class="docutils literal notranslate"><span class="pre">&quot;skewness&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kurtosis&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;entropy&quot;</span></code> methods.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -2833,6 +2849,10 @@ derivation and applications to wireless monitoring”. IEEE Journal of Biomedica
 Applications in reliability measure for pulse oximetry. Informatics in Medicine Unlocked, 16, 100222.</p></li>
 <li><p>Ho, S.Y.S et al. (2025). “Accurate RR-interval extraction from single-lead, telehealth electrocardiogram signals.
 medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.org/10.1101/2025.03.10.25323655">https://doi.org/10.1101/2025.03.10.25323655</a></p></li>
+<li><p>Elgendi, M. et al. (2016). “Optimal signal quality index for photoplethysmogram signals”.
+Bioengineering, 3(4), 1–15. doi: <a class="reference external" href="https://doi.org/10.3390/bioengineering3040021">https://doi.org/10.3390/bioengineering3040021</a></p></li>
+<li><p>Selvaraj, N. et al. (2011). “Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram”.
+Proc IEEE EMBC; pp. 4972–4975.</p></li>
 </ul>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -2876,7 +2896,7 @@ medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.or
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>Example 2:</strong> Using template-matching method to assess RSP signal quality</p></li>
+<li><p><strong>Example 3:</strong> Using template-matching method to assess RSP signal quality</p></li>
 </ul>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
 
@@ -2893,6 +2913,24 @@ medRxiv, 2025.03.10.25323655. <a class="reference external" href="https://doi.or
 <span class="gp">In [20]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">rsp_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [21]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 4:</strong> Using skewness method to assess PPG signal quality</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [22]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
+
+<span class="gp">In [23]: </span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="gp">In [24]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+
+<span class="gp">In [25]: </span><span class="n">ppg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_clean</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">)</span>
+
+<span class="gp">In [26]: </span><span class="n">quality</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_quality</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">signal_type</span><span class="o">=</span><span class="s2">&quot;ppg&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;skewness&quot;</span><span class="p">)</span>
+
+<span class="gp">In [27]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">quality</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [28]: </span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
