@@ -858,6 +858,7 @@ document.write(`
         <span class="c1"># removed plotting functionality from MATLAB implementation</span>
         <span class="n">Pxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
         <span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">smashedECG</span><span class="p">)):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">smashedECG</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>  <span class="c1"># Flatten to 1D array</span>
@@ -1277,7 +1278,7 @@ document.write(`
     <span class="n">clt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">tmp</span><span class="p">])</span>
 
     <span class="c1"># Find adaptive threshold</span>
-    <span class="n">window_size</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">sampling_rate</span>
+    <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>
 
     <span class="c1"># Apply fast moving window average with 1D convolution</span>
 
@@ -2192,6 +2193,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># initialise variables</span>
+    <span class="n">sampling_frequency</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_frequency</span><span class="p">)</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
     <span class="n">min_distance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">sampling_frequency</span><span class="p">)</span>
     <span class="n">signal_peaks</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">min_distance</span><span class="p">]</span>
