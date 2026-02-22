@@ -401,6 +401,12 @@ document.write(`
 <span class="sd">    * ``&#39;nabian2018&#39;``: Lowpass filter the signal below 40 Hz. If `heart_rate` is provided then the function</span>
 <span class="sd">      checks whether 40 Hz is at least 10 times the cardiac frequency and less than half of the sampling frequency, and</span>
 <span class="sd">      raises an error if not.</span>
+<span class="sd">    * ``&#39;langevin2021&#39;``: Bandpass filter between 0.7 and 3.5 Hz using a second-order Butterworth filter,</span>
+<span class="sd">      applied by Langevin et al. (2021) and Vorreuther et al. (2025) in an EmotiBit wearable PPG validation</span>
+<span class="sd">      study. Note that these filter parameters were not systematically optimized — they reflect the pipeline</span>
+<span class="sd">      used in a specific device-validation context. The upper cutoff (3.5 Hz) is narrower than ``&#39;elgendi&#39;``</span>
+<span class="sd">      (8 Hz), which may attenuate higher-frequency components. This method should be used primarily for research</span>
+<span class="sd">      purposes until further validation is conducted.</span>
 <span class="sd">    * ``&#39;goda2024&#39;``: Bandpass filter the signal between 0.5 and 12 Hz using a fourth-order Chebyshev Type II filter.</span>
 
 <span class="sd">    Parameters</span>
@@ -413,8 +419,9 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ppg_signal`` (in Hz, i.e., samples/second). The default is 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;`` (default), ``&quot;nabian2018&quot;``, ``&quot;goda2024&quot;``,</span>
-<span class="sd">        or ``&quot;none&quot;``. If ``&quot;none&quot;`` is passed, the raw signal will be returned without any cleaning.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;`` (default), ``&quot;nabian2018&quot;``,</span>
+<span class="sd">        ``&quot;langevin2021&quot;``, ``&quot;goda2024&quot;``, or ``&quot;none&quot;``. If ``&quot;none&quot;`` is passed, the raw signal</span>
+<span class="sd">        will be returned without any cleaning.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -437,11 +444,13 @@ document.write(`
 <span class="sd">      ppg = nk.ppg_simulate(heart_rate=75, duration=30)</span>
 <span class="sd">      ppg_elgendi = nk.ppg_clean(ppg, method=&#39;elgendi&#39;)</span>
 <span class="sd">      ppg_nabian = nk.ppg_clean(ppg, method=&#39;nabian2018&#39;, heart_rate=75)</span>
+<span class="sd">      ppg_langevin = nk.ppg_clean(ppg, method=&#39;langevin2021&#39;)</span>
 
 <span class="sd">      # Plot and compare methods</span>
 <span class="sd">      signals = pd.DataFrame({&#39;PPG_Raw&#39; : ppg,</span>
 <span class="sd">                              &#39;PPG_Elgendi&#39; : ppg_elgendi,</span>
-<span class="sd">                              &#39;PPG_Nabian&#39; : ppg_nabian})</span>
+<span class="sd">                              &#39;PPG_Nabian&#39; : ppg_nabian,</span>
+<span class="sd">                              &#39;PPG_Langevin&#39; : ppg_langevin})</span>
 <span class="sd">      @savefig p_ppg_clean1.png scale=100%</span>
 <span class="sd">      signals.plot()</span>
 <span class="sd">      @suppress</span>
@@ -453,6 +462,13 @@ document.write(`
 <span class="sd">    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).</span>
 <span class="sd">      An open-source feature extraction tool for the analysis of peripheral physiological data.</span>
 <span class="sd">      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.</span>
+<span class="sd">    * Langevin, A., Bégin, W., Lavallière, M., Beaulieu, L.-D., Menelas, B.-D. J., Gaboury, S.,</span>
+<span class="sd">      et al. (2021). “Criterion validation of an open-source wearable physiological sensors device,”</span>
+<span class="sd">      in Proceedings of the 9th International Conference on Sport Sciences Research and Technology</span>
+<span class="sd">      Support – icSPORTS (SciTePress), 95–105.</span>
+<span class="sd">    * Vorreuther, A., Tagalidou, N., &amp; Vukelić, M. (2025). Validation of the EmotiBit wearable</span>
+<span class="sd">      sensor for heart-based measures under varying workload conditions. Front Neuroergonomics,</span>
+<span class="sd">      6, 1585469.</span>
 <span class="sd">    * M. Elgendi, I. Norton, M. Brearley, D. Abbott, and D. Schuurmans (2013).</span>
 <span class="sd">      Systolic peak detection in acceleration photoplethysmograms measured from emergency responders</span>
 <span class="sd">      in tropical conditions. PLoS ONE, 8(10), 1–11.</span>
@@ -478,13 +494,15 @@ document.write(`
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_elgendi</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nabian2018&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_nabian2018</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="n">heart_rate</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;langevin2021&quot;</span><span class="p">,</span> <span class="s2">&quot;langevin&quot;</span><span class="p">]:</span>
+        <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_langevin2021</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;goda&quot;</span><span class="p">,</span> <span class="s2">&quot;goda2024&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">_ppg_clean_goda</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">clean</span> <span class="o">=</span> <span class="n">ppg_signal</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;`method` not found. Must be one of &#39;elgendi&#39;, &#39;nabian2018&#39;, &#39;goda2024&#39;, or &#39;none&#39;.&quot;</span>
+            <span class="s2">&quot;`method` not found. Must be one of &#39;elgendi&#39;, &#39;nabian2018&#39;, &#39;langevin2021&#39;, &#39;goda2024&#39;, or &#39;none&#39;.&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">clean</span></div>
@@ -510,7 +528,11 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_ppg_clean_nabian2018</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Low-pass filter for continuous BP signal preprocessing, adapted from Nabian et al. (2018).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Low-pass filter for continuous BP signal preprocessing, adapted from Nabian et al.</span>
+
+<span class="sd">    (2018).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Determine low-pass filter value</span>
     <span class="n">highcut</span> <span class="o">=</span> <span class="mi">40</span>
@@ -534,6 +556,23 @@ document.write(`
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">filtered</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ppg_clean_langevin2021</span><span class="p">(</span><span class="n">ppg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Band-pass filter (0.7–3.5 Hz, Butterworth order 2) from Langevin et al. (2021).</span>
+
+<span class="sd">    Note: these parameters reflect the pipeline used in a specific EmotiBit device-validation study.</span>
+<span class="sd">    Use primarily for reproducibility of those results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">ppg_signal</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span>
+        <span class="n">lowcut</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">highcut</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;butterworth&quot;</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">filtered</span>
 
 

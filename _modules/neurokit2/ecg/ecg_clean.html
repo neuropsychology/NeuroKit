@@ -404,12 +404,12 @@ document.write(`
 <span class="sd">      SR). The 0.67 Hz cutoff value was selected based on the fact that there are no morphological</span>
 <span class="sd">      features below the heartrate (assuming a minimum heart rate of 40 bpm).</span>
 <span class="sd">    * ``&#39;pantompkins1985&#39;``: Method used in Pan &amp; Tompkins (1985): band-pass filter between 5 and 15 Hz</span>
-<span class="sd">      using a Butterworth filter (with zi provided - initial zero-input response provided to avoid </span>
+<span class="sd">      using a Butterworth filter (with zi provided - initial zero-input response provided to avoid</span>
 <span class="sd">      transient artifact at beginning).</span>
 <span class="sd">    * ``&#39;hamilton2002&#39;``: Method used in Hamilton (2002): band-pass filter between 8 and 16 Hz</span>
 <span class="sd">      using a Butterworth filter (with zi provided).</span>
 <span class="sd">    * ``&#39;elgendi2010&#39;``: Method used in Elgendi et al. (2010): band-pass filter between 8 and 20 Hz</span>
-<span class="sd">      using a Butterworth filter (with zi provided). </span>
+<span class="sd">      using a Butterworth filter (with zi provided).</span>
 <span class="sd">    * ``&#39;engzeemod2012&#39;``: Method used in Engelse &amp; Zeelenberg (1979). **Please help providing a</span>
 <span class="sd">      better description!**</span>
 <span class="sd">    * ``&#39;vg&#39;``: Method used in Visibility Graph Based Detection Emrich et al. (2023)</span>
@@ -480,6 +480,7 @@ document.write(`
 <span class="sd">    * Emrich, J., Koka, T., Wirth, S., &amp; Muma, M. (2023), Accelerated Sample-Accurate R-Peak</span>
 <span class="sd">      Detectors Based on Visibility Graphs. 31st European Signal Processing Conference</span>
 <span class="sd">      (EUSIPCO), 1090-1094, doi: 10.23919/EUSIPCO58844.2023.10290007</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)</span>
@@ -556,7 +557,9 @@ document.write(`
         <span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;powerline&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="n">signal_filter</span><span class="p">(</span>
+        <span class="n">signal</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;powerline&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">clean</span>
 
 
@@ -580,7 +583,9 @@ document.write(`
 
     <span class="c1">#   -&gt; get_filter()</span>
     <span class="c1">#     -&gt; _norm_freq()</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+    <span class="p">)</span>  <span class="c1"># Normalize frequency to Nyquist Frequency (Fs/2).</span>
 
     <span class="c1">#     -&gt; get coeffs</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
@@ -744,10 +749,14 @@ document.write(`
     <span class="p">)</span>
 
     <span class="c1"># Detect peaks</span>
-    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">filtered</span><span class="p">))</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">find_peaks</span><span class="p">(</span>
+        <span class="n">filtered</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">filtered</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">peaks</span> <span class="o">+</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">)]</span>
 
-    <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">p</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">p</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span>
+    <span class="p">]</span>
     <span class="n">epochs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">filtered</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">])</span>
     <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 

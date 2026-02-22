@@ -458,19 +458,9 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Sanitize inputs</span>
-    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span>
-        <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="p">)</span>
-    <span class="n">method_peaks</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span>
-        <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="p">)</span>
-    <span class="n">method_quality</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">method_quality</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="p">)</span>
+    <span class="n">method_cleaning</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_cleaning</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_cleaning</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">method_peaks</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">method_peaks</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_peaks</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">method_quality</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">method_quality</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="c1"># Create dictionary with all inputs</span>
     <span class="n">report_info</span> <span class="o">=</span> <span class="p">{</span>
@@ -493,10 +483,12 @@ document.write(`
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;kwargs_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs_quality</span>
 
     <span class="c1"># Initialize refs list with NeuroKit2 reference</span>
-    <span class="n">refs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;&quot;Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,</span>
-<span class="s2">    Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.</span>
-<span class="s2">    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y</span>
-<span class="s2">    &quot;&quot;&quot;</span><span class="p">]</span>
+    <span class="n">refs</span> <span class="o">=</span> <span class="p">[</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,</span>
+<span class="sd">    Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.</span>
+<span class="sd">    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="p">]</span>
 
     <span class="c1"># 1. Cleaning</span>
     <span class="c1"># ------------</span>
@@ -530,22 +522,32 @@ document.write(`
 <span class="sd">            An open-source feature extraction tool for the analysis of peripheral physiological data.</span>
 <span class="sd">            IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.&quot;&quot;&quot;</span>
         <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;langevin2021&quot;</span><span class="p">,</span> <span class="s2">&quot;langevin&quot;</span><span class="p">]:</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="s2">&quot; was preprocessed using a bandpass filter ([0.7 - 3.5 Hz], Butterworth 2nd order;&quot;</span> <span class="o">+</span> <span class="s2">&quot; adapted from &quot;</span>
+            <span class="s2">&quot;Langevin et al., 2021).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Langevin, A., Bégin, W., Lavallière, M., Beaulieu, L.-D., Menelas, B.-D. J., Gaboury, S.,</span>
+<span class="sd">              et al. (2021). “Criterion validation of an open-source wearable physiological sensors device,”</span>
+<span class="sd">              in Proceedings of the 9th International Conference on Sport Sciences Research and Technology</span>
+<span class="sd">              Support – icSPORTS (SciTePress), 95–105.</span>
+<span class="sd">              Vorreuther, A., Tagalidou, N., &amp; Vukelić, M. (2025). Validation of the EmotiBit wearable</span>
+<span class="sd">              sensor for heart-based measures under varying workload conditions. Front Neuroergonomics,</span>
+<span class="sd">              6, 1585469.&quot;&quot;&quot;</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method_cleaning</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
-        <span class="n">report_info</span><span class="p">[</span>
-            <span class="s2">&quot;text_cleaning&quot;</span>
-        <span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; was directly used for peak detection without preprocessing.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; was directly used for peak detection without preprocessing.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># just in case more methods are added</span>
-        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;was cleaned following the &quot;</span> <span class="o">+</span> <span class="n">method</span> <span class="o">+</span> <span class="s2">&quot; method.&quot;</span>
-        <span class="p">)</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_cleaning&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;was cleaned following the &quot;</span> <span class="o">+</span> <span class="n">method</span> <span class="o">+</span> <span class="s2">&quot; method.&quot;</span>
 
     <span class="c1"># 2. Peaks</span>
     <span class="c1"># ----------</span>
     <span class="k">if</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="s2">&quot;elgendi13&quot;</span><span class="p">]:</span>
-        <span class="n">report_info</span><span class="p">[</span>
-            <span class="s2">&quot;text_peaks&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The peak detection was carried out using the method described in Elgendi et al. (2013).&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The peak detection was carried out using the method described in Elgendi et al. (2013).&quot;</span>
+        <span class="p">)</span>
         <span class="n">refs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013)</span>
 <span class="sd">            Systolic Peak Detection in Acceleration Photoplethysmograms</span>
@@ -555,16 +557,12 @@ document.write(`
     <span class="k">elif</span> <span class="n">method_peaks</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;There was no peak detection carried out.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">report_info</span><span class="p">[</span>
-            <span class="s2">&quot;text_peaks&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_peaks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The peak detection was carried out using the method </span><span class="si">{</span><span class="n">method_peaks</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="c1"># 2. Quality</span>
     <span class="c1"># ----------</span>
     <span class="k">if</span> <span class="n">method_quality</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;templatematch&quot;</span><span class="p">]:</span>
-        <span class="n">report_info</span><span class="p">[</span>
-            <span class="s2">&quot;text_quality&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The quality assessment was carried out using template-matching, approximately as described &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;in Orphanidou et al. (2015).&quot;</span>
         <span class="p">)</span>
@@ -575,9 +573,7 @@ document.write(`
 <span class="sd">            IEEE Journal of Biomedical and Health Informatics 19(3): 832–838. doi:10.1109/JBHI.2014.2338351.&quot;&quot;&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">method_quality</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;disimilarity&quot;</span><span class="p">]:</span>
-        <span class="n">report_info</span><span class="p">[</span>
-            <span class="s2">&quot;text_quality&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The quality assessment was carried out using a disimilarity measure of positive-peaked beats, &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;approximately as described in Sabeti et al. (2019).&quot;</span>
         <span class="p">)</span>
@@ -590,9 +586,7 @@ document.write(`
     <span class="k">elif</span> <span class="n">method_quality</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
         <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;There was no quality assessment carried out.&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">report_info</span><span class="p">[</span>
-            <span class="s2">&quot;text_quality&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The quality assessment was carried out using the method </span><span class="si">{</span><span class="n">method_quality</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;text_quality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The quality assessment was carried out using the method </span><span class="si">{</span><span class="n">method_quality</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="n">report_info</span><span class="p">[</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">refs</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">report_info</span></div>
