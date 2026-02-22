@@ -384,9 +384,7 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.interpolate</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.parse</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
@@ -401,7 +399,8 @@ document.write(`
     <span class="n">handle_clock_resets</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">upsample_factor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
     <span class="n">fill_method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">,</span>
-    <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+    <span class="n">fill_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fillmissing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="n">timestamp_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -455,14 +454,23 @@ document.write(`
 <span class="sd">        is calculated as: `max(nominal_srate) * upsample_factor`.</span>
 <span class="sd">        Higher factors reduce aliasing but increase memory usage. Default is 2.0.</span>
 <span class="sd">    fill_method : {&#39;ffill&#39;, &#39;bfill&#39;, None}, optional</span>
-<span class="sd">        Method used to fill NaNs arising from resampling (e.g., zero-order hold).</span>
-<span class="sd">        Default is &#39;ffill&#39; (forward fill).</span>
+<span class="sd">        Method used to fill NaNs arising from resampling (e.g., at the very start of the</span>
+<span class="sd">        recording before the first sample). Default is ``&#39;ffill&#39;`` (forward fill).</span>
+<span class="sd">        When ``fill_max`` is set this is automatically overridden to ``None`` so</span>
+<span class="sd">        that masked gap regions are not silently forward-filled back in. Explicitly pass</span>
+<span class="sd">        a value to override this behaviour.</span>
 <span class="sd">    fill_value : float or int, optional</span>
-<span class="sd">        Value used to fill remaining NaNs (e.g., at the start of the recording before</span>
-<span class="sd">        the first sample). Default is 0.</span>
-<span class="sd">    fillmissing : float or int, optional</span>
-<span class="sd">        DEPRECATED: This argument is deprecated and has no direct equivalent in the new</span>
-<span class="sd">        implementation. It previously controlled filling of gaps larger than a threshold.</span>
+<span class="sd">        Value used to fill any NaNs that remain after ``fill_method`` is applied.</span>
+<span class="sd">        Default is ``np.nan``.</span>
+<span class="sd">    fill_max : float or None, optional</span>
+<span class="sd">        If provided, any region of the resampled output that falls inside a gap between</span>
+<span class="sd">        consecutive original samples larger than this threshold (in seconds) is set back</span>
+<span class="sd">        to ``NaN`` after interpolation. This prevents the interpolator from silently</span>
+<span class="sd">        bridging large discontinuities (e.g., paused recordings). When this is set,</span>
+<span class="sd">        ``fill_method`` is coerced to ``None`` (see above). Default is ``None`` (no</span>
+<span class="sd">        masking).</span>
+<span class="sd">    fillmissing : float or None, optional</span>
+<span class="sd">        Deprecated. Use ``fill_max`` instead.</span>
 <span class="sd">    interpolation_method : {&#39;linear&#39;, &#39;previous&#39;}, optional</span>
 <span class="sd">        Method used for interpolating data onto the new timebase.</span>
 <span class="sd">    timestamp_reset : bool, optional</span>
@@ -509,17 +517,30 @@ document.write(`
 <span class="sd">      import neurokit2 as nk</span>
 
 <span class="sd">      # data, info = nk.read_xdf(&quot;data.xdf&quot;)</span>
-<span class="sd">      # sampling_rate = info[&quot;sampling_rate&quot;]</span>
+<span class="sd">      # info[&quot;sampling_rates_original&quot;]   # nominal rates per stream</span>
+<span class="sd">      # info[&quot;sampling_rates_effective&quot;]  # computed effective rates per stream</span>
+<span class="sd">      # info[&quot;datetime&quot;]                  # recording datetime from header</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># DEPRECATION WARNING</span>
+    <span class="c1"># Handle deprecated fillmissing argument</span>
     <span class="k">if</span> <span class="n">fillmissing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;The &#39;fillmissing&#39; argument is deprecated and has no direct equivalent in the new optimized implementation. &quot;</span>
-            <span class="s2">&quot;This function uses &#39;scipy.interpolate&#39; which interpolates across all gaps regardless of duration. &quot;</span>
-            <span class="s2">&quot;If you need to mask large gaps, please do so on the returned DataFrame.&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="s2">&quot;The &#39;fillmissing&#39; argument is deprecated. Use &#39;fill_max&#39; instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="k">if</span> <span class="n">fill_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fill_max</span> <span class="o">=</span> <span class="n">fillmissing</span>
+
+    <span class="c1"># When gap masking is active, forward/backward fill would silently erase the</span>
+    <span class="c1"># masked NaNs.  Coerce fill_method to None so gaps are preserved.</span>
+    <span class="k">if</span> <span class="n">fill_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fill_method</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ffill&quot;</span><span class="p">,</span> <span class="s2">&quot;bfill&quot;</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;fill_max is set: fill_method=</span><span class="si">{</span><span class="n">fill_method</span><span class="si">!r}</span><span class="s2"> would erase masked gap &quot;</span>
+            <span class="s2">&quot;NaNs by filling through them. Coercing fill_method to None. &quot;</span>
+            <span class="s2">&quot;Pass fill_method=None explicitly to silence this warning.&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">fill_method</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># Load XDF streams</span>
     <span class="n">streams</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="n">_load_xdf</span><span class="p">(</span>
@@ -546,16 +567,25 @@ document.write(`
         <span class="n">streams</span><span class="p">,</span> <span class="n">timestamp_reset</span><span class="o">=</span><span class="n">timestamp_reset</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
     <span class="p">)</span>
 
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stream_data</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;No valid streams remain after sanitization. &quot;</span>
+            <span class="s2">&quot;Check that the file contains streams with timestamps.&quot;</span>
+        <span class="p">)</span>
+
     <span class="c1"># Resample and synchronize streams</span>
-    <span class="n">resampled_df</span> <span class="o">=</span> <span class="n">_synchronize_streams</span><span class="p">(</span>
+    <span class="n">resampled_df</span><span class="p">,</span> <span class="n">target_fs</span> <span class="o">=</span> <span class="n">_synchronize_streams</span><span class="p">(</span>
         <span class="n">stream_data</span><span class="p">,</span>
         <span class="n">upsample_factor</span><span class="o">=</span><span class="n">upsample_factor</span><span class="p">,</span>
         <span class="n">fill_method</span><span class="o">=</span><span class="n">fill_method</span><span class="p">,</span>
         <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">,</span>
+        <span class="n">max_gap</span><span class="o">=</span><span class="n">fill_max</span><span class="p">,</span>
         <span class="n">interpolation_method</span><span class="o">=</span><span class="n">interpolation_method</span><span class="p">,</span>
         <span class="n">timestamp_method</span><span class="o">=</span><span class="n">timestamp_method</span><span class="p">,</span>
         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;sampling_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_fs</span>
 
     <span class="c1"># Quality Control Plots</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">show</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">and</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
@@ -572,6 +602,7 @@ document.write(`
             <span class="n">resampled_df</span><span class="p">,</span>
             <span class="n">window_start</span><span class="o">=</span><span class="n">show_start</span><span class="p">,</span>
             <span class="n">window_duration</span><span class="o">=</span><span class="n">show_duration</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">resampled_df</span><span class="p">,</span> <span class="n">info</span></div>
 
@@ -581,10 +612,16 @@ document.write(`
 <span class="c1"># Quality Control</span>
 <span class="c1"># =======================================</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_visual_control</span><span class="p">(</span>
-    <span class="n">show</span><span class="p">,</span> <span class="n">stream_data</span><span class="p">,</span> <span class="n">resampled_df</span><span class="p">,</span> <span class="n">window_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_duration</span><span class="o">=</span><span class="mf">1.0</span>
+    <span class="n">show</span><span class="p">,</span>
+    <span class="n">stream_data</span><span class="p">,</span>
+    <span class="n">resampled_df</span><span class="p">,</span>
+    <span class="n">window_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">window_duration</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="c1"># --- Custom Subplot Generation ---</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Generating custom plot for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">show</span><span class="p">)</span><span class="si">}</span><span class="s2"> specified channels...&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Generating custom plot for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">show</span><span class="p">)</span><span class="si">}</span><span class="s2"> specified channels...&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">window_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">window_start</span> <span class="o">=</span> <span class="n">resampled_df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">resampled_df</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span>
@@ -612,7 +649,6 @@ document.write(`
             <span class="n">channel_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">original_data_map</span>
             <span class="ow">or</span> <span class="n">channel_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resampled_df</span><span class="o">.</span><span class="n">columns</span>
         <span class="p">):</span>
-            <span class="c1"># --- FIX START: Enhanced Debug Message ---</span>
             <span class="c1"># Get a sorted list of available columns to help the user</span>
             <span class="n">available_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">resampled_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
 
@@ -620,7 +656,6 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[Visual Control Error] Channel &#39;</span><span class="si">{</span><span class="n">channel_name</span><span class="si">}</span><span class="s2">&#39; not found in data.</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;Did you mean one of these?</span><span class="se">\n</span><span class="si">{</span><span class="n">available_cols</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-            <span class="c1"># --- FIX END ---</span>
 
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Channel &#39;</span><span class="si">{</span><span class="n">channel_name</span><span class="si">}</span><span class="s2">&#39; - NOT FOUND&quot;</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -722,22 +757,31 @@ document.write(`
     <span class="n">stream_data</span><span class="p">,</span>
     <span class="n">upsample_factor</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
     <span class="n">fill_method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">,</span>
-    <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+    <span class="n">max_gap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="n">timestamp_method</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span><span class="p">,</span>
     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;precise&quot;</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    - upsample_factor: Factor to multiply max nominal srate by.</span>
 <span class="sd">    - fill_method: &#39;ffill&#39;, &#39;bfill&#39;, or None</span>
 <span class="sd">    - fill_value: Value for remaining NaNs</span>
-<span class="sd">    - show (list or None): List of channel names to plot on a single figure.</span>
-<span class="sd">                           If None, no plots are generated.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># --- Compute Target Sampling Rate ---</span>
     <span class="n">target_fs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;nominal_srate&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stream_data</span><span class="p">])</span> <span class="o">*</span> <span class="n">upsample_factor</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target sampling rate: </span><span class="si">{</span><span class="n">target_fs</span><span class="si">}</span><span class="s2"> Hz&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target_fs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;All streams have nominal_srate=0 (irregular/event streams). &quot;</span>
+            <span class="s2">&quot;Cannot determine a target sampling rate automatically. &quot;</span>
+            <span class="s2">&quot;Consider adding at least one stream with a non-zero nominal_srate, &quot;</span>
+            <span class="s2">&quot;or pre-processing the file to assign one.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target sampling rate: </span><span class="si">{</span><span class="n">target_fs</span><span class="si">}</span><span class="s2"> Hz&quot;</span><span class="p">)</span>
 
     <span class="c1"># --- Run Resampling ---</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -746,22 +790,25 @@ document.write(`
         <span class="n">target_fs</span><span class="o">=</span><span class="n">target_fs</span><span class="p">,</span>
         <span class="n">fill_method</span><span class="o">=</span><span class="n">fill_method</span><span class="p">,</span>
         <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">,</span>
+        <span class="n">max_gap</span><span class="o">=</span><span class="n">max_gap</span><span class="p">,</span>
         <span class="n">interpolation_method</span><span class="o">=</span><span class="n">interpolation_method</span><span class="p">,</span>
         <span class="n">timestamp_method</span><span class="o">=</span><span class="n">timestamp_method</span><span class="p">,</span>
         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resampling complete in </span><span class="si">{</span><span class="n">duration</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resampling complete in </span><span class="si">{</span><span class="n">duration</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">resampled_df</span>
+    <span class="k">return</span> <span class="n">resampled_df</span><span class="p">,</span> <span class="n">target_fs</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_resample_streams</span><span class="p">(</span>
     <span class="n">stream_data</span><span class="p">,</span>
     <span class="n">target_fs</span><span class="p">,</span>
     <span class="n">fill_method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">,</span>
-    <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+    <span class="n">max_gap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="n">timestamp_method</span><span class="o">=</span><span class="s2">&quot;circular&quot;</span><span class="p">,</span>
     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;precise&quot;</span><span class="p">,</span>
@@ -775,6 +822,8 @@ document.write(`
 <span class="sd">        target_fs (float): The target sampling rate in Hz.</span>
 <span class="sd">        fill_method (str): Method for filling NaNs (&#39;ffill&#39;, &#39;bfill&#39;, None).</span>
 <span class="sd">        fill_value (any): Value to fill remaining NaNs (e.g., 0 or np.nan).</span>
+<span class="sd">        max_gap (float or None): If set, interpolated regions that span</span>
+<span class="sd">            original-data gaps larger than this value are reset to NaN.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        pd.DataFrame: A single DataFrame with all streams resampled and merged.</span>
@@ -803,6 +852,7 @@ document.write(`
         <span class="n">cols</span><span class="p">,</span>
         <span class="n">col_to_idx</span><span class="p">,</span>
         <span class="n">interpolation_method</span><span class="o">=</span><span class="n">interpolation_method</span><span class="p">,</span>
+        <span class="n">max_gap</span><span class="o">=</span><span class="n">max_gap</span><span class="p">,</span>
         <span class="n">dtype</span><span class="o">=</span><span class="n">target_dtype</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -954,12 +1004,58 @@ document.write(`
     <span class="k">return</span> <span class="n">new_timestamps</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_mask_large_gaps</span><span class="p">(</span><span class="n">original_ts</span><span class="p">,</span> <span class="n">new_ts</span><span class="p">,</span> <span class="n">interpolated_data</span><span class="p">,</span> <span class="n">max_gap</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set interpolated values back to NaN wherever the new timestamps fall inside</span>
+<span class="sd">    a gap between consecutive original samples that exceeds *max_gap*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    original_ts : np.ndarray, shape (N,)</span>
+<span class="sd">        Sorted original timestamps.</span>
+<span class="sd">    new_ts : np.ndarray, shape (M,)</span>
+<span class="sd">        Sorted resampled timestamps.</span>
+<span class="sd">    interpolated_data : np.ndarray, shape (M, C)</span>
+<span class="sd">        Interpolated data array to modify in-place.</span>
+<span class="sd">    max_gap : float</span>
+<span class="sd">        Gaps strictly larger than this threshold are masked.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    interpolated_data : np.ndarray</span>
+<span class="sd">        The same array with large-gap regions set to NaN.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gaps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">original_ts</span><span class="p">)</span>
+    <span class="n">large_gap_mask</span> <span class="o">=</span> <span class="n">gaps</span> <span class="o">&gt;</span> <span class="n">max_gap</span>
+
+    <span class="c1"># Fast path: no large gaps at all</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">large_gap_mask</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">interpolated_data</span>
+
+    <span class="n">gap_starts</span> <span class="o">=</span> <span class="n">original_ts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">large_gap_mask</span><span class="p">]</span>
+    <span class="n">gap_ends</span> <span class="o">=</span> <span class="n">original_ts</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">large_gap_mask</span><span class="p">]</span>
+
+    <span class="c1"># Vectorised: for each new timestamp, find which gap interval it would fall into</span>
+    <span class="c1"># and check whether that interval is a large gap.</span>
+    <span class="c1"># np.searchsorted gives the index of the gap whose start is &lt;= new_ts.</span>
+    <span class="n">gap_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">gap_starts</span><span class="p">,</span> <span class="n">new_ts</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">gap_indices</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="n">in_large_gap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_ts</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">in_large_gap</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_ts</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">gap_starts</span><span class="p">[</span><span class="n">gap_indices</span><span class="p">[</span><span class="n">valid</span><span class="p">]])</span> <span class="o">&amp;</span> <span class="p">(</span>
+        <span class="n">new_ts</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">gap_ends</span><span class="p">[</span><span class="n">gap_indices</span><span class="p">[</span><span class="n">valid</span><span class="p">]]</span>
+    <span class="p">)</span>
+    <span class="n">interpolated_data</span><span class="p">[</span><span class="n">in_large_gap</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">return</span> <span class="n">interpolated_data</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_streams</span><span class="p">(</span>
     <span class="n">stream_data</span><span class="p">,</span>
     <span class="n">new_timestamps</span><span class="p">,</span>
     <span class="n">all_columns</span><span class="p">,</span>
     <span class="n">col_to_idx</span><span class="p">,</span>
     <span class="n">interpolation_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+    <span class="n">max_gap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -969,6 +1065,9 @@ document.write(`
 <span class="sd">    -----------</span>
 <span class="sd">    mode : str</span>
 <span class="sd">        &quot;precise&quot; (float64) or &quot;fast&quot; (float32).</span>
+<span class="sd">    max_gap : float or None</span>
+<span class="sd">        If not None, regions spanning original-data gaps larger than this</span>
+<span class="sd">        threshold are reset to NaN after interpolation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># 1. Create the empty (NaN-filled) data grid with correct dtype</span>
@@ -1015,35 +1114,52 @@ document.write(`
 
         <span class="c1"># --- Interpolation ---</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># assume_sorted=True improves performance significantly</span>
-            <span class="n">interpolator</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
-                <span class="n">original_ts</span><span class="p">,</span>
-                <span class="n">original_data</span><span class="p">,</span>
-                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">kind</span><span class="o">=</span><span class="n">interp_kind</span><span class="p">,</span>
-                <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                <span class="n">assume_sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">n_cols</span> <span class="o">=</span> <span class="n">original_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">interpolated_data_block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+                <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_timestamps</span><span class="p">),</span> <span class="n">n_cols</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span>
             <span class="p">)</span>
 
-            <span class="c1"># Apply the interpolator to the new timestamps</span>
-            <span class="n">interpolated_data_block</span> <span class="o">=</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">new_timestamps</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">interp_kind</span> <span class="o">==</span> <span class="s2">&quot;previous&quot;</span><span class="p">:</span>
+                <span class="c1"># Zero-order hold (step) interpolation via searchsorted.</span>
+                <span class="c1"># For each new timestamp, take the value of the most recent</span>
+                <span class="c1"># original sample that precedes it.</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">original_ts</span><span class="p">,</span> <span class="n">new_timestamps</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">out_of_bounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">new_timestamps</span> <span class="o">&gt;</span> <span class="n">original_ts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">idx_clipped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_ts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">interpolated_data_block</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">original_data</span><span class="p">[</span><span class="n">idx_clipped</span><span class="p">]</span>
+                <span class="n">interpolated_data_block</span><span class="p">[</span><span class="n">out_of_bounds</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Linear interpolation via np.interp (one column at a time).</span>
+                <span class="c1"># left=nan / right=nan matches interp1d bounds_error=False behaviour.</span>
+                <span class="k">for</span> <span class="n">col_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols</span><span class="p">):</span>
+                    <span class="n">interpolated_data_block</span><span class="p">[:,</span> <span class="n">col_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                        <span class="n">new_timestamps</span><span class="p">,</span>
+                        <span class="n">original_ts</span><span class="p">,</span>
+                        <span class="n">original_data</span><span class="p">[:,</span> <span class="n">col_i</span><span class="p">],</span>
+                        <span class="n">left</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                        <span class="n">right</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-            <span class="c1"># Ensure the block matches the target dtype</span>
-            <span class="k">if</span> <span class="n">interpolated_data_block</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">dtype</span><span class="p">:</span>
-                <span class="n">interpolated_data_block</span> <span class="o">=</span> <span class="n">interpolated_data_block</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="c1"># Mask regions that span large gaps in the original data</span>
+            <span class="k">if</span> <span class="n">max_gap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">interpolated_data_block</span> <span class="o">=</span> <span class="n">_mask_large_gaps</span><span class="p">(</span>
+                    <span class="n">original_ts</span><span class="p">,</span>
+                    <span class="n">new_timestamps</span><span class="p">,</span>
+                    <span class="n">interpolated_data_block</span><span class="p">,</span>
+                    <span class="n">max_gap</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="c1"># Place the interpolated data block into the final grid</span>
             <span class="n">resampled_data</span><span class="p">[:,</span> <span class="n">col_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">interpolated_data_block</span>
 
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpolation failed for stream &#39;</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;. Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">continue</span>
 
     <span class="k">return</span> <span class="n">resampled_data</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_fill_missing_data</span><span class="p">(</span><span class="n">resampled_df</span><span class="p">,</span> <span class="n">fill_method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fill_missing_data</span><span class="p">(</span><span class="n">resampled_df</span><span class="p">,</span> <span class="n">fill_method</span><span class="o">=</span><span class="s2">&quot;ffill&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fills NaN values in the resampled DataFrame.</span>
 
@@ -1060,12 +1176,10 @@ document.write(`
         <span class="n">resampled_df</span> <span class="o">=</span> <span class="n">resampled_df</span><span class="o">.</span><span class="n">bfill</span><span class="p">()</span>
 
     <span class="c1"># Fill any remaining NaNs (e.g., at the very beginning)</span>
-    <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">fill_value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
+    <span class="p">):</span>
         <span class="n">resampled_df</span> <span class="o">=</span> <span class="n">resampled_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
-
-    <span class="c1"># After filling, infer the best possible dtypes to silence FutureWarning</span>
-    <span class="c1"># copy=False modifies the df in place if possible</span>
-    <span class="n">resampled_df</span> <span class="o">=</span> <span class="n">resampled_df</span><span class="o">.</span><span class="n">infer_objects</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">resampled_df</span>
 
@@ -1225,8 +1339,11 @@ document.write(`
         <span class="k">if</span> <span class="n">nominal_srate</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
             <span class="n">nominal_srate</span> <span class="o">-</span> <span class="n">tol</span> <span class="o">&lt;=</span> <span class="n">effective_srate</span> <span class="o">&lt;=</span> <span class="n">nominal_srate</span> <span class="o">+</span> <span class="n">tol</span>
         <span class="p">):</span>
-            <span class="c1"># Just a warning, not an error</span>
-            <span class="k">pass</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Stream &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: effective sampling rate (</span><span class="si">{</span><span class="n">effective_srate</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Hz) &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;deviates more than 5% from the nominal rate (</span><span class="si">{</span><span class="n">nominal_srate</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Hz). &quot;</span>
+                <span class="s2">&quot;This may indicate dropped samples or recording issues.&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">stream_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
