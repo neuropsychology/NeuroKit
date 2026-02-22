@@ -401,14 +401,19 @@ document.write(`
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;**Find systolic peaks in a photoplethysmogram (PPG) signal**</span>
 
-<span class="sd">    Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG</span>
-<span class="sd">    signals as input, but typically a filtered PPG (cleaned using ``ppg_clean()``) will result in</span>
+<span class="sd">    Find the peaks in a PPG signal using the specified method. You can pass an unfiltered PPG</span>
+<span class="sd">    signal as input, but typically a filtered PPG (cleaned using ``ppg_clean()``) will provide</span>
 <span class="sd">    better results.</span>
 
-<span class="sd">    .. note::</span>
+<span class="sd">    Methods available (see `ppg_findpeaks` for details):</span>
 
-<span class="sd">      Please help us improve the methods&#39; documentation and features.</span>
-
+<span class="sd">    * ``&quot;elgendi&quot;``: Method by Elgendi et al. (2013), based on moving average and thresholding.</span>
+<span class="sd">    * ``&quot;bishop&quot;``: Method by Bishop &amp; Ercole (2018), multi-scale peak and trough detection. Returns pulse onsets as </span>
+<span class="sd">      well as peaks.</span>
+<span class="sd">    * ``&quot;charlton&quot;``: MSPTDfastv2 method by Charlton et al. (2025). Uses an efficient multi-scale peak and trough </span>
+<span class="sd">      detection algorithm. Returns pulse onsets as well as peaks.</span>
+<span class="sd">    * ``&quot;charlton2024&quot;``: MSPTDfastv1 method by Charlton et al. (2024). Returns pulse onsets as well as peaks. Uses </span>
+<span class="sd">      an efficient multi-scale peak and trough detection algorithm. Now superseded by v2 (i.e. ``charlton``).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -417,7 +422,7 @@ document.write(`
 <span class="sd">    sampling_rate : int</span>
 <span class="sd">        The sampling frequency of ``ppg_cleaned`` (in Hz, i.e., samples/second). Defaults to 1000.</span>
 <span class="sd">    method : str</span>
-<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;bishop&quot;``, ``&quot;charlton&quot;``.</span>
+<span class="sd">        The processing pipeline to apply. Can be one of ``&quot;elgendi&quot;``, ``&quot;bishop&quot;``, ``&quot;charlton&quot;``, or ``&quot;charlton2024&quot;``.</span>
 <span class="sd">        The default is ``&quot;elgendi&quot;``.</span>
 <span class="sd">    correct_artifacts : bool</span>
 <span class="sd">        Whether or not to identify and fix artifacts, using the method by</span>
@@ -430,17 +435,17 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    signals : DataFrame</span>
-<span class="sd">        A DataFrame of same length as the input signal in which occurrences of R-peaks marked as</span>
+<span class="sd">        A DataFrame of same length as the input signal in which occurrences of peaks marked as</span>
 <span class="sd">        ``1`` in a list of zeros with the same length as ``ppg_cleaned``. Accessible with the keys</span>
 <span class="sd">        ``&quot;PPG_Peaks&quot;``.</span>
 <span class="sd">    info : dict</span>
-<span class="sd">        A dictionary containing additional information, in this case the samples at which R-peaks</span>
+<span class="sd">        A dictionary containing additional information, in this case the samples at which peaks</span>
 <span class="sd">        occur, accessible with the key ``&quot;PPG_Peaks&quot;``, as well as the signals&#39; sampling rate,</span>
 <span class="sd">        accessible with the key ``&quot;sampling_rate&quot;``.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">    ppg_clean, ppg_fixpeaks, .signal_fixpeaks</span>
+<span class="sd">    ppg_clean, ppg_fixpeaks, .signal_fixpeaks, ppg_findpeaks</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -481,6 +486,8 @@ document.write(`
 <span class="sd">      (pp. 189-195). Springer International Publishing.</span>
 <span class="sd">    * Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:</span>
 <span class="sd">      design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.</span>
+<span class="sd">    * Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection</span>
+<span class="sd">      Algorithm. Proc CinC.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Store info</span>
@@ -498,7 +505,7 @@ document.write(`
 
     <span class="c1"># Peak (and onset) correction</span>
     <span class="c1"># - tidy up peaks and onsets</span>
-    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;method_fixpeaks&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;charlton2022&quot;</span><span class="p">:</span>  <span class="c1"># this is the default settings when using MSPTDfastv1 or MSPTDfastv2</span>
+    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;method_fixpeaks&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;charlton2022&quot;</span><span class="p">:</span>  <span class="c1"># this is the default setting when using MSPTDfastv1 or MSPTDfastv2</span>
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks_Unfixed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets_Unfixed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Onsets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 

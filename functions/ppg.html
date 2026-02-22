@@ -620,9 +620,9 @@ each epoch is indicated by the <code class="docutils literal notranslate"><span 
 <span class="gp">In [6]: </span><span class="n">analyze_epochs</span>
 <span class="gh">Out[6]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                  0.049206           0.995043</span>
-<span class="go">2     2        10000  ...                 -2.340616           0.975222</span>
-<span class="go">3     3        15000  ...                  0.667630           0.543772</span>
+<span class="go">1     1         5000  ...                  0.499882           0.881253</span>
+<span class="go">2     2        10000  ...                 -4.240413           0.903080</span>
+<span class="go">3     3        15000  ...                 -1.731401           0.825192</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 
@@ -832,19 +832,25 @@ pyPPG: a Python toolbox for comprehensive photoplethysmography signal analysis. 
 <dt class="sig sig-object py" id="neurokit2.ppg.ppg_peaks">
 <span class="sig-name descname"><span class="pre">ppg_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'elgendi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_artifacts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neurokit2/ppg/ppg_peaks.html#ppg_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurokit2.ppg.ppg_peaks" title="Link to this definition">#</a></dt>
 <dd><p><strong>Find systolic peaks in a photoplethysmogram (PPG) signal</strong></p>
-<p>Find the peaks in an PPG signal using the specified method. You can pass an unfiltered PPG
-signals as input, but typically a filtered PPG (cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>) will result in
+<p>Find the peaks in a PPG signal using the specified method. You can pass an unfiltered PPG
+signal as input, but typically a filtered PPG (cleaned using <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>) will provide
 better results.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Please help us improve the methods’ documentation and features.</p>
-</div>
+<p>Methods available (see <cite>ppg_findpeaks</cite> for details):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>: Method by Elgendi et al. (2013), based on moving average and thresholding.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;bishop&quot;</span></code>: Method by Bishop &amp; Ercole (2018), multi-scale peak and trough detection. Returns pulse onsets as
+well as peaks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;charlton&quot;</span></code>: MSPTDfastv2 method by Charlton et al. (2025). Uses an efficient multi-scale peak and trough
+detection algorithm. Returns pulse onsets as well as peaks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;charlton2024&quot;</span></code>: MSPTDfastv1 method by Charlton et al. (2024). Returns pulse onsets as well as peaks. Uses
+an efficient multi-scale peak and trough detection algorithm. Now superseded by v2 (i.e. <code class="docutils literal notranslate"><span class="pre">charlton</span></code>).</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ppg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned PPG channel as returned by <code class="docutils literal notranslate"><span class="pre">ppg_clean()</span></code>.</p></li>
 <li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">ppg_cleaned</span></code> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bishop&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;charlton&quot;</span></code>.
+<li><p><strong>method</strong> (<em>str</em>) – The processing pipeline to apply. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bishop&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;charlton&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;charlton2024&quot;</span></code>.
 The default is <code class="docutils literal notranslate"><span class="pre">&quot;elgendi&quot;</span></code>.</p></li>
 <li><p><strong>correct_artifacts</strong> (<em>bool</em>) – Whether or not to identify and fix artifacts, using the method by
 Lipponen &amp; Tarvainen (2019).</p></li>
@@ -854,10 +860,10 @@ Lipponen &amp; Tarvainen (2019).</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as the input signal in which occurrences of R-peaks marked as
+<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as the input signal in which occurrences of peaks marked as
 <code class="docutils literal notranslate"><span class="pre">1</span></code> in a list of zeros with the same length as <code class="docutils literal notranslate"><span class="pre">ppg_cleaned</span></code>. Accessible with the keys
 <code class="docutils literal notranslate"><span class="pre">&quot;PPG_Peaks&quot;</span></code>.</p></li>
-<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which R-peaks
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which peaks
 occur, accessible with the key <code class="docutils literal notranslate"><span class="pre">&quot;PPG_Peaks&quot;</span></code>, as well as the signals’ sampling rate,
 accessible with the key <code class="docutils literal notranslate"><span class="pre">&quot;sampling_rate&quot;</span></code>.</p></li>
 </ul>
@@ -866,7 +872,7 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_fixpeaks</span></code>, <a class="reference internal" href="signal.html#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.ppg.ppg_clean" title="neurokit2.ppg.ppg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_fixpeaks</span></code>, <a class="reference internal" href="signal.html#neurokit2.signal_fixpeaks" title="neurokit2.signal_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></a>, <a class="reference internal" href="#neurokit2.ppg.ppg_findpeaks" title="neurokit2.ppg.ppg_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span><span class="w"> </span><span class="nn">neurokit2</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nk</span>
@@ -882,8 +888,8 @@ accessible with the key <code class="docutils literal notranslate"><span class="
 
 <span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;PPG_Peaks&quot;</span><span class="p">]</span>
 <span class="gh">Out[6]: </span>
-<span class="go">array([ 48,  89, 133, 176, 219, 261, 306, 351, 405, 444, 480, 514, 557,</span>
-<span class="go">       598, 632, 669, 706, 741, 779, 849, 889, 925, 964])</span>
+<span class="go">array([ 46,  89, 130, 176, 217, 263, 307, 350, 411, 477, 525, 557, 595,</span>
+<span class="go">       669, 705, 741, 780, 813, 850, 888, 925, 964])</span>
 
 <span class="go"># Method by Bishop et al., (2018)</span>
 <span class="gp">In [7]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_peaks</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;bishop&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -908,6 +914,8 @@ periodic and quasi-periodic neuroscience data. In Intracranial Pressure &amp; Ne
 (pp. 189-195). Springer International Publishing.</p></li>
 <li><p>Charlton, P. H. et al. (2025). The MSPTDfast photoplethysmography beat detection algorithm:
 design, benchmarking, and open-source distribution. Physiological Measurement, 46, 035002.</p></li>
+<li><p>Charlton, P. H. et al. (2024). MSPTDfast: An Efficient Photoplethysmography Beat Detection
+Algorithm. Proc CinC.</p></li>
 </ul>
 </dd></dl>
 
@@ -971,9 +979,9 @@ quadratic model:</p>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ppg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span>
 <span class="go">  Label  Event_Onset  ...  PPG_Rate_Trend_Quadratic  PPG_Rate_Trend_R2</span>
-<span class="go">1     1         5000  ...                 -1.114673           0.882738</span>
-<span class="go">2     2        10000  ...                 -0.527438           0.983828</span>
-<span class="go">3     3        15000  ...                 -0.681633           0.872547</span>
+<span class="go">1     1         5000  ...                  0.283976           0.947706</span>
+<span class="go">2     2        10000  ...                  1.610252           0.951879</span>
+<span class="go">3     3        15000  ...                  0.061113           0.737088</span>
 
 <span class="go">[3 rows x 12 columns]</span>
 </pre></div>

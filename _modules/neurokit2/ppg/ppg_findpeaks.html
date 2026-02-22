@@ -459,7 +459,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;elgendi&quot;</span><span class="p">,</span> <span class="s2">&quot;elgendi2013&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_elgendi</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;msptd&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop2018&quot;</span><span class="p">,</span> <span class="s2">&quot;bishop&quot;</span><span class="p">]:</span>
         <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_ppg_findpeaks_bishop</span><span class="p">(</span><span class="n">ppg_cleaned</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -870,6 +870,10 @@ document.write(`
     <span class="c1"># Tidy up detected peaks and onsets (by ordering them and only retaining unique ones)</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">peaks</span><span class="p">))</span>
     <span class="n">onsets</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">onsets</span><span class="p">))</span>
+
+    <span class="c1"># convert to numpy arrays</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">onsets</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="c1"># Plot results (optional)</span>
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>

@@ -529,7 +529,52 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/b4ccce140ff384e635ac18fa8e16e653367db2918c903a448b9340a58b2e8709.png" src="../../_images/b4ccce140ff384e635ac18fa8e16e653367db2918c903a448b9340a58b2e8709.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Extract microstates</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">microstates</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_segment</span><span class="p">(</span><span class="n">eeg</span><span class="p">,</span> <span class="n">n_microstates</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Visualize the extracted microstates</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+
+<span class="nn">File D:\a\NeuroKit\NeuroKit\neurokit2\microstates\microstates_segment.py:208,</span> in <span class="ni">microstates_segment</span><span class="nt">(eeg, n_microstates, train, method, gfp_method, sampling_rate, standardize_eeg, n_runs, max_iterations, criterion, random_state, optimize, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="c1"># Do several runs of the k-means algorithm, keep track of the best segmentation.</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span> <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> 
+<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="c1"># Run clustering on subset of data</span>
+<span class="ne">--&gt; </span><span class="mi">208</span>     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">current_info</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>         <span class="n">data</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span>         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmod&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span>         <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_microstates</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span>         <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">[</span><span class="n">run</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span>         <span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span>         <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span>         <span class="n">optimize</span><span class="o">=</span><span class="n">optimize</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="n">current_microstates</span> <span class="o">=</span> <span class="n">current_info</span><span class="p">[</span><span class="s2">&quot;clusters_normalized&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">218</span>     <span class="n">current_residual</span> <span class="o">=</span> <span class="n">current_info</span><span class="p">[</span><span class="s2">&quot;residual&quot;</span><span class="p">]</span>
+
+<span class="nn">File D:\a\NeuroKit\NeuroKit\neurokit2\stats\cluster.py:138,</span> in <span class="ni">cluster</span><span class="nt">(data, method, n_clusters, random_state, optimize, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">136</span> <span class="c1"># Modified k-means</span>
+<span class="g g-Whitespace">    </span><span class="mi">137</span> <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmods&quot;</span><span class="p">,</span> <span class="s2">&quot;kmod&quot;</span><span class="p">,</span> <span class="s2">&quot;kmeans modified&quot;</span><span class="p">,</span> <span class="s2">&quot;modified kmeans&quot;</span><span class="p">]:</span>
+<span class="ne">--&gt; </span><span class="mi">138</span>     <span class="n">out</span> <span class="o">=</span> <span class="n">_cluster_kmod</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">139</span>         <span class="n">data</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="n">optimize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">140</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">141</span> <span class="c1"># K-medoids</span>
+<span class="g g-Whitespace">    </span><span class="mi">142</span> <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmedoids&quot;</span><span class="p">,</span> <span class="s2">&quot;k-medoids&quot;</span><span class="p">,</span> <span class="s2">&quot;k-centers&quot;</span><span class="p">]:</span>
+
+<span class="nn">File D:\a\NeuroKit\NeuroKit\neurokit2\stats\cluster.py:394,</span> in <span class="ni">_cluster_kmod</span><span class="nt">(data, n_clusters, max_iterations, threshold, random_state, optimize, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">390</span>     <span class="n">state_vals</span> <span class="o">=</span> <span class="n">data_state</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">activation</span><span class="p">[</span><span class="n">state</span><span class="p">,</span> <span class="n">idx</span><span class="p">])</span>
+<span class="g g-Whitespace">    </span><span class="mi">391</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">392</span>     <span class="c1"># Method 1 - eighen value</span>
+<span class="g g-Whitespace">    </span><span class="mi">393</span>     <span class="c1"># step 4a</span>
+<span class="ne">--&gt; </span><span class="mi">394</span>     <span class="n">Sk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data_state</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">data_state</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">395</span>     <span class="c1"># step 4b</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span>     <span class="n">eigen_vals</span><span class="p">,</span> <span class="n">eigen_vectors</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">Sk</span><span class="p">)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
 </div>
 </div>
 <p>This shows the aspect of the microstates and their sequence in the Global Field Power (GFP; see below). We can then proceed to a statistical analysis.</p>
@@ -581,28 +626,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.182583</td>
-      <td>0.235583</td>
-      <td>0.35225</td>
-      <td>0.229583</td>
-      <td>512.5</td>
-      <td>664.5</td>
-      <td>844.0</td>
-      <td>671.5</td>
-      <td>0.018018</td>
+      <td>0.2345</td>
+      <td>0.333833</td>
+      <td>0.262667</td>
+      <td>0.169</td>
+      <td>660.0</td>
+      <td>838.5</td>
+      <td>723.0</td>
+      <td>490.5</td>
+      <td>0.018735</td>
+      <td>0.015</td>
+      <td>0.021843</td>
+      <td>0.015</td>
+      <td>0.019409</td>
+      <td>0.015</td>
+      <td>0.017245</td>
       <td>0.01</td>
-      <td>0.018847</td>
-      <td>0.015</td>
-      <td>0.023073</td>
-      <td>0.015</td>
-      <td>0.018173</td>
-      <td>0.015</td>
-      <td>0.019789</td>
+      <td>0.019557</td>
       <td>0.015</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/53fc0e925fa4c1f97d2ab842222d75514c72c3edf77783a7bb9e1e3f656761a8.png" src="../../_images/53fc0e925fa4c1f97d2ab842222d75514c72c3edf77783a7bb9e1e3f656761a8.png" />
+</div></div><img alt="../../_images/b625eab7795484ed034bcc95e5c427935e2ce671728d69b886ecb37bfabeab87.png" src="../../_images/b625eab7795484ed034bcc95e5c427935e2ce671728d69b886ecb37bfabeab87.png" />
 </div>
 </div>
 <p>This shows computes static statistics, such as the prevalence of each microstates and the median duration time (also shown in the graph).</p>
@@ -652,26 +697,26 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.722831</td>
-      <td>0.075799</td>
-      <td>0.125571</td>
-      <td>0.075799</td>
-      <td>0.056243</td>
-      <td>0.734701</td>
-      <td>0.107181</td>
-      <td>0.101875</td>
-      <td>0.066004</td>
-      <td>0.078779</td>
-      <td>0.783298</td>
-      <td>0.071919</td>
-      <td>0.061706</td>
-      <td>0.091107</td>
-      <td>0.122323</td>
-      <td>0.724864</td>
+      <td>0.73312</td>
+      <td>0.112296</td>
+      <td>0.100569</td>
+      <td>0.054016</td>
+      <td>0.080629</td>
+      <td>0.771093</td>
+      <td>0.085122</td>
+      <td>0.063155</td>
+      <td>0.088226</td>
+      <td>0.111076</td>
+      <td>0.742621</td>
+      <td>0.058077</td>
+      <td>0.073964</td>
+      <td>0.123274</td>
+      <td>0.092702</td>
+      <td>0.710059</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/2d8e0a0eaa0d99cd77abe7d80f7d892927ff9785580c51feea512ecda8226c66.png" src="../../_images/2d8e0a0eaa0d99cd77abe7d80f7d892927ff9785580c51feea512ecda8226c66.png" />
+</div></div><img alt="../../_images/83b23da999ce0839b921934205df5a2948aa5a6939c8dd4d675fddfec3cddddc.png" src="../../_images/83b23da999ce0839b921934205df5a2948aa5a6939c8dd4d675fddfec3cddddc.png" />
 </div>
 </div>
 <p>Finally, one can compute complexity features of the sequence of microstates, such as the entropy.</p>
@@ -706,11 +751,11 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.956936</td>
+      <td>1.959118</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../../_images/5162bef384ca201b43069249dc602882c0306b9b0b80425d3dd6406b5540a8e4.png" src="../../_images/5162bef384ca201b43069249dc602882c0306b9b0b80425d3dd6406b5540a8e4.png" />
+</div></div><img alt="../../_images/e3ccc5c84355c08ca21409ba22421a31016bd25b86b824a14d65addc4bb37635.png" src="../../_images/e3ccc5c84355c08ca21409ba22421a31016bd25b86b824a14d65addc4bb37635.png" />
 </div>
 </div>
 </section>
@@ -735,8 +780,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/151db0611f0dfd87e61a8cd995a563ff531d1a84b9f25340ac890174c85788c8.png" src="../../_images/151db0611f0dfd87e61a8cd995a563ff531d1a84b9f25340ac890174c85788c8.png" />
-<img alt="../../_images/151db0611f0dfd87e61a8cd995a563ff531d1a84b9f25340ac890174c85788c8.png" src="../../_images/151db0611f0dfd87e61a8cd995a563ff531d1a84b9f25340ac890174c85788c8.png" />
+<img alt="../../_images/871f40f9f1c25c789ed88740aa3acb8dfad3d4f3f6f2b64f8476d020ce885367.png" src="../../_images/871f40f9f1c25c789ed88740aa3acb8dfad3d4f3f6f2b64f8476d020ce885367.png" />
 </div>
 </div>
 <p>By default, the microstates clustering algorithm is <strong>trained</strong> on the EEG activity at these peaks, and then applied to back-predict the state at all data points. However, this behaviour can be changed. For instance, one can decide to train the algorithm directly on all data points.</p>
@@ -748,7 +792,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/d5a0bd9c3b397ee3c4348c742cb0f3383103ec72aa11ea3653b5c9aabf40d19a.png" src="../../_images/d5a0bd9c3b397ee3c4348c742cb0f3383103ec72aa11ea3653b5c9aabf40d19a.png" />
+<img alt="../../_images/f2a1b82172d77eaf9782dee08bdc98c6424e18ccd0b3b161f3419057dcb4df2d.png" src="../../_images/f2a1b82172d77eaf9782dee08bdc98c6424e18ccd0b3b161f3419057dcb4df2d.png" />
 </div>
 </div>
 </section>
@@ -767,37 +811,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[........................................] 0/7
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[█████...................................] 1/7
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[███████████.............................] 2/7
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[█████████████████.......................] 3/7
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[██████████████████████..................] 4/7
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[████████████████████████████............] 5/7
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[██████████████████████████████████......] 6/7
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[████████████████████████████████████████] 7/7
+
+Optimal number of microstates:  5.0
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal number of microstates:  5.0
-</pre></div>
-</div>
-<img alt="../../_images/e3a7702ed44f65a7d2d01e80570effc11b00c51f5bfe528711f815fedb9e3961.png" src="../../_images/e3a7702ed44f65a7d2d01e80570effc11b00c51f5bfe528711f815fedb9e3961.png" />
+<img alt="../../_images/9a81d6dea44b66b7c6fe012f5034da38a9f5b8351c2ea3934dfc63b6e58abeb8.png" src="../../_images/9a81d6dea44b66b7c6fe012f5034da38a9f5b8351c2ea3934dfc63b6e58abeb8.png" />
 </div>
 </div>
 </section>
@@ -822,14 +841,6 @@ document.write(`
 <span class="n">nk</span><span class="o">.</span><span class="n">microstates_plot</span><span class="p">(</span><span class="n">microstates_kmod</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">450</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> Using conventional Kmeans,  GEV = 51.06%
- Using modified Kmeans,  GEV = 64.08%
-</pre></div>
-</div>
-<img alt="../../_images/5bbffa48214767f90fca2a2165e2775fd3fd1bccd21255d8a4b24b58663a9928.png" src="../../_images/5bbffa48214767f90fca2a2165e2775fd3fd1bccd21255d8a4b24b58663a9928.png" />
-<img alt="../../_images/ab251c21ac026847051b594444e15c750688ecb6cc4a9ce304cfcab106b927ef.png" src="../../_images/ab251c21ac026847051b594444e15c750688ecb6cc4a9ce304cfcab106b927ef.png" />
 </div>
 </div>
 </section>
