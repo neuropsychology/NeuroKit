@@ -390,6 +390,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">bisect</span><span class="w"> </span><span class="kn">import</span> <span class="n">insort</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">percentile_filter</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..signal</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">signal_findpeaks</span><span class="p">,</span>
@@ -705,14 +706,11 @@ document.write(`
     <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to int</span>
     <span class="k">return</span> <span class="n">peaks</span>
 
+
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Kahmis</span>
 <span class="c1"># =============================================================================</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_ecg_findpeaks_khamis</span><span class="p">(</span>
-    <span class="n">signal</span><span class="p">,</span>
-    <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_ecg_findpeaks_khamis</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;UNSW QRS detection algorithm, developed by Khamis et al. (2016).</span>
 <span class="sd">    Designed for both clinical ECGs and poorer quality telehealth ECGs.</span>
 <span class="sd">    Adapted from the original MATLAB implementation by Khamis et al. (available under a CC0 licence).</span>
@@ -852,7 +850,7 @@ document.write(`
 
         <span class="n">smashedECG</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">starts</span><span class="p">)):</span>
-            <span class="n">smashedECG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ECG</span><span class="p">[</span><span class="n">starts</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">ends</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">smashedECG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ECG</span><span class="p">[</span><span class="n">starts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span> <span class="n">ends</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">smashedECG</span>
 
@@ -866,7 +864,7 @@ document.write(`
             <span class="c1"># Number of 2s windows (P) in data rounded up</span>
             <span class="n">P</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)))</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">P</span><span class="p">)</span>
-            <span class="n">y</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">y</span><span class="p">[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">P</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">fs</span><span class="p">))</span>
 
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Center the data</span>
@@ -892,8 +890,13 @@ document.write(`
         <span class="k">return</span> <span class="n">F</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">sortfilt1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
-
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="c1"># Replaces the original MATLAB-style loop that manually sorted a sliding</span>
+        <span class="c1"># window and picked the P-th element. scipy.ndimage.percentile_filter is</span>
+        <span class="c1"># equivalent in the interior of the signal; the only differences are at</span>
+        <span class="c1"># the boundaries (first/last ~n//2 samples) where `mode=&#39;nearest&#39;` pads</span>
+        <span class="c1"># with the edge value instead of shrinking the window. This has little</span>
+        <span class="c1"># practical impact on peak detection because peaks are rarely expected at</span>
+        <span class="c1"># the very edges of the recording.</span>
 
         <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="mi">100</span>
@@ -907,17 +910,8 @@ document.write(`
             <span class="n">N1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">N2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">A</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">N1</span><span class="p">)</span>
-            <span class="n">B</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">N2</span><span class="p">)</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">round</span><span class="p">((</span><span class="n">p</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">B</span> <span class="o">-</span> <span class="n">A</span><span class="p">))</span>
-            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">A</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="n">B</span><span class="p">])</span>
-            <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Z</span><span class="p">[</span><span class="n">P</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">y</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">N1</span> <span class="o">+</span> <span class="n">N2</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">percentile_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">myfiltfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 
@@ -928,9 +922,8 @@ document.write(`
 
         <span class="k">return</span> <span class="n">y</span>
 
-
     <span class="c1"># Bandpass filtering</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cleansignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">do_original_filtering</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cleansignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">do_original_filtering</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># cleansignal</span>
         <span class="c1"># Helper function:</span>
         <span class="c1"># baseline removal then high pass (0.7 Hz) filtering</span>
@@ -950,22 +943,24 @@ document.write(`
 
         <span class="c1"># hpf - used to eliminate dc component or low frequency drift.</span>
         <span class="k">if</span> <span class="n">do_original_filtering</span><span class="p">:</span>
-            <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">)</span>
             <span class="n">hpdata</span> <span class="o">=</span> <span class="n">myfiltfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">meddata</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">)</span>
+            <span class="n">sos</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">)</span>
             <span class="n">hpdata</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">meddata</span><span class="p">)</span>
 
         <span class="c1"># low pass linear phase filter</span>
-        <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">20</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">20</span> <span class="o">/</span> <span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;low&quot;</span><span class="p">)</span>
         <span class="n">lphpdata</span> <span class="o">=</span> <span class="n">myfiltfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">hpdata</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">lphpdata</span>
 
     <span class="k">if</span> <span class="n">sampling_rate</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;This function requires a sampling rate of at least 50 Hz&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This function requires a sampling rate of at least 50 Hz&quot;</span><span class="p">)</span>
 
-    <span class="n">finalmask</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># The original MATLAB implementation allowed a mask to optionally be inputted.</span>
+    <span class="n">finalmask</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">[]</span>
+    <span class="p">)</span>  <span class="c1"># The original MATLAB implementation allowed a mask to optionally be inputted.</span>
 
     <span class="c1"># Clean up Signal - hi pass, then low pass filter</span>
     <span class="n">lphpdata</span> <span class="o">=</span> <span class="n">cleansignal</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
@@ -977,7 +972,7 @@ document.write(`
     <span class="c1"># Sort filter</span>
     <span class="n">top</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">lphpdata</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
     <span class="n">bot</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">lphpdata</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">envelope</span> <span class="o">=</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bot</span><span class="p">)</span>
+    <span class="n">envelope</span> <span class="o">=</span> <span class="n">top</span> <span class="o">-</span> <span class="n">bot</span>
     <span class="n">envelope</span><span class="p">[</span><span class="n">envelope</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diffdata</span> <span class="o">*</span> <span class="n">envelope</span><span class="p">)</span>
 
@@ -991,8 +986,8 @@ document.write(`
     <span class="n">diffpower1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">feature</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
 
     <span class="n">smashedSig</span> <span class="o">=</span> <span class="n">smashECG</span><span class="p">(</span><span class="n">diffpower1</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">)</span>
-    <span class="n">F</span> <span class="o">=</span> <span class="n">smashedFFT</span><span class="p">(</span><span class="n">smashedSig</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">13</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">14</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">smashedFFT</span><span class="p">(</span><span class="n">smashedSig</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">13</span><span class="p">)</span> <span class="o">*</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="mi">14</span>
     <span class="n">range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">f</span> <span class="o">&gt;=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">max_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">range_indices</span><span class="p">])</span>
     <span class="n">fftHRfreq</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">range_indices</span><span class="p">[</span><span class="n">max_idx</span><span class="p">]]</span>
@@ -1000,7 +995,9 @@ document.write(`
     <span class="c1"># Update smoother feature signal</span>
     <span class="n">HRmin</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1"># Hz: 90 BPM  (don&#39;t want to go much below this, will miss ectopics otherwise!)</span>
     <span class="n">HRmax</span> <span class="o">=</span> <span class="mf">4.0</span>  <span class="c1"># Hz: 240 BPM  (Shouldn&#39;t see much above this)</span>
-    <span class="n">fc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">HRmin</span><span class="p">,</span> <span class="n">fftHRfreq</span><span class="p">,</span> <span class="n">HRmax</span><span class="p">]))</span>  <span class="c1"># Kills half of second harmonic and all of the rest</span>
+    <span class="n">fc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">HRmin</span><span class="p">,</span> <span class="n">fftHRfreq</span><span class="p">,</span> <span class="n">HRmax</span><span class="p">])</span>
+    <span class="p">)</span>  <span class="c1"># Kills half of second harmonic and all of the rest</span>
     <span class="n">k</span> <span class="o">=</span> <span class="p">((</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.0037</span><span class="p">)</span> <span class="o">/</span> <span class="n">fc</span>
     <span class="n">Nh</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">sampling_rate</span><span class="p">)</span>  <span class="c1"># Heuristic for Hamming window 3dB point</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">Nh</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1014,7 +1011,14 @@ document.write(`
     <span class="c1"># Find valid indices</span>
     <span class="n">valididx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">)),</span> <span class="n">finalmask</span><span class="p">)</span>
     <span class="c1"># Maximum filter to get upper envelope</span>
-    <span class="n">Wsort</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">fftHRfreq</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">HRmax</span><span class="p">])))</span>
+    <span class="n">Wsort</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span>
+            <span class="mi">2</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">fftHRfreq</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">HRmax</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">upperenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Morph Open</span>
     <span class="n">upperenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">upperenv</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Morph Close</span>
     <span class="n">lowerenv</span> <span class="o">=</span> <span class="n">sortfilt1</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">Wsort</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Morph Open</span>
@@ -1030,10 +1034,12 @@ document.write(`
     <span class="n">tpsidx</span> <span class="o">=</span> <span class="n">turning_points</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
     <span class="n">qrs</span> <span class="o">=</span> <span class="n">tpsidx</span><span class="p">[</span><span class="n">tpsidx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">)</span>
-    <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span> <span class="o">=</span> <span class="n">calculate_rr_interval</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span> <span class="o">=</span> <span class="n">calculate_rr_interval</span><span class="p">(</span>
+        <span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">,</span> <span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="c1"># Stop if no qrs waves were detected (not in original matlab algorithm):</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to int</span>
         <span class="k">return</span> <span class="n">peaks</span>
 
@@ -1050,21 +1056,23 @@ document.write(`
     <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diffpower2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">temp</span><span class="p">[</span><span class="n">newmask</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">1</span><span class="p">],</span> <span class="n">temp</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    
+
     <span class="c1"># Fill in sections less than 1.5*mRR seconds;</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
         <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">m_rr</span><span class="p">:</span>
-            <span class="n">temp</span><span class="p">[</span><span class="n">start</span><span class="p">:(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">newmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Only keep newly found QRS between long beats</span>
     <span class="n">qrs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">qrs2</span><span class="p">,</span> <span class="n">newmask</span><span class="p">)</span>
     <span class="c1"># Add them to the old QRS (found using low sensitivity)</span>
     <span class="n">qrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">qrs2</span><span class="p">)</span>
-    <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span> <span class="o">=</span> <span class="n">calculate_rr_interval</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">m_rr</span><span class="p">,</span> <span class="n">rr_list</span><span class="p">,</span> <span class="n">n_rr</span><span class="p">,</span> <span class="n">n_sections</span> <span class="o">=</span> <span class="n">calculate_rr_interval</span><span class="p">(</span>
+        <span class="n">qrs</span><span class="p">,</span> <span class="n">finalmask</span><span class="p">,</span> <span class="n">sampling_rate</span>
+    <span class="p">)</span>
 
     <span class="c1"># 3rd pass: Highest threshold</span>
     <span class="c1"># Back-track to remove possible wrong beats</span>
