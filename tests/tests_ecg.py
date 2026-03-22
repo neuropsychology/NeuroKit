@@ -297,6 +297,33 @@ def test_ecg_delineate_cwt_rpeaks_nonpositive_peak_height(monkeypatch):
     assert not np.isnan(offsets[0])
 
 
+def test_ecg_delineate_cwt_inverted_t_wave():
+    """CWT delineation detects inverted T-waves at troughs, not spurious maxima (issue #1138)."""
+    sampling_rate = 1000
+    ecg = nk.ecg_simulate(duration=10, sampling_rate=sampling_rate, noise=0, random_state=42)
+    _, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate)
+    _, waves_upright = nk.ecg_delineate(ecg, info, sampling_rate=sampling_rate, method="cwt")
+
+    # flip each T-wave window so T becomes a trough
+    ecg_inv_t = ecg.copy()
+    for t in [p for p in waves_upright["ECG_T_Peaks"] if not np.isnan(p)]:
+        ecg_inv_t[int(t) - 50 : int(t) + 50] *= -1
+    _, info_inv_t = nk.ecg_peaks(ecg_inv_t, sampling_rate=sampling_rate)
+    _, waves = nk.ecg_delineate(ecg_inv_t, info_inv_t, sampling_rate=sampling_rate, method="cwt")
+
+    t_peaks = [int(p) for p in waves["ECG_T_Peaks"] if not np.isnan(p)]
+    assert len(t_peaks) > 5
+    assert all(ecg_inv_t[p] < 0 for p in t_peaks), "Inverted T-peaks should be at troughs"
+
+    # fully inverted ECG (aVR-like): T-peaks should still be at troughs
+    ecg_inv = -ecg
+    _, info_inv = nk.ecg_peaks(ecg_inv, sampling_rate=sampling_rate)
+    _, waves = nk.ecg_delineate(ecg_inv, info_inv, sampling_rate=sampling_rate, method="cwt")
+    t_peaks = [int(p) for p in waves["ECG_T_Peaks"] if not np.isnan(p)]
+    assert len(t_peaks) > 5
+    assert all(ecg_inv[p] < 0 for p in t_peaks), "Inverted T-peaks should be at troughs"
+
+
 def test_ecg_invert():
     sampling_rate = 500
     noise = 0.05

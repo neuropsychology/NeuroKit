@@ -645,16 +645,20 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
 # =============================================================================
 def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
     # P-Peaks and T-Peaks
-    tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    tpeaks, ppeaks, t_polarities, p_polarities = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
 
     # qrs onsets and offsets
     qrs_onsets, qrs_offsets = _onset_offset_delineator(ecg, rpeaks, peak_type="rpeaks", sampling_rate=sampling_rate)
 
     # ppeaks onsets and offsets
-    p_onsets, p_offsets = _onset_offset_delineator(ecg, ppeaks, peak_type="ppeaks", sampling_rate=sampling_rate)
+    p_onsets, p_offsets = _onset_offset_delineator(
+        ecg, ppeaks, peak_type="ppeaks", sampling_rate=sampling_rate, polarities=p_polarities
+    )
 
     # tpeaks onsets and offsets
-    t_onsets, t_offsets = _onset_offset_delineator(ecg, tpeaks, peak_type="tpeaks", sampling_rate=sampling_rate)
+    t_onsets, t_offsets = _onset_offset_delineator(
+        ecg, tpeaks, peak_type="tpeaks", sampling_rate=sampling_rate, polarities=t_polarities
+    )
 
     # No dwt defined method for Q and S peak
     # Adopting manual method from "peak" method
@@ -881,9 +885,12 @@ def _correct_peak(sig, fs, peak, window=0.02):
 # ---------------------
 
 
-def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000):
+def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000, polarities=None):
     if peak_type not in ["rpeaks", "tpeaks", "ppeaks"]:
         raise ValueError(f"Unknown peak type '{peak_type}'")
+
+    if polarities is None:
+        polarities = np.ones(len(peaks), dtype=int)
 
     # first derivative of the Gaussian signal
     scales = np.array([1, 2, 4, 8, 16])
@@ -892,19 +899,19 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
     half_wave_width = int(0.1 * sampling_rate)  # NEED TO CHECK
     onsets = []
     offsets = []
-    for index_peak in peaks:
+    for index_peak, polarity in zip(peaks, polarities):
         # find onset
         if np.isnan(index_peak):
             onsets.append(np.nan)
             offsets.append(np.nan)
             continue
         if peak_type == "rpeaks":
-            search_window = cwtmatr[2, index_peak - half_wave_width : index_peak]
+            # polarity-normalised so onset edge appears as a positive CWT peak
+            search_window = polarity * cwtmatr[2, index_peak - half_wave_width : index_peak]
             prominence = 0.20 * max(search_window)
             height = 0.0
-
         else:  # tpeaks or ppeaks
-            search_window = -cwtmatr[4, index_peak - half_wave_width : index_peak]
+            search_window = -polarity * cwtmatr[4, index_peak - half_wave_width : index_peak]
             prominence = 0.10 * max(search_window)
             height = 0.0
 
@@ -927,9 +934,9 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                 epsilon_onset = 0.25 * wt_peaks_data["peak_heights"][-1]
             leftbase = wt_peaks_data["left_bases"][-1] + index_peak - half_wave_width
             if peak_type == "rpeaks":
-                candidate_onsets = np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
+                candidate_onsets = np.where(polarity * cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
             elif peak_type in ["tpeaks", "ppeaks"]:
-                candidate_onsets = np.where(-cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
+                candidate_onsets = np.where(-polarity * cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
 
             candidate_onsets = candidate_onsets.tolist() + [leftbase]
             if len(candidate_onsets) == 0:
@@ -940,11 +947,10 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         # find offset
         height = 0.0
         if peak_type == "rpeaks":
-            search_window = -cwtmatr[2, index_peak : index_peak + half_wave_width]
+            search_window = -polarity * cwtmatr[2, index_peak : index_peak + half_wave_width]
             prominence = 0.50 * max(search_window)
-
         elif peak_type in ["tpeaks", "ppeaks"]:
-            search_window = cwtmatr[4, index_peak : index_peak + half_wave_width]
+            search_window = polarity * cwtmatr[4, index_peak : index_peak + half_wave_width]
             prominence = 0.10 * max(search_window)
 
         wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
@@ -956,22 +962,20 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             nlast = wt_peaks[0] + index_peak
 
             if peak_type == "rpeaks":
-                # Use the actual (non-negated) WT value at n_last for the sign check, per Martinez (2004) eq. A.10
-                wt_nlast = cwtmatr[2, nlast]
+                # sign check per Martinez (2004) eq. A.10
+                wt_nlast = polarity * cwtmatr[2, nlast]
                 if wt_nlast > 0:
                     epsilon_offset = 0.125 * wt_nlast
                 else:
                     epsilon_offset = 0.71 * wt_nlast
-                candidate_offsets = np.where(cwtmatr[2, nlast : nlast + 100] < epsilon_offset)[0] + nlast
+                candidate_offsets = np.where(polarity * cwtmatr[2, nlast : nlast + 100] < epsilon_offset)[0] + nlast
             elif peak_type == "ppeaks":
                 epsilon_offset = 0.9 * wt_peaks_data["peak_heights"][0]
             elif peak_type == "tpeaks":
                 epsilon_offset = 0.4 * wt_peaks_data["peak_heights"][0]
             rightbase = wt_peaks_data["right_bases"][0] + index_peak
-            if peak_type == "rpeaks":
-                candidate_offsets = np.where(cwtmatr[2, nlast : nlast + 100] < epsilon_offset)[0] + nlast
-            elif peak_type in ["tpeaks", "ppeaks"]:
-                candidate_offsets = np.where((cwtmatr[4, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
+            if peak_type in ["tpeaks", "ppeaks"]:
+                candidate_offsets = np.where(polarity * cwtmatr[4, nlast : nlast + 100] < epsilon_offset)[0] + nlast
 
             candidate_offsets = candidate_offsets.tolist() + [rightbase]
             if len(candidate_offsets) == 0:
@@ -985,55 +989,81 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
 
 
 def _peaks_delineator(ecg, rpeaks, sampling_rate=1000):
-    # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)
 
-    qrs_duration = 0.1
+    search_boundary = int(0.9 * 0.1 * sampling_rate / 2)  # ~half QRS duration
+    # T expected 80–400ms after R; P expected 50–300ms before next R
+    t_lo_offset = int(0.08 * sampling_rate)
+    t_hi_offset = int(0.40 * sampling_rate)
+    p_lo_pre = int(0.05 * sampling_rate)
+    p_hi_pre = int(0.30 * sampling_rate)
 
-    search_boundary = int(0.9 * qrs_duration * sampling_rate / 2)
     significant_peaks_groups = []
     for i in range(len(rpeaks) - 1):
-        # search for T peaks and P peaks from R peaks
         start = rpeaks[i] + search_boundary
         end = rpeaks[i + 1] - search_boundary
         search_window = cwtmatr[4, start:end]
         height = 0.25 * np.sqrt(np.mean(np.square(search_window)))
         peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(search_window), height=height)
         peaks_tp = peaks_tp + rpeaks[i] + search_boundary
-        # set threshold for heights of peaks to find significant peaks in wavelet
+        # signed threshold: near-zero for inverted-dominant inter-beat windows
         threshold = 0.125 * max(search_window)
-        significant_peaks_tp = []
         significant_peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp["peak_heights"][j] > threshold]
+        significant_peaks_groups.append(_find_tppeaks(ecg, significant_peaks_tp, cwtmatr=cwtmatr, sampling_rate=sampling_rate))
 
-        significant_peaks_groups.append(_find_tppeaks(ecg, significant_peaks_tp, sampling_rate=sampling_rate))
+    tpeaks, ppeaks, t_polarities, p_polarities = [], [], [], []
+    for i, g in enumerate(significant_peaks_groups):
+        peak_positions, peak_pols = g
+        valid = [(p, pol) for p, pol in zip(peak_positions, peak_pols) if not np.isnan(p)]
 
-    tpeaks, ppeaks = zip(*[(g[0], g[-1]) for g in significant_peaks_groups])
+        # T-wave: largest absolute amplitude in the 80–400ms post-R window
+        t_lo, t_hi = rpeaks[i] + t_lo_offset, rpeaks[i] + t_hi_offset
+        t_cands = [(p, pol) for p, pol in valid if t_lo <= p <= t_hi]
+        best_t = max(t_cands or valid, key=lambda x: abs(ecg[int(x[0])])) if (t_cands or valid) else None
+        tpeaks.append(best_t[0] if best_t else np.nan)
+        t_polarities.append(best_t[1] if best_t else 1)
+
+        # P-wave: latest upright candidate in 50–300ms pre-R; largest inverted if none
+        p_lo, p_hi = rpeaks[i + 1] - p_hi_pre, rpeaks[i + 1] - p_lo_pre
+        p_cands = [(p, pol) for p, pol in valid if p_lo <= p <= p_hi]
+        upright_p = [(p, pol) for p, pol in p_cands if pol == 1]
+        if upright_p:
+            best_p = max(upright_p, key=lambda x: x[0])
+        elif p_cands:
+            best_p = max(p_cands, key=lambda x: abs(ecg[int(x[0])]))
+        else:
+            best_p = None
+        ppeaks.append(best_p[0] if best_p else np.nan)
+        p_polarities.append(best_p[1] if best_p else 1)
 
     tpeaks = np.array(tpeaks, dtype="object")
     ppeaks = np.array(ppeaks, dtype="object")
-    return tpeaks, ppeaks
+    return tpeaks, ppeaks, np.array(t_polarities), np.array(p_polarities)
 
 
-def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
-    # first derivative of the Gaissian signal
-    scales = np.array([1, 2, 4, 8, 16])
-    cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)
+def _find_tppeaks(ecg, keep_tp, sampling_rate=1000, cwtmatr=None):
+    if cwtmatr is None:
+        scales = np.array([1, 2, 4, 8, 16])
+        cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)
     max_search_duration = 0.05
-    tppeaks = []
+    nb_idx = int(max_search_duration * sampling_rate)
+    tppeaks, polarities = [], []
     for index_cur, index_next in zip(keep_tp[:-1], keep_tp[1:]):
-        # limit 1
-        correct_sign = cwtmatr[4, :][index_cur] < 0 and cwtmatr[4, :][index_next] > 0  # pylint: disable=R1716
-        #    near = (index_next - index_cur) < max_wv_peak_dist #limit 2
-        #    if near and correct_sign:
-        if correct_sign:
-            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur : index_next + 1])[0] + index_cur
-            nb_idx = int(max_search_duration * sampling_rate)
-            index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (index_zero_cr - nb_idx)
-            tppeaks.append(index_max)
+        cwt = cwtmatr[4, :]
+        upright = cwt[index_cur] < 0 and cwt[index_next] > 0  # pylint: disable=R1716
+        inverted = cwt[index_cur] > 0 and cwt[index_next] < 0
+        if upright or inverted:
+            index_zero_cr = signal_zerocrossings(cwt[index_cur : index_next + 1])[0] + index_cur
+            window = ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]
+            if upright:
+                tppeaks.append(np.argmax(window) + (index_zero_cr - nb_idx))
+            else:
+                tppeaks.append(np.argmin(window) + (index_zero_cr - nb_idx))
+            polarities.append(1 if upright else -1)
     if len(tppeaks) == 0:
-        tppeaks = [np.nan]
-    return tppeaks
+        return [np.nan], [1]
+    return tppeaks, polarities
 
 
 # =============================================================================
