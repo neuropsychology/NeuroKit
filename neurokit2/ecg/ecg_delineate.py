@@ -1048,9 +1048,9 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000, cwtmatr=None):
         cwtmatr, __ = pywt.cwt(ecg, scales, "gaus1", sampling_period=1.0 / sampling_rate)
     max_search_duration = 0.05
     nb_idx = int(max_search_duration * sampling_rate)
+    cwt = cwtmatr[4, :]
     tppeaks, polarities = [], []
     for index_cur, index_next in zip(keep_tp[:-1], keep_tp[1:]):
-        cwt = cwtmatr[4, :]
         upright = cwt[index_cur] < 0 and cwt[index_next] > 0  # pylint: disable=R1716
         inverted = cwt[index_cur] > 0 and cwt[index_next] < 0
         if upright or inverted:
