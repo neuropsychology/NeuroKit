@@ -343,16 +343,11 @@ def entropy_multiscale(
         # Sequential execution (original behavior)
         info["Value"] = np.array([_run(s) for s in info["Scale"]])
     else:
-        # Parallel execution via joblib
-        try:
-            import joblib
-        except ImportError as e:
-            raise ImportError(
-                "NeuroKit error: entropy_multiscale(): the 'joblib' module is required "
-                "for parallel execution. Please install it first (`pip install joblib`).",
-            ) from e
+        # Parallel execution via parallel_run
+        from ..misc import parallel_run
 
-        info["Value"] = np.array(joblib.Parallel(n_jobs=n_jobs)(joblib.delayed(_run)(s) for s in info["Scale"]))
+        args_list = [{"scale_factor": s} for s in info["Scale"]]
+        info["Value"] = np.array(parallel_run(_run, args_list, n_jobs=n_jobs))
 
     # Remove inf, nan and 0
     mse = info["Value"][np.isfinite(info["Value"])]

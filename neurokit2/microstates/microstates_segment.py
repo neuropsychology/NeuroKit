@@ -227,14 +227,10 @@ def microstates_segment(
         if n_jobs == 1:
             run_results = [_run_single_kmod(run) for run in range(n_runs)]
         else:
-            try:
-                import joblib
-            except ImportError as e:
-                raise ImportError(
-                    "NeuroKit error: microstates_segment(): the 'joblib' module is required "
-                    "for parallel execution. Please install it first (`pip install joblib`).",
-                ) from e
-            run_results = joblib.Parallel(n_jobs=n_jobs)(joblib.delayed(_run_single_kmod)(run) for run in range(n_runs))
+            from ..misc import parallel_run
+
+            args_list = [{"run_idx": run} for run in range(n_runs)]
+            run_results = parallel_run(_run_single_kmod, args_list, n_jobs=n_jobs)
 
         # Select the best run
         for result in run_results:

@@ -81,23 +81,13 @@ def eeg_power(eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha",
             )
             data.append(rez)
     else:
-        try:
-            import joblib
-        except ImportError as e:
-            raise ImportError(
-                "NeuroKit error: eeg_power(): the 'joblib' module is required "
-                "for parallel execution. Please install it first (`pip install joblib`).",
-            ) from e
+        from ..misc import parallel_run
 
-        data = joblib.Parallel(n_jobs=n_jobs)(
-            joblib.delayed(signal_power)(
-                eeg[channel].values,
-                sampling_rate=sampling_rate,
-                frequency_band=frequency_band,
-                **kwargs,
-            )
+        args_list = [
+            {"signal": eeg[channel].values, "sampling_rate": sampling_rate, "frequency_band": frequency_band, **kwargs}
             for channel in eeg.columns
-        )
+        ]
+        data = parallel_run(signal_power, args_list, n_jobs=n_jobs)
 
     data = pd.concat(data, axis=0)
     data.columns = band_names

@@ -531,22 +531,10 @@ def _hrv_dfa(rri, out, n_windows="default", **kwargs):
 
     # Compute DFA alpha1
     short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
-
-    # Run monofractal and multifractal DFA in parallel using threads (I/O-like, no GIL contention
-    # since the heavy lifting is in C extensions via numpy/scipy)
-    try:
-        import concurrent.futures
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            fut_mono1 = executor.submit(fractal_dfa, rri, multifractal=False, scale=short_window, **kwargs)
-            fut_multi1 = executor.submit(fractal_dfa, rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs)
-            out["DFA_alpha1"], _ = fut_mono1.result()
-            mdfa_alpha1, _ = fut_multi1.result()
-    except Exception:
-        # Fallback to sequential
-        out["DFA_alpha1"], _ = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)
-        mdfa_alpha1, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs)
-
+    # For monofractal
+    out["DFA_alpha1"], _ = fractal_dfa(rri, multifractal=False, scale=short_window, **kwargs)
+    # For multifractal
+    mdfa_alpha1, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=short_window, **kwargs)
     for k in mdfa_alpha1.columns:
         out["MFDFA_alpha1_" + k] = mdfa_alpha1[k].values[0]
 
@@ -563,22 +551,10 @@ def _hrv_dfa(rri, out, n_windows="default", **kwargs):
         return out
     else:
         long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
-
-        # Run monofractal and multifractal DFA in parallel using threads
-        try:
-            import concurrent.futures
-
-            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-                fut_mono2 = executor.submit(fractal_dfa, rri, multifractal=False, scale=long_window, **kwargs)
-                fut_multi2 = executor.submit(
-                    fractal_dfa, rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs
-                )
-                out["DFA_alpha2"], _ = fut_mono2.result()
-                mdfa_alpha2, _ = fut_multi2.result()
-        except Exception:
-            # Fallback to sequential
-            out["DFA_alpha2"], _ = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)
-            mdfa_alpha2, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs)
+        # For monofractal
+        out["DFA_alpha2"], _ = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)
+        # For multifractal
+        mdfa_alpha2, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs)
 
         for k in mdfa_alpha2.columns:
             out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]

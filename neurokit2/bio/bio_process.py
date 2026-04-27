@@ -1,5 +1,3 @@
-import concurrent.futures
-
 import pandas as pd
 
 from ..ecg import ecg_process
@@ -7,7 +5,7 @@ from ..eda import eda_process
 from ..emg import emg_process
 from ..eog import eog_process
 from ..hrv import hrv_rsa
-from ..misc import as_vector
+from ..misc import as_vector, parallel_run
 from ..ppg import ppg_process
 from ..rsp import rsp_process
 
@@ -55,8 +53,8 @@ def bio_process(
         Defaults to ``1000``.
     parallel : bool
         If ``True``, process each signal type (ECG, RSP, EDA, EMG, PPG, EOG) concurrently using
-        multiple processes. This can significantly speed up processing when multiple signal types
-        are provided. Defaults to ``False``.
+        ``parallel_run()``. This can significantly speed up processing when multiple signal types
+        are provided. Requires the ``joblib`` package. Defaults to ``False``.
 
     Returns
     ----------
@@ -203,13 +201,16 @@ def bio_process(
         _tasks.append(("EOG", eog_process, eog))
 
     # Process signals (parallel or sequential)
-    results = {}
     if parallel and len(_tasks) > 1:
-        with concurrent.futures.ProcessPoolExecutor(max_workers=len(_tasks)) as executor:
-            futures = {name: executor.submit(func, sig, sampling_rate=sampling_rate) for name, func, sig in _tasks}
-            for name, future in futures.items():
-                results[name] = future.result()
+
+        def _process_signal(func, sig, sampling_rate):
+            return func(sig, sampling_rate=sampling_rate)
+
+        args_list = [{"func": func, "sig": sig, "sampling_rate": sampling_rate} for _, func, sig in _tasks]
+        task_results = parallel_run(_process_signal, args_list, n_jobs=len(_tasks))
+        results = {name: task_results[i] for i, (name, _, _) in enumerate(_tasks)}
     else:
+        results = {}
         for name, func, sig in _tasks:
             results[name] = func(sig, sampling_rate=sampling_rate)
 

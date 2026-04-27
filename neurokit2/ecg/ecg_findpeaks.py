@@ -148,7 +148,6 @@ def _ecg_findpeaks_promac(
     ],
     threshold=0.33,
     gaussian_sd=100,
-    n_jobs=1,
     **kwargs,
 ):
     """Probabilistic Methods-Agreement via Convolution (ProMAC).
@@ -173,11 +172,16 @@ def _ecg_findpeaks_promac(
         The standard deviation of the Gaussian distribution used to represent the peak location
         probability. This value should be in millisencods and is usually taken as the size of
         QRS complexes.
-    n_jobs : int
-        Number of cores to use for running peak detection methods in parallel. ``1`` (default)
-        runs sequentially. ``-1`` uses all available cores. Requires the ``joblib`` package.
+    **kwargs
+        Additional keyword arguments. ``n_jobs`` (int) can be passed to run peak detection methods
+        in parallel. ``1`` (default) runs sequentially. ``-1`` uses all available cores. Requires
+        the ``joblib`` package. All other kwargs are forwarded to individual peak detection methods.
 
     """
+    from ..misc import parallel_run
+
+    n_jobs = kwargs.pop("n_jobs", 1)
+
     x = np.zeros(len(signal))
     promac_methods = [method.lower() for method in promac_methods]  # remove capitalised letters
     error_list = []  # Stores the failed methods
@@ -186,44 +190,32 @@ def _ecg_findpeaks_promac(
     sd = sampling_rate * gaussian_sd / 1000
     gauss_shape = scipy.stats.norm.pdf(np.linspace(-sd * 4, sd * 4, num=int(sd * 8)), loc=0, scale=sd)
 
+    def _run_method(method_name, sig, sr, kernel, **kw):
+        try:
+            func = _ecg_findpeaks_findmethod(method_name)
+            peaks = func(sig, sampling_rate=sr, **kw)
+            mask = np.zeros(len(sig))
+            mask[peaks] = 1
+            return np.convolve(mask, kernel, "same"), None
+        except ValueError:
+            return None, f"Method '{method_name}' is not valid."
+        except Exception as error:
+            return None, f"{method_name} error: {error}"
+
     if n_jobs == 1:
         # Sequential execution (original behavior)
         for method in promac_methods:
-            try:
-                func = _ecg_findpeaks_findmethod(method)
-                peaks = func(signal, sampling_rate=sampling_rate, **kwargs)
-                mask = np.zeros(len(signal))
-                mask[peaks] = 1
-                x += np.convolve(mask, gauss_shape, "same")
-            except ValueError:
-                error_list.append(f"Method '{method}' is not valid.")
-            except Exception as error:
-                error_list.append(f"{method} error: {error}")
+            convolved, err = _run_method(method, signal, sampling_rate, gauss_shape, **kwargs)
+            if err is not None:
+                error_list.append(err)
+            else:
+                x += convolved
     else:
-        # Parallel execution via joblib
-        try:
-            import joblib
-        except ImportError as e:
-            raise ImportError(
-                "NeuroKit error: _ecg_findpeaks_promac(): the 'joblib' module is required "
-                "for parallel execution. Please install it first (`pip install joblib`).",
-            ) from e
-
-        def _run_method(method_name, sig, sr, kernel, **kw):
-            try:
-                func = _ecg_findpeaks_findmethod(method_name)
-                peaks = func(sig, sampling_rate=sr, **kw)
-                mask = np.zeros(len(sig))
-                mask[peaks] = 1
-                return np.convolve(mask, kernel, "same"), None
-            except ValueError:
-                return None, f"Method '{method_name}' is not valid."
-            except Exception as error:
-                return None, f"{method_name} error: {error}"
-
-        results = joblib.Parallel(n_jobs=n_jobs)(
-            joblib.delayed(_run_method)(method, signal, sampling_rate, gauss_shape, **kwargs) for method in promac_methods
-        )
+        # Parallel execution via parallel_run
+        args_list = [
+            {"method_name": m, "sig": signal, "sr": sampling_rate, "kernel": gauss_shape, **kwargs} for m in promac_methods
+        ]
+        results = parallel_run(_run_method, args_list, n_jobs=n_jobs)
         for convolved, err in results:
             if err is not None:
                 error_list.append(err)
