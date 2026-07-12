@@ -309,9 +309,11 @@ def test_rsp_rrv():
     # Test Poincaré plot (show=True) - previously untested code path
     nk.rsp_rrv(rsp_rate90, peaks90, show=True)
     fig = plt.gcf()
-    assert len(fig.axes) == 1
-    assert fig.axes[0].get_title() == "Poincaré Plot"
-    plt.close(fig)
+    try:
+        assert len(fig.axes) == 1
+        assert fig.axes[0].get_title() == "Poincaré Plot"
+    finally:
+        plt.close(fig)
 
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
