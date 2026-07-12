@@ -306,6 +306,13 @@ def test_rsp_rrv():
     assert np.isnan(rsp90_rrv["RRV_VLF"][0])
     assert np.isnan(rsp110_rrv["RRV_VLF"][0])
 
+    # Test Poincaré plot (show=True) - previously untested code path
+    nk.rsp_rrv(rsp_rate90, peaks90, show=True)
+    fig = plt.gcf()
+    assert len(fig.axes) == 1
+    assert fig.axes[0].get_title() == "Poincaré Plot"
+    plt.close(fig)
+
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
 #                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
