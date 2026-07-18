@@ -293,7 +293,7 @@ def test_rsp_rrv():
     rsp_rate110 = nk.signal_rate(peaks110, desired_length=len(rsp110))
 
     rsp90_rrv = nk.rsp_rrv(rsp_rate90, peaks90)
-    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110)
+    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110, show=True)
 
     assert np.array(rsp90_rrv["RRV_SDBB"]) < np.array(rsp110_rrv["RRV_SDBB"])
     assert np.array(rsp90_rrv["RRV_RMSSD"]) < np.array(rsp110_rrv["RRV_RMSSD"])
@@ -305,6 +305,17 @@ def test_rsp_rrv():
     assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
     assert np.isnan(rsp90_rrv["RRV_VLF"][0])
     assert np.isnan(rsp110_rrv["RRV_VLF"][0])
+
+    # Test show=True
+    fig = plt.gcf()
+    try:
+        assert len(fig.axes) == 1
+        ax = fig.axes[0]
+        assert ax.get_title() == "Poincaré Plot"
+        assert len(ax.collections) > 0
+        assert len(ax.patches) > 0
+    finally:
+        plt.close(fig)
 
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
