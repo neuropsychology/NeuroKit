@@ -159,7 +159,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     N = len(signal)
     identity = np.eye(N)
     D_2 = scipy.sparse.diags([1, -2, 1], [0, 1, 2], shape=(N - 2, N))
-    A=identity + regularization**2 * D_2.T @ D_2
+    A = identity + regularization**2 * D_2.T @ D_2
     trend = np.linalg.solve(A, signal)
     # detrend
     return signal - trend
