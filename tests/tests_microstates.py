@@ -3,6 +3,7 @@ import pandas as pd
 
 import neurokit2 as nk
 from neurokit2.microstates.microstates_segment import _microstates_segment_runsegmentation
+from neurokit2.microstates.microstates_static import _microstates_lifetime
 from neurokit2.stats.cluster_quality import _cluster_quality_gev
 
 
@@ -149,3 +150,10 @@ def test_microstates_segment_documented_clustering_methods():
         assert output["Microstates"].shape == (2, eeg.shape[0])
         assert output["Sequence"].shape == (eeg.shape[1],)
         assert np.isfinite(output["GEV"])
+
+
+def test_microstates_lifetime_counts_first_run_once():
+    _, lifetimes = _microstates_lifetime(np.array([0, 0, 1]), out={})
+
+    np.testing.assert_array_equal(lifetimes[0], [0, 1])
+    np.testing.assert_array_equal(lifetimes[1], [1])
