@@ -81,9 +81,7 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
             raise ValueError("The precomputed `gfp` must contain one value per timepoint.")
 
     if sampling_rate is None:
-        raise ValueError(
-            "NeuroKit error: microstates_peaks(): `sampling_rate` is required when detecting GFP peaks."
-        )
+        raise ValueError("NeuroKit error: microstates_peaks(): `sampling_rate` is required when detecting GFP peaks.")
 
     peaks = _microstates_peaks_gfp(gfp=gfp, sampling_rate=sampling_rate, distance_between=distance_between)
 

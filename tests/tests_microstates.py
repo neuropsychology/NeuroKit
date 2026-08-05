@@ -130,9 +130,7 @@ def test_microstates_segmentation_cv_gev_order_and_map_scale():
     maps = rng.normal(size=(3, 5))
     scaled_maps = maps * np.array([1, 10, 100])[:, None]
     sequence, _, _, _ = _microstates_segment_runsegmentation(eeg, maps, output["GFP"], n_microstates=3)
-    scaled_sequence, _, _, _ = _microstates_segment_runsegmentation(
-        eeg, scaled_maps, output["GFP"], n_microstates=3
-    )
+    scaled_sequence, _, _, _ = _microstates_segment_runsegmentation(eeg, scaled_maps, output["GFP"], n_microstates=3)
     np.testing.assert_array_equal(sequence, scaled_sequence)
 
 
