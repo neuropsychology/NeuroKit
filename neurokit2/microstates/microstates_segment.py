@@ -175,7 +175,7 @@ def microstates_segment(
     """
     # Sanitize input
     data, indices, gfp, info_mne = microstates_clean(
-        eeg, train=train, sampling_rate=sampling_rate, standardize_eeg=standardize_eeg, gfp_method=gfp_method, **kwargs
+        eeg, train=train, sampling_rate=sampling_rate, standardize_eeg=standardize_eeg, gfp_method=gfp_method
     )
 
     # Run clustering algorithm

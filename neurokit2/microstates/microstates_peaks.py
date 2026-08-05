@@ -53,44 +53,61 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     .eeg_gfp
 
     """
-    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
-        sampling_rate = eeg.info["sfreq"]
-        eeg = eeg.get_data()
-
-    if sampling_rate is None:
-        raise ValueError(
-            "NeuroKit error: microstates_peaks(): The sampling_rate is requested ",
-            "for this function to run. Please provide it as an argument.",
-        )
-
-    # If we don't want to rely on peaks but take uniformly spaced samples
-    # (used in microstates_clustering)
-    if isinstance(gfp, (int, float)):
-        if gfp <= 1:  # If fraction
-            gfp = int(gfp * len(eeg[0, :]))
-        return np.linspace(0, len(eeg[0, :]), gfp, endpoint=False, dtype=int)
+    eeg, sampling_rate, _ = _microstates_sanitize_eeg(eeg, sampling_rate=sampling_rate)
 
     # Deal with string inputs
     if isinstance(gfp, str):
-        if gfp == "all":
-            gfp = False
-        elif gfp == "gfp":
-            gfp = True
+        if gfp.lower() == "all":
+            return np.arange(eeg.shape[1])
+        if gfp.lower() == "gfp":
+            gfp = None
         else:
-            raise ValueError(
-                "The `gfp` argument was not understood.",
-            )
+            raise ValueError("The `gfp` argument was not understood.")
 
-    # If we want ALL the indices
-    if gfp is False:
-        return np.arange(len(eeg))
+    # If we don't want to rely on peaks but take uniformly spaced samples
+    # (used in microstates_clustering)
+    if isinstance(gfp, (int, float, np.integer, np.floating)) and not isinstance(gfp, (bool, np.bool_)):
+        if gfp <= 1:  # If fraction
+            gfp = int(gfp * eeg.shape[1])
+        if not float(gfp).is_integer() or gfp < 1 or gfp > eeg.shape[1]:
+            raise ValueError("The number of training samples must be between 1 and the number of timepoints.")
+        return np.linspace(0, eeg.shape[1], int(gfp), endpoint=False, dtype=int)
 
-    # if gfp is True or gfp is None:
-    gfp = eeg_gfp(eeg, **kwargs)
+    if gfp is None or gfp is True:
+        gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, **kwargs)
+    else:
+        gfp = np.asarray(gfp)
+        if gfp.ndim != 1 or len(gfp) != eeg.shape[1]:
+            raise ValueError("The precomputed `gfp` must contain one value per timepoint.")
+
+    if sampling_rate is None:
+        raise ValueError(
+            "NeuroKit error: microstates_peaks(): `sampling_rate` is required when detecting GFP peaks."
+        )
 
     peaks = _microstates_peaks_gfp(gfp=gfp, sampling_rate=sampling_rate, distance_between=distance_between)
 
     return peaks
+
+
+def _microstates_sanitize_eeg(eeg, sampling_rate=None):
+    """Return EEG data as a channels-by-timepoints array."""
+    info = None
+    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
+        sampling_rate = eeg.info["sfreq"]
+        info = eeg.info
+        eeg = eeg.get_data()
+    elif isinstance(eeg, pd.DataFrame):
+        eeg = eeg.values
+
+    eeg = np.asarray(eeg)
+    if eeg.ndim == 3:
+        # MNE Epochs are ordered as epochs, channels, timepoints.
+        eeg = eeg.transpose(1, 0, 2).reshape(eeg.shape[1], -1)
+    if eeg.ndim != 2:
+        raise ValueError("EEG data must have shape (channels, timepoints) or (epochs, channels, timepoints).")
+
+    return eeg, sampling_rate, info
 
 
 # =============================================================================
