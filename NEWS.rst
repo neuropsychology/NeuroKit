@@ -1,6 +1,18 @@
 News
 =====
 
+0.2.9
+-------------------
+New Features
++++++++++++++
+
+* Added optional parallel processing support to computationally intensive functions:
+  ``bio_process()`` (``parallel`` parameter), ``ecg_findpeaks()`` ProMAC method,
+  ``entropy_multiscale()``, ``eeg_power()``, and ``microstates_segment()`` (``n_jobs`` parameter).
+  Requires the ``joblib`` package. Default behavior (sequential) is unchanged.
+* Internal thread-based parallelism for monofractal/multifractal DFA in ``hrv_nonlinear()``.
+
+
 0.2.8
 -------------------
 New Features

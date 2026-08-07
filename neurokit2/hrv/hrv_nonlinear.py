@@ -555,6 +555,7 @@ def _hrv_dfa(rri, out, n_windows="default", **kwargs):
         out["DFA_alpha2"], _ = fractal_dfa(rri, multifractal=False, scale=long_window, **kwargs)
         # For multifractal
         mdfa_alpha2, _ = fractal_dfa(rri, multifractal=True, q=np.arange(-5, 6), scale=long_window, **kwargs)
+
         for k in mdfa_alpha2.columns:
             out["MFDFA_alpha2_" + k] = mdfa_alpha2[k].values[0]
 

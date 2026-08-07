@@ -591,6 +591,34 @@ Statistics
 
 
 
+Parallel Processing
+---------------------
+
+For computationally intensive workflows, several functions support optional parallel execution via
+the ``n_jobs`` parameter (or ``parallel`` for ``bio_process``). This requires the ``joblib`` package
+(install with ``pip install joblib``).
+
+.. code-block:: python
+
+    # Process multiple biosignals concurrently
+    bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg,
+                                       sampling_rate=1000, parallel=True)
+
+    # Run 10 R-peak detection methods in parallel
+    peaks = nk.ecg_findpeaks(ecg_cleaned, method="promac", n_jobs=-1)
+
+    # Compute multiscale entropy across scales in parallel
+    mse, info = nk.entropy_multiscale(signal, n_jobs=-1)
+
+    # EEG power across channels in parallel
+    power = nk.eeg_power(eeg, n_jobs=-1)
+
+    # Microstate clustering runs in parallel
+    microstates = nk.microstates_segment(eeg, n_jobs=-1)
+
+Setting ``n_jobs=1`` (the default) preserves the original sequential behavior.
+
+
 Popularity
 ---------------------
 

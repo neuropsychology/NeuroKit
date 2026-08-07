@@ -5,7 +5,7 @@ from ..eda import eda_process
 from ..emg import emg_process
 from ..eog import eog_process
 from ..hrv import hrv_rsa
-from ..misc import as_vector
+from ..misc import as_vector, parallel_run
 from ..ppg import ppg_process
 from ..rsp import rsp_process
 
@@ -19,6 +19,7 @@ def bio_process(
     eog=None,
     keep=None,
     sampling_rate=1000,
+    parallel=False,
 ):
     """**Automated processing of bio signals**
 
@@ -50,6 +51,10 @@ def bio_process(
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
         Defaults to ``1000``.
+    parallel : bool
+        If ``True``, process each signal type (ECG, RSP, EDA, EMG, PPG, EOG) concurrently using
+        ``parallel_run()``. This can significantly speed up processing when multiple signal types
+        are provided. Requires the ``joblib`` package. Defaults to ``False``.
 
     Returns
     ----------
@@ -169,44 +174,54 @@ def bio_process(
     # ECG
     if ecg is not None:
         ecg = as_vector(ecg)
-        ecg_signals, ecg_info = ecg_process(ecg, sampling_rate=sampling_rate)
-        bio_info.update(ecg_info)
-        bio_df = pd.concat([bio_df, ecg_signals], axis=1)
-
-    # RSP
     if rsp is not None:
         rsp = as_vector(rsp)
-        rsp_signals, rsp_info = rsp_process(rsp, sampling_rate=sampling_rate)
-        bio_info.update(rsp_info)
-        bio_df = pd.concat([bio_df, rsp_signals], axis=1)
-
-    # EDA
     if eda is not None:
         eda = as_vector(eda)
-        eda_signals, eda_info = eda_process(eda, sampling_rate=sampling_rate)
-        bio_info.update(eda_info)
-        bio_df = pd.concat([bio_df, eda_signals], axis=1)
-
-    # EMG
     if emg is not None:
         emg = as_vector(emg)
-        emg_signals, emg_info = emg_process(emg, sampling_rate=sampling_rate)
-        bio_info.update(emg_info)
-        bio_df = pd.concat([bio_df, emg_signals], axis=1)
-
-    # PPG
     if ppg is not None:
         ppg = as_vector(ppg)
-        ppg_signals, ppg_info = ppg_process(ppg, sampling_rate=sampling_rate)
-        bio_info.update(ppg_info)
-        bio_df = pd.concat([bio_df, ppg_signals], axis=1)
-
-    # EOG
     if eog is not None:
         eog = as_vector(eog)
-        eog_signals, eog_info = eog_process(eog, sampling_rate=sampling_rate)
-        bio_info.update(eog_info)
-        bio_df = pd.concat([bio_df, eog_signals], axis=1)
+
+    # Build tasks: list of (name, function, signal) for non-None signals
+    _tasks = []
+    if ecg is not None:
+        _tasks.append(("ECG", ecg_process, ecg))
+    if rsp is not None:
+        _tasks.append(("RSP", rsp_process, rsp))
+    if eda is not None:
+        _tasks.append(("EDA", eda_process, eda))
+    if emg is not None:
+        _tasks.append(("EMG", emg_process, emg))
+    if ppg is not None:
+        _tasks.append(("PPG", ppg_process, ppg))
+    if eog is not None:
+        _tasks.append(("EOG", eog_process, eog))
+
+    # Process signals (parallel or sequential)
+    if parallel and len(_tasks) > 1:
+
+        def _process_signal(func, sig, sampling_rate):
+            return func(sig, sampling_rate=sampling_rate)
+
+        args_list = [{"func": func, "sig": sig, "sampling_rate": sampling_rate} for _, func, sig in _tasks]
+        task_results = parallel_run(_process_signal, args_list, n_jobs=len(_tasks))
+        results = {name: task_results[i] for i, (name, _, _) in enumerate(_tasks)}
+    else:
+        results = {}
+        for name, func, sig in _tasks:
+            results[name] = func(sig, sampling_rate=sampling_rate)
+
+    # Assemble results in consistent order (single concat for efficiency)
+    to_concat = []
+    for name, _, _ in _tasks:
+        signals_df, info_dict = results[name]
+        bio_info.update(info_dict)
+        to_concat.append(signals_df)
+    if to_concat:
+        bio_df = pd.concat(to_concat, axis=1)
 
     # Additional channels to keep
     if keep is not None:
@@ -219,6 +234,8 @@ def bio_process(
 
     # RSA
     if ecg is not None and rsp is not None:
+        ecg_signals = results["ECG"][0]
+        rsp_signals = results["RSP"][0]
         rsa = hrv_rsa(
             ecg_signals,
             rsp_signals,

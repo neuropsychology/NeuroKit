@@ -23,6 +23,7 @@ def entropy_multiscale(
     tolerance="sd",
     method="MSEn",
     show=False,
+    n_jobs=1,
     **kwargs,
 ):
     """**Multiscale entropy (MSEn) and its Composite (CMSEn), Refined (RCMSEn) or fuzzy versions**
@@ -92,6 +93,10 @@ def entropy_multiscale(
         (case sensitive).
     show : bool
         Show the entropy values for each scale factor.
+    n_jobs : int
+        Number of cores to use for computing entropy at each scale factor in parallel. ``1``
+        (default) runs sequentially. ``-1`` uses all available cores. Requires the ``joblib``
+        package.
     **kwargs
         Optional arguments.
 
@@ -322,21 +327,27 @@ def entropy_multiscale(
     }
 
     # Compute entropy for each coarsegrained segment
-    info["Value"] = np.array(
-        [
-            _entropy_multiscale(
-                signal,
-                scale=scale,
-                coarsegraining=coarsegraining,
-                algorithm=algorithm,
-                dimension=dimension,
-                tolerance=info["Tolerance"],
-                refined=refined,
-                **kwargs,
-            )
-            for scale in info["Scale"]
-        ]
-    )
+    def _run(scale_factor):
+        return _entropy_multiscale(
+            signal,
+            scale=scale_factor,
+            coarsegraining=coarsegraining,
+            algorithm=algorithm,
+            dimension=dimension,
+            tolerance=info["Tolerance"],
+            refined=refined,
+            **kwargs,
+        )
+
+    if n_jobs == 1:
+        # Sequential execution (original behavior)
+        info["Value"] = np.array([_run(s) for s in info["Scale"]])
+    else:
+        # Parallel execution via parallel_run
+        from ..misc import parallel_run
+
+        args_list = [{"scale_factor": s} for s in info["Scale"]]
+        info["Value"] = np.array(parallel_run(_run, args_list, n_jobs=n_jobs))
 
     # Remove inf, nan and 0
     mse = info["Value"][np.isfinite(info["Value"])]

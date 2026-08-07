@@ -20,6 +20,7 @@ def microstates_segment(
     criterion="gev",
     random_state=None,
     optimize=False,
+    n_jobs=1,
     **kwargs,
 ):
     """**Segment M/EEG signal into Microstates**
@@ -84,6 +85,10 @@ def microstates_segment(
         case a different seed is chosen each time this function is called.
     optimize : bool
         Optimized method in Poulsen et al. (2018) for the *k*-means modified method.
+    n_jobs : int
+        Number of cores to use for running clustering iterations in parallel. ``1`` (default)
+        runs sequentially. ``-1`` uses all available cores. Only applies to the ``"kmod"``
+        method which performs multiple runs. Requires the ``joblib`` package.
 
     Returns
     -------
@@ -194,42 +199,58 @@ def microstates_segment(
         polarity = None
         info = None
 
-        # Do several runs of the k-means algorithm, keep track of the best segmentation.
-        for run in range(n_runs):
-            # Run clustering on subset of data
+        def _run_single_kmod(run_idx):
+            """Run a single kmod clustering iteration."""
             _, _, current_info = cluster(
                 data[:, indices].T,
                 method="kmod",
                 n_clusters=n_microstates,
-                random_state=random_state[run],
+                random_state=random_state[run_idx],
                 max_iterations=max_iterations,
                 threshold=1e-6,
                 optimize=optimize,
             )
             current_microstates = current_info["clusters_normalized"]
             current_residual = current_info["residual"]
-
-            # Run segmentation on the whole dataset
             s, p, g, g_all = _microstates_segment_runsegmentation(data, current_microstates, gfp, n_microstates=n_microstates)
+            return {
+                "microstates": current_microstates,
+                "segmentation": s,
+                "polarity": p,
+                "gev": g,
+                "gev_all": g_all,
+                "residual": current_residual,
+                "info": current_info,
+            }
 
+        # Do several runs of the k-means algorithm, keep track of the best segmentation.
+        if n_jobs == 1:
+            run_results = [_run_single_kmod(run) for run in range(n_runs)]
+        else:
+            from ..misc import parallel_run
+
+            args_list = [{"run_idx": run} for run in range(n_runs)]
+            run_results = parallel_run(_run_single_kmod, args_list, n_jobs=n_jobs)
+
+        # Select the best run
+        for result in run_results:
             if criterion == "gev":
-                # If better (i.e., higher GEV), keep this segmentation
-                if g > gev:
-                    microstates, segmentation, polarity, gev = (
-                        current_microstates,
-                        s,
-                        p,
-                        g,
-                    )
-                    gev_all = g_all
-                    info = current_info
+                if result["gev"] > gev:
+                    microstates = result["microstates"]
+                    segmentation = result["segmentation"]
+                    polarity = result["polarity"]
+                    gev = result["gev"]
+                    gev_all = result["gev_all"]
+                    info = result["info"]
             elif criterion == "cv":
-                # If better (i.e., lower CV), keep this segmentation
-                # R2 and residual are proportional, use residual instead of R2
-                if current_residual < cv:
-                    microstates, segmentation, polarity = current_microstates, s, p
-                    cv, gev, gev_all = current_residual, g, g_all
-                    info -= current_info
+                if result["residual"] < cv:
+                    microstates = result["microstates"]
+                    segmentation = result["segmentation"]
+                    polarity = result["polarity"]
+                    cv = result["residual"]
+                    gev = result["gev"]
+                    gev_all = result["gev_all"]
+                    info = result["info"]
 
     else:
         # Run clustering algorithm on subset
