@@ -185,8 +185,7 @@ commands = [
 line-length = 127
 target-version = "py310"
 
-# Why was this excluded before in style workflow?
-extend-exclude = ["neurokit2/complexity/__init__.py"]
+extend-exclude = ["neurokit2/complexity/__init__.py", "studies/**/*.md"]
 
 [tool.ruff.lint]
 # E/W = pycodestyle, F = pyflakes, I = isort, UP = pyupgrade, PL = pylint
@@ -198,6 +197,7 @@ ignore = [
     "PLR0913", # Too many arguments (limit bumped to 10 below)
     "PLR0915", # Too many statements
     "PLR0914", # Too many local variables
+    "PLR0917", # Too many positional arguments (public API is positional by design)
     "PLC0415", # Allow imports inside functions (useful for heavy optional dependencies)
     "PLR2004", # Allows magic values in comparisons
     "PLR0911", # Allows many return statements in a function e.g., in data.py
