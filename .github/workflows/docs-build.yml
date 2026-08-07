@@ -18,19 +18,21 @@ jobs:
 
         steps:
             - name: Checkout Code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
               with:
                   fetch-depth: 0
 
             - name: Install uv
-              uses: astral-sh/setup-uv@v5
+              uses: astral-sh/setup-uv@v9.0.0
               with:
                   enable-cache: true
+                  prune-cache: true
+                  cache-suffix: docs
                   python-version: "3.13"
 
             - name: Cache MNE Data
               id: cache-mne
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                   path: ${{ env.MNE_DATA }}
                   key: mne-datasets-v1
@@ -53,7 +55,7 @@ jobs:
               run: uv run sphinx-build --keep-going -j 2 -b html docs/ docs/_build/html
 
             - name: Upload Artifact
-              uses: actions/upload-pages-artifact@v3
+              uses: actions/upload-pages-artifact@v5
               with:
                   path: docs/_build/html
 
@@ -73,4 +75,4 @@ jobs:
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@v4
+              uses: actions/deploy-pages@v5

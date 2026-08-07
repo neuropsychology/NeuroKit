@@ -30,9 +30,9 @@ Sub-domains
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_rqa
 
-*hrv_symdyn()*
+*hrv_symbolic()*
 """"""""""""""""""
-.. autofunction:: neurokit2.hrv.hrv_symdyn
+.. autofunction:: neurokit2.hrv.hrv_symbolic
 
 Intervals
 ^^^^^^^^^^^^^^^^
@@ -50,4 +50,3 @@ Intervals
 .. automodule:: neurokit2.hrv
    :members:
    :exclude-members: hrv, hrv_time, hrv_frequency, hrv_nonlinear, hrv_rqa, hrv_rsa, intervals_process, intervals_to_peaks
-

@@ -97,8 +97,11 @@ Beyond speed, **uv** can automatically manage Python versions for you. If you wa
     python -m venv .venv
     source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
+    # Dependency groups require pip 25.1 or newer
+    python -m pip install --upgrade pip
+
     # Install package and hooks
-    pip install -e ".[dev]"
+    pip install -e . --group dev
     pre-commit install
 
 .. tip::

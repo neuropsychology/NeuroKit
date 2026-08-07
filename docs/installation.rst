@@ -23,7 +23,7 @@ Then, at the top of each of your Python script, you should be able to import the
 
     .. code-block:: console
 
-        pip install https://github.com/neuropsychology/neurokit/zipball/dev --upgrade
+        pip install -U git+https://github.com/neuropsychology/NeuroKit@dev
 
 
 
@@ -85,6 +85,3 @@ If you have Python installed as part of `Miniconda` or `Anaconda`, please follow
     conda install neurokit2
 
 `conda` or `pip` are the preferred methods to install NeuroKit2, as they will install the most up-to-date stable release.
-
-
-
