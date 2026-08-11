@@ -109,8 +109,13 @@ def _rsp_intervalrelated_features(data, sampling_rate, output={}):
         output["RSP_Symmetry_RiseDecay"] = np.nanmean(data["RSP_Symmetry_RiseDecay"].values)
 
     if "RSP_Phase" in colnames:
+        # Phase durations depend on sample positions, not dataframe index labels.
+        # Epochs use time-based indices, while continuous signals typically use
+        # a RangeIndex, so normalize the index before calculating durations.
+        phase_data = data.reset_index(drop=True)
+
         # Extract inspiration durations
-        insp_phases = data[data["RSP_Phase"] == 1]
+        insp_phases = phase_data[phase_data["RSP_Phase"] == 1]
         insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
         insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
 
@@ -128,7 +133,7 @@ def _rsp_intervalrelated_features(data, sampling_rate, output={}):
         insp_times = np.array(insp_end - insp_start) / sampling_rate
 
         # Extract expiration durations
-        exp_phases = data[data["RSP_Phase"] == 0]
+        exp_phases = phase_data[phase_data["RSP_Phase"] == 0]
         exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
         exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
 

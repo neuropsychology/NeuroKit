@@ -341,6 +341,28 @@ def test_rsp_intervalrelated():
     assert features_dict.shape[0] == 2  # Number of rows
 
 
+def test_rsp_intervalrelated_phase_durations_with_time_index():
+    phase = pd.DataFrame(
+        {
+            "RSP_Phase": [1, 1, 1, 1, 0, 0, 0, 0],
+            "RSP_Phase_Completion": [0, 0.33, 0.66, 1, 0, 0.33, 0.66, 1],
+        }
+    )
+    epoched_phase = phase.copy()
+    epoched_phase.index = np.linspace(10, 10.07, len(epoched_phase))
+
+    continuous = nk.rsp_intervalrelated(phase, sampling_rate=100)
+    epoched = nk.rsp_intervalrelated(epoched_phase, sampling_rate=100)
+    duration_columns = [
+        "RSP_Phase_Duration_Inspiration",
+        "RSP_Phase_Duration_Expiration",
+        "RSP_Phase_Duration_Ratio",
+    ]
+
+    np.testing.assert_allclose(epoched[duration_columns], continuous[duration_columns])
+    np.testing.assert_allclose(epoched[duration_columns], [[0.03, 0.03, 1.0]])
+
+
 def test_rsp_rvt():
     sampling_rate = 1000
     rsp10 = nk.rsp_simulate(duration=60, sampling_rate=sampling_rate, respiratory_rate=10, random_state=42)
