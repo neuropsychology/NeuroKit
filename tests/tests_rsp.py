@@ -350,9 +350,10 @@ def test_rsp_intervalrelated_phase_durations_with_time_index():
     )
     epoched_phase = phase.copy()
     epoched_phase.index = np.linspace(10, 10.07, len(epoched_phase))
+    epoched_phase["Label"] = "1"
 
     continuous = nk.rsp_intervalrelated(phase, sampling_rate=100)
-    epoched = nk.rsp_intervalrelated(epoched_phase, sampling_rate=100)
+    epoched = nk.rsp_intervalrelated({"1": epoched_phase}, sampling_rate=100)
     duration_columns = [
         "RSP_Phase_Duration_Inspiration",
         "RSP_Phase_Duration_Expiration",
