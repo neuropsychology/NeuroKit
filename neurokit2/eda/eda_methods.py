@@ -64,13 +64,13 @@ def eda_methods(
     method_phasic = str(method).lower() if method_phasic == "default" else str(method_phasic).lower()
     method_peaks = str(method).lower() if method_peaks == "default" else str(method_peaks).lower()
 
-    # Create dictionary with all inputs
+    # Unpack user kwargs so get_kwargs() can forward them (same pattern as rsp_methods).
     report_info = {
         "sampling_rate": sampling_rate,
         "method_cleaning": method_cleaning,
         "method_phasic": method_phasic,
         "method_peaks": method_peaks,
-        "kwargs": kwargs,
+        **kwargs,
     }
 
     # Get arguments to be passed to underlying functions

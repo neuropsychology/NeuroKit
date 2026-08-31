@@ -28,8 +28,10 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
         should be generated. Defaults to ``None``. Can also be ``"text"`` to
         just print the text in the console without saving anything.
     **kwargs
-        Other arguments to be passed to specific methods. For more information,
-        see :func:`.rsp_methods`.
+        Other arguments to be passed to specific methods. This includes
+        ``amplitude_min`` (relative SCR amplitude threshold, default ``0.1``)
+        forwarded to :func:`.eda_peaks`. For more information, see
+        :func:`.eda_methods`.
 
     Returns
     -------
@@ -96,12 +98,12 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit", report=None, 
             **methods["kwargs_phasic"],
         )
 
-    # Find peaks
+    # Find peaks. amplitude_min defaults to 0.1 inside eda_peaks(); a custom
+    # value passed via **kwargs is forwarded through methods["kwargs_peaks"].
     peak_signal, info = eda_peaks(
         eda_decomposed["EDA_Phasic"].values,
         sampling_rate=sampling_rate,
         method=methods["method_peaks"],
-        amplitude_min=0.1,
         **methods["kwargs_peaks"],
     )
     info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
