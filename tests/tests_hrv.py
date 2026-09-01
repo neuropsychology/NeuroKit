@@ -58,6 +58,26 @@ def test_hrv():
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
 
 
+def test_hrv_tuple_input():
+    """HRV should accept peaks and sampling rate supplied as a tuple."""
+    peaks = [0, 1000, 2100, 3150, 4300, 5300]
+
+    hrv = nk.hrv_time((peaks, 1000))
+
+    assert hrv["HRV_MeanNN"].iloc[0] == 1060
+
+
+def test_hrv_tuple_metadata_input():
+    """HRV should accept the (signals, info) tuples returned by processing functions."""
+    peaks = [0, 1000, 2100, 3150, 4300, 5300]
+    signals = pd.DataFrame({"ECG_R_Peaks": np.zeros(peaks[-1] + 1)})
+    signals.loc[peaks, "ECG_R_Peaks"] = 1
+
+    hrv = nk.hrv_time((signals, {"sampling_rate": 1000}))
+
+    assert hrv["HRV_MeanNN"].iloc[0] == 1060
+
+
 def test_rri_input_hrv():
     ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
 
