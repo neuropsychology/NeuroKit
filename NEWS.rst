@@ -1,6 +1,14 @@
 News
 =====
 
+0.2.14
+-------------------
+Fixes
++++++++++++++
+
+* ``eda_process()`` now forwards a custom ``amplitude_min`` to ``eda_peaks()``
+  instead of hardcoding ``0.1`` (#1197).
+
 0.2.8
 -------------------
 New Features
@@ -230,6 +238,3 @@ Fixes
 -------------------
 
 * First release on PyPI.
-
-
-
