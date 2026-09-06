@@ -3,9 +3,28 @@ News
 
 0.3.0
 -------------------
+Compatibility
++++++++++++++
+
+* pandas 3 is now supported (the ``pandas<3`` pin was removed). Python 3.10 to 3.14 are tested.
+
+New Features
++++++++++++++
+
+* ``read_xdf()`` returns richer metadata: ``info`` now contains ``stream_names``,
+  ``stream_types``, ``channel_names``, ``channel_counts``, ``durations`` and a per-stream
+  ``streams`` list (name, type, channels, nominal and effective sampling rates, start/end
+  times, uid, source id, hostname). Metadata is computed from the streams that actually
+  contribute to the returned data.
+
 Fixes
 +++++++++++++
 
+* ``ecg_process()``, ``ecg_delineate()``, ``ecg_phase()`` and ``ecg_quality()`` no longer
+  crash when no R-peak is detected; they return NaN/empty outputs with a warning.
+* ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
+  which broke downstream functions), and the file-reading logic was updated for pandas 3.
+* ``epochs_create()`` and ``signal_recompose()`` were updated for pandas 3 and scipy 1.18.
 * ``eda_process()`` now forwards a custom ``amplitude_min`` to ``eda_peaks()``
   instead of hardcoding ``0.1`` (#1197, #1203).
 * ``rsp_intervalrelated()`` computes inspiration/expiration durations from sample positions
@@ -25,6 +44,12 @@ Fixes
   raised a ``TypeError``; backfitting is now invariant to the scale of the maps; the first
   microstate lifetime was overcounted by one sample (#1199).
 * ``hrv_nonlinear()`` docstring now points to :func:`hrv_rqa` (#1207).
+
+Maintenance
++++++++++++++
+
+* Source distributions no longer ship the tests, docs and data folders.
+* Broken image links in the README and documentation were fixed.
 
 0.2.8
 -------------------
