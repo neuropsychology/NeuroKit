@@ -58,6 +58,66 @@ def test_hrv():
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
 
 
+def test_hrv_rqa():
+    intervals = np.tile([900, 1000, 1100, 950, 1050], 8)
+    peaks = np.r_[0, np.cumsum(intervals)]
+
+    rqa = nk.hrv_rqa(peaks, sampling_rate=1000)
+
+    assert rqa.shape == (1, 14)
+    assert set(rqa.columns) == {
+        "RecurrenceRate",
+        "DiagRec",
+        "Determinism",
+        "DeteRec",
+        "L",
+        "Divergence",
+        "LEn",
+        "Laminarity",
+        "TrappingTime",
+        "VMax",
+        "VEn",
+        "W",
+        "WMax",
+        "WEn",
+    }
+
+
+def test_hrv_rqa_parameters():
+    intervals = np.tile([900, 1000, 1100, 950, 1050], 8)
+    peaks = np.r_[0, np.cumsum(intervals)]
+
+    rqa_default = nk.hrv_rqa(peaks, sampling_rate=1000)
+    rqa_custom = nk.hrv_rqa(peaks, sampling_rate=1000, dimension=3, delay=2, tolerance=10)
+
+    assert not np.isclose(rqa_default["RecurrenceRate"].iloc[0], rqa_custom["RecurrenceRate"].iloc[0])
+
+
+def test_hrv_rqa_short_input():
+    with pytest.raises(ValueError, match=r"dimension \* delay"):
+        nk.hrv_rqa([0, 1000, 2100], sampling_rate=1000)
+
+
+def test_hrv_tuple_input():
+    """HRV should accept peaks and sampling rate supplied as a tuple."""
+    peaks = [0, 1000, 2100, 3150, 4300, 5300]
+
+    hrv = nk.hrv_time((peaks, 1000))
+
+    assert hrv["HRV_MeanNN"].iloc[0] == 1060
+
+
+def test_hrv_tuple_metadata_input():
+    """HRV should accept the (signals, info) tuples returned by processing functions."""
+    peaks = [0, 1000, 2100, 3150, 4300, 5300]
+    signals = pd.DataFrame({"ECG_R_Peaks": np.zeros(peaks[-1] + 1)})
+    signals.loc[peaks, "ECG_R_Peaks"] = 1
+
+    hrv = nk.hrv_time((signals, {"sampling_rate": 1000}))
+
+    assert hrv["HRV_MeanNN"].iloc[0] == 1060
+
+
 def test_rri_input_hrv():
     ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
 

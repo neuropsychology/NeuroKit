@@ -97,6 +97,18 @@ def test_kmeans():
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])
 
 
+def test_cluster_microstates_method_routing():
+    rng = np.random.RandomState(42)
+    data = rng.normal(size=(20, 4))
+
+    _, _, info = nk.cluster(data, method="ica", n_clusters=2, random_state=42)
+    assert info["clustering_function"].func.__name__ == "_cluster_ica"
+
+    _, clusters, info = nk.cluster(data, method="aahc", n_clusters=2, random_state=42)
+    assert clusters.shape == (2, data.shape[1])
+    assert info["clustering_function"].func.__name__ == "_cluster_aahc"
+
+
 def test_cor():
     # pearson
     wiki_example_x = np.array([1, 2, 3, 5, 8])

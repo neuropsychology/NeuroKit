@@ -1,6 +1,9 @@
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_phase
 from .ecg_delineate import ecg_delineate
 from .ecg_peaks import ecg_peaks
@@ -79,6 +82,22 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
     # Try retrieving right column
     if isinstance(rpeaks, dict):
         rpeaks = rpeaks["ECG_R_Peaks"]
+
+    # Handle empty R-peaks array
+    if isinstance(rpeaks, (list, np.ndarray)) and len(rpeaks) == 0:
+        warn(
+            "No R-peaks were detected. Returning NaN values for cardiac phase determination.",
+            category=NeuroKitWarning,
+        )
+        # Return NaN-filled results when no R-peaks are detected
+        return pd.DataFrame(
+            {
+                "ECG_Phase_Atrial": np.full(len(ecg_cleaned), np.nan),
+                "ECG_Phase_Completion_Atrial": np.full(len(ecg_cleaned), np.nan),
+                "ECG_Phase_Ventricular": np.full(len(ecg_cleaned), np.nan),
+                "ECG_Phase_Completion_Ventricular": np.full(len(ecg_cleaned), np.nan),
+            }
+        )
 
     if delineate_info is None:
         __, delineate_info = ecg_delineate(ecg_cleaned, sampling_rate=sampling_rate)

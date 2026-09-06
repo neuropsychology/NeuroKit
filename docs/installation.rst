@@ -23,7 +23,7 @@ Then, at the top of each of your Python script, you should be able to import the
 
     .. code-block:: console
 
-        pip install https://github.com/neuropsychology/neurokit/zipball/dev --upgrade
+        pip install -U git+https://github.com/neuropsychology/NeuroKit@dev
 
 
 
@@ -67,7 +67,7 @@ Here is some `more information <https://docs.conda.io/projects/conda/en/latest/u
 1. Run :code:`conda env create <yourenvname>`; activate it every time you open conda by running :code:`conda activate <yourenvname>`
 2. Now you can proceed to the next step.
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/tutorial_installation_conda.jpg
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/img/tutorial_installation_conda.jpg
 
 
 
@@ -85,6 +85,3 @@ If you have Python installed as part of `Miniconda` or `Anaconda`, please follow
     conda install neurokit2
 
 `conda` or `pip` are the preferred methods to install NeuroKit2, as they will install the most up-to-date stable release.
-
-
-

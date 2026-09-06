@@ -212,7 +212,7 @@ def epochs_create(
 
     # Sanitize dtype of individual columns
     for i, epoch_df in epochs.items():
-        for colname, column in epoch_df.select_dtypes(include=["object"]).items():
+        for colname, column in epoch_df.select_dtypes(include=["object", "string"]).items():
             # Check whether columns are indices or label/condition
             values = column.unique().tolist()
             zero_or_one = all(x in [0, 1] for x in values)

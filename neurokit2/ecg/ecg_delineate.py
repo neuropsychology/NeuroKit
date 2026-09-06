@@ -1,3 +1,5 @@
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -5,6 +7,7 @@ import pywt
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
+from ..misc import NeuroKitWarning
 from ..signal import (
     signal_findpeaks,
     signal_formatpeaks,
@@ -160,6 +163,28 @@ def ecg_delineate(
 
     if isinstance(rpeaks, dict):
         rpeaks = rpeaks["ECG_R_Peaks"]
+
+    # Handle empty R-peaks array
+    if isinstance(rpeaks, (list, np.ndarray)) and len(rpeaks) == 0:
+        warn(
+            "No R-peaks were detected. Returning empty results for ECG delineation.",
+            category=NeuroKitWarning,
+        )
+        # Return empty results when no R-peaks are detected
+        waves = {
+            "ECG_P_Peaks": np.array([], dtype=float),
+            "ECG_P_Onsets": np.array([], dtype=float),
+            "ECG_P_Offsets": np.array([], dtype=float),
+            "ECG_Q_Peaks": np.array([], dtype=float),
+            "ECG_R_Onsets": np.array([], dtype=float),
+            "ECG_R_Offsets": np.array([], dtype=float),
+            "ECG_S_Peaks": np.array([], dtype=float),
+            "ECG_T_Peaks": np.array([], dtype=float),
+            "ECG_T_Onsets": np.array([], dtype=float),
+            "ECG_T_Offsets": np.array([], dtype=float),
+        }
+        signals = pd.DataFrame({key: np.zeros(len(ecg_cleaned), dtype=int) for key in waves.keys()})
+        return signals, waves
 
     method = method.lower()  # remove capitalised letters
     if method in ["peak", "peaks", "derivative", "gradient"]:
@@ -763,7 +788,7 @@ def _calc_prominence(peaks, sig, Rpeak=None, minima=False):
     _sig = -sig if minima else sig
     w[peaks] = scipy.signal.peak_prominences(_sig, peaks)[0]
     # optional: set rpeak prominence to zero to emphasize other peaks
-    if Rpeak is not None:
+    if Rpeak is not None and 0 <= Rpeak < len(w):
         w[Rpeak] = 0
     return w
 
@@ -772,7 +797,8 @@ def _prominence_find_q_wave(weight_minima, current_wave, max_r_rise_time):
     if "ECG_R_Peaks" not in current_wave:
         return
     q_bound = max(current_wave["ECG_R_Peaks"] - max_r_rise_time, 0)
-
+    if len(weight_minima[q_bound : current_wave["ECG_R_Peaks"]]) == 0:
+        return
     current_wave["ECG_Q_Peaks"] = np.argmax(weight_minima[q_bound : current_wave["ECG_R_Peaks"]]) + q_bound
 
 
@@ -780,6 +806,8 @@ def _prominence_find_s_wave(sig, weight_minima, current_wave, max_qrs_interval):
     if "ECG_Q_Peaks" not in current_wave:
         return
     s_bound = current_wave["ECG_Q_Peaks"] + max_qrs_interval
+    if len(weight_minima[current_wave["ECG_R_Peaks"] : s_bound] > 0) == 0:
+        return
     s_wave = np.argmax(weight_minima[current_wave["ECG_R_Peaks"] : s_bound] > 0) + current_wave["ECG_R_Peaks"]
     current_wave["ECG_S_Peaks"] = (
         np.argmin(sig[current_wave["ECG_R_Peaks"] : s_bound]) + current_wave["ECG_R_Peaks"]

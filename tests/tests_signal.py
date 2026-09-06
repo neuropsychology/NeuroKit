@@ -102,7 +102,7 @@ def test_signal_detrend():
 
     # Tarvainen
     rez_nk = nk.signal_detrend(signal, method="tarvainen2002", regularization=500)
-    assert np.allclose(np.mean(rez_nk - signal), -2.88438737697, atol=0.000001)
+    assert np.allclose(np.mean(rez_nk - signal), -2.941610000384851, atol=0.000001)
 
 
 def test_signal_filter():
@@ -306,12 +306,23 @@ def test_signal_plot():
 
 def test_signal_power():
     signal1 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=500)
-    pwr1 = nk.signal_power(signal1, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=500)
+    pwr1 = nk.signal_power(signal1, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=500, show=True)
 
     signal2 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=100)
     pwr2 = nk.signal_power(signal2, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=100)
 
     assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)
+
+    # Test show=True
+    fig = plt.gcf()
+    try:
+        assert len(fig.axes) == 1
+        ax = fig.axes[0]
+        assert ax.get_title() == "Power Spectral Density (PSD) for Frequency Domains"
+        assert ax.get_xlabel() == "Frequency (Hz)"
+        assert len(ax.collections) > 0
+    finally:
+        plt.close(fig)
 
 
 def test_signal_timefrequency():

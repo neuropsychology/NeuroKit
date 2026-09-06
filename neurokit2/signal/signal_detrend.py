@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.sparse
+import scipy.sparse.linalg
 
 from ..stats import fit_loess, fit_polynomial
 from .signal_decompose import signal_decompose
@@ -157,14 +158,15 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.
     """
     N = len(signal)
-    identity = np.eye(N)
-    B = np.dot(np.ones((N - 2, 1)), np.array([[1, -2, 1]]))
-    D_2 = scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N - 2, N))  # pylint: disable=E1101
-    inv = np.linalg.inv(identity + regularization**2 * D_2.T @ D_2)
-    z_stat = (identity - inv) @ signal
-
-    trend = np.squeeze(np.asarray(signal - z_stat))
-
+    # Second-order difference operator D_2 of shape (N-2, N), with rows [1, -2, 1]. Using
+    # `diags` guarantees that every row keeps its full set of coefficients (a `dia_matrix`
+    # built from (N-2)-long diagonals silently truncated the last rows, see #1198).
+    D_2 = scipy.sparse.diags([1.0, -2.0, 1.0], [0, 1, 2], shape=(N - 2, N), format="csc")
+    # The trend is the solution of (I + lambda^2 * D_2' D_2) z = signal. The matrix is
+    # symmetric, positive-definite and pentadiagonal, so a sparse solver is used instead
+    # of a dense inversion (orders of magnitude faster for long signals).
+    A = scipy.sparse.identity(N, format="csc") + regularization**2 * (D_2.T @ D_2)
+    trend = scipy.sparse.linalg.spsolve(A.tocsc(), np.asarray(signal, dtype=float))
     # detrend
     return signal - trend
 

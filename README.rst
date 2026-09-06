@@ -1,4 +1,4 @@
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/img/banner.png
         :target: https://neuropsychology.github.io/NeuroKit/
 
 .. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg?logo=python&logoColor=FFE873
@@ -143,7 +143,7 @@ Examples
 **Don't know which tutorial is suited for your case?** Follow this flowchart:
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/workflow.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/workflow.png
         :target: https://neuropsychology.github.io/NeuroKit/
 
 Citation
@@ -231,7 +231,7 @@ You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https:/
     nk.signal_plot(data, subplots=True)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_simulation.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_simulation.png
         :target: https://neuropsychology.github.io/NeuroKit/examples/signal_simulation/signal_simulation.html
 
 
@@ -249,7 +249,7 @@ Electrodermal Activity (EDA/GSR)
     # Visualise the processing
     nk.eda_plot(signals, info)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png
         :target: https://neuropsychology.github.io/NeuroKit/examples/eda_peaks/eda_peaks.html
 
 
@@ -268,7 +268,7 @@ Cardiac activity (ECG)
     nk.ecg_plot(signals, info)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png
         :target: https://neuropsychology.github.io/NeuroKit/examples/ecg_heartbeats/ecg_heartbeats.html
 
 
@@ -287,7 +287,7 @@ Respiration (RSP)
     nk.rsp_plot(signals, info)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png
         :target: https://neuropsychology.github.io/NeuroKit/examples/rsp_rrv/rsp_rrv.html
 
 
@@ -306,7 +306,7 @@ Photoplethysmography (PPG/BVP)
     nk.ppg_plot(signals, info)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png
 
 
 Electromyography (EMG)
@@ -324,7 +324,7 @@ Electromyography (EMG)
     nk.emg_plot(signals, info)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
 
 
 
@@ -343,7 +343,7 @@ Electrooculography (EOG)
     nk.eog_plot(signals, info)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png
 
 
 
@@ -360,7 +360,7 @@ The analysis of physiological data usually comes in two types, **event-related**
 
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/features.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/features.png
 
 
 Event-related
@@ -440,7 +440,7 @@ Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices an
 
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
 
 Miscellaneous
 ----------------------------
@@ -465,7 +465,7 @@ ECG Delineation
 
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_delineate.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_delineate.png
        :target: https://neuropsychology.github.io/NeuroKit/examples/ecg_delineate/ecg_delineate.html
 
 
@@ -501,7 +501,7 @@ Signal Processing
     plot = nk.signal_plot([original, distorted, cleaned])
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_signalprocessing.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_signalprocessing.png
 
 
 Complexity (Entropy, Fractal Dimensions, ...)
@@ -519,7 +519,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
         :target: https://neuropsychology.github.io/NeuroKit/functions/complexity.html
 
 
@@ -556,7 +556,7 @@ Signal Decomposition
     recomposed = nk.signal_recompose(components, threshold=0.99)
     nk.signal_plot(recomposed)  # Visualize components
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_decomposition.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_decomposition.png
         :target: https://neuropsychology.github.io/NeuroKit/functions/signal.html#signal-decompose
 
 Signal Power Spectrum Density (PSD)
@@ -572,7 +572,7 @@ Signal Power Spectrum Density (PSD)
     lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
     burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
         :target: https://neuropsychology.github.io/NeuroKit/functions/signal.html#signal-psd
 
 Statistics
@@ -586,7 +586,7 @@ Statistics
 
     ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
         :target: https://neuropsychology.github.io/NeuroKit/functions/stats.html#hdi
 
 
@@ -610,20 +610,22 @@ NeuroKit2 is one of the most welcoming packages for new contributors and users, 
 Used at
 -------
 
-|ntu| |univ_paris| |univ_duke| |uni_auckland| |uni_pittsburh| |uni_washington|
+|ntu| |univ_paris| |univ_duke| |uni_auckland| |uni_pittsburgh| |uni_washington| |uni_sussex|
 
-.. |ntu| image:: https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Nanyang_Technological_University.svg/1024px-Nanyang_Technological_University.svg.png
-   :height: 70
-.. |univ_duke| image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
-   :height: 70
-.. |univ_paris| image:: https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg
-   :height: 70
-.. |uni_auckland| image:: https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/University_of_Auckland.svg/1024px-University_of_Auckland.svg.png
-   :height: 70
-.. |uni_pittsburh| image:: https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png
-   :height: 70
-.. |uni_washington| image:: https://upload.wikimedia.org/wikipedia/en/thumb/5/58/University_of_Washington_seal.svg/768px-University_of_Washington_seal.svg.png
-   :height: 70
+.. |ntu| image:: https://img.shields.io/badge/Nanyang_Technological_University-Singapore-D71440?style=for-the-badge
+   :target: https://www.ntu.edu.sg/
+.. |univ_paris| image:: https://img.shields.io/badge/Universit%C3%A9_Paris_Cit%C3%A9-France-2E3A87?style=for-the-badge
+   :target: https://u-paris.fr/
+.. |univ_duke| image:: https://img.shields.io/badge/Duke_University-USA-012169?style=for-the-badge
+   :target: https://duke.edu/
+.. |uni_auckland| image:: https://img.shields.io/badge/University_of_Auckland-New_Zealand-00467F?style=for-the-badge
+   :target: https://www.auckland.ac.nz/
+.. |uni_pittsburgh| image:: https://img.shields.io/badge/University_of_Pittsburgh-USA-003594?style=for-the-badge
+   :target: https://www.pitt.edu/
+.. |uni_washington| image:: https://img.shields.io/badge/University_of_Washington-USA-4B2E83?style=for-the-badge
+   :target: https://www.washington.edu/
+.. |uni_sussex| image:: https://img.shields.io/badge/University_of_Sussex-UK-003B49?style=for-the-badge
+   :target: https://www.sussex.ac.uk/
 
 
 Disclaimer

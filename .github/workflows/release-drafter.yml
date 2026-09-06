@@ -17,7 +17,15 @@ jobs:
 
     if: github.repository == 'neuropsychology/NeuroKit'
     steps:
-      - uses: release-drafter/release-drafter@v6
+      - uses: release-drafter/release-drafter@v7
+        if: github.event_name == 'push'
+        with:
+          config-name: release-drafter-config.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: release-drafter/release-drafter/autolabeler@v7
+        if: github.event_name == 'pull_request'
         with:
           config-name: release-drafter-config.yml
         env:

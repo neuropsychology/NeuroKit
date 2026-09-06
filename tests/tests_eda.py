@@ -118,30 +118,55 @@ def test_eda_process():
     signals, info = nk.eda_process(eda, sampling_rate=250)
 
     assert signals.shape == (7500, 11)
-    assert (
-        np.array(
-            [
-                "EDA_Raw",
-                "EDA_Clean",
-                "EDA_Tonic",
-                "EDA_Phasic",
-                "SCR_Onsets",
-                "SCR_Peaks",
-                "SCR_Height",
-                "SCR_Amplitude",
-                "SCR_RiseTime",
-                "SCR_Recovery",
-                "SCR_RecoveryTime",
-            ]
-        )
-        in signals.columns.values
-    )
+    assert {
+        "EDA_Raw",
+        "EDA_Clean",
+        "EDA_Tonic",
+        "EDA_Phasic",
+        "SCR_Onsets",
+        "SCR_Peaks",
+        "SCR_Height",
+        "SCR_Amplitude",
+        "SCR_RiseTime",
+        "SCR_Recovery",
+        "SCR_RecoveryTime",
+    }.issubset(signals.columns)
 
     # Check equal number of markers
     peaks = np.where(signals["SCR_Peaks"] == 1)[0]
     onsets = np.where(signals["SCR_Onsets"] == 1)[0]
     recovery = np.where(signals["SCR_Recovery"] == 1)[0]
     assert peaks.shape == onsets.shape == recovery.shape == (5,)
+
+
+def test_eda_process_custom_amplitude_min():
+    """Custom amplitude_min must reach eda_peaks through eda_process (#1197)."""
+    from neurokit2.eda.eda_methods import eda_methods
+
+    methods = eda_methods(amplitude_min=0.03)
+    assert methods["kwargs_peaks"]["amplitude_min"] == 0.03
+
+    sampling_rate = 250
+    eda = nk.eda_simulate(
+        duration=30,
+        scr_number=5,
+        drift=0.1,
+        noise=0,
+        sampling_rate=sampling_rate,
+        random_state=42,
+    )
+
+    signals_default, _ = nk.eda_process(eda, sampling_rate=sampling_rate)
+    signals_strict, _ = nk.eda_process(eda, sampling_rate=sampling_rate, amplitude_min=0.9)
+    signals_loose, _ = nk.eda_process(eda, sampling_rate=sampling_rate, amplitude_min=0.01)
+
+    n_default = int(np.sum(signals_default["SCR_Peaks"] == 1))
+    n_strict = int(np.sum(signals_strict["SCR_Peaks"] == 1))
+    n_loose = int(np.sum(signals_loose["SCR_Peaks"] == 1))
+
+    assert n_strict <= n_default
+    assert n_loose >= n_default
+    assert n_strict < n_loose
 
 
 def test_eda_plot():
