@@ -173,9 +173,16 @@ def microstates_segment(
       on Biomedical Engineering.
 
     """
+    method = method.lower()
+    criterion = criterion.lower()
+    if criterion not in ["gev", "cv"]:
+        raise ValueError("`criterion` must be one of 'gev' or 'cv'.")
+    if n_runs < 1:
+        raise ValueError("`n_runs` must be at least 1.")
+
     # Sanitize input
     data, indices, gfp, info_mne = microstates_clean(
-        eeg, train=train, sampling_rate=sampling_rate, standardize_eeg=standardize_eeg, gfp_method=gfp_method, **kwargs
+        eeg, train=train, sampling_rate=sampling_rate, standardize_eeg=standardize_eeg, gfp_method=gfp_method
     )
 
     # Run clustering algorithm
@@ -187,7 +194,7 @@ def microstates_segment(
         random_state = rng.choice(n_runs * 1000, n_runs, replace=False)
 
         # Initialize values
-        gev = 0
+        gev = -np.inf
         cv = np.inf
         microstates = None
         segmentation = None
@@ -229,7 +236,7 @@ def microstates_segment(
                 if current_residual < cv:
                     microstates, segmentation, polarity = current_microstates, s, p
                     cv, gev, gev_all = current_residual, g, g_all
-                    info -= current_info
+                    info = current_info
 
     else:
         # Run clustering algorithm on subset
@@ -243,7 +250,8 @@ def microstates_segment(
         )
 
     # Reorder
-    segmentation, microstates = microstates_classify(segmentation, microstates)
+    segmentation, microstates, new_order = microstates_classify(segmentation, microstates, return_order=True)
+    gev_all = gev_all[new_order]
 
     # CLustering quality
     #    quality = cluster_quality(data, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)
@@ -268,7 +276,12 @@ def microstates_segment(
 # =============================================================================
 def _microstates_segment_runsegmentation(data, microstates, gfp, n_microstates):
     # Find microstate corresponding to each datapoint
-    activation = microstates.dot(data)
+    maps_centered = microstates - np.mean(microstates, axis=1, keepdims=True)
+    map_norms = np.linalg.norm(maps_centered, axis=1, keepdims=True)
+    map_norms[map_norms == 0] = 1
+    maps_normalized = maps_centered / map_norms
+    data_centered = data - np.mean(data, axis=0, keepdims=True)
+    activation = maps_normalized.dot(data_centered)
     segmentation = np.argmax(np.abs(activation), axis=0)
     polarity = np.sign(np.choose(segmentation, activation))
 

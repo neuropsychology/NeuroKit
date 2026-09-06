@@ -192,7 +192,7 @@ def _microstates_lifetime(microstates, out=None):
     tau_dict = {s: [] for s in states}
     s = microstates[0]  # current symbol
     tau = 1.0  # current lifetime
-    for i in range(n):
+    for i in range(1, n):
         if microstates[i] == s:
             tau += 1.0
         else:
