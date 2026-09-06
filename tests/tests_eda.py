@@ -118,24 +118,19 @@ def test_eda_process():
     signals, info = nk.eda_process(eda, sampling_rate=250)
 
     assert signals.shape == (7500, 11)
-    assert (
-        np.array(
-            [
-                "EDA_Raw",
-                "EDA_Clean",
-                "EDA_Tonic",
-                "EDA_Phasic",
-                "SCR_Onsets",
-                "SCR_Peaks",
-                "SCR_Height",
-                "SCR_Amplitude",
-                "SCR_RiseTime",
-                "SCR_Recovery",
-                "SCR_RecoveryTime",
-            ]
-        )
-        in signals.columns.values
-    )
+    assert {
+        "EDA_Raw",
+        "EDA_Clean",
+        "EDA_Tonic",
+        "EDA_Phasic",
+        "SCR_Onsets",
+        "SCR_Peaks",
+        "SCR_Height",
+        "SCR_Amplitude",
+        "SCR_RiseTime",
+        "SCR_Recovery",
+        "SCR_RecoveryTime",
+    }.issubset(signals.columns)
 
     # Check equal number of markers
     peaks = np.where(signals["SCR_Peaks"] == 1)[0]

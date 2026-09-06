@@ -495,3 +495,25 @@ def test_ecg_quality_no_rpeaks():
         assert isinstance(quality, np.ndarray), "quality should be a numpy array"
         assert len(quality) == len(ecg_flat), "Quality length mismatch"
         assert np.all(np.isnan(quality)), "Quality should be NaN when no R-peaks"
+
+
+def test_ecg_delineate_prominence_boundary_rpeaks():
+    """The prominence helpers must not crash when an R-peak lies at the edge of a beat segment (#1181)."""
+    from neurokit2.ecg.ecg_delineate import _calc_prominence, _prominence_find_q_wave, _prominence_find_s_wave
+
+    sig = np.sin(np.linspace(0, 4 * np.pi, 50))
+    peaks = np.array([12, 37])
+
+    # R-peak index equal to the segment length used to raise an IndexError
+    weights = _calc_prominence(peaks, sig, Rpeak=len(sig))
+    assert weights.shape == sig.shape
+
+    # R-peak at the very start: empty search window for the Q wave
+    wave = {"ECG_R_Peaks": 0}
+    _prominence_find_q_wave(weights, wave, max_r_rise_time=10)
+    assert "ECG_Q_Peaks" not in wave
+
+    # R-peak at the very end: empty search window for the S wave
+    wave = {"ECG_R_Peaks": len(sig), "ECG_Q_Peaks": len(sig) - 5}
+    _prominence_find_s_wave(sig, weights, wave, max_qrs_interval=10)
+    assert "ECG_S_Peaks" not in wave
