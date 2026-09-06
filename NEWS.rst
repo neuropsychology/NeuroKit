@@ -1,13 +1,30 @@
 News
 =====
 
-0.2.14
+0.3.0
 -------------------
 Fixes
 +++++++++++++
 
 * ``eda_process()`` now forwards a custom ``amplitude_min`` to ``eda_peaks()``
-  instead of hardcoding ``0.1`` (#1197).
+  instead of hardcoding ``0.1`` (#1197, #1203).
+* ``rsp_intervalrelated()`` computes inspiration/expiration durations from sample positions
+  rather than index labels, fixing wrong durations for time-indexed epochs (#1196, #1201).
+* ``hrv()`` and related functions accept ``(peaks, sampling_rate)`` tuples as well as the
+  ``(signals, info)`` tuples returned by processing functions (#1205).
+* ``signal_detrend(method="tarvainen2002")``: the second-difference operator was truncated at
+  the end of the signal, leaving the last samples undetrended. The linear system is now solved
+  with a sparse solver, which is also orders of magnitude faster for long signals (#1198).
+* ``ecg_delineate(method="prominence")`` no longer crashes when an R-peak falls at the boundary
+  of a beat segment (#1181).
+* Microstates: ``method="ica"`` was routed to PCA and ``method="aahc"`` was not recognized;
+  ``train="all"`` selected only the first ``n_channels`` samples; precomputed GFP passed to
+  ``microstates_peaks()`` was ignored; EEG standardization was performed across channels
+  instead of across time; MNE ``Epochs`` input failed; microstate labels and
+  ``GEV_per_microstate`` were incorrectly remapped after reordering; ``criterion="cv"``
+  raised a ``TypeError``; backfitting is now invariant to the scale of the maps; the first
+  microstate lifetime was overcounted by one sample (#1199).
+* ``hrv_nonlinear()`` docstring now points to :func:`hrv_rqa` (#1207).
 
 0.2.8
 -------------------

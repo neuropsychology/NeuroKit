@@ -77,6 +77,7 @@ def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True
         peaks = np.asarray(train, dtype=int)
     # Find peaks in the global field power (GFP) or take a given amount of indices
     else:
-        peaks = microstates_peaks(eeg, gfp=gfp if train == "gfp" else train, sampling_rate=sampling_rate)
+        peaks_kwargs = {key: kwargs[key] for key in ["distance_between"] if key in kwargs}
+        peaks = microstates_peaks(eeg, gfp=gfp if train == "gfp" else train, sampling_rate=sampling_rate, **peaks_kwargs)
 
     return eeg, peaks, gfp, info
