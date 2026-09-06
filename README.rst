@@ -610,20 +610,22 @@ NeuroKit2 is one of the most welcoming packages for new contributors and users, 
 Used at
 -------
 
-|ntu| |univ_paris| |univ_duke| |uni_auckland| |uni_pittsburh| |uni_washington|
+|ntu| |univ_paris| |univ_duke| |uni_auckland| |uni_pittsburgh| |uni_washington| |uni_sussex|
 
-.. |ntu| image:: https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Nanyang_Technological_University.svg/1024px-Nanyang_Technological_University.svg.png
-   :height: 70
-.. |univ_duke| image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
-   :height: 70
-.. |univ_paris| image:: https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg
-   :height: 70
-.. |uni_auckland| image:: https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/University_of_Auckland.svg/1024px-University_of_Auckland.svg.png
-   :height: 70
-.. |uni_pittsburh| image:: https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png
-   :height: 70
-.. |uni_washington| image:: https://upload.wikimedia.org/wikipedia/en/thumb/5/58/University_of_Washington_seal.svg/768px-University_of_Washington_seal.svg.png
-   :height: 70
+.. |ntu| image:: https://img.shields.io/badge/Nanyang_Technological_University-Singapore-D71440?style=for-the-badge
+   :target: https://www.ntu.edu.sg/
+.. |univ_paris| image:: https://img.shields.io/badge/Universit%C3%A9_Paris_Cit%C3%A9-France-2E3A87?style=for-the-badge
+   :target: https://u-paris.fr/
+.. |univ_duke| image:: https://img.shields.io/badge/Duke_University-USA-012169?style=for-the-badge
+   :target: https://duke.edu/
+.. |uni_auckland| image:: https://img.shields.io/badge/University_of_Auckland-New_Zealand-00467F?style=for-the-badge
+   :target: https://www.auckland.ac.nz/
+.. |uni_pittsburgh| image:: https://img.shields.io/badge/University_of_Pittsburgh-USA-003594?style=for-the-badge
+   :target: https://www.pitt.edu/
+.. |uni_washington| image:: https://img.shields.io/badge/University_of_Washington-USA-4B2E83?style=for-the-badge
+   :target: https://www.washington.edu/
+.. |uni_sussex| image:: https://img.shields.io/badge/University_of_Sussex-UK-003B49?style=for-the-badge
+   :target: https://www.sussex.ac.uk/
 
 
 Disclaimer
