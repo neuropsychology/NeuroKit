@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 
 from ..signal import signal_filter
@@ -15,8 +14,7 @@ def emg_amplitude(emg_cleaned, sampling_rate=1000):
     emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by ``emg_clean()``.
     sampling_rate : int
-        The sampling frequency of ``emg_cleaned`` (in Hz, i.e., samples/second).
-        Defaults to 1000.
+        The sampling frequency of ``emg_cleaned`` in Hz. Defaults to 1000.
 
     Returns
     -------
@@ -89,9 +87,7 @@ def _emg_amplitude_tkeo(emg_cleaned):
 # =============================================================================
 # Linear Envelope
 # =============================================================================
-def _emg_amplitude_envelope(
-    emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8
-):
+def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8):
     """Calculate the linear envelope of a signal.
 
     This function implements a 2nd-order Butterworth filter with zero lag, described by Marcos Duarte
@@ -120,9 +116,6 @@ def _emg_amplitude_envelope(
     - BMCLab: https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb
 
     """
-    # A low-pass above the Nyquist frequency has no realizable effect. Omitting
-    # it keeps lower-rate recordings usable while preserving the 10 Hz
-    # high-pass.
     if highcut >= sampling_rate / 2:
         highcut = None
 
