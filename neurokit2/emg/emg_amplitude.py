@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 
 from ..signal import signal_filter
 
 
-def emg_amplitude(emg_cleaned):
+def emg_amplitude(emg_cleaned, sampling_rate=1000):
     """**Compute electromyography (EMG) amplitude**
 
     Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
@@ -13,6 +14,9 @@ def emg_amplitude(emg_cleaned):
     ----------
     emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by ``emg_clean()``.
+    sampling_rate : int
+        The sampling frequency of ``emg_cleaned`` (in Hz, i.e., samples/second).
+        Defaults to 1000.
 
     Returns
     -------
@@ -41,7 +45,7 @@ def emg_amplitude(emg_cleaned):
 
     """
     tkeo = _emg_amplitude_tkeo(emg_cleaned)
-    amplitude = _emg_amplitude_envelope(tkeo)
+    amplitude = _emg_amplitude_envelope(tkeo, sampling_rate=sampling_rate)
 
     return amplitude
 
@@ -85,7 +89,9 @@ def _emg_amplitude_tkeo(emg_cleaned):
 # =============================================================================
 # Linear Envelope
 # =============================================================================
-def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8):
+def _emg_amplitude_envelope(
+    emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8
+):
     """Calculate the linear envelope of a signal.
 
     This function implements a 2nd-order Butterworth filter with zero lag, described by Marcos Duarte
@@ -114,6 +120,12 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
     - BMCLab: https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb
 
     """
+    # A low-pass above the Nyquist frequency has no realizable effect. Omitting
+    # it keeps lower-rate recordings usable while preserving the 10 Hz
+    # high-pass.
+    if highcut >= sampling_rate / 2:
+        highcut = None
+
     filtered = signal_filter(
         emg_cleaned,
         sampling_rate=sampling_rate,
