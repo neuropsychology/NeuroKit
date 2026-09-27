@@ -173,3 +173,51 @@ def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
     )
     assert p.is_file()
     assert "EMG_Activity" in signals.columns
+
+
+def test_emg_process_passes_sampling_rate_to_amplitude():
+    from neurokit2.emg.emg_amplitude import (
+        _emg_amplitude_envelope,
+        _emg_amplitude_tkeo,
+    )
+
+    sampling_rate = 4000
+    rng = np.random.default_rng(42)
+    emg = rng.normal(size=4 * sampling_rate)
+
+    signals, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
+    tkeo = _emg_amplitude_tkeo(signals["EMG_Clean"].to_numpy())
+    expected = _emg_amplitude_envelope(tkeo, sampling_rate=sampling_rate)
+
+    np.testing.assert_allclose(signals["EMG_Amplitude"], expected)
+
+
+def test_emg_process_1000_hz_amplitude_is_unchanged():
+    from neurokit2.emg.emg_amplitude import (
+        _emg_amplitude_envelope,
+        _emg_amplitude_tkeo,
+    )
+
+    sampling_rate = 1000
+    rng = np.random.default_rng(42)
+    emg = rng.normal(size=4 * sampling_rate)
+    cleaned = nk.emg_clean(emg, sampling_rate=sampling_rate)
+
+    expected = _emg_amplitude_envelope(_emg_amplitude_tkeo(cleaned))
+    signals, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
+
+    np.testing.assert_allclose(signals["EMG_Amplitude"], expected)
+
+
+def test_emg_process_below_amplitude_highcut_nyquist():
+    sampling_rate = 250
+    emg = nk.emg_simulate(
+        duration=2,
+        sampling_rate=sampling_rate,
+        random_state=42,
+    )
+
+    signals, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
+
+    assert len(signals) == len(emg)
+    assert np.isfinite(signals["EMG_Amplitude"]).all()
