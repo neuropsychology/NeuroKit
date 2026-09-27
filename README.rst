@@ -589,7 +589,7 @@ Statistics
 .. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
         :target: https://neuropsychology.github.io/NeuroKit/functions/stats.html#hdi
 
-
+.. used_at_section
 
 Popularity
 ---------------------

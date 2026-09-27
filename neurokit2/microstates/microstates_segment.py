@@ -153,7 +153,8 @@ def microstates_segment(
 
     .. ipython:: python
 
-      out_aahc = nk.microstates_segment(eeg, method='aahc')
+      # Crop to the first 20 seconds to reduce runtime when building the docs
+      out_aahc = nk.microstates_segment(eeg.copy().crop(0, 20), method='aahc')
       @savefig p_microstate_segment4.png scale=100%
       nk.microstates_plot(out_aahc, gfp=out_aahc["GFP"][0:500])
       @suppress
