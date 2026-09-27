@@ -4,8 +4,8 @@ on:
   push:
     branches: [master]
   # Required for the autolabeler to work on new PRs
-  pull_request:
-    types: [opened, reopened, synchronize]
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
 
 permissions:
   contents: write
@@ -25,7 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: release-drafter/release-drafter/autolabeler@v7
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request_target'
         with:
           config-name: release-drafter-config.yml
         env:
