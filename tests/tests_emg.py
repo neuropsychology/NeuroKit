@@ -174,12 +174,8 @@ def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
     assert p.is_file()
     assert "EMG_Activity" in signals.columns
 
-
 def test_emg_process_passes_sampling_rate_to_amplitude():
-    from neurokit2.emg.emg_amplitude import (
-        _emg_amplitude_envelope,
-        _emg_amplitude_tkeo,
-    )
+    from neurokit2.emg.emg_amplitude import _emg_amplitude_envelope, _emg_amplitude_tkeo
 
     sampling_rate = 4000
     rng = np.random.default_rng(42)
@@ -193,10 +189,7 @@ def test_emg_process_passes_sampling_rate_to_amplitude():
 
 
 def test_emg_process_1000_hz_amplitude_is_unchanged():
-    from neurokit2.emg.emg_amplitude import (
-        _emg_amplitude_envelope,
-        _emg_amplitude_tkeo,
-    )
+    from neurokit2.emg.emg_amplitude import _emg_amplitude_envelope, _emg_amplitude_tkeo
 
     sampling_rate = 1000
     rng = np.random.default_rng(42)
@@ -211,11 +204,7 @@ def test_emg_process_1000_hz_amplitude_is_unchanged():
 
 def test_emg_process_below_amplitude_highcut_nyquist():
     sampling_rate = 250
-    emg = nk.emg_simulate(
-        duration=2,
-        sampling_rate=sampling_rate,
-        random_state=42,
-    )
+    emg = nk.emg_simulate(duration=2, sampling_rate=sampling_rate, random_state=42)
 
     signals, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
 
