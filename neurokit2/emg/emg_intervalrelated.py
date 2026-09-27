@@ -21,7 +21,7 @@ def emg_intervalrelated(data):
 
         .. codebookadd::
             EMG_Activation_N|The number of bursts of muscular activity.
-            ECG_Amplitude_Mean|The mean amplitude of the muscular activity.
+            EMG_Amplitude_Mean|The mean amplitude of the muscular activity.
 
     See Also
     --------
