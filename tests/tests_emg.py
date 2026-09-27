@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
+import scipy.signal
 import scipy.stats
 
 import neurokit2 as nk
@@ -73,7 +74,7 @@ def test_emg_plot():
     for ax, title in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
-    np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
+    assert np.array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
 
 
@@ -174,32 +175,25 @@ def test_emg_report(tmp_path, method_cleaning, method_activation, threshold):
     assert p.is_file()
     assert "EMG_Activity" in signals.columns
 
-def test_emg_process_passes_sampling_rate_to_amplitude():
-    from neurokit2.emg.emg_amplitude import _emg_amplitude_envelope, _emg_amplitude_tkeo
 
+def test_emg_process_amplitude_sampling_rate():
     sampling_rate = 4000
-    rng = np.random.default_rng(42)
-    emg = rng.normal(size=4 * sampling_rate)
-
+    emg = nk.emg_simulate(duration=20, sampling_rate=sampling_rate, burst_number=4, random_state=42)
     signals, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
-    tkeo = _emg_amplitude_tkeo(signals["EMG_Clean"].to_numpy())
-    expected = _emg_amplitude_envelope(tkeo, sampling_rate=sampling_rate)
+    wrong = nk.emg_amplitude(signals["EMG_Clean"].to_numpy(), sampling_rate=1000)
 
-    np.testing.assert_allclose(signals["EMG_Amplitude"], expected)
+    amplitudes = np.array([signals["EMG_Amplitude"], wrong])
+    freqs, psd = scipy.signal.welch(amplitudes, fs=sampling_rate, nperseg=4 * sampling_rate)
+    correct_ratio, wrong_ratio = psd[:, freqs > 20].sum(axis=1) / psd.sum(axis=1)
+
+    assert correct_ratio < 1e-4 < wrong_ratio
 
 
 def test_emg_process_1000_hz_amplitude_is_unchanged():
-    from neurokit2.emg.emg_amplitude import _emg_amplitude_envelope, _emg_amplitude_tkeo
+    emg = nk.emg_simulate(duration=10, sampling_rate=1000, random_state=42)
+    signals, _ = nk.emg_process(emg, sampling_rate=1000)
 
-    sampling_rate = 1000
-    rng = np.random.default_rng(42)
-    emg = rng.normal(size=4 * sampling_rate)
-    cleaned = nk.emg_clean(emg, sampling_rate=sampling_rate)
-
-    expected = _emg_amplitude_envelope(_emg_amplitude_tkeo(cleaned))
-    signals, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
-
-    np.testing.assert_allclose(signals["EMG_Amplitude"], expected)
+    assert np.allclose(signals["EMG_Amplitude"], nk.emg_amplitude(signals["EMG_Clean"].to_numpy()))
 
 
 def test_emg_process_below_amplitude_highcut_nyquist():
