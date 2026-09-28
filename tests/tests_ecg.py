@@ -1,7 +1,9 @@
 import importlib
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -74,10 +76,46 @@ def test_ecg_peaks():
 
 def test_ecg_process():
     sampling_rate = 1000
-    noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=4)
-    _ = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
+    # Test 1: Normal ECG with noise
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=0.05, random_state=4)
+    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
+    assert len(info["ECG_R_Peaks"]) > 0, "Should detect R-peaks in normal ECG"
+    assert signals.shape[0] == len(ecg), "Signal length should match input"
+    assert "ECG_Rate" in signals.columns, "Should have ECG_Rate column"
+    assert "ECG_Quality" in signals.columns, "Should have ECG_Quality column"
+    # When R-peaks are detected, results should NOT be NaN
+    assert not np.all(np.isnan(signals["ECG_Rate"])), "ECG_Rate should not be all NaN when R-peaks are detected"
+    assert not np.all(np.isnan(signals["ECG_Quality"])), "ECG_Quality should not be all NaN when R-peaks are detected"
+    assert np.any(signals["ECG_R_Peaks"] == 1), "ECG_R_Peaks should contain some 1s when R-peaks are detected"
+
+    # Test 2: Different heart rates
+    for heart_rate in [50, 70, 120]:
+        ecg = nk.ecg_simulate(duration=10, sampling_rate=sampling_rate, heart_rate=heart_rate, random_state=42)
+        signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate)
+        assert len(info["ECG_R_Peaks"]) > 0, f"Should detect R-peaks at {heart_rate} BPM"
+        assert np.nanmean(signals["ECG_Rate"]) > 40, f"Heart rate should be reasonable at {heart_rate} BPM"
+        # When R-peaks are detected, results should NOT be NaN
+        assert not np.all(np.isnan(signals["ECG_Rate"])), f"ECG_Rate should not be all NaN at {heart_rate} BPM"
+        assert not np.all(np.isnan(signals["ECG_Quality"])), f"ECG_Quality should not be all NaN at {heart_rate} BPM"
+
+    # Test 3: Different noise levels
+    for noise_level in [0.01, 0.05, 0.1]:
+        ecg = nk.ecg_simulate(duration=10, sampling_rate=sampling_rate, noise=noise_level, random_state=42)
+        signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate)
+        assert len(info["ECG_R_Peaks"]) > 0, f"Should detect R-peaks with noise={noise_level}"
+        # When R-peaks are detected, results should NOT be NaN
+        assert not np.all(np.isnan(signals["ECG_Rate"])), f"ECG_Rate should not be all NaN with noise={noise_level}"
+        assert not np.all(np.isnan(signals["ECG_Quality"])), f"ECG_Quality should not be all NaN with noise={noise_level}"
+
+    # Test 4: Different methods
+    for method in ["neurokit", "pantompkins1985"]:
+        ecg = nk.ecg_simulate(duration=10, sampling_rate=sampling_rate, random_state=42)
+        signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate, method=method)
+        assert len(info["ECG_R_Peaks"]) > 0, f"Should detect R-peaks with method={method}"
+        # When R-peaks are detected, results should NOT be NaN
+        assert not np.all(np.isnan(signals["ECG_Rate"])), f"ECG_Rate should not be all NaN with method={method}"
+        assert not np.all(np.isnan(signals["ECG_Quality"])), f"ECG_Quality should not be all NaN with method={method}"
 
 
 def test_ecg_plot():
@@ -351,3 +389,131 @@ def test_ecg_intervalrelated():
 
     assert (elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
     assert features_dict.shape[0] == 2  # Number of rows
+
+
+def test_ecg_process_no_rpeaks():
+    """Test that ecg_process handles cases where no R-peaks are detected."""
+
+    # Test with flatline ECG (no peaks)
+    ecg_flat = np.zeros(1000)
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        signals, info = nk.ecg_process(ecg_flat, sampling_rate=1000)
+
+        # Check that no R-peaks were found
+        assert len(info["ECG_R_Peaks"]) == 0, "Expected no R-peaks to be found"
+
+        # Check that appropriate warnings were issued
+        neurokit_warnings = [warning for warning in w if "No R-peaks were detected" in str(warning.message)]
+        assert len(neurokit_warnings) >= 3, f"Expected at least 3 warnings, got {len(neurokit_warnings)}"
+
+        # Check that signals DataFrame has expected structure
+        assert signals.shape[0] == len(ecg_flat), "Signal length mismatch"
+        assert "ECG_Rate" in signals.columns, "Missing ECG_Rate column"
+        assert "ECG_Quality" in signals.columns, "Missing ECG_Quality column"
+
+        # Check that rate and quality are NaN when no peaks are detected
+        assert np.all(np.isnan(signals["ECG_Rate"])), "ECG_Rate should be NaN when no peaks detected"
+        assert np.all(np.isnan(signals["ECG_Quality"])), "ECG_Quality should be NaN when no peaks detected"
+
+        # Check that peak marker columns are zero-filled
+        assert np.all(signals["ECG_R_Peaks"] == 0), "ECG_R_Peaks should be zero-filled when no peaks detected"
+
+
+def test_ecg_delineate_no_rpeaks():
+    """Test that ecg_delineate handles empty R-peaks array."""
+
+    # Create flatline ECG and get empty R-peaks
+    ecg_flat = np.zeros(1000)
+    cleaned = nk.ecg_clean(ecg_flat, sampling_rate=1000)
+    peaks, info = nk.ecg_peaks(cleaned, sampling_rate=1000)
+    empty_rpeaks = info["ECG_R_Peaks"]
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+
+        # Test ecg_delineate with empty R-peaks
+        signals, waves = nk.ecg_delineate(cleaned, rpeaks=empty_rpeaks, sampling_rate=1000)
+
+        # Check that warning was issued
+        delineate_warnings = [warning for warning in w if "delineation" in str(warning.message)]
+        assert len(delineate_warnings) == 1, "ecg_delineate should issue one warning for empty R-peaks"
+
+        # Check return values
+        assert isinstance(signals, pd.DataFrame), "signals should be a DataFrame"
+        assert isinstance(waves, dict), "waves should be a dict"
+        assert signals.shape[0] == len(ecg_flat), "Signal length mismatch"
+        assert len(waves["ECG_P_Peaks"]) == 0, "Waves should contain empty arrays"
+
+
+def test_ecg_phase_no_rpeaks():
+    """Test that ecg_phase handles empty R-peaks array."""
+
+    # Create flatline ECG and get empty R-peaks
+    ecg_flat = np.zeros(1000)
+    cleaned = nk.ecg_clean(ecg_flat, sampling_rate=1000)
+    peaks, info = nk.ecg_peaks(cleaned, sampling_rate=1000)
+    empty_rpeaks = info["ECG_R_Peaks"]
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+
+        # Test ecg_phase with empty R-peaks
+        phases = nk.ecg_phase(cleaned, rpeaks=empty_rpeaks, sampling_rate=1000)
+
+        # Check that warning was issued
+        phase_warnings = [warning for warning in w if "phase determination" in str(warning.message)]
+        assert len(phase_warnings) == 1, "ecg_phase should issue one warning for empty R-peaks"
+
+        # Check return values
+        assert isinstance(phases, pd.DataFrame), "phases should be a DataFrame"
+        assert phases.shape[0] == len(ecg_flat), "Phase length mismatch"
+        assert np.all(np.isnan(phases["ECG_Phase_Atrial"])), "Phases should be NaN when no R-peaks"
+
+
+def test_ecg_quality_no_rpeaks():
+    """Test that ecg_quality handles empty R-peaks array."""
+
+    # Create flatline ECG and get empty R-peaks
+    ecg_flat = np.zeros(1000)
+    cleaned = nk.ecg_clean(ecg_flat, sampling_rate=1000)
+    peaks, info = nk.ecg_peaks(cleaned, sampling_rate=1000)
+    empty_rpeaks = info["ECG_R_Peaks"]
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+
+        # Test ecg_quality with empty R-peaks
+        quality = nk.ecg_quality(cleaned, rpeaks=empty_rpeaks, sampling_rate=1000)
+
+        # Check that warning was issued
+        quality_warnings = [warning for warning in w if "quality assessment" in str(warning.message)]
+        assert len(quality_warnings) == 1, "ecg_quality should issue one warning for empty R-peaks"
+
+        # Check return values
+        assert isinstance(quality, np.ndarray), "quality should be a numpy array"
+        assert len(quality) == len(ecg_flat), "Quality length mismatch"
+        assert np.all(np.isnan(quality)), "Quality should be NaN when no R-peaks"
+
+
+def test_ecg_delineate_prominence_boundary_rpeaks():
+    """The prominence helpers must not crash when an R-peak lies at the edge of a beat segment (#1181)."""
+    from neurokit2.ecg.ecg_delineate import _calc_prominence, _prominence_find_q_wave, _prominence_find_s_wave
+
+    sig = np.sin(np.linspace(0, 4 * np.pi, 50))
+    peaks = np.array([12, 37])
+
+    # R-peak index equal to the segment length used to raise an IndexError
+    weights = _calc_prominence(peaks, sig, Rpeak=len(sig))
+    assert weights.shape == sig.shape
+
+    # R-peak at the very start: empty search window for the Q wave
+    wave = {"ECG_R_Peaks": 0}
+    _prominence_find_q_wave(weights, wave, max_r_rise_time=10)
+    assert "ECG_Q_Peaks" not in wave
+
+    # R-peak at the very end: empty search window for the S wave
+    wave = {"ECG_R_Peaks": len(sig), "ECG_Q_Peaks": len(sig) - 5}
+    _prominence_find_s_wave(sig, weights, wave, max_qrs_interval=10)
+    assert "ECG_S_Peaks" not in wave

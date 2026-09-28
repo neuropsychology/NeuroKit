@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.cluster
+import scipy.spatial.distance
 
 from .signal_zerocrossings import signal_zerocrossings
 
@@ -100,7 +101,7 @@ def _signal_recompose_wcorr(components, threshold=0.5, metric="chebyshev"):
     wcorr = _signal_recompose_get_wcorr(components, show=False)
 
     # Find clusters in correlation matrix
-    pairwise_distances = scipy.cluster.hierarchy.distance.pdist(wcorr, metric=metric)
+    pairwise_distances = scipy.spatial.distance.pdist(wcorr, metric=metric)
     linkage = scipy.cluster.hierarchy.linkage(pairwise_distances, method="complete")
     threshold = threshold * pairwise_distances.max()
     clusters = scipy.cluster.hierarchy.fcluster(linkage, threshold, "distance")

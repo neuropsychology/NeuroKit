@@ -16,10 +16,10 @@ jobs:
         name: 🔨 Build Package
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                 fetch-depth: 0
-            - uses: astral-sh/setup-uv@v5
+            - uses: astral-sh/setup-uv@v9.0.0
 
             - name: Build
               run: uv build
@@ -34,11 +34,11 @@ jobs:
             name: testpypi
             url: https://test.pypi.org/p/neurokit2
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                 fetch-depth: 0
 
-            - uses: astral-sh/setup-uv@v5
+            - uses: astral-sh/setup-uv@v9.0.0
 
             - name: Build
               run: uv build
@@ -60,11 +60,11 @@ jobs:
             name: pypi
             url: https://pypi.org/p/neurokit2
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                 fetch-depth: 0
 
-            - uses: astral-sh/setup-uv@v5
+            - uses: astral-sh/setup-uv@v9.0.0
 
             - name: Build
               run: uv build

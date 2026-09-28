@@ -108,7 +108,7 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
     # Get indices
     rrv = {}  # Initialize empty dict
     rrv.update(_rsp_rrv_time(bbi))
-    rrv.update(_rsp_rrv_frequency(rsp_period, sampling_rate=sampling_rate, show=show, silent=silent))
+    rrv.update(_rsp_rrv_frequency(rsp_period, sampling_rate=sampling_rate, silent=silent))
     rrv.update(_rsp_rrv_nonlinear(bbi))
 
     rrv = pd.DataFrame.from_dict(rrv, orient="index").T.add_prefix("RRV_")
@@ -165,7 +165,6 @@ def _rsp_rrv_frequency(
     hf=(0.15, 0.4),
     sampling_rate=1000,
     method="welch",
-    show=False,
     silent=True,
 ):
     power = signal_power(
@@ -174,7 +173,6 @@ def _rsp_rrv_frequency(
         sampling_rate=sampling_rate,
         method=method,
         max_frequency=0.5,
-        show=show,
     )
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]

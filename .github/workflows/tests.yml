@@ -23,7 +23,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install CVXOPT build dependencies for newer Python versions
         if: matrix.python-version == '3.14'
@@ -38,14 +38,15 @@ jobs:
             libglpk-dev
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v9.0.0
         with:
           enable-cache: true
+          prune-cache: true
           python-version: ${{ matrix.python-version }}
 
       - name: Cache MNE Data
         id: cache-mne
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ env.MNE_DATA }}
           key: mne-datasets-v1
@@ -70,7 +71,7 @@ jobs:
           uv run pytest --cov=neurokit2 --cov-report=xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           use_oidc: true
           fail_ci_if_error: false

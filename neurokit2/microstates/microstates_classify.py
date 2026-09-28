@@ -3,7 +3,7 @@ import numpy as np
 from ..misc import replace
 
 
-def microstates_classify(segmentation, microstates):
+def microstates_classify(segmentation, microstates, return_order=False):
     """**Reorder (sort) the microstates (experimental)**
 
     Reorder (sort) the microstates (experimental) based on the pattern of values in the vector of
@@ -15,6 +15,9 @@ def microstates_classify(segmentation, microstates):
         Vector containing the segmentation.
     microstates : Union[np.array, dict]
         Array of microstates maps . Defaults to ``None``.
+    return_order : bool
+        If ``True``, also return the indices used to reorder the microstate maps. Defaults to
+        ``False``.
 
     Returns
     -------
@@ -45,9 +48,11 @@ def microstates_classify(segmentation, microstates):
     new_order = _microstates_sort(microstates)
     microstates = microstates[new_order]
 
-    replacement = dict(enumerate(new_order))
+    replacement = {old: new for new, old in enumerate(new_order)}
     segmentation = replace(segmentation, replacement)
 
+    if return_order is True:
+        return segmentation, microstates, new_order
     return segmentation, microstates
 
 
