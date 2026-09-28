@@ -1,6 +1,18 @@
 News
 =====
 
+0.3.0
+-------------------
+Fixes
++++++++++++++
+
+* `fractal_dfa()`: the variance threshold used to discard numerically-zero detrended
+  segments is now relative to the largest segment variance at each scale instead of an
+  absolute `1e-8` cutoff, restoring invariance of `h(q)` under constant rescaling of the
+  signal (see #1208). Note: results computed with negative `q` on physiological signals
+  in their natural units may shift slightly; the new values are the more correct ones.
+
+
 0.2.8
 -------------------
 New Features

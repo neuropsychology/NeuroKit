@@ -48,11 +48,6 @@ def test_complexity_sanity():
     )
 
 
-# =============================================================================
-# Comparison against R
-# =============================================================================
-
-
 def test_fractal_dfa_scale_invariance():
     # Regression test for issue #1208: DFA's scaling exponents are invariant
     # under constant rescaling of the signal. White noise is monofractal with
@@ -70,7 +65,15 @@ def test_fractal_dfa_scale_invariance():
         if reference is None:
             reference = h
         else:
-            assert np.allclose(h, reference, atol=0.05)
+            # The fix makes h exactly invariant under rescaling (up to float
+            # rounding), so pin it down tightly: a loose atol would let smaller
+            # versions of the same bug through (see #1208).
+            np.testing.assert_allclose(h, reference, rtol=1e-8)
+
+
+# =============================================================================
+# Comparison against R
+# =============================================================================
 
 
 # R code:
