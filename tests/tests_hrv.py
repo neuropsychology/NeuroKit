@@ -31,6 +31,29 @@ def test_hrv_time():
     assert np.all(hrv_fast["HRV_HTI"] != hrv_slow["HRV_HTI"])
 
 
+def test_hrv_time_preserves_timestamps_in_window_metrics():
+    rri = np.repeat([750.0, 1000.0, 1250.0], 120)
+    rri_time = np.cumsum(rri / 1000)
+    rri_time[120:] += 91
+    rri_time[240:] += 121
+
+    result = nk.hrv_time({"RRI": rri, "RRI_Time": rri_time})
+
+    assert result["HRV_SDANN1"].iloc[0] == pytest.approx(208.63074009907007)
+    assert result["HRV_SDANN2"].iloc[0] == pytest.approx(209.16500663351889)
+    assert result["HRV_SDNNI1"].iloc[0] == pytest.approx(0.0)
+    assert result["HRV_SDNNI2"].iloc[0] == pytest.approx(0.0)
+
+
+def test_hrv_time_contiguous_timestamps_preserve_window_metrics():
+    rri = np.repeat([750.0, 1000.0, 1250.0], 120)
+    implicit = nk.hrv_time({"RRI": rri})
+    explicit = nk.hrv_time({"RRI": rri, "RRI_Time": np.cumsum(rri / 1000)})
+    columns = [name for name in implicit.columns if "SDANN" in name or "SDNNI" in name]
+
+    np.testing.assert_allclose(implicit[columns], explicit[columns], equal_nan=True)
+
+
 def test_hrv_frequency():
     # Test frequency domain
     ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
