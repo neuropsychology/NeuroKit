@@ -31,6 +31,15 @@ def test_hrv_time():
     assert np.all(hrv_fast["HRV_HTI"] != hrv_slow["HRV_HTI"])
 
 
+def test_hrv_time_tinn_preserves_repeated_distribution():
+    rri = np.repeat(np.arange(600.0, 850.0, 25.0), [1, 2, 8, 20, 35, 50, 30, 15, 5, 1])
+    original = nk.hrv_time({"RRI": rri}, binsize=25)["HRV_TINN"].iloc[0]
+    repeated = nk.hrv_time({"RRI": np.tile(rri, 100)}, binsize=25)["HRV_TINN"].iloc[0]
+
+    assert original == pytest.approx(175.0)
+    assert repeated == pytest.approx(original)
+
+
 def test_hrv_frequency():
     # Test frequency domain
     ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
