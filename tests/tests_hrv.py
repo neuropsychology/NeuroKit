@@ -351,3 +351,18 @@ def test_hrv_symbolic():
     for start in range(0, len(values), 4):
         group_sum = values[start : start + 4].sum()
         assert np.isclose(group_sum, 1.0, atol=1e-9), f"Family group at col {start} sums to {group_sum}"
+
+
+@pytest.mark.parametrize("steps, expected", [([160] + [-8] * 20, 1 / 21), ([8, -8], 1), ([8] * 4 + [-8] * 4, 0)])
+def test_hrv_fragmentation_pss_interval_weighting(steps, expected):
+    from neurokit2.hrv.hrv_nonlinear import _hrv_nonlinear_fragmentation
+
+    rri = np.r_[800, 800 + np.cumsum(np.tile(steps, 30))]
+    result = _hrv_nonlinear_fragmentation(rri, out={})
+    assert result["PSS"] == pytest.approx(expected)
+
+
+def test_hrv_nonlinear_pss_interval_weighting():
+    rri = np.r_[800, 800 + np.cumsum(np.tile([160] + [-8] * 20, 30))]
+    result = nk.hrv_nonlinear({"RRI": rri})
+    assert result.loc[0, "HRV_PSS"] == pytest.approx(1 / 21)
