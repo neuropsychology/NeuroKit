@@ -165,8 +165,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["MeanNN"] = np.nanmean(rri)
     out["SDNN"] = np.nanstd(rri, ddof=1)
     for i in [1, 2, 5]:
-        out["SDANN" + str(i)] = _sdann(rri, window=i)
-        out["SDNNI" + str(i)] = _sdnni(rri, window=i)
+        out["SDANN" + str(i)] = _sdann(rri, rri_time=rri_time, window=i)
+        out["SDNNI" + str(i)] = _sdnni(rri, rri_time=rri_time, window=i)
 
     # Difference-based
     out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
