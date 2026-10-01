@@ -44,6 +44,11 @@ Fixes
   raised a ``TypeError``; backfitting is now invariant to the scale of the maps; the first
   microstate lifetime was overcounted by one sample (#1199).
 * ``hrv_nonlinear()`` docstring now points to :func:`hrv_rqa` (#1207).
+* ``fractal_dfa()``: the variance threshold used to discard numerically-zero detrended
+  segments is now relative to the largest segment variance at each scale instead of an
+  absolute ``1e-8`` cutoff, restoring invariance of ``h(q)`` under constant rescaling of the
+  signal (#1208). Note: results computed with negative ``q`` on physiological signals in
+  their natural units may shift slightly; the new values are the more correct ones.
 
 Maintenance
 +++++++++++++

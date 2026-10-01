@@ -398,8 +398,11 @@ def _fractal_dfa_fluctuation(segments, trends, q=2):
     # Compute variance
     var = np.var(detrended, axis=1)
 
-    # Remove where var is zero
-    var = var[var > 1e-08]
+    # Remove where var is (numerically) zero. The cutoff must be relative to the
+    # largest segment variance at this scale: detrended variance scales with the
+    # square of the signal's units, so an absolute cutoff would make the results
+    # depend on the amplitude units of the input signal (see issue #1208).
+    var = var[var > 1e-08 * np.max(var)]
     if len(var) == 0:
         warn("All detrended segments have no variance. Retuning NaN.")
         return np.nan
