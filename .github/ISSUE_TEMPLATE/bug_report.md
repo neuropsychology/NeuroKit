@@ -34,6 +34,7 @@ It's important that you give us some information about the system you are using.
 
 ```python
 import neurokit2 as nk
+
 nk.version()
 ```
 

@@ -3,12 +3,6 @@ tag-template: 'v$RESOLVED_VERSION'
 
 # This automatically suggests the next version based on PR labels
 version-resolver:
-  major:
-    labels: ['major', 'breaking']
-  minor:
-    labels: ['minor', 'feature', 'enhancement']
-  patch:
-    labels: ['patch', 'bug', 'fix']
   default: patch
 
 # This automatically labels PRs based on their title (saves you time!)
@@ -22,13 +16,33 @@ autolabeler:
 
 categories:
   - title: '🚀 Features & Enhancements'
-    labels: ['feature', 'enhancement']
+    semver-increment: 'minor'
+    when:
+      labels: ['feature', 'enhancement']
   - title: '🐛 Bug Fixes'
-    labels: ['bug', 'fix']
+    semver-increment: 'patch'
+    when:
+      labels: ['bug', 'fix']
   - title: '📖 Documentation'
-    labels: ['docs', 'documentation']
+    when:
+      labels: ['docs', 'documentation']
   - title: '🛠 Maintenance & CI'
-    labels: ['chore', 'ci', 'dependencies']
+    when:
+      labels: ['chore', 'ci', 'dependencies']
+
+  # Labels that only influence the next version, without a changelog section
+  - type: 'version-resolver'
+    semver-increment: 'major'
+    when:
+      labels: ['major', 'breaking']
+  - type: 'version-resolver'
+    semver-increment: 'minor'
+    when:
+      labels: ['minor']
+  - type: 'version-resolver'
+    semver-increment: 'patch'
+    when:
+      labels: ['patch']
 
 template: |
   ## 🚀 What’s New

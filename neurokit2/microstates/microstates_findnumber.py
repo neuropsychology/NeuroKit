@@ -4,6 +4,7 @@ import pandas as pd
 
 from ..misc import find_knee, progress_bar
 from ..stats.cluster_quality import _cluster_quality_dispersion
+from .microstates_peaks import _microstates_sanitize_eeg
 from .microstates_segment import microstates_segment
 
 
@@ -63,12 +64,7 @@ def microstates_findnumber(eeg, n_max=12, method="GEV", clustering_method="kmod"
 
     """
     # Retrieve data
-    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
-        data = eeg.get_data()
-    elif isinstance(eeg, pd.DataFrame):
-        data = eeg.values
-    else:
-        data = eeg.copy()
+    data, _, _ = _microstates_sanitize_eeg(eeg)
 
     # Loop accross number and get indices of fit
     n_channel, _ = data.shape

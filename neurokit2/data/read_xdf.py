@@ -2,6 +2,7 @@ import io
 import time
 import urllib.parse
 import warnings
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -134,6 +135,8 @@ def read_xdf(
       import neurokit2 as nk
 
       # data, info = nk.read_xdf("data.xdf")
+            # info["stream_names"]               # stream names from the XDF file
+            # info["streams"][0]["channel_names"]  # channels for the first stream
       # info["sampling_rates_original"]   # nominal rates per stream
       # info["sampling_rates_effective"]  # computed effective rates per stream
       # info["datetime"]                  # recording datetime from header
@@ -168,18 +171,14 @@ def read_xdf(
         verbose=verbose,
     )
 
-    # Store metadata
-    info = {
-        "sampling_rates_original": [float(s["info"]["nominal_srate"][0]) for s in streams],
-        "sampling_rates_effective": [float(s["info"]["effective_srate"]) for s in streams],
-        "datetime": header["info"]["datetime"][0],
-    }
-
     # Sanitize streams
     stream_data = _sanitize_streams(streams, timestamp_reset=timestamp_reset, mode=mode, verbose=verbose)
 
     if not stream_data:
         raise ValueError("No valid streams remain after sanitization. Check that the file contains streams with timestamps.")
+
+    # Store metadata for the valid streams that contribute to the output.
+    info = _build_xdf_info(stream_data, header)
 
     # Resample and synchronize streams
     resampled_df, target_fs = _synchronize_streams(
@@ -354,7 +353,7 @@ def _visual_control_channel(original, resampled, window_start=None, window_durat
 def _synchronize_streams(
     stream_data,
     upsample_factor=2.0,
-    fill_method="ffill",
+    fill_method: str | None = "ffill",
     fill_value=np.nan,
     max_gap=None,
     interpolation_method="linear",
@@ -404,7 +403,7 @@ def _synchronize_streams(
 def _resample_streams(
     stream_data,
     target_fs,
-    fill_method="ffill",
+    fill_method: str | None = "ffill",
     fill_value=np.nan,
     max_gap=None,
     interpolation_method="linear",
@@ -647,7 +646,7 @@ def _interpolate_streams(
     col_to_idx,
     interpolation_method="linear",
     max_gap=None,
-    dtype=np.float64,
+    dtype: Any = np.float64,
 ):
     """
     Performs efficient interpolation.
@@ -744,7 +743,7 @@ def _interpolate_streams(
     return resampled_data
 
 
-def _fill_missing_data(resampled_df, fill_method="ffill", fill_value=np.nan):
+def _fill_missing_data(resampled_df, fill_method: str | None = "ffill", fill_value=np.nan):
     """
     Fills NaN values in the resampled DataFrame.
 
@@ -914,8 +913,12 @@ def _sanitize_streams(streams, timestamp_reset=True, mode="precise", verbose=Tru
                 "data": data,
                 "columns": cols,
                 "name": name,
+                "type": stream["info"].get("type", [None])[0],
                 "nominal_srate": nominal_srate,
                 "effective_srate": effective_srate,
+                "uid": stream["info"].get("uid", [None])[0],
+                "source_id": stream["info"].get("source_id", [None])[0],
+                "hostname": stream["info"].get("hostname", [None])[0],
                 "force_step_interpolation": force_step_interpolation,  # New Flag
             }
         )
@@ -1027,3 +1030,55 @@ def _load_xdf(
         streams[i] = streams_clean[i]
 
     return streams, header
+
+
+def _get_xdf_header_datetime(header):
+    """Safely extract the recording datetime from the XDF header."""
+    info = header.get("info", {}) if isinstance(header, dict) else {}
+    datetime = info.get("datetime") if isinstance(info, dict) else None
+    if isinstance(datetime, list):
+        return datetime[0] if len(datetime) > 0 else None
+    return datetime
+
+
+def _build_xdf_info(stream_data, header):
+    """Build the metadata object returned alongside the resampled DataFrame."""
+    streams = []
+    for index, stream in enumerate(stream_data):
+        timestamps = stream["timestamps"]
+        start_time = float(timestamps[0]) if len(timestamps) > 0 else None
+        end_time = float(timestamps[-1]) if len(timestamps) > 0 else None
+        duration = (
+            float(end_time - start_time) if start_time is not None and end_time is not None and len(timestamps) > 1 else 0.0
+        )
+
+        streams.append(
+            {
+                "index": index,
+                "name": stream["name"],
+                "type": stream.get("type"),
+                "channel_count": len(stream["columns"]),
+                "channel_names": list(stream["columns"]),
+                "nominal_srate": float(stream["nominal_srate"]),
+                "effective_srate": float(stream["effective_srate"]),
+                "start_time": start_time,
+                "end_time": end_time,
+                "duration": duration,
+                "uid": stream.get("uid"),
+                "source_id": stream.get("source_id"),
+                "hostname": stream.get("hostname"),
+            }
+        )
+
+    return {
+        "sampling_rates_original": [float(stream["nominal_srate"]) for stream in stream_data],
+        "sampling_rates_effective": [float(stream["effective_srate"]) for stream in stream_data],
+        "datetime": _get_xdf_header_datetime(header),
+        "stream_count": len(streams),
+        "stream_names": [stream["name"] for stream in streams],
+        "stream_types": [stream["type"] for stream in streams],
+        "channel_counts": [stream["channel_count"] for stream in streams],
+        "channel_names": [stream["channel_names"] for stream in streams],
+        "durations": [stream["duration"] for stream in streams],
+        "streams": streams,
+    }

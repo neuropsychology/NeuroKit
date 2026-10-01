@@ -52,6 +52,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
 
     .. ipython:: python
       :okexcept:
+      :okwarning:
 
       # Example 1: Using the EMD method
       components = nk.signal_decompose(signal, method="emd")

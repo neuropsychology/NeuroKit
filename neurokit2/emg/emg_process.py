@@ -74,7 +74,7 @@ def emg_process(emg_signal, sampling_rate=1000, report=None, **kwargs):
     emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate, method=methods["method_cleaning"])
 
     # Get amplitude
-    amplitude = emg_amplitude(emg_cleaned)
+    amplitude = emg_amplitude(emg_cleaned, sampling_rate=sampling_rate)
 
     # Get onsets, offsets, and periods of activity
     activity_signal, info = emg_activation(

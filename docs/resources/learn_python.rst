@@ -23,7 +23,7 @@ The process of writing code usually happens in the editor, which is basically a 
 For instance, try writing ``1+1`` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press ``F9`` (or ``CTRL + ENTER``, or ``SHIFT + ENTER`` in VS Code), it will **execute it** (on Spyder, but the shortcut for running a line might be different in other IDEs).
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/learnpython/learnpython_1.jpg
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/img/learnpython/learnpython_1.jpg
 
 
 As a result, you should see in the console the order that you gave and, below, its **output** (which is: ``2``).
@@ -32,7 +32,7 @@ As a result, you should see in the console the order that you gave and, below, i
 Now that the distinction between where we write the code and where the output appears is clear, take some time to explore the settings and turn the editor background to **DARK**. *Why?* Because it's more comfortable for the eyes, but most importantly, because it's cool 😎
 
 
-.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/img/learnpython/learnpython_2.png
 
 **Congrats, you've become a programmer**, a wizard of the modern times.
 
@@ -64,7 +64,7 @@ Once we execute these two lines, Python will know that ``x`` refers to ``2``, an
 
 Which will print in the console the correct result.
 
-.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_3.png
+.. image:: https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/docs/img/learnpython/learnpython_3.png
 
 We can also store the output in a third variable:
 

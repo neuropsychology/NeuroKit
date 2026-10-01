@@ -113,8 +113,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
       corresponding to long-term correlations. See :func:`.fractal_dfa`.
     * **MFDFA indices**: Indices related to the :func:`multifractal spectrum <.fractal_dfa()>`.
 
-    Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), but
-    are not implemented yet (but soon).
+    Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), which
+    can be computed with :func:`.hrv_rqa`.
 
     .. tip::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
@@ -202,7 +202,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     See Also
     --------
-    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary, hrv_symbolic
+    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary, hrv_symbolic, hrv_rqa
 
     Examples
     --------

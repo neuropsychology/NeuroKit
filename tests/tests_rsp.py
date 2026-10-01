@@ -293,7 +293,7 @@ def test_rsp_rrv():
     rsp_rate110 = nk.signal_rate(peaks110, desired_length=len(rsp110))
 
     rsp90_rrv = nk.rsp_rrv(rsp_rate90, peaks90)
-    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110)
+    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110, show=True)
 
     assert np.array(rsp90_rrv["RRV_SDBB"]) < np.array(rsp110_rrv["RRV_SDBB"])
     assert np.array(rsp90_rrv["RRV_RMSSD"]) < np.array(rsp110_rrv["RRV_RMSSD"])
@@ -305,6 +305,17 @@ def test_rsp_rrv():
     assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
     assert np.isnan(rsp90_rrv["RRV_VLF"][0])
     assert np.isnan(rsp110_rrv["RRV_VLF"][0])
+
+    # Test show=True
+    fig = plt.gcf()
+    try:
+        assert len(fig.axes) == 1
+        ax = fig.axes[0]
+        assert ax.get_title() == "Poincaré Plot"
+        assert len(ax.collections) > 0
+        assert len(ax.patches) > 0
+    finally:
+        plt.close(fig)
 
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
@@ -328,6 +339,29 @@ def test_rsp_intervalrelated():
     features_dict = nk.rsp_intervalrelated(epochs)
 
     assert features_dict.shape[0] == 2  # Number of rows
+
+
+def test_rsp_intervalrelated_phase_durations_with_time_index():
+    phase = pd.DataFrame(
+        {
+            "RSP_Phase": [1, 1, 1, 1, 0, 0, 0, 0],
+            "RSP_Phase_Completion": [0, 0.33, 0.66, 1, 0, 0.33, 0.66, 1],
+        }
+    )
+    epoched_phase = phase.copy()
+    epoched_phase.index = np.linspace(10, 10.07, len(epoched_phase))
+    epoched_phase["Label"] = "1"
+
+    continuous = nk.rsp_intervalrelated(phase, sampling_rate=100)
+    epoched = nk.rsp_intervalrelated({"1": epoched_phase}, sampling_rate=100)
+    duration_columns = [
+        "RSP_Phase_Duration_Inspiration",
+        "RSP_Phase_Duration_Expiration",
+        "RSP_Phase_Duration_Ratio",
+    ]
+
+    np.testing.assert_allclose(epoched[duration_columns], continuous[duration_columns])
+    np.testing.assert_allclose(epoched[duration_columns], [[0.03, 0.03, 1.0]])
 
 
 def test_rsp_rvt():
