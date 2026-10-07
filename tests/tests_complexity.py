@@ -657,3 +657,17 @@ def MultiscaleEntropy_mse(
         ms_en = [i[0] for i in ms_en]
         ms_en = [i[0] for i in ms_en]
     return ms_en
+
+
+def test_entropy_spectral_sampling_rate():
+    signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 30], noise=0)
+
+    # The sampling rate is forwarded to signal_psd() instead of raising a TypeError
+    spen, _ = nk.entropy_spectral(signal, sampling_rate=100)
+    assert np.isclose(spen, nk.entropy_spectral(signal)[0])
+
+    # With a restricted frequency range, the band is defined in Hz of the actual signal
+    spen_10hz, _ = nk.entropy_spectral(signal, sampling_rate=100, max_frequency=10)
+    psd = nk.signal_psd(signal, sampling_rate=100, max_frequency=10)
+    power = psd["Power"] / psd["Power"].sum()
+    assert np.isclose(spen_10hz, nk.entropy_shannon(freq=power.values)[0] / np.log2(len(power)))

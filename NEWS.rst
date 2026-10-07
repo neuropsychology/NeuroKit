@@ -20,6 +20,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``entropy_spectral()`` forwards ``sampling_rate`` to ``signal_psd()`` instead of raising a
+  ``TypeError``, so ``min_frequency`` and ``max_frequency`` are applied in Hz of the actual signal.
 * ``ecg_process()``, ``ecg_delineate()``, ``ecg_phase()`` and ``ecg_quality()`` no longer
   crash when no R-peak is detected; they return NaN/empty outputs with a warning.
 * ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
