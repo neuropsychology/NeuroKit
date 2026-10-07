@@ -44,6 +44,10 @@ Fixes
   raised a ``TypeError``; backfitting is now invariant to the scale of the maps; the first
   microstate lifetime was overcounted by one sample (#1199).
 * ``hrv_nonlinear()`` docstring now points to :func:`hrv_rqa` (#1207).
+* ``ecg_delineate(method="dwt")``: the choice among candidate T and P peaks no longer depends on the
+  units or gain of the signal (e.g., mV vs. uV). The amplitude term of the candidate score is now
+  scale-free and weighted against the latency penalty (``amplitude_weight``), which also changes the
+  detected peaks (and the onsets/offsets derived from them) for signals in their original units (#1210).
 
 Maintenance
 +++++++++++++

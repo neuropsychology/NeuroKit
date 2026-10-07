@@ -345,6 +345,25 @@ def _dwt_adjust_parameters(rpeaks, sampling_rate, duration=None, target=None):
         return np.round(duration * (60 / average_rate), 3)
 
 
+def _dwt_normalize_window(ecg_local, weight=1.0):
+    """Express the amplitude of a search window in units that do not depend on the signal scale.
+
+    The candidate scores in `_dwt_delineate_tp_peaks()` combine the signal amplitude with a latency penalty in
+    seconds. Without this normalization the ranking of the candidates changes with the units (e.g., mV vs. uV)
+    or the gain of the recording. The absolute deviation from the median of the window is used (rather than the raw
+    amplitude) so that negative and biphasic waves are treated like positive ones, and it is divided by its maximum so
+    that the result lies in [0, `weight`].
+    """
+    ecg_local = np.asarray(ecg_local, dtype=float)
+    if len(ecg_local) == 0:
+        return ecg_local
+    deviation = np.abs(ecg_local - np.median(ecg_local))
+    max_deviation = np.max(deviation)
+    if not np.isfinite(max_deviation) or max_deviation == 0:
+        return np.zeros_like(ecg_local)
+    return weight * deviation / max_deviation
+
+
 def _dwt_delineate_tp_peaks(
     ecg,
     rpeaks,
@@ -357,6 +376,7 @@ def _dwt_delineate_tp_peaks(
     degree_ppeak=2,
     epsilon_T_weight=0.25,
     epsilon_P_weight=0.02,
+    amplitude_weight=0.3,
 ):
     """
     Parameters
@@ -384,6 +404,10 @@ def _dwt_delineate_tp_peaks(
         Epsilon of RMS value of wavelet transform. Appendix (A.3).
     epsilon_P_weight : int
         Epsilon of RMS value of wavelet transform. Appendix (A.4).
+    amplitude_weight : float
+        Weight of the (scale-free) wave amplitude relative to the latency penalty (in seconds) when choosing among
+        several candidate T/P peaks. The amplitude is normalized within each search window to [0, 1], so the result does
+        not depend on the units of the signal. Values of 0.2-0.4 gave similar results on the LUDB database.
     """
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_adjust_parameters(rpeaks, sampling_rate, target="degree")
@@ -405,7 +429,7 @@ def _dwt_delineate_tp_peaks(
             continue
 
         height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
-        ecg_local = ecg[srch_idx_start:srch_idx_end]
+        ecg_local = _dwt_normalize_window(ecg[srch_idx_start:srch_idx_end], amplitude_weight)
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
         peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))  # pylint: disable=W0640
         if dwt_local[0] > 0:  # just append
@@ -445,7 +469,7 @@ def _dwt_delineate_tp_peaks(
             continue
 
         height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
-        ecg_local = ecg[srch_idx_start:srch_idx_end]
+        ecg_local = _dwt_normalize_window(ecg[srch_idx_start:srch_idx_end], amplitude_weight)
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
         peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
         if dwt_local[0] > 0:  # just append
