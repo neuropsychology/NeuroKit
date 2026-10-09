@@ -51,6 +51,23 @@ def test_signal_binarize():
     assert len(binary) == 1000
 
 
+@pytest.mark.parametrize("keep_sd", [None, 0, 0.1, 1])
+def test_signal_recompose_keep_sd(keep_sd):
+    time = np.arange(1000) / 100
+    source = np.sin(2 * np.pi * 0.5 * time)
+    noise = 0.01 * np.sin(2 * np.pi * 5 * time)
+    components = np.array([source, 0.5 * source, noise])
+    original = components.copy()
+
+    # Correlated components must be summed before filtering by their SD.
+    expected = np.array([1.5 * source, noise]) if keep_sd in [None, 0] else np.array([1.5 * source])
+    recomposed = nk.signal_recompose(components, threshold=0.5, keep_sd=keep_sd)
+    # Cluster ordering is arbitrary; compare from largest to smallest SD.
+    recomposed = recomposed[np.argsort(np.std(recomposed, axis=1))[::-1]]
+    np.testing.assert_allclose(recomposed, expected)
+    np.testing.assert_array_equal(components, original)
+
+
 def test_signal_resample():
     signal = np.cos(np.linspace(start=0, stop=20, num=50))
 

@@ -64,7 +64,7 @@ def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **
         raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
 
     if keep_sd is not None:
-        recomposed = _signal_recompose_filter_sd(components, threshold=keep_sd)
+        recomposed = _signal_recompose_filter_sd(recomposed, threshold=keep_sd)
 
     return recomposed
 
