@@ -25,6 +25,8 @@ Fixes
 * ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
   which broke downstream functions), and the file-reading logic was updated for pandas 3.
 * ``epochs_create()`` and ``signal_recompose()`` were updated for pandas 3 and scipy 1.18.
+* ``signal_recompose()`` now applies ``keep_sd`` to reconstructed components instead of
+  discarding the reconstruction and filtering the original components.
 * ``eda_process()`` now forwards a custom ``amplitude_min`` to ``eda_peaks()``
   instead of hardcoding ``0.1`` (#1197, #1203).
 * ``rsp_intervalrelated()`` computes inspiration/expiration durations from sample positions
