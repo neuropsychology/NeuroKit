@@ -20,6 +20,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``epochs_create()`` retains the final complete block during automatic chunking
+  and aligns blocks with the data when relative epoch starts are nonzero.
 * ``ecg_process()``, ``ecg_delineate()``, ``ecg_phase()`` and ``ecg_quality()`` no longer
   crash when no R-peak is detected; they return NaN/empty outputs with a warning.
 * ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
