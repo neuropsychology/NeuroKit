@@ -48,7 +48,9 @@ def epochs_create(
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
     baseline_correction : bool
-        Defaults to False.
+        Whether to subtract a baseline computed separately for each epoch. The baseline
+        extends from the epoch start to time zero. If the epoch starts after zero,
+        its first sample is used instead. Defaults to False.
 
 
     Returns
@@ -118,7 +120,7 @@ def epochs_create(
 
       epochs = nk.epochs_create(data, events, sampling_rate=100,
                                 epochs_start=[0, -1, -1, 0],
-                                epochs_end=[1, 0, 0, 1])
+                                epochs_end=[1, 0, 0, 1], baseline_correction=True)
       [len(epochs[i]) for i in epochs.keys()]
 
     """
@@ -199,7 +201,7 @@ def epochs_create(
         )
 
         if baseline_correction is True:
-            baseline_end = 0 if epochs_start <= 0 else epochs_start
+            baseline_end = 0 if parameters["start"][i] <= 0 else parameters["start"][i]
             epoch = epoch - epoch.loc[:baseline_end].mean()
 
         # Add additional

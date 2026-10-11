@@ -44,6 +44,8 @@ Fixes
   raised a ``TypeError``; backfitting is now invariant to the scale of the maps; the first
   microstate lifetime was overcounted by one sample (#1199).
 * ``hrv_nonlinear()`` docstring now points to :func:`hrv_rqa` (#1207).
+* ``epochs_create()`` applies baseline correction when ``epochs_start`` contains
+  a list of per-event start times.
 
 Maintenance
 +++++++++++++
