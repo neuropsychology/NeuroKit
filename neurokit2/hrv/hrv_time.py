@@ -19,8 +19,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     among the most commonly reported HRV indices.
 
     The time-domain indices can be categorized into deviation-based and difference-based indices
-    where the formal are calculated directly from the normal beat-to-beat intervals (normal RR
-    intervals or NN intervals), and the later are derived from the difference between successive NN
+    where the former are calculated directly from the normal beat-to-beat intervals (normal RR
+    intervals or NN intervals), and the latter are derived from the difference between successive NN
     intervals.
 
     .. tip::
