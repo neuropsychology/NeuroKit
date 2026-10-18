@@ -34,6 +34,11 @@ Fixes
 * ``signal_detrend(method="tarvainen2002")``: the second-difference operator was truncated at
   the end of the signal, leaving the last samples undetrended. The linear system is now solved
   with a sparse solver, which is also orders of magnitude faster for long signals (#1198).
+* ``ecg_intervalrelated()``, ``rsp_intervalrelated()``, ``eda_intervalrelated()``,
+  ``emg_intervalrelated()`` and ``eog_intervalrelated()`` no longer carry features over from
+  a previous call (e.g., ``HRV_DFA_alpha2`` from a long recording reappearing in the results
+  of a short one). ``ecg_intervalrelated()`` also returns HRV indices as floats instead of
+  nested arrays.
 * ``ecg_delineate(method="prominence")`` no longer crashes when an R-peak falls at the boundary
   of a beat segment (#1181).
 * Microstates: ``method="ica"`` was routed to PCA and ``method="aahc"`` was not recognized;

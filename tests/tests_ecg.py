@@ -517,3 +517,30 @@ def test_ecg_delineate_prominence_boundary_rpeaks():
     wave = {"ECG_R_Peaks": len(sig), "ECG_Q_Peaks": len(sig) - 5}
     _prominence_find_s_wave(sig, weights, wave, max_qrs_interval=10)
     assert "ECG_S_Peaks" not in wave
+
+
+def test_ecg_intervalrelated_independent_calls():
+    # Features computed for one recording must not leak into the next call
+    long_df, _ = nk.ecg_process(nk.ecg_simulate(duration=600, sampling_rate=250, random_state=1), sampling_rate=250)
+    short_df, _ = nk.ecg_process(nk.ecg_simulate(duration=20, sampling_rate=250, random_state=2), sampling_rate=250)
+
+    before = nk.ecg_intervalrelated(short_df, sampling_rate=250)
+    nk.ecg_intervalrelated(long_df, sampling_rate=250)
+    after = nk.ecg_intervalrelated(short_df, sampling_rate=250)
+
+    assert list(after.columns) == list(before.columns)
+    pd.testing.assert_frame_equal(after, before)
+
+
+def test_ecg_intervalrelated_returns_scalars():
+    data = nk.data("bio_resting_5min_100hz")
+    df, _ = nk.ecg_process(data["ECG"], sampling_rate=100)
+
+    features_df = nk.ecg_intervalrelated(df, sampling_rate=100)
+    epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
+    features_dict = nk.ecg_intervalrelated(epochs, sampling_rate=100)
+
+    for features in [features_df, features_dict]:
+        hrv_columns = [col for col in features.columns if col.startswith("HRV_")]
+        assert len(hrv_columns) > 0
+        assert all(pd.api.types.is_float_dtype(features[col]) for col in hrv_columns)
