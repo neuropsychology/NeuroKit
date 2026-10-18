@@ -141,6 +141,21 @@ def test_emg_intervalrelated():
     assert features_dict.shape[0] == 2  # Number of rows
 
 
+def test_emg_intervalrelated_formatinput_fresh_output():
+    from neurokit2.emg.emg_intervalrelated import _emg_intervalrelated_formatinput
+
+    emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=2, random_state=1)
+    emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
+
+    first = _emg_intervalrelated_formatinput(emg_signals)
+    first["Extra"] = 1
+    second = _emg_intervalrelated_formatinput(emg_signals)
+
+    # Each call must return its own dict, not a shared default
+    assert second is not first
+    assert "Extra" not in second
+
+
 @pytest.mark.parametrize(
     "method_cleaning, method_activation, threshold",
     [

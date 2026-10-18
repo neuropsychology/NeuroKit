@@ -90,8 +90,11 @@ def eda_intervalrelated(data, sampling_rate=1000, **kwargs):
 # =============================================================================
 
 
-def _eda_intervalrelated(data, output={}, sampling_rate=1000, method_sympathetic="posada", **kwargs):
+def _eda_intervalrelated(data, output=None, sampling_rate=1000, method_sympathetic="posada", **kwargs):
     """Format input for dictionary."""
+    if output is None:
+        output = {}
+
     # Sanitize input
     colnames = data.columns.values
 
