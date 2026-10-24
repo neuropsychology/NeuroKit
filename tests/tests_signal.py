@@ -204,6 +204,27 @@ def test_signal_interpolate():
     assert interpolated[-1] == signal.iloc[-1]
 
 
+@pytest.mark.parametrize("x_new", [[-0.1, 0.2, 0.8, 1.1], [2.0, 0.8, -1.0, 0.2]])
+@pytest.mark.parametrize(
+    "fill_value, left, right",
+    [(None, 0.0, 1.0), (-1.0, -1.0, -1.0), ((-1.0, 2.0), -1.0, 2.0), ("extrapolate", None, None)],
+)
+def test_signal_interpolate_monotone_cubic_bounds(x_new, fill_value, left, right):
+    x_new = np.asarray(x_new)
+    expected = x_new.copy()
+    if fill_value != "extrapolate":
+        expected[x_new < 0] = left
+        expected[x_new > 1] = right
+    actual = nk.signal_interpolate(
+        np.array([0.0, 1.0]),
+        np.array([0.0, 1.0]),
+        x_new=x_new,
+        method="monotone_cubic",
+        fill_value=fill_value,
+    )
+    np.testing.assert_allclose(actual, expected)
+
+
 def test_signal_findpeaks():
     signal1 = np.cos(np.linspace(start=0, stop=30, num=1000))
     info1 = nk.signal_findpeaks(signal1)
