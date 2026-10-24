@@ -20,6 +20,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``signal_interpolate(method="monotone_cubic")`` applies boundary fill values to every
+  out-of-range sample, including irregular or unordered output grids.
 * ``ecg_process()``, ``ecg_delineate()``, ``ecg_phase()`` and ``ecg_quality()`` no longer
   crash when no R-peak is detected; they return NaN/empty outputs with a warning.
 * ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
