@@ -120,7 +120,7 @@ def complexity_optimize(
                 tau_sequence,
                 metric,
                 metric_values,
-                dimension_seq[:-1],
+                dimension_seq,
                 optimize_indices,
                 r_range,
                 ApEn,
@@ -260,11 +260,14 @@ def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10
         E2 = Es[1:] / Es[:-1]
         min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
         optimize_indices = [E1, E2]
-        return dimension_seq, optimize_indices, min_dimension
+        # E1 and E2 are ratios between consecutive dimensions, so they are one shorter than
+        # dimension_seq: return the sequence aligned with them (fnn metrics have the full length)
+        return dimension_seq[:-1], optimize_indices, min_dimension
 
     if method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs)
-        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        # f3[i] corresponds to dimension_seq[i]: return the dimension itself, not its index
+        min_dimension = dimension_seq[np.where(f3 <= 1.85 * np.min(f3[np.nonzero(f3)]))[0][0]]
         optimize_indices = [f1, f2, f3]
         return dimension_seq, optimize_indices, min_dimension
     else:

@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 
 import antropy
+import matplotlib.pyplot as plt
 import nolds
 import numpy as np
 import pandas as pd
@@ -9,6 +10,7 @@ from pyentrp import entropy as pyentrp
 
 # import EntropyHub
 import neurokit2 as nk
+from neurokit2.complexity.optim_complexity_optimize import _complexity_dimension
 
 
 # For the testing of complexity, we test our implementations against existing and established ones.
@@ -695,3 +697,28 @@ def test_entropy_spectral_sampling_rate():
     psd = nk.signal_psd(signal, sampling_rate=100, max_frequency=10)
     power = psd["Power"] / psd["Power"].sum()
     assert np.isclose(spen_10hz, nk.entropy_shannon(freq=power.values)[0] / np.log2(len(power)))
+
+
+def test_complexity_dimension_fnn():
+    # The Lorenz attractor has 3 variables: the proportion of false nearest neighbours drops
+    # to ~0 at dimension 3, which must be returned (and not its index in the sequence, 2)
+    signal = nk.complexity_simulate(duration=2, sampling_rate=250, method="lorenz")
+    dimension, info = nk.complexity_dimension(signal, delay=5, dimension_max=10, method="fnn")
+    assert dimension == 3
+    f3 = info["f3"]
+    assert dimension == info["Values"][np.argmax(f3 <= 1.85 * np.min(f3[np.nonzero(f3)]))]
+
+    # A custom sequence of dimensions (not starting at 1) must return one of its members
+    dimension, _ = nk.complexity_dimension(signal, delay=5, dimension_max=[2, 3, 4, 5, 6], method="fnn")
+    assert dimension == 3
+
+    # complexity_optimize() uses the same selection
+    _, _, dimension = _complexity_dimension(signal, delay=5, dimension_max=10, method="fnn")
+    assert dimension == 3
+
+    # complexity_optimize(show=True) plots the fnn fractions against the full sequence of
+    # dimensions (the afnn ratios are one shorter and are plotted against the trimmed one)
+    out = nk.complexity_optimize(signal, delay_max=10, dimension_max=10, dimension_method="fnn", show=True)
+    assert out["Dimension"] == 3
+    nk.complexity_optimize(signal, delay_max=10, dimension_max=10, dimension_method="afnn", show=True)
+    plt.close("all")

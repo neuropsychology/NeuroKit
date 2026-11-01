@@ -9,6 +9,14 @@ New Features
 Fixes
 +++++++++++++
 
+* ``complexity_dimension(method="fnn")`` (and ``complexity_optimize(dimension_method="fnn")``)
+  now return the dimension at which the proportion of false nearest neighbours meets the
+  criterion, rather than its index in the tested sequence. The result was one too low with the
+  default sequence (e.g., 2 instead of 3 for the Lorenz attractor) and arbitrary for a custom
+  ``dimension_max`` sequence; the marker drawn with ``show=True`` was off accordingly.
+* ``complexity_optimize(dimension_method="fnn", show=True)`` no longer raises a shape error when
+  plotting the false nearest neighbour fractions.
+
 
 0.3.0
 -------------------

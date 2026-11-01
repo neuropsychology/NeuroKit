@@ -178,7 +178,9 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     elif method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
 
-        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        # f3[i] is the proportion of false neighbours at dimension_seq[i] (compared with
+        # dimension_seq[i] + 1), so return the dimension itself rather than its index
+        min_dimension = dimension_seq[np.where(f3 <= 1.85 * np.min(f3[np.nonzero(f3)]))[0][0]]
 
         # Store information
         info = {"Method": method, "Values": dimension_seq, "f1": f1, "f2": f2, "f3": f3}
