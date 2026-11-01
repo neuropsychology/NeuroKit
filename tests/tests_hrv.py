@@ -60,6 +60,13 @@ def test_hrv_time_contiguous_timestamps_preserve_window_metrics():
     columns = [name for name in implicit.columns if "SDANN" in name or "SDNNI" in name]
 
     np.testing.assert_allclose(implicit[columns], explicit[columns], equal_nan=True)
+def test_hrv_time_tinn_preserves_repeated_distribution():
+    rri = np.repeat(np.arange(600.0, 850.0, 25.0), [1, 2, 8, 20, 35, 50, 30, 15, 5, 1])
+    original = nk.hrv_time({"RRI": rri}, binsize=25)["HRV_TINN"].iloc[0]
+    repeated = nk.hrv_time({"RRI": np.tile(rri, 100)}, binsize=25)["HRV_TINN"].iloc[0]
+
+    assert original == pytest.approx(175.0)
+    assert repeated == pytest.approx(original)
 
 
 def test_hrv_frequency():

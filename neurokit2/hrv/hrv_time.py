@@ -265,7 +265,7 @@ def _sdnni(rri, rri_time=None, window=1):
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2**14
+    min_error = np.inf
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]
