@@ -129,6 +129,7 @@ def _rsp_rvt_birn(
     )
     info = rsp_findpeaks(
         zsmooth_signal,
+        sampling_rate=sampling_rate,
         method="scipy",
         peak_distance=peak_distance,
         peak_prominence=peak_prominence,
@@ -187,6 +188,7 @@ def _rsp_rvt_power(
     # find peaks and troughs
     info = rsp_findpeaks(
         zsmooth_signal,
+        sampling_rate=sampling_rate,
         method="scipy",
         peak_distance=peak_distance,
         peak_prominence=peak_prominence,
