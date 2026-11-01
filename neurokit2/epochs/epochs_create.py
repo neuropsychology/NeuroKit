@@ -29,7 +29,8 @@ def epochs_create(
         Events onset location. If a dict is passed (e.g., from ``events_find()``),
         will select only the 'onset' list. If an integer is passed,
         will use this number to create an evenly spaced list of events. If None,
-        will chunk the signal into successive blocks of the set duration.
+        will chunk the signal into successive complete blocks of the set duration,
+        starting at the first sample and including a final full-length block.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start : int, list
@@ -133,7 +134,9 @@ def epochs_create(
     # Sanitize events input
     if events is None:
         max_duration = (np.max(epochs_end) - np.min(epochs_start)) * sampling_rate
-        events = np.arange(0, len(data) - max_duration, max_duration)
+        events = np.arange(0, len(data) - max_duration + 1, max_duration)
+        # Align the beginning of each block, rather than its event, with the data.
+        events -= np.min(epochs_start) * sampling_rate
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:

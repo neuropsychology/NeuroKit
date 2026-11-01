@@ -1,6 +1,23 @@
 import numpy as np
+import pytest
 
 import neurokit2 as nk
+
+
+@pytest.mark.parametrize("sampling_rate", [100, 128])
+@pytest.mark.parametrize("duration", [1, 2, 2.5])
+@pytest.mark.parametrize("start", [-0.5, 0, 0.5])
+def test_epochs_create_complete_blocks(sampling_rate, duration, start):
+    signal = np.arange(int(duration * sampling_rate), dtype=float)
+    epochs = nk.epochs_create(signal, sampling_rate=sampling_rate, epochs_start=start, epochs_end=start + 1)
+
+    assert len(epochs) == int(duration)
+    for number, epoch in enumerate(epochs.values()):
+        first = number * sampling_rate
+        expected = signal[first : first + sampling_rate]
+        np.testing.assert_array_equal(epoch["Signal"], expected)
+        np.testing.assert_array_equal(epoch["Index"], np.arange(first, first + sampling_rate))
+        assert epoch.index[0] == start
 
 
 def test_epochs_create():
