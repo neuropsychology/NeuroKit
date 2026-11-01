@@ -28,7 +28,9 @@ def entropy_spectral(signal, bins=None, show=False, **kwargs):
     show : bool
         Display the power spectrum.
     **kwargs : optional
-        Keyword arguments to be passed to ``signal_psd()``.
+        Keyword arguments to be passed to ``signal_psd()``, such as ``sampling_rate`` (default
+        1000), ``min_frequency`` or ``max_frequency``. The sampling rate only matters when the
+        frequency range is restricted.
 
     Returns
     -------
@@ -82,8 +84,10 @@ def entropy_spectral(signal, bins=None, show=False, **kwargs):
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
-    # Power-spectrum density (PSD) (actual sampling rate does not matter)
-    psd = signal_psd(signal, sampling_rate=1000, **kwargs)
+    # Power-spectrum density (PSD) (the actual sampling rate does not matter, unless the
+    # frequency range is restricted with min_frequency or max_frequency)
+    kwargs.setdefault("sampling_rate", 1000)
+    psd = signal_psd(signal, **kwargs)
 
     # Cut into bins
     if isinstance(bins, int):

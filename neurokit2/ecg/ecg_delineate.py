@@ -1,3 +1,5 @@
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -5,6 +7,7 @@ import pywt
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
+from ..misc import NeuroKitWarning
 from ..signal import (
     signal_findpeaks,
     signal_formatpeaks,
@@ -160,6 +163,28 @@ def ecg_delineate(
 
     if isinstance(rpeaks, dict):
         rpeaks = rpeaks["ECG_R_Peaks"]
+
+    # Handle empty R-peaks array
+    if isinstance(rpeaks, (list, np.ndarray)) and len(rpeaks) == 0:
+        warn(
+            "No R-peaks were detected. Returning empty results for ECG delineation.",
+            category=NeuroKitWarning,
+        )
+        # Return empty results when no R-peaks are detected
+        waves = {
+            "ECG_P_Peaks": np.array([], dtype=float),
+            "ECG_P_Onsets": np.array([], dtype=float),
+            "ECG_P_Offsets": np.array([], dtype=float),
+            "ECG_Q_Peaks": np.array([], dtype=float),
+            "ECG_R_Onsets": np.array([], dtype=float),
+            "ECG_R_Offsets": np.array([], dtype=float),
+            "ECG_S_Peaks": np.array([], dtype=float),
+            "ECG_T_Peaks": np.array([], dtype=float),
+            "ECG_T_Onsets": np.array([], dtype=float),
+            "ECG_T_Offsets": np.array([], dtype=float),
+        }
+        signals = pd.DataFrame({key: np.zeros(len(ecg_cleaned), dtype=int) for key in waves.keys()})
+        return signals, waves
 
     method = method.lower()  # remove capitalised letters
     if method in ["peak", "peaks", "derivative", "gradient"]:
@@ -320,6 +345,25 @@ def _dwt_adjust_parameters(rpeaks, sampling_rate, duration=None, target=None):
         return np.round(duration * (60 / average_rate), 3)
 
 
+def _dwt_normalize_window(ecg_local, weight=1.0):
+    """Express the amplitude of a search window in units that do not depend on the signal scale.
+
+    The candidate scores in `_dwt_delineate_tp_peaks()` combine the signal amplitude with a latency penalty in
+    seconds. Without this normalization the ranking of the candidates changes with the units (e.g., mV vs. uV)
+    or the gain of the recording. The absolute deviation from the median of the window is used (rather than the raw
+    amplitude) so that negative and biphasic waves are treated like positive ones, and it is divided by its maximum so
+    that the result lies in [0, `weight`].
+    """
+    ecg_local = np.asarray(ecg_local, dtype=float)
+    if len(ecg_local) == 0:
+        return ecg_local
+    deviation = np.abs(ecg_local - np.median(ecg_local))
+    max_deviation = np.max(deviation)
+    if not np.isfinite(max_deviation) or max_deviation == 0:
+        return np.zeros_like(ecg_local)
+    return weight * deviation / max_deviation
+
+
 def _dwt_delineate_tp_peaks(
     ecg,
     rpeaks,
@@ -332,6 +376,7 @@ def _dwt_delineate_tp_peaks(
     degree_ppeak=2,
     epsilon_T_weight=0.25,
     epsilon_P_weight=0.02,
+    amplitude_weight=0.3,
 ):
     """
     Parameters
@@ -359,6 +404,10 @@ def _dwt_delineate_tp_peaks(
         Epsilon of RMS value of wavelet transform. Appendix (A.3).
     epsilon_P_weight : int
         Epsilon of RMS value of wavelet transform. Appendix (A.4).
+    amplitude_weight : float
+        Weight of the (scale-free) wave amplitude relative to the latency penalty (in seconds) when choosing among
+        several candidate T/P peaks. The amplitude is normalized within each search window to [0, 1], so the result does
+        not depend on the units of the signal. Values of 0.2-0.4 gave similar results on the LUDB database.
     """
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_adjust_parameters(rpeaks, sampling_rate, target="degree")
@@ -380,7 +429,7 @@ def _dwt_delineate_tp_peaks(
             continue
 
         height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
-        ecg_local = ecg[srch_idx_start:srch_idx_end]
+        ecg_local = _dwt_normalize_window(ecg[srch_idx_start:srch_idx_end], amplitude_weight)
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
         peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))  # pylint: disable=W0640
         if dwt_local[0] > 0:  # just append
@@ -420,7 +469,7 @@ def _dwt_delineate_tp_peaks(
             continue
 
         height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
-        ecg_local = ecg[srch_idx_start:srch_idx_end]
+        ecg_local = _dwt_normalize_window(ecg[srch_idx_start:srch_idx_end], amplitude_weight)
         peaks, __ = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
         peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
         if dwt_local[0] > 0:  # just append
@@ -763,7 +812,7 @@ def _calc_prominence(peaks, sig, Rpeak=None, minima=False):
     _sig = -sig if minima else sig
     w[peaks] = scipy.signal.peak_prominences(_sig, peaks)[0]
     # optional: set rpeak prominence to zero to emphasize other peaks
-    if Rpeak is not None:
+    if Rpeak is not None and 0 <= Rpeak < len(w):
         w[Rpeak] = 0
     return w
 
@@ -772,7 +821,8 @@ def _prominence_find_q_wave(weight_minima, current_wave, max_r_rise_time):
     if "ECG_R_Peaks" not in current_wave:
         return
     q_bound = max(current_wave["ECG_R_Peaks"] - max_r_rise_time, 0)
-
+    if len(weight_minima[q_bound : current_wave["ECG_R_Peaks"]]) == 0:
+        return
     current_wave["ECG_Q_Peaks"] = np.argmax(weight_minima[q_bound : current_wave["ECG_R_Peaks"]]) + q_bound
 
 
@@ -780,6 +830,8 @@ def _prominence_find_s_wave(sig, weight_minima, current_wave, max_qrs_interval):
     if "ECG_Q_Peaks" not in current_wave:
         return
     s_bound = current_wave["ECG_Q_Peaks"] + max_qrs_interval
+    if len(weight_minima[current_wave["ECG_R_Peaks"] : s_bound] > 0) == 0:
+        return
     s_wave = np.argmax(weight_minima[current_wave["ECG_R_Peaks"] : s_bound] > 0) + current_wave["ECG_R_Peaks"]
     current_wave["ECG_S_Peaks"] = (
         np.argmin(sig[current_wave["ECG_R_Peaks"] : s_bound]) + current_wave["ECG_R_Peaks"]

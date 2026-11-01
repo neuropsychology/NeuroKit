@@ -265,8 +265,11 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
     if continuous is True:
         return None
 
+    # ``ecg_period`` holds the heart rate (bpm), but Porges-Bohrer works on heart period (ms)
+    heart_period = 60000 / np.asarray(ecg_period, dtype=float)
+
     # Re-sample at 2 Hz
-    resampled = signal_resample(ecg_period, sampling_rate=sampling_rate, desired_sampling_rate=2)
+    resampled = signal_resample(heart_period, sampling_rate=sampling_rate, desired_sampling_rate=2)
 
     # Fit 21-point cubic polynomial filter (zero mean, 3rd order)
     # with a low-pass cutoff frequency of 0.095Hz
@@ -292,7 +295,7 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
     epochs = [time.loc[i] for i in range(int(np.max(time.index.values)) + 1)]
     variance = []
     for epoch in epochs:
-        variance.append(np.log(epoch.var(axis=0) / 1000))  # convert ms
+        variance.append(np.log(epoch.var(axis=0)))  # ln(ms^2)
 
     variance = [row for row in variance if not np.isnan(row).any()]
 

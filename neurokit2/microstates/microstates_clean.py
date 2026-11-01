@@ -1,9 +1,8 @@
 import numpy as np
-import pandas as pd
 
 from ..eeg import eeg_gfp
 from ..stats import standardize
-from .microstates_peaks import microstates_peaks
+from .microstates_peaks import _microstates_sanitize_eeg, microstates_peaks
 
 
 def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True, normalize=True, gfp_method="l1", **kwargs):
@@ -62,26 +61,23 @@ def microstates_clean(eeg, sampling_rate=None, train="gfp", standardize_eeg=True
     .eeg_gfp, microstates_peaks, .microstates_segment
 
     """
-    # If MNE object
-    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
-        sampling_rate = eeg.info["sfreq"]
-        info = eeg.info
-        eeg = eeg.get_data()
-    else:
-        info = None
+    eeg, sampling_rate, info = _microstates_sanitize_eeg(eeg, sampling_rate=sampling_rate)
 
     # Normalization
     if standardize_eeg is True:
-        eeg = standardize(eeg, **kwargs)
+        standardize_kwargs = {key: kwargs[key] for key in ["robust", "window"] if key in kwargs}
+        eeg = standardize(eeg.T, **standardize_kwargs).T
 
     # Get GFP
-    gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=normalize, method=gfp_method, **kwargs)
+    gfp_kwargs = {key: kwargs[key] for key in ["robust", "smooth"] if key in kwargs}
+    gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=normalize, method=gfp_method, **gfp_kwargs)
 
     # If train is a custom of vector (assume it's the pre-computed peaks)
     if isinstance(train, (list, np.ndarray)):
-        peaks = train
+        peaks = np.asarray(train, dtype=int)
     # Find peaks in the global field power (GFP) or take a given amount of indices
     else:
-        peaks = microstates_peaks(eeg, gfp=train, sampling_rate=sampling_rate, **kwargs)
+        peaks_kwargs = {key: kwargs[key] for key in ["distance_between"] if key in kwargs}
+        peaks = microstates_peaks(eeg, gfp=gfp if train == "gfp" else train, sampling_rate=sampling_rate, **peaks_kwargs)
 
     return eeg, peaks, gfp, info

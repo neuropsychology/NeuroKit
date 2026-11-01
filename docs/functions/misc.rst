@@ -58,5 +58,4 @@ Misc
 
 .. automodule:: neurokit2.misc
    :members:
-   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, intervals_to_peaks, listify, parallel_run, progress_bar, replace, as_vector, find_knee
-
+   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, listify, parallel_run, progress_bar, replace, as_vector, find_knee

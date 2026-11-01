@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 import neurokit2 as nk
 
@@ -21,6 +22,54 @@ def test_standardize():
 
     rez = np.sum(nk.standardize([1, 1, 5, 2, 1, 5, 1, 7], robust=True))
     assert np.allclose(rez, 14.8387, atol=0.001)
+
+
+@pytest.mark.parametrize(
+    ("kind", "label_dtype"),
+    [("series", None), ("frame", None), ("mixed_frame", "object"), ("mixed_frame", "string")],
+)
+@pytest.mark.parametrize("robust", [False, True])
+def test_standardize_rolling_pandas_preserves_labels(kind, label_dtype, robust):
+    series = pd.Series(
+        [1.0, 3.0, 2.0, 5.0],
+        index=pd.date_range("2020-01-01", periods=4),
+        name="signal",
+    )
+    scale = 1 / 1.4826 if robust else 1 / np.sqrt(2)
+    expected = pd.Series([scale, scale, -scale, scale], index=series.index, name=series.name)
+    if kind == "series":
+        actual = nk.standardize(series, window=2, robust=robust)
+        pd.testing.assert_series_equal(actual, expected)
+    else:
+        data = series.to_frame()
+        if kind == "mixed_frame":
+            data["other"] = 2 * series
+            data["label"] = pd.Series(["a", "b", "c", "d"], index=data.index, dtype=label_dtype)
+        actual = nk.standardize(data, window=2, robust=robust)
+        pd.testing.assert_series_equal(actual["signal"], expected)
+        if kind == "mixed_frame":
+            pd.testing.assert_series_equal(actual["other"], expected.rename("other"))
+            pd.testing.assert_series_equal(actual["label"], data["label"])
+
+
+@pytest.mark.parametrize("dtype", ["object", "string"])
+def test_standardize_string_series(dtype):
+    data = pd.Series(["a", "b", "c"], dtype=dtype, name="label")
+    with pytest.warns(nk.misc.NeuroKitWarning, match="string type"):
+        actual = nk.standardize(data, window=2)
+    pd.testing.assert_series_equal(actual, data)
+
+
+@pytest.mark.parametrize("as_dataframe", [False, True])
+def test_standardize_robust_scales_each_column_independently(as_dataframe):
+    data = np.array([[1.0, 100.0], [2.0, 200.0], [3.0, 300.0], [np.nan, 400.0]])
+    expected = np.array([[-1.0, -1.5], [0.0, -0.5], [1.0, 0.5], [np.nan, 1.5]]) / 1.4826
+    if as_dataframe:
+        data = pd.DataFrame(data, columns=["low_scale", "high_scale"])
+        expected = pd.DataFrame(expected, columns=data.columns)
+        pd.testing.assert_frame_equal(nk.standardize(data, robust=True), expected)
+    else:
+        np.testing.assert_allclose(nk.standardize(data, robust=True), expected, equal_nan=True)
 
 
 def test_fit_loess():
@@ -95,6 +144,18 @@ def test_kmeans():
 
     # check results (sort, then compare rows of res[1] and points)
     assert np.allclose(res[1][np.lexsort(res[1].T)], centres[np.lexsort(centres.T)])
+
+
+def test_cluster_microstates_method_routing():
+    rng = np.random.RandomState(42)
+    data = rng.normal(size=(20, 4))
+
+    _, _, info = nk.cluster(data, method="ica", n_clusters=2, random_state=42)
+    assert info["clustering_function"].func.__name__ == "_cluster_ica"
+
+    _, clusters, info = nk.cluster(data, method="aahc", n_clusters=2, random_state=42)
+    assert clusters.shape == (2, data.shape[1])
+    assert info["clustering_function"].func.__name__ == "_cluster_aahc"
 
 
 def test_cor():

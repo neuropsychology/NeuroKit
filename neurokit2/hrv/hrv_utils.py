@@ -36,26 +36,18 @@ def _hrv_format_input(peaks=None, sampling_rate=1000, output_format="intervals")
 # =============================================================================
 def _hrv_sanitize_tuple(peaks, sampling_rate=1000):
     # Get sampling rate
-    info = [i for i in peaks if isinstance(i, dict)]
-    sampling_rate = info[0]["sampling_rate"]
+    info = next((item for item in peaks if isinstance(item, dict) and "sampling_rate" in item), None)
 
     # Detect actual sampling rate
-    if len(info) < 1:
-        peaks, sampling_rate = peaks[0], peaks[1]
+    sampling_rate = info["sampling_rate"] if info else peaks[1]
+    peaks = peaks[0]
 
-    # Get peaks
-    if isinstance(peaks[0], (dict, pd.DataFrame)):
-        try:
-            peaks = _hrv_sanitize_dict_or_df(peaks[0])
-        except NameError:
-            if isinstance(peaks[1], (dict, pd.DataFrame)):
-                try:
-                    peaks = _hrv_sanitize_dict_or_df(peaks[1])
-                except NameError:
-                    peaks = _hrv_sanitize_peaks(peaks[1])
-            else:
-                peaks = _hrv_sanitize_peaks(peaks[0])
+    if isinstance(peaks, (dict, pd.DataFrame)):
+        rri, rri_time, rri_missing, _ = _hrv_sanitize_dict_or_df(peaks, sampling_rate=sampling_rate)
+        return rri, rri_time, rri_missing, sampling_rate
 
+    # Get R-R intervals from raw peak locations
+    peaks = _hrv_sanitize_peaks(peaks)
     rri, rri_time, rri_missing = _hrv_get_rri(peaks=peaks, sampling_rate=sampling_rate)
 
     return rri, rri_time, rri_missing, sampling_rate

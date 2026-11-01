@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.cluster
+import scipy.spatial.distance
 
 from .signal_zerocrossings import signal_zerocrossings
 
@@ -63,7 +64,7 @@ def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **
         raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
 
     if keep_sd is not None:
-        recomposed = _signal_recompose_filter_sd(components, threshold=keep_sd)
+        recomposed = _signal_recompose_filter_sd(recomposed, threshold=keep_sd)
 
     return recomposed
 
@@ -100,7 +101,7 @@ def _signal_recompose_wcorr(components, threshold=0.5, metric="chebyshev"):
     wcorr = _signal_recompose_get_wcorr(components, show=False)
 
     # Find clusters in correlation matrix
-    pairwise_distances = scipy.cluster.hierarchy.distance.pdist(wcorr, metric=metric)
+    pairwise_distances = scipy.spatial.distance.pdist(wcorr, metric=metric)
     linkage = scipy.cluster.hierarchy.linkage(pairwise_distances, method="complete")
     threshold = threshold * pairwise_distances.max()
     clusters = scipy.cluster.hierarchy.fcluster(linkage, threshold, "distance")

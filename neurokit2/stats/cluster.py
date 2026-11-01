@@ -145,14 +145,14 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
 
     # ICA
     elif method in ["ica", "independent", "independent component analysis"]:
-        out = _cluster_pca(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+        out = _cluster_ica(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
 
     # Mixture
     elif method in ["mixture", "mixt"]:
         out = _cluster_mixture(data, n_clusters=n_clusters, bayesian=False, random_state=random_state, **kwargs)
 
     # Frederic's AAHC
-    elif method in ["aahc_frederic", "aahc_eegmicrostates"]:
+    elif method in ["aahc", "aahc_frederic", "aahc_eegmicrostates"]:
         out = _cluster_aahc(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
 
     # Bayesian
@@ -470,7 +470,12 @@ def _cluster_ica(data, n_clusters=2, random_state=None, **kwargs):
     """Independent Component Analysis (ICA) for clustering."""
     # Fit ICA
     ica = sklearn.decomposition.FastICA(
-        n_components=n_clusters, algorithm="parallel", whiten=True, fun="exp", random_state=random_state, **kwargs
+        n_components=n_clusters,
+        algorithm="parallel",
+        whiten="unit-variance",
+        fun="exp",
+        random_state=random_state,
+        **kwargs,
     )
 
     ica = ica.fit(data)

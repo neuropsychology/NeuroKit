@@ -13,7 +13,7 @@ def emg_methods(
     """**EMG Preprocessing Methods**
 
     This function analyzes and specifies the methods used in the preprocessing, and create a
-    textual description of the methods used. It is used by :func:`eda_process()` to dispatch the
+    textual description of the methods used. It is used by :func:`emg_process()` to dispatch the
     correct methods to each subroutine of the pipeline and to create a
     preprocessing report.
 

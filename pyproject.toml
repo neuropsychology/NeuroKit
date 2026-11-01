@@ -32,7 +32,7 @@ classifiers = [
 dependencies = [
     "requests",
     "numpy>=2.0.0",
-    "pandas<3.0.0",
+    "pandas>=2.0.0",
     "scipy",
     "scikit-learn>=1.0.0",
     "matplotlib>=3.5.0",
@@ -48,7 +48,7 @@ full = [
     "opencv-python",
     "pillow",
     "tabulate",
-    "PyEMD",
+    "EMD-signal",
     "menpo",
     "menpodetect",
     "pyrqa",
@@ -65,14 +65,11 @@ test = [
     "pytest-cov",
     "pytest-xdist",
     "coverage",
-    "codecov",
     "pyentrp",
     "antropy",
     "EntropyHub",
     "nolds<=0.6.2",
     "biosppy==0.6.1",
-    "cvxopt",
-    "EMD-signal",
     "numba>=0.61.0",
     "llvmlite>=0.44.0",
     "astropy",
@@ -92,22 +89,16 @@ docs = [
     "myst-nb",
     "seaborn",
     "pickleshare",
-    "neurokit2[full]",
     { include-group = "test" },
 ]
 
 # General development tools
 dev = [
-    "invoke",
-    "bumpversion",
-    "sphinx",
     "twine",
     "tox",
     "tox-uv",
     "ruff",
     "pre-commit",
-    "yapf",
-    "neurokit2[full]",
     { include-group = "docs" },
     { include-group = "test" },
 ]
@@ -130,19 +121,13 @@ packages = ["neurokit2"]
 version-file = "neurokit2/_version.py"
 
 [tool.hatch.build.targets.sdist]
-exclude = [
-  "/.direnv",
-  "/.venv*",
-  "/.tox",
-  "/.pytest_cache",
-  "/.python_cache",
-  "/.coverage",
-  "/coverage.xml",
-  "/data",
-  "/flake.nix",
-  "/flake.lock",
-  "tests/",
-  "docs/"
+include = [
+  "/neurokit2",
+  "/README.rst",
+  "/LICENSE",
+  "/AUTHORS.rst",
+  "/NEWS.rst",
+  "/CITATION.cff"
 ]
 
 [tool.uv]
@@ -191,8 +176,7 @@ commands = [
 line-length = 127
 target-version = "py310"
 
-# Why was this excluded before in style workflow?
-extend-exclude = ["neurokit2/complexity/__init__.py"]
+extend-exclude = ["neurokit2/complexity/__init__.py", "studies/**/*.md"]
 
 [tool.ruff.lint]
 # E/W = pycodestyle, F = pyflakes, I = isort, UP = pyupgrade, PL = pylint
@@ -204,6 +188,7 @@ ignore = [
     "PLR0913", # Too many arguments (limit bumped to 10 below)
     "PLR0915", # Too many statements
     "PLR0914", # Too many local variables
+    "PLR0917", # Too many positional arguments (public API is positional by design)
     "PLC0415", # Allow imports inside functions (useful for heavy optional dependencies)
     "PLR2004", # Allows magic values in comparisons
     "PLR0911", # Allows many return statements in a function e.g., in data.py

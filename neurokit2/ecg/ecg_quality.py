@@ -205,6 +205,15 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
         rpeaks = rpeaks["ECG_R_Peaks"]
 
+    # Handle empty R-peaks array
+    if isinstance(rpeaks, (list, np.ndarray)) and len(rpeaks) == 0:
+        warn(
+            "No R-peaks were detected. Returning NaN values for ECG quality assessment.",
+            category=NeuroKitWarning,
+        )
+        # Return NaN quality when no R-peaks are detected
+        return np.full(len(ecg_cleaned), np.nan)
+
     # Get heartbeats
     heartbeats = ecg_segment(ecg_cleaned, rpeaks, sampling_rate)
     data = epochs_to_df(heartbeats).pivot(index="Label", columns="Time", values="Signal")

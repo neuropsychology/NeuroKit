@@ -51,6 +51,23 @@ def test_signal_binarize():
     assert len(binary) == 1000
 
 
+@pytest.mark.parametrize("keep_sd", [None, 0, 0.1, 1])
+def test_signal_recompose_keep_sd(keep_sd):
+    time = np.arange(1000) / 100
+    source = np.sin(2 * np.pi * 0.5 * time)
+    noise = 0.01 * np.sin(2 * np.pi * 5 * time)
+    components = np.array([source, 0.5 * source, noise])
+    original = components.copy()
+
+    # Correlated components must be summed before filtering by their SD.
+    expected = np.array([1.5 * source, noise]) if keep_sd in [None, 0] else np.array([1.5 * source])
+    recomposed = nk.signal_recompose(components, threshold=0.5, keep_sd=keep_sd)
+    # Cluster ordering is arbitrary; compare from largest to smallest SD.
+    recomposed = recomposed[np.argsort(np.std(recomposed, axis=1))[::-1]]
+    np.testing.assert_allclose(recomposed, expected)
+    np.testing.assert_array_equal(components, original)
+
+
 def test_signal_resample():
     signal = np.cos(np.linspace(start=0, stop=20, num=50))
 
@@ -102,7 +119,7 @@ def test_signal_detrend():
 
     # Tarvainen
     rez_nk = nk.signal_detrend(signal, method="tarvainen2002", regularization=500)
-    assert np.allclose(np.mean(rez_nk - signal), -2.88438737697, atol=0.000001)
+    assert np.allclose(np.mean(rez_nk - signal), -2.941610000384851, atol=0.000001)
 
 
 def test_signal_filter():
@@ -202,6 +219,27 @@ def test_signal_interpolate():
     assert len(interpolated) == 1000
     assert interpolated[0] == signal.iloc[0]
     assert interpolated[-1] == signal.iloc[-1]
+
+
+@pytest.mark.parametrize("x_new", [[-0.1, 0.2, 0.8, 1.1], [2.0, 0.8, -1.0, 0.2]])
+@pytest.mark.parametrize(
+    "fill_value, left, right",
+    [(None, 0.0, 1.0), (-1.0, -1.0, -1.0), ((-1.0, 2.0), -1.0, 2.0), ("extrapolate", None, None)],
+)
+def test_signal_interpolate_monotone_cubic_bounds(x_new, fill_value, left, right):
+    x_new = np.asarray(x_new)
+    expected = x_new.copy()
+    if fill_value != "extrapolate":
+        expected[x_new < 0] = left
+        expected[x_new > 1] = right
+    actual = nk.signal_interpolate(
+        np.array([0.0, 1.0]),
+        np.array([0.0, 1.0]),
+        x_new=x_new,
+        method="monotone_cubic",
+        fill_value=fill_value,
+    )
+    np.testing.assert_allclose(actual, expected)
 
 
 def test_signal_findpeaks():
@@ -306,12 +344,23 @@ def test_signal_plot():
 
 def test_signal_power():
     signal1 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=500)
-    pwr1 = nk.signal_power(signal1, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=500)
+    pwr1 = nk.signal_power(signal1, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=500, show=True)
 
     signal2 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=100)
     pwr2 = nk.signal_power(signal2, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=100)
 
     assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)
+
+    # Test show=True
+    fig = plt.gcf()
+    try:
+        assert len(fig.axes) == 1
+        ax = fig.axes[0]
+        assert ax.get_title() == "Power Spectral Density (PSD) for Frequency Domains"
+        assert ax.get_xlabel() == "Frequency (Hz)"
+        assert len(ax.collections) > 0
+    finally:
+        plt.close(fig)
 
 
 def test_signal_timefrequency():

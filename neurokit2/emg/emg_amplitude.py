@@ -3,16 +3,18 @@ import numpy as np
 from ..signal import signal_filter
 
 
-def emg_amplitude(emg_cleaned):
+def emg_amplitude(emg_cleaned, sampling_rate=1000):
     """**Compute electromyography (EMG) amplitude**
 
-    Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
+    Compute electromyography amplitude given the cleaned electromyography signal, done by calculating the
     linear envelope of the signal.
 
     Parameters
     ----------
     emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by ``emg_clean()``.
+    sampling_rate : int
+        The sampling frequency of ``emg_cleaned`` in Hz. Defaults to 1000.
 
     Returns
     -------
@@ -21,7 +23,7 @@ def emg_amplitude(emg_cleaned):
 
     See Also
     --------
-    emg_clean, emg_rate, emg_process, emg_plot
+    emg_clean, emg_process, emg_plot
 
     Examples
     --------
@@ -41,13 +43,13 @@ def emg_amplitude(emg_cleaned):
 
     """
     tkeo = _emg_amplitude_tkeo(emg_cleaned)
-    amplitude = _emg_amplitude_envelope(tkeo)
+    amplitude = _emg_amplitude_envelope(tkeo, sampling_rate=sampling_rate)
 
     return amplitude
 
 
 # =============================================================================
-# Taeger-Kaiser Energy Operator
+# Teager-Kaiser Energy Operator
 # =============================================================================
 def _emg_amplitude_tkeo(emg_cleaned):
     """Calculates the Teager–Kaiser Energy operator to improve onset detection, described by Marcos Duarte at
@@ -96,13 +98,13 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
     emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by `emg_clean()`.
     sampling_rate : int
-        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of `emg_cleaned` (in Hz, i.e., samples/second).
     lowcut : float
         Low-cut frequency for the band-pass filter (in Hz). Defaults to 10Hz.
     highcut : float
         High-cut frequency for the band-pass filter (in Hz). Defaults to 400Hz.
     envelope_filter : float
-        Cuttoff frequency for the high-pass filter (in Hz). Defauts to 8Hz.
+        Cutoff frequency for the low-pass filter (in Hz). Defaults to 8Hz.
 
     Returns
     -------
@@ -114,6 +116,9 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
     - BMCLab: https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb
 
     """
+    if highcut >= sampling_rate / 2:
+        highcut = None
+
     filtered = signal_filter(
         emg_cleaned,
         sampling_rate=sampling_rate,

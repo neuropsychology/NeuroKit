@@ -293,7 +293,7 @@ def test_rsp_rrv():
     rsp_rate110 = nk.signal_rate(peaks110, desired_length=len(rsp110))
 
     rsp90_rrv = nk.rsp_rrv(rsp_rate90, peaks90)
-    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110)
+    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110, show=True)
 
     assert np.array(rsp90_rrv["RRV_SDBB"]) < np.array(rsp110_rrv["RRV_SDBB"])
     assert np.array(rsp90_rrv["RRV_RMSSD"]) < np.array(rsp110_rrv["RRV_RMSSD"])
@@ -305,6 +305,17 @@ def test_rsp_rrv():
     assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
     assert np.isnan(rsp90_rrv["RRV_VLF"][0])
     assert np.isnan(rsp110_rrv["RRV_VLF"][0])
+
+    # Test show=True
+    fig = plt.gcf()
+    try:
+        assert len(fig.axes) == 1
+        ax = fig.axes[0]
+        assert ax.get_title() == "Poincaré Plot"
+        assert len(ax.collections) > 0
+        assert len(ax.patches) > 0
+    finally:
+        plt.close(fig)
 
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
@@ -330,6 +341,29 @@ def test_rsp_intervalrelated():
     assert features_dict.shape[0] == 2  # Number of rows
 
 
+def test_rsp_intervalrelated_phase_durations_with_time_index():
+    phase = pd.DataFrame(
+        {
+            "RSP_Phase": [1, 1, 1, 1, 0, 0, 0, 0],
+            "RSP_Phase_Completion": [0, 0.33, 0.66, 1, 0, 0.33, 0.66, 1],
+        }
+    )
+    epoched_phase = phase.copy()
+    epoched_phase.index = np.linspace(10, 10.07, len(epoched_phase))
+    epoched_phase["Label"] = "1"
+
+    continuous = nk.rsp_intervalrelated(phase, sampling_rate=100)
+    epoched = nk.rsp_intervalrelated({"1": epoched_phase}, sampling_rate=100)
+    duration_columns = [
+        "RSP_Phase_Duration_Inspiration",
+        "RSP_Phase_Duration_Expiration",
+        "RSP_Phase_Duration_Ratio",
+    ]
+
+    np.testing.assert_allclose(epoched[duration_columns], continuous[duration_columns])
+    np.testing.assert_allclose(epoched[duration_columns], [[0.03, 0.03, 1.0]])
+
+
 def test_rsp_rvt():
     sampling_rate = 1000
     rsp10 = nk.rsp_simulate(duration=60, sampling_rate=sampling_rate, respiratory_rate=10, random_state=42)
@@ -341,6 +375,19 @@ def test_rsp_rvt():
         assert len(rsp20) == len(rvt20)
         assert min(rvt10[~np.isnan(rvt10)]) >= 0
         assert min(rvt20[~np.isnan(rvt20)]) >= 0
+
+
+def test_rsp_rvt_sampling_rate():
+    # Breath detection should use the signal's sampling rate, not the 1000 Hz default
+    rvt = {}
+    for sampling_rate in [100, 1000]:
+        rsp = nk.rsp_simulate(duration=120, sampling_rate=sampling_rate, respiratory_rate=15, random_state=42)
+        for method in ["birn", "power"]:
+            rvt[method, sampling_rate] = np.nanmean(nk.rsp_rvt(rsp, method=method, sampling_rate=sampling_rate, silent=True))
+
+    assert np.isclose(rvt["birn", 100], rvt["birn", 1000], rtol=0.1)
+    # power2020 divides by the peak-to-peak interval in samples, so compare it per second
+    assert np.isclose(rvt["power", 100] * 100, rvt["power", 1000] * 1000, rtol=0.1)
 
 
 # Commented out for now: Check issue https://github.com/neuropsychology/NeuroKit/issues/1082
@@ -412,3 +459,18 @@ def test_rsp_report(tmp_path, method_cleaning, method_peaks, method_rvt):
         method_rvt=method_rvt,
     )
     assert p.is_file()
+
+
+def test_rsp_intervalrelated_independent_calls():
+    # Features computed for one recording must not leak into the next call
+    long_rsp = nk.rsp_simulate(duration=600, sampling_rate=100, respiratory_rate=12, random_state=1)
+    short_rsp = nk.rsp_simulate(duration=30, sampling_rate=100, respiratory_rate=20, random_state=1)
+    long_df, _ = nk.rsp_process(long_rsp, sampling_rate=100)
+    short_df, _ = nk.rsp_process(short_rsp, sampling_rate=100)
+
+    before = nk.rsp_intervalrelated(short_df, sampling_rate=100)
+    nk.rsp_intervalrelated(long_df, sampling_rate=100)
+    after = nk.rsp_intervalrelated(short_df, sampling_rate=100)
+
+    assert list(after.columns) == list(before.columns)
+    pd.testing.assert_frame_equal(after, before)

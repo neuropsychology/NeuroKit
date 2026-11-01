@@ -25,6 +25,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
       using a Butterworth filter (with zi provided).
     * ``'elgendi2010'``: Method used in Elgendi et al. (2010): band-pass filter between 8 and 20 Hz
       using a Butterworth filter (with zi provided).
+    * ``'elgendi2013'``: Same 8-20 Hz band-pass filter as ``'elgendi2010'``, used by the Elgendi
+      (2013) QRS detector (``ecg_peaks(..., method="elgendi2013")``).
     * ``'engzeemod2012'``: Method used in Engelse & Zeelenberg (1979). **Please help providing a
       better description!**
     * ``'vg'``: Method used in Visibility Graph Based Detection Emrich et al. (2023)
@@ -39,7 +41,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     method : str
         The processing pipeline to apply. Can be one of ``"neurokit"`` (default),
         ``"biosppy"``, ``"pantompkins1985"``, ``"hamilton2002"``, ``"elgendi2010"``,
-        ``"engzeemod2012"``, ``'vg'``.
+        ``"elgendi2013"``, ``"engzeemod2012"``, ``'vg'``.
     **kwargs
         Other arguments to be passed to specific methods.
 
@@ -119,7 +121,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         clean = _ecg_clean_pantompkins(ecg_signal, sampling_rate)
     elif method in ["hamilton", "hamilton2002"]:
         clean = _ecg_clean_hamilton(ecg_signal, sampling_rate)
-    elif method in ["elgendi", "elgendi2010"]:
+    elif method in ["elgendi", "elgendi2010", "elgendi2013"]:
         clean = _ecg_clean_elgendi(ecg_signal, sampling_rate)
     elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
@@ -152,7 +154,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
         raise ValueError(
             "NeuroKit error: ecg_clean(): 'method' should be "
             "one of 'neurokit', 'biosppy', 'pantompkins1985',"
-            " 'hamilton2002', 'elgendi2010', 'engzeemod2012',"
+            " 'hamilton2002', 'elgendi2010', 'elgendi2013', 'engzeemod2012',"
             " 'templateconvolution', 'vg'."
         )
     return clean

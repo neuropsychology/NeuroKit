@@ -91,7 +91,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     * **PIP**: Percentage of inflection points of the RR intervals series.
     * **IALS**: Inverse of the average length of the acceleration/deceleration segments.
-    * **PSS**: Percentage of short segments.
+    * **PSS**: Fraction of successive RR differences in short acceleration/deceleration segments
+      (fewer than three differences).
     * **PAS**: Percentage of NN intervals in alternation segments.
 
     Indices of **Complexity** and **Fractal Physiology** include:
@@ -113,8 +114,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
       corresponding to long-term correlations. See :func:`.fractal_dfa`.
     * **MFDFA indices**: Indices related to the :func:`multifractal spectrum <.fractal_dfa()>`.
 
-    Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), but
-    are not implemented yet (but soon).
+    Other non-linear indices include those based on Recurrence Quantification Analysis (RQA), which
+    can be computed with :func:`.hrv_rqa`.
 
     .. tip::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
@@ -196,13 +197,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
             HRV_Cd|The total contributions of heart rate decelerations to HRV.
             HRV_PIP|Percentage of inflection points of the RR intervals series.
             HRV_IALS|Inverse of the average length of the acceleration/deceleration segments.
-            HRV_PSS|Percentage of short segments.
+            HRV_PSS|Fraction of RR differences in short acceleration/deceleration segments.
             HRV_PAS|Percentage of NN intervals in alternation segments.
 
 
     See Also
     --------
-    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary, hrv_symbolic
+    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary, hrv_symbolic, hrv_rqa
 
     Examples
     --------
@@ -478,12 +479,11 @@ def _hrv_nonlinear_fragmentation(rri, rri_time=None, rri_missing=False, out={}):
     accelerations = np.where(diff_rri > 0)[0]
     decelerations = np.where(diff_rri < 0)[0]
     consecutive = find_consecutive(accelerations) + find_consecutive(decelerations)
-    lengths = [len(i) for i in consecutive]
+    lengths = np.asarray([len(i) for i in consecutive])
     out["IALS"] = 1 / np.average(lengths)
 
-    # Percentage of short segments (PSS) - The complement of the percentage of NN intervals in
-    # acceleration and deceleration segments with three or more NN intervals
-    out["PSS"] = np.sum(np.asarray(lengths) < 3) / len(lengths)
+    # PSS weights short acceleration/deceleration segments by their number of RR differences.
+    out["PSS"] = np.sum(lengths[lengths < 3]) / np.sum(lengths)
 
     # Percentage of NN intervals in alternation segments (PAS). An alternation segment is a sequence
     # of at least four NN intervals, for which heart rate acceleration changes sign every beat. We note

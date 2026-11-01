@@ -29,7 +29,8 @@ def epochs_create(
         Events onset location. If a dict is passed (e.g., from ``events_find()``),
         will select only the 'onset' list. If an integer is passed,
         will use this number to create an evenly spaced list of events. If None,
-        will chunk the signal into successive blocks of the set duration.
+        will chunk the signal into successive complete blocks of the set duration,
+        starting at the first sample and including a final full-length block.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start : int, list
@@ -48,7 +49,9 @@ def epochs_create(
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
     baseline_correction : bool
-        Defaults to False.
+        Whether to subtract a baseline computed separately for each epoch. The baseline
+        extends from the epoch start to time zero. If the epoch starts after zero,
+        its first sample is used instead. Defaults to False.
 
 
     Returns
@@ -118,7 +121,7 @@ def epochs_create(
 
       epochs = nk.epochs_create(data, events, sampling_rate=100,
                                 epochs_start=[0, -1, -1, 0],
-                                epochs_end=[1, 0, 0, 1])
+                                epochs_end=[1, 0, 0, 1], baseline_correction=True)
       [len(epochs[i]) for i in epochs.keys()]
 
     """
@@ -133,7 +136,9 @@ def epochs_create(
     # Sanitize events input
     if events is None:
         max_duration = (np.max(epochs_end) - np.min(epochs_start)) * sampling_rate
-        events = np.arange(0, len(data) - max_duration, max_duration)
+        events = np.arange(0, len(data) - max_duration + 1, max_duration)
+        # Align the beginning of each block, rather than its event, with the data.
+        events -= np.min(epochs_start) * sampling_rate
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
@@ -199,7 +204,7 @@ def epochs_create(
         )
 
         if baseline_correction is True:
-            baseline_end = 0 if epochs_start <= 0 else epochs_start
+            baseline_end = 0 if parameters["start"][i] <= 0 else parameters["start"][i]
             epoch = epoch - epoch.loc[:baseline_end].mean()
 
         # Add additional
@@ -212,7 +217,7 @@ def epochs_create(
 
     # Sanitize dtype of individual columns
     for i, epoch_df in epochs.items():
-        for colname, column in epoch_df.select_dtypes(include=["object"]).items():
+        for colname, column in epoch_df.select_dtypes(include=["object", "string"]).items():
             # Check whether columns are indices or label/condition
             values = column.unique().tolist()
             zero_or_one = all(x in [0, 1] for x in values)

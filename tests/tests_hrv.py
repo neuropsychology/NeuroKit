@@ -31,6 +31,48 @@ def test_hrv_time():
     assert np.all(hrv_fast["HRV_HTI"] != hrv_slow["HRV_HTI"])
 
 
+def test_sdann_keeps_the_last_interval_in_the_window():
+    # 180 one-second intervals, except the one that ends at 59.5 s.
+    rri = [1000] * 180
+    rri[58] = 1500
+    out = nk.hrv_time({"RRI": rri})
+    first = np.array([1000] * 58 + [1500], dtype=float)
+    assert out["HRV_SDANN1"].iloc[0] == pytest.approx(np.std([first.mean(), 1000.0, 1000.0], ddof=1))
+    assert out["HRV_SDNNI1"].iloc[0] == pytest.approx(np.mean([first.std(ddof=1), 0.0, 0.0]))
+
+
+def test_hrv_time_preserves_timestamps_in_window_metrics():
+    rri = np.repeat([750.0, 1000.0, 1250.0], 120)
+    rri_time = np.cumsum(rri / 1000)
+    rri_time[120:] += 91
+    rri_time[240:] += 121
+
+    result = nk.hrv_time({"RRI": rri, "RRI_Time": rri_time})
+
+    assert result["HRV_SDANN1"].iloc[0] == pytest.approx(208.63074009907007)
+    assert result["HRV_SDANN2"].iloc[0] == pytest.approx(209.16500663351889)
+    assert result["HRV_SDNNI1"].iloc[0] == pytest.approx(0.0)
+    assert result["HRV_SDNNI2"].iloc[0] == pytest.approx(0.0)
+
+
+def test_hrv_time_contiguous_timestamps_preserve_window_metrics():
+    rri = np.repeat([750.0, 1000.0, 1250.0], 120)
+    implicit = nk.hrv_time({"RRI": rri})
+    explicit = nk.hrv_time({"RRI": rri, "RRI_Time": np.cumsum(rri / 1000)})
+    columns = [name for name in implicit.columns if "SDANN" in name or "SDNNI" in name]
+
+    np.testing.assert_allclose(implicit[columns], explicit[columns], equal_nan=True)
+
+
+def test_hrv_time_tinn_preserves_repeated_distribution():
+    rri = np.repeat(np.arange(600.0, 850.0, 25.0), [1, 2, 8, 20, 35, 50, 30, 15, 5, 1])
+    original = nk.hrv_time({"RRI": rri}, binsize=25)["HRV_TINN"].iloc[0]
+    repeated = nk.hrv_time({"RRI": np.tile(rri, 100)}, binsize=25)["HRV_TINN"].iloc[0]
+
+    assert original == pytest.approx(175.0)
+    assert repeated == pytest.approx(original)
+
+
 def test_hrv_frequency():
     # Test frequency domain
     ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
@@ -56,6 +98,66 @@ def test_hrv():
     ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
 
     assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
+
+
+def test_hrv_rqa():
+    intervals = np.tile([900, 1000, 1100, 950, 1050], 8)
+    peaks = np.r_[0, np.cumsum(intervals)]
+
+    rqa = nk.hrv_rqa(peaks, sampling_rate=1000)
+
+    assert rqa.shape == (1, 14)
+    assert set(rqa.columns) == {
+        "RecurrenceRate",
+        "DiagRec",
+        "Determinism",
+        "DeteRec",
+        "L",
+        "Divergence",
+        "LEn",
+        "Laminarity",
+        "TrappingTime",
+        "VMax",
+        "VEn",
+        "W",
+        "WMax",
+        "WEn",
+    }
+
+
+def test_hrv_rqa_parameters():
+    intervals = np.tile([900, 1000, 1100, 950, 1050], 8)
+    peaks = np.r_[0, np.cumsum(intervals)]
+
+    rqa_default = nk.hrv_rqa(peaks, sampling_rate=1000)
+    rqa_custom = nk.hrv_rqa(peaks, sampling_rate=1000, dimension=3, delay=2, tolerance=10)
+
+    assert not np.isclose(rqa_default["RecurrenceRate"].iloc[0], rqa_custom["RecurrenceRate"].iloc[0])
+
+
+def test_hrv_rqa_short_input():
+    with pytest.raises(ValueError, match=r"dimension \* delay"):
+        nk.hrv_rqa([0, 1000, 2100], sampling_rate=1000)
+
+
+def test_hrv_tuple_input():
+    """HRV should accept peaks and sampling rate supplied as a tuple."""
+    peaks = [0, 1000, 2100, 3150, 4300, 5300]
+
+    hrv = nk.hrv_time((peaks, 1000))
+
+    assert hrv["HRV_MeanNN"].iloc[0] == 1060
+
+
+def test_hrv_tuple_metadata_input():
+    """HRV should accept the (signals, info) tuples returned by processing functions."""
+    peaks = [0, 1000, 2100, 3150, 4300, 5300]
+    signals = pd.DataFrame({"ECG_R_Peaks": np.zeros(peaks[-1] + 1)})
+    signals.loc[peaks, "ECG_R_Peaks"] = 1
+
+    hrv = nk.hrv_time((signals, {"sampling_rate": 1000}))
+
+    assert hrv["HRV_MeanNN"].iloc[0] == 1060
 
 
 def test_rri_input_hrv():
@@ -178,6 +280,33 @@ def test_hrv_missing():
     assert abs_diff_only_rri > abs_diff_rri_time
 
 
+@pytest.mark.parametrize("mean_rr", [1000, 600])
+def test_hrv_rsa_porges_bohrer_uses_heart_period(mean_rr):
+    # Heart period swinging +/- 50 ms at the breathing rate (0.25 Hz) has a
+    # respiratory-band variance of 50^2 / 2 = 1250 ms^2, so Porges-Bohrer should be
+    # close to ln(1250) whatever the mean heart rate is (see #1230).
+    sampling_rate, duration = 1000, 300
+    t, beats = 0.5, []
+    while t < duration - 1:
+        beats.append(t)
+        t += (mean_rr - 50 * np.sin(2 * np.pi * 0.25 * t)) / 1000
+    rpeaks = np.round(np.array(beats) * sampling_rate).astype(int)
+    n = duration * sampling_rate
+    peaks = np.zeros(n, dtype=int)
+    peaks[rpeaks] = 1
+    ecg = pd.DataFrame(
+        {
+            "ECG_R_Peaks": peaks,
+            "ECG_Rate": nk.signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=n),
+        }
+    )
+    rsp, _ = nk.rsp_process(np.sin(2 * np.pi * 0.25 * np.arange(n) / sampling_rate), sampling_rate=sampling_rate)
+
+    rsa = nk.hrv_rsa(ecg, rsp, sampling_rate=sampling_rate)
+
+    assert rsa["RSA_PorgesBohrer"] == pytest.approx(np.log(1250), abs=0.3)
+
+
 def test_hrv_rsa():
     data = nk.data("bio_eventrelated_100hz")
     ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
@@ -291,3 +420,18 @@ def test_hrv_symbolic():
     for start in range(0, len(values), 4):
         group_sum = values[start : start + 4].sum()
         assert np.isclose(group_sum, 1.0, atol=1e-9), f"Family group at col {start} sums to {group_sum}"
+
+
+@pytest.mark.parametrize("steps, expected", [([160] + [-8] * 20, 1 / 21), ([8, -8], 1), ([8] * 4 + [-8] * 4, 0)])
+def test_hrv_fragmentation_pss_interval_weighting(steps, expected):
+    from neurokit2.hrv.hrv_nonlinear import _hrv_nonlinear_fragmentation
+
+    rri = np.r_[800, 800 + np.cumsum(np.tile(steps, 30))]
+    result = _hrv_nonlinear_fragmentation(rri, out={})
+    assert result["PSS"] == pytest.approx(expected)
+
+
+def test_hrv_nonlinear_pss_interval_weighting():
+    rri = np.r_[800, 800 + np.cumsum(np.tile([160] + [-8] * 20, 30))]
+    result = nk.hrv_nonlinear({"RRI": rri})
+    assert result.loc[0, "HRV_PSS"] == pytest.approx(1 / 21)

@@ -45,6 +45,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, method="elgendi", method_quality
             PPG_Raw|The raw signal.
             PPG_Clean|The cleaned signal.
             PPG_Rate|The heart rate as measured based on PPG peaks.
+            PPG_Quality|The quality of the PPG signal.
             PPG_Peaks|The PPG peaks marked as "1" in a list of zeros.
 
     info : dict

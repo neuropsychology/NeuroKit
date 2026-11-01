@@ -19,8 +19,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     among the most commonly reported HRV indices.
 
     The time-domain indices can be categorized into deviation-based and difference-based indices
-    where the formal are calculated directly from the normal beat-to-beat intervals (normal RR
-    intervals or NN intervals), and the later are derived from the difference between successive NN
+    where the former are calculated directly from the normal beat-to-beat intervals (normal RR
+    intervals or NN intervals), and the latter are derived from the difference between successive NN
     intervals.
 
     .. tip::
@@ -165,8 +165,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["MeanNN"] = np.nanmean(rri)
     out["SDNN"] = np.nanstd(rri, ddof=1)
     for i in [1, 2, 5]:
-        out["SDANN" + str(i)] = _sdann(rri, window=i)
-        out["SDNNI" + str(i)] = _sdnni(rri, window=i)
+        out["SDANN" + str(i)] = _sdann(rri, rri_time=rri_time, window=i)
+        out["SDNNI" + str(i)] = _sdnni(rri, rri_time=rri_time, window=i)
 
     # Difference-based
     out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
@@ -238,7 +238,7 @@ def _sdann(rri, rri_time=None, window=1):
         start = i * window_size
         start_idx = np.where(rri_cumsum >= start)[0][0]
         end_idx = np.where(rri_cumsum < start + window_size)[0][-1]
-        avg_rri.append(np.nanmean(rri[start_idx:end_idx]))
+        avg_rri.append(np.nanmean(rri[start_idx : end_idx + 1]))
     sdann = np.nanstd(avg_rri, ddof=1)
     return sdann
 
@@ -258,14 +258,14 @@ def _sdnni(rri, rri_time=None, window=1):
         start = i * window_size
         start_idx = np.where(rri_cumsum >= start)[0][0]
         end_idx = np.where(rri_cumsum < start + window_size)[0][-1]
-        sdnn_.append(np.nanstd(rri[start_idx:end_idx], ddof=1))
+        sdnn_.append(np.nanstd(rri[start_idx : end_idx + 1], ddof=1))
     sdnni = np.nanmean(sdnn_)
     return sdnni
 
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2**14
+    min_error = np.inf
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]

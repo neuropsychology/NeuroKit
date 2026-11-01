@@ -12,6 +12,7 @@ import pandas as pd
 import pytest
 
 from neurokit2.data.read_xdf import (
+    _build_xdf_info,
     _create_timestamps_anchored,
     _create_timestamps_circular,
     _fill_missing_data,
@@ -37,6 +38,35 @@ def _make_stream(t_start, t_end, srate, n_channels=1, name="S"):
         "name": name,
         "nominal_srate": float(srate),
         "effective_srate": float(srate),
+        "force_step_interpolation": False,
+    }
+
+
+def _make_sanitized_stream(
+    timestamps,
+    name="S",
+    columns=None,
+    nominal_srate=100.0,
+    effective_srate=100.0,
+    stream_type=None,
+    uid=None,
+    source_id=None,
+    hostname=None,
+):
+    timestamps = np.asarray(timestamps, dtype=np.float64)
+    if columns is None:
+        columns = [f"{name}_CH0"]
+    return {
+        "timestamps": timestamps,
+        "data": np.ones((len(timestamps), len(columns)), dtype=np.float64),
+        "columns": columns,
+        "name": name,
+        "type": stream_type,
+        "nominal_srate": float(nominal_srate),
+        "effective_srate": float(effective_srate),
+        "uid": uid,
+        "source_id": source_id,
+        "hostname": hostname,
         "force_step_interpolation": False,
     }
 
@@ -205,6 +235,68 @@ class TestSynchronizeStreams:
         assert isinstance(df, pd.DataFrame)
         assert len(df) > 0
         assert target_fs == 100
+
+
+# ===========================================================================
+# _build_xdf_info
+# ===========================================================================
+
+
+class TestBuildXdfInfo:
+    def test_returns_stream_level_metadata(self):
+        streams = [
+            _make_sanitized_stream(
+                timestamps=[0.0, 0.5, 1.0],
+                name="EEG",
+                columns=["C3", "C4"],
+                nominal_srate=250.0,
+                effective_srate=249.5,
+                stream_type="EEG",
+                uid="uid-eeg",
+                source_id="src-eeg",
+                hostname="host-a",
+            ),
+            _make_sanitized_stream(
+                timestamps=[0.2],
+                name="Markers",
+                columns=["event"],
+                nominal_srate=0.0,
+                effective_srate=0.0,
+                stream_type="Markers",
+            ),
+        ]
+        header = {"info": {"datetime": ["2026-03-07T12:00:00"]}}
+
+        info = _build_xdf_info(streams, header)
+
+        assert info["datetime"] == "2026-03-07T12:00:00"
+        assert info["stream_count"] == 2
+        assert info["stream_names"] == ["EEG", "Markers"]
+        assert info["stream_types"] == ["EEG", "Markers"]
+        assert info["channel_counts"] == [2, 1]
+        assert info["channel_names"] == [["C3", "C4"], ["event"]]
+        assert info["sampling_rates_original"] == [250.0, 0.0]
+        assert info["sampling_rates_effective"] == [249.5, 0.0]
+        assert info["durations"] == [1.0, 0.0]
+
+        assert info["streams"][0] == {
+            "index": 0,
+            "name": "EEG",
+            "type": "EEG",
+            "channel_count": 2,
+            "channel_names": ["C3", "C4"],
+            "nominal_srate": 250.0,
+            "effective_srate": 249.5,
+            "start_time": 0.0,
+            "end_time": 1.0,
+            "duration": 1.0,
+            "uid": "uid-eeg",
+            "source_id": "src-eeg",
+            "hostname": "host-a",
+        }
+        assert info["streams"][1]["duration"] == 0.0
+        assert info["streams"][1]["start_time"] == 0.2
+        assert info["streams"][1]["end_time"] == 0.2
 
 
 # ===========================================================================

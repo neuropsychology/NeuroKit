@@ -84,3 +84,32 @@ Difference:
     # helper_plot(attribute, ecg_characteristics, test_data)
     assert diff.std() < 0.11 * test_data["sampling_rate"], report
     assert diff.mean() < 0.11 * test_data["sampling_rate"], report
+
+
+@pytest.mark.parametrize("scale, offset", [(0.001, 0), (2, 0), (1000, 0), (1, 5.0), (250, -3.0)])
+def test_ecg_delineate_dwt_is_invariant_to_signal_units(scale, offset):
+    """The DWT delineation must not depend on the amplitude units (e.g., mV vs. uV) or the baseline of the ECG."""
+    sampling_rate = 1000
+    ecg = nk.ecg_clean(np.asarray(nk.data("ecg_1000hz")), sampling_rate=sampling_rate)
+    rpeaks = nk.ecg_findpeaks(ecg, sampling_rate=sampling_rate, method="neurokit")["ECG_R_Peaks"]
+
+    _, reference = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method="dwt")
+    _, rescaled = nk.ecg_delineate(ecg * scale + offset, rpeaks, sampling_rate=sampling_rate, method="dwt")
+
+    for key, expected in reference.items():
+        np.testing.assert_array_equal(np.array(rescaled[key], dtype=float), np.array(expected, dtype=float), err_msg=key)
+
+
+def test_dwt_normalize_window():
+    from neurokit2.ecg.ecg_delineate import _dwt_normalize_window
+
+    window = np.array([2.0, 4.0, 10.0, 6.0])  # median = 5, absolute deviations = [3, 1, 5, 1]
+    expected = [0.6, 0.2, 1.0, 0.2]
+    np.testing.assert_allclose(_dwt_normalize_window(window), expected)
+    np.testing.assert_allclose(_dwt_normalize_window(window, weight=0.3), np.array(expected) * 0.3)
+    # Invariant to scale and baseline offset, and to the polarity of the waves
+    np.testing.assert_allclose(_dwt_normalize_window(window * 1000 + 7), expected)
+    np.testing.assert_allclose(_dwt_normalize_window(-window), expected)
+    # Degenerate windows must not produce NaN/inf
+    np.testing.assert_array_equal(_dwt_normalize_window(np.full(5, 3.0)), np.zeros(5))
+    assert len(_dwt_normalize_window([])) == 0
