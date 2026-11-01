@@ -8,6 +8,26 @@ Compatibility
 
 * pandas 3 is now supported (the ``pandas<3`` pin was removed). Python 3.10 to 3.14 are tested.
 
+Changes in Results
+++++++++++++++++++
+
+Several fixes below change computed values compared to 0.2.x:
+
+* ``HRV_PSS`` is now weighted by the number of RR differences in short segments (e.g., from
+  0.74 to 0.55 on ``bio_resting_5min_100hz``) (#1214).
+* ``RSA_PorgesBohrer`` is now computed on heart period and is positive, in ln(ms^2); it was
+  previously negative (#1231).
+* ``HRV_SDANN*`` and ``HRV_SDNNI*`` now include the last interval of each window and use the
+  actual interval timestamps when available (#1213, #1215).
+* ``HRV_TINN`` no longer returns 0 when the interval histogram has large counts (#1216).
+* ``ecg_delineate(method="dwt")`` P and T peaks (and the onsets/offsets derived from them) can
+  differ for signals in their original units (#1220).
+* ``epochs_create(events=None)`` now returns the final complete block, i.e., often one more
+  epoch (#1222).
+* ``rsp_rvt()`` differs at sampling rates other than 1000 Hz (#1233).
+* ``standardize(robust=True)`` on multi-column data now scales each column by its own MAD (#1229).
+* ``fractal_dfa()`` with negative ``q`` can shift slightly (#1209).
+
 New Features
 +++++++++++++
 
@@ -16,32 +36,42 @@ New Features
   ``streams`` list (name, type, channels, nominal and effective sampling rates, start/end
   times, uid, source id, hostname). Metadata is computed from the streams that actually
   contribute to the returned data.
+* ``ecg_peaks()``, ``ecg_findpeaks()``, ``ecg_clean()`` and ``ecg_process()`` support
+  ``method="elgendi2013"``, the two-moving-average QRS detector of Elgendi (2013). ``"elgendi"``
+  still refers to the 2010 detector (#1202, #1232).
 
 Fixes
 +++++++++++++
 
 * ``hrv_nonlinear()`` weights short acceleration/deceleration segments by their
-  number of RR differences when calculating ``HRV_PSS``.
-
+  number of RR differences when calculating ``HRV_PSS`` (#1214).
+* ``hrv_time()``: ``SDANN`` and ``SDNNI`` dropped the last RR interval of each window, and
+  ignored the actual interval timestamps (e.g., recordings with gaps) (#1213, #1215).
+* ``hrv_time()``: ``TINN`` returned 0 when every candidate triangle fit had a squared error
+  above a fixed ceiling, which happens with large interval counts (#1216).
+* ``rsp_rvt()`` passes ``sampling_rate`` to breath detection in the ``"power2020"`` and
+  ``"birn2006"`` methods; at lower sampling rates many breaths were skipped (#1233).
 * ``entropy_spectral()`` forwards ``sampling_rate`` to ``signal_psd()`` instead of raising a
-  ``TypeError``, so ``min_frequency`` and ``max_frequency`` are applied in Hz of the actual signal.
+  ``TypeError``, so ``min_frequency`` and ``max_frequency`` are applied in Hz of the actual
+  signal (#1219).
 * ``epochs_create()`` retains the final complete block during automatic chunking
-  and aligns blocks with the data when relative epoch starts are nonzero.
+  and aligns blocks with the data when relative epoch starts are nonzero (#1222).
 * ``signal_interpolate(method="monotone_cubic")`` applies boundary fill values to every
-  out-of-range sample, including irregular or unordered output grids.
+  out-of-range sample, including irregular or unordered output grids (#1227).
 * ``standardize(window=...)`` accepts named pandas columns and preserves their labels and
-  sample index when performing rolling standardization.
+  sample index when performing rolling standardization (#1228).
 * ``standardize(robust=True)`` scales each input column by its own MAD, so columns
-  measured in different units are standardized independently.
+  measured in different units are standardized independently (#1229).
 * ``hrv_rsa()``: ``RSA_PorgesBohrer`` is now computed on heart period (ms) instead of heart
-  rate (bpm), so it is in ln(ms^2) as documented and no longer comes out negative.
+  rate (bpm), so it is in ln(ms^2) as documented and no longer comes out negative (#1230,
+  #1231).
 * ``ecg_process()``, ``ecg_delineate()``, ``ecg_phase()`` and ``ecg_quality()`` no longer
   crash when no R-peak is detected; they return NaN/empty outputs with a warning.
 * ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
   which broke downstream functions), and the file-reading logic was updated for pandas 3.
 * ``epochs_create()`` and ``signal_recompose()`` were updated for pandas 3 and scipy 1.18.
 * ``signal_recompose()`` now applies ``keep_sd`` to reconstructed components instead of
-  discarding the reconstruction and filtering the original components.
+  discarding the reconstruction and filtering the original components (#1221).
 * ``eda_process()`` now forwards a custom ``amplitude_min`` to ``eda_peaks()``
   instead of hardcoding ``0.1`` (#1197, #1203).
 * ``rsp_intervalrelated()`` computes inspiration/expiration durations from sample positions
@@ -55,7 +85,7 @@ Fixes
   ``emg_intervalrelated()`` and ``eog_intervalrelated()`` no longer carry features over from
   a previous call (e.g., ``HRV_DFA_alpha2`` from a long recording reappearing in the results
   of a short one). ``ecg_intervalrelated()`` also returns HRV indices as floats instead of
-  nested arrays.
+  nested arrays (#1226).
 * ``ecg_delineate(method="prominence")`` no longer crashes when an R-peak falls at the boundary
   of a beat segment (#1181).
 * Microstates: ``method="ica"`` was routed to PCA and ``method="aahc"`` was not recognized;
@@ -74,9 +104,10 @@ Fixes
 * ``ecg_delineate(method="dwt")``: the choice among candidate T and P peaks no longer depends on the
   units or gain of the signal (e.g., mV vs. uV). The amplitude term of the candidate score is now
   scale-free and weighted against the latency penalty (``amplitude_weight``), which also changes the
-  detected peaks (and the onsets/offsets derived from them) for signals in their original units (#1210).
+  detected peaks (and the onsets/offsets derived from them) for signals in their original units
+  (#1210, #1220).
 * ``epochs_create()`` applies baseline correction when ``epochs_start`` contains
-  a list of per-event start times.
+  a list of per-event start times (#1223).
 
 Maintenance
 +++++++++++++
