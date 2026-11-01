@@ -39,6 +39,27 @@ def test_sdann_keeps_the_last_interval_in_the_window():
     first = np.array([1000] * 58 + [1500], dtype=float)
     assert out["HRV_SDANN1"].iloc[0] == pytest.approx(np.std([first.mean(), 1000.0, 1000.0], ddof=1))
     assert out["HRV_SDNNI1"].iloc[0] == pytest.approx(np.mean([first.std(ddof=1), 0.0, 0.0]))
+def test_hrv_time_preserves_timestamps_in_window_metrics():
+    rri = np.repeat([750.0, 1000.0, 1250.0], 120)
+    rri_time = np.cumsum(rri / 1000)
+    rri_time[120:] += 91
+    rri_time[240:] += 121
+
+    result = nk.hrv_time({"RRI": rri, "RRI_Time": rri_time})
+
+    assert result["HRV_SDANN1"].iloc[0] == pytest.approx(208.63074009907007)
+    assert result["HRV_SDANN2"].iloc[0] == pytest.approx(209.16500663351889)
+    assert result["HRV_SDNNI1"].iloc[0] == pytest.approx(0.0)
+    assert result["HRV_SDNNI2"].iloc[0] == pytest.approx(0.0)
+
+
+def test_hrv_time_contiguous_timestamps_preserve_window_metrics():
+    rri = np.repeat([750.0, 1000.0, 1250.0], 120)
+    implicit = nk.hrv_time({"RRI": rri})
+    explicit = nk.hrv_time({"RRI": rri, "RRI_Time": np.cumsum(rri / 1000)})
+    columns = [name for name in implicit.columns if "SDANN" in name or "SDNNI" in name]
+
+    np.testing.assert_allclose(implicit[columns], explicit[columns], equal_nan=True)
 
 
 def test_hrv_frequency():
