@@ -41,9 +41,9 @@ def is_string(x):
     if isinstance(x, list):
         out = [isinstance(member, str) for member in x]
     elif isinstance(x, pd.DataFrame):
-        out = [member == "object" for member in list(x.dtypes)]
+        out = [pd.api.types.is_string_dtype(dtype) for dtype in x.dtypes]
     elif isinstance(x, pd.Series):
-        out = [x.dtype == "object"]
+        out = [pd.api.types.is_string_dtype(x.dtype)]
     elif isinstance(x, np.ndarray):
         out = [x.dtype == "U1"]
     else:

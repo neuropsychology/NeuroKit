@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 import neurokit2 as nk
 
@@ -21,6 +22,42 @@ def test_standardize():
 
     rez = np.sum(nk.standardize([1, 1, 5, 2, 1, 5, 1, 7], robust=True))
     assert np.allclose(rez, 14.8387, atol=0.001)
+
+
+@pytest.mark.parametrize(
+    ("kind", "label_dtype"),
+    [("series", None), ("frame", None), ("mixed_frame", "object"), ("mixed_frame", "string")],
+)
+@pytest.mark.parametrize("robust", [False, True])
+def test_standardize_rolling_pandas_preserves_labels(kind, label_dtype, robust):
+    series = pd.Series(
+        [1.0, 3.0, 2.0, 5.0],
+        index=pd.date_range("2020-01-01", periods=4),
+        name="signal",
+    )
+    scale = 1 / 1.4826 if robust else 1 / np.sqrt(2)
+    expected = pd.Series([scale, scale, -scale, scale], index=series.index, name=series.name)
+    if kind == "series":
+        actual = nk.standardize(series, window=2, robust=robust)
+        pd.testing.assert_series_equal(actual, expected)
+    else:
+        data = series.to_frame()
+        if kind == "mixed_frame":
+            data["other"] = 2 * series
+            data["label"] = pd.Series(["a", "b", "c", "d"], index=data.index, dtype=label_dtype)
+        actual = nk.standardize(data, window=2, robust=robust)
+        pd.testing.assert_series_equal(actual["signal"], expected)
+        if kind == "mixed_frame":
+            pd.testing.assert_series_equal(actual["other"], expected.rename("other"))
+            pd.testing.assert_series_equal(actual["label"], data["label"])
+
+
+@pytest.mark.parametrize("dtype", ["object", "string"])
+def test_standardize_string_series(dtype):
+    data = pd.Series(["a", "b", "c"], dtype=dtype, name="label")
+    with pytest.warns(nk.misc.NeuroKitWarning, match="string type"):
+        actual = nk.standardize(data, window=2)
+    pd.testing.assert_series_equal(actual, data)
 
 
 def test_fit_loess():

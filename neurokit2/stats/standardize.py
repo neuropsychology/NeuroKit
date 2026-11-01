@@ -77,7 +77,11 @@ def standardize(data, robust=False, window=None, **kwargs):
         # only standardize columns that are not string and are not nan
         _data = data.loc[:, ~is_string(data) & ~np.array(data.isnull().all())]
         to_append = data.loc[:, is_string(data) | np.array(data.isnull().all())]
-        out = pd.DataFrame(_standardize(_data, robust=robust, window=window, **kwargs))
+        out = pd.DataFrame(
+            _standardize(_data, robust=robust, window=window, **kwargs),
+            index=data.index,
+            columns=_data.columns,
+        )
         out = pd.concat([to_append, out], axis=1)
 
     elif isinstance(data, pd.Series):
@@ -88,7 +92,11 @@ def standardize(data, robust=False, window=None, **kwargs):
                 category=NeuroKitWarning,
             )
         else:
-            out = pd.Series(_standardize(data, robust=robust, window=window, **kwargs))
+            out = pd.Series(
+                _standardize(data, robust=robust, window=window, **kwargs),
+                index=data.index,
+                name=data.name,
+            )
 
     elif is_string(data):
         out = data
@@ -131,7 +139,7 @@ def _standardize(data, robust=False, window=None, **kwargs):
 
         # Restore to vector or array
         if z.shape[1] == 1:
-            z = z[0].values
+            z = z.iloc[:, 0].values
         else:
             z = z.values
 
