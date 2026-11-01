@@ -377,6 +377,19 @@ def test_rsp_rvt():
         assert min(rvt20[~np.isnan(rvt20)]) >= 0
 
 
+def test_rsp_rvt_sampling_rate():
+    # Breath detection should use the signal's sampling rate, not the 1000 Hz default
+    rvt = {}
+    for sampling_rate in [100, 1000]:
+        rsp = nk.rsp_simulate(duration=120, sampling_rate=sampling_rate, respiratory_rate=15, random_state=42)
+        for method in ["birn", "power"]:
+            rvt[method, sampling_rate] = np.nanmean(nk.rsp_rvt(rsp, method=method, sampling_rate=sampling_rate, silent=True))
+
+    assert np.isclose(rvt["birn", 100], rvt["birn", 1000], rtol=0.1)
+    # power2020 divides by the peak-to-peak interval in samples, so compare it per second
+    assert np.isclose(rvt["power", 100] * 100, rvt["power", 1000] * 1000, rtol=0.1)
+
+
 # Commented out for now: Check issue https://github.com/neuropsychology/NeuroKit/issues/1082
 # def test_rsp_rate():
 #     sampling_rate = 1000
