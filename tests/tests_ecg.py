@@ -197,6 +197,25 @@ def test_ecg_findpeaks():
     assert info_khamis["ECG_R_Peaks"].size == 70
 
 
+def test_ecg_elgendi2013():
+    sampling_rate = 360
+    ecg = nk.ecg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=60, noise=0.05, random_state=1)
+    cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="elgendi2013")
+    peaks = nk.ecg_findpeaks(cleaned, sampling_rate=sampling_rate, method="elgendi2013")["ECG_R_Peaks"]
+
+    # Thirty seconds at 60 bpm. The first and last beats can fall outside the windows.
+    assert 25 <= len(peaks) <= 35
+    assert np.all(np.diff(peaks) > 0.4 * sampling_rate)
+
+    flat = nk.ecg_findpeaks(np.zeros(sampling_rate), sampling_rate=sampling_rate, method="elgendi2013")
+    assert flat["ECG_R_Peaks"].size == 0
+
+    legacy_clean = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="elgendi2010")
+    alias = nk.ecg_findpeaks(legacy_clean, sampling_rate=sampling_rate, method="elgendi")
+    named = nk.ecg_findpeaks(legacy_clean, sampling_rate=sampling_rate, method="elgendi2010")
+    np.testing.assert_array_equal(alias["ECG_R_Peaks"], named["ECG_R_Peaks"])
+
+
 def test_ecg_eventrelated():
     ecg, _ = nk.ecg_process(nk.ecg_simulate(duration=20, random_state=6))
     epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)

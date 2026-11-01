@@ -28,7 +28,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
     method : str
         The processing method used for signal cleaning (using ``ecg_clean()``) and peak detection
         (using ``ecg_peaks()``). Defaults to ``'neurokit'``. Available methods are ``'neurokit'``,
-        ``'pantompkins1985'``, ``'hamilton2002'``, ``'elgendi2010'``, ``'engzeemod2012'``.
+        ``'pantompkins1985'``, ``'hamilton2002'``, ``'elgendi2010'``,
+        ``'elgendi2013'``, ``'engzeemod2012'``.
         We aim at improving this aspect to make the available methods more transparent, and be able
         to generate specific reports. Please get in touch if you are interested in helping out with
         this.

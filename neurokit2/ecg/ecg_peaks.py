@@ -27,6 +27,10 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
     * **christov2004**: Algorithm by Christov (2004).
     * **gamboa2008**: Algorithm by Gamboa (2008).
     * **elgendi2010**: Algorithm by Elgendi et al. (2010).
+    * **elgendi2013**: Two moving averages from Elgendi (2013), with 97 ms and
+      611 ms windows and an offset of 8% of the mean squared signal. The name
+      ``"elgendi"`` remains the 2010 detector. Clean the signal with the same
+      method name first; that band-pass is 8-20 Hz.
     * **engzeemod2012**: Original algorithm by Engelse & Zeelenberg (1979) modified by Lourenço et
       al. (2012).
     * **manikandan2012**: Algorithm by Manikandan & Soman (2012) based on the Shannon energy
