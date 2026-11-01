@@ -2,7 +2,6 @@ from collections.abc import Iterable
 
 import antropy
 import matplotlib.pyplot as plt
-import nolds
 import numpy as np
 import pandas as pd
 import sklearn.neighbors
@@ -43,11 +42,29 @@ def test_complexity_sanity():
     # assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
 
     assert np.allclose(nk.fractal_correlation(signal)[0], 0.7382138350901658, atol=0.000001)
-    assert np.allclose(
-        nk.fractal_correlation(signal, radius="nolds")[0],
-        nolds.corr_dim(signal, 2),
-        atol=0.01,
-    )
+    assert np.allclose(nk.fractal_correlation(signal, radius="nolds")[0], 0.8356790165119761, atol=0.000001)
+
+
+def test_fractal_correlation_known_values():
+    # Two repeated points have dimension 0
+    alternating = np.tile([0.0, 1.0], 250)
+    assert np.isclose(nk.fractal_correlation(alternating, radius="nolds")[0], 0, atol=1e-10)
+
+    # A straight line has dimension 1
+    ramp = np.arange(2000.0)
+    assert np.isclose(nk.fractal_correlation(ramp, radius="nolds")[0], 1, atol=0.05)
+
+    # Uniform noise fills the embedding space
+    noise = np.random.default_rng(0).uniform(size=3000)
+    for dimension in (1, 2, 3):
+        cd = nk.fractal_correlation(noise, dimension=dimension, radius="nolds")[0]
+        assert np.isclose(cd, dimension, atol=0.15)
+
+    # Scaling, shifting and flipping don't change the dimension
+    sine = np.sin(np.linspace(0, 10 * np.pi, 2000, endpoint=False))
+    expected = nk.fractal_correlation(sine, radius="nolds")[0]
+    for transformed in (sine * 1000, sine + 50, -sine):
+        assert np.isclose(nk.fractal_correlation(transformed, radius="nolds")[0], expected)
 
 
 def test_fractal_dfa_scale_invariance():
@@ -169,10 +186,6 @@ def test_complexity_vs_Python():
     )
     assert np.allclose(
         nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0],
-        nolds.sampen(signal, 2, 0.2),
-    )
-    assert np.allclose(
-        nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0],
         entro_py_sampen(signal, 2, 0.2, scale=False),
     )
     assert np.allclose(
@@ -217,12 +230,6 @@ def test_complexity_vs_Python():
 
     # Katz
     assert np.allclose(nk.fractal_katz(signal)[0] - antropy.katz_fd(signal), 0)
-
-
-#    # DFA
-#    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))['slopes'][0], nolds.dfa(
-#        signal, nvals=[4, 8, 12, 20], fit_exp="poly"), atol=0.01
-#    )
 
 
 # =============================================================================
