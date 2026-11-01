@@ -88,7 +88,10 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _rsp_intervalrelated_features(data, sampling_rate, output={}):
+def _rsp_intervalrelated_features(data, sampling_rate, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     colnames = data.columns.values
 

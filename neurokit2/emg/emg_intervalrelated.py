@@ -91,8 +91,11 @@ def emg_intervalrelated(data):
 # =============================================================================
 
 
-def _emg_intervalrelated_formatinput(interval, output={}):
+def _emg_intervalrelated_formatinput(interval, output=None):
     """Format input for dictionary."""
+    if output is None:
+        output = {}
+
     # Sanitize input
     colnames = interval.columns.values
     if len([i for i in colnames if "EMG_Onsets" in i]) == 0:

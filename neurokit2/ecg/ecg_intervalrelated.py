@@ -93,7 +93,10 @@ def ecg_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _ecg_intervalrelated_formatinput(data, output={}):
+def _ecg_intervalrelated_formatinput(data, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "ECG_Rate" in i]) == 0:
@@ -108,7 +111,10 @@ def _ecg_intervalrelated_formatinput(data, output={}):
     return output
 
 
-def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
+def _ecg_intervalrelated_hrv(data, sampling_rate, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "ECG_R_Peaks" in i]) == 0:
@@ -123,8 +129,7 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
     rpeaks = {"ECG_R_Peaks": rpeaks}
 
     results = hrv(rpeaks, sampling_rate=sampling_rate)
-    for column in results.columns:
-        # Add and convert to float
-        output[column] = results[[column]].values
+    # Add each index as a float (``hrv()`` returns a single-row DataFrame)
+    output.update(results.astype("float").iloc[0].to_dict())
 
     return output

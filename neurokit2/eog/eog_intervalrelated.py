@@ -81,7 +81,10 @@ def eog_intervalrelated(data):
 # =============================================================================
 
 
-def _eog_intervalrelated_formatinput(data, output={}):
+def _eog_intervalrelated_formatinput(data, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "EOG_Rate" in i]) == 0:

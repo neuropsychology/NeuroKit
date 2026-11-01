@@ -446,3 +446,18 @@ def test_rsp_report(tmp_path, method_cleaning, method_peaks, method_rvt):
         method_rvt=method_rvt,
     )
     assert p.is_file()
+
+
+def test_rsp_intervalrelated_independent_calls():
+    # Features computed for one recording must not leak into the next call
+    long_rsp = nk.rsp_simulate(duration=600, sampling_rate=100, respiratory_rate=12, random_state=1)
+    short_rsp = nk.rsp_simulate(duration=30, sampling_rate=100, respiratory_rate=20, random_state=1)
+    long_df, _ = nk.rsp_process(long_rsp, sampling_rate=100)
+    short_df, _ = nk.rsp_process(short_rsp, sampling_rate=100)
+
+    before = nk.rsp_intervalrelated(short_df, sampling_rate=100)
+    nk.rsp_intervalrelated(long_df, sampling_rate=100)
+    after = nk.rsp_intervalrelated(short_df, sampling_rate=100)
+
+    assert list(after.columns) == list(before.columns)
+    pd.testing.assert_frame_equal(after, before)
