@@ -54,6 +54,10 @@ Fixes
   absolute ``1e-8`` cutoff, restoring invariance of ``h(q)`` under constant rescaling of the
   signal (#1208). Note: results computed with negative ``q`` on physiological signals in
   their natural units may shift slightly; the new values are the more correct ones.
+* ``ecg_delineate(method="dwt")``: the choice among candidate T and P peaks no longer depends on the
+  units or gain of the signal (e.g., mV vs. uV). The amplitude term of the candidate score is now
+  scale-free and weighted against the latency penalty (``amplitude_weight``), which also changes the
+  detected peaks (and the onsets/offsets derived from them) for signals in their original units (#1210).
 
 Maintenance
 +++++++++++++
