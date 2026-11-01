@@ -62,6 +62,8 @@ Fixes
   units or gain of the signal (e.g., mV vs. uV). The amplitude term of the candidate score is now
   scale-free and weighted against the latency penalty (``amplitude_weight``), which also changes the
   detected peaks (and the onsets/offsets derived from them) for signals in their original units (#1210).
+* ``epochs_create()`` applies baseline correction when ``epochs_start`` contains
+  a list of per-event start times.
 
 Maintenance
 +++++++++++++
