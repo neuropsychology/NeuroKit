@@ -238,7 +238,7 @@ def _sdann(rri, rri_time=None, window=1):
         start = i * window_size
         start_idx = np.where(rri_cumsum >= start)[0][0]
         end_idx = np.where(rri_cumsum < start + window_size)[0][-1]
-        avg_rri.append(np.nanmean(rri[start_idx:end_idx]))
+        avg_rri.append(np.nanmean(rri[start_idx:end_idx + 1]))
     sdann = np.nanstd(avg_rri, ddof=1)
     return sdann
 
@@ -258,7 +258,7 @@ def _sdnni(rri, rri_time=None, window=1):
         start = i * window_size
         start_idx = np.where(rri_cumsum >= start)[0][0]
         end_idx = np.where(rri_cumsum < start + window_size)[0][-1]
-        sdnn_.append(np.nanstd(rri[start_idx:end_idx], ddof=1))
+        sdnn_.append(np.nanstd(rri[start_idx:end_idx + 1], ddof=1))
     sdnni = np.nanmean(sdnn_)
     return sdnni
 

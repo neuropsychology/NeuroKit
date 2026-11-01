@@ -31,6 +31,16 @@ def test_hrv_time():
     assert np.all(hrv_fast["HRV_HTI"] != hrv_slow["HRV_HTI"])
 
 
+def test_sdann_keeps_the_last_interval_in_the_window():
+    # 180 one-second intervals, except the one that ends at 59.5 s.
+    rri = [1000] * 180
+    rri[58] = 1500
+    out = nk.hrv_time({"RRI": rri})
+    first = np.array([1000] * 58 + [1500], dtype=float)
+    assert out["HRV_SDANN1"].iloc[0] == pytest.approx(np.std([first.mean(), 1000.0, 1000.0], ddof=1))
+    assert out["HRV_SDNNI1"].iloc[0] == pytest.approx(np.mean([first.std(ddof=1), 0.0, 0.0]))
+
+
 def test_hrv_frequency():
     # Test frequency domain
     ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
