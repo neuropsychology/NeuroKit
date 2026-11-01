@@ -102,6 +102,8 @@ def _ecg_findpeaks_findmethod(method):
         found_method = _ecg_findpeaks_manikandan
     elif method in ["elgendi", "elgendi2010"]:
         found_method = _ecg_findpeaks_elgendi
+    elif method in ["elgendi2013"]:
+        found_method = _ecg_findpeaks_elgendi2013
     elif method in ["kalidas2017", "swt", "kalidas"]:
         found_method = _ecg_findpeaks_kalidas
     elif method in ["khamis2016", "unsw", "khamis"]:
@@ -1151,6 +1153,43 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
 
     QRS = np.array(QRS, dtype="int")
     return QRS
+
+
+def _ecg_findpeaks_elgendi2013(signal, sampling_rate=1000, **kwargs):
+    """Elgendi (2013) two-moving-average QRS detector.
+
+    Elgendi, M. (2013). Fast QRS Detection with an Optimized Knowledge-Based
+    Method: Evaluation on 11 Standard ECG Databases. PLoS ONE, 8(9), e73557.
+
+    ``signal`` is expected to already be band-pass filtered at 8-20 Hz, as
+    returned by ``ecg_clean(..., method="elgendi2013")``. The published
+    windows are 97 ms and 611 ms, and the offset is 8% of the mean squared
+    signal. ``"elgendi"`` stays the 2010 detector.
+    """
+    qrs_window = max(int(round(0.097 * sampling_rate)), 1)
+    beat_window = max(int(round(0.611 * sampling_rate)), 1)
+    squared = np.square(signal)
+    ma_qrs = _ecg_findpeaks_MWA(squared, qrs_window)
+    ma_beat = _ecg_findpeaks_MWA(squared, beat_window)
+    threshold = ma_beat + 0.08 * np.mean(squared)
+    blocks = ma_qrs > threshold
+
+    changes = np.diff(blocks.astype(int))
+    starts = np.where(changes == 1)[0] + 1
+    ends = np.where(changes == -1)[0]
+    # Both moving averages equal the first sample, and the offset is positive,
+    # so a block cannot already be open at index 0.
+    if len(blocks) and blocks[-1]:
+        ends = np.r_[ends, len(blocks) - 1]
+
+    peaks = []
+    for start, end in zip(starts, ends):
+        if end - start + 1 < qrs_window:
+            continue
+        segment = signal[start : end + 1]
+        peaks.append(start + int(np.argmax(np.abs(segment))))
+
+    return np.array(peaks, dtype="int")
 
 
 # =============================================================================
