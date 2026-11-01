@@ -276,6 +276,33 @@ def test_hrv_missing():
     assert abs_diff_only_rri > abs_diff_rri_time
 
 
+@pytest.mark.parametrize("mean_rr", [1000, 600])
+def test_hrv_rsa_porges_bohrer_uses_heart_period(mean_rr):
+    # Heart period swinging +/- 50 ms at the breathing rate (0.25 Hz) has a
+    # respiratory-band variance of 50^2 / 2 = 1250 ms^2, so Porges-Bohrer should be
+    # close to ln(1250) whatever the mean heart rate is (see #1230).
+    sampling_rate, duration = 1000, 300
+    t, beats = 0.5, []
+    while t < duration - 1:
+        beats.append(t)
+        t += (mean_rr - 50 * np.sin(2 * np.pi * 0.25 * t)) / 1000
+    rpeaks = np.round(np.array(beats) * sampling_rate).astype(int)
+    n = duration * sampling_rate
+    peaks = np.zeros(n, dtype=int)
+    peaks[rpeaks] = 1
+    ecg = pd.DataFrame(
+        {
+            "ECG_R_Peaks": peaks,
+            "ECG_Rate": nk.signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=n),
+        }
+    )
+    rsp, _ = nk.rsp_process(np.sin(2 * np.pi * 0.25 * np.arange(n) / sampling_rate), sampling_rate=sampling_rate)
+
+    rsa = nk.hrv_rsa(ecg, rsp, sampling_rate=sampling_rate)
+
+    assert rsa["RSA_PorgesBohrer"] == pytest.approx(np.log(1250), abs=0.3)
+
+
 def test_hrv_rsa():
     data = nk.data("bio_eventrelated_100hz")
     ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
