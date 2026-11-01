@@ -39,6 +39,8 @@ def test_sdann_keeps_the_last_interval_in_the_window():
     first = np.array([1000] * 58 + [1500], dtype=float)
     assert out["HRV_SDANN1"].iloc[0] == pytest.approx(np.std([first.mean(), 1000.0, 1000.0], ddof=1))
     assert out["HRV_SDNNI1"].iloc[0] == pytest.approx(np.mean([first.std(ddof=1), 0.0, 0.0]))
+
+
 def test_hrv_time_preserves_timestamps_in_window_metrics():
     rri = np.repeat([750.0, 1000.0, 1250.0], 120)
     rri_time = np.cumsum(rri / 1000)
@@ -60,6 +62,8 @@ def test_hrv_time_contiguous_timestamps_preserve_window_metrics():
     columns = [name for name in implicit.columns if "SDANN" in name or "SDNNI" in name]
 
     np.testing.assert_allclose(implicit[columns], explicit[columns], equal_nan=True)
+
+
 def test_hrv_time_tinn_preserves_repeated_distribution():
     rri = np.repeat(np.arange(600.0, 850.0, 25.0), [1, 2, 8, 20, 35, 50, 30, 15, 5, 1])
     original = nk.hrv_time({"RRI": rri}, binsize=25)["HRV_TINN"].iloc[0]

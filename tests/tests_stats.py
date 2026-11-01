@@ -58,6 +58,8 @@ def test_standardize_string_series(dtype):
     with pytest.warns(nk.misc.NeuroKitWarning, match="string type"):
         actual = nk.standardize(data, window=2)
     pd.testing.assert_series_equal(actual, data)
+
+
 @pytest.mark.parametrize("as_dataframe", [False, True])
 def test_standardize_robust_scales_each_column_independently(as_dataframe):
     data = np.array([[1.0, 100.0], [2.0, 200.0], [3.0, 300.0], [np.nan, 400.0]])
