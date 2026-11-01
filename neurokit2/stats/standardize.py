@@ -119,7 +119,7 @@ def _standardize(data, robust=False, window=None, **kwargs):
         if robust is False:
             z = (data - np.nanmean(data, axis=0)) / np.nanstd(data, axis=0, ddof=1)
         else:
-            z = (data - np.nanmedian(data, axis=0)) / mad(data)
+            z = (data - np.nanmedian(data, axis=0)) / np.apply_along_axis(mad, 0, data)
 
     # Rolling standardization on windows
     else:

@@ -31,6 +31,8 @@ Fixes
   out-of-range sample, including irregular or unordered output grids.
 * ``standardize(window=...)`` accepts named pandas columns and preserves their labels and
   sample index when performing rolling standardization.
+* ``standardize(robust=True)`` scales each input column by its own MAD, so columns
+  measured in different units are standardized independently.
 * ``ecg_process()``, ``ecg_delineate()``, ``ecg_phase()`` and ``ecg_quality()`` no longer
   crash when no R-peak is detected; they return NaN/empty outputs with a warning.
 * ``read_acqknowledge()`` returns the sampling rate as an ``int`` (previously a NumPy float,
