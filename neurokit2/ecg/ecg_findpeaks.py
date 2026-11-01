@@ -1177,9 +1177,9 @@ def _ecg_findpeaks_elgendi2013(signal, sampling_rate=1000, **kwargs):
     changes = np.diff(blocks.astype(int))
     starts = np.where(changes == 1)[0] + 1
     ends = np.where(changes == -1)[0]
-    if blocks[0]:
-        starts = np.r_[0, starts]
-    if blocks[-1]:
+    # Both moving averages equal the first sample, and the offset is positive,
+    # so a block cannot already be open at index 0.
+    if len(blocks) and blocks[-1]:
         ends = np.r_[ends, len(blocks) - 1]
 
     peaks = []

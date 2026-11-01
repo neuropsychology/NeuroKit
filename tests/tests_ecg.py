@@ -215,6 +215,12 @@ def test_ecg_elgendi2013():
     named = nk.ecg_findpeaks(legacy_clean, sampling_rate=sampling_rate, method="elgendi2010")
     np.testing.assert_array_equal(alias["ECG_R_Peaks"], named["ECG_R_Peaks"])
 
+    # A pulse that reaches the last sample keeps that closing block.
+    edged = np.zeros(2000)
+    edged[-120:] = 5
+    edged_peaks = nk.ecg_findpeaks(edged, sampling_rate=sampling_rate, method="elgendi2013")["ECG_R_Peaks"]
+    assert np.any(edged_peaks >= len(edged) - 120)
+
 
 def test_ecg_eventrelated():
     ecg, _ = nk.ecg_process(nk.ecg_simulate(duration=20, random_state=6))
