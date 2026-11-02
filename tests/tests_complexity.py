@@ -41,7 +41,7 @@ def test_complexity_sanity():
     # TODO: why this gives 70 or 71 depending on the machine????
     # assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
 
-    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7382138350901658, atol=0.000001)
+    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7930504156910694, atol=0.000001)
     assert np.allclose(nk.fractal_correlation(signal, radius="nolds")[0], 0.8356790165119761, atol=0.000001)
 
 
@@ -65,6 +65,22 @@ def test_fractal_correlation_known_values():
     expected = nk.fractal_correlation(sine, radius="nolds")[0]
     for transformed in (sine * 1000, sine + 50, -sine):
         assert np.isclose(nk.fractal_correlation(transformed, radius="nolds")[0], expected)
+
+
+def test_fractal_correlation_default_radius_scale_invariance():
+    # The correlation dimension must not depend on the units of the signal
+    signal = np.sin(np.linspace(0, 10 * np.pi, 2000, endpoint=False))
+    expected = nk.fractal_correlation(signal)[0]
+    assert np.isclose(nk.fractal_correlation(signal * 1000)[0], expected)
+
+
+def test_expspace_range():
+    # Must span from start to stop, including when start is 0
+    for base in (1, 2):
+        assert np.allclose(nk.expspace(10, 100, 3, out=float, base=base)[[0, -1]], [10, 100])
+        assert np.allclose(nk.expspace(0, 1, 3, out=float, base=base)[[0, -1]], [0, 1])
+        # Spaced evenly on a log scale, whatever the units
+        assert np.allclose(nk.expspace(1e-3, 1e-1, 3, out=float, base=base), [1e-3, 1e-2, 1e-1])
 
 
 def test_fractal_dfa_scale_invariance():

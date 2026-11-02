@@ -34,10 +34,11 @@ def expspace(start, stop, num=50, out=int, base=1):
       nk.expspace(start=0, stop=1, num=10, out=float)
 
     """
+    offset = 0 if start > 0 else 1  # log(0) is undefined
     if base == 1:
-        seq = np.exp(np.linspace(np.log(1 + start), np.log(1 + stop), num, endpoint=True)) - 1
+        seq = np.exp(np.linspace(np.log(offset + start), np.log(offset + stop), num, endpoint=True)) - offset
     else:
-        seq = np.exp2(np.linspace(np.log2(1 + start), np.log2(1 + stop), num, endpoint=True) - 1)  # pylint: disable=E1111
+        seq = np.exp2(np.linspace(np.log2(offset + start), np.log2(offset + stop), num, endpoint=True)) - offset  # pylint: disable=E1111
 
     # Round and convert to int
     if out is int:
