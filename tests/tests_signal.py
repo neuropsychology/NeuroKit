@@ -607,3 +607,21 @@ def test_signal_quality():
     quality = nk.signal_quality(signal_zeros, cycle_inds=peaks, signal_type="ecg", method="ici", sampling_rate=sampling_rate)
 
     assert np.allclose(quality, np.zeros_like(quality))
+
+
+def test_signal_formatpeaks_drops_every_nan_index():
+    # Each nan index must be dropped with its own value, not only the first one
+    info = {
+        "SCR_Peaks": np.array([10, 20, 30, 40]),
+        "SCR_Recovery": np.array([np.nan, 25.0, np.nan, 45.0]),
+        "SCR_RecoveryTime": np.array([np.nan, 0.5, np.nan, 0.7]),
+    }
+    signals = nk.signal_formatpeaks(
+        info, desired_length=50, peak_indices=info["SCR_Peaks"], other_indices=info["SCR_Recovery"]
+    )
+
+    recovery_time = signals["SCR_RecoveryTime"]
+    assert recovery_time[25] == 0.5
+    assert recovery_time[45] == 0.7
+    assert np.count_nonzero(recovery_time) == 2
+    assert np.all(np.where(signals["SCR_Recovery"] != 0)[0] == [25, 45])

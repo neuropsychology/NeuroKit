@@ -21,6 +21,9 @@ New Features
 Fixes
 +++++++++++++
 
+* ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
+  first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
+  values at the wrong recovery points.
 * ``expspace()`` now spans the full range and no longer depends on the units of the values.
 * ``fractal_correlation()`` now accepts a list of radiuses and returns 0 for constant signals.
 * ``signal_resample()`` no longer sets the last sample to 0 for some signal lengths.
