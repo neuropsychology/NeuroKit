@@ -95,6 +95,11 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     # Get embedded
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
+
+    # A constant signal has no distances, so its dimension is 0
+    if np.max(dist) == 0:
+        return 0.0, {"Dimension": dimension, "Delay": delay, "Radius": np.array([])}
+
     r_vals = _fractal_correlation_get_r(radius, signal, dist)
 
     # Store parameters
@@ -133,6 +138,9 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
 # Utilities
 # =============================================================================
 def _fractal_correlation_get_r(radius, signal, dist):
+    if isinstance(radius, (list, np.ndarray)):
+        return np.asarray(radius, dtype=float)
+
     if isinstance(radius, str):
         if radius == "nolds":
             sd = np.std(signal, ddof=1)
@@ -156,7 +164,6 @@ def _fractal_correlation_get_r(radius, signal, dist):
     if isinstance(radius, int):
         dist_range = np.max(dist) - np.min(dist)
         r_min, r_max = (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
-        # A constant signal has no distance range, so use any positive radius other than 1 (log2 = 0)
-        r_vals = expspace(r_min, r_max, radius, base=2, out="float") if dist_range > 0 else np.full(radius, 0.5)
+        r_vals = expspace(r_min, r_max, radius, base=2, out="float")
 
     return r_vals

@@ -74,6 +74,18 @@ def test_fractal_correlation_default_radius_scale_invariance():
     assert np.isclose(nk.fractal_correlation(signal * 1000)[0], expected)
 
 
+def test_fractal_correlation_constant_signal():
+    # Dimension of zero check
+    for radius in (64, "nolds", "Corr_Dim", "boon2008", [0.5, 1, 2]):
+        assert nk.fractal_correlation(np.ones(100), radius=radius)[0] == 0
+
+
+def test_fractal_correlation_radius_list():
+    signal = np.sin(np.linspace(0, 10 * np.pi, 500, endpoint=False))
+    expected, info = nk.fractal_correlation(signal, radius=16)
+    assert np.isclose(nk.fractal_correlation(signal, radius=list(info["Radius"]))[0], expected)
+
+
 def test_expspace_range():
     # Must span from start to stop, including when start is 0
     for base in (1, 2):
