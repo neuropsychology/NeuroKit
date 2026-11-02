@@ -104,6 +104,12 @@ def test_signal_resample():
     assert np.allclose(np.mean(rez.mean()), 0.0001, atol=0.0001)
 
 
+def test_signal_resample_interpolation_last_sample():
+    # Rounding can put the last position just past the end of the signal, which must not give 0
+    resampled = nk.signal_resample(np.ones(512), desired_length=51200, method="interpolation")
+    assert np.allclose(resampled, 1)
+
+
 def test_signal_detrend():
     signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
     signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
