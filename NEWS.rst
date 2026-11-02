@@ -3,12 +3,27 @@ News
 
 0.3.1
 -------------------
+Compatibility
++++++++++++++
+
+* ``setuptools`` is now only installed with the ``full`` extra, removing its ``<82`` pin.
+
+Changes in Results
+++++++++++++++++++
+
+* ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
+* ``expspace()`` returns different values when ``start`` is above 0.
+
 New Features
 +++++++++++++
 
 Fixes
 +++++++++++++
 
+* ``expspace()`` now spans the full range and no longer depends on the units of the values.
+* ``fractal_correlation()`` now accepts a list of radiuses and returns 0 for constant signals.
+* ``signal_resample()`` no longer sets the last sample to 0 for some signal lengths.
+* ``ecg_simulate()`` no longer hangs for some settings.
 * ``complexity_dimension(method="fnn")`` (and ``complexity_optimize(dimension_method="fnn")``)
   now return the dimension at which the proportion of false nearest neighbours meets the
   criterion, rather than its index in the tested sequence. The result was one too low with the
