@@ -87,6 +87,33 @@ def test_fractal_correlation_radius_list():
     assert np.isclose(nk.fractal_correlation(signal, radius=list(info["Radius"]))[0], expected)
 
 
+def test_fractal_correlation_theiler():
+    import scipy.spatial
+
+    def cd_reference(x, delay, dimension, radius, theiler=0):
+        # Grassberger & Procaccia (1983), leaving out the pairs closer than `theiler` samples in
+        # time (Theiler, 1986)
+        emb = nk.complexity_embedding(x, delay=delay, dimension=dimension)
+        d = scipy.spatial.distance.pdist(emb)
+        i, j = np.triu_indices(len(emb), 1)
+        d = d[(j - i) > theiler]
+        c = np.array([np.mean(d < r) for r in radius])
+        return np.polyfit(np.log2(radius), np.log2(c), 1)[0]
+
+    # Smoothed noise (oversampled, as EEG)
+    rng = np.random.default_rng(42)
+    x = np.convolve(rng.normal(size=1009), np.ones(10) / 10, mode="valid")
+    cd, info = nk.fractal_correlation(x, delay=7, dimension=3, radius=16)
+    assert np.allclose(cd, cd_reference(x, 7, 3, info["Radius"]))
+    for theiler in [7, 28]:
+        cd_w, info_w = nk.fractal_correlation(x, delay=7, dimension=3, radius=16, theiler=theiler)
+        # The radii do not depend on the Theiler window
+        assert np.allclose(info_w["Radius"], info["Radius"])
+        assert np.allclose(cd_w, cd_reference(x, 7, 3, info["Radius"], theiler=theiler))
+    # The window removes the time-close pairs, which raises the estimate of an oversampled signal
+    assert nk.fractal_correlation(x, delay=7, dimension=3, radius=16, theiler=28)[0] > cd
+
+
 def test_expspace_range():
     # Must span from start to stop, including when start is 0
     for base in (1, 2):

@@ -47,6 +47,11 @@ Changes in Results
 New Features
 +++++++++++++
 
+* ``fractal_correlation()`` gains a ``theiler`` argument (Theiler window): pairs of points closer
+  than that number of samples in time are left out of the correlation sum, which removes the bias
+  of the autocorrelation of oversampled signals (e.g., EEG) at small radii. Defaults to 0 (all
+  pairs), so results are unchanged.
+
 Fixes
 +++++++++++++
 
@@ -56,6 +61,13 @@ Fixes
 * ``fractal_katz()``'s docstring now describes the version computed (absolute differences between
   successive values, ignoring time) and no longer claims a 1-1.5 range: KFD is not bounded by 2 and
   grows with the length of the signal for noise.
+* ``fractal_correlation()`` is about 3 times faster and uses half the memory: the distances are
+  computed once per pair (``scipy.spatial.distance.pdist()``) and the correlation sums of all the
+  radii are counted in one pass. The radii are returned sorted. Results are unchanged, except with
+  ``radius="Corr_Dim"`` for signals with exactly repeated points, whose smallest nonzero distance
+  (which sets the radii) was rounding noise.
+* ``fractal_correlation()``'s docstring now cites Grassberger & Procaccia (1983) and Theiler
+  (1986), and notes that the default radii can reach beyond the scaling region of an attractor.
 * ``fractal_dfa()`` is 5 to 10 times faster: the polynomial trends of all the windows of a scale
   are computed with one matrix product instead of a loop over the windows.
 * ``fractal_dfa()``'s docstring now describes alpha correctly (0.5 for white noise, below 0.5 for
