@@ -40,6 +40,9 @@ Fixes
 * ``complexity_lempelziv()`` is about 10 times faster, no longer fails on a one-sample signal, and
   with ``permutation=True`` its ``info`` keeps the ``"Permutation"``, ``"Dimension"`` and
   ``"Delay"`` entries (they were overwritten by those of ``complexity_ordinalpatterns()``).
+* ``fractal_katz()``'s docstring now describes the version computed (absolute differences between
+  successive values, ignoring time) and no longer claims a 1-1.5 range: KFD is not bounded by 2 and
+  grows with the length of the signal for noise.
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.
