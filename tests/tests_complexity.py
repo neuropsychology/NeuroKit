@@ -758,6 +758,48 @@ def test_entropy_sample_delay():
         )
 
 
+def test_complexity_lempelziv_count():
+    from neurokit2.complexity.complexity_lempelziv import _complexity_lempelziv_count
+
+    def lz76_words(symbols):
+        # LZ76 parsing (Lempel & Ziv, 1976) from its definition: each word is the shortest part of
+        # the rest of the sequence that cannot be copied from what precedes its last symbol
+        s = list(symbols)
+        n, c, p = len(s), 0, 0
+
+        def copyable(word, end):
+            return any(s[q : q + len(word)] == word for q in range(end - len(word) + 1))
+
+        while p < n:
+            k = 1
+            while p + k <= n and copyable(s[p : p + k], p + k - 1):
+                k += 1
+            c += 1
+            p += k
+        return c
+
+    # Published parsings (Kaspar & Schuster, 1987)
+    for string in ["0001101001000101", "1001111011000010"]:
+        assert _complexity_lempelziv_count(np.array(list(string)).astype(int)) == (6, 16)
+
+    # Binary sequences
+    rng = np.random.default_rng(42)
+    for length in [1, 2, 3, 10, 50, 200]:
+        symbols = (rng.random(length) < 0.5).astype(int)
+        assert _complexity_lempelziv_count(symbols) == (lz76_words(symbols), length)
+
+    # Permutation LZC with more than 10 possible patterns (dimension >= 4)
+    signal = nk.signal_simulate(duration=4, sampling_rate=250, frequency=[5, 10], noise=0.5, random_state=42)
+    for dimension in [3, 4, 5]:
+        _, info = nk.complexity_lempelziv(signal, dimension=dimension, permutation=True)
+        patterns = nk.complexity_ordinalpatterns(signal, dimension=dimension)[1]["Uniques"]
+        assert info["Complexity_Kolmogorov"] == lz76_words(patterns)
+        assert info["Permutation"] is True and info["Dimension"] == dimension and info["Delay"] == 1
+
+    # One sample
+    assert nk.complexity_lempelziv([1.0])[0] == 0
+
+
 def test_entropy_spectral_sampling_rate():
     signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 30], noise=0)
 

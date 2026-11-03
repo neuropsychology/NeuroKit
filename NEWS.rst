@@ -25,6 +25,11 @@ Changes in Results
   dimension *m* are now counted among the same templates as at *m* + 1, as defined by Richman &
   Moorman (2000). Before, the last ``delay - 1`` vectors at *m* had no counterpart at *m* + 1.
   Results with ``delay=1`` are unchanged.
+* ``complexity_lempelziv(permutation=True)`` (and ``entropy_multiscale(method="LZC", permutation=True)``)
+  with ``dimension`` of 4 or more now gives the correct number of words. Before, the ordinal
+  patterns were joined into a string of their indices, so patterns 10 and above were written with
+  two digits and parsed as two symbols, which inflated the count and the sequence length used for
+  the normalization. Binary LZC (the default) is unchanged.
 
 New Features
 +++++++++++++
@@ -32,6 +37,9 @@ New Features
 Fixes
 +++++++++++++
 
+* ``complexity_lempelziv()`` is about 10 times faster, no longer fails on a one-sample signal, and
+  with ``permutation=True`` its ``info`` keeps the ``"Permutation"``, ``"Dimension"`` and
+  ``"Delay"`` entries (they were overwritten by those of ``complexity_ordinalpatterns()``).
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.
