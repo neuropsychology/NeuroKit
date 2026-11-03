@@ -941,9 +941,11 @@ def test_complexity_dimension_methods():
     for method in ["fnn", "afnn"]:
         dimension, info = nk.complexity_dimension(rr, delay=1, dimension_max=8, method=method)
         assert dimension in info["Values"]
-    # A coarsely quantized signal with no valid neighbour at all gives NaN with a warning
-    with pytest.warns(nk.misc.NeuroKitWarning):
-        dimension, _ = nk.complexity_dimension(np.round(sine, 1)[:300], delay=10, dimension_max=3, method="afnn")
+    # A signal whose vectors are all identical to others gives NaN with a warning
+    for method in ["fnn", "afnn"]:
+        with pytest.warns(nk.misc.NeuroKitWarning):
+            dimension, _ = nk.complexity_dimension(np.tile([0.0, 1.0, 2.0], 100), delay=1, dimension_max=3, method=method)
+        assert np.isnan(dimension)
 
     # afnn with a custom list of dimensions returns the dimension itself (not its index + 1)
     lorenz = nk.complexity_simulate(duration=4, sampling_rate=250, method="lorenz")
