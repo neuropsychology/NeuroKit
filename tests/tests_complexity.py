@@ -4,6 +4,7 @@ import antropy
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pytest
 import sklearn.neighbors
 from pyentrp import entropy as pyentrp
 
@@ -885,6 +886,107 @@ def test_fractal_dfa_windows():
     assert np.allclose(nk.fractal_dfa(np.cumsum(noise))[0], 1.5, atol=0.1)
 
 
+def test_complexity_delay_methods():
+    # Sine of period 42 samples: its autocorrelation is cos(2 * pi * tau / 42)
+    period = 42
+    signal = np.sin(2 * np.pi * np.arange(4000) / period)
+    autocor = nk.signal_autocor(signal)[0]
+
+    # First lag at or below 0 (10.5 -> 11), 1/e (7.98 -> 8) and 1 - 1/e (5.92 -> 6)
+    for method, expected in [("casdagli1991", 11), ("theiler1990", 8), ("rosenstein1993", 6)]:
+        delay, info = nk.complexity_delay(signal, delay_max=50, method=method)
+        assert delay == expected
+        # The scores are the autocorrelation at the tested lags (they used to start at lag 0)
+        assert np.allclose(info["Scores"], autocor[1:51])
+
+    # A custom sequence of delays is honoured
+    delay, info = nk.complexity_delay(signal, delay_max=np.arange(5, 30), method="casdagli1991")
+    assert delay == 11
+    assert np.allclose(info["Scores"], autocor[5:30])
+
+    # Rosenstein (1994): the slope of the average displacement at 40% of its initial value,
+    # i.e., cos(pi * tau / period) = 0.4 -> tau = 15.5
+    delay, info = nk.complexity_delay(signal, delay_max=50, method="rosenstein1994")
+    slope = np.diff(np.concatenate([[0], info["Scores"]]))
+    assert delay == np.where(slope <= 0.4 * slope[0])[0][0] + 1
+    assert 14 <= delay <= 18
+
+    # Mutual information: first local minimum at a quarter of the period, also for a noise-free
+    # signal with delay_max beyond the period (the number of bins used to diverge there)
+    assert nk.complexity_delay(signal, delay_max=100, method="fraser1986")[0] in [10, 11]
+
+    # SPAR: a third of the period
+    assert nk.complexity_delay(signal, method="spar")[0] == 14
+
+    # C-C method (Kim, 1999): usable, returns the first local minimum of its curve
+    lorenz = nk.complexity_simulate(duration=4, sampling_rate=250, method="lorenz")
+    delay, info = nk.complexity_delay(lorenz, delay_max=30, method="kim1999")
+    i = np.where(info["Values"] == delay)[0][0]
+    assert 1 <= delay <= 30
+    assert info["Scores"][i] <= info["Scores"][i - 1] and info["Scores"][i] <= info["Scores"][i + 1]
+
+
+def test_complexity_dimension_methods():
+    # A noisy sine (a circle): 2 dimensions
+    rng = np.random.default_rng(3)
+    sine = np.sin(2 * np.pi * np.arange(2000) / 41.3) + 1e-4 * rng.normal(size=2000)
+    dimension, info = nk.complexity_dimension(sine, delay=10, dimension_max=6, method="fnn")
+    assert dimension == 2
+    assert np.all(info["f3"][1:] < 0.02)
+
+    # Quantized signals (e.g., RR intervals in integer milliseconds) are handled: identical
+    # vectors are skipped rather than counted as true neighbours (fnn) or making everything NaN
+    # (afnn), and the result is one of the tested dimensions
+    rr = np.round(60000 / (70 + 5 * np.cumsum(rng.normal(size=600)) / 10))
+    for method in ["fnn", "afnn"]:
+        dimension, info = nk.complexity_dimension(rr, delay=1, dimension_max=8, method=method)
+        assert dimension in info["Values"]
+    # A coarsely quantized signal with no valid neighbour at all gives NaN with a warning
+    with pytest.warns(nk.misc.NeuroKitWarning):
+        dimension, _ = nk.complexity_dimension(np.round(sine, 1)[:300], delay=10, dimension_max=3, method="afnn")
+
+    # afnn with a custom list of dimensions returns the dimension itself (not its index + 1)
+    lorenz = nk.complexity_simulate(duration=4, sampling_rate=250, method="lorenz")
+    full, info = nk.complexity_dimension(lorenz, delay=5, dimension_max=8, method="afnn")
+    custom, _ = nk.complexity_dimension(lorenz, delay=5, dimension_max=[2, 3, 4, 5, 6, 7, 8], method="afnn")
+    assert full == custom
+    assert full == info["Values"][np.argmax(info["E1"] >= 0.85 * np.nanmax(info["E1"]))]
+
+
+def test_complexity_tolerance_methods():
+    rng = np.random.default_rng(1)
+    signal = rng.normal(size=1000)
+    sd1, sd2 = np.std(np.diff(signal), ddof=1), np.std(signal, ddof=1)
+
+    # Chon (2009): r in units of the SD, divided by the fourth root of N / 1000, with the
+    # published coefficients for m = 2 to 7
+    for dimension, x, y in [(2, -0.036, 0.26), (3, -0.08, 0.46), (7, -0.2, 1.0)]:
+        expected = sd2 * (x + y * np.sqrt(sd1 / sd2)) / (len(signal) / 1000) ** 0.25
+        assert np.allclose(nk.complexity_tolerance(signal, method="chon2009", dimension=dimension)[0], expected)
+    # Scales with the signal
+    r1 = nk.complexity_tolerance(signal, method="chon2009", dimension=2)[0]
+    r100 = nk.complexity_tolerance(100 * signal, method="chon2009", dimension=2)[0]
+    assert np.allclose(r100, 100 * r1)
+    # And with the length (N = 4000 -> divided by sqrt(2))
+    r4000 = nk.complexity_tolerance(np.tile(signal, 4), method="chon2009", dimension=2)[0]
+    assert np.allclose(r4000, r1 / np.sqrt(2), rtol=0.05)
+
+    # numpy integers (as returned by complexity_dimension()) are accepted
+    for method in ["nolds", "chon2009", "makowski"]:
+        assert np.allclose(
+            nk.complexity_tolerance(signal, method=method, dimension=np.int64(3))[0],
+            nk.complexity_tolerance(signal, method=method, dimension=3)[0],
+        )
+
+    # Plotting does not modify the returned scores
+    for method in ["recurrence", "neighbours"]:
+        _, info = nk.complexity_tolerance(signal[:300], method=method, delay=1, dimension=2, show=True)
+        assert np.max(info["Scores"]) <= 1
+    for method in ["sd", "nolds", "chon2009", "makowski", "singh2016"]:
+        nk.complexity_tolerance(signal[:300], method=method, delay=1, dimension=2, show=True)
+    plt.close("all")
+
+
 def test_entropy_spectral_sampling_rate():
     signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 30], noise=0)
 
@@ -906,7 +1008,7 @@ def test_complexity_dimension_fnn():
     dimension, info = nk.complexity_dimension(signal, delay=5, dimension_max=10, method="fnn")
     assert dimension == 3
     f3 = info["f3"]
-    assert dimension == info["Values"][np.argmax(f3 <= 1.85 * np.min(f3[np.nonzero(f3)]))]
+    assert dimension == info["Values"][np.argmax(f3 <= max(0.02, 1.85 * np.min(f3)))]
 
     # A custom sequence of dimensions (not starting at 1) must return one of its members
     dimension, _ = nk.complexity_dimension(signal, delay=5, dimension_max=[2, 3, 4, 5, 6], method="fnn")
@@ -922,3 +1024,76 @@ def test_complexity_dimension_fnn():
     assert out["Dimension"] == 3
     nk.complexity_optimize(signal, delay_max=10, dimension_max=10, dimension_method="afnn", show=True)
     plt.close("all")
+
+
+def test_fractal_higuchi():
+    def hfd_reference(x, k_max):
+        # Higuchi (1988): average normalized length L(k) of the k series x(m), x(m + k), ...
+        n = len(x)
+        lengths = []
+        for k in range(1, k_max + 1):
+            lm = []
+            for m in range(1, k + 1):
+                n_m = (n - m) // k
+                total = sum(abs(x[m - 1 + i * k] - x[m - 1 + (i - 1) * k]) for i in range(1, n_m + 1))
+                lm.append(total * (n - 1) / (n_m * k) / k)
+            lengths.append(np.mean(lm))
+        # log L(k) = intercept + HFD * log(1 / k)
+        return np.polyfit(np.log(1 / np.arange(1, k_max + 1)), np.log(lengths), 1)
+
+    rng = np.random.default_rng(42)
+    signal = rng.normal(size=301)
+    for k_max in [2, 5, 10, 150]:
+        hfd, info = nk.fractal_higuchi(signal, k_max=k_max)
+        slope, intercept = hfd_reference(signal, k_max)
+        assert np.allclose(hfd, slope)
+        assert np.allclose(info["Intercept"], intercept)
+
+    # complexity_k() scores are the HFD of each k_max
+    _, info = nk.complexity_k(signal, k_max=[2, 5, 10, 150])
+    assert np.allclose(info["Scores"], [hfd_reference(signal, k)[0] for k in [2, 5, 10, 150]])
+
+    # Known values: 2 for white noise, 1.5 for a Brownian motion, 1 for a sine
+    noise = rng.normal(size=5000)
+    assert np.allclose(nk.fractal_higuchi(noise, k_max=10)[0], 2, atol=0.05)
+    assert np.allclose(nk.fractal_higuchi(np.cumsum(noise), k_max=10)[0], 1.5, atol=0.1)
+    sine = np.sin(2 * np.pi * 5 * np.arange(5000) / 1000)
+    assert np.allclose(nk.fractal_higuchi(sine, k_max=10)[0], 1, atol=0.05)
+
+    # Lists, Series and numpy integers are accepted
+    hfd = nk.fractal_higuchi(signal, k_max=10)[0]
+    assert np.allclose(nk.fractal_higuchi(list(signal), k_max=np.int64(10))[0], hfd)
+    assert np.allclose(nk.fractal_higuchi(pd.Series(signal, index=np.arange(100, 401)), k_max=10)[0], hfd)
+    assert nk.complexity_k(list(signal), k_max=np.int64(30))[0] == nk.complexity_k(signal, k_max=30)[0]
+
+    # k_max must be between 2 and half the length of the signal
+    with pytest.warns(nk.misc.NeuroKitWarning):
+        assert np.isnan(nk.fractal_higuchi(signal, k_max=151)[0])
+    with pytest.raises(ValueError):
+        nk.complexity_k(signal, k_max=[5, 151])
+    with pytest.raises(ValueError):
+        nk.complexity_k(signal, k_max=20.0)
+
+
+def test_complexity_k_plateau():
+    def is_plateau(hfd, i):
+        # The HFD stays within 0.01 of its value for the next 10 tested k_max
+        return len(hfd) > i + 10 and np.all(np.abs(hfd[i + 1 : i + 11] - hfd[i]) < 0.01)
+
+    # The first k_max of the plateau is returned, and it does not drift with the length of the signal
+    for n in [500, 2000]:
+        for seed in range(3):
+            signal = nk.signal_simulate(duration=n / 100, sampling_rate=100, frequency=[5, 6], noise=0.5, random_state=seed)
+            k_max, info = nk.complexity_k(signal)
+            i = list(info["Values"]).index(k_max)
+            assert is_plateau(info["Scores"], i)
+            assert not any(is_plateau(info["Scores"], j) for j in range(i))
+            assert 15 <= k_max <= 25
+
+    # A list of k_max is tested in increasing order
+    k_values = np.arange(2, 60)
+    assert nk.complexity_k(signal, k_max=k_values[::-1])[0] == nk.complexity_k(signal, k_max=k_values)[0]
+
+    # Without 10 values after it, there is no plateau: the largest k_max is returned
+    with pytest.warns(nk.misc.NeuroKitWarning, match="No plateau"):
+        assert nk.complexity_k(signal, k_max=10)[0] == 10

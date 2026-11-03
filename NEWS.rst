@@ -30,6 +30,31 @@ Changes in Results
   patterns were joined into a string of their indices, so patterns 10 and above were written with
   two digits and parsed as two symbols, which inflated the count and the sequence length used for
   the normalization. Binary LZC (the default) is unchanged.
+* ``complexity_delay()`` with the autocorrelation methods (``"theiler1990"``, ``"casdagli1991"``,
+  ``"rosenstein1993"``) returned the delay plus one: the autocorrelation at lag 0 was labelled as
+  delay 1. They now return the first lag at which the autocorrelation is at or below the
+  threshold (1/e, 0, and 1 - 1/e of its initial value), and they honour a custom sequence of
+  delays (a list ``delay_max`` was ignored).
+* ``complexity_delay(method="rosenstein1994")`` now returns the delay at which the slope of the
+  average displacement has decreased to 40% of its initial value, as in the paper. It used to look
+  for a slope of 40 degrees on an arbitrarily scaled curve.
+* ``complexity_delay(method="gautama2003")`` now uses the number of delay vectors, rather than the
+  length of the signal, in the description-length penalty of the entropy ratio.
+* ``complexity_dimension(method="fnn")`` now returns the first dimension at which the proportion
+  of false nearest neighbours drops below 2% (or within 1.85 times its minimum when it stays
+  above). It used to accept the dimension before the drop when the proportion reached exactly 0
+  afterwards (e.g., 2 instead of 3 for the Lorenz attractor). Its test II now uses the same
+  (Euclidean) distance in both dimensions.
+* ``complexity_dimension(method="afnn")`` with a custom list of dimensions returned the index of
+  the optimal dimension plus one rather than the dimension itself.
+* ``complexity_tolerance(method="chon2009")`` was wrong by a factor of 4 or more (the fourth root
+  of N / 1000 was computed as a division by N / 4000), used the extrapolated coefficients instead
+  of the published ones for dimensions 3 to 7, and was not scaled by the SD of the signal (the
+  formula gives r in units of the SD, so the same tolerance was returned whatever the amplitude
+  of the signal).
+* ``complexity_optimize()`` now calls ``complexity_delay()``, ``complexity_dimension()`` and
+  ``complexity_tolerance()`` instead of its own copies of them, which tested one delay less than
+  ``delay_max`` and mapped ``"rosenstein1993"`` to the average displacement method.
 * ``fractal_petrosian()`` now uses the number of samples as *N* (Petrosian, 1995) rather than the
   number of consecutive differences, which is one less with the default ``symbolize="C"`` (and
   ``"D"`` and ``"R"``). The change is small (about 1e-4 for 500 samples) but systematic.
@@ -43,10 +68,32 @@ Changes in Results
   signal. Before, the window starting at ``len(signal) - window`` was left out, so the last
   samples were never used (e.g., the last 25 of 2,000 samples with windows of 50). The effect on
   alpha is small (up to about 0.01) but systematic. Results with ``overlap=False`` are unchanged.
+* ``fractal_higuchi()`` and ``complexity_k()`` now return NaN for signals with missing values.
+  Before, the increments touching a missing value were silently left out of the curve lengths,
+  while their normalization still counted them.
+* The ``"Intercept"`` of ``fractal_higuchi()`` and the ``"Intercepts"`` of ``complexity_k()`` are
+  now those of the fitted line (log L(k) against log(1/k)); their sign was flipped before.
+* ``complexity_k()``, and therefore ``fractal_higuchi()`` with its default ``k_max="default"``,
+  now selects the first k_max from which the HFD stays within 0.01 of its value for the next 10
+  tested k_max values. Before, ``find_plateau()`` kept the bend of the HFD curve with the highest
+  HFD among the 10% sharpest ones (and returned the k_max just before it): the selected k_max was
+  erratic (e.g., from 2 to 118 for 10 white noises of 500 samples, now from 4 to 14) and grew with
+  the length of the signal (a median of 122 for pink noise of 500 samples and 756 for 2,000, now
+  23 and 19). A list of k_max values is now tested in increasing order. ``find_plateau()`` itself
+  is unchanged.
 
 New Features
 +++++++++++++
 
+* ``complexity_delay(method="kim1999")`` (C-C method) is rewritten: it now splits the signal into
+  the disjoint subseries of the paper (they were embedded with the delay a second time) and counts
+  the pairs with vectorised distances, which makes it usable (a few seconds instead of minutes).
+* ``complexity_dimension()`` works on quantized signals (e.g., RR intervals in integer
+  milliseconds): for ``"fnn"``, identical vectors are accepted as neighbours and judged by
+  Kennel's second test (the first one, a ratio, is undefined for them; they used to be silently
+  counted as true neighbours); for ``"afnn"``, they are skipped instead of turning the whole
+  estimate into NaN. Both methods return NaN with a warning,
+  instead of raising, when no dimension can be evaluated.
 * ``fractal_correlation()`` gains a ``theiler`` argument (Theiler window): pairs of points closer
   than that number of samples in time are left out of the correlation sum, which removes the bias
   of the autocorrelation of oversampled signals (e.g., EEG) at small radii. Defaults to 0 (all
@@ -55,6 +102,15 @@ New Features
 Fixes
 +++++++++++++
 
+* ``complexity_delay(method="fraser1986")`` no longer fails on a noise-free periodic signal when
+  the tested delays reach its period (the default number of bins of ``mutual_information()``
+  diverged for perfectly correlated variables).
+* ``complexity_tolerance()`` accepts numpy integers as ``dimension`` (e.g., the output of
+  ``complexity_dimension()``), which used to raise "method not recognized" for ``"nolds"``,
+  ``"chon2009"`` and ``"makowski"``; plotting the ``"recurrence"`` and ``"neighbours"`` methods no
+  longer converts the returned scores to percentages in place, and the plots show the 1% and 2%
+  targets; ``show=True`` works with the ``"makowski"`` method; the docstring now lists all the
+  methods and which ones use ``delay`` and ``dimension``.
 * ``complexity_lempelziv()`` is about 10 times faster, no longer fails on a one-sample signal, and
   with ``permutation=True`` its ``info`` keeps the ``"Permutation"``, ``"Dimension"`` and
   ``"Delay"`` entries (they were overwritten by those of ``complexity_ordinalpatterns()``).
@@ -76,6 +132,19 @@ Fixes
   al. (1994).
 * ``fractal_petrosian()``'s docstring now gives the right default for ``symbolize`` (``"C"``, the
   sign of consecutive differences, not the mean).
+* ``complexity_k()`` (and therefore ``fractal_higuchi(k_max="default")``) is several hundred times
+  faster (e.g., 0.04 s instead of 19 s for 1,600 samples): the curve lengths are computed once
+  instead of again for each tested k_max, and the least-squares fits of all the k_max values are
+  done at once. The HFD values are unchanged.
+* ``complexity_k()`` and ``fractal_higuchi()`` now accept lists and pandas Series (with any
+  index), and ``complexity_k()`` accepts numpy integers as ``k_max`` (it raised an
+  ``UnboundLocalError``). ``complexity_k()`` raises an error for k_max values that are not between
+  2 and half the length of the signal, and ``fractal_higuchi()`` warns before returning NaN. The
+  k_max returned by ``complexity_k()`` is an int, and its warning when no plateau is found no
+  longer says that the optimal k_max is 2 or less.
+* ``complexity_hjorth()``'s docstring now gives the right formulas of mobility and complexity (the
+  one given for complexity was the mobility, and mobility was defined through complexity), and
+  the units of mobility.
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.

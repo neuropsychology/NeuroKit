@@ -63,17 +63,19 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Can be ``"maxApEn"`` (default), ``"sd"``, ``"recurrence"``, ``"neighbours"``, ``"nolds"``,
-        ``"chon2009"``, or ``"neurokit"``.
+        ``"chon2009"``, ``"makowski"`` or ``"singh2016"``.
     r_range : Union[list, int]
         The range of tolerance values (or the number of values) to test. Only used if ``method`` is
-        ``"maxApEn"`` or ``"recurrence"``. If ``None`` (default), the default range will be used;
-        ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)`` for ``"maxApEn"``, and ``np.
-        linspace(0, np.max(d), 30 + 1)[1:]`` for ``"recurrence"``. You can set a lower number for
-        faster results.
+        ``"maxApEn"``, ``"recurrence"`` or ``"neighbours"``. If ``None`` (default), the default
+        range will be used; ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)`` for
+        ``"maxApEn"`` and ``"neighbours"``, and ``np.linspace(0, np.max(d), 50 + 1)[1:]`` for
+        ``"recurrence"``. You can set a lower number for faster results.
     delay : int
-        Only used if ``method="maxApEn"``. See :func:`entropy_approximate()`.
+        Required by ``"maxApEn"``, ``"recurrence"`` and ``"singh2016"``, and used by
+        ``"neighbours"`` (default of 1). See :func:`entropy_approximate()`.
     dimension : int
-        Only used if ``method="maxApEn"``. See :func:`entropy_approximate()`.
+        Required by all the methods but ``"sd"`` (``"neighbours"`` defaults to 1). See
+        :func:`entropy_approximate()`.
     show : bool
         If ``True`` and method is ``"maxApEn"``, will plot the ApEn values for each value of r.
 
@@ -216,39 +218,40 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": "20% SD"}
 
-    elif method in ["adjusted_sd", "nolds"] and (isinstance(dimension, (int, float)) or dimension is None):
+    elif method in ["adjusted_sd", "nolds"]:
         if dimension is None:
             raise ValueError("'dimension' cannot be empty for the 'nolds' method.")
         r = 0.11604738531196232 * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
         info = {"Method": "Adjusted 20% SD"}
 
-    elif method in ["chon", "chon2009"] and (isinstance(dimension, (int, float)) or dimension is None):
+    elif method in ["chon", "chon2009"]:
         if dimension is None:
             raise ValueError("'dimension' cannot be empty for the 'chon2009' method.")
+        dimension = int(dimension)
         sd1 = np.std(np.diff(signal), ddof=1)  # short-term variability
         sd2 = np.std(signal, ddof=1)  # long-term variability of the signal
 
-        # Here are the 3 formulas from Chon (2009):
-        # For m=2: r =(−0.036 + 0.26 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
-        # For m=3: r =(−0.08 + 0.46 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
-        # For m=4: r =(−0.12 + 0.62 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
-        # For m=5: r =(−0.16 + 0.78 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
-        # For m=6: r =(−0.19 + 0.91 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
-        # For m=7: r =(−0.2 + 1 * sqrt(sd1/sd2)) / (len(signal) / 1000)**1/4
-        if dimension <= 2 and dimension <= 7:
+        # Here are the formulas from Chon (2009), which give r in units of the SD of the signal:
+        # For m=2: r =(−0.036 + 0.26 * sqrt(sd1/sd2)) / (len(signal) / 1000)**(1/4)
+        # For m=3: r =(−0.08 + 0.46 * sqrt(sd1/sd2)) / (len(signal) / 1000)**(1/4)
+        # For m=4: r =(−0.12 + 0.62 * sqrt(sd1/sd2)) / (len(signal) / 1000)**(1/4)
+        # For m=5: r =(−0.16 + 0.78 * sqrt(sd1/sd2)) / (len(signal) / 1000)**(1/4)
+        # For m=6: r =(−0.19 + 0.91 * sqrt(sd1/sd2)) / (len(signal) / 1000)**(1/4)
+        # For m=7: r =(−0.2 + 1 * sqrt(sd1/sd2)) / (len(signal) / 1000)**(1/4)
+        if 2 <= dimension <= 7:
             x = [-0.036, -0.08, -0.12, -0.16, -0.19, -0.2][dimension - 2]
             y = [0.26, 0.46, 0.62, 0.78, 0.91, 1][dimension - 2]
         else:
             # We need to extrapolate the 2 first numbers, x and y
-            # np.polyfit(np.log([2,3,4, 5, 6, 7]), [-0.036, -0.08, -0.12, -0.16, -0.19, -0.2], 1)
+            # np.polyfit([2,3,4, 5, 6, 7], [-0.036, -0.08, -0.12, -0.16, -0.19, -0.2], 1)
             # np.polyfit([2,3,4, 5, 6, 7], [0.26, 0.46, 0.62, 0.78, 0.91, 1], 1)
             x = -0.034 * dimension + 0.022
             y = 0.14885714 * dimension - 0.00180952
 
-        r = (x + y * np.sqrt(sd1 / sd2)) / (len(signal) / 1000) ** 1 / 4
+        r = sd2 * (x + y * np.sqrt(sd1 / sd2)) / (len(signal) / 1000) ** (1 / 4)
         info = {"Method": "Chon (2009)"}
 
-    elif method in ["neurokit", "makowski"] and (isinstance(dimension, (int, float)) or dimension is None):
+    elif method in ["neurokit", "makowski"]:
         # Method described in
         # https://github.com/DominiqueMakowski/ComplexityTolerance
         if dimension is None:
@@ -399,6 +402,8 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
         "nolds",
         "chon",
         "chon2009",
+        "neurokit",
+        "makowski",
     ]:
         x, y = density(signal)
         arrow_y = np.mean([np.max(y), np.min(y)])
@@ -443,22 +448,23 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
         return fig
 
     r_range = info["Values"]
-    y_values = info["Scores"]
+    y_values = np.array(info["Scores"], dtype=float)  # a copy, not to modify the returned scores
 
     # Custom legend depending on method
     if method in ["maxapen", "optimize"]:
         ylabel = "Approximate Entropy $ApEn$"
         legend = "$ApEn$"
     else:
-        y_values *= 100  # Convert to percentage
-        ax.axhline(y=0.5, color="grey")
+        y_values = y_values * 100  # Convert to percentage
         ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
         if method in ["neighbours", "neighbors", "nn"]:
             ylabel = "Nearest Neighbours"
             legend = "$NN$"
+            ax.axhline(y=2, color="grey", linestyle="dotted", label="Target: 2%")
         else:
             ylabel = "Recurrence Rate $RR$"
             legend = "$RR$"
+            ax.axhline(y=1, color="grey", linestyle="dotted", label="Target: 1%")
 
     ax.set_title("Optimization of Tolerance Threshold (r)")
     ax.set_xlabel("Tolerance threshold $r$")

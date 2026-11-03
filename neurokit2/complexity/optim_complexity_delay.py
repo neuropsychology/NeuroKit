@@ -1,4 +1,3 @@
-import itertools
 from warnings import warn
 
 import matplotlib
@@ -10,13 +9,12 @@ import scipy.signal
 import scipy.spatial
 import scipy.stats
 
-from ..misc import NeuroKitWarning, find_closest
+from ..misc import NeuroKitWarning
 from ..signal import (
     signal_autocor,
     signal_findpeaks,
     signal_psd,
     signal_surrogate,
-    signal_zerocrossings,
 )
 from .entropy_kl import entropy_kl
 from .information_mutual import mutual_information
@@ -55,20 +53,23 @@ def complexity_delay(signal, delay_max=50, method="fraser1986", algorithm=None, 
       which they share the least information (and where the attractor is the least redundant).
       Unlike autocorrelation, mutual information takes into account also nonlinear correlations.
     * **Theiler (1990)** suggested to select Tau where the autocorrelation between the signal and
-      its lagged version at Tau first crosses the value :math:`1/e`. The autocorrelation-based
-      methods have the advantage of short computation times when calculated via the fast Fourier
-      transform (FFT) algorithm.
-    * **Casdagli (1991)** suggests instead taking the first zero-crossing of the autocorrelation.
+      its lagged version at Tau first crosses the value :math:`1/e` (the first lag at which it is
+      at or below :math:`1/e`). The autocorrelation-based methods have the advantage of short
+      computation times when calculated via the fast Fourier transform (FFT) algorithm.
+    * **Casdagli (1991)** suggests instead taking the first zero-crossing of the autocorrelation
+      (the first lag at which it is at or below 0).
     * **Rosenstein (1993)** suggests to approximate the point where the autocorrelation function
-      drops to :math:`(1 - 1/e)` of its maximum value.
-    * **Rosenstein (1994)** suggests to the point close to 40% of the slope of the average
-      displacement from the diagonal (ADFD).
+      drops to :math:`(1 - 1/e)` of its initial value (the first lag at which it is at or below
+      :math:`1 - 1/e`).
+    * **Rosenstein (1994)** suggests the delay at which the slope of the average displacement
+      from the diagonal (ADFD) has decreased to 40% of its initial value.
     * **Kim (1999)** suggests estimating Tau using the correlation integral, called the C-C method,
       which has shown to agree with those obtained using the Mutual Information. This method
       makes use of a statistic within the reconstructed phase space, rather than analyzing the
-      temporal evolution of the time series. However, computation times are significantly long for
-      this method due to the need to compare every unique pair of pairwise vectors within the
-      embedded signal per delay.
+      temporal evolution of the time series: the first local minimum of the average over the
+      embedding dimensions (2 to 5) of the range over the tolerances (0.5 to 2 SD) of the
+      dependence statistic of the disjoint subseries. It compares every pair of embedded vectors
+      per delay, so it is slower than the other methods.
     * **Lyle (2021)** describes the "Symmetric Projection Attractor Reconstruction" (SPAR), where
       :math:`1/3` of the the dominant frequency (i.e., of the length of the average "cycle") can be
       a suitable value for approximately periodic data, and makes the attractor sensitive to
@@ -102,7 +103,9 @@ def complexity_delay(signal, delay_max=50, method="fraser1986", algorithm=None, 
     algorithm : str
         The method used to find the optimal value of Tau given the values computed by the method.
         If ``None`` (default), will select the algorithm according to the method. Modify only if you
-        know what you are doing.
+        know what you are doing. Note that the ``"first local minimum"`` algorithm (mutual
+        information and C-C methods) ignores the shallow minima whose prominence is below 10% of
+        the largest one.
     show : bool
         If ``True``, will plot the metric values for each value of tau.
     silent : bool
@@ -283,7 +286,7 @@ def complexity_delay(signal, delay_max=50, method="fraser1986", algorithm=None, 
     elif method in ["rosenstein", "rosenstein1994", "adfd"]:
         metric = "Displacement"
         if algorithm is None:
-            algorithm = "closest to 40% of the slope"
+            algorithm = "40% of the initial slope"
     elif method in ["rosenstein1993"]:
         metric = "Autocorrelation"
         if algorithm is None:
@@ -303,7 +306,7 @@ def complexity_delay(signal, delay_max=50, method="fraser1986", algorithm=None, 
     metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
 
     # Get optimal tau
-    optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+    optimal = _embedding_delay_select(metric_values, algorithm=algorithm, tau_sequence=tau_sequence)
 
     if np.isnan(optimal) and silent is False:
         warn(
@@ -335,7 +338,7 @@ def complexity_delay(signal, delay_max=50, method="fraser1986", algorithm=None, 
 # =============================================================================
 # Methods
 # =============================================================================
-def _embedding_delay_select(metric_values, algorithm="first local minimum"):
+def _embedding_delay_select(metric_values, algorithm="first local minimum", tau_sequence=None):
     if algorithm in ["first local minimum (corrected)"]:
         # if immediately increasing, assume it is the first is the closest
         if np.diff(metric_values)[0] > 0:
@@ -359,19 +362,21 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
             optimal = np.nan
 
     elif algorithm == "first 1/e crossing":
-        metric_values = metric_values - 1 / np.exp(1)
-        optimal = signal_zerocrossings(metric_values)
+        # First lag at which the autocorrelation is at or below 1/e
+        optimal = np.where(metric_values <= 1 / np.e)[0]
     elif algorithm == "first zero crossing":
-        optimal = signal_zerocrossings(metric_values)
-    elif algorithm == "closest to 40% of the slope":
-        slope = np.diff(metric_values) * len(metric_values)
-        slope_in_deg = np.rad2deg(np.arctan(slope))
-        optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
+        # First lag at which the autocorrelation is at or below 0
+        optimal = np.where(metric_values <= 0)[0]
+    elif algorithm in ["40% of the initial slope", "closest to 40% of the slope"]:
+        # Rosenstein (1994): the delay at which the slope of the average displacement curve has
+        # decreased to 40% of its initial value (the displacement is 0 at a delay of 0)
+        if tau_sequence is None:
+            tau_sequence = np.arange(1, len(metric_values) + 1)
+        slope = np.diff(np.concatenate([[0], metric_values])) / np.diff(np.concatenate([[0], tau_sequence]))
+        optimal = np.where(slope <= 0.4 * slope[0])[0]
     elif algorithm == "first drop below 1-(1/e) of maximum":
-        try:
-            optimal = np.where(metric_values < np.nanmax(metric_values) * (1 - 1.0 / np.e))[0][0]
-        except IndexError:  # If no value are below that threshold
-            optimal = np.nan
+        # First lag at which the autocorrelation is at or below 1 - 1/e of its initial value (1)
+        optimal = np.where(metric_values <= 1 - 1.0 / np.e)[0]
 
     if not isinstance(optimal, (int, float, np.integer)):
         if len(optimal) != 0:
@@ -397,28 +402,14 @@ def _embedding_delay_metric(
     """
 
     if metric == "Autocorrelation":
-        values, _ = signal_autocor(signal)
-        values = values[: len(tau_sequence)]  # upper limit
+        # Autocorrelation at each tested lag (the first value returned by signal_autocor() is lag 0)
+        autocor, _ = signal_autocor(signal)
+        if np.max(tau_sequence) >= len(autocor):
+            raise ValueError("complexity_delay(): 'delay_max' must be smaller than the length of the signal.")
+        values = autocor[tau_sequence]
 
     elif metric == "Correlation Integral":
-        r_vals = [i * np.std(signal) for i in r_vals]
-        # initiate empty list for storing
-        # averages = np.zeros(len(tau_sequence))
-        values = np.zeros(len(tau_sequence))
-        for i, t in enumerate(tau_sequence):
-            # average = 0
-            change = 0
-            for m in dimensions:
-                # # find average of dependence statistic
-                # for r in r_vals:
-                #     s = _embedding_delay_cc_statistic(signal, delay=t, dimension=m, r=r)
-                #     average += s
-
-                # find average of statistic deviations across r_vals
-                deviation = _embedding_delay_cc_deviation_max(signal, delay=t, dimension=m, r_vals=r_vals)
-                change += deviation
-            # averages[i] = average / 16
-            values[i] = change / 4
+        values = _embedding_delay_cc(signal, tau_sequence, dimensions=dimensions, r_vals=r_vals)
 
     else:
         values = np.zeros(len(tau_sequence))
@@ -431,12 +422,9 @@ def _embedding_delay_metric(
             elif metric == "Mutual Information 2":
                 values[i] = mutual_information(embedded[:, 0], embedded[:, 1], method="knn")
             elif metric == "Displacement":
-                dimension = 2
-
-                # Reconstruct with zero time delay.
-                tau0 = embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
-                dist = np.asarray([scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)])
-                values[i] = np.mean(dist)
+                # Average distance between each embedded vector and its version with a delay of 0
+                # (i.e., with all its coordinates equal to the first one)
+                values[i] = np.mean(np.linalg.norm(embedded - embedded[:, [0]], axis=1))
             else:
                 raise ValueError("'metric' not recognized.")
 
@@ -446,68 +434,44 @@ def _embedding_delay_metric(
 # =============================================================================
 # Internals for C-C method, Kim et al. (1999)
 # =============================================================================
+def _embedding_delay_cc(signal, tau_sequence, dimensions=(2, 3, 4, 5), r_vals=(0.5, 1.0, 1.5, 2.0)):
+    """C-C method (Kim et al., 1999).
 
-
-def _embedding_delay_cc_integral_sum(signal, dimension=3, delay=10, r=0.02):
-    """Correlation integral is a cumulative distribution function, which denotes
-    the probability of distance between any pairs of points in phase space
-    not greater than the specified `r`.
+    For each delay t, the signal is split into t disjoint subseries x[s::t]. The dependence
+    statistic S(m, r, t) is the average over the subseries of C_s(m, r) - C_s(1, r)^m, where C_s
+    is the correlation integral (proportion of pairs of vectors within r, sup-norm) of the
+    subseries embedded with dimension m (and a delay of 1 within the subseries, i.e., of t in the
+    signal). Delta S(m, t) is the range of S over the tolerances r, and the returned quantity is
+    its average over the dimensions m, whose first local minimum gives the delay.
     """
-
-    # Embed signal
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=False)
-    M = embedded.shape[0]
-
-    # Prepare indices for comparing all unique pairwise vectors
-    combinations = list(itertools.combinations(range(0, M), r=2))
-    first_index, second_index = (
-        np.transpose(combinations)[0],
-        np.transpose(combinations)[1],
-    )
-
-    vectorized_integral = np.vectorize(_embedding_delay_cc_integral, excluded=["embedded", "r"])
-    integral = np.sum(vectorized_integral(first_index=first_index, second_index=second_index, embedded=embedded, r=r))
-
-    return integral
-
-
-def _embedding_delay_cc_integral(first_index, second_index, embedded, r=0.02):
-    M = embedded.shape[0]  # Number of embedded points
-    diff = np.linalg.norm(embedded[first_index] - embedded[second_index], ord=np.inf)  # sup-norm
-    h = np.heaviside(r - diff, 1)
-    integral = (2 / (M * (M - 1))) * h  # find average
-
-    return integral
+    signal = np.asarray(signal)
+    r_vals = np.sort(np.asarray(r_vals, dtype=float)) * np.std(signal, ddof=1)
+    values = np.zeros(len(tau_sequence))
+    for i, t in enumerate(tau_sequence):
+        deltas = np.zeros(len(dimensions))
+        for j, m in enumerate(dimensions):
+            statistic = np.zeros(len(r_vals))
+            for s in range(t):
+                subseries = signal[s::t]
+                statistic += (
+                    _embedding_delay_cc_integral(subseries, m, r_vals)
+                    - _embedding_delay_cc_integral(subseries, 1, r_vals) ** m
+                )
+            statistic /= t
+            deltas[j] = np.max(statistic) - np.min(statistic)
+        values[i] = np.mean(deltas)
+    return values
 
 
-def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
-    """The dependence statistic as the serial correlation of a nonlinear time series."""
-
-    # create disjoint time series
-    series = [signal[i - 1 :: delay] for i in range(1, delay + 1)]
-
-    statistic = 0
-    for sub_series in series:
-        diff = _embedding_delay_cc_integral_sum(sub_series, dimension=dimension, delay=delay, r=r) - (
-            (_embedding_delay_cc_integral_sum(signal, dimension=1, delay=delay, r=r)) ** dimension
-        )
-        statistic += diff
-
-    return statistic / delay
-
-
-def _embedding_delay_cc_deviation_max(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
-    """A measure of the variation of the dependence statistic with r using
-    several representative values of r.
-    """
-    vectorized_deviation = np.vectorize(_embedding_delay_cc_deviation, excluded=["signal", "delay", "dimension"])
-    deviations = vectorized_deviation(signal=signal, r_vals=r_vals, delay=delay, dimension=dimension)
-
-    return np.max(deviations) - np.min(deviations)
-
-
-def _embedding_delay_cc_deviation(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
-    return _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r_vals)
+def _embedding_delay_cc_integral(x, dimension, r_vals):
+    """Correlation integrals of a (sub)series embedded with a delay of 1, for all r at once."""
+    embedded = complexity_embedding(x, delay=1, dimension=dimension)
+    if len(embedded) < 2:
+        return np.zeros(len(r_vals))
+    dist = scipy.spatial.distance.pdist(embedded, metric="chebyshev")
+    # Number of distances <= r for each r (r_vals is sorted)
+    counts = np.bincount(np.searchsorted(r_vals, dist, side="left"), minlength=len(r_vals) + 1)
+    return np.cumsum(counts)[: len(r_vals)] / len(dist)
 
 
 # =============================================================================
@@ -654,8 +618,7 @@ def _complexity_delay_entropyratio(
         }
     )
     # N is the number of delay vectors
-    # out["N"] = len(signal) - (out["Dimension"] - 1) * out["Delay"]
-    out["N"] = len(signal)
+    out["N"] = len(signal) - (out["Dimension"] - 1) * out["Delay"]
 
     klens = np.full(len(out), np.nan)
     klens_surrogates = np.full(len(out), np.nan)
