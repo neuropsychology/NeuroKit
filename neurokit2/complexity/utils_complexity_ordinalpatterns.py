@@ -90,16 +90,15 @@ def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksor
 
 
 def _bubblesort(embedded):
-    """
+    """Number of swaps performed by the bubble sort algorithm to sort each vector.
+
+    Bubble sort swaps each pair of elements that is in the wrong order (i < j with x_i > x_j)
+    exactly once, so the number of swaps is the number of such pairs (inversions) in the vector.
+
     Manis, G., Aktaruzzaman, M. D., & Sassi, R. (2017). Bubble entropy: An entropy almost free of
     parameters. IEEE Transactions on Biomedical Engineering, 64(11), 2711-2718.
     """
-    n, n_dim = np.shape(embedded)
-    swaps = np.zeros(n)
-    for y in range(n):
-        for t in range(n_dim - 1):
-            for kk in range(n_dim - t - 1):
-                if embedded[y, kk] > embedded[y, kk + 1]:
-                    embedded[y, kk], embedded[y, kk + 1] = embedded[y, kk + 1], embedded[y, kk]
-                    swaps[y] += 1
+    swaps = np.zeros(len(embedded), dtype=int)
+    for i in range(embedded.shape[1] - 1):
+        swaps += np.sum(embedded[:, i : i + 1] > embedded[:, i + 1 :], axis=1)
     return swaps

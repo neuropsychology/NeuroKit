@@ -19,27 +19,29 @@ def entropy_increment(signal, dimension=2, q=4, **kwargs):
 
     The time series is reconstructed into vectors of *m* elements. Each element of each vector
     represents the increment between two neighbouring elements in the original time series.
-    Each increment element is mapped to a word consisting of two letters (one letter represents
-    the volatility direction, and the other represents the magnitude of the variation between
-    the adjacent elements), and then, each vector is described as a symbolic (discrete) pattern.
-    The :func:`Shannon entropy <entropy_shannon>` of the probabilities of independent patterns is
-    then computed.
+    Each increment element is mapped to a word consisting of two letters: its sign (rise, decline
+    or no change), and its size, :math:`\\min(q, \\lfloor |v| \\times q / SD \\rfloor)`, where *SD*
+    is the standard deviation of the increments of the vector (the size is 0 when *SD* is 0). Each
+    vector is then described as a symbolic (discrete) pattern of *2m* letters. The
+    :func:`Shannon entropy <entropy_shannon>` (in bits by default) of the probabilities of the
+    patterns is then computed and divided by *m - 1*.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     dimension : int
-        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*), at least 2. See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
     q : float
         The quantifying resolution *q* represents the precision of *IncrEn*, with larger values
         indicating a higher precision, causing IncrEn to be more sensitive to subtle fluctuations.
         The IncrEn value increases with increasing *q*, until reaching a plateau. This property can
-        be useful to selecting an optimal *q* value.
+        be useful to selecting an optimal *q* value. If 0, only the signs of the increments are
+        used.
     **kwargs : optional
-        Other keyword arguments, such as the logarithmic ``base`` to use for
-        :func:`entropy_shannon`.
+        Other keyword arguments, such as the ``delay`` of the embedding of the increments, or the
+        logarithmic ``base`` to use for :func:`entropy_shannon`.
 
     Returns
     --------
@@ -86,6 +88,8 @@ def entropy_increment(signal, dimension=2, q=4, **kwargs):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+    if dimension < 2:
+        raise ValueError("The dimension of Increment Entropy should be at least 2.")
 
     # Store parameters
     info = {"Dimension": dimension, "q": q}
@@ -94,22 +98,25 @@ def entropy_increment(signal, dimension=2, q=4, **kwargs):
     embedded = complexity_embedding(np.diff(signal), dimension=dimension, **kwargs)
 
     # The sign indicates the direction of the volatility between the corresponding neighbouring
-    # elements in the original time series; it takes values of 1, 0, or 1, indicating a rise, no
+    # elements in the original time series; it takes values of 1, 0, or -1, indicating a rise, no
     # change, or a decline
     sign = np.sign(embedded)
 
-    # The size describes the magnitude of the variation between these adjacent elements
-    Temp = np.tile(np.std(embedded, axis=1, ddof=1, keepdims=True), (1, dimension))
-    size = np.minimum(q, np.floor(abs(embedded) * q / Temp))
-    size[np.any(Temp == 0, axis=1), :] = 0
+    # The size describes the magnitude of the variation between these adjacent elements, relative
+    # to the standard deviation of the vector
+    sd = np.std(embedded, axis=1, ddof=1, keepdims=True)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        size = np.minimum(q, np.floor(np.abs(embedded) * q / sd))
+    size[sd[:, 0] == 0, :] = 0
 
-    # Each element in each vector is mapped to a word consisting of the sign and the size
-    words = sign * size
+    # Each element in each vector is mapped to a word of two letters, the sign and the size. The
+    # pair is encoded as sign * (size + 1), so that a rise or a decline of size 0 differs from no
+    # change (Liu et al., 2016)
+    words = sign * (size + 1)
 
     # Get probabilities of occurence
-    freq = np.unique(words, axis=0)
-    freq = [np.sum(~np.any(words - freq[k, :], axis=1)) for k in range(len(freq))]
-    freq = np.array(freq) / np.sum(freq)
+    _, freq = np.unique(words, axis=0, return_counts=True)
+    freq = freq / np.sum(freq)
 
     # Compute entropy
     incren, _ = entropy_shannon(freq=freq, **kwargs)

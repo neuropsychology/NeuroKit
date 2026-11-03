@@ -81,6 +81,16 @@ Changes in Results
   the length of the signal (a median of 122 for pink noise of 500 samples and 756 for 2,000, now
   23 and 19). A list of k_max values is now tested in increasing order. ``find_plateau()`` itself
   is unchanged.
+* ``entropy_bubble()`` (and the ``BubbEn`` index of ``complexity()``) now uses the Rényi entropy
+  of order ``alpha`` (2 by default, as in Manis et al., 2017). The ``alpha`` argument was not
+  passed on, so the Shannon entropy was used whatever its value (e.g., 0.656 instead of 0.582 for
+  white noise with ``dimension=3``).
+* ``entropy_increment()`` (and ``entropy_multiscale(method="MSIncrEn")``) now keeps the sign and
+  the size of each increment as two letters of its word, as in Liu et al. (2016). They were
+  multiplied, which merged a rise or a decline of size 0 with no change: values are higher (e.g.,
+  4.06 instead of 3.86 bits for white noise with ``dimension=3`` and ``q=4``), the worked example
+  of the paper now gives its 3 bits (instead of 2.75), and ``q=0`` gives the entropy of the signs
+  of the increments, as described in the paper, instead of always 0.
 
 New Features
 +++++++++++++
@@ -145,6 +155,16 @@ Fixes
 * ``complexity_hjorth()``'s docstring now gives the right formulas of mobility and complexity (the
   one given for complexity was the mobility, and mobility was defined through complexity), and
   the units of mobility.
+* ``entropy_bubble()`` and ``complexity_ordinalpatterns(algorithm="bubblesort")`` are up to a few
+  hundred times faster: the swaps of bubble sort are counted as the number of inversions of each
+  vector (pairs of elements in the wrong order), with array operations. The ``"Embedded"`` vectors
+  returned by ``complexity_ordinalpatterns(algorithm="bubblesort")`` are no longer sorted (they
+  were sorted in place). ``entropy_bubble()`` raises an error when ``dimension`` is below 2 (instead
+  of a ``ZeroDivisionError``), and its docstring describes the method, no longer lists a
+  ``tolerance`` argument, and gives the right default of ``alpha``.
+* ``entropy_increment()`` is up to 50 times faster (the words are counted with ``np.unique()``),
+  raises an error when ``dimension`` is below 2 (instead of returning NaN), and its docstring
+  describes the words and the normalization by ``dimension - 1``.
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.
