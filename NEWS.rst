@@ -149,6 +149,312 @@ Changes in Results
   and ignored the spacing of uneven scales or of the scales left out as undefined. For the default
   (consecutive) scales, values are now n / (n - 1) times larger, e.g., by about 1% for the 82
   scales of 1,000 samples with ``dimension=2`` and 4% for the 24 scales of 300 RR intervals.
+* ``entropy_shannon_joint()`` now returns the joint entropy H(X, Y), i.e., the Shannon entropy of
+  the pairs of values (x_i, y_i) (Cover & Thomas, 2006), as documented. It returned the
+  Kullback-Leibler divergence between the distributions of ``x`` and of ``y``
+  (``scipy.stats.entropy(p_x, p_y)``), which ignores how the two sequences are paired: e.g.,
+  1.459 instead of 0.119 bits for its docstring example, and H(X) instead of 0 for ``x`` with
+  itself. ``x`` and ``y`` can now take different values (they had to have the same labels, checked
+  with an ``assert``), and must have the same length (sequences of different lengths were
+  accepted).
+* ``entropy_cumulativeresidual()`` (and its alias ``complexity_cren()``) now uses the survival
+  function P(X > x), as defined by Rao et al. (2004) and given in its docstring, instead of the
+  cumulative distribution P(X <= x), which gives the "cumulative entropy" (the CREn of -X). Values
+  change for asymmetric distributions, e.g., 1.432 instead of 0.921 bits for 10,000 samples of an
+  exponential distribution of mean 1 (whose CREn is 1 nat, 1.4427 bits), or 0.5 instead of 0.311
+  for ``[0, 0, 0, 1]``; they are unchanged for symmetric ones (e.g., its docstring example) and
+  close for roughly symmetric ones (1.282 instead of 1.295 for 1,000 samples of white noise).
+  Signals with missing values now return NaN: the missing values were counted in the
+  probabilities, but their interval was left out of the sum.
+* ``entropy_kl()`` with the default ``norm="euclidean"`` (and therefore
+  ``complexity_delay(method="gautama2003")``) used the volume of the Euclidean ball of radius 1
+  instead of diameter 1 in the Kozachenko-Leonenko estimator (Kraskov et al., 2004), so KLEn was
+  ``dimension`` × log(2) nats too high (e.g., 4.28 instead of 2.90 nats for 1,000 samples of white
+  noise with ``dimension=2``, whose differential entropy is 2.84 nats). ``norm="max"`` was correct
+  and is unchanged. As ``complexity_delay(method="gautama2003")`` takes the ratio of the KLEn of
+  the signal and of its surrogates, the delay and dimension it selects can change.
+* ``entropy_kl()`` now leaves the delay vectors that have an identical neighbour (at a distance of
+  0, e.g., in quantized signals) out of the average of the log-distances. They were left out of
+  the sum but still counted in the number of vectors, i.e., as a distance of 1 in the units of the
+  signal, so that the result depended on these units: e.g., for 300 RR intervals in integer ms
+  with ``dimension=1``, converting them to seconds changed KLEn by 1.17 instead of log(1000) =
+  6.91. Results for signals without repeated delay vectors are unchanged (apart from the
+  Euclidean constant above). KLEn is now NaN, with a warning, for a constant signal (it returned
+  6.31 for 100 samples with ``dimension=2``) or a single delay vector (it returned infinity).
+* ``entropy_renyi()`` and ``entropy_tsallis()`` given a ``freq`` that contains zero
+  probabilities now leave out the states that do not occur. Before, the default ``alpha=1`` and
+  ``q=1``, and ``q`` below 1, returned NaN (0 × log(0)), and ``alpha=0`` (Hartley entropy) counted
+  them (e.g., log(3) instead of log(2) for ``freq=[0.5, 0.5, 0]``). This can affect
+  ``entropy_permutation(weighted=True)`` with ``algorithm=nk.entropy_renyi`` or
+  ``nk.entropy_tsallis`` when a pattern only occurs in constant vectors (weight 0). Results
+  computed from a signal are unchanged (all its states occur).
+* ``entropy_shannon()`` (and its alias ``complexity_se()``), ``entropy_renyi()``,
+  ``entropy_tsallis()`` and ``entropy_cumulativeresidual()`` now pass ``c`` and ``random_state``
+  on to ``complexity_symbolize()``. They were silently ignored, so that e.g.
+  ``entropy_shannon(signal, symbolize="MEP", c=5)`` used 3 symbols (1.585 instead of 2.322 bits for
+  white noise). Results without these arguments are unchanged, including those of the indices
+  that use ``entropy_shannon()`` (e.g., ``ShanEn`` of ``hrv_nonlinear()``, ``AttEn`` and
+  ``MSPEn`` of ``complexity()``) and ``entropy_renyi()`` (``BubbEn``).
+* ``entropy_maximum()`` now treats a string as a sequence of characters, as
+  ``entropy_shannon()`` does: it returned 0 for ``"ABBA"`` (one string), below the 1 bit of
+  ``entropy_shannon("ABBA")`` that it is meant to bound. It now raises an error for
+  multidimensional inputs, like ``entropy_shannon()`` (their values were pooled).
+* ``entropy_dispersion()`` is now between 0 and 1, as defined by Rostaghi & Azami (2016): the
+  entropy in bits was divided by the natural logarithm of the number of patterns, which made every
+  value 1.4427 (1 / ln(2)) times too large (e.g., 0.976 instead of 1.409 for white noise with the
+  default parameters, and 0.790 instead of 1.139 for the worked example of Azami & Escudero, 2018,
+  whose DispEn is 1.7351 nats, i.e., 0.790 once divided by ln(9)). With ``fluctuation=True``, it
+  is now normalized by the logarithm of the (2c - 1)^(m - 1) possible fluctuation patterns, as in
+  Azami & Escudero (2018), instead of c^m (e.g., 0.891 instead of 1.147 for white noise with the
+  default parameters, and 0.710 instead of 1.082 for the worked example of the paper). The
+  Reverse Dispersion Entropy (``info["RDEn"]``) now sums over all the possible patterns, including
+  those that do not occur, as defined by Li et al. (2019), and uses the (2c - 1)^(m - 1)
+  fluctuation patterns with ``fluctuation=True``: it is higher when some patterns are missing
+  (e.g., 0.083 instead of 0.042 for the worked example of DispEn, and 0.0048 instead of 0.0030 for
+  200 samples of white noise with the default parameters).
+* ``entropy_dispersion(symbolize="finesort")`` now computes the fine-sorting factor from the
+  differences between the NCDF values of each vector, as defined by Fu et al. (2019). It was
+  computed from the classes of the vector, i.e., from its pattern itself, so it never split a
+  pattern and the fine-sorted DispEn was always equal to DispEn (e.g., for white noise with
+  ``c=3`` and ``rho=1``, it is now 1.042, against 0.996 for DispEn). With ``fluctuation=True``, the
+  factor is now added after the differences between the classes, instead of being differenced
+  with the last class.
+* ``entropy_permutation()`` with ``corrected=True`` (the default), and therefore
+  ``complexity_pe()``, ``complexity_wpe()`` and the PEn methods of ``entropy_multiscale()``
+  (``"MSPEn"``, ``"CMSPEn"``, ``"MMSPEn"``, ``"IMSPEn"`` and their ``"WPEn"`` counterparts), is now
+  divided by the maximum entropy in the unit of the entropy that is computed. It was always divided
+  by log2(m!), which is only right for the default Shannon entropy in bits, so that the values were
+  wrong with another logarithmic ``base`` (e.g., 0.408 instead of 0.589 for the example of Bandt &
+  Pompe, 2002, with ``base=np.e``), with ``algorithm=nk.entropy_renyi`` (in nats: 0.691 instead of
+  0.997 for white noise with ``alpha=2``) or with ``algorithm=nk.entropy_tsallis`` (0.322 instead
+  of 0.999 with ``q=2``). Results with the default Shannon entropy in bits are unchanged (for CPEn,
+  see the next bullet).
+* ``entropy_permutation(conditional=True)`` (CPEn), and therefore the ``CWPEn`` index of
+  ``complexity()``, is now the conditional entropy that it is documented to be, between 0 and 1
+  with ``corrected=True`` (the default). The correction divided it by log((m + 1)!), the maximum
+  of the PEn of dimension m + 1, instead of its own maximum, log(m + 1) (the next value can take
+  m + 1 ranks), so that it was at most 0.613 for ``dimension=2`` (the default of ``complexity()``)
+  and 0.436 for ``dimension=3``. The entropy of the patterns of m values is now computed from the
+  first m values of the vectors of m + 1 values and, for the weighted CPEn, with their weights (the
+  variance of the m + 1 values). It was computed from all the vectors of m values, weighted by the
+  variance of their m values, so that the difference was not a conditional entropy and could be
+  negative (e.g., -0.082 bits for ``[4, 1, 3, 0, 2]`` with ``dimension=2``, whose patterns of 2
+  values each determine the rank of the third value: it is now 0). For 1000 samples of white
+  noise, CPEn is now 0.995 instead of 0.434 with ``dimension=3``, and ``CWPEn`` 0.990 instead of
+  0.607 (0.019 instead of 0.012 for 10 s of ``ecg_simulate(sampling_rate=250, random_state=1)``).
+  Without weights, the uncorrected CPEn only changes for short signals (e.g., 0.8 instead of 0.604
+  bits for the 7 samples of the example of Bandt & Pompe, 2002, with ``dimension=2``, and 0.2147
+  instead of 0.2148 bits for the ECG with ``dimension=3``), but it changes more with weights (0.088
+  instead of 0.136 bits for the ECG). With ``algorithm=nk.entropy_renyi``, CPEn is divided by
+  log(m + 1) in nats (0.991 instead of 0.432 for white noise with ``alpha=2`` and
+  ``dimension=3``), and with ``algorithm=nk.entropy_tsallis`` by the maximum of the difference,
+  ln_q(m + 1) max(1, (m!)^(1 - q)), which white noise does not reach for q above 1 (0.167 instead
+  of 0.131 with ``q=2``, and 0.996 instead of 0.626 with ``q=0.5``).
+* ``entropy_slope()`` (and ``entropy_multiscale(method="MSSlopEn")``) now uses all the vectors of
+  the signal: the last one was left out (e.g., 3.539 instead of 3.536 bits for the 31 vectors of
+  the worked example of Cuesta-Frau, 2019). With a ``delay`` above 1, the vectors are now made of
+  samples spaced by the delay, as in the paper (where a delay is a downsampling), instead of
+  successive differences between samples spaced by the delay (e.g., 3.875 instead of 4.033 bits for
+  white noise with ``delay=2``). A single threshold now separates the ties from the rises and
+  declines; all the slopes were mapped to the same symbol, which always gave 0.
+* ``entropy_symbolicdynamic()`` (and ``entropy_multiscale()`` with ``"MSSyDyEn"`` and
+  ``"MMSyDyEn"``) now computes the state transition entropy as the entropy of the symbol that
+  follows each state conditional on that state, -ΣΣ P(q) P(σ|q) ln P(σ|q) (the definition of Li
+  et al., 2017, as corrected by Wei et al., 2023), so that SyDyEn is the joint entropy of the
+  states and of their transitions, and its normalization by ln(c^(m + 1)) bounds it between 0 and
+  1 (1 for white noise). The transition term was -ΣΣ P(q) ln(P(q) P(σ|q)) (as in EntropyHub),
+  which is not an entropy and grew with the number of different states and transitions (e.g.,
+  0.902 instead of 4.117 for 1,000 samples of white noise with the default parameters). The normalization uses the number of possible symbols, which is 2 for the binary
+  symbolizations (e.g., ``symbolize="A"``: 0.999 instead of 0.580 for white noise) and the number
+  of bins when ``symbolize`` is an integer, instead of ``c``. The state transitions of all the
+  vectors that are followed by a symbol (up to the sample N - m × delay) are now counted; those of
+  the last (m - 1) × delay vectors were left out, which mattered with large delays, and therefore
+  at the large scales of ``"MMSyDyEn"``. With symbolizations whose symbols start at 0 (e.g.,
+  ``symbolize="A"``, ``"binning"`` or a number of bins), the transitions to the symbol 0 are now
+  counted; they were dropped (``symbolize="binning"`` now gives the same values as the equal-width
+  bins of ``"linear"``).
+* ``entropy_coalition(method="synchrony")`` (SCE) is now reproducible: the random binary sequences
+  used for its normalization were drawn without a seed, so that every call gave a different value
+  (e.g., 0.8533, 0.8539 and 0.8531 for the same signals). They are now drawn from the new
+  ``random_state`` argument (30 by default).
+* ``entropy_power()`` now returns the entropy power exp(2H) / (2 pi e) of Shannon (1948) and Dembo
+  et al. (1991), i.e., the variance of the Gaussian variable with the same differential entropy H,
+  in the squared units of the signal. 2H was divided by the number of samples (the *n* of the
+  formula is the dimension of the random vector, 1 for a signal), so that PowEn was about
+  1 / (2 pi e) = 0.0586 whatever the signal (e.g., 0.0586 instead of 1.035 for 10,000 samples of
+  a standard normal distribution, and instead of 102.8 with an SD of 10). The kernel density
+  estimate is also normalized to integrate to 1 over the range where it is evaluated (from the
+  minimum to the maximum of the signal), so that multiplying the signal by *a* multiplies PowEn by
+  exactly a^2: the mass of the tails missing from this range made the entropy depend on the units
+  (e.g., PowEn was on average 12% lower than expected after multiplying 100 samples of noise by 10).
+  The ``"Density"`` returned in ``info`` is this normalized density.
+* ``entropy_angular()`` now computes the ComEDA index of Nardelli et al. (2022) as in the code
+  released by the authors, which it claims to implement: the signal is normalized to [0, 1]
+  before the embedding, the angular distance between two embedded vectors is the cosine of their
+  angle (as in the paper) rather than the angle itself, and the PDF of the distances is estimated
+  with the diffusion kernel density estimator of Botev et al. (2010) on B points (the Sturges
+  number of bins rounded up to a power of 2) spread over the range of the distances extended by
+  half of it on each side. Before, the raw signal was embedded, so that AngEn depended on its
+  offset (e.g., 0.98 for white noise, but 0.68 after adding 10), the PDF was a Gaussian kernel
+  estimate with an ad hoc bandwidth on bins spanning only the range of the angles, and the
+  quadratic Rényi entropy was divided by the log of the number of bin edges (one more than the
+  number of bins), so it could not reach 1. Values are therefore different and lower (e.g., 0.32
+  instead of 0.98 for white noise of 1,000 samples with the default ``dimension=2``, and 0.37
+  instead of 0.92 with ``dimension=3``). The ``"bins"`` of the returned ``info`` are now the B
+  points at which the PDF is estimated (instead of the B + 1 bin edges).
+* ``entropy_grid()`` now divides both axes of the Poincaré plot into the same *k* sections of the
+  [0, 1] range of the normalized signal (Yan et al., 2019), as drawn with ``show=True``. Before,
+  each axis was divided over the range of its own values (the present or the delayed ones),
+  which is narrower when the minimum or the maximum of the signal is among its first or last
+  ``delay`` samples (e.g., a GridEn of 2.183 instead of 2.322 bits, and a GDR of 0.778 instead of
+  0.889, for 100 samples of white noise whose first sample is the maximum). The values that fall
+  exactly on a grid line (e.g., RR intervals in integer milliseconds) are now always counted in
+  the section above it; rounding errors in the bin edges could put them in the section below
+  (with ``k=5`` or ``k=10``, about 18% of 5-minute series of RR intervals in ms changed, by about
+  0.01 bits and up to 0.06; the default ``k=3`` was not affected).
+* ``complexity_lyapunov()`` with ``separation="auto"`` (the default, for all the methods) now
+  computes the mean period from the whole power spectrum, as in Rosenstein et al. (1993). The
+  spectrum went through ``signal_psd()``, whose default ``min_frequency`` left out the three lowest
+  nonzero frequencies, which dominate for signals with slow fluctuations, so the separation was too
+  short: e.g., 171 instead of 135 samples for the x-component of the Lorenz system sampled every
+  0.01 time unit, and 291 instead of 98 for a random walk of 2,000 samples. It is unchanged for
+  white noise, chaotic maps or an ECG (e.g., 4 for the logistic map).
+* ``complexity_lyapunov()`` now uses ``method="makowski"`` by default (it was
+  ``"rosenstein1993"``), which chooses the part of the divergence curve to fit automatically (see
+  below). Rosenstein's method, with its default ``len_trajectory=20``, depends on the length of the
+  signal and on its sampling rate: e.g., 0.43 to 0.81 times the LLE of chaotic maps (from 500 to
+  20,000 samples) and 2.5 times that of the Lorenz system, against 0.98 to 1.00 and 0.94 times
+  with ``"makowski"``. Use ``method="rosenstein1993"`` to get the previous results.
+* ``complexity_lyapunov(method="makowski")`` now chooses the part of the divergence curve to which
+  the line is fitted from the local slope of the curve. The trajectories are followed until the
+  curve levels off (at the level of unrelated vectors, or when it stops rising, e.g., for
+  quasi-periodic signals) instead of for 10 × ``delay`` samples, and the line is fitted to the
+  first of the longest runs of steps (from step 1) over which the local slope varies by less than
+  a factor of 1.5, instead of from the first step to the knee of the curve (found with
+  ``find_knee()``). This leaves out the initial transient of flows and the saturation, so that the
+  LLE no longer depends on the length of the signal or on its sampling rate: e.g., 0.92 instead of
+  2.42 times the LLE of the Lorenz system and 0.90 instead of 1.40 for the Rössler system (medians
+  over sampling steps of 0.005 to 0.05 and 0.05 to 0.2 time units, with 5,000 samples), 0.99 to
+  1.00 instead of 0.93 to 0.96 for chaotic maps (500 to 5,000 samples), and 0.24 and 0.25 per
+  second instead of 8.9 and 10.5 for a simulated respiration signal of 120 s sampled at 50 and
+  200 Hz. The nearest neighbour of each vector is now found among the vectors more than
+  ``separation`` samples away in time, as in Rosenstein's method: it used to be the
+  (``separation`` + 1)-th nearest neighbour whatever its distance in time (e.g., the 136th for the
+  Lorenz system, 9% of which were within the separation window). It returns NaN, with a warning,
+  when the curve has no linear part because the neighbours become unrelated within a few steps,
+  e.g., for white noise (0.32 per sample before), and the slope of the curve, close to 0 (with a
+  warning), when the trajectories do not diverge, e.g., for periodic signals with or without
+  noise. With 5% of observational noise, the LLE of chaotic maps is underestimated by about 25%
+  (0.76 instead of 0.82 before). ``max_length`` (by default, 20 times the ``separation``) is now
+  an upper bound, and can be any integer of at least 2 (it had to be at least 6). In ``info``, the
+  divergence curve now starts at step 0, and ``"Changepoint"`` is replaced by ``"Fit_Range"`` (the
+  first and last steps of the fit), with ``"R2"``, ``"Plateau"`` (the level at which the curve
+  levels off) and ``"Pairs"`` (the number of pairs of neighbours at each step); ``show=True``
+  shades the fit range.
+* ``complexity_lyapunov(method="eckmann1986")`` now uses the ``delay``: the neighbours are found
+  among the delay vectors, and the tangent maps send each vector ``m * delay`` samples ahead (with
+  m = (``dimension`` - 1) / (``matrix_dim`` - 1)). The delay was ignored (always 1), so oversampled
+  signals were embedded over a few samples: e.g., for the Lorenz system (sampled every 0.01 time
+  unit, whose exponents are 0.906, 0 and -14.57 per time unit) with ``delay=10`` and
+  ``dimension=4``, the LEs are now 0.96, 0.07, -3.19 and -9.72 per time unit instead of 1.35,
+  -0.08, -6.48 and -11.96, the values for ``delay=1`` (and 0.86, -0.01 and -11.07 with
+  ``dimension=3``). Results with ``delay=1`` and ``dimension`` = ``matrix_dim`` (e.g., 4) are
+  unchanged (apart from the separation above).
+* ``complexity_lyapunov(method="eckmann1986")`` with ``dimension`` larger than ``matrix_dim``
+  (e.g., ``dimension=7`` with the matrix dimension of 4, i.e., m = 2) now multiplies the tangent
+  maps every m steps along the trajectory (T_1, T_1+m, T_1+2m, ..., as in Eckmann et al., 1986;
+  the m interleaved products, starting at each of the first m vectors, are averaged): each tangent
+  map sends a vector m steps ahead, but they were multiplied at every step, i.e., each one was
+  applied to the frame of the vector m - 1 steps further. E.g., 1.04, 0.06, -6.1 and -12.07
+  instead of 3.17, 1.21, -8.37 and -13.08 per time unit for the Lorenz system with
+  ``dimension=7`` and ``delay=1``; for the Hénon map
+  (exponents of 0.419 and -1.62, plus spurious ones) with ``dimension=5``, ``matrix_dim=3`` and
+  ``separation=0``, 0.837, 0.416 and -1.568 (0.999, 0.328 and -1.642 with nolds' ``lyap_e()``,
+  which multiplies them at every step too).
+* ``complexity_lyapunov(method="rosenstein1993")`` (the previous default) now computes the distances
+  between the vectors exactly. They were computed with the dot-product formula of
+  ``sklearn.metrics.pairwise.euclidean_distances()``, whose rounding error is about 1e-8 times the
+  amplitude of the signal. Values are unchanged (to about 1e-10), except for noise-free signals
+  that repeat themselves exactly (e.g., a sine whose period is a whole number of samples), whose
+  neighbours are copies at the rounding error, so that the estimate is meaningless either way
+  (e.g., 0.024 instead of -0.0009 per sample for a sine with a period of 50 samples).
+* ``complexity_ordinalpatterns()``, and therefore ``entropy_permutation()`` (and the ``CWPEn``
+  index of ``complexity()`` and the PEn methods of ``entropy_multiscale()``) and
+  ``complexity_lempelziv(permutation=True)``, now ranks the equal values of a vector (ties) in
+  their order of appearance, as defined by Bandt & Pompe (2002). The vectors were sorted with
+  numpy's ``"quicksort"``, which does not keep the order of the ties for vectors of 4 values or
+  more (with numpy 2), and whose order of the ties can depend on the CPU: e.g., for 1,000
+  intervals of about 800 ms rounded to 10 ms, 28 of the 316 vectors with ties had a different
+  pattern with ``dimension=4``, and 172 of 621 with ``dimension=6`` (an uncorrected PEn of 8.853
+  instead of 8.805 bits). Results for signals without ties are unchanged.
+* ``fishershannon_information()`` now computes the Fisher information with the derivative of the
+  density with respect to the values of the signal. ``np.gradient()`` was given no spacing, so the
+  derivative was taken with respect to the index of the 100 points at which the density is
+  evaluated, which made the Fisher information about the squared spacing of these points too
+  small (e.g., 0.0055 instead of 0.97 for 5,000 samples of a standard normal distribution, whose
+  Fisher information is 1). Together with the fix of ``entropy_power()``, the Fisher-Shannon
+  complexity is now about 1 for a normal distribution (1.01 instead of 0.00027 for 2,000 samples),
+  its theoretical minimum, and above for other distributions (e.g., 1.36 for a Laplace
+  distribution).
+* ``entropy_range()`` (RangEn B, the default ``approximate=False``) no longer removes the
+  self-matches twice: the range distance of a vector with itself is undefined (0 / 0), so the
+  vector was already left out of its own count, from which the SampEn computation then removed
+  one more match. Values are lower and no longer depend on the length of the signal as much
+  (e.g., on average 1.52 instead of 1.58 for 1,000 samples of white noise, and 1.52 instead of
+  1.77 for 300 samples, with ``tolerance=0.2``), and match the definition of Omidvarnia et al.
+  (2018).
+* ``entropy_range()`` (RangEn A and B) no longer multiplies the tolerance by the SD of the signal:
+  the range distance is normalized (between 0 and 1), so the default ``tolerance="sd"`` now gives
+  0.2 (Omidvarnia et al., 2018) whatever the amplitude of the signal, and the other methods of
+  ``complexity_tolerance()`` are applied to the standardized signal. RangEn used to depend on the
+  amplitude of the signal, which it is designed not to: e.g., for RR intervals in ms (SD of 50 ms)
+  the tolerance was 10, all the vectors matched and RangEn was 0 (it is now 1.52 for such a
+  random series of 300 intervals). Results for signals with an SD of 1 only change as described in
+  the previous point. Two vectors now also match when their range distance equals the tolerance
+  (d <= r, Eq. 19-20 of Omidvarnia et al., 2018), which only matters for signals with
+  repeated values (e.g., integers), and makes RangEn 0 at ``tolerance=1`` as described in the
+  paper.
+* ``entropy_cosinesimilarity()`` (and ``entropy_multiscale(method="MSCoSiEn")``) is now in bits,
+  as defined by Chanwimalueang & Mandic (2017), and therefore between 0 and 1: it used the natural
+  logarithm, so values were ln(2) = 0.69 times smaller (e.g., 0.25 instead of 0.37 for white noise
+  with ``dimension=2`` and ``tolerance=0.07``, the value given in the paper). The cosine
+  similarities are no longer rescaled to [-1, 1] (together with the zeros of the lower triangle of
+  their matrix), which distorted the angles of short signals (e.g., by 2% for 30 samples); they
+  are only clipped to [-1, 1] to remove rounding errors.
+* ``entropy_cosinesimilarity()`` no longer multiplies the tolerance by the SD of the signal: the
+  angular distance is between 0 and 1, so the default ``tolerance="sd"`` now gives 0.2 whatever
+  the amplitude of the signal (and the other methods of ``complexity_tolerance()`` are applied to
+  the standardized signal). CoSiEn used to depend on the amplitude of the signal, which it is
+  designed not to: e.g., for RR intervals in ms (SD of 50 ms) the tolerance was 10, all the pairs
+  of vectors were similar and CoSiEn was 0 (it is now 0.44 for such a random series of 300
+  intervals). For signals with an SD of 1, only the change of logarithm applies (e.g., 0.45
+  instead of 0.31 for white noise).
+* ``entropy_kolmogorov()`` now counts the pairs of identical embedded vectors (at a distance of 0)
+  in the correlation integrals; they were left out (e.g., 1.27 instead of NaN for 600 samples of
+  white noise rounded to integers, with ``dimension=2`` and ``tolerance=0.5``). Results for
+  signals without repeated vectors are unchanged.
+* The ``"Excess_Entropy"`` returned by ``entropy_rate()`` is now the intercept of the line fitted
+  to the block entropies, i.e., the excess entropy E in H(k) = E + h × k for long histories
+  (Crutchfield & Feldman, 2003). It was the block entropy at k = 1 (the Shannon entropy of the
+  symbols, which is E + h for a Markov chain): e.g., 0.24 instead of 0.81 bits for a
+  binary Markov chain whose excess entropy is 0.24, and 0.00 instead of 1.00 for a random binary
+  sequence. ``"MaxRatEn"`` is now NaN when the knee is the second history length (it was a slope
+  fitted on a single point).
+* ``entropy_multiscale(method="MSCoSiEn")`` now uses the same tolerance as
+  ``entropy_cosinesimilarity()`` (0.2 with the default ``tolerance="sd"``, whatever the amplitude
+  of the signal), so that its value at scale 1 is CoSiEn. It used 0.2 times the SD of the signal,
+  as for the methods based on SampEn, as a tolerance on the angular distance (between 0 and 1).
+* ``entropy_sample()`` and ``entropy_approximate()`` with ``distance="range"`` (and therefore
+  ``entropy_range(approximate=True, corrected=True)``) now count each vector as a match of itself,
+  and the pairs at a range distance equal to the tolerance, as for the other distances. The range
+  distance of a vector with itself is undefined (0 / 0), so the vector was left out of its own
+  count, from which ``entropy_sample()`` then removed one more match; ``entropy_sample()`` with
+  ``distance="range"`` is now RangEn (B) (``entropy_range()``, with the same tolerance).
+* ``entropy_fuzzy()`` (and ``complexity_fuzzyen()``, ``complexity_fuzzyapen()`` and
+  ``entropy_multiscale(fuzzy=True)``) now passes on the exponent ``n`` of the membership function
+  exp(-d^n / r), now documented: it was silently ignored, so that ``n=2`` (as in Chen et al., 2007)
+  gave the values of ``n=1`` (e.g., 1.350 instead of 1.645 for 300 samples of white noise). Values
+  with the default ``n=1`` are unchanged.
 
 New Features
 +++++++++++++
@@ -166,6 +472,15 @@ New Features
   than that number of samples in time are left out of the correlation sum, which removes the bias
   of the autocorrelation of oversampled signals (e.g., EEG) at small radii. Defaults to 0 (all
   pairs), so results are unchanged.
+* ``complexity_lyapunov()`` gains a ``sampling_rate`` argument: the exponents are then per second
+  instead of per sample (with ``show=True``, the time axis is in seconds).
+* ``entropy_symbolicdynamic()`` gains a ``fluctuation`` argument for the fluctuation-based
+  Symbolic Dynamic Entropy (FSDE; Shen et al., 2025), computed on the differences between the
+  neighbouring symbols (and its multiscale version, MFSDE, with
+  ``entropy_multiscale(method="MSSyDyEn", fluctuation=True)``). It is normalized by
+  ln((2c - 1)^m), the maximum of the joint entropy of the states and of their transitions, so
+  that it lies between 0 and 1; the paper divides it by ln((2c - 1)^(m - 1)), which gives values
+  m / (m - 1) times larger.
 
 Fixes
 +++++++++++++
@@ -253,6 +568,184 @@ Fixes
 * ``complexity_coarsegraining()`` accepts lists (a list was returned unchanged at ``scale=1``) and
   numpy integers as ``scale``; its docstring describes the time-shift series, and its benchmarking
   example uses ``method="rolling"`` (it passed a ``rolling=True`` argument that does not exist).
+* ``entropy_shannon()``, ``entropy_renyi()``, ``entropy_tsallis()`` and
+  ``entropy_cumulativeresidual()`` accept numpy integers as ``symbolize`` (e.g., ``np.int64(3)``
+  for 3 bins), which raised an ``UnboundLocalError``. The docstring of ``entropy_shannon()`` names
+  the ``symbolize`` argument (it said ``method``), gives the formula with the logarithmic ``base``
+  and documents the ``**kwargs``.
+* ``entropy_renyi()`` with ``alpha=np.inf`` now returns the min-entropy, -log(max p), instead of
+  NaN. Its docstring now gives the formula with the natural logarithm that it uses (it showed
+  log2; values are in nats, so that ``alpha=1`` is ``entropy_shannon(base=np.e)``), says that it
+  returns the Rényi entropy (not the Tsallis entropy), and its ``info`` contains ``"Alpha"``.
+* ``entropy_tsallis()``'s docstring notes that ``q=1`` gives the Shannon entropy in nats, and
+  cites Tsallis (1988). The ``"Values"`` in its ``info`` are 0 for the states that do not occur
+  (they were NaN for ``q`` of 1 or below).
+* ``entropy_cumulativeresidual()`` works with the ``freq`` argument, taken as the probabilities of
+  the values 0, 1, 2, etc. (it always raised an ``UnboundLocalError``), raises a clear error for
+  non-numeric values such as strings (instead of a ``TypeError`` on subtracting them), and is
+  about 30 times faster for 100,000 samples (the terms are computed with array operations instead
+  of a loop over the values). Its docstring describes how the survival function of the empirical
+  distribution is integrated, what is done for signals with negative values, and its units.
+* ``entropy_kl()``'s docstring now gives the formula of the estimator, its unit (nats), its
+  dependence on the units of the signal and the defaults of ``delay`` and ``dimension``, and cites
+  Kraskov et al. (2004); an unknown ``norm`` raises an error that lists the valid ones.
+* ``entropy_permutation()`` (and ``complexity_pe()`` and ``complexity_wpe()``) returns NaN with a
+  warning for signals with missing values (they were ranked as the largest values) and, with
+  ``weighted=True``, when all the vectors are constant (the weights are all 0); it raises an error
+  when ``dimension`` is below 2 without ``conditional=True``, or below 1 with it (instead of
+  returning NaN after a division by zero). The weighted frequencies of WPEn are counted with ``np.bincount()``, which is
+  up to 70 times faster for large dimensions (e.g., 10 ms instead of 0.7 s for 10,000 samples with
+  ``dimension=7``). The docstring documents the ``conditional`` argument and the ``algorithm``
+  keyword argument (and no longer names ``entropy_reyni``), gives the formulas, and describes CPEn
+  as the sorting entropy of Bandt & Pompe (2002), with its bounds. It described it as the
+  conditional entropy of ordinal patterns of Unakafov & Keller (2014), the entropy of the next
+  pattern given the current one, which is lower (e.g., about 0.66 instead of 0.89 nats for the
+  logistic map with r = 4 and ``dimension=5``, whose Kolmogorov-Sinai entropy is ln(2) = 0.693).
+* ``entropy_dispersion()`` returns NaN with a warning for signals with missing values (they were
+  put in the highest class), raises an error when ``c`` is below 2 (instead of returning NaN) and
+  when ``dimension`` is below 2 with ``fluctuation=True`` (instead of returning 0) or
+  ``symbolize="finesort"`` (instead of a cryptic error), and passes ``random_state`` on to
+  ``complexity_symbolize()`` (e.g., for ``symbolize="kmeans"``, whose values changed at every call).
+  Its docstring describes DispEn, FDispEn, the fine-sorted DispEn and RDEn, documents the ``base``
+  keyword argument, and cites Azami & Escudero (2018), Li et al. (2019) and Fu et al. (2019).
+* ``entropy_slope()`` now accepts lists (they raised a ``TypeError``) and pandas Series with any
+  index (a Series with a non-default index returned 0, as its differences were aligned on the
+  index), returns NaN with a warning for signals with missing values, and raises an error when
+  ``dimension`` is below 2 (it returned 0) or when the ``thresholds`` are not increasing angles
+  between 0 and 90 degrees (unsorted thresholds gave meaningless symbols). Its docstring describes
+  the symbols and the thresholds (the default ``[0.1, 45]`` corresponds to differences of 0.0017
+  and 1), and notes that Cuesta-Frau (2019) divides the counts by the number of different patterns
+  rather than by the number of vectors (5.29 instead of 3.54 bits for the worked example of the
+  paper).
+* ``entropy_symbolicdynamic()`` is about 20 times faster (the states and transitions are counted
+  with ``np.unique()`` and ``np.bincount()``), returns NaN with a warning for signals with missing
+  values, raises a clear error for signals too short to have a state transition (it raised an
+  ``IndexError``), and passes ``random_state`` on to ``complexity_symbolize()`` (e.g., for
+  ``symbolize="kmeans"``). Its docstring gives the formula and its normalization.
+* ``entropy_coalition()`` accepts ``method="ACE"`` and ``method="SCE"``, as documented (they raised
+  an ``UnboundLocalError``, like any unknown method, which now raises a ``ValueError``), raises an
+  error for fewer than 2 channels, returns NaN with a warning for signals with missing values, and
+  no longer reseeds numpy's global random number generator (it called ``np.random.seed(30)``);
+  ACE values are unchanged. It is 5 to 25 times faster (e.g., 0.11 s instead of 2.9 s for SCE with
+  16 channels of 20,000 samples): the coalitions are mapped to integers with a matrix product and
+  the synchrony of all the pairs of a channel is computed at once. Its docstring describes the
+  computation and documents that arrays are taken as (n_channels, n_samples), unlike DataFrames.
+* ``entropy_power()`` raises a clear error for constant signals (instead of a ``LinAlgError`` from
+  the kernel density estimation) and for signals with missing values, and its docstring gives the
+  formula and its units and no longer warns that the implementation is uncertain.
+* ``entropy_spectral()`` accepts numpy integers as ``bins`` (e.g., ``np.int64(10)``), which were
+  silently ignored (the spectrum was not binned, e.g., 0.751 instead of 0.592 for sinusoids at 5,
+  6 and 10 Hz with 10 bins), and raises an error when ``bins`` is not an integer of at least 2
+  (``bins=1`` returned NaN, and floats were ignored). It returns NaN with a warning for constant
+  signals, signals with missing values, and when the spectrum has fewer than 2 frequency bins (it
+  returned -0.0 or NaN, without a warning, for signals of fewer than 10 samples). Its docstring
+  gives the normalization by the logarithm of the number of frequency bins, describes the binning
+  and the default frequency range, and cites Inouye et al. (1991).
+* ``entropy_svd()`` (and the ``SVDEn`` index of ``complexity()``) returns 0 instead of NaN when a
+  singular value is null (a rank-deficient embedding, e.g., ``[1, 0, 0, 0, 0]`` with
+  ``dimension=2``), and NaN with a warning (instead of a ``LinAlgError``) for signals with missing
+  values. Its docstring gives the formula (Roberts et al., 1999), the range of the values
+  (0 to log2(``dimension``) bits), notes that it depends on the mean of the signal, and describes
+  the returned value correctly (it was described as the singular value decomposition).
+* ``entropy_distribution()`` is about 4 times faster (the Chebyshev distances are computed with
+  ``scipy.spatial.distance.pdist()``); values are unchanged. The ``"Doane"`` method of ``bins``,
+  as documented, works (only ``"doanes"`` was recognized). It returns NaN with a warning for
+  signals with missing values (instead of a ``ValueError`` from the histogram) and for signals too
+  short to give 2 distances (instead of NaN without a warning or an ``OverflowError``), and raises
+  an error for fewer than 2 bins. A non-integer number of bins is now truncated for the
+  normalization as it was for the histogram. Its docstring describes the method (Li et al., 2015).
+* ``entropy_ofentropy()`` is up to a few hundred times faster (e.g., 3 ms instead of 1.4 s for
+  100,000 samples): the samples of all the windows are counted at once. Values are unchanged.
+  It has an explicit ``base`` argument (the other keyword arguments, which were ignored, now raise
+  an error), returns NaN with a warning (instead of 0) for signals with missing values or shorter
+  than ``scale``, and raises an error when ``scale`` or ``bins`` is below 1. Its docstring
+  describes the steps of Hsu et al. (2017).
+* ``entropy_quadratic()``'s docstring explains the ln(2r) correction of SampEn and the units of QSE,
+  and gives the right year of Lake (2006) and the reference of Lake & Moorman (2011).
+* ``entropy_angular()`` is 20 to 30 times faster for 1,000 to 4,000 samples (e.g., 0.08 s instead
+  of 1.9 s for 2,000 samples) and uses much less memory: the cosines are computed once per pair
+  with ``scipy.spatial.distance.pdist()``, instead of from two full matrices of all the pairs, and
+  the density is estimated from the binned distances instead of a Gaussian for each distance and
+  bin. It returns NaN with a warning for constant signals, signals with missing values, and
+  signals too short to give two distinct distances (it returned NaN silently, or with a
+  ``RuntimeWarning``), and leaves out the embedded vectors at the origin, whose angle is undefined
+  (a single one made AngEn NaN). Its ``info`` now includes the ``Dimension`` and the ``Delay``,
+  and its docstring describes each step, gives the formula and cites Botev et al. (2010).
+* ``entropy_grid()`` returns NaN with a warning for constant signals and signals with missing
+  values (they raised a ``ValueError`` about a non-finite range), and raises a clear error when
+  ``k`` or ``delay`` is not a positive integer or the signal is not longer than ``delay`` (a
+  ``delay`` of 0 raised an unrelated ``ValueError``, and a one-sample signal returned 0). With
+  ``show=True``, the number of points in each grid is now drawn in the same orientation as the
+  Poincaré plot (it was mirrored) and with axis labels (they were set on the Poincaré plot a
+  second time). Its docstring describes the normalization, the *k* × *k* grids and the range of
+  GridEn (0 to log(k²)), calls GDR a proportion (not a percentage), and its examples no longer
+  name the result ``phasen``.
+* ``complexity_lyapunov(method="eckmann1986")`` works with the default ``dimension=2`` and with
+  ``dimension=3`` (it raised "slice step cannot be zero"): the default ``matrix_dim`` is now
+  ``min(dimension, 4)`` (it was always 4), and ``matrix_dim`` and ``min_neighbors`` are now passed
+  on (they were silently ignored). An error explains the valid values of ``matrix_dim`` when
+  ``dimension - 1`` is not a multiple of ``matrix_dim - 1`` (e.g., ``dimension=5`` failed with a
+  shape error). It also accepts lists and pandas Series (they raised a ``TypeError`` or a
+  ``KeyError``). The exponent is -inf instead of +inf when all the diagonal elements of R are 0.
+* ``complexity_lyapunov()`` is much faster and uses much less memory for long signals: the nearest
+  neighbours are found with a KDTree instead of a full distance matrix (8 × N² bytes, e.g., 3.2 GB
+  for 20,000 samples). E.g., 0.02 s instead of 1.2 s for 10,000 samples with
+  ``"rosenstein1993"``, and 0.6 s instead of 3.3 s with ``"eckmann1986"``. The neighbours are the
+  same.
+* ``complexity_lyapunov()`` returns NaN (with a warning) for constant signals and signals with
+  missing values (they raised "cannot convert float NaN to integer"), raises an error explaining
+  the minimum length when the signal is too short to find neighbours outside of the separation
+  window (it used to warn and return a value, or fail with "attempt to get argmin of an empty
+  sequence"), and accepts numpy integers as ``separation`` (they raised an ``AssertionError``).
+* ``complexity_lyapunov()`` now raises an error for unknown arguments (``"rosenstein1993"``
+  silently ignored them), and ignores the arguments of the other methods (e.g.,
+  ``len_trajectory`` with ``"makowski"`` raised a ``TypeError``). ``show`` is an explicit argument.
+* ``complexity_lyapunov(method="rosenstein1993")`` now fits the line at the steps of the divergence
+  curve where it is defined (they were renumbered after leaving out the steps where all the
+  distances were 0), and its ``info`` contains the whole curve and the ``"Intercept"`` of the line
+  (also for ``"makowski"``).
+* ``complexity_lyapunov()``'s docstring now describes the algorithms with their formulas, the
+  units of the exponents (per sample, in natural logarithm), the dependence of Rosenstein's method
+  on ``len_trajectory`` (e.g., 0.35 with the default of 20 samples instead of 0.69 with 8 for the
+  logistic map, whose LLE is ln(2)), the ``max_length`` argument of ``"makowski"``, the
+  ``separation`` argument, and the spurious exponents of Eckmann's method when ``matrix_dim`` is
+  larger than the dimension of the attractor (Sauer et al., 1998). It no longer claims that the
+  ``**kwargs`` are passed to ``signal_psd()``, nor that Eckmann's method does not work.
+* ``fishershannon_information()``'s docstring gives the formula of the Fisher-Shannon complexity
+  and its expected values, notes that its ``**kwargs`` are passed to ``density()``, and no longer
+  warns that the implementation is uncertain; its example no longer passes a ``method`` argument
+  that was ignored.
+* ``entropy_range()`` is 4 to 6 times faster (the range distances are computed by blocks with
+  array operations instead of a loop over the vectors), returns NaN with a warning for constant
+  signals (whose range distances are all undefined) and for signals with missing values (instead
+  of 0 or -0), and raises an error for ``corrected=True`` without ``approximate=True`` (it was
+  ignored). ``corrected`` is now an explicit argument, and other arguments raise an error instead
+  of being ignored. Its docstring gives the range distance and the definitions of RangEn (A) and
+  (B), and explains why RangEn (A) is often undefined.
+* ``entropy_cosinesimilarity()`` is 3 to 4 times faster and uses much less memory (the angles are
+  computed by blocks of pairs instead of with several N x N matrices), raises an error when
+  ``dimension`` is below 2, and returns NaN with a warning for signals with missing values
+  (instead of 0). Its docstring gives the formulas and the tolerances recommended by
+  Chanwimalueang & Mandic (2017), and no longer lists a ``**kwargs`` argument that does not exist.
+* ``entropy_kolmogorov()`` is about 7 times faster and uses half the memory (the distances are
+  computed once per pair with ``scipy.spatial.distance.pdist()``), and returns NaN with a warning
+  for signals with missing values. Its docstring describes the estimator (Grassberger & Procaccia,
+  1983), its units (nats per sample) and its convergence.
+* ``entropy_fuzzy()`` (and ``complexity_fuzzyen()``) raises an error for ``corrected=True``
+  without ``approximate=True`` (it was ignored). Its docstring now describes FuzzyEn (Chen et al.,
+  2007) and FuzzyApEn: the removal of the baseline of each vector, the membership function
+  exp(-d / r) (Chen et al., 2007, used exp(-d^2 / r)) and the treatment of the self-matches, cites
+  Chen et al. (2007, 2009) and Xie et al. (2010), and its example is rendered (the directive was
+  missing a space). Values (and therefore the ``HRV_FuzzyEn`` index of ``hrv_nonlinear()``) are
+  unchanged.
+* ``entropy_rate()`` accepts a list of history lengths with ``show=True`` (it raised a
+  ``TypeError``) and sequences of any symbols (e.g., letters, with ``symbolize=None``), raises an
+  error for fewer than two history lengths (the slope was fitted on a single point), and returns
+  NaN with a warning for signals with missing values (they were symbolized as 0). Its docstring
+  describes the block entropies (in bits), the excess entropy and the returned values, and cites
+  Crutchfield & Feldman (2003); the plot shows the excess entropy at k = 0.
+* ``entropy_angular()``, ``entropy_distribution()``, ``entropy_cosinesimilarity()``,
+  ``entropy_kolmogorov()`` and ``entropy_coalition()`` are now listed in the documentation.
 * ``expspace()`` now spans the full range and no longer depends on the units of the values.
 * ``fractal_correlation()`` now accepts a list of radiuses and returns 0 for constant signals.
 * ``signal_resample()`` no longer sets the last sample to 0 for some signal lengths.

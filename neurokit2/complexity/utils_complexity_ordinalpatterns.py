@@ -8,7 +8,8 @@ def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksor
 
     The seminal work by Bandt and Pompe (2002) introduced a symbolization approach to obtain a
     sequence of ordinal patterns (permutations) from continuous data. It is used in
-    :func:`permutation entropy <entropy_permutation>` and its different variants.
+    :func:`permutation entropy <entropy_permutation>` and its different variants. Equal values
+    within a vector (ties) are ranked in their order of appearance, as in Bandt and Pompe (2002).
 
     Parameters
     ----------
@@ -70,7 +71,9 @@ def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksor
     if algorithm == "bubblesort":
         info["Permutations"] = _bubblesort(info["Embedded"])
     else:
-        info["Permutations"] = info["Embedded"].argsort(kind="quicksort")
+        # A stable sort ranks the ties in their order of appearance (numpy's "quicksort" does not
+        # guarantee it, and its order of the ties can depend on the CPU)
+        info["Permutations"] = info["Embedded"].argsort(kind="stable")
 
     # Count and get unique patterns
     patterns, info["Uniques"], info["Frequencies"] = np.unique(

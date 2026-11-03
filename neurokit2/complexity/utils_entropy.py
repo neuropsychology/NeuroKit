@@ -56,7 +56,7 @@ def _phi(
 ):
     """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`."""
 
-    # Embed signal at m and m+1
+    # Embed signal at m and m+1 (passing on the exponent `n` of the fuzzy membership function)
     embedded1, count1, kdtree1 = _get_count(
         signal,
         delay,
@@ -66,6 +66,7 @@ def _phi(
         approximate=approximate,
         fuzzy=fuzzy,
         kdtree=kdtree1,
+        n=kwargs.get("n", 1),
     )
 
     embedded2, count2, kdtree2 = _get_count(
@@ -77,6 +78,7 @@ def _phi(
         approximate=True,
         fuzzy=fuzzy,
         kdtree=kdtree2,
+        n=kwargs.get("n", 1),
     )
 
     # Initialize phi
@@ -175,8 +177,9 @@ def _get_count(
             valid = np.where(denominator != 0)  # To prevent division by 0
             return np.divide(numerator[valid], denominator[valid])
 
-        # Count for each row
-        count = np.array([np.sum(distrange(embedded, embedded[i]) < tolerance) for i in range(len(embedded))])
+        # Count for each row (the range distance is undefined for identical vectors, so the vector
+        # itself is added, as it is counted in the other distances)
+        count = 1 + np.array([np.sum(distrange(embedded, embedded[i]) <= tolerance) for i in range(len(embedded))])
 
     elif kdtree is None and distance == "chebyshev" and len(embedded) <= _DENSE_COUNT_MAX_N:
         # Short series: the dense distance matrix is faster than a KDTree (same counts)

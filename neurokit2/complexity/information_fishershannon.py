@@ -9,26 +9,33 @@ def fishershannon_information(signal, **kwargs):
 
     The :func:`Shannon Entropy Power <entropy_power>` is closely related to another index, the
     Fisher Information Measure (FIM). Their combination results in the Fisher-Shannon Information
-    index.
+    index, or Fisher-Shannon Complexity (Vignat & Bercher, 2003):
 
-    .. warning::
+    .. math::
 
-        We are not sure at all about the correct implementation of this function. Please consider
-        helping us by double-checking the code against the formulas in the references.
+        FSC = N_X \\cdot J_X, \\quad J_X = \\int \\frac{f'(x)^2}{f(x)} dx
+
+    where :math:`N_X` is the entropy power and :math:`J_X` the Fisher information of the density
+    *f* of the signal (estimated by :func:`density`). FSC does not depend on the units of the
+    signal and is at least 1, the value of a Gaussian distribution (Stam's inequality). The kernel
+    density estimate smooths the density, so that values for non-Gaussian distributions are
+    underestimated (and can be below 1 for distributions with sharp edges, such as uniform).
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     **kwargs
-        Other arguments to be passed to :func:`density_bandwidth`.
+        Other arguments to be passed to :func:`density`, such as ``bandwidth`` (see
+        :func:`density_bandwidth`).
 
     Returns
     -------
     fsi : float
         The computed FSI.
     info : dict
-        A dictionary containing additional information regarding the parameters used.
+        A dictionary containing additional information regarding the parameters used, such as the
+        Fisher information ``FI``.
 
     See Also
     --------
@@ -42,7 +49,7 @@ def fishershannon_information(signal, **kwargs):
 
       signal = nk.signal_simulate(duration=10, frequency=[10, 12], noise=0.1)
 
-      fsi, info = nk.fishershannon_information(signal, method=0.01)
+      fsi, info = nk.fishershannon_information(signal)
       fsi
 
 
@@ -59,7 +66,7 @@ def fishershannon_information(signal, **kwargs):
     powen, info = entropy_power(signal, **kwargs)
     x_range = info["Values"]
     fx = info["Density"]
-    gx = np.gradient(fx)
+    gx = np.gradient(fx, x_range)  # The derivative with respect to x, not to the index
 
     # Fisher
     fi = gx**2 / fx

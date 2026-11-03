@@ -115,6 +115,10 @@ Entropy
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_quadratic
 
+*entropy_kolmogorov()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_kolmogorov
+
 *entropy_cumulativeresidual()*
 """""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_cumulativeresidual
@@ -131,6 +135,10 @@ Entropy
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_kl
 
+*entropy_distribution()*
+""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_distribution
+
 *entropy_spectral()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
@@ -142,6 +150,10 @@ Entropy
 *entropy_grid()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_grid
+
+*entropy_angular()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_angular
 
 *entropy_attention()*
 """""""""""""""""""""""
@@ -178,6 +190,10 @@ Entropy
 *entropy_range()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_range
+
+*entropy_cosinesimilarity()*
+""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_cosinesimilarity
 
 *entropy_fuzzy()*
 """"""""""""""""""""
@@ -271,6 +287,10 @@ Joint/Multivariate
 *entropy_shannon_joint()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_shannon_joint
+
+*entropy_coalition()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_coalition
 
 
 .. *Other*

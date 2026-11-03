@@ -1,8 +1,10 @@
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import find_knee
+from ..misc import NeuroKitWarning, find_knee
 from .entropy_shannon import entropy_shannon
 from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_symbolize import complexity_symbolize
@@ -16,13 +18,24 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     conditioned on the *k*-histories.
 
     It quantifies how much uncertainty or randomness the process produces at each new time step,
-    given knowledge about the past states of the process. The entropy rate is estimated as the
-    slope of the linear fit between the history length *k* and the joint Shannon entropies. The
-    entropy at k = 1 is called **Excess Entropy** (ExEn).
+    given knowledge about the past states of the process. For a stationary process, the
+    :func:`joint Shannon entropy <entropy_shannon>` (in bits) of the words of *k* successive
+    symbols (the block entropy :math:`H(k)`) grows linearly with *k* for large *k*,
+    :math:`H(k) \\approx E + h \\cdot k` (Crutchfield & Feldman, 2003). The entropy rate *h*
+    is estimated as the slope of the linear fit between the history length *k* and the block
+    entropies, and the intercept of this line is the **Excess Entropy** (ExEn) *E*, the
+    information that the past of the signal shares with its future (e.g., 0 for a random sequence,
+    and :math:`\\log_2(p)` for a periodic sequence of period *p*).
 
     We adapted the algorithm to include a knee-point detection (beyond which the self-Entropy
     reaches a plateau), and if it exists, we additionally re-compute the Entropy Rate up until that
-    point. This **Maximum Entropy Rate** (MaxRatEn) can be retrieved from the dictionary.
+    point. This **Maximum Entropy Rate** (MaxRatEn) can be retrieved from the dictionary. Indeed,
+    the block entropy cannot exceed the logarithm of the number of words (:math:`\\log_2(N - k + 1)`),
+    so that the block entropies of long histories are underestimated for short signals (they
+    saturate), which lowers the slope.
+
+    Note that the entropy rate can also be estimated with the normalized :func:`Lempel-Ziv
+    complexity <complexity_lempelziv>` (e.g., Mediano et al., 2020).
 
     Parameters
     ----------
@@ -30,7 +43,7 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
         A :func:`symbolic <complexity_symbolize>` sequence in the form of a vector of values.
     kmax : int
         The max history length to consider. If an integer is passed, will generate a range from 1
-        to kmax.
+        to kmax. A list of history lengths (at least two) can also be passed.
     symbolize : str
         Method to convert a continuous signal input into a symbolic (discrete) signal. By default,
         assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in
@@ -38,9 +51,20 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     show : bool
         Plot the Entropy Rate line.
 
+    Returns
+    -------
+    raten : float
+        The entropy rate (in bits per symbol).
+    info : dict
+        A dictionary containing the block entropies (``"Entropy"``) for each history length
+        (``"k"``), the ``"Excess_Entropy"``, the ``"MaxRatEn"`` and the index of the ``"Knee"``
+        point (in ``"k"``). ``"MaxRatEn"`` is the entropy rate fitted on the history lengths before
+        the knee point (NaN if there is only one), and equal to the entropy rate if no knee point
+        is found.
+
     See Also
     --------
-    entropy_shannon
+    entropy_shannon, complexity_lempelziv
 
     Examples
     ----------
@@ -86,6 +110,8 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
 
     References
     ----------
+    * Crutchfield, J. P., & Feldman, D. P. (2003). Regularities unseen, randomness observed:
+      Levels of entropy convergence. Chaos, 13(1), 25-54.
     * Mediano, P. A., Rosas, F. E., Timmermann, C., Roseman, L., Nutt, D. J., Feilding, A., ... &
       Carhart-Harris, R. L. (2020). Effects of external stimulation on psychedelic state
       neurodynamics. Biorxiv.
@@ -95,17 +121,32 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
-    # Force to array
-    if not isinstance(signal, np.ndarray):
-        signal = np.array(signal)
-
-    # Make discrete
-    if not np.isscalar(signal):
-        signal = complexity_symbolize(signal, method=symbolize)
-
     # Convert into range if integer
     if np.isscalar(kmax):
         kmax = np.arange(1, kmax + 1)
+    kmax = np.asarray(kmax)
+    if len(kmax) < 2:
+        raise ValueError("At least two history lengths are needed to estimate the entropy rate (kmax >= 2).")
+
+    # Force to array (a string is a sequence of characters)
+    if isinstance(signal, str):
+        signal = list(signal)
+    signal = np.asarray(signal)
+
+    if np.any(pd.isna(signal)):
+        warn("The signal contains missing values (NaN): RatEn is returned as NaN.", category=NeuroKitWarning)
+        return np.nan, {
+            "Entropy": np.full(len(kmax), np.nan),
+            "k": kmax,
+            "Excess_Entropy": np.nan,
+            "MaxRatEn": np.nan,
+            "Knee": np.nan,
+        }
+
+    # Make discrete
+    signal = complexity_symbolize(signal, method=symbolize)
+    # Integer codes of the symbols (the block entropies only depend on their identity)
+    signal = np.unique(signal, return_inverse=True)[1]
 
     # Compute self-entropy
     info = {
@@ -113,11 +154,11 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
         "k": kmax,
     }
 
-    # Traditional Entropy Rate (on all the values)
+    # Traditional Entropy Rate (on all the values): H(k) = E + h * k
     raten, intercept1 = np.polyfit(info["k"], info["Entropy"], 1)
 
-    # Excess Entropy
-    info["Excess_Entropy"] = info["Entropy"][0]
+    # Excess Entropy: the intercept of the line (Crutchfield & Feldman, 2003)
+    info["Excess_Entropy"] = intercept1
 
     # Max Entropy Rate
     # Detect knee
@@ -128,6 +169,9 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
 
     if knee == len(info["k"]) - 1:
         info["MaxRatEn"], intercept2 = raten, np.nan
+    elif knee < 2:
+        # A single history length before the knee: the slope cannot be estimated
+        info["MaxRatEn"], intercept2 = np.nan, np.nan
     else:
         info["MaxRatEn"], intercept2 = np.polyfit(info["k"][0:knee], info["Entropy"][0:knee], 1)
 
@@ -138,16 +182,17 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     if show:
         plt.figure(figsize=(6, 6))
         plt.plot(info["k"], info["Entropy"], "o-", color="black")
-        y = raten * info["k"] + intercept1
+        k = np.append(0, info["k"])
+        y = raten * k + intercept1
         plt.plot(
-            info["k"],
+            k,
             y,
             color="red",
             label=f"Entropy Rate = {raten:.2f}",
         )
         plt.plot(
-            (np.min(info["k"]), np.min(info["k"])),
-            (0, info["Entropy"][0]),
+            (0, 0),
+            (0, info["Excess_Entropy"]),
             "--",
             color="blue",
             label=f"Excess Entropy = {info['Excess_Entropy']:.2f}",

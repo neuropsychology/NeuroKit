@@ -8,6 +8,7 @@ from .entropy_approximate import entropy_approximate
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_increment import entropy_increment
 from .entropy_permutation import entropy_permutation
+from .entropy_range import _entropy_range_tolerance
 from .entropy_sample import entropy_sample
 from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
@@ -326,13 +327,13 @@ def entropy_multiscale(
         "Coarsegraining": coarsegraining,
         "Dimension": dimension,
         "Scale": _get_scales(signal, scale=scale),
-        "Tolerance": complexity_tolerance(
-            signal,
-            method=tolerance,
-            dimension=dimension,
-            show=False,
-        )[0],
     }
+    if algorithm is entropy_cosinesimilarity:
+        # The angular distance is normalized (between 0 and 1): its tolerance does not depend on the
+        # amplitude of the signal ("sd" gives 0.2)
+        info["Tolerance"] = _entropy_range_tolerance(np.asarray(signal, dtype=float), tolerance, 1, dimension)
+    else:
+        info["Tolerance"] = complexity_tolerance(signal, method=tolerance, dimension=dimension, show=False)[0]
 
     # Compute entropy for each coarsegrained segment
     info["Value"] = np.array(
