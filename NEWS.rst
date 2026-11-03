@@ -38,6 +38,11 @@ Changes in Results
   difference, so it is not counted as a sign change. Before, a flat segment within a decrease
   counted as two sign changes. This only affects signals with repeated consecutive values (e.g.,
   quantized or low-resolution recordings).
+* ``fractal_dfa()`` with ``overlap=True`` (the default, and therefore the ``DFA`` and ``MFDFA``
+  indices of ``hrv_nonlinear()`` and ``rsp_rrv()``) now includes the last window that fits in the
+  signal. Before, the window starting at ``len(signal) - window`` was left out, so the last
+  samples were never used (e.g., the last 25 of 2,000 samples with windows of 50). The effect on
+  alpha is small (up to about 0.01) but systematic. Results with ``overlap=False`` are unchanged.
 
 New Features
 +++++++++++++
@@ -51,6 +56,12 @@ Fixes
 * ``fractal_katz()``'s docstring now describes the version computed (absolute differences between
   successive values, ignoring time) and no longer claims a 1-1.5 range: KFD is not bounded by 2 and
   grows with the length of the signal for noise.
+* ``fractal_dfa()`` is 5 to 10 times faster: the polynomial trends of all the windows of a scale
+  are computed with one matrix product instead of a loop over the windows.
+* ``fractal_dfa()``'s docstring now describes alpha correctly (0.5 for white noise, below 0.5 for
+  anti-correlations, 1.5 for a Brownian motion, equal to the Hurst exponent only for stationary
+  signals), gives the right minimum of the default scales (10 samples, not 4), and cites Peng et
+  al. (1994).
 * ``fractal_petrosian()``'s docstring now gives the right default for ``symbolize`` (``"C"``, the
   sign of consecutive differences, not the mean).
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the

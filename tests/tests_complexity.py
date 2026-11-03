@@ -35,7 +35,8 @@ def test_complexity_sanity():
     # Fractal
     fractal_dfa, parameters = nk.fractal_dfa(signal, scale=np.array([4, 8, 12, 20]))
     assert parameters["Fluctuations"].shape == (4, 1)
-    assert np.allclose(fractal_dfa, 2.10090484, atol=0.0001)
+    # Regression value (updated when the last overlapping window started being included)
+    assert np.allclose(fractal_dfa, 2.10277697, atol=0.0001)
 
     _, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
     # TODO: why this gives 70 or 71 depending on the machine????
@@ -824,6 +825,37 @@ def test_fractal_petrosian():
     rng = np.random.default_rng(42)
     x = rng.normal(size=1000)
     assert np.array_equal(nk.complexity_symbolize(x, method="C"), np.signbit(np.diff(x)).astype(int))
+
+
+def test_fractal_dfa_windows():
+    def dfa_reference(signal, scale, overlap=True, order=1):
+        # Peng et al. (1994), with every window that fits in the signal
+        profile = np.cumsum(signal - np.mean(signal))
+        n = len(profile)
+        fluctuations = []
+        for window in scale:
+            x = np.arange(window)
+            variances = []
+            for start in range(0, n - window + 1, window // 2 if overlap else window):
+                segment = profile[start : start + window]
+                variances.append(np.var(segment - np.polyval(np.polyfit(x, segment, order), x)))
+            fluctuations.append(np.sqrt(np.mean(variances)))
+        return np.polyfit(np.log2(scale), np.log2(fluctuations), 1)[0]
+
+    rng = np.random.default_rng(42)
+    for signal in [rng.normal(size=2000), np.cumsum(rng.normal(size=1537))]:
+        scale = np.array([10, 14, 20, 28, 40, 50])
+        for overlap in [True, False]:
+            for order in [1, 2]:
+                assert np.allclose(
+                    nk.fractal_dfa(signal, scale=scale, overlap=overlap, order=order)[0],
+                    dfa_reference(signal, scale, overlap=overlap, order=order),
+                )
+
+    # Known exponents: 0.5 for white noise, 1.5 for a Brownian motion
+    noise = rng.normal(size=10000)
+    assert np.allclose(nk.fractal_dfa(noise)[0], 0.5, atol=0.1)
+    assert np.allclose(nk.fractal_dfa(np.cumsum(noise))[0], 1.5, atol=0.1)
 
 
 def test_entropy_spectral_sampling_rate():

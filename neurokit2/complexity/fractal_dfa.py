@@ -31,10 +31,12 @@ def fractal_dfa(
     corresponds to MFDFA with *q = 2*, and its output is actually an estimation of the
     **Hurst exponent** (:math:`h_{(2)}`).
 
-    The Hurst exponent is the measure of long range autocorrelation of a signal, and
-    :math:`h_{(2)} > 0.5` suggests the presence of long range correlation, while
-    :math:`h_{(2)} < 0.5`suggests short range correlations. If :math:`h_{(2)} = 0.5`, it indicates
-    uncorrelated indiscriminative fluctuations, i.e. a Brownian motion.
+    For stationary signals, :math:`\\alpha` estimates the Hurst exponent, a measure of long-range
+    autocorrelation: :math:`\\alpha = 0.5` for uncorrelated fluctuations (white noise),
+    :math:`0.5 < \\alpha < 1` for long-range correlations (persistence), :math:`\\alpha < 0.5` for
+    anti-correlations (anti-persistence), and :math:`\\alpha = 1` for 1/f (pink) noise. Values
+    above 1 indicate non-stationary signals: :math:`\\alpha = 1.5` for a Brownian motion (a random
+    walk), and :math:`\\alpha = H + 1` for a fractional Brownian motion of Hurst exponent *H*.
 
     .. figure:: ../img/douglas2022a.png
        :alt: Illustration of DFA (Douglas et al., 2022).
@@ -86,7 +88,7 @@ def fractal_dfa(
         A list containing the lengths of the windows (number of data points in each subseries) that
         the signal is divided into. Also referred to as Tau :math:`\\tau`. If ``"default"``, will
         set it to a logarithmic scale (so that each window scale has the same weight) with a
-        minimum of 4 and maximum of a tenth of the length (to have more than 10 windows to
+        minimum of 10 and maximum of a tenth of the length (to have more than 10 windows to
         calculate the average fluctuation).
     overlap : bool
         Defaults to ``True``, where the windows will have a 50% overlap with each other, otherwise
@@ -183,6 +185,8 @@ def fractal_dfa(
 
     References
     -----------
+    * Peng, C. K., Buldyrev, S. V., Havlin, S., Simons, M., Stanley, H. E., & Goldberger, A. L.
+      (1994). Mosaic organization of DNA nucleotides. Physical Review E, 49(2), 1685-1689.
     * Faini, A., Parati, G., & Castiglioni, P. (2021). Multiscale assessment of the degree of
       multifractality for physiological time series. Philosophical Transactions of the Royal
       Society A, 379(2212), 20200254.
@@ -364,31 +368,16 @@ def _slopes(scale, fluctuations, q):
 
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
-    # This function reshapes the segments from a one-dimensional array to a
-    # matrix for faster polynomail fittings. 'Overlap' reshapes into several
-    # overlapping partitions of the data
-
-    # TODO: see whether this step could be integrated within complexity_coarsegraining
-
-    if overlap:
-        segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
-    else:
-        segments = signal[: n - (n % window)]
-        segments = segments.reshape((signal.shape[0] // window, window))
-
-    return segments
+    # Windows starting every half window (or every window), up to the last one that fits
+    starts = np.arange(0, n - window + 1, window // 2 if overlap else window)
+    return np.lib.stride_tricks.sliding_window_view(signal, window)[starts]
 
 
 def _fractal_dfa_trends(segments, window, order=1):
-    # TODO: can we rely on signal_detrend?
-    x = np.arange(window)
-
-    coefs = np.polyfit(x[:window], segments.T, order).T
-
-    # TODO: Could this be optimized? Something like np.polyval(x[:window], coefs)
-    trends = np.array([np.polyval(coefs[j], x) for j in np.arange(len(segments))])
-
-    return trends
+    # Least-squares polynomial trends of all the segments at once: their projection on the
+    # polynomials of the time axis (scaled to [-1, 1] for numerical conditioning)
+    x = np.vander(np.linspace(-1, 1, window), order + 1)
+    return segments @ (x @ np.linalg.pinv(x))
 
 
 def _fractal_dfa_fluctuation(segments, trends, q=2):
