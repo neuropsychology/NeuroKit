@@ -1163,3 +1163,50 @@ def test_entropy_increment():
 
     with pytest.raises(ValueError):
         nk.entropy_increment(signal, dimension=1)
+
+
+def test_entropy_phase():
+    def phasen_reference(signal, k):
+        # Rohila & Sharma (2019): sum of the angles (in [0, 2pi)) of the SODP points in each sector
+        sums = np.zeros(k)
+        for i in range(len(signal) - 2):
+            x, y = signal[i + 1] - signal[i], signal[i + 2] - signal[i + 1]
+            angle = np.arctan2(y, x)
+            if angle < 0:
+                angle += 2 * np.pi
+            sums[min(int(angle // (2 * np.pi / k)), k - 1)] += angle
+        p = sums[sums > 0] / np.sum(sums)
+        return -np.sum(p * np.log(p)) / np.log(k)
+
+    rng = np.random.default_rng(42)
+    # The rounded signal has points on the axes of the SODP (e.g., RR intervals in ms)
+    for signal in [rng.normal(size=1000), np.round(rng.normal(800, 20, size=1000))]:
+        for k in [4, 7, 8]:
+            phasen = nk.entropy_phase(signal, k=k)[0]
+            assert np.allclose(phasen, phasen_reference(signal, k))
+            assert 0 < phasen <= 1
+            # The normalized value does not depend on the logarithmic base
+            assert np.allclose(nk.entropy_phase(signal, k=k, base=np.e)[0], phasen)
+
+    # Lists and Series (with any index) are accepted
+    assert np.allclose(nk.entropy_phase(list(signal))[0], nk.entropy_phase(signal)[0])
+    assert np.allclose(nk.entropy_phase(pd.Series(signal, index=np.arange(5, 1005)))[0], nk.entropy_phase(signal)[0])
+
+
+def test_entropy_differential():
+    rng = np.random.default_rng(42)
+    signal = rng.normal(size=10000)
+
+    # Standard normal distribution: 0.5 * log2(2 * pi * e) bits
+    assert np.allclose(nk.entropy_differential(signal)[0], 0.5 * np.log2(2 * np.pi * np.e), atol=0.05)
+    # Scaling the signal by a adds log(a)
+    assert np.allclose(nk.entropy_differential(10 * signal)[0], nk.entropy_differential(signal)[0] + np.log2(10))
+
+    # The default estimator depends on the length of the signal, as in scipy
+    assert nk.entropy_differential(signal)[0] == nk.entropy_differential(signal, method="vasicek")[0]
+    short = signal[:500]
+    assert nk.entropy_differential(short)[0] == nk.entropy_differential(short, method="ebrahimi")[0]
+    assert nk.entropy_differential(pd.Series(short, index=np.arange(3, 503)))[0] == nk.entropy_differential(short)[0]
+
+    with pytest.raises(ValueError):
+        nk.entropy_differential("ABBA")

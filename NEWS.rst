@@ -91,6 +91,15 @@ Changes in Results
   4.06 instead of 3.86 bits for white noise with ``dimension=3`` and ``q=4``), the worked example
   of the paper now gives its 3 bits (instead of 2.75), and ``q=0`` gives the entropy of the signs
   of the increments, as described in the paper, instead of always 0.
+* ``entropy_phase()`` is now between 0 and 1, as defined by Rohila & Sharma (2019): the entropy in
+  bits was divided by the natural logarithm of ``k``, which made every value 1.4427 (1 / ln(2))
+  times too large (e.g., 1.166 instead of 0.808 for white noise with ``k=4``). The points on the
+  axes of the second order difference plot (e.g., two equal successive RR intervals in ms) and on
+  the boundaries between sectors are now counted; they were left out of all the sectors.
+* ``entropy_differential()`` now uses the default estimator of ``scipy.stats.differential_entropy()``
+  (``method="auto"``), instead of always ``"vasicek"``, which is more biased for short signals
+  (e.g., -0.13 instead of -0.04 bits on average for 100 samples of a normal distribution). Results
+  are unchanged for more than 1000 samples.
 
 New Features
 +++++++++++++
@@ -165,6 +174,12 @@ Fixes
 * ``entropy_increment()`` is up to 50 times faster (the words are counted with ``np.unique()``),
   raises an error when ``dimension`` is below 2 (instead of returning NaN), and its docstring
   describes the words and the normalization by ``dimension - 1``.
+* ``entropy_phase()`` now accepts lists and pandas Series: a Series returned NaN (its differences
+  were aligned on the index) and a list raised a ``TypeError``. With ``show=True``, the lines of
+  the sectors are drawn once.
+* ``entropy_differential()`` has an explicit ``method`` argument, now documented, works on arrays
+  instead of converting them to lists, raises an error for strings (instead of returning NaN), and
+  its docstring notes that it depends on the units of the signal.
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.
