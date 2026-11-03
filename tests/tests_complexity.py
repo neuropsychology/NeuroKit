@@ -1193,6 +1193,61 @@ def test_entropy_phase():
     assert np.allclose(nk.entropy_phase(pd.Series(signal, index=np.arange(5, 1005)))[0], nk.entropy_phase(signal)[0])
 
 
+def test_entropy_attention():
+    import scipy.signal
+
+    def peaks_reference(x):
+        # PkFind of EntropyHub: strict local maxima, and the middle (rounded down) of flat ones
+        peaks = []
+        for n in range(1, len(x) - 1):
+            if x[n - 1] < x[n] > x[n + 1]:
+                peaks.append(n)
+            elif x[n - 1] < x[n] == x[n + 1]:
+                k = 1
+                while (n + k) < len(x) - 1 and x[n] == x[n + k]:
+                    k += 1
+                if x[n] > x[n + k]:
+                    peaks.append(n + (k - 1) // 2)
+        return np.array(peaks)
+
+    def atten_reference(xmax, xmin, base=2):
+        def shannon(intervals):
+            p = np.unique(intervals, return_counts=True)[1] / len(intervals)
+            return -np.sum(p * np.log(p)) / np.log(base)
+
+        # Interval from each maximum (minimum) to the first minimum (maximum) after it
+        maxmin = [next(j for j in xmin if j > i) - i for i in xmax if i < xmin[-1]]
+        minmax = [next(j for j in xmax if j > i) - i for i in xmin if i < xmax[-1]]
+        return np.mean([shannon(np.diff(xmax)), shannon(np.diff(xmin)), shannon(maxmin), shannon(minmax)])
+
+    rng = np.random.default_rng(42)
+    signal = nk.signal_simulate(duration=2, frequency=[5, 12], noise=0.3, random_state=42)
+    for x in [signal, np.round(signal * 4) / 4]:  # with and without plateaus
+        xmax, xmin = peaks_reference(x), peaks_reference(-x)
+        atten = nk.entropy_attention(x)[0]
+        assert np.allclose(atten, atten_reference(xmax, xmin))
+        assert np.allclose(nk.entropy_attention(x, base=np.e)[0], atten * np.log(2))
+
+    # With a tuned peak detection, the maxima and minima no longer alternate
+    for kwargs in [{"distance": 5}, {"height": 0.2}]:
+        xmax = scipy.signal.find_peaks(signal, **kwargs)[0]
+        xmin = scipy.signal.find_peaks(-signal, **kwargs)[0]
+        assert np.allclose(nk.entropy_attention(signal, **kwargs)[0], atten_reference(xmax, xmin))
+
+    # Lists and Series (with any index) are accepted
+    x = rng.normal(size=200)
+    atten = nk.entropy_attention(x)[0]
+    assert np.allclose(nk.entropy_attention(list(x))[0], atten)
+    assert np.allclose(nk.entropy_attention(pd.Series(x, index=np.arange(5, 205)), show=True)[0], atten)
+    plt.close("all")
+
+    # NaN (not 0) when a type of interval is missing
+    with pytest.warns(nk.misc.NeuroKitWarning, match="Not enough"):
+        atten, info = nk.entropy_attention([0, 1, 0, 1, 0])
+    assert np.isnan(atten) and np.isnan(info["AttEn_MinMin"])
+    assert nk.entropy_attention([0, 1, 0, 1, 0, 1, 0], silent=True)[0] == 0
+
+
 def test_entropy_differential():
     rng = np.random.default_rng(42)
     signal = rng.normal(size=10000)

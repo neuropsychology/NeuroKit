@@ -100,6 +100,17 @@ Changes in Results
   (``method="auto"``), instead of always ``"vasicek"``, which is more biased for short signals
   (e.g., -0.13 instead of -0.04 bits on average for 100 samples of a normal distribution). Results
   are unchanged for more than 1000 samples.
+* ``entropy_attention()`` (and the ``AttEn`` index of ``complexity()``) is now in bits by default,
+  like ``entropy_shannon()`` and the other Shannon-based entropies, so values are 1.4427
+  (1 / ln(2)) times larger (e.g., 1.657 instead of 1.149 for white noise); the new ``base``
+  argument gives the previous values with ``base=np.e``. With arguments for
+  ``scipy.signal.find_peaks()`` (e.g., ``distance`` or ``height``), which make the maxima and
+  minima no longer alternate, the MaxMin and MinMax intervals now go from each key pattern to the
+  next one of the other type. Before, every other interval between successive key patterns was
+  taken, which mixed in MaxMax and MinMin intervals (e.g., an AttEn of 3.01 bits, instead of 2.64,
+  for white noise with ``height=0.5``). AttEn and its sub-entropies are now NaN (with a warning)
+  when a type of interval is missing, e.g., with fewer than two maxima; they used to be 0, which
+  lowered the average.
 
 New Features
 +++++++++++++
@@ -180,6 +191,10 @@ Fixes
 * ``entropy_differential()`` has an explicit ``method`` argument, now documented, works on arrays
   instead of converting them to lists, raises an error for strings (instead of returning NaN), and
   its docstring notes that it depends on the units of the signal.
+* ``entropy_attention()`` now accepts lists (they raised a ``TypeError``) and pandas Series with
+  any index when ``show=True`` (they raised a ``KeyError``), and is up to 3 times faster for long
+  signals (the intervals are counted with ``np.bincount()`` instead of a histogram with one bin per
+  sample).
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.
