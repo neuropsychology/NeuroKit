@@ -14,6 +14,12 @@ Changes in Results
 
 * ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
 * ``expspace()`` returns different values when ``start`` is above 0.
+* ``entropy_approximate()`` (and ``entropy_fuzzy(approximate=True)``, ``entropy_range(approximate=True)``,
+  ``entropy_multiscale(method="MSApEn")`` and the ``complexity_tolerance(method="maxApEn")`` curve)
+  now returns the signed difference Phi(m) - Phi(m+1) as defined by Pincus (1991), instead of its
+  absolute value. It can therefore be slightly negative when the embedded vectors match only
+  themselves (small tolerance, high dimension or short signal), where the absolute value used to
+  make this degenerate estimate look like a small positive entropy.
 
 New Features
 +++++++++++++

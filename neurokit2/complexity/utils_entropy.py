@@ -19,7 +19,10 @@ def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
         **kwargs,
     )
 
-    return np.abs(np.subtract(phi[0], phi[1])), info
+    # Pincus (1991): ApEn = Phi^m - Phi^(m+1). Keep the sign: the difference is negative when
+    # the vectors match only themselves (self-match bias), which is a degenerate estimate
+    # that the absolute value would otherwise turn into a small positive value.
+    return phi[0] - phi[1], info
 
 
 # =============================================================================

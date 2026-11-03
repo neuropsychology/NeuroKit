@@ -720,6 +720,22 @@ def MultiscaleEntropy_mse(
     return ms_en
 
 
+def test_entropy_approximate_sign():
+    # Pincus (1991): ApEn = Phi(m) - Phi(m+1), signed. When no embedded vector has a neighbour
+    # other than itself, Phi(m) = -log(N - (m - 1) * delay) and Phi(m+1) = -log(N - m * delay),
+    # so ApEn = log((N - m * delay) / (N - (m - 1) * delay)) < 0 (self-match bias).
+    rng = np.random.default_rng(42)
+    signal = rng.normal(size=500)
+    n, m = len(signal), 5
+    apen = nk.entropy_approximate(signal, delay=1, dimension=m, tolerance=0.1)[0]
+    assert apen < 0
+    assert np.allclose(apen, np.log((n - m) / (n - m + 1)))
+
+    # Non-degenerate case stays positive and matches the reference implementation
+    apen = nk.entropy_approximate(signal, delay=1, dimension=2, tolerance=0.2)[0]
+    assert apen > 0
+
+
 def test_entropy_spectral_sampling_rate():
     signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 30], noise=0)
 
