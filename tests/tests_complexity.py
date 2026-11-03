@@ -1099,3 +1099,67 @@ def test_complexity_k_plateau():
     # Without 10 values after it, there is no plateau: the largest k_max is returned
     with pytest.warns(nk.misc.NeuroKitWarning, match="No plateau"):
         assert nk.complexity_k(signal, k_max=10)[0] == 10
+
+
+def test_entropy_bubble():
+    def bubble_reference(signal, dimension, alpha=2):
+        # Manis et al. (2017): Renyi entropy of the number of swaps of bubble sort, at m and m + 1
+        def renyi(m):
+            swaps = []
+            for embedded in nk.complexity_embedding(signal, dimension=m):
+                vector, n_swaps = list(embedded), 0
+                for i in range(m - 1):
+                    for j in range(m - i - 1):
+                        if vector[j] > vector[j + 1]:
+                            vector[j], vector[j + 1] = vector[j + 1], vector[j]
+                            n_swaps += 1
+                swaps.append(n_swaps)
+            p = np.unique(swaps, return_counts=True)[1] / len(swaps)
+            return np.log(np.sum(p**alpha)) / (1 - alpha)
+
+        return (renyi(dimension + 1) - renyi(dimension)) / np.log((dimension + 1) / (dimension - 1))
+
+    rng = np.random.default_rng(42)
+    signal = rng.normal(size=500)
+    for x in [signal, np.round(signal)]:  # with and without ties
+        for dimension in [2, 3, 6]:
+            assert np.allclose(nk.entropy_bubble(x, dimension=dimension)[0], bubble_reference(x, dimension))
+    assert np.allclose(nk.entropy_bubble(signal, alpha=3)[0], bubble_reference(signal, 3, alpha=3))
+
+    # The embedded vectors are not sorted in place
+    _, info = nk.complexity_ordinalpatterns(signal, algorithm="bubblesort")
+    assert np.array_equal(info["Embedded"], nk.complexity_embedding(signal, dimension=3))
+
+    with pytest.raises(ValueError):
+        nk.entropy_bubble(signal, dimension=1)
+
+
+def test_entropy_increment():
+    # Worked example of Liu et al. (2016): 8 unique words with m = 2 and R = 4, i.e., 3 bits
+    assert np.allclose(nk.entropy_increment([3, 3, 2, -8, -5, 4, 20, 10, 11, 8], dimension=2, q=4)[0], 3)
+
+    def incren_reference(signal, dimension, q):
+        # Each increment is mapped to two letters: its sign, and its size relative to the SD of its vector
+        words = []
+        for vector in nk.complexity_embedding(np.diff(signal), dimension=dimension):
+            sd = np.std(vector, ddof=1)
+            sizes = [0 if sd == 0 else min(q, np.floor(abs(v) * q / sd)) for v in vector]
+            words.append(list(np.sign(vector)) + sizes)
+        p = np.unique(words, axis=0, return_counts=True)[1] / len(words)
+        return -np.sum(p * np.log2(p)) / (dimension - 1)
+
+    rng = np.random.default_rng(42)
+    signal = rng.normal(size=500)
+    for dimension, q in [(2, 4), (3, 4), (3, 2), (4, 1)]:
+        assert np.allclose(nk.entropy_increment(signal, dimension=dimension, q=q)[0], incren_reference(signal, dimension, q))
+
+    # With q = 0, the words are the signs of the increments
+    signs = nk.complexity_embedding(np.sign(np.diff(signal)), dimension=3)
+    p = np.unique(signs, axis=0, return_counts=True)[1] / len(signs)
+    assert np.allclose(nk.entropy_increment(signal, dimension=3, q=0)[0], -np.sum(p * np.log2(p)) / 2)
+
+    # Constant increments give a single word
+    assert nk.entropy_increment(np.arange(20), dimension=3)[0] == 0
+
+    with pytest.raises(ValueError):
+        nk.entropy_increment(signal, dimension=1)
