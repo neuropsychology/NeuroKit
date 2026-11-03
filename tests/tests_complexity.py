@@ -736,6 +736,28 @@ def test_entropy_approximate_sign():
     assert apen > 0
 
 
+def test_entropy_sample_delay():
+    # Richman & Moorman (2000): the same N - m * delay templates at m and m + 1, whatever the delay
+    rng = np.random.default_rng(42)
+    signal = np.convolve(rng.normal(size=1009), np.ones(10) / 10, mode="valid")
+    signal = (signal - signal.mean()) / signal.std(ddof=1)
+
+    def sampen_reference(x, delay, dimension, tolerance):
+        emb = nk.complexity_embedding(x, delay=delay, dimension=dimension + 1)
+
+        def n_pairs(vectors):
+            d = np.max(np.abs(vectors[:, None, :] - vectors[None, :, :]), axis=2)
+            return (np.sum(d <= tolerance) - len(vectors)) / 2
+
+        return -np.log(n_pairs(emb) / n_pairs(emb[:, :-1]))
+
+    for delay in [1, 7]:
+        assert np.allclose(
+            nk.entropy_sample(signal, delay=delay, dimension=5, tolerance=0.7)[0],
+            sampen_reference(signal, delay, 5, 0.7),
+        )
+
+
 def test_entropy_spectral_sampling_rate():
     signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 30], noise=0)
 

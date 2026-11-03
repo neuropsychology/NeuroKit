@@ -124,7 +124,9 @@ def _get_count(
     # -------------------
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     if approximate is False:
-        embedded = embedded[:-1]  # Removes the last line
+        # SampEn (Richman & Moorman, 2000) uses the same templates at m and m + 1: keep the first
+        # N - m * delay of the N - (m - 1) * delay vectors, i.e., those that also exist at m + 1
+        embedded = embedded[:-delay]
 
     # Get neighbors count
     # -------------------

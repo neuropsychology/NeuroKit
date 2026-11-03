@@ -60,6 +60,12 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
       sampen, parameters = nk.entropy_sample(signal, delay=1, dimension=2)
       sampen
 
+    References
+    -----------
+    * Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate
+      entropy and sample entropy. American Journal of Physiology-Heart and Circulatory Physiology,
+      278(6), H2039-H2049.
+
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:

@@ -20,6 +20,11 @@ Changes in Results
   absolute value. It can therefore be slightly negative when the embedded vectors match only
   themselves (small tolerance, high dimension or short signal), where the absolute value used to
   make this degenerate estimate look like a small positive entropy.
+* ``entropy_sample()`` (and ``entropy_fuzzy()``, ``entropy_range()`` and ``entropy_multiscale()``
+  with ``"MMSEn"`` or ``"IMSEn"``) can differ slightly when ``delay`` is above 1: the matches at
+  dimension *m* are now counted among the same templates as at *m* + 1, as defined by Richman &
+  Moorman (2000). Before, the last ``delay - 1`` vectors at *m* had no counterpart at *m* + 1.
+  Results with ``delay=1`` are unchanged.
 
 New Features
 +++++++++++++
