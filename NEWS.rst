@@ -30,6 +30,14 @@ Changes in Results
   patterns were joined into a string of their indices, so patterns 10 and above were written with
   two digits and parsed as two symbols, which inflated the count and the sequence length used for
   the normalization. Binary LZC (the default) is unchanged.
+* ``fractal_petrosian()`` now uses the number of samples as *N* (Petrosian, 1995) rather than the
+  number of consecutive differences, which is one less with the default ``symbolize="C"`` (and
+  ``"D"`` and ``"R"``). The change is small (about 1e-4 for 500 samples) but systematic.
+* ``complexity_symbolize(method="C")`` (used by default in ``fractal_petrosian()``) no longer
+  treats a zero difference as an increase: a flat segment takes the sign of the previous nonzero
+  difference, so it is not counted as a sign change. Before, a flat segment within a decrease
+  counted as two sign changes. This only affects signals with repeated consecutive values (e.g.,
+  quantized or low-resolution recordings).
 
 New Features
 +++++++++++++
@@ -43,6 +51,8 @@ Fixes
 * ``fractal_katz()``'s docstring now describes the version computed (absolute differences between
   successive values, ignoring time) and no longer claims a 1-1.5 range: KFD is not bounded by 2 and
   grows with the length of the signal for noise.
+* ``fractal_petrosian()``'s docstring now gives the right default for ``symbolize`` (``"C"``, the
+  sign of consecutive differences, not the mean).
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.

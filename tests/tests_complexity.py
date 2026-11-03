@@ -800,6 +800,32 @@ def test_complexity_lempelziv_count():
     assert nk.complexity_lempelziv([1.0])[0] == 0
 
 
+def test_fractal_petrosian():
+    def pfd_reference(n, n_delta):
+        # Petrosian (1995): N is the number of samples, N_delta the number of sign changes
+        return np.log10(n) / (np.log10(n) + np.log10(n / (n + 0.4 * n_delta)))
+
+    signal = nk.signal_simulate(duration=2, sampling_rate=250, frequency=[5, 12], noise=0.5, random_state=42)
+    d = np.diff(signal)
+    assert np.allclose(nk.fractal_petrosian(signal)[0], pfd_reference(len(signal), np.sum(d[1:] * d[:-1] < 0)))
+
+    # Flat segments are not sign changes: monotonic staircases and a constant signal give 1
+    up = np.repeat(np.arange(10.0), 2)
+    assert np.allclose(nk.fractal_petrosian(up)[0], 1)
+    assert np.allclose(nk.fractal_petrosian(up[::-1].copy())[0], 1)
+    assert np.allclose(nk.fractal_petrosian([3, 2, 2, 1])[0], 1)
+    assert np.allclose(nk.fractal_petrosian(np.ones(20))[0], 1)
+
+    # A plateau at an extremum is one sign change
+    assert np.array_equal(nk.complexity_symbolize([0, 1, 1, 0], method="C"), [0, 0, 1])
+    assert np.allclose(nk.fractal_petrosian([0, 1, 1, 0])[0], pfd_reference(4, 1))
+
+    # Without zero differences, method "C" is the sign of the differences
+    rng = np.random.default_rng(42)
+    x = rng.normal(size=1000)
+    assert np.array_equal(nk.complexity_symbolize(x, method="C"), np.signbit(np.diff(x)).astype(int))
+
+
 def test_entropy_spectral_sampling_rate():
     signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 30], noise=0)
 
