@@ -1265,3 +1265,165 @@ def test_entropy_differential():
 
     with pytest.raises(ValueError):
         nk.entropy_differential("ABBA")
+
+
+# =============================================================================
+# Multiscale entropy
+# =============================================================================
+def _multiscale_counts(x, m, r, delay=1):
+    """Richman & Moorman (2000): the number of template pairs (i < j) within r at m + 1 (A) and at
+    m (B), on the same N - m * delay templates, with the Chebyshev distance."""
+    x = np.asarray(x, dtype=float)
+    n = len(x) - m * delay
+    emb = np.array([x[i : i + (m + 1) * delay : delay] for i in range(n)])
+    d_m = np.max(np.abs(emb[:, None, :m] - emb[None, :, :m]), axis=2)
+    d_m1 = np.maximum(d_m, np.abs(emb[:, None, m] - emb[None, :, m]))
+    iu = np.triu_indices(n, 1)
+    return np.sum(d_m1[iu] <= r), np.sum(d_m[iu] <= r)
+
+
+def _multiscale_sampen(x, m, r, delay=1):
+    A, B = _multiscale_counts(x, m, r, delay)
+    return -np.log(A / B)
+
+
+def _multiscale_coarse(x, tau):
+    # Costa et al. (2002): means of non-overlapping windows
+    n = len(x) // tau
+    return np.asarray(x[: n * tau]).reshape(n, tau).mean(axis=1)
+
+
+def _multiscale_mse(x, scales, m, r):
+    # Costa et al. (2002)
+    return [_multiscale_sampen(_multiscale_coarse(x, t), m, r) for t in scales]
+
+
+def _multiscale_cmse(x, scales, m, r):
+    # Wu et al. (2013), Entropy: the mean of the SampEn of the tau time-shifted series
+    return [np.mean([_multiscale_sampen(_multiscale_coarse(x[k:], t), m, r) for k in range(t)]) for t in scales]
+
+
+def _multiscale_rcmse(x, scales, m, r):
+    # Wu et al. (2014): the numbers of matches are summed over the tau series before the ratio
+    out = []
+    for t in scales:
+        A, B = np.sum([_multiscale_counts(_multiscale_coarse(x[k:], t), m, r) for k in range(t)], axis=0)
+        out.append(-np.log(A / B))
+    return out
+
+
+def _multiscale_mmse(x, scales, m, r):
+    # Wu et al. (2013), Physica A: SampEn of the moving average with a delay of tau
+    return [_multiscale_sampen(np.convolve(x, np.ones(t) / t, mode="valid"), m, r, delay=t) for t in scales]
+
+
+def test_entropy_sample_short():
+    # Short series are counted with a dense distance matrix instead of a KDTree: same values
+    rng = np.random.default_rng(42)
+    for n in [20, 30, 50, 51, 120]:
+        signal = rng.normal(size=n)
+        for m in [2, 3]:
+            reference = _multiscale_sampen(signal, m, 0.5)
+            if np.isfinite(reference):  # Undefined (no match) cases follow NeuroKit's own convention
+                assert np.allclose(nk.entropy_sample(signal, dimension=m, tolerance=0.5)[0], reference)
+    # Distances exactly at the tolerance count as matches (quantized signal, integer tolerance)
+    signal = rng.integers(0, 5, size=40).astype(float)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, tolerance=1)[0], _multiscale_sampen(signal, 2, 1))
+    assert np.allclose(
+        nk.entropy_sample(signal, dimension=2, tolerance=1)[0], nk.entropy_sample(signal, dimension=2, tolerance=1.5)[0]
+    )
+
+
+def test_complexity_coarsegraining():
+    signal = np.arange(12.0)
+    assert np.allclose(nk.complexity_coarsegraining(signal, scale=3), [1, 4, 7, 10])
+    rolling = nk.complexity_coarsegraining(signal, scale=3, method="rolling")
+    assert np.allclose(rolling, np.arange(1, 11))
+
+    # Time-shift (Wu et al., 2013): the k-th series averages the windows of 3 starting at sample k,
+    # i.e., every 3rd value of the moving average from offset k (lengths differ by one window)
+    coarse = nk.complexity_coarsegraining(signal, scale=3, method="timeshift")
+    assert len(coarse) == 3
+    assert np.allclose(coarse[0], [1, 4, 7, 10])
+    assert np.allclose(coarse[1], [2, 5, 8])
+    assert np.allclose(coarse[2], [3, 6, 9])
+    for k in range(3):
+        assert np.allclose(coarse[k], rolling[k::3])
+
+    # Lists, Series and numpy integers are accepted; scale 1 returns the signal as an array
+    assert isinstance(nk.complexity_coarsegraining([0, 2, 4], scale=1), np.ndarray)
+    assert np.allclose(nk.complexity_coarsegraining([0, 2, 4, 6, 8, 10], scale=2), [1, 5, 9])
+    assert np.allclose(nk.complexity_coarsegraining(pd.Series(signal), scale=np.int64(4)), [1.5, 5.5, 9.5])
+
+
+def test_entropy_multiscale():
+    rng = np.random.default_rng(42)
+    signal = rng.normal(size=400)
+    m, r = 2, 0.2 * np.std(signal, ddof=1)  # The default tolerance="sd"
+    scales = [1, 2, 3, 5, 8]  # 400 is not a multiple of 3 or 8: the time-shifted series differ in length
+
+    # Values at each scale against brute-force implementations of the papers
+    for method, reference in [
+        ("MSEn", _multiscale_mse),
+        ("CMSEn", _multiscale_cmse),
+        ("RCMSEn", _multiscale_rcmse),
+        ("MMSEn", _multiscale_mmse),
+    ]:
+        index, info = nk.entropy_multiscale(signal, scale=scales, dimension=m, method=method)
+        assert np.allclose(info["Tolerance"], r)
+        assert np.allclose(info["Value"], reference(signal, scales, m, r))
+        # Coarse-graining low-pass filters white noise, so the entropy decreases with the scale
+        assert info["Value"][-1] < info["Value"][0] - 0.5
+        # The index is the average height of the curve
+        assert np.allclose(index, np.trapezoid(info["Value"], x=scales) / (scales[-1] - scales[0]))
+
+    # Index: a single scale gives SampEn, a flat curve its value, uneven scales are weighted by
+    # their spacing, and undefined scales are left out
+    assert np.allclose(nk.entropy_multiscale(signal, scale=[1], dimension=m)[0], nk.entropy_sample(signal, dimension=m)[0])
+    from neurokit2.complexity.entropy_multiscale import _entropy_multiscale_index
+
+    assert _entropy_multiscale_index(np.array([2.0, 2.0, 2.0, 2.0]), np.array([1, 2, 3, 4])) == 2
+    assert _entropy_multiscale_index(np.array([1.0, 3.0]), np.array([1, 5])) == 2
+    assert _entropy_multiscale_index(np.array([1.0, np.inf, 3.0]), np.array([1, 2, 5])) == 2
+    assert np.isnan(_entropy_multiscale_index(np.array([np.inf]), np.array([1])))
+
+    # Fuzzy versions apply the fuzzy membership at every scale (it used to apply at scale 1 only)
+    rcmsen = nk.entropy_multiscale(signal, scale=[1, 2, 3], dimension=m, method="RCMSEn")[1]["Value"]
+    fuzzy = nk.entropy_multiscale(signal, scale=[1, 2, 3], dimension=m, method="RCMSEn", fuzzy=True)[1]["Value"]
+    assert np.allclose(fuzzy[0], nk.entropy_fuzzy(signal, dimension=m)[0])
+    assert np.all(fuzzy < rcmsen - 0.3)
+    assert np.allclose(nk.complexity_fuzzyrcmse(signal, scale=[1, 2, 3], dimension=m)[1]["Value"], fuzzy)
+
+    # Scale specifications, list and Series inputs
+    index, info = nk.entropy_multiscale(signal, scale=[1, 2, 3, 4, 5], dimension=m)
+    for scale in [5, np.int64(5), np.arange(1, 6), (1, 2, 3, 4, 5)]:
+        assert np.array_equal(nk.entropy_multiscale(signal, scale=scale, dimension=m)[1]["Scale"], np.arange(1, 6))
+        assert np.allclose(nk.entropy_multiscale(signal, scale=scale, dimension=m)[0], index)
+    assert np.allclose(nk.entropy_multiscale(list(signal), scale=[1, 2, 3, 4, 5], dimension=m)[0], index)
+    assert np.allclose(nk.entropy_multiscale(pd.Series(signal, index=np.arange(10, 410)), scale=5, dimension=m)[0], index)
+    # Default scales: 1 to 20, as long as the coarse-grained series keep at least 100 samples
+    from neurokit2.complexity.utils_complexity_coarsegraining import _get_scales
+
+    assert np.array_equal(nk.entropy_multiscale(signal, dimension=m)[1]["Scale"], np.arange(1, 5))
+    assert np.array_equal(_get_scales(np.zeros(4000)), np.arange(1, 21))
+    assert np.array_equal(_get_scales(np.zeros(199)), np.array([1]))
+    assert np.array_equal(_get_scales(np.zeros(50)), np.array([1]))
+    assert np.isfinite(nk.entropy_multiscale(signal, scale=[1, 2, 3], dimension=m, show=True)[0])
+    plt.close("all")
+
+    # complexity_mspe() is entropy_multiscale(method="MSPEn")
+    assert np.allclose(nk.complexity_mspe(signal, scale=5)[0], nk.entropy_multiscale(signal, scale=5, method="MSPEn")[0])
+
+    # Scales at which the coarse-grained series is too short to embed are NaN (instead of an error)
+    for method in ["MSEn", "CMSEn", "RCMSEn", "MMSEn", "IMSEn"]:
+        values = nk.entropy_multiscale(signal[:60], scale=[1, 10, 20, 29], dimension=m, method=method)[1]["Value"]
+        assert np.isfinite(values[0]) and np.isnan(values[-1])
+    assert np.isfinite(nk.entropy_multiscale(signal[:100], scale="max", dimension=m)[0])
+
+    with pytest.raises(ValueError, match="'foo'"):
+        nk.entropy_multiscale(signal, method="foo")
+
+    # The hierarchical entropy uses the same index (its decomposition keeps 2 ** k samples)
+    assert np.allclose(
+        nk.entropy_hierarchical(signal[:256], scale=1, dimension=m)[0], nk.entropy_sample(signal[:256], dimension=m)[0]
+    )

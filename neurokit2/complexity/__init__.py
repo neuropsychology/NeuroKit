@@ -1,4 +1,5 @@
 """Submodule for NeuroKit."""
+
 import functools
 
 from .complexity import complexity
@@ -74,6 +75,7 @@ from .utils_complexity_symbolize import complexity_symbolize
 from .utils_fractal_mandelbrot import fractal_mandelbrot
 from .utils_recurrence_matrix import recurrence_matrix
 
+
 # Aliases
 complexity_se = entropy_shannon
 complexity_diffen = entropy_differential
@@ -92,14 +94,12 @@ complexity_pe = entropy_permutation
 complexity_wpe = functools.partial(entropy_permutation, weighted=True)
 
 complexity_mse = entropy_multiscale
-complexity_mspe = functools.partial(entropy_multiscale, scale="MSPEn")
+complexity_mspe = functools.partial(entropy_multiscale, method="MSPEn")
 complexity_cmse = functools.partial(entropy_multiscale, method="CMSEn")
 complexity_rcmse = functools.partial(entropy_multiscale, method="RCMSEn")
 complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
 complexity_fuzzycmse = functools.partial(entropy_multiscale, method="CMSEn", fuzzy=True)
-complexity_fuzzyrcmse = functools.partial(
-    entropy_multiscale, method="RCMSEn", fuzzy=True
-)
+complexity_fuzzyrcmse = functools.partial(entropy_multiscale, method="RCMSEn", fuzzy=True)
 
 
 complexity_dfa = fractal_dfa

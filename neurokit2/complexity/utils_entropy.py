@@ -6,6 +6,18 @@ from packaging import version
 from .utils_complexity_embedding import complexity_embedding
 
 
+# Distance metrics accepted by the KDTree (computed once: in sklearn 1.3.0, valid_metrics was a method)
+if version.parse(sklearn.__version__) in [version.parse("1.3.0"), version.parse("1.3.0rc1")]:
+    _VALID_METRICS = sklearn.neighbors.KDTree.valid_metrics() + ["range"]
+else:
+    _VALID_METRICS = sklearn.neighbors.KDTree.valid_metrics + ["range"]
+
+# Up to this number of embedded vectors, counting the neighbours with a dense distance matrix is
+# faster than building a KDTree, whose fixed overhead dominates on short series (e.g., the
+# coarse-grained series of multiscale entropy)
+_DENSE_COUNT_MAX_N = 50
+
+
 # =============================================================================
 # ApEn
 # =============================================================================
@@ -87,10 +99,11 @@ def _phi(
 
 
 def _phi_divide(phi):
-    if np.isclose(phi[0], 0):
+    # Same absolute tolerance as np.isclose(x, 0), which is much slower
+    if abs(phi[0]) <= 1e-8:
         return -np.inf
-    division = np.divide(phi[1], phi[0])
-    if np.isclose(division, 0):
+    division = phi[1] / phi[0]
+    if abs(division) <= 1e-8:
         return np.inf
     if division < 0:
         return np.nan
@@ -131,13 +144,8 @@ def _get_count(
     # Get neighbors count
     # -------------------
     # Sanity checks
-    sklearn_version = version.parse(sklearn.__version__)
-    if sklearn_version in [version.parse("1.3.0"), version.parse("1.3.0rc1")]:
-        valid_metrics = sklearn.neighbors.KDTree.valid_metrics() + ["range"]
-    else:
-        valid_metrics = sklearn.neighbors.KDTree.valid_metrics + ["range"]
-    if distance not in valid_metrics:
-        raise ValueError(f"The given metric ({distance}) is not valid. Valid metric names are: {valid_metrics}")
+    if distance not in _VALID_METRICS:
+        raise ValueError(f"The given metric ({distance}) is not valid. Valid metric names are: {_VALID_METRICS}")
 
     if fuzzy is True:
         if distance == "range":
@@ -169,6 +177,11 @@ def _get_count(
 
         # Count for each row
         count = np.array([np.sum(distrange(embedded, embedded[i]) < tolerance) for i in range(len(embedded))])
+
+    elif kdtree is None and distance == "chebyshev" and len(embedded) <= _DENSE_COUNT_MAX_N:
+        # Short series: the dense distance matrix is faster than a KDTree (same counts)
+        dist = np.max(np.abs(embedded[:, None, :] - embedded[None, :, :]), axis=2)
+        count = np.sum(dist <= tolerance, axis=1).astype(np.float64)
 
     else:  # chebyshev and other sklearn methods
         # Perhaps scipy.spatial.KDTree would be faster? Especially since its query() method

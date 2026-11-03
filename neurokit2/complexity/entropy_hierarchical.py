@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from .entropy_multiscale import _entropy_multiscale_index
 from .entropy_sample import entropy_sample
 from .optim_complexity_tolerance import complexity_tolerance
 
@@ -108,10 +109,9 @@ def entropy_hierarchical(signal, scale="default", dimension=2, tolerance="sd", s
         vals = HEns[(2**t) - 1 : (2 ** (t + 1)) - 1]
         Sn[t] = np.mean(vals[np.isfinite(vals)])
 
-    # The HEn index is quantified as the area under the curve (AUC),
-    # which is like the sum normalized by the number of values. It's similar to the mean.
-    _trapezoid = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
-    hen = _trapezoid(Sn[np.isfinite(Sn)]) / len(Sn[np.isfinite(Sn)])
+    # The index is the area under the curve of the (defined) values against the scales, divided by
+    # the range of the scales (the average height of the curve), as for entropy_multiscale()
+    hen = _entropy_multiscale_index(Sn, info["Scale"])
 
     if show is True:
         # Color normalization values by extending beyond the range of the mean values

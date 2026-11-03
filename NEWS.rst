@@ -111,6 +111,44 @@ Changes in Results
   for white noise with ``height=0.5``). AttEn and its sub-entropies are now NaN (with a warning)
   when a type of interval is missing, e.g., with fewer than two maxima; they used to be 0, which
   lowered the average.
+* ``entropy_multiscale()`` with ``"CMSEn"``, ``"RCMSEn"``, ``"CMSPEn"`` and ``"CMSWPEn"`` (and
+  therefore the ``CMSEn`` and ``RCMSEn`` indices of ``hrv_nonlinear()``), and
+  ``complexity_coarsegraining(method="timeshift")``, now average the non-overlapping windows that
+  start at each of the Tau offsets, as defined by Wu et al. (2013). The "time-shift"
+  coarse-graining used to keep every Tau-th sample from each offset, without averaging, so there
+  was no low-pass filtering and the composite entropies stayed flat (or rose) with the scale
+  instead of decreasing like MSEn (e.g., 2.17 instead of 1.10 at scale 10 for white noise with
+  ``dimension=2``). ``complexity_coarsegraining(method="timeshift")`` returns a list of the Tau
+  series (their lengths can differ by one) instead of a 2D array.
+* ``entropy_multiscale(method="RCMSEn")`` now sums the numbers of template matches of the Tau
+  series before taking their ratio, as in Wu et al. (2014). It used to average their proportions,
+  which is the same only when the series have the same length. ``fuzzy=True`` (and
+  ``complexity_fuzzyrcmse()``) now applies at every scale; it was only applied at scale 1.
+* ``entropy_multiscale(method="CMSEn")`` is now undefined (infinite or NaN) at a scale where the
+  entropy of one of its Tau series is undefined, as defined by Wu et al. (2013). The undefined
+  series used to be silently left out of the average, which biased the value downwards (the
+  refined ``"RCMSEn"`` exists to handle these cases).
+* ``entropy_multiscale()`` (every method, and therefore the ``MSEn``, ``CMSEn`` and ``RCMSEn``
+  indices of ``hrv_nonlinear()`` and ``MSPEn`` of ``complexity()``) now uses by default the scale
+  factors 1 to 20 (Costa et al., 2005), capped so that the coarse-grained series at the largest
+  scale keeps at least 100 samples (``min(20, len(signal) // 100)`` scales, and scale 1 alone
+  below 200 samples). The default used to go up to ``len(signal) / (dimension + 10)``, i.e., until
+  the coarse-grained series had only about 12 samples whatever the length of the signal: for 300
+  RR intervals (a 5-minute recording) it gave 24 scales, of which those above 10 were undefined in
+  25% to 80% of the realizations of 1/f noise and the others scattered by about 30%; for 2,000
+  samples with the default ``dimension=3``, 153 scales. They are now 3 and 20. The sample entropy
+  is reasonably stable from about 100 samples (Richman & Moorman, 2000; Yentes et al., 2013). The
+  previous scales can be obtained with ``scale=int(len(signal) / (dimension + 10)) - 1``. The
+  default is also much faster to compute.
+* The index returned by ``entropy_multiscale()`` (every method, and therefore the ``MSEn``,
+  ``CMSEn`` and ``RCMSEn`` indices of ``hrv_nonlinear()`` and ``MSPEn`` of ``complexity()``) and
+  by ``entropy_hierarchical()`` is now the area under the curve of the entropy values against the
+  scale factors divided by the range of the scales, i.e., the average height of the curve. It was
+  the area under the values (assumed evenly spaced) divided by their number, which was 0 for a
+  single scale, c × (n - 1) / n for a flat curve at c over n scales (e.g., 1.5 for 4 values of 2),
+  and ignored the spacing of uneven scales or of the scales left out as undefined. For the default
+  (consecutive) scales, values are now n / (n - 1) times larger, e.g., by about 1% for the 82
+  scales of 1,000 samples with ``dimension=2`` and 4% for the 24 scales of 300 RR intervals.
 
 New Features
 +++++++++++++
@@ -198,6 +236,23 @@ Fixes
 * ``signal_formatpeaks()`` now drops every missing index together with its value. Before, only the
   first one was dropped, so with two or more unrecovered SCRs ``eda_peaks()`` put ``SCR_RecoveryTime``
   values at the wrong recovery points.
+* ``entropy_multiscale()`` now accepts lists (they raised an ``AttributeError``), numpy integers
+  and arrays as ``scale`` (they raised a ``TypeError`` or a ``ValueError``), and ``show=True`` with
+  a list of scales (it raised a ``TypeError``); ``complexity_mspe()`` works (it passed ``"MSPEn"``
+  as the ``scale`` and always raised a ``TypeError``). The entropy is now NaN at the scales where
+  the coarse-grained series is too short to embed (fewer than (``dimension`` + 1) × delay + 1
+  samples) instead of raising an error, so ``scale="max"`` works with the SampEn-based methods.
+  The error for an unknown ``method`` names it and lists all the methods. The docstring describes
+  the index and notes that ``delay`` is ignored; its FuzzyRCMSEn example printed the FuzzyCMSEn
+  value.
+* ``entropy_sample()``, ``entropy_approximate()`` and ``entropy_multiscale()`` are 2 to 4 times
+  faster on short series (up to 50 embedded vectors, e.g., the coarse-grained series at large
+  scales): the neighbours are counted with a dense distance matrix instead of a KDTree, whose
+  fixed overhead dominated. The scikit-learn version is no longer parsed at every call, and the
+  ratio of the counts no longer goes through ``np.isclose()``. Values are unchanged.
+* ``complexity_coarsegraining()`` accepts lists (a list was returned unchanged at ``scale=1``) and
+  numpy integers as ``scale``; its docstring describes the time-shift series, and its benchmarking
+  example uses ``method="rolling"`` (it passed a ``rolling=True`` argument that does not exist).
 * ``expspace()`` now spans the full range and no longer depends on the units of the values.
 * ``fractal_correlation()`` now accepts a list of radiuses and returns 0 for constant signals.
 * ``signal_resample()`` no longer sets the last sample to 0 for some signal lengths.
