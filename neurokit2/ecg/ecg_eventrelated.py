@@ -29,21 +29,28 @@ def ecg_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
+        Rate features use the sample nearest stimulus onset as baseline and summarize the samples
+        after that baseline sample. Maximum, minimum and mean rates are reported as changes from
+        baseline, not absolute rates. The standard deviation is the population standard deviation
+        of the post-baseline rates, not a change from baseline. Times are in seconds relative to
+        stimulus onset.
+
         .. codebookadd::
-            ECG_Rate_Max|The maximum heart rate after stimulus onset.
-            ECG_Rate_Min|The minimum heart rate after stimulus onset.
-            ECG_Rate_Mean|The mean heart rate after stimulus onset.
-            ECG_Rate_SD|The standard deviation of the heart rate after stimulus onset.
-            ECG_Rate_Max_Time|The time at which maximum heart rate occurs.
-            ECG_Rate_Min_Time|The time at which minimum heart rate occurs.
-            ECG_Phase_Atrial|Indication of whether the onset of the event concurs with \
-                respiratory systole (1) or diastole (0).
-            ECG_Phase_Ventricular|Indication of whether the onset of the event concurs with \
-                respiratory systole (1) or diastole (0).
-            ECG_Phase_Atrial_Completion|Indication of the stage of the current cardiac (atrial) \
-                phase (0 to 1) at the onset of the event.
-            ECG_Phase_Ventricular_Completion|Indication of the stage of the current cardiac \
-                (ventricular) phase (0 to 1) at the onset of the event.
+            ECG_Rate_Baseline|The heart rate at the sample nearest stimulus onset.
+            ECG_Rate_Max|The maximum change in heart rate from the onset baseline.
+            ECG_Rate_Min|The minimum change in heart rate from the onset baseline.
+            ECG_Rate_Mean|The mean change in heart rate from the onset baseline.
+            ECG_Rate_SD|The population standard deviation of the post-baseline heart rate.
+            ECG_Rate_Max_Time|The time of maximum post-baseline heart rate, relative to stimulus onset (seconds).
+            ECG_Rate_Min_Time|The time of minimum post-baseline heart rate, relative to stimulus onset (seconds).
+            ECG_Phase_Atrial|Indication of atrial systole (1) or diastole (0) at the first sample \
+                after stimulus onset.
+            ECG_Phase_Ventricular|Indication of ventricular systole (1) or diastole (0) at the \
+                first sample after stimulus onset.
+            ECG_Phase_Completion_Atrial|Indication of the stage of the current cardiac (atrial) \
+                phase (0 to 1) at the first sample after stimulus onset.
+            ECG_Phase_Completion_Ventricular|Indication of the stage of the current cardiac \
+                (ventricular) phase (0 to 1) at the first sample after stimulus onset.
 
         We also include the following *experimental* features related to the parameters of a
         quadratic model:

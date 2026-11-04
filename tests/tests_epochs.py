@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -70,3 +71,58 @@ def test_epochs_create_baseline_per_epoch(starts):
         np.testing.assert_allclose(corrected[epoch]["Signal"], expected)
         np.testing.assert_array_equal(corrected[epoch].index, expected.index)
         np.testing.assert_array_equal(corrected[epoch]["Label"], raw[epoch]["Label"])
+
+
+@pytest.mark.parametrize("prefix", ["ECG", "PPG", "RSP", "EOG"])
+@pytest.mark.parametrize("onset_sample", [-0.01, 0, 0.01])
+def test_eventrelated_rate_changes_from_onset(prefix, onset_sample):
+    epoch = pd.DataFrame(
+        {
+            prefix + "_Rate": [100, 80, 60, 55, 57, 59, 61],
+            "Label": "trial",
+            "ECG_Phase_Atrial": 0,
+            "ECG_Phase_Ventricular": 1,
+            "ECG_Phase_Completion_Atrial": 0.5,
+            "ECG_Phase_Completion_Ventricular": 0.5,
+            "ECG_Quality": 1,
+            "RSP_Amplitude": 1,
+            "RSP_Phase": 1,
+            "RSP_Phase_Completion": 0.5,
+            "RSP_RVT": 1,
+            "RSP_Symmetry_PeakTrough": 0.5,
+            "RSP_Symmetry_RiseDecay": 0.5,
+            "EOG_Blinks": 0,
+        },
+        index=[-0.3, -0.1, onset_sample, 0.1, 0.2, 0.3, 0.4],
+    )
+    analyze = getattr(nk, prefix.lower() + "_eventrelated")
+    features = analyze({"trial": epoch}).iloc[0]
+
+    # The onset sample is the nearest to zero, not the pre-event average.
+    assert features[prefix + "_Rate_Baseline"] == 60
+    assert features[prefix + "_Rate_Max"] == 1
+    assert features[prefix + "_Rate_Min"] == -5
+    assert features[prefix + "_Rate_Mean"] == -2
+    np.testing.assert_allclose(features[prefix + "_Rate_SD"], np.sqrt(5))
+    assert features[prefix + "_Rate_Max_Time"] == 0.4
+    assert features[prefix + "_Rate_Min_Time"] == 0.1
+
+
+def test_ecg_eventrelated_phase_at_first_post_onset_sample():
+    epoch = pd.DataFrame(
+        {
+            "ECG_Rate": [100, 80, 60, 55, 57, 59, 61],
+            "ECG_Phase_Atrial": [0, 0, 0, 1, 1, 1, 1],
+            "ECG_Phase_Ventricular": [1, 1, 1, 0, 0, 0, 0],
+            "ECG_Phase_Completion_Atrial": [0.1, 0.1, 0.2, 0.6, 0.7, 0.8, 0.9],
+            "ECG_Phase_Completion_Ventricular": [0.1, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7],
+            "ECG_Quality": 1,
+        },
+        index=[-0.3, -0.1, 0, 0.1, 0.2, 0.3, 0.4],
+    )
+    features = nk.ecg_eventrelated({"trial": epoch}).iloc[0]
+
+    assert features["ECG_Phase_Atrial"] == 1
+    assert features["ECG_Phase_Ventricular"] == 0
+    assert features["ECG_Phase_Completion_Atrial"] == 0.6
+    assert features["ECG_Phase_Completion_Ventricular"] == 0.4
