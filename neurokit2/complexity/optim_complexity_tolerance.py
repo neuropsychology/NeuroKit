@@ -9,7 +9,7 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_entropy import _entropy_apen
 
 
-def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dimension=None, show=False):
+def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dimension=None, distance="euclidean", show=False):
     """**Automated selection of tolerance (r)**
 
     Estimate and select the optimal tolerance (*r*) parameter used by other entropy and other
@@ -29,10 +29,11 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
 
     * **maxApEn**: Different values of tolerance will be tested and the one where the approximate
       entropy (ApEn) is maximized will be selected and returned (Chen, 2008).
-    * **recurrence**: The tolerance that yields a recurrence rate (see ``RQA``) close to 1% will
-      be returned. Note that this method is currently not suited for very long signals, as it is
-      based on a recurrence matrix, which size is close to n^2. Help is needed to address this
-      limitation.
+    * **recurrence**: The smallest tolerance that yields a recurrence rate (see
+      :func:`complexity_rqa`) of 1% will be returned, i.e., the 1% quantile of the Euclidean
+      distances between all pairs of embedded points (with a custom ``r_range``, the value of the
+      range whose recurrence rate is the closest to 1%). Note that this method is not suited for
+      very long signals, as it computes the n(n - 1) / 2 distances between the n embedded points.
     * **neighbours**: The tolerance that yields a number of nearest neighbours (NN) close to 2% will
       be returned.
 
@@ -69,13 +70,18 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
         ``"maxApEn"``, ``"recurrence"`` or ``"neighbours"``. If ``None`` (default), the default
         range will be used; ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)`` for
         ``"maxApEn"`` and ``"neighbours"``, and ``np.linspace(0, np.max(d), 50 + 1)[1:]`` for
-        ``"recurrence"``. You can set a lower number for faster results.
+        ``"recurrence"`` (where the number of values only sets the curve returned in ``info``, the
+        tolerance being computed exactly). You can set a lower number for faster results.
     delay : int
         Required by ``"maxApEn"``, ``"recurrence"`` and ``"singh2016"``, and used by
         ``"neighbours"`` (default of 1). See :func:`entropy_approximate()`.
     dimension : int
         Required by all the methods but ``"sd"`` (``"neighbours"`` defaults to 1). See
         :func:`entropy_approximate()`.
+    distance : str
+        The distance between the embedded points used by the ``"recurrence"`` method:
+        ``"euclidean"`` (default, as in :func:`complexity_rqa`), ``"chebyshev"`` or
+        ``"manhattan"``. The other methods use the Chebyshev distance of the entropy measures.
     show : bool
         If ``True`` and method is ``"maxApEn"``, will plot the ApEn values for each value of r.
 
@@ -128,7 +134,7 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
 
 
     * **Example 2**: The method based on the recurrence rate will display the rates according to
-      different values of tolerance. The horizontal line indicates 5%.
+      different values of tolerance. The horizontal line indicates 1%.
 
     .. ipython:: python
 
@@ -266,7 +272,7 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
         info.update({"Method": "Max ApEn"})
 
     elif method in ["recurrence", "rqa"]:
-        r, info = _optimize_tolerance_recurrence(signal, r_range=r_range, delay=delay, dimension=dimension)
+        r, info = _optimize_tolerance_recurrence(signal, r_range=r_range, delay=delay, dimension=dimension, distance=distance)
         info.update({"Method": "1% Recurrence Rate"})
 
     elif method in ["neighbours", "neighbors", "nn"]:
@@ -290,28 +296,46 @@ def complexity_tolerance(signal, method="maxApEn", r_range=None, delay=None, dim
 # =============================================================================
 
 
-def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=None):
+def _recurrence_distance(distance):
+    """SciPy name of the distance between embedded points used by the recurrence functions."""
+    metrics = {"euclidean": "euclidean", "chebyshev": "chebyshev", "manhattan": "cityblock", "cityblock": "cityblock"}
+    if not isinstance(distance, str) or distance.lower() not in metrics:
+        raise ValueError(f"NeuroKit error: 'distance' should be 'euclidean', 'chebyshev' or 'manhattan' (got {distance!r}).")
+    return metrics[distance.lower()]
+
+
+def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=None, distance="euclidean"):
     # Optimize missing parameters
     if delay is None or dimension is None:
         raise ValueError("If method='recurrence', both delay and dimension must be specified.")
 
-    # Compute distance matrix
+    # Distances between all pairs of embedded points (each point with itself excluded), as in the
+    # recurrence matrix and the recurrence rate of complexity_rqa()
     emb = complexity_embedding(signal, delay=delay, dimension=dimension)
-    d = scipy.spatial.distance.cdist(emb, emb, metric="euclidean")
+    d = scipy.spatial.distance.pdist(emb, metric=_recurrence_distance(distance))
+    if len(d) == 0:
+        raise ValueError("NeuroKit error: complexity_tolerance(): 'recurrence' needs at least 2 embedded points.")
 
     if r_range is None:
         r_range = 50
     if isinstance(r_range, int):
         r_range = np.linspace(0, np.max(d), r_range + 1)[1:]
+        # Smallest tolerance with a recurrence rate of at least 1%: the 1% quantile of the distances
+        k = max(int(np.ceil(0.01 * len(d))) - 1, 0)
+        optimal = np.partition(d, k)[k]
+    else:
+        optimal = None
 
-    recurrence_rate = np.zeros_like(r_range)
-    # Indices of the lower triangular (without the diagonal)
-    idx = np.tril_indices(len(d), k=-1)
-    n = len(d[idx])
-    for i, r in enumerate(r_range):
-        recurrence_rate[i] = (d[idx] <= r).sum() / n
-    # Closest to 0.01 (1%)
-    optimal = r_range[np.abs(recurrence_rate - 0.01).argmin()]
+    # Recurrence rate for each tolerance (proportion of distances <= r)
+    r_range = np.asarray(r_range, dtype=float)
+    order = np.argsort(r_range)
+    counts = np.bincount(np.searchsorted(r_range[order], d, side="left"), minlength=len(r_range) + 1)
+    recurrence_rate = np.zeros(len(r_range))
+    recurrence_rate[order] = np.cumsum(counts)[: len(r_range)] / len(d)
+
+    if optimal is None:
+        # Among the given values, the closest to 0.01 (1%)
+        optimal = r_range[np.abs(recurrence_rate - 0.01).argmin()]
 
     return optimal, {"Values": r_range, "Scores": recurrence_rate}
 

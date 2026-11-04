@@ -1,13 +1,12 @@
 import matplotlib.pyplot as plt
 import matplotlib.ticker
-import numpy as np
 import scipy.spatial
 
-from .optim_complexity_tolerance import complexity_tolerance
+from .optim_complexity_tolerance import _recurrence_distance, complexity_tolerance
 from .utils_complexity_embedding import complexity_embedding
 
 
-def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=False):
+def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", distance="euclidean", show=False):
     """**Recurrence Matrix**
 
     Fast Python implementation of recurrence matrix (tested against pyRQA). Returns a tuple
@@ -32,6 +31,10 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
         :func:`complexity_tolerance` to estimate the optimal value for this parameter. A rule of
         thumb is to set *r* so that the percentage of points classified as recurrences is about
         2-5%.
+    distance : str
+        The distance between the embedded points: ``"euclidean"`` (default), ``"chebyshev"`` (the
+        largest difference between their coordinates, as in the entropy measures) or
+        ``"manhattan"`` (the sum of the absolute differences). See :func:`complexity_rqa`.
     show : bool
         Visualise recurrence matrix.
 
@@ -93,18 +96,19 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
       sympathetic and parasympathetic tones by nonlinear indexes in normotensive rats. American
       Journal of Physiology-Heart and Circulatory Physiology, 275(4), H1290-H1297.
     """
-    tolerance, _ = complexity_tolerance(signal, method=tolerance, delay=delay, dimension=dimension, show=False)
+    metric = _recurrence_distance(distance)
+    tolerance, _ = complexity_tolerance(
+        signal, method=tolerance, delay=delay, dimension=dimension, distance=distance, show=False
+    )
 
     # Time-delay embedding
     emb = complexity_embedding(signal, delay=delay, dimension=dimension)
 
     # Compute distance matrix
-    d = scipy.spatial.distance.cdist(emb, emb, metric="euclidean")
+    d = scipy.spatial.distance.cdist(emb, emb, metric=metric)
 
-    # Initialize the recurrence matrix filled with 0s
-    recmat = np.zeros((len(d), len(d)))
-    # If lower than tolerance, then 1
-    recmat[d <= tolerance] = 1
+    # 1 if lower than tolerance, else 0
+    recmat = (d <= tolerance).astype(float)
 
     # Plotting
     if show is True:
@@ -113,7 +117,7 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
             axes[0].imshow(recmat, cmap="Greys")
             axes[0].set_title("Recurrence Matrix")
             im = axes[1].imshow(d)
-            axes[1].set_title("Distance")
+            axes[1].set_title(f"{distance.capitalize()} distance")
             cbar = fig.colorbar(im, ax=axes[1], fraction=0.046, pad=0.04)
             cbar.ax.plot([0, 1], [tolerance] * 2, color="r")
             # Flip the matrix to match traditional RQA representation

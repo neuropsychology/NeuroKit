@@ -40,8 +40,8 @@ def test_complexity_sanity():
     assert np.allclose(fractal_dfa, 2.10277697, atol=0.0001)
 
     _, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
-    # TODO: why this gives 70 or 71 depending on the machine????
-    # assert parameters["Fluctuations"].shape == (70, len(mdfa_q))
+    # Default scales: from 10 to 100 samples, about 10% apart
+    assert parameters["Fluctuations"].shape == (25, len(mdfa_q))
 
     assert np.allclose(nk.fractal_correlation(signal)[0], 0.7930504156910694, atol=0.000001)
     assert np.allclose(nk.fractal_correlation(signal, radius="nolds")[0], 0.8356790165119761, atol=0.000001)
@@ -886,6 +886,89 @@ def test_fractal_dfa_windows():
     assert np.allclose(nk.fractal_dfa(np.cumsum(noise))[0], 1.5, atol=0.1)
 
 
+def test_fractal_mfdfa():
+    def mfdfa_reference(signal, scale, q, overlap=True):
+        # Kantelhardt et al. (2002), with the logarithmic average for q = 0
+        profile = np.cumsum(signal - np.mean(signal))
+        fluctuations = np.zeros((len(scale), len(q)))
+        for i, window in enumerate(scale):
+            x = np.arange(window)
+            f2 = []
+            for start in range(0, len(profile) - window + 1, window // 2 if overlap else window):
+                segment = profile[start : start + window]
+                f2.append(np.mean((segment - np.polyval(np.polyfit(x, segment, 1), x)) ** 2))
+            f2 = np.array(f2)
+            for j, qj in enumerate(q):
+                if qj == 0:
+                    fluctuations[i, j] = np.exp(0.5 * np.mean(np.log(f2)))
+                else:
+                    fluctuations[i, j] = np.mean(f2 ** (qj / 2)) ** (1 / qj)
+        return fluctuations
+
+    rng = np.random.default_rng(3)
+    q = np.array([-5.0, -3, -1, 0, 1, 2, 3, 5])
+    scale = np.array([10, 16, 25, 40, 63, 100])
+    for signal in [rng.normal(size=2000), np.cumsum(rng.normal(size=2000))]:
+        for overlap in [True, False]:
+            _, info = nk.fractal_dfa(signal, scale=scale, q=q, multifractal=True, overlap=overlap)
+            np.testing.assert_allclose(info["Fluctuations"], mfdfa_reference(signal, scale, q, overlap), rtol=1e-9)
+
+    # Binomial multifractal cascade (Kantelhardt et al., 2002), whose h(q) is known. Its smallest
+    # segment variances are 1e-12 times the largest: they must not be discarded, as they set the
+    # negative q exponents (which were about 1.2 instead of 1.6-1.8)
+    a, nmax = 0.75, 16
+    ones = np.array([bin(k).count("1") for k in range(2**nmax)])
+    cascade = a**ones * (1 - a) ** (nmax - ones)
+    q = np.array([-5.0, -3, -1])
+    h_theory = 1 / q - np.log(a**q + (1 - a) ** q) / (q * np.log(2))
+    scale = np.unique(np.round(2 ** np.linspace(4, 12, 25)).astype(int))
+    _, info = nk.fractal_dfa(cascade, scale=scale, q=q, multifractal=True, order=2)
+    np.testing.assert_allclose(info["h"], h_theory, atol=0.1)
+
+    # Several q values close to 0, and unsorted q
+    signal = rng.normal(size=3000)
+    _, info = nk.fractal_dfa(signal, q=[-1, -0.05, 0, 0.05, 1], multifractal=True)
+    assert np.all(info["Fluctuations"][:, 1] == info["Fluctuations"][:, 2])
+    assert np.all(info["Fluctuations"][:, 2] == info["Fluctuations"][:, 3])
+    out1, _ = nk.fractal_dfa(signal, q=[-3, -1, 1, 3], multifractal=True)
+    out2, _ = nk.fractal_dfa(signal, q=[1, -3, 3, -1], multifractal=True)
+    pd.testing.assert_frame_equal(out1, out2)
+
+    # Exactly linear segments of the profile (runs of identical values) are left out
+    signal[1000:1200] = 0
+    _, info = nk.fractal_dfa(signal, scale=np.array([10, 20, 40, 80]), q=[-5, 2], multifractal=True)
+    assert np.allclose(info["h"], 0.5, atol=0.15)
+
+    # Spectrum features of a symmetric spectrum (H linear in q)
+    from neurokit2.complexity.fractal_dfa import _singularity_spectrum
+
+    q = np.arange(-5.0, 6)
+    out = _singularity_spectrum(q=q, slopes=0.7 - 0.02 * q)
+    assert np.isclose(out["Peak"], 0.7)
+    assert np.isclose(out["Asymmetry"], 0.5)
+    # Faini et al. (2021): sum of the squared increments of h between consecutive q
+    assert np.isclose(out["Increment"], 10 * 0.02**2)
+    # Orozco-Duque et al. (2015, eq. 17): squared second differences of h, over 2 * |q_max| + 2
+    out = _singularity_spectrum(q=q, slopes=0.7 - 0.01 * q**2)
+    assert np.isclose(out["Fluctuation"], 9 * 0.02**2 / 12)
+
+    # Default scales: evenly log-spaced from 10 samples to a tenth of the signal, about 10% apart
+    from neurokit2.complexity.fractal_dfa import _fractal_dfa_findscales
+
+    scale = _fractal_dfa_findscales(10000)
+    assert len(scale) == 49
+    assert np.all(np.abs(scale / np.geomspace(10, 1000, 49) - 1) <= 0.05)
+
+    # max. DFA: the scales up to the knee are kept, and returned
+    signal = nk.signal_simulate(duration=20, frequency=[5, 7, 10, 14], noise=0.05, random_state=1)
+    scale = nk.expspace(10, 400, 30, base=2).astype(int)
+    _, info = nk.fractal_dfa(signal, scale=scale)
+    knee = nk.find_knee(np.log2(info["Fluctuations"][:, 0]), x=np.log2(scale), verbose=False)
+    _, info = nk.fractal_dfa(signal, scale=scale, maxdfa=True)
+    assert np.isclose(np.log2(info["scale"][-1]), knee)
+    assert len(info["scale"]) == len(info["Fluctuations"])
+
+
 def test_complexity_delay_methods():
     # Sine of period 42 samples: its autocorrelation is cos(2 * pi * tau / 42)
     period = 42
@@ -987,6 +1070,163 @@ def test_complexity_tolerance_methods():
     for method in ["sd", "nolds", "chon2009", "makowski", "singh2016"]:
         nk.complexity_tolerance(signal[:300], method=method, delay=1, dimension=2, show=True)
     plt.close("all")
+
+
+def test_complexity_rqa():
+    import scipy.stats
+
+    from neurokit2.complexity.complexity_rqa import _complexity_rqa_features
+
+    def runs(sequence):
+        lengths, run = [], 0
+        for value in list(sequence) + [False]:
+            if value:
+                run += 1
+            elif run > 0:
+                lengths.append(run)
+                run = 0
+        return lengths
+
+    def entropy(lengths):
+        return scipy.stats.entropy(np.unique(lengths, return_counts=True)[1]) if len(lengths) > 0 else 0
+
+    def rqa_reference(rc, lmin=2):
+        # Marwan et al. (2007): whole matrix, line of identity (LOI) excluded
+        rc = np.asarray(rc, dtype=bool)
+        rec = rc.copy()
+        np.fill_diagonal(rec, False)
+        n = len(rc)
+        diag = np.array([x for k in range(1 - n, n) if k != 0 for x in runs(np.diagonal(rec, k))], dtype=int)
+        vert = np.array([x for column in rec.T for x in runs(column)], dtype=int)
+        # White lines: between two consecutive recurrence points of a column (the LOI included)
+        white = np.concatenate([np.diff(np.flatnonzero(column)) - 1 for column in rc.T]).astype(int)
+        diag, vert, white = diag[diag >= lmin], vert[vert >= lmin], white[white >= lmin]
+        out = {
+            "RecurrenceRate": rec.sum() / (n**2 - n),
+            "Determinism": diag.sum() / rec.sum(),
+            "L": diag.mean() if len(diag) > 0 else 0,
+            "Divergence": 1 / diag.max() if len(diag) > 0 else np.nan,
+            "LEn": entropy(diag),
+            "Laminarity": vert.sum() / rec.sum(),
+            "TrappingTime": vert.mean() if len(vert) > 0 else 0,
+            "VMax": vert.max() if len(vert) > 0 else 0,
+            "VEn": entropy(vert),
+            "W": white.mean() if len(white) > 0 else 0,
+            "WMax": white.max() if len(white) > 0 else 0,
+            "WEn": entropy(white),
+        }
+        out["LamiDet"] = out["Laminarity"] / out["Determinism"] if out["Determinism"] > 0 else np.nan
+        # Tomashin et al. (2022, approach 3): log-log slope over the first 64 diagonals
+        lag = np.arange(1, min(n, 65))
+        rate = np.array([np.diagonal(rc, k).mean() for k in lag])
+        lag, rate = lag[rate > 0], rate[rate > 0]
+        out["DiagRec"] = np.polyfit(np.log2(lag), np.log2(rate), 1)[0] if len(lag) > 2 else np.nan
+        return out
+
+    rng = np.random.default_rng(42)
+    matrices = []
+    for p in [0.05, 0.3, 0.7]:
+        rc = np.triu(rng.uniform(size=(60, 60)) < p, k=1)
+        matrices.append(rc | rc.T | np.eye(60, dtype=bool))
+    # Time-irreversible signals (Hénon map, sawtooth), where the vertical lines below and above the
+    # LOI differ
+    henon = np.zeros(300)
+    henon[0], y = 0.1, 0.1
+    for i in range(1, 300):
+        henon[i], y = 1 - 1.4 * henon[i - 1] ** 2 + y, 0.3 * henon[i - 1]
+    sawtooth = (np.arange(300) % 20) / 20 + rng.normal(0, 0.02, 300)
+    for signal in [henon, sawtooth, rng.normal(size=300)]:
+        matrices.append(nk.recurrence_matrix(signal, dimension=2, tolerance=0.15 * np.ptp(signal))[0])
+
+    for rc in matrices:
+        for lmin in [1, 2, 3]:
+            out = _complexity_rqa_features(rc, min_linelength=lmin)
+            for key, value in rqa_reference(rc, lmin=lmin).items():
+                assert np.isclose(out[key], value, equal_nan=True), (key, lmin)
+
+    # White lines that reach the border of the matrix are left out: here, only the two lines
+    # between the LOI and the recurrences (0, 5) and (5, 0) have a recurrence point at both ends
+    rc = np.eye(6, dtype=bool)
+    rc[0, 5] = rc[5, 0] = True
+    out = _complexity_rqa_features(rc)
+    assert out["W"] == 4 and out["WMax"] == 4 and out["WEn"] == 0
+
+    # Same features with complexity_rqa(), and LamiDet is returned
+    signal = nk.signal_simulate(duration=4, sampling_rate=100, frequency=[5, 6, 7], noise=0.2, random_state=3)
+    rqa, info = nk.complexity_rqa(signal, tolerance=1)
+    assert rqa.shape == (1, 15)
+    assert np.isclose(rqa["LamiDet"][0], rqa["Laminarity"][0] / rqa["Determinism"][0])
+    for key, value in rqa_reference(info["Recurrence_Matrix"]).items():
+        assert np.isclose(rqa[key][0], value), key
+    # No recurrences: the ratios are undefined
+    rqa, _ = nk.complexity_rqa(signal, tolerance=0)
+    assert rqa["RecurrenceRate"][0] == 0
+    assert rqa[["Determinism", "Laminarity", "LamiDet", "DeteRec"]].isna().all(axis=None)
+
+    # The default tolerance gives a recurrence rate of 1% (in any dimension), whereas 0.2 SD,
+    # designed for the Chebyshev distance of SampEn, leaves almost no recurrences
+    for dimension in [3, 7]:
+        rqa, info = nk.complexity_rqa(signal, dimension=dimension)
+        assert info["Tolerance"] == nk.complexity_tolerance(signal, "recurrence", delay=1, dimension=dimension)[0]
+        assert 0.01 <= rqa["RecurrenceRate"][0] < 0.0101
+        assert nk.complexity_rqa(signal, dimension=dimension, tolerance="sd")[0]["RecurrenceRate"][0] < 0.002
+
+
+def test_complexity_rqa_distance():
+    import scipy.spatial
+
+    signal = nk.signal_simulate(duration=4, sampling_rate=100, frequency=[6, 10, 21], noise=0.5, random_state=2)
+    signal = nk.standardize(signal)
+    m, r = 3, 0.5
+    embedded = nk.complexity_embedding(signal, delay=1, dimension=m)
+    for distance, metric in [("euclidean", "euclidean"), ("chebyshev", "chebyshev"), ("manhattan", "cityblock")]:
+        rc, d = nk.recurrence_matrix(signal, dimension=m, tolerance=r, distance=distance)
+        np.testing.assert_allclose(d, scipy.spatial.distance.cdist(embedded, embedded, metric))
+        assert np.array_equal(rc, d <= r)
+        # The default tolerance gives 1% of recurrences with each distance
+        rqa, info = nk.complexity_rqa(signal, dimension=m, distance=distance)
+        assert info["Distance"] == distance
+        assert info["Tolerance"] == nk.complexity_tolerance(signal, "recurrence", delay=1, dimension=m, distance=distance)[0]
+        assert 0.01 <= rqa["RecurrenceRate"][0] < 0.0101
+
+    # With the Chebyshev distance (and a delay of 1), the recurrence matrix in dimension m is the one
+    # of dimension 1 restricted to its diagonal lines of at least m points...
+    rc1 = nk.recurrence_matrix(signal, dimension=1, tolerance=r, distance="chebyshev")[0].astype(bool)
+    rc = nk.recurrence_matrix(signal, dimension=m, tolerance=r, distance="chebyshev")[0].astype(bool)
+    n = len(rc)
+    expected = np.ones((n, n), dtype=bool)
+    for k in range(m):
+        expected &= rc1[k : k + n, k : k + n]
+    assert np.array_equal(rc, expected)
+    # ... and SampEn is minus the log of the probability that a recurrence point is followed by
+    # another one on its diagonal (among the first N - m points, the templates of SampEn)
+    np.fill_diagonal(rc, False)
+    successor = (rc[:-1, :-1] & rc[1:, 1:]).sum() / rc[:-1, :-1].sum()
+    assert np.isclose(-np.log(successor), nk.entropy_sample(signal, dimension=m, tolerance=r)[0])
+
+    with pytest.raises(ValueError, match="distance"):
+        nk.complexity_rqa(signal, distance="cosine")
+
+
+def test_complexity_tolerance_recurrence():
+    import scipy.spatial
+
+    rng = np.random.default_rng(7)
+    for signal in [rng.normal(size=400), np.round(rng.normal(size=400).cumsum())]:
+        d = scipy.spatial.distance.pdist(nk.complexity_embedding(signal, delay=2, dimension=4))
+        r, info = nk.complexity_tolerance(signal, method="recurrence", delay=2, dimension=4)
+        # The smallest distance that gives a recurrence rate of at least 1%
+        assert np.mean(d <= r) >= 0.01
+        assert np.mean(d < r) < 0.01
+        # The curve is the recurrence rate at each tolerance of the range
+        assert len(info["Values"]) == 50
+        np.testing.assert_allclose(info["Scores"], [np.mean(d <= x) for x in info["Values"]])
+
+        # With a custom range, the value whose recurrence rate is the closest to 1%
+        r_range = np.quantile(d, [0.3, 0.002, 0.05, 0.012])
+        r, info = nk.complexity_tolerance(signal, method="recurrence", delay=2, dimension=4, r_range=r_range)
+        np.testing.assert_allclose(info["Scores"], [np.mean(d <= x) for x in r_range])
+        assert r == r_range[3]
 
 
 def test_entropy_spectral_sampling_rate():
