@@ -186,8 +186,8 @@ def _eog_clean_mne(eog_signal, sampling_rate=1000):
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run.",
-            " Please install it first (`pip install mne`).",
+            "NeuroKit error: eog_clean(): the 'mne' module is required for this method to run. "
+            "Please install it first (`pip install mne`)."
         )
 
     # Filter

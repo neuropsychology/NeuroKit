@@ -685,6 +685,9 @@ Fixes
 * ``fractal_katz()``'s docstring now describes the version computed (absolute differences between
   successive values, ignoring time) and no longer claims a 1-1.5 range: KFD is not bounded by 2 and
   grows with the length of the signal for noise.
+* ``eog_findpeaks()`` and ``eog_clean()`` now identify the correct function in missing-MNE errors,
+  rather than reporting ``signal_filter()``. ``eog_process()`` documents its default blink detector's
+  optional MNE dependency and the ``method="neurokit"`` alternative (#1241).
 * ``fractal_correlation()`` is about 3 times faster and uses half the memory: the distances are
   computed once per pair (``scipy.spatial.distance.pdist()``) and the correlation sums of all the
   radii are counted in one pass. The radii are returned sorted. Results are unchanged, except with
