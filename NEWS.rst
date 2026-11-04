@@ -665,6 +665,9 @@ New Features
 Fixes
 +++++++++++++
 
+* ``rsp_process()`` no longer raises ``IndexError`` when short recordings leave no complete
+  trough-to-peak pair after detection. Peak finding returns empty arrays, and phase and amplitude
+  return ``NaN`` values when no extrema are retained (#1242).
 * ``complexity_rqa()`` (and ``hrv_rqa()``) now returns the documented ``LamiDet`` (laminarity /
   determinism): it was computed but never stored, so the column was missing (it only appeared,
   as NaN, when the determinism was 0 or undefined). The lines of the recurrence matrix are now
