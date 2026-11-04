@@ -485,6 +485,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``hrv(show=True)`` no longer raises ``KeyError`` when ``peaks`` is the info dict returned by
+  ``ppg_peaks()``; the plot now uses the same peaks as the computed indices.
 * ``complexity_delay(method="fraser1986")`` no longer fails on a noise-free periodic signal when
   the tested delays reach its period (the default number of bins of ``mutual_information()``
   diverged for perfectly correlated variables).

@@ -140,6 +140,20 @@ def test_hrv_rqa_short_input():
         nk.hrv_rqa([0, 1000, 2100], sampling_rate=1000)
 
 
+def test_hrv_show_ppg_peaks():
+    """hrv(show=True) should plot peaks from ppg_peaks(), not only ECG_R_Peaks."""
+    import matplotlib.pyplot as plt
+
+    ppg = nk.ppg_simulate(duration=60, sampling_rate=100, heart_rate=70, random_state=42)
+    _, info = nk.ppg_peaks(nk.ppg_clean(ppg, sampling_rate=100), sampling_rate=100)
+
+    hrv = nk.hrv(info, sampling_rate=100, show=True)
+    plt.close("all")
+
+    assert "PPG_Peaks" in info
+    assert hrv["HRV_MeanNN"].iloc[0] > 0
+
+
 def test_hrv_tuple_input():
     """HRV should accept peaks and sampling rate supplied as a tuple."""
     peaks = [0, 1000, 2100, 3150, 4300, 5300]
