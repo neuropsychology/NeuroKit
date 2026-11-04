@@ -127,6 +127,10 @@ Entropy
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_rate
 
+*entropy_correctedconditional()*
+""""""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_correctedconditional
+
 *entropy_svd()*
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
@@ -142,6 +146,10 @@ Entropy
 *entropy_spectral()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
+
+*entropy_wiener()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_wiener
 
 *entropy_phase()*
 """"""""""""""""""""
@@ -234,6 +242,14 @@ Other indices
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_lempelziv
 
+*complexity_jensenshannon()*
+""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_jensenshannon
+
+*complexity_irreversibility()*
+""""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_irreversibility
+
 *complexity_relativeroughness()*
 """"""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_relativeroughness
@@ -298,4 +314,4 @@ Joint/Multivariate
 
 .. .. automodule:: neurokit2.complexity
 ..    :members:
-..    :exclude-members: complexity, complexity_delay, complexity_dimension, complexity_tolerance, complexity_k, fractal_katz, fractal_petrosian, fractal_sevcik, fractal_nld, fractal_psdslope, fractal_higuchi, fractal_correlation, entropy_shannon, entropy_maximum, entropy_differential, entropy_tsallis, entropy_renyi, entropy_cumulativeresidual, entropy_svd, entropy_spectral, entropy_phase, entropy_grid, entropy_attention, entropy_increment, entropy_slope, entropy_symbolicdynamic, entropy_dispersion, entropy_ofentropy, entropy_approximate, entropy_sample, entropy_permutation, entropy_bubble, entropy_range, entropy_fuzzy, entropy_multiscale, entropy_hierarchical, fisher_information, complexity_hjorth, complexity_lempelziv, complexity_relativeroughness, fractal_hurst, complexity_lyapunov, complexity_rqa, fractal_mandelbrot, complexity_simulate, complexity_attractor, complexity_symbolize, complexity_coarsegraining, complexity_ordinalpatterns, recurrence_matrix, entropy_shannon_joint, entropy_rate, entropy_quadratic
+..    :exclude-members: complexity, complexity_delay, complexity_dimension, complexity_tolerance, complexity_k, fractal_katz, fractal_petrosian, fractal_sevcik, fractal_nld, fractal_psdslope, fractal_higuchi, fractal_correlation, entropy_shannon, entropy_maximum, entropy_differential, entropy_tsallis, entropy_renyi, entropy_cumulativeresidual, entropy_svd, entropy_spectral, entropy_wiener, entropy_phase, entropy_grid, entropy_attention, entropy_increment, entropy_slope, entropy_symbolicdynamic, entropy_dispersion, entropy_ofentropy, entropy_approximate, entropy_sample, entropy_permutation, entropy_bubble, entropy_range, entropy_fuzzy, entropy_multiscale, entropy_hierarchical, fisher_information, complexity_hjorth, complexity_lempelziv, complexity_relativeroughness, fractal_hurst, complexity_lyapunov, complexity_rqa, fractal_mandelbrot, complexity_simulate, complexity_attractor, complexity_symbolize, complexity_coarsegraining, complexity_ordinalpatterns, recurrence_matrix, entropy_shannon_joint, entropy_rate, entropy_quadratic, entropy_correctedconditional, complexity_jensenshannon, complexity_irreversibility

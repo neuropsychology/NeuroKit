@@ -566,6 +566,46 @@ Changes in Results
   rates between about 0.4% and 2.3%. With a custom ``r_range``, the value of the range whose rate
   is the closest to 1% is still returned. It is also about 7 times faster (0.6 s instead of 4.4 s
   for 5,000 samples).
+* ``information_gain()`` with ``delay`` above 1 now follows each word by the word starting
+  ``delay`` samples later, which adds one new symbol, so that the mean information gain (MIG) is
+  the conditional entropy of that symbol given the word (the entropy of the words of
+  ``dimension + 1`` symbols minus that of the words of ``dimension`` symbols), as with
+  ``delay=1``. Each word was followed by the one starting one sample later, whose ``dimension``
+  symbols are all new when ``delay`` is above 1: MIG jumped from 1 bit for white noise with
+  ``delay=1`` to about ``dimension`` bits (e.g., 3.99 instead of 1.00 with the default
+  ``dimension=4``), and the fluctuation complexity (``FC``) changed accordingly.
+* ``information_gain()`` now compares the words symbol by symbol. They were joined into strings,
+  so that with symbols of more than one character (e.g., ``symbolize=None`` with 10 or more
+  values, or negative values) different words could be merged (e.g., 1 followed by 11, and 11
+  followed by 1), which changed MIG and FC depending on the labels of the symbols; non-integer
+  symbols (with ``symbolize=None``) were truncated to integers, which merged them (e.g., 0 and
+  0.5). The probability of the next word given the current one is now that of the transitions
+  that start from the current word (instead of all its occurrences, including the last one, which
+  has no successor), which changes MIG by about 1e-6 for 2,000 samples. It returns NaN with a
+  warning for signals with missing values (they were symbolized as 0) and for signals too short to
+  have a transition between words.
+* ``complexity_decorrelation()`` returns NaN with a warning for constant signals and for signals
+  with missing values; it returned 1 (the autocorrelation was NaN). Its undocumented -1 for an
+  autocorrelation that never crosses zero is now NaN, but this cannot happen for non-constant
+  signals (the autocovariances of a demeaned signal at all lags sum to zero). Other values are
+  unchanged.
+* ``entropy_wiener()`` (Wiener entropy, or spectral flatness) is rewritten. It returned the
+  flatness of the first window of a short-time Fourier transform only, ignoring the rest of the
+  signal, and gave about 0.15 for white noise instead of a value close to 1. It is now the ratio of
+  the geometric to the arithmetic mean of the power spectrum of the whole signal, estimated by
+  ``signal_psd()`` with the Welch method on windows of a sixteenth of the signal by default: the
+  flatness is biased downwards by the fluctuations of the estimated spectrum, and averaging about
+  30 windows gives about 0.98 for white noise (0.84 with the default windows of ``signal_psd()``,
+  and 0.56 with a single periodogram), 0.73 for an AR(1) process with a coefficient of 0.5 (whose
+  unpredictable proportion of the variance is 0.75), and nearly 0 for sinusoids. The power is no
+  longer clipped at 1e-10 (which depended on the units of the signal). The logarithmic Wiener
+  entropy, from 0 to minus infinity as the docstring described, is returned in ``info["Log"]``
+  together with the ``"PSD"``. It returns NaN with a warning for constant signals, signals with
+  missing values and spectra with fewer than 2 frequency bins, gains a ``show`` argument, its
+  ``**kwargs`` are passed to ``signal_psd()`` (instead of ``signal_timefrequency()``), and it is
+  now listed in the documentation, with a docstring that gives the formula, its relationship with
+  linear predictability (Dubnov, 2004) and references (Johnston, 1988; Tchernichovski et al.,
+  2000).
 
 New Features
 +++++++++++++
@@ -603,6 +643,24 @@ New Features
   ln((2c - 1)^m), the maximum of the joint entropy of the states and of their transitions, so
   that it lies between 0 and 1; the paper divides it by ln((2c - 1)^(m - 1)), which gives values
   m / (m - 1) times larger.
+* New ``complexity_jensenshannon()``: the Jensen-Shannon statistical complexity (C_JS, or MPR
+  complexity; Rosso et al., 2007), the product of the normalized permutation entropy and of the
+  Jensen-Shannon divergence between the distribution of the ordinal patterns and the uniform one.
+  Unlike permutation entropy alone, it distinguishes chaos from coloured noise: with
+  ``show=True``, the signal is drawn in the complexity-entropy plane, with the curves of minimum
+  and maximum complexity (Martin et al., 2006). It also returns the proportion of missing
+  (forbidden) ordinal patterns (Amigó et al., 2007).
+* New ``complexity_irreversibility()``: time-irreversibility indices, which are 0 for reversible
+  (e.g., linear Gaussian) processes and change sign when the signal is reversed: Trev, the
+  skewness of the increments (Schreiber & Schmitz, 2000; the ``trev`` feature of hctsa), and the
+  up-down balance and rotational asymmetry ordinal contrasts (Bandt, 2023), which leave out the
+  patterns with ties. Unlike the heart rate asymmetry indices of ``hrv_nonlinear()``, they apply
+  to any signal.
+* New ``entropy_correctedconditional()``: the corrected conditional entropy (CCE; Porta et al.,
+  1998), the minimum over the length of the patterns of the conditional entropy of a sample given
+  the previous ones, corrected for the patterns found only once, a standard regularity index for
+  short cardiovascular series. It also returns the normalized CCE and the regularity index
+  (Porta et al., 2001).
 
 Fixes
 +++++++++++++
@@ -909,6 +967,29 @@ Fixes
   ``dimension_max`` sequence; the marker drawn with ``show=True`` was off accordingly.
 * ``complexity_optimize(dimension_method="fnn", show=True)`` no longer raises a shape error when
   plotting the false nearest neighbour fractions.
+* ``information_gain()`` is 50 to 250 times faster (e.g., 8 ms instead of 0.4 s for 100,000
+  samples, and 1.4 ms instead of 0.38 s for 10,000 samples with ``dimension=10``): the words are
+  numbered as integers and the transitions counted with ``np.unique()``, instead of joining the
+  symbols into strings and looping over all the pairs of words. Its docstring gives the formulas
+  of MIG and FC and describes the words with a ``delay``.
+* ``complexity_relativeroughness()`` is about 25 times faster for long signals (e.g., 5 ms instead
+  of 0.13 s for 1,000,000 samples): only the autocovariances at lag 0 and 1 are computed, instead
+  of the whole autocorrelation function. Values are unchanged. ``demean`` and ``unbiased`` are now
+  explicit arguments (the other arguments of ``signal_autocor()``, which were passed through
+  ``**kwargs``, do not change RR and are no longer accepted). It returns NaN with a warning for
+  constant signals and signals with missing values (instead of NaN with a ``RuntimeWarning``), and
+  its docstring gives the formula and its expected values for white noise (2) and fractional
+  Gaussian noise (4 - 2^(2H)).
+* ``complexity_decorrelation()``'s plot (``show=True``) now normalizes the autocorrelation by its
+  value at lag 0 (the unbiased autocovariance could be larger at long lags, which shrank the
+  curve), and its docstring defines DT as the first lag at which the autocorrelation is zero or
+  negative.
+* ``complexity_embedding()`` raises a readable error when ``dimension * delay`` exceeds the length
+  of the signal (the message was a tuple of two strings), raises an error when ``dimension`` is
+  below 1 (it returned an array with no columns and more rows than samples), and accepts NumPy
+  floats such as ``np.float32`` as ``delay`` and ``dimension`` (with the same warning as Python
+  floats; they raised a ``TypeError``). Its docstring gives the shape of the output, which has
+  ``dimension`` columns.
 
 
 0.3.0

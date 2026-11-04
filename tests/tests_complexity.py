@@ -1,3 +1,4 @@
+from collections import Counter
 from collections.abc import Iterable
 
 import antropy
@@ -3220,3 +3221,217 @@ def test_fractal_tmf():
     # Arguments are passed on to fractal_dfa()
     _, info = nk.fractal_tmf(signal, n=3, random_state=3, q=[-3, -1, 1, 3])
     assert np.isclose(info["Width"], nk.fractal_dfa(signal, multifractal=True, q=[-3, -1, 1, 3])[0]["Width"].iloc[0])
+
+
+def test_complexity_decorrelation():
+    signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5, random_state=1)
+    # First lag at which the autocorrelation is zero or negative
+    d = signal - np.mean(signal)
+    acov = np.correlate(d, d, mode="full")[len(d) - 1 :]
+    assert nk.complexity_decorrelation(signal)[0] == np.flatnonzero(acov <= 0)[0]
+
+    # Undefined for constant signals and signals with missing values (it returned 1)
+    with pytest.warns(nk.misc.NeuroKitWarning, match="constant"):
+        assert np.isnan(nk.complexity_decorrelation(np.ones(50))[0])
+    with pytest.warns(nk.misc.NeuroKitWarning, match="missing"):
+        assert np.isnan(nk.complexity_decorrelation([1.0, 2.0, np.nan, 3.0, 1.0, 0.0])[0])
+
+
+def test_complexity_relativeroughness():
+    # The lag-1 autocovariance of [1, 2, 3, 4, 5] is 4 (biased, as in R's acf()), its variance 10
+    rr, info = nk.complexity_relativeroughness([1, 2, 3, 4, 5])
+    assert np.isclose(rr, 2 * (1 - 4 / 10))
+    assert np.allclose(info["ACov"], [10, 4])
+
+    signal = np.random.default_rng(3).standard_normal(1000).cumsum()
+    assert np.isclose(nk.complexity_relativeroughness(signal)[0], 2 * (1 - nk.signal_autocor(signal, lag=1)[0]))
+    _, info = nk.complexity_relativeroughness(signal, unbiased=True)
+    assert np.allclose(info["ACov"], nk.signal_autocor(signal, unbiased=True)[1]["ACov"][:2])
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="constant"):
+        assert np.isnan(nk.complexity_relativeroughness(np.full(10, 0.1))[0])
+
+
+def test_information_gain():
+    signal = np.random.default_rng(4).standard_normal(5000)
+    binary = (signal > np.mean(signal)).astype(int)
+
+    for delay in [1, 3]:
+        mig, info = nk.information_gain(signal, dimension=3, delay=delay)
+
+        # Bates & Shepard (1993), with each word followed by the one starting `delay` samples later
+        states = [tuple(row) for row in nk.complexity_embedding(binary, dimension=3, delay=delay)]
+        pairs = list(zip(states[:-delay], states[delay:]))
+        p = {s: c / len(states) for s, c in Counter(states).items()}
+        n_i = Counter(states[:-delay])
+        n_ij = Counter(pairs)
+        assert np.isclose(mig, sum(c / len(pairs) * np.log2(n_i[i] / c) for (i, _), c in n_ij.items()))
+        assert np.isclose(info["FC"], sum(c / len(pairs) * np.log2(p[i] / p[j]) ** 2 for (i, j), c in n_ij.items()))
+
+        # The next word adds one symbol: 1 bit for white noise, whatever the delay (it was about
+        # `dimension` bits for delays above 1)
+        assert np.abs(mig - 1) < 0.01
+
+    # Any symbols can be used (with 10 symbols or more, the words were joined as ambiguous strings,
+    # and non-integer symbols were truncated)
+    symbols = np.random.default_rng(5).integers(0, 12, 3000)
+    mig = nk.information_gain(symbols, symbolize=None, dimension=2)[0]
+    assert np.isclose(mig, nk.information_gain(symbols * 10 + 100, symbolize=None, dimension=2)[0])
+    assert np.isclose(mig, nk.information_gain(symbols / 2, symbolize=None, dimension=2)[0])
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="missing"):
+        assert np.isnan(nk.information_gain(np.array([1, 2, np.nan, 3, 4, 1, 2, 0.0]), dimension=2)[0])
+
+
+def test_complexity_embedding_checks():
+    embedded = nk.complexity_embedding([1, 2, 3, 2.5, 2.0, 1.5], delay=2, dimension=2)
+    assert np.array_equal(embedded, [[1, 3], [2, 2.5], [3, 2.0], [2.5, 1.5]])
+
+    with pytest.raises(ValueError, match="should not exceed the length"):
+        nk.complexity_embedding(np.arange(10), dimension=4, delay=3)
+    with pytest.raises(ValueError, match="'dimension' has to be at least 1"):
+        nk.complexity_embedding(np.arange(10), dimension=0)
+
+
+def test_entropy_wiener():
+    import scipy.signal
+
+    # Ratio of the geometric to the arithmetic mean of the power spectrum
+    signal = np.random.default_rng(6).standard_normal(2000)
+    sf, info = nk.entropy_wiener(signal)
+    power = info["PSD"]["Power"].values
+    assert np.isclose(sf, np.exp(np.mean(np.log(power))) / np.mean(power))
+    assert np.isclose(info["Log"], np.log(sf))
+    # The whole signal is used (only the first window of the STFT was), and white noise is flat
+    assert 0.95 < sf <= 1
+    assert np.isclose(sf, nk.entropy_wiener(signal * 1e-6, sampling_rate=100)[0])
+
+    # Proportion of the variance that cannot be linearly predicted: 1 - phi^2 for an AR(1) process
+    ar = scipy.signal.lfilter([1], [1, -0.5], np.random.default_rng(7).standard_normal(10000))
+    assert np.abs(nk.entropy_wiener(ar)[0] - 0.75) < 0.03
+
+    # Close to 0 for sinusoids
+    sines = nk.signal_simulate(duration=20, sampling_rate=100, frequency=[3, 10])
+    assert nk.entropy_wiener(sines, sampling_rate=100)[0] < 1e-3
+
+    for signal in [np.ones(100), np.array([1, 2, np.nan, 3.0] * 10)]:
+        with pytest.warns(nk.misc.NeuroKitWarning):
+            assert np.isnan(nk.entropy_wiener(signal)[0])
+
+
+def _logistic_map(n=5000, r=4.0, x0=0.1):
+    x = np.zeros(n)
+    x[0] = x0
+    for i in range(1, n):
+        x[i] = r * x[i - 1] * (1 - x[i - 1])
+    return x
+
+
+def test_complexity_jensenshannon():
+    import math
+
+    from neurokit2.complexity.complexity_jensenshannon import _complexity_jensenshannon_curves
+
+    def reference(signal, dimension):
+        # Rosso et al. (2007), with the dense distribution over all the dimension! patterns
+        n = math.factorial(dimension)
+        p = np.zeros(n)
+        freq = nk.complexity_ordinalpatterns(signal, dimension=dimension)[1]["Frequencies"]
+        p[: len(freq)] = freq
+        u = np.full(n, 1 / n)
+
+        def S(x):
+            return -np.sum(x[x > 0] * np.log(x[x > 0]))
+
+        js = S((p + u) / 2) - S(p) / 2 - S(u) / 2
+        js_max = -0.5 * (((n + 1) / n) * np.log(n + 1) + np.log(n) - 2 * np.log(2 * n))
+        return S(p) / np.log(n) * js / js_max
+
+    logistic = _logistic_map()
+    noise = np.random.default_rng(8).standard_normal(5000)
+    for signal in [logistic, noise, noise.cumsum()]:
+        c, info = nk.complexity_jensenshannon(signal, dimension=5)
+        assert np.isclose(c, reference(signal, 5))
+        assert np.isclose(c, info["Entropy"] * info["Disequilibrium"])
+        # H is the normalized permutation entropy
+        assert np.isclose(info["Entropy"], nk.entropy_permutation(signal, dimension=5)[0])
+
+    # Chaos lies close to the maximum complexity at its entropy, noise near 0
+    c, info = nk.complexity_jensenshannon(logistic, dimension=5)
+    _, (h_max, c_max) = _complexity_jensenshannon_curves(120, n_points=400)
+    assert c > 0.9 * np.interp(info["Entropy"], h_max, c_max)
+    assert info["MissingPatterns"] > 0.5  # Forbidden patterns of the logistic map
+    c, info = nk.complexity_jensenshannon(noise, dimension=5)
+    assert c < 0.02 and info["MissingPatterns"] == 0
+
+    # A single pattern: no entropy, no complexity, all but one pattern missing
+    c, info = nk.complexity_jensenshannon(np.arange(100.0), dimension=4)
+    assert c == 0 and info["Entropy"] == 0 and np.isclose(info["Disequilibrium"], 1)
+    assert np.isclose(info["MissingPatterns"], 23 / 24)
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="missing"):
+        assert np.isnan(nk.complexity_jensenshannon([1.0, 2.0, np.nan, 3.0, 1.0, 0.0])[0])
+
+
+def test_complexity_irreversibility():
+    signal = np.random.default_rng(9).standard_normal(500).cumsum() ** 2
+    trev, info = nk.complexity_irreversibility(signal, delay=3)
+
+    # Skewness of the increments (hctsa's trev)
+    d = signal[3:] - signal[:-3]
+    assert np.isclose(trev, np.mean(d**3) / np.mean(d**2) ** 1.5)
+
+    # All the indices change sign with time reversal
+    trev_r, info_r = nk.complexity_irreversibility(signal[::-1], delay=3)
+    assert np.isclose(trev_r, -trev)
+    for key in ["UpDownBalance", "RotationalAsymmetry"]:
+        assert np.isclose(info_r[key], -info[key])
+    # Flipping the signal upside down changes the up-down balance, not the rotational asymmetry
+    _, info_f = nk.complexity_irreversibility(-signal, delay=3)
+    assert np.isclose(info_f["UpDownBalance"], -info["UpDownBalance"])
+    assert np.isclose(info_f["RotationalAsymmetry"], info["RotationalAsymmetry"])
+
+    # Sawtooth with slow rises and fast falls: negatively skewed increments, more monotonic rises
+    t = np.linspace(0, 10, 2000)
+    sawtooth = (t % 1) + np.random.default_rng(10).normal(0, 0.1, len(t))
+    trev, info = nk.complexity_irreversibility(sawtooth, delay=10)
+    assert trev < -1 and info["UpDownBalance"] > 0.1
+
+    # A linear Gaussian process is reversible
+    ar = np.zeros(20000)
+    e = np.random.default_rng(11).standard_normal(20000)
+    for i in range(1, len(ar)):
+        ar[i] = 0.6 * ar[i - 1] + e[i]
+    trev, info = nk.complexity_irreversibility(ar)
+    assert np.abs(trev) < 0.05 and np.abs(info["UpDownBalance"]) < 0.01
+
+
+def test_entropy_correctedconditional():
+    signal = np.random.default_rng(12).standard_normal(60)
+    cce, info = nk.entropy_correctedconditional(signal, dimension=4, c=3)
+
+    # Porta et al. (1998): CCE(L) = E(L) - E(L - 1) + perc(L) * E(1), uniform quantization
+    symbols = np.minimum(np.floor((signal - signal.min()) / np.ptp(signal) * 3), 2)
+    entropies, perc = [0.0], []
+    for L in range(1, 5):
+        counts = np.array(list(Counter(tuple(symbols[i : i + L]) for i in range(len(symbols) - L + 1)).values()))
+        p = counts / counts.sum()
+        entropies.append(-np.sum(p * np.log2(p)))
+        perc.append(np.sum(counts == 1) / counts.sum())  # Patterns found only once
+    expected = [entropies[L] - entropies[L - 1] + perc[L - 1] * entropies[1] for L in range(1, 5)]
+    assert np.allclose(info["CCE_L"], expected)
+    assert np.isclose(cce, min(expected)) and info["L"] == np.argmin(expected) + 1
+    assert np.isclose(info["NCCE"], cce / entropies[1]) and np.isclose(info["Regularity"], 1 - info["NCCE"])
+
+    # Close to 1 (normalized) for white noise, close to 0 for a periodic signal
+    rng = np.random.default_rng(13)
+    assert nk.entropy_correctedconditional(rng.standard_normal(300))[1]["NCCE"] > 0.9
+    sine = np.sin(2 * np.pi * np.arange(300) / 20) + rng.normal(0, 0.01, 300)
+    assert nk.entropy_correctedconditional(sine)[1]["NCCE"] < 0.1
+    # The normalized index does not depend on the logarithmic base
+    assert np.isclose(
+        nk.entropy_correctedconditional(sine, base=np.e)[1]["NCCE"], nk.entropy_correctedconditional(sine)[1]["NCCE"]
+    )
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="constant"):
+        assert np.isnan(nk.entropy_correctedconditional(np.ones(50))[0])

@@ -123,8 +123,6 @@ def fractal_tmf(signal, n=40, show=False, random_state=None, **kwargs):
     rng = check_random_state(random_state)
     kwargs = {k: v for k, v in kwargs.items() if k not in ["multifractal", "show"]}
 
-    # TODO: Bell et al. (2019) use the Chhabra & Jensen (1989) spectrum width (with q kept only if
-    # r >= 0.995), not the MFDFA one. Consider adding it as an option (see the note in the docstring).
     w0 = float(fractal_dfa(signal, multifractal=True, show=False, **kwargs)[0]["Width"].iloc[0])
 
     w = np.zeros(n)
