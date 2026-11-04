@@ -10,9 +10,18 @@ def fractal_sevcik(signal):
     The SFD algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik
     (1998). This method can be used to quickly measure the complexity and randomness of a signal.
 
-    .. note:: Some papers (e.g., Wang et al. 2017) suggest adding ``np.log(2)`` to the numerator,
-       but it's unclear why, so we stuck to the original formula for now. But if you have an idea,
-       please let us know!
+    The waveform is first mapped into a unit square (the time axis is rescaled to [0, 1] and the
+    amplitude to [0, 1]), and its length *L* is computed. The fractal dimension is then
+    approximated as :math:`D = 1 + \\frac{\\ln(L)}{\\ln(2 \\cdot N')}`, where *N'* is the number of
+    segments (i.e., the number of samples minus 1).
+
+    .. note:: Some papers (e.g., Wang et al. 2017) include a ``ln(2)`` term in the numerator. It
+       comes from Sevcik's derivation, in which the curve is covered by :math:`N(\\epsilon) =
+       L / (2 \\epsilon)` balls of radius :math:`\\epsilon = 1 / (2 N')`, giving
+       :math:`D = 1 + \\frac{\\ln(L) - \\ln(2)}{\\ln(2 N')}`. Sevcik drops it because it vanishes as
+       :math:`N' \\to \\infty` (his eq. 6), and that is the version that reproduces the values of his
+       Table 2. We use eq. 6 (note that the QuickBASIC program listed in his appendix subtracts
+       ``ln(2)``).
 
     Parameters
     ----------
@@ -68,12 +77,11 @@ def fractal_sevcik(signal):
     # 3. Compute L (because we use np.diff, hence n-1 below)
     L = np.sum(np.sqrt(np.diff(y_) ** 2 + np.diff(x_) ** 2))
 
-    # 4. Compute the fractal dimension (approximation)
+    # 4. Compute the fractal dimension (approximation, eq. 6 of Sevcik, 2010)
     sfd = 1 + np.log(L) / np.log(2 * (n - 1))
 
-    # Some papers (e.g., Wang et al. 2017) suggest adding np.log(2) to the numerator:
-    # sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))
-    # But it's unclear why. Sticking to the original formula for now.
-    # If you have an idea, let us know!
+    # Sevcik's derivation (eq. 3) has an additional -ln(2) term in the numerator, which vanishes as
+    # n -> Inf: sfd = 1 + (np.log(L) - np.log(2)) / np.log(2 * (n - 1)). Eq. 6 (without it) is the
+    # one that reproduces the values in Sevcik's Table 2.
 
     return sfd, {}

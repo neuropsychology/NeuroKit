@@ -15,12 +15,14 @@ def fractal_hurst(signal, scale="default", corrected=True, show=False):
     The Hurst exponent is a measure for the "long-term memory" of a signal. It can be used to
     determine whether the time series is more, less, or equally likely to increase if it has
     increased in previous steps. This property makes the Hurst exponent especially interesting for
-    the analysis of stock data. It typically ranges from 0 to 1, with 0.5 corresponding to a
-    Brownian motion. If H < 0.5, the time-series covers less "distance" than a random walk (the
-    memory of the signal decays faster than at random), and vice versa.
+    the analysis of stock data. It typically ranges from 0 to 1, with 0.5 corresponding to
+    uncorrelated noise (i.e., the increments of a Brownian motion, since the R/S analysis
+    integrates the signal). If H < 0.5, the time series is anti-persistent (increases tend to be
+    followed by decreases), and if H > 0.5 it is persistent (long-range correlated).
 
-    The R/S approach first splits the time series into non-overlapping subseries of length n. R and
-    S (sigma) are then calculated for each subseries and the mean is taken over all subseries
+    The R/S approach first splits the time series into non-overlapping subseries of length n. R
+    (the range of the cumulative sum of the deviations from the mean) and S (the standard
+    deviation) are then calculated for each subseries and the mean is taken over all subseries
     yielding (R/S)_n. This process is repeated for several lengths *n*. The final exponent is then
     derived from fitting a straight line to the plot of :math:`log((R/S)_n)` vs :math:`log(n)`.
 
@@ -28,13 +30,17 @@ def fractal_hurst(signal, scale="default", corrected=True, show=False):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-        or dataframe.
     scale : list
         A list containing the lengths of the windows (number of data points in each subseries) that
         the signal is divided into. See :func:`fractal_dfa` for more information.
     corrected : boolean
-        if ``True``, the Anis-Lloyd-Peters correction factor will be applied to the
-        output according to the expected value for the individual (R/S) values.
+        If ``True``, the Anis-Lloyd correction is applied: the expected (R/S)_n of Gaussian white
+        noise (Anis & Lloyd, 1976) is subtracted from each (R/S)_n in log-space, and 0.5 is added
+        to the resulting slope (Weron, 2002). This removes the small-sample bias of R/S, which
+        overestimates H for short windows. Note that the expected value is exact when S is the
+        population standard deviation (as used here). Peters' (1994) additional factor
+        :math:`(n - 0.5) / n` (used e.g. in *nolds*) approximately corresponds to using the
+        sample (*n - 1*) standard deviation instead.
     show : bool
         If ``True``, returns a plot.
 
@@ -59,14 +65,17 @@ def fractal_hurst(signal, scale="default", corrected=True, show=False):
     ----------
     * Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the
       Multiscaling Value at Risk. The European Journal of Finance, 1-22.
-    * Annis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range
+    * Anis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range
       of independent normal summands. Biometrika, 63(1), 111-116.
+    * Weron, R. (2002). Estimating long-range dependence: finite sample properties and confidence
+      intervals. Physica A, 312(1-2), 285-299.
     * https://github.com/CSchoel/nolds
 
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+    signal = np.asarray(signal, dtype=float)
 
     n = len(signal)
     scale = _fractal_dfa_findscales(n, scale)
@@ -108,19 +117,17 @@ def fractal_hurst(signal, scale="default", corrected=True, show=False):
 
 
 def expected_rs(n):
-    """Calculates the expected (R/S)_n for white noise for a given n.
-    This is used as a correction factor in the function hurst_rs. It uses the
-    formula of Anis-Lloyd-Peters.
+    """Calculates the expected (R/S)_n of Gaussian white noise for a given n (Anis & Lloyd, 1976).
+
+    The formula is exact when S is the population standard deviation. The ratio of Gamma functions
+    is computed in log-space, which avoids the overflow of Gamma for n > 340 (and hence the
+    asymptotic approximation used for large n by other implementations).
 
     https://en.wikipedia.org/wiki/Hurst_exponent#cite_note-:2-17
     """
-    # front = (n - 0.5) / n
     i = np.arange(1, n)
     back = np.sum(np.sqrt((n - i) / i))
-    if n <= 340:
-        middle = scipy.special.gamma((n - 1) * 0.5) / np.sqrt(np.pi) / scipy.special.gamma(n * 0.5)
-    else:
-        middle = 1.0 / np.sqrt(n * np.pi * 0.5)
+    middle = np.exp(scipy.special.gammaln((n - 1) * 0.5) - scipy.special.gammaln(n * 0.5)) / np.sqrt(np.pi)
 
     return middle * back
 
@@ -143,9 +150,9 @@ def _fractal_hurst_rs(signal, window):
     y = np.cumsum(y, axis=1)
     # find ranges
     r = np.max(y, axis=1) - np.min(y, axis=1)
-    # find standard deviation
-    # we should use the unbiased estimator, since we do not know the true mean
-    s = np.std(seqs, ddof=1, axis=1)
+    # find standard deviation (population formula, as in the classical R/S statistic, for which
+    # the expected value of Anis & Lloyd (1976) is exact)
+    s = np.std(seqs, ddof=0, axis=1)
     # some ranges may be zero and have to be excluded from the analysis
     idx = np.where(r != 0)
     r = r[idx]

@@ -3088,3 +3088,135 @@ def test_entropy_utils_fuzzy_range():
         _, info = nk.entropy_multiscale(amplitude * signal, scale=[1, 2], method="MSCoSiEn")
         assert np.isclose(info["Tolerance"], 0.2)
         assert np.isclose(info["Value"][0], nk.entropy_cosinesimilarity(signal)[0])
+
+
+def test_fractal_hurst():
+    import scipy.special
+
+    from neurokit2.complexity.fractal_hurst import _fractal_hurst_rs, expected_rs
+
+    # Anis & Lloyd (1976) expected R/S (exact for the population SD), continuous for n > 340
+    for n in [5, 10, 50, 340, 341, 1000]:
+        i = np.arange(1, n)
+        expected = np.sum(np.sqrt((n - i) / i)) / np.sqrt(np.pi)
+        expected *= np.exp(scipy.special.gammaln((n - 1) / 2) - scipy.special.gammaln(n / 2))
+        assert np.isclose(expected_rs(n), expected)
+    rng = np.random.default_rng(0)
+    x = rng.normal(size=(20000, 10))
+    y = np.cumsum(x - x.mean(axis=1, keepdims=True), axis=1)
+    rs = np.mean((y.max(axis=1) - y.min(axis=1)) / x.std(axis=1))
+    assert np.isclose(rs, expected_rs(10), rtol=0.01)
+    # ... which is what _fractal_hurst_rs() computes (for windows of 10)
+    assert np.isclose(_fractal_hurst_rs(x.ravel(), 10), rs)
+
+    # Corrected H of white noise is 0.5 (the R/S small-sample bias is removed)
+    noise = rng.normal(size=4000)
+    h, info = nk.fractal_hurst(noise)
+    assert np.isclose(h, 0.5, atol=0.03)
+    assert info["Corrected"]
+    assert nk.fractal_hurst(noise, corrected=False)[0] > h
+    assert np.isclose(nk.fractal_hurst(list(noise))[0], h)
+    assert np.isclose(nk.fractal_hurst(pd.Series(noise))[0], h)
+
+
+def test_fractal_sda():
+    rng = np.random.default_rng(3)
+    signal = rng.normal(size=1000)
+
+    # Reference: SD of the means of adjacent bins of `scale` points of the standardized signal
+    def sda_reference(x, scales):
+        x = nk.signal_detrend(x)
+        x = (x - np.mean(x)) / np.std(x)
+        sds = [np.std(x[: len(x) // s * s].reshape(-1, s).mean(axis=1), ddof=1) for s in scales]
+        return 1 - np.polyfit(np.log10(scales), np.log10(sds), 1)[0]
+
+    sda, info = nk.fractal_sda(signal)
+    assert np.all(info["Scale"] == [1, 2, 4, 8, 16, 32, 64, 128, 256])
+    assert np.isclose(sda, sda_reference(signal, info["Scale"]))
+    assert np.isclose(sda, 1.5, atol=0.1)  # White noise: SD of the means ~ 1/sqrt(size)
+    for scales in [[1, 2, 4, 8, 16], np.array([1, 3, 9, 27])]:
+        assert np.isclose(nk.fractal_sda(list(signal), scales=scales)[0], sda_reference(signal, np.asarray(scales)))
+
+    # Smoother signals (positively correlated increments) have a lower FD
+    smooth = np.convolve(signal, np.ones(10) / 10, mode="valid")
+    assert nk.fractal_sda(smooth)[0] < sda - 0.1
+    with pytest.raises(ValueError, match="2 valid scales"):
+        nk.fractal_sda(signal, scales=[1, 1000])
+
+
+def test_fractal_psdslope():
+    rng = np.random.default_rng(5)
+    noise = rng.normal(size=4000)
+    brown = np.cumsum(noise)
+
+    # Voss (1988): FD = (5 - beta) / 2 for fBm, where the PSD decays as 1/f^beta (beta = -slope)
+    fd, info = nk.fractal_psdslope(brown)
+    assert np.isclose(info["Slope"], -2, atol=0.2)
+    assert np.isclose(fd, (5 + info["Slope"]) / 2)
+    assert np.isclose(fd, 1.5, atol=0.1)
+
+    # Hasselman (2013): 1.5 for white noise, lower for persistent signals
+    fd, info = nk.fractal_psdslope(noise, method="hasselman2013")
+    assert np.isclose(info["Slope"], 0, atol=0.15)
+    assert np.isclose(fd, 1.5, atol=0.05)
+    assert nk.fractal_psdslope(brown, method="hasselman")[0] < 1.2
+
+    # The method is validated
+    with pytest.raises(ValueError, match="method"):
+        nk.fractal_psdslope(noise, method="higuchi")
+
+
+def test_fractal_nld():
+    rng = np.random.default_rng(7)
+    signal = rng.normal(size=30)
+
+    # Kalauzi et al. (2009, eqs. 8-10): normalized by the mean absolute deviation, divided by N
+    centered = signal - np.mean(signal)
+    normalized = centered / np.mean(np.abs(centered))
+    nld = nk.fractal_nld(signal)[0]
+    assert np.isclose(nld, np.sum(np.abs(np.diff(normalized))) / len(signal))
+    assert np.isclose(nk.fractal_nld(5 * signal + 3)[0], nld)
+
+    # The calibration curve (fitted on Weierstrass functions) gives FD ~ 2 for white noise
+    windows = rng.normal(size=(1000, 30))
+    assert np.isclose(np.mean([nk.fractal_nld(w, corrected=True)[0] for w in windows]), 2, atol=0.03)
+
+    # Missing values are ignored
+    with_nan = np.r_[signal[:10], np.nan, signal[10:]]
+    expected = np.sum(np.abs(np.diff(normalized[:10]))) + np.sum(np.abs(np.diff(normalized[10:])))
+    assert np.isclose(nk.fractal_nld(with_nan)[0], expected / len(signal))
+
+
+def test_fractal_linelength_sevcik():
+    signal = np.array([0.0, 1.0, 3.0, 2.0, np.nan, 5.0, 4.0])
+    # Differences involving missing values are ignored (not bridged over)
+    assert np.isclose(nk.fractal_linelength(signal)[0], np.mean([1, 2, 1, 1]))
+
+    # Sevcik (2010, eq. 6): a straight line in the unit square has length sqrt(2)
+    n = 101
+    sfd, _ = nk.fractal_sevcik(np.arange(n))
+    assert np.isclose(sfd, 1 + np.log(np.sqrt(2)) / np.log(2 * (n - 1)))
+
+
+def test_fractal_density():
+    signal = nk.signal_simulate(duration=2, frequency=[5, 9], noise=0.01, random_state=1)
+    edges = np.percentile(signal, [1, 99])
+    for tolerance in [0.1, 0.25]:
+        _, info = nk.fractal_density(signal, delay=20, tolerance=tolerance)
+        assert info["Average"].shape == (int((edges[1] - edges[0]) / tolerance),) * 2
+    assert np.isclose(nk.fractal_density(pd.Series(signal), delay=20)[0], nk.fractal_density(signal, delay=20)[0])
+
+
+def test_fractal_tmf():
+    signal = nk.signal_simulate(duration=1, sampling_rate=300, frequency=[5, 12], noise=0.5, random_state=2)
+
+    tmf, info = nk.fractal_tmf(signal, n=10, random_state=3)
+    assert tmf == nk.fractal_tmf(signal, n=10, random_state=3)[0]
+    # tMF = (W_original - mean(W_surrogates)) / SE(W_surrogates) (Bell et al., 2019)
+    w = info["Width_Surrogates"]
+    assert np.isclose(tmf, (info["Width"] - np.mean(w)) / (np.std(w, ddof=1) / np.sqrt(len(w))))
+    assert np.isclose(info["Width"], nk.fractal_dfa(signal, multifractal=True)[0]["Width"].iloc[0])
+
+    # Arguments are passed on to fractal_dfa()
+    _, info = nk.fractal_tmf(signal, n=3, random_state=3, q=[-3, -1, 1, 3])
+    assert np.isclose(info["Width"], nk.fractal_dfa(signal, multifractal=True, q=[-3, -1, 1, 3])[0]["Width"].iloc[0])

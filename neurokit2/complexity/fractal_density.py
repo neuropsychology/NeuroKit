@@ -29,7 +29,8 @@ def fractal_density(signal, delay=1, tolerance="sd", bins=None, show=False, **kw
         Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     tolerance : float
-        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        Tolerance (often denoted as *r*), used as the bin width of the density matrix (the number
+        of bins is the range between the 1st and 99th percentiles divided by the tolerance). If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     bins : int
@@ -38,7 +39,8 @@ def fractal_density(signal, delay=1, tolerance="sd", bins=None, show=False, **kw
     show : bool
         Plot the density matrix. Defaults to ``False``.
     **kwargs
-        Other arguments to be passe.
+        Other arguments to be passed to the density estimation (``method="histogram"`` (default)
+        or ``"kde"``).
 
     Returns
     ---------
@@ -97,19 +99,20 @@ def fractal_density(signal, delay=1, tolerance="sd", bins=None, show=False, **kw
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
-    if isinstance(signal, (np.ndarray, list)):
+    if isinstance(signal, (np.ndarray, list, pd.Series)):
         # This index is made to work on epochs, so if not an epoch,
         # got to transform
-        signal = {"1": pd.DataFrame({"Signal": signal})}
+        signal = {"1": pd.DataFrame({"Signal": np.asarray(signal)})}
 
     # Get edges and tolerance from first epoch. Imperfect but what to do?
-    edges = np.percentile(signal["1"]["Signal"].values, [1, 99])
+    first = next(iter(signal.values()))["Signal"].dropna().values
+    edges = np.percentile(first, [1, 99])
 
     if bins is None:
-        tolerance, _ = complexity_tolerance(signal["1"]["Signal"].values, method="sd")
+        tolerance, _ = complexity_tolerance(first, method=tolerance)
 
         # Compute number of "bins"
-        bins = int((edges[1] - edges[0]) / tolerance)
+        bins = max(1, int((edges[1] - edges[0]) / tolerance))
 
     # Prepare the container for the 2D density matrix
     X = np.empty((bins, bins, len(signal)))

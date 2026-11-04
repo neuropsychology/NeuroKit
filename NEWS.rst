@@ -122,6 +122,37 @@ Changes in Results
   the length of the signal (a median of 122 for pink noise of 500 samples and 756 for 2,000, now
   23 and 19). A list of k_max values is now tested in increasing order. ``find_plateau()`` itself
   is unchanged.
+* ``fractal_hurst()`` now uses the population standard deviation in the R/S statistic, for which
+  the expected value of Anis & Lloyd (1976), subtracted with ``corrected=True`` (the default), is
+  exact. With the sample (n - 1) SD, the corrected exponent was biased upward (e.g., 0.525 instead
+  of 0.50 for white noise of 500 samples, 0.513 for 2,000 samples). The expected value is now also
+  computed exactly for windows above 340 samples (an asymptotic approximation was used).
+  Uncorrected exponents are slightly lower.
+* ``fractal_sda()`` split the signal into ``scale`` bins (of n / ``scale`` points each) instead of
+  bins of ``scale`` points, so the FD was around 0.6-0.75 whatever the signal (e.g., 0.66 for white
+  noise and 0.71 for fractional Gaussian noise with H = 0.7, for 2,000 samples). It now gives 1.54
+  and 1.37 (2 - H: 1.5 and 1.3). The SD of the bin means now uses the sample (n - 1) formula, as in
+  Hasselman's *casnet*, which reduces the bias of the largest scales (with only 2 bins).
+* ``fractal_psdslope()`` with the default ``method="voss1988"`` computed FD = (5 - beta) / 2 with
+  the slope instead of beta (the PSD decays as 1/f^beta, so beta = -slope): e.g., 3.5 instead of
+  1.5 for a Brownian motion. The fit now also includes the lowest frequencies (``signal_psd()``'s
+  default ``min_frequency`` dropped the first three), which reduces the SD of the slope by about
+  10% (this also affects ``method="hasselman2013"``).
+* ``fractal_nld()`` now normalizes the signal as Kalauzi et al. (2009, eqs. 8-10): centered and
+  divided by its mean absolute deviation (instead of its standard deviation), with the sum of the
+  absolute differences divided by the number of samples (instead of the number of differences).
+  The calibration curve of ``corrected=True`` was fitted on this definition: it now gives an FD of
+  2.00 for white noise (30-sample windows) instead of 1.92. Raw NLD values are about 1.25 times
+  larger for Gaussian-like signals.
+* ``fractal_tmf()`` had its sign flipped: ``scipy.stats.ttest_1samp(surrogates, original)``
+  returns (mean(surrogates) - original) / SE, while tMF is (original - mean(surrogates)) / SE
+  (Bell et al., 2019), positive when the signal is more multifractal than its linear surrogates.
+  Its ``**kwargs`` are now passed on to ``fractal_dfa()``, as documented (they were ignored).
+* ``fractal_linelength()`` (and the ``LL`` index of ``complexity()``) no longer bridges missing
+  values: the differences involving a NaN are ignored, instead of dropping the NaNs and taking the
+  difference between the samples around the gap. Results without missing values are unchanged.
+* ``fractal_density()`` now uses its ``tolerance`` argument (it always used 0.2 SD) and accepts
+  pandas Series.
 * ``entropy_bubble()`` (and the ``BubbEn`` index of ``complexity()``) now uses the Rényi entropy
   of order ``alpha`` (2 by default, as in Manis et al., 2017). The ``alpha`` argument was not
   passed on, so the Shannon entropy was used whatever its value (e.g., 0.656 instead of 0.582 for
@@ -552,6 +583,8 @@ New Features
   than that number of samples in time are left out of the correlation sum, which removes the bias
   of the autocorrelation of oversampled signals (e.g., EEG) at small radii. Defaults to 0 (all
   pairs), so results are unchanged.
+* ``fractal_tmf()`` gains a ``random_state`` argument (for reproducible surrogates), and returns the
+  multifractal width of the signal and of its surrogates in ``info``.
 * ``complexity_rqa()``, ``recurrence_matrix()`` and ``hrv_rqa()`` gain a ``distance`` argument
   (``"euclidean"``, the default, ``"chebyshev"`` or ``"manhattan"``), which
   ``complexity_tolerance(method="recurrence")`` also takes, so that the default tolerance still
@@ -620,6 +653,20 @@ Fixes
   al. (1994).
 * ``fractal_petrosian()``'s docstring now gives the right default for ``symbolize`` (``"C"``, the
   sign of consecutive differences, not the mean).
+* ``fractal_sevcik()``'s docstring now describes the method and explains the ln(2) term found in
+  some papers: it comes from Sevcik's derivation and vanishes as N grows, and his eq. 6 (without
+  it, as used here) is the one that reproduces the values of his Table 2. Results are unchanged.
+* ``fractal_nld()``'s docstring now says that the calibration curve was fitted on Weierstrass
+  functions (not on EEG), gives the parameters that Kalauzi et al. (2009) adjusted on EEG, and
+  that a float (not a DataFrame) is returned.
+* ``fractal_hurst()``'s docstring now says that H = 0.5 corresponds to uncorrelated noise (the
+  increments of a Brownian motion, not the Brownian motion itself) and describes the correction.
+* ``fractal_psdslope()``'s docstring now gives both conversion formulas and the range of validity of
+  Voss' (fractional Brownian motions; it returns values above 2 for noise-like signals), and no
+  longer says that the PSD ``method`` can be changed (it is the function's own ``method``
+  argument).
+* ``fractal_sda()``'s docstring now describes the bins (``scales`` are bin sizes, which can be
+  given as a list) and the relationship with H (FD = 2 - H for fractional Gaussian noise).
 * ``complexity_k()`` (and therefore ``fractal_higuchi(k_max="default")``) is several hundred times
   faster (e.g., 0.04 s instead of 19 s for 1,600 samples): the curve lengths are computed once
   instead of again for each tested k_max, and the least-squares fits of all the k_max values are
