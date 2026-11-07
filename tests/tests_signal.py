@@ -266,6 +266,27 @@ def test_signal_merge():
     assert signal[0] == signal2[0] + signal2[0]
 
 
+@pytest.mark.parametrize("container", [list, pd.Series])
+@pytest.mark.parametrize(
+    "time1, time2, expected",
+    [
+        ([0, 4], [0, 4], [11, 22, 33, 44]),
+        ([0, 4], [2, 6], [11, 12, 13, 24, 34, 44]),
+        ([2, 6], [0, 4], [11, 21, 31, 42, 43, 44]),
+    ],
+)
+def test_signal_merge_input_types(container, time1, time2, expected):
+    merged = nk.signal_merge(container([1, 2, 3, 4]), container([10, 20, 30, 40]), time1, time2)
+    assert isinstance(merged, np.ndarray)
+    np.testing.assert_array_equal(merged, expected)
+
+
+def test_signal_merge_series_index():
+    signal1 = pd.Series([1, 2, 3, 4], index=[10, 11, 12, 13])
+    signal2 = pd.Series([10, 20, 30, 40], index=[20, 21, 22, 23])
+    np.testing.assert_array_equal(nk.signal_merge(signal1, signal2, [0, 4], [0, 4]), [11, 22, 33, 44])
+
+
 def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
     # Test with array.
     duration = 10
