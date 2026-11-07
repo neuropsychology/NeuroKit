@@ -665,6 +665,9 @@ New Features
 Fixes
 +++++++++++++
 
+* ``rsp_process()`` no longer raises ``IndexError`` when short recordings leave no complete
+  trough-to-peak pair after detection. Peak finding returns empty arrays, and phase and amplitude
+  return ``NaN`` values when peaks or troughs are missing (#1242).
 * ``hrv(show=True)`` no longer raises ``KeyError`` when ``peaks`` is the info dict returned by
   ``ppg_peaks()``; the plot now uses the same peaks as the computed indices.
 * ``complexity_rqa()`` (and ``hrv_rqa()``) now returns the documented ``LamiDet`` (laminarity /

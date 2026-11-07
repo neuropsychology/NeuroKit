@@ -43,7 +43,8 @@ def rsp_findpeaks(
     info : dict
         A dictionary containing additional information, in this case the samples at which inhalation
         onsets and exhalation onsets occur, accessible with the keys ``"RSP_Troughs"`` and
-        ``"RSP_Peaks"``, respectively.
+        ``"RSP_Peaks"``, respectively. For the ``"khodadad2018"``, ``"biosppy"``, and ``"scipy"``
+        methods, both arrays are empty if no complete trough-to-peak pair is retained after filtering.
 
     See Also
     --------
@@ -206,6 +207,9 @@ def _rsp_findpeaks_extrema(rsp_cleaned):
     risex = np.where(np.bitwise_and(smaller[:-1], greater[1:]))[0]
     fallx = np.where(np.bitwise_and(greater[:-1], smaller[1:]))[0]
 
+    if len(risex) == 0 or len(fallx) == 0:
+        return np.array([], dtype=int)
+
     if risex[0] < fallx[0]:
         startx = "rise"
     elif fallx[0] < risex[0]:
@@ -244,6 +248,9 @@ def _rsp_findpeaks_extrema(rsp_cleaned):
 
 
 def _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0.3):
+    if len(extrema) < 2:
+        return extrema, rsp_cleaned[extrema]
+
     # Only consider those extrema that have a minimum vertical distance to
     # their direct neighbor, i.e., define outliers in absolute amplitude
     # difference between neighboring extrema.
@@ -266,6 +273,9 @@ def _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0.3):
 
 
 def _rsp_findpeaks_sanitize(extrema, amplitudes):
+    if len(extrema) < 2:
+        return np.array([], dtype=int), np.array([], dtype=int)
+
     # To be able to consistently calculate breathing amplitude, make sure that
     # the extrema always start with a trough and end with a peak, since
     # breathing amplitude will be defined as vertical distance between each
