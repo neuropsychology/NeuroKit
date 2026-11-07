@@ -33,7 +33,7 @@ def rsp_phase(peaks, troughs=None, desired_length=()):
         * ``"RSP_Phase_Completion"``: breathing phase completion, expressed in percentage (from 0
           to 1), representing the stage of the current respiratory phase.
 
-        Both columns contain ``NaN`` if no peaks or troughs are provided.
+        Both columns contain ``NaN`` if peaks or troughs are empty.
 
     See Also
     --------
@@ -61,7 +61,7 @@ def rsp_phase(peaks, troughs=None, desired_length=()):
 
     # Phase
     inspiration = np.full(desired_length, np.nan)
-    if len(peaks) == 0 and len(troughs) == 0:
+    if len(peaks) == 0 or len(troughs) == 0:
         return pd.DataFrame({"RSP_Phase": inspiration, "RSP_Phase_Completion": np.full(desired_length, np.nan)})
 
     inspiration[peaks] = 0.0

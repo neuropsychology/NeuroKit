@@ -38,7 +38,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, method="standard", interpola
     Returns
     -------
     array
-        A vector containing the respiratory amplitude. If both peaks and troughs are empty,
+        A vector containing the respiratory amplitude. If peaks or troughs are empty,
         returns ``NaN`` values and emits a :class:`.NeuroKitWarning`.
 
     See Also
@@ -81,8 +81,11 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, method="standard", interpola
     # Format input.
     peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
-    if len(peaks) == 0 and len(troughs) == 0:
-        warn("No peaks and troughs found, returning NaN for respiratory amplitude.", category=NeuroKitWarning)
+    if len(peaks) == 0 or len(troughs) == 0:
+        warn(
+            "No complete breathing cycle found (missing peaks or troughs), returning NaN for respiratory amplitude.",
+            category=NeuroKitWarning,
+        )
         return np.full(len(rsp_cleaned), np.nan)
 
     # To consistently calculate amplitude, peaks and troughs must have the same

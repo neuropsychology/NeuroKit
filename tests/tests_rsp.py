@@ -240,6 +240,22 @@ def test_rsp_amplitude_without_extrema():
     assert np.isnan(amplitude).all()
 
 
+@pytest.mark.parametrize("peaks_only", [True, False])
+def test_rsp_phase_amplitude_one_sided_extrema(peaks_only):
+    extrema = np.array([20, 60])
+    empty = np.array([], dtype=int)
+    peaks, troughs = (extrema, empty) if peaks_only else (empty, extrema)
+
+    phase = nk.rsp_phase(peaks, troughs, desired_length=100)
+    assert phase.shape == (100, 2)
+    assert phase.isna().all().all()
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="amplitude"):
+        amplitude = nk.rsp_amplitude(np.zeros(100), peaks, troughs)
+    assert amplitude.shape == (100,)
+    assert np.isnan(amplitude).all()
+
+
 def test_rsp_rav():
     rsp = nk.rsp_simulate(duration=45, sampling_rate=50, respiratory_rate=15, random_state=42)
     peak_signal, _ = nk.rsp_peaks(rsp, sampling_rate=50)
