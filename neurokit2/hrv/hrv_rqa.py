@@ -1,7 +1,8 @@
 import numpy as np
 import scipy.spatial
 
-from ..complexity import complexity_rqa
+from ..complexity import complexity_embedding, complexity_rqa
+from ..complexity.optim_complexity_tolerance import _recurrence_distance
 from ..signal import signal_detrend
 from .hrv_utils import _hrv_format_input
 
@@ -35,7 +36,9 @@ def hrv_rqa(
         See :func:`.complexity_rqa` for more information.
     tolerance : float
         See :func:`.complexity_rqa` for more information. If ``"zimatore2021"``, will be set to half
-        of the mean pairwise distance between points.
+        of the mean distance between all pairs of points of the (detrended and embedded) RR
+        intervals (Zimatore et al., 2021), with the ``distance`` of the analysis (see
+        :func:`.complexity_rqa`).
     show : bool
         See :func:`.complexity_rqa` for more information.
     **kwargs
@@ -89,10 +92,12 @@ def hrv_rqa(
     # Linear detrend (Zimatore, 2021)
     rri = signal_detrend(rri, method="polynomial", order=1)
 
-    # Radius (50% of mean distance between all pairs of points in time)
-    if tolerance == "zimatore2021":
-        dists = scipy.spatial.distance.pdist(np.array([rri, rri]).T, "euclidean")
-        tolerance = 0.5 * np.mean(dists)
+    # Radius: 50% of the mean distance between all pairs of points of the embedded signal
+    # (Zimatore, 2021), i.e., in the same space as the distances of the recurrence matrix
+    if isinstance(tolerance, str) and tolerance == "zimatore2021":
+        embedded = complexity_embedding(rri, dimension=dimension, delay=delay)
+        metric = _recurrence_distance(kwargs.get("distance", "euclidean"))
+        tolerance = 0.5 * np.mean(scipy.spatial.distance.pdist(embedded, metric))
 
     # Run the RQA
     rqa, _ = complexity_rqa(

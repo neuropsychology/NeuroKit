@@ -9,8 +9,10 @@ def fractal_linelength(signal):
     :func:`Katz fractal dimension <fractal_katz>` algorithm, with the goal of making it more
     efficient and accurate (especially for seizure onset detection).
 
-    It basically corresponds to the average of the absolute consecutive differences of the signal,
-    and was made to be used within subwindows. Note that this does not technically measure the
+    It basically corresponds to the average of the absolute consecutive differences of the signal
+    (i.e., the curve length normalized by the number of differences), and was made to be used
+    within subwindows. Contrary to :func:`fractal_nld`, the signal is not normalized, so LL also
+    scales with the signal's amplitude. Note that this does not technically measure the
     fractal dimension, but the function was named with the ``fractal_`` prefix due to its
     conceptual similarity with Katz's fractal dimension.
 
@@ -57,12 +59,10 @@ def fractal_linelength(signal):
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
     # Force to array
-    signal = np.array(signal)
+    signal = np.asarray(signal, dtype=float)
 
-    # Drop missing values
-    signal = signal[~np.isnan(signal)]
-
-    # Compute line length
-    ll = np.mean(np.abs(np.diff(signal)))
+    # Compute line length (normalized by the number of differences). Differences involving missing
+    # values are ignored (dropping the NaNs first would join the samples around the gaps)
+    ll = np.nanmean(np.abs(np.diff(signal)))
 
     return ll, {}

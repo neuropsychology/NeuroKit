@@ -64,21 +64,23 @@ def fractal_dfa(
       exponents are at their minimum and maximum. Corresponds to the range of fluctuations of the
       signal.
     * **Asymmetry**: The Asymmetric Ratio (AR) corresponds to the centrality of the peak of the
-      spectrum. AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et
-      al., 2015).
+      spectrum: the distance from the peak to the singularity exponent *H* of the most negative
+      *q*, as a proportion of the distance between the *H* of the most negative and most positive
+      *q*. AR = 0.5 indicates that the multifractal spectrum is symmetric (Orozco-Duque et al.,
+      2015).
     * **Fluctuation**: The *h*-fluctuation index (hFI) is defined as the power of the second
-      derivative of *h*\\(q). See Orozco-Duque et al. (2015).
+      derivative of *h*\\(q): the sum of the squared second differences of *h*\\(q) (for unit
+      steps of *q*), divided by :math:`2|q_{max}| + 2` (Orozco-Duque et al., 2015). It tends to
+      zero for highly fractionated signals. Orozco-Duque et al. (2015) then normalise it across a
+      set of signals with their min-max range.
     * **Increment**: The cumulative function of the squared increments (:math:`\\alpha CF`) of the
       generalized Hurst's exponents between consecutive moment orders is a more robust index of the
-      distribution of the generalized Hurst's exponents (Faini et al., 2021).
+      distribution of the generalized Hurst's exponents (Faini et al., 2021). Each squared
+      increment is divided by the step between the two *q* values, which gives Faini's index for
+      unit steps.
 
     This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its
     multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``.
-
-    .. note ::
-
-      Help is needed to implement the modified formula to compute the slope when
-      *q* = 0. See for instance Faini et al. (2021). See https://github.com/LRydin/MFDFA/issues/33
 
     Parameters
     ----------
@@ -89,7 +91,8 @@ def fractal_dfa(
         the signal is divided into. Also referred to as Tau :math:`\\tau`. If ``"default"``, will
         set it to a logarithmic scale (so that each window scale has the same weight) with a
         minimum of 10 and maximum of a tenth of the length (to have more than 10 windows to
-        calculate the average fluctuation).
+        calculate the average fluctuation), with consecutive scales about 10% apart (about 24 per
+        decade). If an integer, the number of scales between these bounds.
     overlap : bool
         Defaults to ``True``, where the windows will have a 50% overlap with each other, otherwise
         non-overlapping windows will be used.
@@ -106,13 +109,15 @@ def fractal_dfa(
         If ``True``, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the
         argument ``q`` is taken into account.
     q : Union[int, list, np.array]
-        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between
-        -10 and 10 (note that zero will be removed, since the code does not converge there).
-        Setting ``q = 2`` (default for DFA) gives a result of a standard DFA. For instance, Ihlen
-        (2012) uses ``q = [-5, -3, -1, 0, 1, 3, 5]`` (default when for multifractal). In general,
-        positive q moments amplify the contribution of fractal components with larger amplitude and
-        negative q moments amplify the contribution of fractal with smaller amplitude (Kantelhardt
-        et al., 2002).
+        The sequence of fractal exponents when ``multifractal=True`` (sorted in increasing order).
+        For *q* = 0 (and :math:`|q| < 0.1`), the fluctuation function is the logarithmic average
+        of Kantelhardt et al. (2002). Setting ``q = 2`` (default for DFA) gives a result of a
+        standard DFA. For instance, Ihlen (2012) uses ``q = [-5, -3, -1, 0, 1, 3, 5]`` (default
+        when for multifractal). In general, positive q moments amplify the contribution of fractal
+        components with larger amplitude and negative q moments amplify the contribution of
+        fractal with smaller amplitude (Kantelhardt et al., 2002). Segments whose detrended
+        variance is numerically zero (at the rounding error of the signal, e.g., runs of identical
+        values) are left out, as they would make the negative q moments infinite.
     maxdfa : bool
         If ``True``, it will locate the knee of the fluctuations (using :func:`.find_knee`) and use
         that as a maximum scale value. It computes max. DFA (a similar method exists in
@@ -223,6 +228,12 @@ def fractal_dfa(
         # Get signal profile
         signal = np.cumsum(signal - np.mean(signal))
 
+    # Detrended variances at or below the rounding error of the profile are numerically zero
+    # (segments that are exactly polynomial, e.g., runs of identical values). This is relative to
+    # the signal's amplitude, so that the results do not depend on its units (#1208), and allows
+    # for the rounding error accumulated by the cumulative sum.
+    tolerance = (n * np.finfo(float).eps * np.max(np.abs(signal))) ** 2
+
     # Function to store fluctuations. For DFA this is an array. For MFDFA, this
     # is a matrix of size (len(scale),len(q))
     fluctuations = np.zeros((len(scale), len(q)))
@@ -236,21 +247,22 @@ def fractal_dfa(
         trends = _fractal_dfa_trends(segments, window, order=order)
 
         # Get local fluctuation
-        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, q)
+        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, q, tolerance=tolerance)
 
     if len(fluctuations) == 0:
         return np.nan, info
 
     # Max. DFA ---------------------
     if maxdfa is True:
-        # Find knees of fluctuations
-        knee = np.repeat(len(scale), fluctuations.shape[1])
+        # Find knees of fluctuations (in log2 of the scale)
+        knee = np.zeros(fluctuations.shape[1])
         for i in range(fluctuations.shape[1]):
             knee[i] = find_knee(y=np.log2(fluctuations[:, i]), x=np.log2(scale), show=False, verbose=False)
-        knee = np.exp2(np.nanmax(knee))
         # Cut fluctuations
-        fluctuations = fluctuations[scale <= knee, :]
-        scale = scale[scale <= knee]
+        keep = np.log2(scale) <= np.nanmax(knee)
+        fluctuations = fluctuations[keep, :]
+        scale = scale[keep]
+        info["scale"] = scale
     # ------------------------------
 
     # Get slopes
@@ -309,14 +321,15 @@ def _fractal_dfa_findscales(n, scale="default"):
     if isinstance(scale, list):
         scale = np.asarray(scale)
 
-    # Default scale number
+    # Default scale number: as many as keeps consecutive scales about 10% apart, which is as close as
+    # they can be while remaining distinct (and evenly log-spaced) once rounded to whole samples
     if scale is None or isinstance(scale, str):
-        scale = int(n / 10)
+        scale = int(np.abs(np.log(max(int(n / 10), 1) / 10)) / np.log(1.1)) + 1
 
     # See https://github.com/neuropsychology/NeuroKit/issues/206
-    if isinstance(scale, int):
-        scale = np.exp(np.linspace(np.log(10), np.log(int(n / 10)), scale)).astype(int)
-        scale = np.unique(scale)  # keep only unique
+    if isinstance(scale, (int, np.integer)):
+        scale = np.exp(np.linspace(np.log(10), np.log(max(int(n / 10), 1)), scale))
+        scale = np.unique(np.round(scale).astype(int))  # keep only unique
 
     # Sanity checks (return warning for too short scale)
     if len(scale) < 2:
@@ -340,8 +353,8 @@ def _sanitize_q(q=2, multifractal=False):
     elif isinstance(q, (int, float)):
         q = [q]
 
-    # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype=float)
+    # Fractal powers as floats, sorted (the singularity spectrum is computed as a derivative along q)
+    q = np.unique(np.asarray_chkfinite(q, dtype=float))
 
     return q
 
@@ -356,13 +369,16 @@ def _slopes(scale, fluctuations, q):
         raise ValueError("Fluctuation function and q powers don't match in dimension.")
 
     # Allocated array for slopes
-    slopes = np.zeros(len(q))
+    slopes = np.full(len(q), np.nan)
+    # if fluctuations are zero (or NaN when all the segments of a scale are numerically zero),
+    # these scales are left out of the fit
+    with np.errstate(divide="ignore", invalid="ignore"):
+        log_fluctuations = np.log2(fluctuations)
     # Find slopes of each q-power
     for i in range(len(q)):
-        # if fluctiations is zero, log2 wil encounter zero division
-        old_setting = np.seterr(divide="ignore", invalid="ignore")
-        slopes[i] = np.polyfit(np.log2(scale), np.log2(fluctuations[:, i]), 1)[0]
-        np.seterr(**old_setting)
+        finite = np.isfinite(log_fluctuations[:, i])
+        if np.sum(finite) >= 2:
+            slopes[i] = np.polyfit(np.log2(scale)[finite], log_fluctuations[finite, i], 1)[0]
 
     return slopes
 
@@ -374,24 +390,24 @@ def _fractal_dfa_getwindow(signal, n, window, overlap=True):
 
 
 def _fractal_dfa_trends(segments, window, order=1):
-    # Least-squares polynomial trends of all the segments at once: their projection on the
-    # polynomials of the time axis (scaled to [-1, 1] for numerical conditioning)
+    # Least-squares polynomial trends of all the segments at once, from their polynomial
+    # coefficients on the time axis (scaled to [-1, 1] for numerical conditioning). Computing the
+    # coefficients first avoids forming the (window x window) projection matrix.
     x = np.vander(np.linspace(-1, 1, window), order + 1)
-    return segments @ (x @ np.linalg.pinv(x))
+    return (segments @ np.linalg.pinv(x).T) @ x.T
 
 
-def _fractal_dfa_fluctuation(segments, trends, q=2):
+def _fractal_dfa_fluctuation(segments, trends, q=2, tolerance=0):
     # Detrend
     detrended = segments - trends
 
     # Compute variance
     var = np.var(detrended, axis=1)
 
-    # Remove where var is (numerically) zero. The cutoff must be relative to the
-    # largest segment variance at this scale: detrended variance scales with the
-    # square of the signal's units, so an absolute cutoff would make the results
-    # depend on the amplitude units of the input signal (see issue #1208).
-    var = var[var > 1e-08 * np.max(var)]
+    # Remove where var is numerically zero (at or below the rounding error of the signal). Any
+    # cutoff above that (e.g., relative to the largest variance) would drop genuinely small
+    # fluctuations, which dominate the negative q moments of multifractal signals.
+    var = var[var > tolerance]
     if len(var) == 0:
         warn("All detrended segments have no variance. Retuning NaN.")
         return np.nan
@@ -400,18 +416,15 @@ def _fractal_dfa_fluctuation(segments, trends, q=2):
     # See https://github.com/LRydin/MFDFA/issues/33
     is0 = np.abs(q) < 0.1
 
-    # Reshape q to perform np.float_power
-    q_non0 = q[~is0].reshape(-1, 1)
-
     # Get the fluctuation function, which is a function of the windows and of q
     # When q = 2 (i.e., multifractal = False)
     # The formula is equivalent to np.sqrt(np.mean(var))
     # And corresponds to the Root Mean Square (RMS)
-    fluctuation = np.float_power(np.mean(np.float_power(var, q_non0 / 2), axis=1), 1 / q_non0.T)
+    q_non0 = np.where(is0, 1, q).reshape(-1, 1)
+    fluctuation = np.float_power(np.mean(np.float_power(var, q_non0 / 2), axis=1), 1 / q_non0[:, 0])
 
-    if np.sum(is0) > 0:
-        fluc0 = np.exp(0.5 * np.mean(np.log(var)))
-        fluctuation = np.insert(fluctuation, np.where(is0)[0], [fluc0])
+    # For q = 0, the logarithmic average (Kantelhardt et al., 2002)
+    fluctuation[is0] = np.exp(0.5 * np.mean(np.log(var)))
 
     return fluctuation
 
@@ -432,8 +445,7 @@ def _singularity_spectrum(q, slopes):
     The parameters are mostly identical to `fractal_mfdfa()`, as one needs to
     perform MFDFA to obtain the singularity spectrum. Calculating only the
     DFA is insufficient, as it only has `q=2`, and a set of `q` values are
-    needed. Here defaulted to `q = list(range(-5,5))`, where the `0` element
-    is removed by `_cleanse_q()`.
+    needed (by default `q = [-5, -3, -1, 0, 1, 3, 5]`).
 
     This was first designed and implemented by Leonardo Rydin in
     `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
@@ -448,8 +460,9 @@ def _singularity_spectrum(q, slopes):
     # The generalised Hurst exponent h(q) is related to the Scaling Exponent Tau t(q):
     out["Tau"] = q * slopes - 1
 
-    # Calculate Singularity Exponent H or α, which needs tau
-    out["H"] = np.gradient(out["Tau"]) / np.gradient(q)
+    # Calculate Singularity Exponent H or α, which needs tau (its derivative along q, also when the
+    # q values are unevenly spaced)
+    out["H"] = np.gradient(out["Tau"], q)
 
     # Calculate Singularity Dimension Dq or f(α), which needs tau and q
     # The relation between α and f(α) (H and D) is called the Multifractal (MF) spectrum or
@@ -477,27 +490,31 @@ def _singularity_spectrum(q, slopes):
     out["Delta"] = out["D"][np.nanargmax(out["H"])] - out["D"][np.nanargmin(out["H"])]
 
     # the asymmetric ratio (AR) defined as the ratio between h calculated with negative q and the
-    # total width of the spectrum. If the multifractal spectrum is symmetric, AR should be equal to
-    # 0.5
-    out["Asymmetry"] = (np.nanmin(out["H"]) - out["Peak"]) / out["Width"]
+    # total width of the spectrum (Orozco-Duque et al., 2015, eq. 16): (h_r - h_max) / (h_r - h_i),
+    # with h_r and h_i the singularity exponents at the most negative and most positive q. If the
+    # multifractal spectrum is symmetric, AR should be equal to 0.5
+    out["Asymmetry"] = (out["H"][0] - out["Peak"]) / (out["H"][0] - out["H"][-1])
 
     # h-fluctuation index (hFI), which is defined as the power of the second derivative of h(q)
-    # hFI tends to zero in high fractionation signals.
+    # (Orozco-Duque et al., 2015, eq. 17): the sum of the squared second differences of h(q) over
+    # unit steps of q, divided by 2 * |q_max| + 2. For other steps, the second derivative is
+    # estimated with divided differences, each weighted by its step.
     if len(slopes) > 3:
-        # Help needed to double check that!
-        out["Fluctuation"] = np.sum(np.gradient(np.gradient(out["h"])) ** 2) / (2 * np.max(np.abs(q)) + 2)
+        step = (q[2:] - q[:-2]) / 2
+        d2h = np.diff(np.diff(slopes) / np.diff(q)) / step
+        out["Fluctuation"] = np.sum(d2h**2 * step) / (2 * np.max(np.abs(q)) + 2)
     else:
         out["Fluctuation"] = np.nan
-    # hFI tends to zero in high fractionation signals. hFI has no reference point when a set of
-    # signals is evaluated, so hFI must be normalisedd, so that hFIn = 1 is the most organised and
-    # the most regular signal in the set
-    # BUT the formula in Orozco-Duque (2015) is weird, as HFI is a single value so cannot be
-    # normalized by its range...
+    # hFI tends to zero in high fractionation signals. As it has no reference point, Orozco-Duque et
+    # al. (2015) normalise it across a set of signals, (hFI - min(hFI)) / (max(hFI) - min(hFI)), so
+    # that 1 is the most organised and regular signal in the set.
 
     # Faini (2021): new index that describes the distribution of the generalized Hurst's exponents
     # without requiring the Legendre transform. This index, αCF, is the cumulative function of the
-    # squared increments of the generalized Hurst's exponents between consecutive moment orders.
-    out["Increment"] = np.sum(np.gradient(slopes) ** 2 / np.gradient(q))
+    # squared increments of the generalized Hurst's exponents between consecutive moment orders:
+    # sum of (h(q) - h(q - 1))^2 for unit steps of q. Dividing by the step keeps it comparable for
+    # other steps (it approximates the integral of h'(q)^2).
+    out["Increment"] = np.sum(np.diff(slopes) ** 2 / np.diff(q))
 
     return out
 

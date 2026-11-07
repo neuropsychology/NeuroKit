@@ -34,6 +34,12 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     so that the block entropies of long histories are underestimated for short signals (they
     saturate), which lowers the slope.
 
+    The difference between successive block entropies, :math:`H(k) - H(k - 1)`, is the
+    conditional entropy of a symbol given the *k - 1* previous ones, another estimate of the
+    entropy rate. For short signals, it decreases towards 0 as most long words occur only once:
+    the :func:`corrected conditional entropy <entropy_correctedconditional>` (Porta et al., 1998)
+    corrects it for these words, and takes its minimum over *k*.
+
     Note that the entropy rate can also be estimated with the normalized :func:`Lempel-Ziv
     complexity <complexity_lempelziv>` (e.g., Mediano et al., 2020).
 
@@ -64,7 +70,7 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
 
     See Also
     --------
-    entropy_shannon, complexity_lempelziv
+    entropy_shannon, entropy_correctedconditional, complexity_lempelziv
 
     Examples
     ----------
@@ -115,6 +121,9 @@ def entropy_rate(signal, kmax=10, symbolize="mean", show=False):
     * Mediano, P. A., Rosas, F. E., Timmermann, C., Roseman, L., Nutt, D. J., Feilding, A., ... &
       Carhart-Harris, R. L. (2020). Effects of external stimulation on psychedelic state
       neurodynamics. Biorxiv.
+    * Porta, A., Baselli, G., Liberati, D., Montano, N., Cogliati, C., Gnecchi-Ruscone, T.,
+      Malliani, A., & Cerutti, S. (1998). Measuring regularity by means of a corrected conditional
+      entropy in sympathetic outflow. Biological Cybernetics, 78(1), 71-78.
 
     """
     # Sanity checks

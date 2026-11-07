@@ -68,6 +68,47 @@ Changes in Results
   signal. Before, the window starting at ``len(signal) - window`` was left out, so the last
   samples were never used (e.g., the last 25 of 2,000 samples with windows of 50). The effect on
   alpha is small (up to about 0.01) but systematic. Results with ``overlap=False`` are unchanged.
+* ``fractal_dfa()`` and ``fractal_hurst()`` with their default ``scale`` (and therefore
+  ``complexity()`` and ``fractal_tmf()``; the ``hrv_nonlinear()`` and ``rsp_rrv()`` indices set
+  their own scales) now use evenly log-spaced scales, about 10% apart (e.g., 25 scales instead of
+  70 for 1,000 samples, 73 instead of 4,236 for 100,000). Before, the number of scales was a tenth
+  of the signal length, and the scales were truncated to whole samples and deduplicated, which
+  left them crowded at the large scales (about 90% in the upper half of the log range for long
+  signals), where the fluctuations are the noisiest. This contradicted the documented equal
+  weighting. The new scales reduce the standard deviation of DFA alpha and of the Hurst exponent
+  by 10 to 15% for 2,000 samples and by 30% for 10,000 samples (white and fractional Gaussian
+  noise), with similar means (within 0.01). When ``scale`` is an integer (the number of scales),
+  the scales are now rounded rather than truncated to whole samples.
+* ``fractal_dfa(multifractal=True)`` (``fractal_mfdfa()``), and therefore the ``MFDFA`` indices of
+  ``hrv_nonlinear()``, ``rsp_rrv()`` and ``complexity()``, and ``fractal_tmf()``:
+
+  * Detrended segments are now discarded only when their variance is numerically zero (at the
+    rounding error of the signal, e.g., runs of identical values), instead of when it is below
+    1e-8 times the largest variance at that scale. That cutoff discarded genuinely small
+    fluctuations, which dominate the negative ``q`` moments: for the binomial cascade of
+    Kantelhardt et al. (2002), h(-5) was 1.18 instead of 1.74 (theory: 1.80). Results only change
+    for signals whose segment variances span more than 8 orders of magnitude, and for signals
+    whose segments are all exactly linear at some scales (h was then fitted on rounding noise,
+    e.g., about 20). Such scales are now left out of the fit.
+  * ``Asymmetry`` is now the asymmetric ratio of Orozco-Duque et al. (2015, eq. 16),
+    (H(q_min) - Peak) / (H(q_min) - H(q_max)), the share of the spectrum's width on the side of
+    the negative ``q``, which is 0.5 for a symmetric spectrum as documented. It was
+    (min(H) - Peak) / Width, between -1 and 0 (the new value is the old one plus 1 when H
+    decreases with q).
+  * ``Fluctuation`` (the h-fluctuation index of Orozco-Duque et al., 2015, eq. 17) is now the sum
+    of the squared second differences of h(q) between consecutive ``q``, divided by
+    2 * max(abs(q)) + 2. It applied ``np.gradient()`` twice, i.e., second differences over steps
+    of 2 ``q`` divided by 4, with one-sided differences at the ends. With unevenly spaced ``q``,
+    the second derivative of h(q) is now estimated from its spacing.
+  * ``Increment`` (Faini et al., 2021) is now the sum of the squared differences of h(q) between
+    consecutive ``q`` (divided by the step of ``q``, which is 1 in the HRV and RRV indices). It was
+    computed from central differences (``np.gradient()``), which skip every other ``q`` and count
+    the end points twice.
+  * The singularity exponents ``H`` now take the spacing of ``q`` into account
+    (``np.gradient(Tau, q)``). With unevenly spaced ``q`` (e.g., the default
+    ``[-5, -3, -1, 0, 1, 3, 5]``), this changes ``H`` and ``D`` at q = -1 and 1, but none of the
+    returned indices.
+
 * ``fractal_higuchi()`` and ``complexity_k()`` now return NaN for signals with missing values.
   Before, the increments touching a missing value were silently left out of the curve lengths,
   while their normalization still counted them.
@@ -81,6 +122,37 @@ Changes in Results
   the length of the signal (a median of 122 for pink noise of 500 samples and 756 for 2,000, now
   23 and 19). A list of k_max values is now tested in increasing order. ``find_plateau()`` itself
   is unchanged.
+* ``fractal_hurst()`` now uses the population standard deviation in the R/S statistic, for which
+  the expected value of Anis & Lloyd (1976), subtracted with ``corrected=True`` (the default), is
+  exact. With the sample (n - 1) SD, the corrected exponent was biased upward (e.g., 0.525 instead
+  of 0.50 for white noise of 500 samples, 0.513 for 2,000 samples). The expected value is now also
+  computed exactly for windows above 340 samples (an asymptotic approximation was used).
+  Uncorrected exponents are slightly lower.
+* ``fractal_sda()`` split the signal into ``scale`` bins (of n / ``scale`` points each) instead of
+  bins of ``scale`` points, so the FD was around 0.6-0.75 whatever the signal (e.g., 0.66 for white
+  noise and 0.71 for fractional Gaussian noise with H = 0.7, for 2,000 samples). It now gives 1.54
+  and 1.37 (2 - H: 1.5 and 1.3). The SD of the bin means now uses the sample (n - 1) formula, as in
+  Hasselman's *casnet*, which reduces the bias of the largest scales (with only 2 bins).
+* ``fractal_psdslope()`` with the default ``method="voss1988"`` computed FD = (5 - beta) / 2 with
+  the slope instead of beta (the PSD decays as 1/f^beta, so beta = -slope): e.g., 3.5 instead of
+  1.5 for a Brownian motion. The fit now also includes the lowest frequencies (``signal_psd()``'s
+  default ``min_frequency`` dropped the first three), which reduces the SD of the slope by about
+  10% (this also affects ``method="hasselman2013"``).
+* ``fractal_nld()`` now normalizes the signal as Kalauzi et al. (2009, eqs. 8-10): centered and
+  divided by its mean absolute deviation (instead of its standard deviation), with the sum of the
+  absolute differences divided by the number of samples (instead of the number of differences).
+  The calibration curve of ``corrected=True`` was fitted on this definition: it now gives an FD of
+  2.00 for white noise (30-sample windows) instead of 1.92. Raw NLD values are about 1.25 times
+  larger for Gaussian-like signals.
+* ``fractal_tmf()`` had its sign flipped: ``scipy.stats.ttest_1samp(surrogates, original)``
+  returns (mean(surrogates) - original) / SE, while tMF is (original - mean(surrogates)) / SE
+  (Bell et al., 2019), positive when the signal is more multifractal than its linear surrogates.
+  Its ``**kwargs`` are now passed on to ``fractal_dfa()``, as documented (they were ignored).
+* ``fractal_linelength()`` (and the ``LL`` index of ``complexity()``) no longer bridges missing
+  values: the differences involving a NaN are ignored, instead of dropping the NaNs and taking the
+  difference between the samples around the gap. Results without missing values are unchanged.
+* ``fractal_density()`` now uses its ``tolerance`` argument (it always used 0.2 SD) and accepts
+  pandas Series.
 * ``entropy_bubble()`` (and the ``BubbEn`` index of ``complexity()``) now uses the Rényi entropy
   of order ``alpha`` (2 by default, as in Manis et al., 2017). The ``alpha`` argument was not
   passed on, so the Shannon entropy was used whatever its value (e.g., 0.656 instead of 0.582 for
@@ -455,6 +527,85 @@ Changes in Results
   exp(-d^n / r), now documented: it was silently ignored, so that ``n=2`` (as in Chen et al., 2007)
   gave the values of ``n=1`` (e.g., 1.350 instead of 1.645 for 300 samples of white noise). Values
   with the default ``n=1`` are unchanged.
+* ``complexity_rqa()`` (and ``hrv_rqa()``) now counts the vertical lines (``Laminarity``,
+  ``TrappingTime``, ``VMax``, ``VEn``) in every column of the recurrence matrix, above and below
+  the line of identity, as defined by Marwan et al. (2007). Only the part of each column below
+  the line of identity was used, i.e., only the returns to a state that happen after it, which
+  differs from the full matrix for time-irreversible signals (e.g., ``Laminarity`` of 0.043
+  instead of 0.050 for the HRV of ``bio_resting_5min_100hz``; 1-4% differences on simulated
+  signals). The white vertical lines (``W``, ``WMax``, ``WEn``) are now counted in the full matrix
+  as well, and only between two recurrence points: the ones that reach the top or bottom border
+  of the matrix are cut by the end of the recording, and set ``WMax`` to nearly the length of the
+  signal (e.g., ``W`` of 85 instead of 129 samples and ``WEn`` of 4.41 instead of 5.41 for the
+  same HRV), as for the recurrence times of RecurrenceAnalysis.jl (pyunicorn counts them).
+* ``complexity_rqa()`` (and ``hrv_rqa()``) now fits ``DiagRec`` (Tomashin et al., 2022, approach
+  3) over the first 64 diagonals, as in the authors' code, instead of all of them. The far
+  diagonals, which hold few points, outnumbered the others in the fit, so the slope barely
+  separated white from pink noise (-0.03 ± 0.03 vs. 0.00 ± 0.01, for 1,026 samples) and was noisy
+  for brown noise (-0.20 ± 0.14); it is now -0.12 ± 0.03, 0.00 ± 0.01 and -0.30 ± 0.06. The other
+  diagonal indices (``RecurrenceRate``, ``Determinism``, ``L``, ``Divergence``, ``LEn``) are
+  unchanged.
+* ``hrv_rqa()`` with the default ``tolerance="zimatore2021"`` now sets the radius to half the mean
+  distance between all pairs of points of the embedded RR intervals (with the ``dimension`` and
+  ``delay`` of the analysis), as in Zimatore et al. (2021), i.e., in the same space as the
+  distances of the recurrence matrix. It was computed on the RR intervals alone (stacked twice,
+  so sqrt(2) times their distances), a radius too small for the default 7-dimensional embedding:
+  e.g., 41 instead of 97 ms for ``bio_resting_5min_100hz``, which left 0.3% of recurrences
+  (now 12.7%) and nearly no vertical lines (``VMax`` of 2, now 24). All the default ``hrv_rqa()``
+  indices change.
+* ``complexity_rqa()``'s default ``tolerance`` is now ``"recurrence"`` (the radius that gives a
+  recurrence rate of 1%) instead of ``"sd"`` (0.2 times the SD of the signal). The latter is
+  designed for SampEn and ApEn, which use the Chebyshev distance (the largest difference between
+  the coordinates), while the recurrence matrix uses the Euclidean distance, which is larger: it
+  left about 0.1% of recurrences in 3 dimensions (the default) and none in 5 or more, so that
+  most indices were undefined or degenerate. All the default ``complexity_rqa()`` indices change
+  (``hrv_rqa()`` sets its own radius).
+* ``complexity_tolerance(method="recurrence")`` now returns the smallest tolerance that gives a
+  recurrence rate of 1% (the 1% quantile of the distances between the embedded points), instead
+  of the closest of 50 values evenly spaced up to the largest distance, which gave recurrence
+  rates between about 0.4% and 2.3%. With a custom ``r_range``, the value of the range whose rate
+  is the closest to 1% is still returned. It is also about 7 times faster (0.6 s instead of 4.4 s
+  for 5,000 samples).
+* ``information_gain()`` with ``delay`` above 1 now follows each word by the word starting
+  ``delay`` samples later, which adds one new symbol, so that the mean information gain (MIG) is
+  the conditional entropy of that symbol given the word (the entropy of the words of
+  ``dimension + 1`` symbols minus that of the words of ``dimension`` symbols), as with
+  ``delay=1``. Each word was followed by the one starting one sample later, whose ``dimension``
+  symbols are all new when ``delay`` is above 1: MIG jumped from 1 bit for white noise with
+  ``delay=1`` to about ``dimension`` bits (e.g., 3.99 instead of 1.00 with the default
+  ``dimension=4``), and the fluctuation complexity (``FC``) changed accordingly.
+* ``information_gain()`` now compares the words symbol by symbol. They were joined into strings,
+  so that with symbols of more than one character (e.g., ``symbolize=None`` with 10 or more
+  values, or negative values) different words could be merged (e.g., 1 followed by 11, and 11
+  followed by 1), which changed MIG and FC depending on the labels of the symbols; non-integer
+  symbols (with ``symbolize=None``) were truncated to integers, which merged them (e.g., 0 and
+  0.5). The probability of the next word given the current one is now that of the transitions
+  that start from the current word (instead of all its occurrences, including the last one, which
+  has no successor), which changes MIG by about 1e-6 for 2,000 samples. It returns NaN with a
+  warning for signals with missing values (they were symbolized as 0) and for signals too short to
+  have a transition between words.
+* ``complexity_decorrelation()`` returns NaN with a warning for constant signals and for signals
+  with missing values; it returned 1 (the autocorrelation was NaN). Its undocumented -1 for an
+  autocorrelation that never crosses zero is now NaN, but this cannot happen for non-constant
+  signals (the autocovariances of a demeaned signal at all lags sum to zero). Other values are
+  unchanged.
+* ``entropy_wiener()`` (Wiener entropy, or spectral flatness) is rewritten. It returned the
+  flatness of the first window of a short-time Fourier transform only, ignoring the rest of the
+  signal, and gave about 0.15 for white noise instead of a value close to 1. It is now the ratio of
+  the geometric to the arithmetic mean of the power spectrum of the whole signal, estimated by
+  ``signal_psd()`` with the Welch method on windows of a sixteenth of the signal by default: the
+  flatness is biased downwards by the fluctuations of the estimated spectrum, and averaging about
+  30 windows gives about 0.98 for white noise (0.84 with the default windows of ``signal_psd()``,
+  and 0.56 with a single periodogram), 0.73 for an AR(1) process with a coefficient of 0.5 (whose
+  unpredictable proportion of the variance is 0.75), and nearly 0 for sinusoids. The power is no
+  longer clipped at 1e-10 (which depended on the units of the signal). The logarithmic Wiener
+  entropy, from 0 to minus infinity as the docstring described, is returned in ``info["Log"]``
+  together with the ``"PSD"``. It returns NaN with a warning for constant signals, signals with
+  missing values and spectra with fewer than 2 frequency bins, gains a ``show`` argument, its
+  ``**kwargs`` are passed to ``signal_psd()`` (instead of ``signal_timefrequency()``), and it is
+  now listed in the documentation, with a docstring that gives the formula, its relationship with
+  linear predictability (Dubnov, 2004) and references (Johnston, 1988; Tchernichovski et al.,
+  2000).
 
 New Features
 +++++++++++++
@@ -472,6 +623,17 @@ New Features
   than that number of samples in time are left out of the correlation sum, which removes the bias
   of the autocorrelation of oversampled signals (e.g., EEG) at small radii. Defaults to 0 (all
   pairs), so results are unchanged.
+* ``fractal_tmf()`` gains a ``random_state`` argument (for reproducible surrogates), and returns the
+  multifractal width of the signal and of its surrogates in ``info``.
+* ``complexity_rqa()``, ``recurrence_matrix()`` and ``hrv_rqa()`` gain a ``distance`` argument
+  (``"euclidean"``, the default, ``"chebyshev"`` or ``"manhattan"``), which
+  ``complexity_tolerance(method="recurrence")`` also takes, so that the default tolerance still
+  gives 1% of recurrences (and ``hrv_rqa()``'s radius is in the same distance). With the Chebyshev
+  distance of the entropy measures (and a delay of 1), the recurrence matrix in dimension *m* + 1
+  is the one of dimension *m* where the diagonal lines continue, and SampEn is exactly minus the
+  log of the probability that a recurrence point is followed by another one on its diagonal: this
+  allows separating what RQA and the entropy measures share by definition from what they share
+  empirically.
 * ``complexity_lyapunov()`` gains a ``sampling_rate`` argument: the exponents are then per second
   instead of per sample (with ``show=True``, the time axis is in seconds).
 * ``entropy_symbolicdynamic()`` gains a ``fluctuation`` argument for the fluctuation-based
@@ -481,12 +643,35 @@ New Features
   ln((2c - 1)^m), the maximum of the joint entropy of the states and of their transitions, so
   that it lies between 0 and 1; the paper divides it by ln((2c - 1)^(m - 1)), which gives values
   m / (m - 1) times larger.
+* New ``complexity_jensenshannon()``: the Jensen-Shannon statistical complexity (C_JS, or MPR
+  complexity; Rosso et al., 2007), the product of the normalized permutation entropy and of the
+  Jensen-Shannon divergence between the distribution of the ordinal patterns and the uniform one.
+  Unlike permutation entropy alone, it distinguishes chaos from coloured noise: with
+  ``show=True``, the signal is drawn in the complexity-entropy plane, with the curves of minimum
+  and maximum complexity (Martin et al., 2006). It also returns the proportion of missing
+  (forbidden) ordinal patterns (Amigó et al., 2007).
+* New ``complexity_irreversibility()``: time-irreversibility indices, which are 0 for reversible
+  (e.g., linear Gaussian) processes and change sign when the signal is reversed: Trev, the
+  skewness of the increments (Schreiber & Schmitz, 2000; the ``trev`` feature of hctsa), and the
+  up-down balance and rotational asymmetry ordinal contrasts (Bandt, 2023), which leave out the
+  patterns with ties. Unlike the heart rate asymmetry indices of ``hrv_nonlinear()``, they apply
+  to any signal.
+* New ``entropy_correctedconditional()``: the corrected conditional entropy (CCE; Porta et al.,
+  1998), the minimum over the length of the patterns of the conditional entropy of a sample given
+  the previous ones, corrected for the patterns found only once, a standard regularity index for
+  short cardiovascular series. It also returns the normalized CCE and the regularity index
+  (Porta et al., 2001).
 
 Fixes
 +++++++++++++
 
 * ``hrv(show=True)`` no longer raises ``KeyError`` when ``peaks`` is the info dict returned by
   ``ppg_peaks()``; the plot now uses the same peaks as the computed indices.
+* ``complexity_rqa()`` (and ``hrv_rqa()``) now returns the documented ``LamiDet`` (laminarity /
+  determinism): it was computed but never stored, so the column was missing (it only appeared,
+  as NaN, when the determinism was 0 or undefined). The lines of the recurrence matrix are now
+  counted with vectorised run lengths instead of a Python loop over the diagonals and rows: e.g.,
+  0.6 s instead of 21 s and a sixth of the memory for 5,000 samples.
 * ``complexity_delay(method="fraser1986")`` no longer fails on a noise-free periodic signal when
   the tested delays reach its period (the default number of bins of ``mutual_information()``
   diverged for perfectly correlated variables).
@@ -509,14 +694,39 @@ Fixes
   (which sets the radii) was rounding noise.
 * ``fractal_correlation()``'s docstring now cites Grassberger & Procaccia (1983) and Theiler
   (1986), and notes that the default radii can reach beyond the scaling region of an attractor.
-* ``fractal_dfa()`` is 5 to 10 times faster: the polynomial trends of all the windows of a scale
-  are computed with one matrix product instead of a loop over the windows.
+* ``fractal_dfa()`` is 5 to 15 times faster for the same scales (e.g., 0.2 s instead of 2.7 s for
+  200,000 samples and 40 scales): the polynomial trends of all the windows of a scale are computed
+  at once, from their coefficients, instead of with a loop over the windows. With the new default
+  scales (see above), it is about 75 times faster (0.02 s instead of 1.5 s for 20,000 samples).
+* ``fractal_dfa(multifractal=True)``: several ``q`` values within 0.1 of 0 raised an
+  ``IndexError`` or silently swapped the fluctuations of two ``q`` values (e.g., with
+  ``q=np.linspace(-5, 5, 101)``); unsorted ``q`` values gave a wrong singularity spectrum (they are
+  now sorted).
+* ``fractal_dfa(maxdfa=True)`` kept too few scales (the knee was truncated to an integer power of
+  2, e.g., scales up to 64 instead of 87 were kept), and ``info["scale"]`` still listed all of them.
+* ``fractal_dfa()`` accepts a number of scales given as a NumPy integer.
+* ``fractal_dfa()``'s docstring no longer says that ``q = 0`` is removed or asks for help with it:
+  it uses the logarithmic average of Kantelhardt et al. (2002).
 * ``fractal_dfa()``'s docstring now describes alpha correctly (0.5 for white noise, below 0.5 for
   anti-correlations, 1.5 for a Brownian motion, equal to the Hurst exponent only for stationary
   signals), gives the right minimum of the default scales (10 samples, not 4), and cites Peng et
   al. (1994).
 * ``fractal_petrosian()``'s docstring now gives the right default for ``symbolize`` (``"C"``, the
   sign of consecutive differences, not the mean).
+* ``fractal_sevcik()``'s docstring now describes the method and explains the ln(2) term found in
+  some papers: it comes from Sevcik's derivation and vanishes as N grows, and his eq. 6 (without
+  it, as used here) is the one that reproduces the values of his Table 2. Results are unchanged.
+* ``fractal_nld()``'s docstring now says that the calibration curve was fitted on Weierstrass
+  functions (not on EEG), gives the parameters that Kalauzi et al. (2009) adjusted on EEG, and
+  that a float (not a DataFrame) is returned.
+* ``fractal_hurst()``'s docstring now says that H = 0.5 corresponds to uncorrelated noise (the
+  increments of a Brownian motion, not the Brownian motion itself) and describes the correction.
+* ``fractal_psdslope()``'s docstring now gives both conversion formulas and the range of validity of
+  Voss' (fractional Brownian motions; it returns values above 2 for noise-like signals), and no
+  longer says that the PSD ``method`` can be changed (it is the function's own ``method``
+  argument).
+* ``fractal_sda()``'s docstring now describes the bins (``scales`` are bin sizes, which can be
+  given as a list) and the relationship with H (FD = 2 - H for fractional Gaussian noise).
 * ``complexity_k()`` (and therefore ``fractal_higuchi(k_max="default")``) is several hundred times
   faster (e.g., 0.04 s instead of 19 s for 1,600 samples): the curve lengths are computed once
   instead of again for each tested k_max, and the least-squares fits of all the k_max values are
@@ -759,6 +969,29 @@ Fixes
   ``dimension_max`` sequence; the marker drawn with ``show=True`` was off accordingly.
 * ``complexity_optimize(dimension_method="fnn", show=True)`` no longer raises a shape error when
   plotting the false nearest neighbour fractions.
+* ``information_gain()`` is 50 to 250 times faster (e.g., 8 ms instead of 0.4 s for 100,000
+  samples, and 1.4 ms instead of 0.38 s for 10,000 samples with ``dimension=10``): the words are
+  numbered as integers and the transitions counted with ``np.unique()``, instead of joining the
+  symbols into strings and looping over all the pairs of words. Its docstring gives the formulas
+  of MIG and FC and describes the words with a ``delay``.
+* ``complexity_relativeroughness()`` is about 25 times faster for long signals (e.g., 5 ms instead
+  of 0.13 s for 1,000,000 samples): only the autocovariances at lag 0 and 1 are computed, instead
+  of the whole autocorrelation function. Values are unchanged. ``demean`` and ``unbiased`` are now
+  explicit arguments (the other arguments of ``signal_autocor()``, which were passed through
+  ``**kwargs``, do not change RR and are no longer accepted). It returns NaN with a warning for
+  constant signals and signals with missing values (instead of NaN with a ``RuntimeWarning``), and
+  its docstring gives the formula and its expected values for white noise (2) and fractional
+  Gaussian noise (4 - 2^(2H)).
+* ``complexity_decorrelation()``'s plot (``show=True``) now normalizes the autocorrelation by its
+  value at lag 0 (the unbiased autocovariance could be larger at long lags, which shrank the
+  curve), and its docstring defines DT as the first lag at which the autocorrelation is zero or
+  negative.
+* ``complexity_embedding()`` raises a readable error when ``dimension * delay`` exceeds the length
+  of the signal (the message was a tuple of two strings), raises an error when ``dimension`` is
+  below 1 (it returned an array with no columns and more rows than samples), and accepts NumPy
+  floats such as ``np.float32`` as ``delay`` and ``dimension`` (with the same warning as Python
+  floats; they raised a ``TypeError``). Its docstring gives the shape of the output, which has
+  ``dimension`` columns.
 
 
 0.3.0
