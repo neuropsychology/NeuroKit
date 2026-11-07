@@ -30,14 +30,20 @@ def eog_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
+        Rate features use the sample nearest stimulus onset as baseline and summarize the samples
+        after that baseline sample. Maximum, minimum and mean rates are reported as changes from
+        baseline, not absolute rates. The standard deviation is the population standard deviation
+        of the post-baseline rates, not a change from baseline. Times are in seconds relative to
+        stimulus onset.
+
         .. codebookadd::
-            EOG_Rate_Baseline|The baseline EOG rate before stimulus onset.
-            EOG_Rate_Max|The maximum EOG rate after stimulus onset.
-            EOG_Rate_Min|The minimum EOG rate after stimulus onset.
-            EOG_Rate_Mean|The mean EOG rate after stimulus onset.
-            EOG_Rate_SD|The standard deviation of the EOG rate after stimulus onset.
-            EOG_Rate_Max_Time|The time at which maximum EOG rate occurs.
-            EOG_Rate_Min_Time|The time at which minimum EOG rate occurs.
+            EOG_Rate_Baseline|The EOG rate at the sample nearest stimulus onset.
+            EOG_Rate_Max|The maximum change in EOG rate from the onset baseline.
+            EOG_Rate_Min|The minimum change in EOG rate from the onset baseline.
+            EOG_Rate_Mean|The mean change in EOG rate from the onset baseline.
+            EOG_Rate_SD|The population standard deviation of the post-baseline EOG rate.
+            EOG_Rate_Max_Time|The time of maximum post-baseline EOG rate, relative to stimulus onset (seconds).
+            EOG_Rate_Min_Time|The time of minimum post-baseline EOG rate, relative to stimulus onset (seconds).
             EOG_Blinks_Presence|Marked with '1' if a blink occurs in the epoch, and '0' if not.
 
     See Also

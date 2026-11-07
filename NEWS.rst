@@ -679,6 +679,9 @@ Fixes
 * ``complexity_delay(method="fraser1986")`` no longer fails on a noise-free periodic signal when
   the tested delays reach its period (the default number of bins of ``mutual_information()``
   diverged for perfectly correlated variables).
+* The event-related ECG, PPG, RSP and EOG codebooks now clarify that rate maxima, minima and
+  means are changes from the sample nearest stimulus onset, while SD is an absolute population
+  standard deviation. Calculations and output names are unchanged (#1240).
 * ``complexity_tolerance()`` accepts numpy integers as ``dimension`` (e.g., the output of
   ``complexity_dimension()``), which used to raise "method not recognized" for ``"nolds"``,
   ``"chon2009"`` and ``"makowski"``; plotting the ``"recurrence"`` and ``"neighbours"`` methods no

@@ -30,13 +30,20 @@ def rsp_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
+        Rate features use the sample nearest stimulus onset as baseline and summarize the samples
+        after that baseline sample. Maximum, minimum and mean rates are reported as changes from
+        baseline, not absolute rates. The standard deviation is the population standard deviation
+        of the post-baseline rates, not a change from baseline. Times are in seconds relative to
+        stimulus onset.
+
         .. codebookadd::
-            RSP_Rate_Max|The maximum respiratory rate after stimulus onset.
-            RSP_Rate_Min|The minimum respiratory rate after stimulus onset.
-            RSP_Rate_Mean|The mean respiratory rate after stimulus onset.
-            RSP_Rate_SD|The standard deviation of the respiratory rate after stimulus onset.
-            RSP_Rate_Max_Time|The time at which maximum respiratory rate occurs.
-            RSP_Rate_Min_Time|The time at which minimum respiratory rate occurs.
+            RSP_Rate_Baseline|The respiratory rate at the sample nearest stimulus onset.
+            RSP_Rate_Max|The maximum change in respiratory rate from the onset baseline.
+            RSP_Rate_Min|The minimum change in respiratory rate from the onset baseline.
+            RSP_Rate_Mean|The mean change in respiratory rate from the onset baseline.
+            RSP_Rate_SD|The population standard deviation of the post-baseline respiratory rate.
+            RSP_Rate_Max_Time|The time of maximum post-baseline respiratory rate, relative to stimulus onset (seconds).
+            RSP_Rate_Min_Time|The time of minimum post-baseline respiratory rate, relative to stimulus onset (seconds).
             RSP_Amplitude_Baseline|The respiratory amplitude at stimulus onset.
             RSP_Amplitude_Max|The change in maximum respiratory amplitude from before stimulus onset.
             RSP_Amplitude_Min|The change in minimum respiratory amplitude from before stimulus onset.
