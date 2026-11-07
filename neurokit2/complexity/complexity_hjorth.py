@@ -19,12 +19,12 @@ def complexity_hjorth(signal):
         Activity = \\sigma_{signal}^2
 
     * The **mobility** parameter represents the mean frequency or the proportion of standard
-      deviation of the power spectrum. This is defined as the square root of variance of the
+      deviation of the power spectrum. This is defined as the square root of the variance of the
       first derivative of the signal divided by the variance of the signal.
 
       .. math::
 
-        Mobility = \\frac{\\sigma_{dd}/ \\sigma_{d}}{Complexity}
+        Mobility = \\frac{\\sigma_{d}}{\\sigma_{signal}}
 
     * The **complexity** parameter gives an estimate of the bandwidth of the signal, which
       indicates the similarity of the shape of the signal to a pure sine wave (for which the
@@ -34,9 +34,13 @@ def complexity_hjorth(signal):
 
       .. math::
 
-        Complexity = \\sigma_{d}/ \\sigma_{signal}
+        Complexity = \\frac{\\sigma_{dd} / \\sigma_{d}}{\\sigma_{d} / \\sigma_{signal}}
 
-    :math:`d` and :math:`dd` represent the first and second derivatives of the signal, respectively.
+    :math:`d` and :math:`dd` represent the first and second derivatives of the signal, respectively,
+    computed as differences between consecutive samples. The mobility is therefore expressed in
+    radians per sample: multiplied by ``sampling_rate / (2 * pi)``, it approximates the
+    root-mean-square frequency of the signal in Hz (for frequencies well below Nyquist). The
+    complexity is unitless (the time unit of the derivatives cancels out).
 
     Hjorth (1970) illustrated the parameters as follows:
 

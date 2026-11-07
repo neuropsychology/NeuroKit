@@ -104,6 +104,12 @@ def test_signal_resample():
     assert np.allclose(np.mean(rez.mean()), 0.0001, atol=0.0001)
 
 
+def test_signal_resample_interpolation_last_sample():
+    # Rounding can put the last position just past the end of the signal, which must not give 0
+    resampled = nk.signal_resample(np.ones(512), desired_length=51200, method="interpolation")
+    assert np.allclose(resampled, 1)
+
+
 def test_signal_detrend():
     signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
     signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
@@ -258,6 +264,27 @@ def test_signal_merge():
     signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
     assert len(signal) == 150
     assert signal[0] == signal2[0] + signal2[0]
+
+
+@pytest.mark.parametrize("container", [list, pd.Series])
+@pytest.mark.parametrize(
+    "time1, time2, expected",
+    [
+        ([0, 4], [0, 4], [11, 22, 33, 44]),
+        ([0, 4], [2, 6], [11, 12, 13, 24, 34, 44]),
+        ([2, 6], [0, 4], [11, 21, 31, 42, 43, 44]),
+    ],
+)
+def test_signal_merge_input_types(container, time1, time2, expected):
+    merged = nk.signal_merge(container([1, 2, 3, 4]), container([10, 20, 30, 40]), time1, time2)
+    assert isinstance(merged, np.ndarray)
+    np.testing.assert_array_equal(merged, expected)
+
+
+def test_signal_merge_series_index():
+    signal1 = pd.Series([1, 2, 3, 4], index=[10, 11, 12, 13])
+    signal2 = pd.Series([10, 20, 30, 40], index=[20, 21, 22, 23])
+    np.testing.assert_array_equal(nk.signal_merge(signal1, signal2, [0, 4], [0, 4]), [11, 22, 33, 44])
 
 
 def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
@@ -601,3 +628,21 @@ def test_signal_quality():
     quality = nk.signal_quality(signal_zeros, cycle_inds=peaks, signal_type="ecg", method="ici", sampling_rate=sampling_rate)
 
     assert np.allclose(quality, np.zeros_like(quality))
+
+
+def test_signal_formatpeaks_drops_every_nan_index():
+    # Each nan index must be dropped with its own value, not only the first one
+    info = {
+        "SCR_Peaks": np.array([10, 20, 30, 40]),
+        "SCR_Recovery": np.array([np.nan, 25.0, np.nan, 45.0]),
+        "SCR_RecoveryTime": np.array([np.nan, 0.5, np.nan, 0.7]),
+    }
+    signals = nk.signal_formatpeaks(
+        info, desired_length=50, peak_indices=info["SCR_Peaks"], other_indices=info["SCR_Recovery"]
+    )
+
+    recovery_time = signals["SCR_RecoveryTime"]
+    assert recovery_time[25] == 0.5
+    assert recovery_time[45] == 0.7
+    assert np.count_nonzero(recovery_time) == 2
+    assert np.all(np.where(signals["SCR_Recovery"] != 0)[0] == [25, 45])

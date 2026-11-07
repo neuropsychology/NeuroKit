@@ -24,7 +24,8 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
     * **Method 'B'** uses values that are within the mean +/- 1 SD band vs. values that are outside
       this band.
     * **Method 'C'** computes the difference between consecutive samples and binarizes depending on
-      their sign.
+      their sign (0 for an increase, 1 for a decrease). A zero difference (flat segment) takes the
+      sign of the previous nonzero one, so that it does not count as a sign change.
     * **Method 'D'** forms separates consecutive samples that exceed 1 signal's SD from the others
       smaller changes.
     * **Method 'r'** is based on the concept of :func:`*tolerance* <complexity_tolerance>`, and
@@ -213,7 +214,13 @@ def complexity_symbolize(signal, method="mean", c=3, random_state=None, show=Fal
                 plt.title("Method B")
 
         elif method in ["c", "sign"]:
-            symbolic = np.signbit(np.diff(signal)).astype(int)
+            # Sign of consecutive differences. A zero difference (flat segment) takes the sign of the
+            # previous nonzero one (of the first one, at the start), so that it is not a sign change
+            d = np.sign(np.diff(signal))
+            nonzero = np.flatnonzero(d)
+            if len(nonzero) > 0:
+                d = d[np.maximum.accumulate(np.where(d != 0, np.arange(len(d)), nonzero[0]))]
+            symbolic = (d < 0).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
                 df.loc[np.insert(symbolic, 0, False), "A"] = np.nan

@@ -17,6 +17,13 @@ def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=
     This function can be called either via ``entropy_approximate()`` or ``complexity_apen()``, and
     the corrected version via ``complexity_capen()``.
 
+    ApEn is defined (Pincus, 1991) as :math:`\\Phi^m(r) - \\Phi^{m+1}(r)`, where
+    :math:`\\Phi^m(r)` is the average of the logarithm of the proportion of embedded vectors
+    (self-matches included) within a distance *r* of each vector of dimension *m*. The value can
+    be slightly negative when few vectors have neighbours other than themselves (e.g., small
+    tolerance, high dimension or short signal), which reflects the self-match bias that motivated
+    :func:`sample entropy <entropy_sample>`.
+
 
     Parameters
     ----------
@@ -65,6 +72,8 @@ def entropy_approximate(signal, delay=1, dimension=2, tolerance="sd", corrected=
 
     References
     -----------
+    * Pincus, S. M. (1991). Approximate entropy as a measure of system complexity. Proceedings of
+      the National Academy of Sciences, 88(6), 2297-2301.
     * Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal
       classification of schizophrenic and control participants. Artificial intelligence in medicine,
       47(3), 263-274.

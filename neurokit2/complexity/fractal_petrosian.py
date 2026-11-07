@@ -30,9 +30,10 @@ def fractal_petrosian(signal, symbolize="C", show=False):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     symbolize : str
-        Method to convert a continuous signal input into a symbolic (discrete) signal. By default,
-        assigns 0 and 1 to values below and above the mean. Can be ``None`` to skip the process (in
-        case the input is already discrete). See :func:`complexity_symbolize` for details.
+        Method to convert a continuous signal input into a symbolic (discrete) signal. By default
+        (``"C"``), assigns 0 and 1 to increases and decreases of the signal (the sign of consecutive
+        differences). Can be ``None`` to skip the process (in case the input is already discrete).
+        See :func:`complexity_symbolize` for details.
     show : bool
         If ``True``, will show the discrete the signal.
 
@@ -93,6 +94,7 @@ def fractal_petrosian(signal, symbolize="C", show=False):
     #     n_inversions = (symbolic[1:] != symbolic[:-1]).sum()
     n_inversions = (symbolic[1:] != symbolic[:-1]).sum()
 
-    n = len(symbolic)
+    # Petrosian (1995): N is the number of samples (symbolic is one shorter for "C", "D" and "R")
+    n = len(signal)
     pfd = np.log10(n) / (np.log10(n) + np.log10(n / (n + 0.4 * n_inversions)))
     return pfd, {"Symbolization": symbolize}
