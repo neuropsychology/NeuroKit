@@ -41,13 +41,18 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     ----------
     DataFrame
         DataFrame of the analyzed bio features. See docstrings of :func:`.ecg_analyze()`,
-        :func:`.rsp_analyze()`, :func:`.eda_analyze()`, :func:`.emg_analyze()` and
-        :func:`.eog_analyze()` for more details. Also returns Respiratory Sinus Arrhythmia features
-        produced by :func:`.hrv_rsa()` if interval-related analysis is carried out.
+        :func:`.rsp_analyze()`, :func:`.eda_analyze()`, :func:`.emg_analyze()`,
+        :func:`.eog_analyze()` and :func:`.ppg_analyze()` for more details. Also returns Respiratory
+        Sinus Arrhythmia features produced by :func:`.hrv_rsa()` if interval-related analysis is
+        carried out.
+
+        When ECG and PPG are both analyzed, ECG-derived HRV indices retain their ``HRV_`` prefix,
+        while PPG-derived indices use ``PPG_HRV_`` (e.g., ``HRV_MeanNN`` and ``PPG_HRV_MeanNN``).
+        ECG-only and PPG-only analyses retain the existing ``HRV_`` names.
 
     See Also
     ----------
-    .ecg_analyze, .rsp_analyze, .eda_analyze, .emg_analyze, .eog_analyze
+    .ecg_analyze, .rsp_analyze, .eda_analyze, .emg_analyze, .eog_analyze, .ppg_analyze
 
     Examples
     ----------
@@ -169,6 +174,8 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
                 ppg_data = _bio_analyze_slicewindow(ppg_data, window_lengths, signal="PPG")
 
         ppg_analyzed = ppg_analyze(ppg_data, sampling_rate=sampling_rate, method=method)
+        if len(ecg_cols) != 0:
+            ppg_analyzed = ppg_analyzed.rename(columns={col: "PPG_" + col for col in ppg_analyzed if col.startswith("HRV_")})
         features = pd.concat([features, ppg_analyzed], axis=1, sort=False)
 
     # EOG

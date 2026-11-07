@@ -675,6 +675,10 @@ Fixes
   as NaN, when the determinism was 0 or undefined). The lines of the recurrence matrix are now
   counted with vectorised run lengths instead of a Python loop over the diagonals and rows: e.g.,
   0.6 s instead of 21 s and a sixth of the memory for 5,000 samples.
+* ``bio_analyze()`` retains both ECG- and PPG-derived variability features when both signals are
+  analyzed: PPG indices use ``PPG_HRV_*`` while ECG indices retain ``HRV_*``. Previously, their
+  names were duplicated, or the PPG indices were dropped for labelled epochs. Single-signal
+  analyses keep their existing column names (#1239).
 * ``complexity_delay(method="fraser1986")`` no longer fails on a noise-free periodic signal when
   the tested delays reach its period (the default number of bins of ``mutual_information()``
   diverged for perfectly correlated variables).
