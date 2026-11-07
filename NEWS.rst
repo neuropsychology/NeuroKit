@@ -665,6 +665,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``hrv(show=True)`` no longer raises ``KeyError`` when ``peaks`` is the info dict returned by
+  ``ppg_peaks()``; the plot now uses the same peaks as the computed indices.
 * ``complexity_rqa()`` (and ``hrv_rqa()``) now returns the documented ``LamiDet`` (laminarity /
   determinism): it was computed but never stored, so the column was missing (it only appeared,
   as NaN, when the determinism was 0 or undefined). The lines of the recurrence matrix are now
