@@ -15,7 +15,7 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
         The cleaned EDA signal.
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
-    lag : int
+    lag : int or float
         Time lag in seconds. Defaults to 4 seconds to avoid autoregressive
         correlations approaching 1, as recommended by Halem et al. (2020).
 

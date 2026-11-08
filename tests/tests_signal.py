@@ -300,7 +300,7 @@ def test_signal_autocor(method, unbiased):
     assert nk.signal_autocor(signal, lag=1, method=method, unbiased=unbiased)[0] == pytest.approx(r[1])
 
 
-@pytest.mark.parametrize("lag", [5, -1, 1.5])
+@pytest.mark.parametrize("lag", [5, -1, 1.5, np.inf, np.nan])
 def test_signal_autocor_invalid_lag(lag):
     with pytest.raises(ValueError, match="whole number of samples"):
         nk.signal_autocor([1, 2, 3, 4, 5], lag=lag)

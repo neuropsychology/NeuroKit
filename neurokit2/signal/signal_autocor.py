@@ -123,7 +123,7 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
             plt.ylim(-1.1, 1.1)
 
     if lag is not None:
-        if int(lag) != lag or lag < 0 or lag >= n:
+        if not 0 <= lag < n or int(lag) != lag:
             raise ValueError(
                 f"NeuroKit error: signal_autocor(): The time lag must be a whole number of samples between 0 and {n - 1}."
             )
