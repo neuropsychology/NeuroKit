@@ -675,6 +675,10 @@ Fixes
   maximum), integer signals no longer overflow with ``demean=False``, invalid lags and
   multidimensional inputs raise a ``ValueError``, and the plot's lag axis starts at 0.
 * ``eda_autocor()`` accepts fractional lags and float sampling rates.
+* ``signal_cyclesegment()``, ``ppg_segment()``, ``rsp_segment()`` and ``ecg_segment()`` accept the
+  documented peak dict (and the tuple or DataFrame returned by the ``*_peaks()`` functions) and
+  raise a clear error with too few peaks. Any ``signal_name`` can now be plotted by
+  ``signal_cyclesegment()``.
 * ``rsp_process()`` no longer raises ``IndexError`` when short recordings leave no complete
   trough-to-peak pair after detection. Peak finding returns empty arrays, and phase and amplitude
   return ``NaN`` values when peaks or troughs are missing (#1242).

@@ -350,6 +350,37 @@ def test_signal_changepoints_integer_overflow():
     np.testing.assert_array_equal(nk.signal_changepoints(signal, change="mean"), [100, 200])
 
 
+def test_signal_cyclesegment_any_signal_name():
+    signal = np.sin(np.linspace(0, 40 * np.pi, 2000))
+    ax = nk.signal_cyclesegment(signal, [100, 500, 900, 1300, 1700], sampling_rate=250, show="return", signal_name="eeg")
+    assert ax.get_ylabel() == "eeg"
+    plt.close("all")
+
+
+@pytest.mark.parametrize(
+    "format_peaks", [lambda signals, info: info, lambda signals, info: (signals, info), lambda signals, info: signals]
+)
+def test_signal_cyclesegment_peak_formats(format_peaks):
+    ppg = nk.ppg_clean(nk.ppg_simulate(duration=30, sampling_rate=100, random_state=1), sampling_rate=100)
+    signals, info = nk.ppg_peaks(ppg, sampling_rate=100)
+    cycles, _ = nk.signal_cyclesegment(ppg, format_peaks(signals, info), sampling_rate=100)
+    expected, _ = nk.signal_cyclesegment(ppg, info["PPG_Peaks"], sampling_rate=100)
+    assert cycles.keys() == expected.keys()
+
+
+def test_ecg_segment_peak_dict():
+    ecg = nk.ecg_clean(nk.ecg_simulate(duration=15, sampling_rate=500, random_state=1), sampling_rate=500)
+    _, info = nk.ecg_peaks(ecg, sampling_rate=500)
+    assert len(nk.ecg_segment(ecg, rpeaks=info, sampling_rate=500)) == len(info["ECG_R_Peaks"])
+
+
+@pytest.mark.parametrize("segment", [nk.signal_cyclesegment, nk.ecg_segment])
+@pytest.mark.parametrize("peaks", [[], [100, 200, 300]])
+def test_segment_too_few_peaks(segment, peaks):
+    with pytest.raises(ValueError, match="Too few"):
+        segment(np.sin(np.arange(1000)), np.array(peaks, dtype=int), sampling_rate=100)
+
+
 def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
     # Test with array.
     duration = 10

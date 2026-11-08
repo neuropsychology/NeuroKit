@@ -3,6 +3,7 @@ import numpy as np
 
 from ..epochs import epochs_create, epochs_to_df
 from ..signal import signal_rate
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .ecg_peaks import ecg_peaks
 
 
@@ -55,6 +56,7 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False, **kwar
     if len(ecg_cleaned) < sampling_rate * 4:
         raise ValueError("The data length is too small to be segmented.")
 
+    rpeaks = _signal_formatpeaks_sanitize(rpeaks)
     epochs_start, epochs_end, average_hr = _ecg_segment_window(
         rpeaks=rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned)
     )
@@ -157,6 +159,9 @@ def _ecg_segment_window(
         heart_rate = np.mean(heart_rate)
     if rpeaks is not None:
         heart_rate = np.mean(signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=desired_length))
+
+    if np.isnan(heart_rate):
+        raise ValueError("Too few R-peaks to compute the heart rate (at least 4 are needed).")
 
     # Modulator
     # Note: this is based on quick internal testing but could be improved
