@@ -190,16 +190,16 @@ Changes in Results
   coarse-graining used to keep every Tau-th sample from each offset, without averaging, so there
   was no low-pass filtering and the composite entropies stayed flat (or rose) with the scale
   instead of decreasing like MSEn (e.g., 2.17 instead of 1.10 at scale 10 for white noise with
-  ``dimension=2``). ``complexity_coarsegraining(method="timeshift")`` returns a list of the Tau
-  series (their lengths can differ by one) instead of a 2D array.
+  ``dimension=2``) (#1071). ``complexity_coarsegraining(method="timeshift")`` returns a list of the
+  Tau series (their lengths can differ by one) instead of a 2D array.
 * ``entropy_multiscale(method="RCMSEn")`` now sums the numbers of template matches of the Tau
   series before taking their ratio, as in Wu et al. (2014). It used to average their proportions,
-  which is the same only when the series have the same length. ``fuzzy=True`` (and
+  which is the same only when the series have the same length (#1071). ``fuzzy=True`` (and
   ``complexity_fuzzyrcmse()``) now applies at every scale; it was only applied at scale 1.
 * ``entropy_multiscale(method="CMSEn")`` is now undefined (infinite or NaN) at a scale where the
   entropy of one of its Tau series is undefined, as defined by Wu et al. (2013). The undefined
   series used to be silently left out of the average, which biased the value downwards (the
-  refined ``"RCMSEn"`` exists to handle these cases).
+  refined ``"RCMSEn"`` exists to handle these cases) (#1071).
 * ``entropy_multiscale()`` (every method, and therefore the ``MSEn``, ``CMSEn`` and ``RCMSEn``
   indices of ``hrv_nonlinear()`` and ``MSPEn`` of ``complexity()``) now uses by default the scale
   factors 1 to 20 (Costa et al., 2005), capped so that the coarse-grained series at the largest
@@ -208,7 +208,7 @@ Changes in Results
   the coarse-grained series had only about 12 samples whatever the length of the signal: for 300
   RR intervals (a 5-minute recording) it gave 24 scales, of which those above 10 were undefined in
   25% to 80% of the realizations of 1/f noise and the others scattered by about 30%; for 2,000
-  samples with the default ``dimension=3``, 153 scales. They are now 3 and 20. The sample entropy
+  samples with the default ``dimension=3``, 152 scales. They are now 3 and 20. The sample entropy
   is reasonably stable from about 100 samples (Richman & Moorman, 2000; Yentes et al., 2013). The
   previous scales can be obtained with ``scale=int(len(signal) / (dimension + 10)) - 1``. The
   default is also much faster to compute.
