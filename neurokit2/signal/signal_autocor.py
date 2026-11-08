@@ -72,11 +72,14 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
       plt.close()
 
     """
+    signal = np.asarray(signal, dtype=float)
+    if signal.ndim > 1:
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
     n = len(signal)
 
     # Demean
     if demean:
-        signal = np.asarray(signal) - np.nanmean(signal)
+        signal = signal - np.nanmean(signal)
 
     # Run autocor
     method = method.lower()

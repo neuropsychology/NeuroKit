@@ -306,9 +306,18 @@ def test_signal_autocor_invalid_lag(lag):
         nk.signal_autocor([1, 2, 3, 4, 5], lag=lag)
 
 
-def test_signal_autocor_integer_input():
-    r, _ = nk.signal_autocor([1, 2, 3, 4], demean=False, unbiased=True, method="correlation")
-    assert r[0] == 1
+@pytest.mark.parametrize("signal", [np.zeros((20, 1)), np.zeros((20, 3)), [[1.0], [2.0]]])
+def test_signal_autocor_multidimensional(signal):
+    with pytest.raises(ValueError, match="Multidimensional"):
+        nk.signal_autocor(signal)
+
+
+@pytest.mark.parametrize("method", ["auto", "correlation", "fft"])
+def test_signal_autocor_integer_input(method):
+    signal = np.array([100, 120, 90, 130, 110, 140, 95, 125, 105, 135], dtype=np.int16)
+    r, _ = nk.signal_autocor(signal, demean=False, method=method)
+    expected, _ = nk.signal_autocor(signal.astype(float), demean=False, method=method)
+    np.testing.assert_allclose(r, expected)
 
 
 def test_signal_autocor_plot():
