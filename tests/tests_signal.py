@@ -350,6 +350,13 @@ def test_signal_changepoints_integer_overflow():
     np.testing.assert_array_equal(nk.signal_changepoints(signal, change="mean"), [100, 200])
 
 
+@pytest.mark.parametrize("method", ["polynomial", "tarvainen2002", "loess"])
+def test_signal_detrend_column_input(method):
+    signal = nk.signal_simulate(duration=2, sampling_rate=100, noise=0.05, random_state=42)
+    expected = nk.signal_detrend(signal, method=method)
+    np.testing.assert_allclose(nk.signal_detrend(signal.reshape(-1, 1), method=method), expected)
+
+
 def test_signal_cyclesegment_any_signal_name():
     signal = np.sin(np.linspace(0, 40 * np.pi, 2000))
     ax = nk.signal_cyclesegment(signal, [100, 500, 900, 1300, 1700], sampling_rate=250, show="return", signal_name="eeg")
