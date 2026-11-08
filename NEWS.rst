@@ -679,6 +679,8 @@ Fixes
   documented peak dict (and the tuple or DataFrame returned by the ``*_peaks()`` functions) and
   raise a clear error with too few peaks. Any ``signal_name`` can now be plotted by
   ``signal_cyclesegment()``.
+* ``signal_decompose(method="emd")`` accepts lists, Series and column arrays and passes PyEMD
+  options correctly, and ``method="ssa"`` needs less memory and time on long signals.
 * ``signal_detrend()`` accepts ``(n, 1)`` column arrays (it could return an ``(n, n)`` matrix).
 * ``rsp_process()`` no longer raises ``IndexError`` when short recordings leave no complete
   trough-to-peak pair after detection. Peak finding returns empty arrays, and phase and amplitude

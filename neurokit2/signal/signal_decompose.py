@@ -19,10 +19,13 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     method : str
         The decomposition method. Can be one of ``"emd"`` or ``"ssa"``.
     n_components : int
-        Number of components to extract. Only used for ``"ssa"`` method. If ``None``, will default
-        to 50.
+        Only used for the ``"ssa"`` method, where it is the window length, i.e., the maximum number
+        of components (fewer are returned if the signal has a lower rank). If ``None``, defaults to
+        50, or to half the signal length for signals shorter than 100 samples.
     **kwargs
-        Other arguments passed to other functions.
+        Other arguments. For the ``"emd"`` method, ``ensemble=True`` runs Ensemble EMD, and the
+        others are passed to PyEMD (e.g., ``max_imf``, ``std_thr``, or ``extrema_detection``, which
+        defaults to ``"parabol"``).
 
     Returns
     -------
@@ -77,6 +80,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     """
     # Apply method
     method = method.lower()
+    signal = as_vector(signal)
     if method in ["emd"]:
         components = _signal_decompose_emd(signal, **kwargs)
     elif method in ["ssa"]:
@@ -100,9 +104,6 @@ def _signal_decompose_ssa(signal, n_components=None):
     - https://www.kaggle.com/jdarcy/introducing-ssa-for-time-series-decomposition
 
     """
-    # sanitize input
-    signal = as_vector(signal)
-
     # Parameters
     # The window length.
     if n_components is None:
@@ -120,7 +121,7 @@ def _signal_decompose_ssa(signal, n_components=None):
 
     # Embed the time series in a trajectory matrix by pulling the relevant subseries of F,
     # and stacking them as columns.
-    X = np.array([signal[i : L + i] for i in range(0, K)]).T
+    X = np.lib.stride_tricks.sliding_window_view(signal, L).T
 
     # Get n components
     d = np.linalg.matrix_rank(X)
@@ -129,15 +130,13 @@ def _signal_decompose_ssa(signal, n_components=None):
     u, sigma, vt = np.linalg.svd(X, full_matrices=False)
 
     # Initialize components matrix
-    components = np.zeros((N, d))
-    # Reconstruct the elementary matrices without storing them
+    components = np.zeros((d, N))
+    counts = np.convolve(np.ones(L), np.ones(K))
     for i in range(d):
-        X_elem = sigma[i] * np.outer(u[:, i], vt[i, :])
-        X_rev = X_elem[::-1]
-        components[:, i] = [X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0] + 1, X_rev.shape[1])]
+        components[i] = sigma[i] * np.convolve(u[:, i], vt[i, :]) / counts
 
     # Return the components
-    return components.T
+    return components
 
 
 # =============================================================================
@@ -158,7 +157,7 @@ def _signal_decompose_ssa(signal, n_components=None):
 # =============================================================================
 # Empirical Mode Decomposition (EMD)
 # =============================================================================
-def _signal_decompose_emd(signal, ensemble=False, **kwargs):
+def _signal_decompose_emd(signal, ensemble=False, T=None, max_imf=-1, progress=False, extrema_detection="parabol", **kwargs):
     """References
     ------------
     - http://perso.ens-lyon.fr/patrick.flandrin/CSDATrendfiltering.pdf
@@ -175,11 +174,11 @@ def _signal_decompose_emd(signal, ensemble=False, **kwargs):
         ) from e
 
     if ensemble is False:
-        emd = PyEMD.EMD(extrema_detection="parabol", **kwargs)
-        imfs = emd.emd(signal, **kwargs)
+        emd = PyEMD.EMD(extrema_detection=extrema_detection, **kwargs)
+        imfs = emd.emd(signal, T=T, max_imf=max_imf)
     else:
-        emd = PyEMD.EEMD(extrema_detection="parabol", **kwargs)
-        imfs = emd.eemd(signal, **kwargs)
+        emd = PyEMD.EEMD(extrema_detection=extrema_detection, **kwargs)
+        imfs = emd.eemd(signal, T=T, max_imf=max_imf, progress=progress)
 
     #    _, residue = emd.get_imfs_and_residue()
     return imfs

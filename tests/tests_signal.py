@@ -350,6 +350,31 @@ def test_signal_changepoints_integer_overflow():
     np.testing.assert_array_equal(nk.signal_changepoints(signal, change="mean"), [100, 200])
 
 
+@pytest.mark.parametrize(
+    "kwargs",
+    [{"max_imf": 2}, {"std_thr": 0.01}, {"extrema_detection": "simple"}, {"ensemble": True, "trials": 3, "parallel": False}],
+)
+def test_signal_decompose_emd_options(kwargs):
+    signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[1, 5], noise=0.05, random_state=42)
+    assert np.ndim(nk.signal_decompose(signal, method="emd", **kwargs)) == 2
+
+
+@pytest.mark.parametrize("convert", [list, pd.Series, lambda signal: signal.reshape(-1, 1)])
+def test_signal_decompose_emd_input_types(convert):
+    signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[1, 5], noise=0.05, random_state=42)
+    np.testing.assert_allclose(nk.signal_decompose(convert(signal)), nk.signal_decompose(signal))
+
+
+def test_signal_decompose_ssa_components():
+    signal = np.random.default_rng(0).normal(size=200)
+    components = nk.signal_decompose(signal, method="ssa", n_components=10)
+    assert components.shape == (10, 200)
+    np.testing.assert_allclose(components.sum(axis=0), signal)
+
+    sines = np.sin(2 * np.pi * np.arange(1000) / 50) + 0.5 * np.sin(2 * np.pi * np.arange(1000) / 20)
+    assert nk.signal_decompose(sines, method="ssa", n_components=20).shape == (4, 1000)
+
+
 @pytest.mark.parametrize("method", ["polynomial", "tarvainen2002", "loess"])
 def test_signal_detrend_column_input(method):
     signal = nk.signal_simulate(duration=2, sampling_rate=100, noise=0.05, random_state=42)
