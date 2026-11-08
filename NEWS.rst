@@ -665,6 +665,9 @@ New Features
 Fixes
 +++++++++++++
 
+* ``signal_autocor()``: ``unbiased=True`` now returns 1 at lag 0 (values were divided by their
+  maximum), invalid lags raise a ``ValueError``, and the plot's lag axis starts at 0.
+* ``eda_autocor()`` accepts fractional lags and float sampling rates.
 * ``rsp_process()`` no longer raises ``IndexError`` when short recordings leave no complete
   trough-to-peak pair after detection. Peak finding returns empty arrays, and phase and amplitude
   return ``NaN`` values when peaks or troughs are missing (#1242).

@@ -287,6 +287,37 @@ def test_signal_merge_series_index():
     np.testing.assert_array_equal(nk.signal_merge(signal1, signal2, [0, 4], [0, 4]), [11, 22, 33, 44])
 
 
+@pytest.mark.parametrize("unbiased", [False, True])
+@pytest.mark.parametrize("method", ["auto", "correlation", "fft"])
+def test_signal_autocor(method, unbiased):
+    signal = np.array([-1.01, 3.1, -0.03, -0.79, 2.4])
+    x = signal - signal.mean()
+    n = len(x)
+    acov = np.array([np.dot(x[: n - k], x[k:]) / ((n - k) if unbiased else 1) for k in range(n)])
+
+    r, _ = nk.signal_autocor(signal, method=method, unbiased=unbiased)
+    np.testing.assert_allclose(r, acov / acov[0])
+    assert nk.signal_autocor(signal, lag=1, method=method, unbiased=unbiased)[0] == pytest.approx(r[1])
+
+
+@pytest.mark.parametrize("lag", [5, -1, 1.5])
+def test_signal_autocor_invalid_lag(lag):
+    with pytest.raises(ValueError, match="whole number of samples"):
+        nk.signal_autocor([1, 2, 3, 4, 5], lag=lag)
+
+
+def test_signal_autocor_integer_input():
+    r, _ = nk.signal_autocor([1, 2, 3, 4], demean=False, unbiased=True, method="correlation")
+    assert r[0] == 1
+
+
+def test_signal_autocor_plot():
+    r, _ = nk.signal_autocor(np.sin(np.arange(20)), show=True)
+    x = plt.gca().get_lines()[-1].get_xdata()
+    plt.close("all")
+    np.testing.assert_array_equal(x, np.arange(len(r)))
+
+
 def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
     # Test with array.
     duration = 10
