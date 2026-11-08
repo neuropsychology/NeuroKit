@@ -327,6 +327,29 @@ def test_signal_autocor_plot():
     np.testing.assert_array_equal(x, np.arange(len(r)))
 
 
+@pytest.mark.parametrize("change", ["mean", "var", "meanvar"])
+def test_signal_changepoints(change):
+    signal = np.concatenate([np.zeros(200), np.full(200, 5.0), np.full(200, 10.0)])
+    np.testing.assert_array_equal(nk.signal_changepoints(signal, change=change), [200, 400])
+    assert len(nk.signal_changepoints(np.full(200, 7.3), change=change)) == 0
+
+
+@pytest.mark.parametrize("change", ["mean", "var", "meanvar"])
+def test_signal_changepoints_noise(change):
+    signal = np.random.default_rng(0).normal(size=500)
+    assert len(nk.signal_changepoints(signal, change=change)) == 0
+
+
+@pytest.mark.parametrize("signal", [[], [1.0, 2.0, 4.0], [3.0, 1.0, 2.0, 0.0, 1.0, 3.0]])
+def test_signal_changepoints_no_change(signal):
+    assert len(nk.signal_changepoints(signal)) == 0
+
+
+def test_signal_changepoints_integer_overflow():
+    signal = np.concatenate([np.zeros(100), np.full(100, 5e9), np.full(100, 1e10)]).astype(np.int64)
+    np.testing.assert_array_equal(nk.signal_changepoints(signal, change="mean"), [100, 200])
+
+
 def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
     # Test with array.
     duration = 10

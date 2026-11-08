@@ -606,6 +606,12 @@ Changes in Results
   now listed in the documentation, with a docstring that gives the formula, its relationship with
   linear predictability (Dubnov, 2004) and references (Johnston, 1988; Tchernichovski et al.,
   2000).
+* ``signal_changepoints()`` (and therefore ``eda_changepoints()`` and
+  ``emg_activation(method="pelt")``) now returns the optimal changepoints (most were dropped or
+  wrong), ``change="mean"`` uses the correct cost, constant segments no longer crash, and constant
+  signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
+  Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
+* ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
 
 New Features
 +++++++++++++
