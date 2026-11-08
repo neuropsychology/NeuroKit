@@ -18,6 +18,7 @@ from neurokit2.data.read_xdf import (
     _fill_missing_data,
     _interpolate_streams,
     _mask_large_gaps,
+    _sanitize_streams,
     _synchronize_streams,
 )
 
@@ -482,3 +483,59 @@ class TestFillmissingDeprecation:
             self._run_deprecation_logic(fillmissing=None, fill_max=None)
         dep_warnings = [x for x in w if issubclass(x.category, DeprecationWarning)]
         assert len(dep_warnings) == 0
+
+
+# ===========================================================================
+# Duplicate column names sanitization
+# ===========================================================================
+class TestDuplicateColumnNames:
+    """Duplicate channel names across or within streams should be disambiguated."""
+
+    def test_duplicate_names_within_stream(self):
+        stream = {
+            "time_stamps": np.array([0.0, 0.1, 0.2, 0.3]),
+            "time_series": np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]]),
+            "info": {
+                "name": ["NIRS"],
+                "nominal_srate": ["10"],
+                "desc": [{"channels": [{"channel": [{"label": ["1-1:1"]}, {"label": ["1-1:1"]}]}]}],
+            },
+        }
+        stream_data = _sanitize_streams([stream], verbose=False)
+        assert stream_data[0]["columns"] == ["NIRS_1-1:1_1", "NIRS_1-1:1_2"]
+
+        df, fs = _synchronize_streams(stream_data, verbose=False)
+        assert list(df.columns) == ["NIRS_1-1:1_1", "NIRS_1-1:1_2"]
+        assert not df.isna().any().any()
+        np.testing.assert_array_equal(df["NIRS_1-1:1_1"].values[0], 1.0)
+        np.testing.assert_array_equal(df["NIRS_1-1:1_2"].values[0], 2.0)
+
+    def test_duplicate_names_across_streams_unique_names(self):
+        s1 = {
+            "time_stamps": np.array([0.0, 0.1, 0.2]),
+            "time_series": np.array([[1.0], [2.0], [3.0]]),
+            "info": {"name": ["EEG"], "nominal_srate": ["10"], "desc": [{"channels": [{"channel": [{"label": ["ch1"]}]}]}]},
+        }
+        s2 = {
+            "time_stamps": np.array([0.0, 0.1, 0.2]),
+            "time_series": np.array([[4.0], [5.0], [6.0]]),
+            "info": {"name": ["EMG"], "nominal_srate": ["10"], "desc": [{"channels": [{"channel": [{"label": ["ch1"]}]}]}]},
+        }
+        stream_data = _sanitize_streams([s1, s2], verbose=False)
+        assert stream_data[0]["columns"] == ["EEG_ch1"]
+        assert stream_data[1]["columns"] == ["EMG_ch1"]
+
+    def test_duplicate_names_across_streams_identical_names(self):
+        s1 = {
+            "time_stamps": np.array([0.0, 0.1, 0.2]),
+            "time_series": np.array([[1.0], [2.0], [3.0]]),
+            "info": {"name": ["Device"], "nominal_srate": ["10"], "desc": [{"channels": [{"channel": [{"label": ["ch1"]}]}]}]},
+        }
+        s2 = {
+            "time_stamps": np.array([0.0, 0.1, 0.2]),
+            "time_series": np.array([[4.0], [5.0], [6.0]]),
+            "info": {"name": ["Device"], "nominal_srate": ["10"], "desc": [{"channels": [{"channel": [{"label": ["ch1"]}]}]}]},
+        }
+        stream_data = _sanitize_streams([s1, s2], verbose=False)
+        assert stream_data[0]["columns"] == ["Device_ch1_1"]
+        assert stream_data[1]["columns"] == ["Device_ch1_2"]
