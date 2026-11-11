@@ -1021,6 +1021,8 @@ Fixes
   ``dimension`` columns.
 * ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
   which made the threshold 0 so that no sample counted as flat.
+* ``eog_intervalrelated()`` raises a ``ValueError`` for a DataFrame without an ``EOG_Rate`` column,
+  as it does for a dict of epochs, instead of returning an empty DataFrame.
 
 
 0.3.0

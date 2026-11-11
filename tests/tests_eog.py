@@ -3,6 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import mne
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -160,3 +161,13 @@ def test_eog_intervalrelated():
 
     assert all(elem in columns for elem in np.array(epochs_dict.columns.values, dtype=str))
     assert epochs_dict.shape[0] == len(epochs)  # Number of rows
+
+
+@pytest.mark.parametrize("missing", ["EOG_Rate", "EOG_Blinks"])
+def test_eog_intervalrelated_missing_columns(missing):
+    data = pd.DataFrame({"EOG_Rate": [10.0, 12.0, 14.0], "EOG_Blinks": [0, 1, 0], "Label": ["1"] * 3})
+    data = data.drop(columns=missing)
+    with pytest.raises(ValueError, match=missing):
+        nk.eog_intervalrelated(data)
+    with pytest.raises(ValueError, match=missing):
+        nk.eog_intervalrelated({"1": data})
