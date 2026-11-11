@@ -1019,6 +1019,8 @@ Fixes
   floats such as ``np.float32`` as ``delay`` and ``dimension`` (with the same warning as Python
   floats; they raised a ``TypeError``). Its docstring gives the shape of the output, which has
   ``dimension`` columns.
+* ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
+  which made the threshold 0 so that no sample counted as flat.
 
 
 0.3.0

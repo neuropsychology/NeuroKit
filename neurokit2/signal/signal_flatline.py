@@ -30,6 +30,10 @@ def signal_flatline(signal, threshold=0.01):
 
     """
     diff = np.diff(signal)
+    if not diff.any():
+        # A constant signal is entirely flat (the threshold would be 0)
+        return 1.0
+
     threshold = threshold * np.max(np.abs(diff))
 
     flatline = np.where(np.abs(diff) < threshold)[0]
