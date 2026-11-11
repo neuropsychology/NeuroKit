@@ -55,9 +55,8 @@ def eog_intervalrelated(data):
 
     # Format input
     if isinstance(data, pd.DataFrame):
-        rate_cols = [col for col in data.columns if "EOG_Rate" in col]
-        if len(rate_cols) == 1:
-            intervals.update(_eog_intervalrelated_formatinput(data))
+        # Raises a ValueError if the EOG_Rate or EOG_Blinks column is missing
+        intervals.update(_eog_intervalrelated_formatinput(data))
 
         eog_intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
