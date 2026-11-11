@@ -1021,6 +1021,8 @@ Fixes
   ``dimension`` columns.
 * ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
   which made the threshold 0 so that no sample counted as flat.
+* ``emg_intervalrelated()`` raises its ``ValueError`` when ``EMG_Amplitude`` or ``EMG_Activity`` is
+  missing; the column check never triggered, so a bare ``KeyError`` was raised instead.
 
 
 0.3.0

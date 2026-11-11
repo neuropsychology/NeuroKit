@@ -228,3 +228,19 @@ def test_emg_process_below_amplitude_highcut_nyquist():
 
     assert len(signals) == len(emg)
     assert np.isfinite(signals["EMG_Amplitude"]).all()
+
+
+@pytest.mark.parametrize("missing", ["EMG_Amplitude", "EMG_Activity"])
+def test_emg_intervalrelated_missing_amplitude_columns(missing):
+    data = pd.DataFrame(
+        {
+            "EMG_Onsets": [0, 1, 0, 0],
+            "EMG_Activity": [0, 1, 1, 0],
+            "EMG_Amplitude": [0.1, 0.5, 0.4, 0.1],
+            "Label": ["1"] * 4,
+        }
+    ).drop(columns=missing)
+    with pytest.raises(ValueError, match="EMG_Amplitude` and `EMG_Activity"):
+        nk.emg_intervalrelated(data)
+    with pytest.raises(ValueError, match="EMG_Amplitude` and `EMG_Activity"):
+        nk.emg_intervalrelated({"1": data})
