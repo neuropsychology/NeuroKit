@@ -98,7 +98,13 @@ def signal_rate(
         )
         if not interpolated:
             interpolation_method = None
-        _signal_rate_plot(rate, peaks, sampling_rate, interpolation_method, interpolated=interpolated)
+        _signal_rate_plot(
+            rate,
+            peaks,
+            sampling_rate,
+            interpolation_method,
+            interpolated=interpolated,
+        )
 
     return rate
 
