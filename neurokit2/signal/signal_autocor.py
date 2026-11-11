@@ -14,8 +14,8 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
     signal : Union[list, np.array, pd.Series]
         Vector of values.
     lag : int
-        Time lag. If specified, one value of autocorrelation between signal with its lag self will
-        be returned.
+        Time lag (in samples), between 0 and the length of the signal minus one. If specified, one
+        value of autocorrelation between signal with its lag self will be returned.
     demean : bool
         If ``True``, the mean of the signal will be subtracted from the signal before ACF
         computation.
@@ -23,15 +23,21 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
         Using ``"auto"`` runs ``scipy.signal.correlate`` to determine the faster algorithm. Other
         methods are kept for legacy reasons, but are not recommended. Other methods include
         ``"correlation"`` (using :func:`.np.correlate`) or ``"fft"`` (Fast Fourier Transform).
+        ``"unbiased"`` is a shortcut for ``method="fft"`` with ``unbiased=True``.
+    unbiased : bool
+        If ``True``, the autocovariance at each lag k is divided by the number of overlapping
+        samples (n - k) before normalization. This corrects the shrinking of the estimate at large
+        lags, but makes it less stable there: with only a few overlapping samples, values can
+        exceed the [-1, 1] range. Defaults to ``False``.
     show : bool
         If ``True``, plot the autocorrelation at all values of lag.
 
     Returns
     -------
-    r : float
+    r : Union[np.array, float]
         The cross-correlation of the signal with itself at different time lags. Minimum time lag is
-        0, maximum time lag is the length of the signal. Or a correlation value at a specific lag
-        if lag is not ``None``.
+        0, maximum time lag is the length of the signal minus one. Or a correlation value at a
+        specific (integer) lag if lag is not ``None``.
     info : dict
         A dictionary containing additional information, such as the confidence interval.
 
@@ -66,11 +72,14 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
       plt.close()
 
     """
+    signal = np.asarray(signal, dtype=float)
+    if signal.ndim > 1:
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
     n = len(signal)
 
     # Demean
     if demean:
-        signal = np.asarray(signal) - np.nanmean(signal)
+        signal = signal - np.nanmean(signal)
 
     # Run autocor
     method = method.lower()
@@ -94,10 +103,10 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
     # If unbiased, normalize by the number of overlapping elements
     if unbiased is True:
         normalization = np.arange(n, 0, -1)
-        acov /= normalization
+        acov = acov / normalization
 
-    # Normalize (so that max correlation is 1)
-    r = acov / np.max(acov)
+    # Normalize (so that the correlation at lag 0 is 1)
+    r = acov / acov[0]
 
     # Confidence interval
     varacf = 1.0 / n
@@ -107,15 +116,17 @@ def signal_autocor(signal, lag=None, demean=True, method="auto", unbiased=False,
     # Plot
     if show:
         plt.axhline(y=0, color="grey", linestyle="--")
-        plt.plot(np.arange(1, len(r) + 1), r, lw=2)
+        plt.plot(np.arange(len(r)), r, lw=2)
         plt.ylabel("Autocorrelation r")
         plt.xlabel("Lag")
-        plt.ylim(-1.1, 1.1)
+        if not unbiased:
+            plt.ylim(-1.1, 1.1)
 
     if lag is not None:
-        if lag > n:
-            raise ValueError("NeuroKit error: signal_autocor(): The time lag exceeds the duration of the signal. ")
-        else:
-            r = r[lag]
+        if not 0 <= lag < n or int(lag) != lag:
+            raise ValueError(
+                f"NeuroKit error: signal_autocor(): The time lag must be a whole number of samples between 0 and {n - 1}."
+            )
+        r = r[int(lag)]
 
     return r, {"CI_low": ci_low, "CI_high": ci_high, "Method": method, "ACov": acov}

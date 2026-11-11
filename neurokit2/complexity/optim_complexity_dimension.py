@@ -1,7 +1,10 @@
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
 
+from ..misc import NeuroKitWarning
 from .fractal_correlation import fractal_correlation
 from .utils_complexity_embedding import complexity_embedding
 
@@ -35,7 +38,11 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
       purely random signals, the amount of false neighbors does not substantially drops as *m*
       increases). The **figure** below show how projections to higher-dimensional spaces can be
       used to detect false nearest neighbours. For instance, the red and the yellow points are
-      neighbours in the 1D space, but not in the 2D space.
+      neighbours in the 1D space, but not in the 2D space. This implementation returns the first
+      dimension at which the proportion of false neighbours drops below 2% (or within 1.85 times
+      its minimum, when it stays above that), finds the nearest neighbours among the points
+      separated by more than 10 samples in time, and skips identical vectors (so that heavily
+      quantized signals can leave some dimensions without an estimate).
 
     .. figure:: ../img/douglas2022b.png
        :alt: Illustration of FNN (Douglas et al., 2022).
@@ -49,7 +56,9 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
       Then *d0*+1 is the optimal minimum embedding dimension. *E2* is a useful quantity to
       distinguish deterministic signals from stochastic signals. A constant *E2* close to 1 for any
       embedding dimension *d* suggests random data, since the future values are independent of the
-      past values.
+      past values. This implementation returns the first dimension at which *E1* reaches 85% of
+      its maximum (i.e., *d0*), and finds the nearest neighbours among the points separated by
+      more than 10 samples in time.
 
     Parameters
     ----------
@@ -156,12 +165,19 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
 
-        # To find where E1 saturates, set a threshold of difference
-        # threshold = 0.1 * (np.max(E1) - np.min(E1))
-        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.nanmax(E1)) if x][0] + 1
-
         # To standardize the length of dimension_seq with E1 and E2
         dimension_seq = dimension_seq[:-1]
+
+        # Where E1 saturates (reaches 85% of its maximum): the dimension itself, not its index
+        if np.all(np.isnan(E1)):
+            warn(
+                "complexity_dimension(): E1 could not be computed (no valid nearest neighbours, "
+                "e.g., because the signal is quantized). NaN is returned.",
+                category=NeuroKitWarning,
+            )
+            min_dimension = np.nan
+        else:
+            min_dimension = dimension_seq[np.where(E1 >= 0.85 * np.nanmax(E1))[0][0]]
 
         # Store information
         info = {"Method": method, "Values": dimension_seq, "E1": E1, "E2": E2}
@@ -178,7 +194,19 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     elif method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
 
-        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        # Kennel et al. (1992): the first dimension at which the proportion of false neighbours
+        # drops to (about) zero, i.e., below 2%, or within 1.85 times its minimum when it stays
+        # above that (e.g., noisy signals). f3[i] is the proportion at dimension_seq[i] (compared
+        # with dimension_seq[i] + 1), so return the dimension itself rather than its index
+        if np.all(np.isnan(f3)):
+            warn(
+                "complexity_dimension(): the proportion of false neighbours could not be computed "
+                "(no valid nearest neighbours). NaN is returned.",
+                category=NeuroKitWarning,
+            )
+            min_dimension = np.nan
+        else:
+            min_dimension = dimension_seq[np.where(f3 <= max(0.02, 1.85 * np.nanmin(f3)))[0][0]]
 
         # Store information
         info = {"Method": method, "Values": dimension_seq, "f1": f1, "f2": f2, "f3": f3}
@@ -244,17 +272,15 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", w
     E2(d) = E*(d + 1)/E*(d).
 
     """
-    d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
+    d, dist, y2, y2_nn = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
+    if len(dist) == 0:
+        return np.nan, np.nan
 
     # Compute the ratio of near-neighbor distances in d + 1 over d dimension
     # Its average is E(d)
-    if any(d == 0) or any(dist == 0):
-        E = np.nan
-        Es = np.nan
-    else:
-        E = np.mean(d / dist)
-        # Calculate E^*(d)
-        Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
+    E = np.mean(d / dist)
+    # Calculate E^*(d)
+    Es = np.mean(np.abs(y2[:, -1] - y2_nn[:, -1]))
 
     return E, Es
 
@@ -282,11 +308,15 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, **kw
 
 def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
     """Return fraction of false nearest neighbors for a single d."""
-    d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
+    d, dist, y2, y2_nn = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
+    if len(dist) == 0:
+        return np.nan, np.nan, np.nan
 
     # Find all potential false neighbors using Kennel et al.'s tests.
-    dist[dist == 0] = np.nan  # assign nan to avoid divide by zero error in next line
-    f1 = np.abs(y2[:, -1] - y2[index, -1]) / dist > R
+    # Test I: the distance added by the new coordinate, relative to the distance in d (identical
+    # vectors, for which the ratio is undefined, are skipped by the neighbour search)
+    f1 = np.abs(y2[:, -1] - y2_nn[:, -1]) / dist > R
+    # Test II: the distance in d + 1 relative to the size of the attractor
     f2 = d / np.std(signal) > A
     f3 = f1 | f2
 
@@ -296,7 +326,7 @@ def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
 # =============================================================================
 # Internals
 # =============================================================================
-def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
+def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, ties=False):
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.
@@ -304,16 +334,26 @@ def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", windo
     y2 = complexity_embedding(signal, delay=delay, dimension=dimension + 1)
 
     # Find near neighbors in dimension d.
-    index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
+    index, dist, valid = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum, ties=ties)
 
-    # Compute the near-neighbor distances in d + 1 dimension
-    # TODO: is there a way to make this faster?
-    d = [scipy.spatial.distance.chebyshev(i, j) for i, j in zip(y2, y2[index])]
+    # Drop the points without a valid neighbour (all the nearest ones are within the temporal
+    # window or, unless ties are allowed, at a distance of 0, as happens with quantized signals)
+    y2_nn = y2[index][valid]
+    y2, dist = y2[valid], dist[valid]
 
-    return np.asarray(d), dist, index, y2
+    # Compute the near-neighbor distances in d + 1 dimension (with the same metric as in d)
+    diff = y2 - y2_nn
+    if metric == "chebyshev":
+        d = np.max(np.abs(diff), axis=1)
+    elif metric == "cityblock":
+        d = np.sum(np.abs(diff), axis=1)
+    else:
+        d = np.linalg.norm(diff, axis=1)
+
+    return d, dist, y2, y2_nn
 
 
-def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None, show=False):
+def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None, ties=False, show=False):
     """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
     array using SciPy's KDTree search.
 
@@ -338,6 +378,9 @@ def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None,
         Maximum number of near neighbors that should be found for each point.
         In rare cases, when there are no neighbors that are at a nonzero distance, this will have to
         be increased (i.e., beyond 2 * window + 3). Defaults to None (optimum).
+    ties : bool
+        If ``True``, neighbours at a distance of 0 (identical vectors) are accepted. If ``False``
+        (default), they are skipped.
     show : bool
         Defaults to False.
 
@@ -347,6 +390,9 @@ def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None,
         Array containing indices of near neighbors.
     dist : array
         Array containing near neighbor distances.
+    valid : array
+        Boolean array, False for the points without a valid neighbour (all the ``maxnum`` nearest
+        ones are within the temporal window or at a distance of 0).
 
     """
     if metric == "chebyshev":
@@ -378,19 +424,22 @@ def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None,
     # Remove points that are closer than min temporal separation
     valid = np.abs(valid) > window
 
-    # Remove also self reference (d > 0)
-    valid = valid & (distances > 0)
+    # Remove also the identical vectors (d > 0), unless ties are accepted (the point itself is
+    # always excluded by the temporal window)
+    if not ties:
+        valid = valid & (distances > 0)
 
-    # Get indices to keep
-    valid = (np.arange(len(distances)), np.argmax(valid, axis=1))
+    # First valid neighbour of each point (if any)
+    has_neighbour = np.any(valid, axis=1)
+    keep = (np.arange(len(distances)), np.argmax(valid, axis=1))
 
-    distances = distances[valid]
-    indices = indices[(valid)]
+    distances = distances[keep]
+    indices = indices[keep]
 
     if show is True:
         plt.plot(indices, distances)
 
-    return indices, distances
+    return indices, distances, has_neighbour
 
 
 # =============================================================================

@@ -15,7 +15,7 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
         The cleaned EDA signal.
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
-    lag : int
+    lag : int or float
         Time lag in seconds. Defaults to 4 seconds to avoid autoregressive
         correlations approaching 1, as recommended by Halem et al. (2020).
 
@@ -60,9 +60,9 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
         eda_cleaned = eda_cleaned.values
 
     # Autocorrelation
-    lag_samples = lag * sampling_rate
+    lag_samples = int(round(lag * sampling_rate))
 
-    if lag_samples > len(eda_cleaned):
+    if lag_samples >= len(eda_cleaned):
         raise ValueError(
             "NeuroKit error: eda_autocor(): The time lag "
             "exceeds the duration of the EDA signal. "

@@ -1,7 +1,11 @@
+from warnings import warn
+
 import numpy as np
 import pandas as pd
+import scipy.spatial
 import scipy.stats
 
+from ..misc import NeuroKitWarning
 from .entropy_shannon import entropy_shannon
 from .utils_complexity_embedding import complexity_embedding
 
@@ -9,7 +13,23 @@ from .utils_complexity_embedding import complexity_embedding
 def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base=2):
     """**Distribution Entropy (DistrEn)**
 
-    Distribution Entropy (**DistrEn**, more commonly known as **DistEn**).
+    Distribution Entropy (**DistrEn**, more commonly known as **DistEn**) quantifies the complexity
+    of a signal from the distribution of the distances between all its embedded vectors (Li et al.,
+    2015). Unlike :func:`SampEn <entropy_sample>`, it does not rely on a tolerance to count the
+    similar vectors, and it was proposed to be more stable for short signals.
+
+    1. The signal is :func:`time-delay embedded <complexity_embedding>`.
+    2. The Chebyshev distances (the largest absolute difference between their elements) between all
+       the pairs of vectors are computed, leaving out the distance of each vector to itself. As the
+       distance matrix is symmetric, each pair is counted once.
+    3. The empirical probability distribution of the distances, :math:`p_t`, is estimated with a
+       histogram of *M* bins (``bins``) spanning the range of the distances.
+    4. DistrEn is the :func:`Shannon entropy <entropy_shannon>` of this distribution, divided by its
+       maximum :math:`\\log(M)` so that it lies between 0 and 1.
+
+    .. math::
+
+        DistrEn = -\\frac{1}{\\log_2(M)} \\sum_{t=1}^{M} p_t \\log_2(p_t)
 
     Parameters
     ----------
@@ -22,15 +42,18 @@ def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
     bins : int or str
-        Method to find the number of bins. Can be a number, or one of ``"Sturges"``, ``"Rice"``,
-        ``"Doane"``, or ``"sqrt"``.
+        The number of bins *M* of the histogram (at least 2), or the method to find it from the
+        number of distances: ``"Sturges"`` (default), ``"Rice"``, ``"Doane"`` (or ``"Doanes"``),
+        or ``"sqrt"``.
     base : int
-        The logarithmic base to use for :func:`entropy_shannon`.
+        The logarithmic base to use for :func:`entropy_shannon` (which does not change the
+        normalized DistrEn).
 
     Returns
     --------
     distren : float
-        The Distance Entropy entropy of the signal.
+        The Distribution Entropy of the signal, between 0 and 1. It is NaN (with a warning) for
+        signals with missing values, or too short to give at least 2 distances.
     info : dict
         A dictionary containing additional information regarding the parameters used.
 
@@ -60,6 +83,16 @@ def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
+    methods = ["sturges", "rice", "doane", "doanes", "sqrt"]
+    if isinstance(bins, str):
+        if bins.lower() not in methods:
+            raise ValueError(
+                f"NeuroKit error: entropy_distribution(): bins method '{bins}' not recognized. It should be"
+                + " a number or one of 'Sturges', 'Rice', 'Doane' or 'sqrt'."
+            )
+    elif bins < 2:
+        raise ValueError(f"NeuroKit error: entropy_distribution(): `bins` should be at least 2, not {bins}.")
+
     # Store parameters
     info = {
         "Dimension": dimension,
@@ -70,16 +103,24 @@ def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base
     # Time-delay embedding
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
 
-    # Compute distance
-    n = len(embedded)
-    d = np.zeros(round(n * (n - 1) / 2))
-    for k in range(1, n):
-        Ix = (int((k - 1) * (n - k / 2)), int(k * (n - ((k + 1) / 2))))
-        d[Ix[0] : Ix[1]] = np.max(abs(np.tile(embedded[k - 1, :], (n - k, 1)) - embedded[k:, :]), axis=1)
-    # TODO: "D is symmetrical. Only the upper or lower triangular matrix will actually be adequate
-    # for the estimation of the ePDF, which can be used to facilitate its fast calculation."
-
+    # Chebyshev distances between all the pairs of vectors (i < j). The distance matrix D is
+    # symmetrical, so only its upper triangular part (without the diagonal of self-distances) is
+    # needed for the estimation of the ePDF. (The missing values are checked beforehand, as
+    # pdist() leaves them out of the Chebyshev distance.)
+    d = scipy.spatial.distance.pdist(embedded, metric="chebyshev")
     n_d = len(d)
+
+    if n_d < 2 or np.any(~np.isfinite(embedded)):
+        warn(
+            "The signal contains missing values or is too short (fewer than 2 distances between its"
+            " embedded vectors). DistrEn cannot be computed and is returned as NaN.",
+            category=NeuroKitWarning,
+        )
+        return np.nan, info
+
+    # All the distances are the same (e.g., constant signal): they fall into one bin
+    if np.all(d == d[0]):
+        return 0.0, info
 
     # Number of bins
     if isinstance(bins, str):
@@ -90,16 +131,17 @@ def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base
             n_bins = np.ceil(2 * (n_d ** (1 / 3)))
         elif bins == "sqrt":
             n_bins = np.ceil(np.sqrt(n_d))
-        elif bins == "doanes":
+        else:  # Doane
             sigma = np.sqrt(6 * (n_d - 2) / ((n_d + 1) * (n_d + 3)))
-            n_bins = np.ceil(1 + np.log2(n_d) + np.log2(1 + abs(scipy.stats.skew(d) / sigma)))
-        else:
-            raise Exception("Please enter a valid binning method")
+            # (with 2 distances, sigma is 0 and so is the skewness)
+            skewness = abs(scipy.stats.skew(d) / sigma) if n_d > 2 else 0
+            n_bins = np.ceil(1 + np.log2(n_d) + np.log2(1 + skewness))
     else:
         n_bins = bins
+    n_bins = int(n_bins)
 
     # Get probability
-    freq, _ = np.histogram(d, int(n_bins))
+    freq, _ = np.histogram(d, n_bins)
     freq = freq / freq.sum()
 
     # Compute Shannon Entropy

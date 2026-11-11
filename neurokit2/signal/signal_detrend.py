@@ -2,6 +2,7 @@ import numpy as np
 import scipy.sparse
 import scipy.sparse.linalg
 
+from ..misc import as_vector
 from ..stats import fit_loess, fit_polynomial
 from .signal_decompose import signal_decompose
 
@@ -128,7 +129,7 @@ def signal_detrend(
       method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2),
       172-175
     """
-    signal = np.array(signal)  # Force vector
+    signal = as_vector(signal)  # Force vector
 
     method = method.lower()
     if method in ["tarvainen", "tarvainen2002"]:

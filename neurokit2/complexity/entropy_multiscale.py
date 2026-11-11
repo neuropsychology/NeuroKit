@@ -8,6 +8,7 @@ from .entropy_approximate import entropy_approximate
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_increment import entropy_increment
 from .entropy_permutation import entropy_permutation
+from .entropy_range import _entropy_range_tolerance
 from .entropy_sample import entropy_sample
 from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
@@ -47,9 +48,12 @@ def entropy_multiscale(
     * **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et
       al. (2013) introduced the **Composite Multiscale Entropy** algorithm, which computes
       multiple coarse-grained series for each scale factor (via the **time-shift** method for
-      :func:`coarse-graining <complexity_coarsegraining>`).
+      :func:`coarse-graining <complexity_coarsegraining>`), and averages their entropy values.
+      As for SampEn, the entropy is undefined (infinite) at a scale if no template matches at
+      dimension *m* + 1 in one of the series.
     * **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy
-      values of each subcoarsed vector, but its components at a lower level.
+      values of each coarse-grained series, but the numbers of template matches at dimension *m*
+      and *m* + 1 (summed over the series), which makes it defined in more cases.
     * **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**
       algorithm, which is based on rolling-average :func:`coarse-graining <complexity_coarsegraining>`.
     * **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
@@ -64,20 +68,22 @@ def entropy_multiscale(
     Their :func:`Fuzzy <entropy_fuzzy>` version can be obtained by setting ``fuzzy=True``.
 
     This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``.
-    Moreover, variants can be directly accessed via ``complexity_cmse()``, `complexity_rcmse()``,
+    Moreover, variants can be directly accessed via ``complexity_cmse()``, ``complexity_rcmse()``,
     ``complexity_fuzzymse()``, ``complexity_fuzzycmse()`` and ``complexity_fuzzyrcmse()``.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-        or dataframe.
     scale : str or int or list
-        A list of scale factors used for coarse graining the time series. If 'default', will use
-        ``range(len(signal) / (dimension + 10))`` (see discussion
-        `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_).
-        If 'max', will use all scales until half the length of the signal. If an integer, will
-        create a range until the specified int. See :func:`complexity_coarsegraining` for details.
+        A list of scale factors used for coarse graining the time series. If ``"default"``, will
+        use the scale factors from 1 to 20 (Costa et al., 2005), stopping earlier so that the
+        coarse-grained series at the largest scale keeps at least 100 samples (i.e.,
+        ``min(20, len(signal) // 100)`` scales, and the first one alone for signals shorter than
+        200 samples), as the sample entropy of shorter series is unreliable (Richman & Moorman,
+        2000; Yentes et al., 2013). If ``"max"``, will use all scales until half the length of the
+        signal. If an integer, will create a range until the specified int. See
+        :func:`complexity_coarsegraining` for details.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
@@ -93,15 +99,18 @@ def entropy_multiscale(
     show : bool
         Show the entropy values for each scale factor.
     **kwargs
-        Optional arguments.
-
+        Optional arguments passed to the entropy function (e.g., ``fuzzy=True``). A ``delay``
+        argument is ignored, as the delay is set by the coarse-graining method (1 for
+        non-overlapping windows, the scale factor for moving averages).
 
     Returns
     ----------
     float
-        The point-estimate of multiscale entropy (MSEn) of the single time series corresponding to
-        the area under the MSEn values curve, which is essentially the sum of sample entropy values
-        over the range of scale factors.
+        The point-estimate of multiscale entropy (MSEn) of the single time series: the area under
+        the curve of the entropy values against the scale factors, divided by the range of the
+        scale factors (i.e., the average height of the curve, which is close to the mean of the
+        values and equal to it for a single scale). Scales at which the entropy is undefined
+        (infinite or NaN) are left out.
     dict
         A dictionary containing additional information regarding the parameters used
         to compute multiscale entropy. The entropy values corresponding to each ``"Scale"``
@@ -213,7 +222,7 @@ def entropy_multiscale(
       fuzzycmsen
 
       fuzzyrcmsen, info = nk.entropy_multiscale(signal, method="RCMSEn", fuzzy=True)
-      fuzzycmsen
+      fuzzyrcmsen
 
     References
     -----------
@@ -237,14 +246,20 @@ def entropy_multiscale(
     * Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012).
       Adaptive computation of multiscale entropy and its application in EEG signals for monitoring
       depth of anesthesia during surgery. Entropy, 14(6), 978-992.
+    * Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using
+      approximate entropy and sample entropy. American Journal of Physiology-Heart and Circulatory
+      Physiology, 278(6), H2039-H2049.
+    * Yentes, J. M., Hunt, N., Schmid, K. K., Kaipust, J. P., McGrath, D., & Stergiou, N. (2013).
+      The appropriate use of approximate entropy and sample entropy with short data sets. Annals
+      of Biomedical Engineering, 41(2), 349-365.
 
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
-    # Prevent multiple arguments error in case 'delay' is passed in kwargs
-    if "delay" in kwargs:
-        kwargs.pop("delay")
+    signal = np.asarray(signal, dtype=float)
+    # The delay is set by the coarse-graining; drop it if passed (e.g., by complexity())
+    kwargs.pop("delay", None)
 
     # Default parameters
     algorithm = entropy_sample
@@ -297,13 +312,12 @@ def entropy_multiscale(
             coarsegraining = "rolling"
     else:
         raise ValueError(
-            "Method '{method}' is not supported. Please use "
-            "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'IMSPEn',"
-            "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn',"
-            "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn',"
-            "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn', 'MSSyDyEn'"
-            "'MSLZC', 'MSPLZC'"
-            " or 'MSApEn' (case sensitive)."
+            f"Method '{method}' is not supported. Please use "
+            "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'IMSEn', 'MSApEn', "
+            "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn', "
+            "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn', "
+            "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn', 'MSSyDyEn', 'MMSyDyEn', "
+            "'MSLZC' or 'MSPLZC' (case sensitive)."
         )
 
     # Store parameters
@@ -312,14 +326,14 @@ def entropy_multiscale(
         "Algorithm": algorithm.__name__,
         "Coarsegraining": coarsegraining,
         "Dimension": dimension,
-        "Scale": _get_scales(signal, scale=scale, dimension=dimension),
-        "Tolerance": complexity_tolerance(
-            signal,
-            method=tolerance,
-            dimension=dimension,
-            show=False,
-        )[0],
+        "Scale": _get_scales(signal, scale=scale),
     }
+    if algorithm is entropy_cosinesimilarity:
+        # The angular distance is normalized (between 0 and 1): its tolerance does not depend on the
+        # amplitude of the signal ("sd" gives 0.2)
+        info["Tolerance"] = _entropy_range_tolerance(np.asarray(signal, dtype=float), tolerance, 1, dimension)
+    else:
+        info["Tolerance"] = complexity_tolerance(signal, method=tolerance, dimension=dimension, show=False)[0]
 
     # Compute entropy for each coarsegrained segment
     info["Value"] = np.array(
@@ -338,12 +352,9 @@ def entropy_multiscale(
         ]
     )
 
-    # Remove inf, nan and 0
-    mse = info["Value"][np.isfinite(info["Value"])]
-
-    # The MSE index is quantified as the area under the curve (AUC),
-    # which is like the sum normalized by the number of values. It's similar to the mean.
-    mse = np.trapezoid(mse) / len(mse)
+    # The index is the area under the curve of the (defined) values against the scales, divided by
+    # the range of the scales: the average height of the curve, which is close to the mean
+    mse = _entropy_multiscale_index(info["Value"], info["Scale"])
 
     # Plot overlay
     if show is True:
@@ -355,6 +366,20 @@ def entropy_multiscale(
 # =============================================================================
 # Internal
 # =============================================================================
+def _entropy_multiscale_index(values, scales):
+    """Area under the curve of the finite values against their scales, divided by the range of the
+    scales (equal to the value itself for a single scale)."""
+    finite = np.isfinite(values)
+    values, scales = values[finite], scales[finite]
+    if len(values) == 0:
+        return np.nan
+    order = np.argsort(scales)
+    values, scales = values[order], scales[order]
+    if scales[-1] == scales[0]:
+        return np.mean(values)
+    return np.trapezoid(values, x=scales) / (scales[-1] - scales[0])
+
+
 def _entropy_multiscale_plot(mse, info):
     fig = plt.figure(constrained_layout=False)
     fig.suptitle("Entropy values across scale factors")
@@ -383,17 +408,22 @@ def _entropy_multiscale(
     refined=False,
     **kwargs,
 ):
-    """Wrapper function that works both on 1D and 2D coarse-grained (for composite)"""
+    """Wrapper function that works both on a coarse-grained series and on the list of them of the
+    time-shift coarse-graining (for composite)"""
 
     # Get coarse-grained signal
     coarse = complexity_coarsegraining(signal, scale=scale, method=coarsegraining)
 
     # For 1D coarse-graining
-    if coarse.ndim == 1:
+    if isinstance(coarse, np.ndarray):
         # Get delay
         delay = 1  # If non-overlapping
         if coarsegraining in ["rolling", "interpolate"]:
             delay = scale
+
+        # Undefined if the series is too short to embed
+        if _too_short(coarse, dimension, delay):
+            return np.nan
 
         # Compute entropy
         return algorithm(
@@ -404,43 +434,44 @@ def _entropy_multiscale(
             **kwargs,
         )[0]
 
-    # 2D coarse-graining (time-shifted, used in composite)
-    # CMSE
+    # List of time-shifted coarse-grained series (used in composite)
+    # CMSE (Wu et al., 2013): the mean of the entropy values of the series
     elif refined is False:
-        return _validmean(
+        if any(_too_short(series, dimension, 1) for series in coarse):
+            return np.nan
+        return np.mean(
             [
                 algorithm(
-                    coarse[i],
+                    series,
                     delay=1,
                     dimension=dimension,
                     tolerance=tolerance,
                     **kwargs,
                 )[0]
-                for i in range(len(coarse))
+                for series in coarse
             ]
         )
-    # RCMSE
+    # RCMSE (Wu et al., 2014): the numbers of template matches at dimension m and m + 1 are
+    # summed over the series before the ratio is taken (so that longer series weigh more)
     else:
-        phis = np.array(
-            [
-                _phi(
-                    coarse[i],
-                    delay=1,
-                    dimension=dimension,
-                    tolerance=tolerance,
-                    approximate=False,
-                )[0]
-                for i in range(len(coarse))
-            ]
-        )
-        # Average all phi of the same dimension, then divide, then log
-        return _phi_divide([_validmean(phis[:, 0]), _validmean(phis[:, 1])])
+        coarse = [series for series in coarse if not _too_short(series, dimension, 1)]
+        if len(coarse) == 0:
+            return np.nan
+        matches = np.zeros(2)
+        for series in coarse:
+            _, counts = _phi(
+                series,
+                delay=1,
+                dimension=dimension,
+                tolerance=tolerance,
+                approximate=False,
+                **kwargs,
+            )
+            # The counts include the self-match of each template
+            matches += [np.sum(counts["count1"] - 1), np.sum(counts["count2"] - 1)]
+        return _phi_divide(matches)
 
 
-def _validmean(x):
-    """Mean that is robust to NaN and Inf."""
-    x = np.array(x)[np.isfinite(x)]
-    if len(x) == 0:
-        return np.nan
-    else:
-        return np.mean(x)
+def _too_short(signal, dimension, delay):
+    """Whether the signal is too short to have at least two templates at dimension + 1."""
+    return len(signal) <= (dimension + 1) * delay

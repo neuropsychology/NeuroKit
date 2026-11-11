@@ -106,7 +106,7 @@ def test_hrv_rqa():
 
     rqa = nk.hrv_rqa(peaks, sampling_rate=1000)
 
-    assert rqa.shape == (1, 14)
+    assert rqa.shape == (1, 15)
     assert set(rqa.columns) == {
         "RecurrenceRate",
         "DiagRec",
@@ -116,6 +116,7 @@ def test_hrv_rqa():
         "Divergence",
         "LEn",
         "Laminarity",
+        "LamiDet",
         "TrappingTime",
         "VMax",
         "VEn",
@@ -135,9 +136,56 @@ def test_hrv_rqa_parameters():
     assert not np.isclose(rqa_default["RecurrenceRate"].iloc[0], rqa_custom["RecurrenceRate"].iloc[0])
 
 
+def test_hrv_rqa_tolerance():
+    import scipy.spatial
+
+    from neurokit2.hrv.hrv_utils import _hrv_format_input
+
+    rng = np.random.default_rng(0)
+    intervals = 1000 + 50 * np.sin(np.arange(300) / 3) + rng.normal(0, 20, 300)
+    peaks = np.r_[0, np.cumsum(intervals)].astype(int)
+
+    # Zimatore et al. (2021): half the mean distance between all pairs of points of the detrended
+    # RR intervals, in the embedding space of the recurrence matrix
+    rri, _, _ = _hrv_format_input(peaks, sampling_rate=1000)
+    rri = nk.signal_detrend(rri, method="polynomial", order=1)
+    for dimension, delay in [(7, 1), (3, 2)]:
+        embedded = nk.complexity_embedding(rri, dimension=dimension, delay=delay)
+        radius = 0.5 * np.mean(scipy.spatial.distance.pdist(embedded))
+        rqa = nk.hrv_rqa(peaks, sampling_rate=1000, dimension=dimension, delay=delay)
+        pd.testing.assert_frame_equal(
+            rqa, nk.hrv_rqa(peaks, sampling_rate=1000, dimension=dimension, delay=delay, tolerance=radius)
+        )
+    # The radius used to be computed on the RR intervals alone (times sqrt(2)), which left about
+    # 0.3% of recurrences at dimension 7
+    assert 0.05 < nk.hrv_rqa(peaks, sampling_rate=1000)["RecurrenceRate"][0] < 0.3
+
+    # The radius uses the same distance as the recurrence matrix
+    embedded = nk.complexity_embedding(rri, dimension=7, delay=1)
+    radius = 0.5 * np.mean(scipy.spatial.distance.pdist(embedded, "chebyshev"))
+    pd.testing.assert_frame_equal(
+        nk.hrv_rqa(peaks, sampling_rate=1000, distance="chebyshev"),
+        nk.hrv_rqa(peaks, sampling_rate=1000, distance="chebyshev", tolerance=radius),
+    )
+
+
 def test_hrv_rqa_short_input():
     with pytest.raises(ValueError, match=r"dimension \* delay"):
         nk.hrv_rqa([0, 1000, 2100], sampling_rate=1000)
+
+
+def test_hrv_show_ppg_peaks():
+    """hrv(show=True) should plot peaks from ppg_peaks(), not only ECG_R_Peaks."""
+    import matplotlib.pyplot as plt
+
+    ppg = nk.ppg_simulate(duration=60, sampling_rate=100, heart_rate=70, random_state=42)
+    _, info = nk.ppg_peaks(nk.ppg_clean(ppg, sampling_rate=100), sampling_rate=100)
+
+    hrv = nk.hrv(info, sampling_rate=100, show=True)
+    plt.close("all")
+
+    assert "PPG_Peaks" in info
+    assert hrv["HRV_MeanNN"].iloc[0] > 0
 
 
 def test_hrv_tuple_input():
