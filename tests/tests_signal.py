@@ -777,6 +777,6 @@ def test_signal_formatpeaks_drops_every_nan_index():
 def test_signal_flatline_constant_signal():
     # A constant signal is entirely flat; its largest change is 0, which used
     # to make the threshold 0 so that no sample was counted as flat.
-    assert nk.signal_flatline(np.ones(100)) == 99 / 100
+    assert nk.signal_flatline(np.ones(100)) == 1.0
     signal = np.concatenate([np.zeros(50), np.sin(np.linspace(0, 10, 50))])
     assert 0 < nk.signal_flatline(signal) < 1
