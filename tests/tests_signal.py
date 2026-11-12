@@ -445,6 +445,49 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     assert rate.shape == (duration * sampling_rate,)
 
 
+@pytest.mark.parametrize("length_mode", ["default", "none", "interpolated"])
+@pytest.mark.parametrize("peak_format", ["array", "list", "dict", "dataframe"])
+@pytest.mark.parametrize("peaks", [[100, 200, 300, 400], [0, 1, 2, 3]])
+def test_signal_rate_show(peaks, peak_format, length_mode):
+    peaks = np.array(peaks)
+    peak_input = peaks
+    if peak_format == "list":
+        peak_input = peaks.tolist()
+    elif peak_format == "dict":
+        peak_input = {"Peaks": peaks}
+    elif peak_format == "dataframe":
+        markers = np.zeros(peaks[-1] + 1)
+        markers[peaks] = 1
+        peak_input = pd.DataFrame({"Peaks": markers})
+
+    kwargs = {}
+    if length_mode == "none":
+        kwargs["desired_length"] = None
+    elif length_mode == "interpolated":
+        kwargs["desired_length"] = peaks[-1] + 1
+
+    expected_rate = nk.signal_rate(peak_input, sampling_rate=100, **kwargs)
+    rate = nk.signal_rate(peak_input, sampling_rate=100, show=True, **kwargs)
+    fig = plt.gcf()
+    try:
+        ax = fig.axes[0]
+        np.testing.assert_array_equal(rate, expected_rate)
+        np.testing.assert_array_equal(ax.lines[0].get_ydata(), rate)
+        if length_mode == "interpolated":
+            expected_x = np.linspace(0, len(rate) / 100, len(rate))
+            expected_points = np.column_stack([expected_x[peaks], rate[peaks]])
+            assert "monotone_cubic" in ax.get_title()
+        else:
+            expected_x = peaks / 100
+            expected_points = np.column_stack([expected_x, rate])
+            assert ax.get_title() == "Rate"
+        np.testing.assert_allclose(ax.lines[0].get_xdata(), expected_x)
+        np.testing.assert_allclose(ax.collections[0].get_offsets(), expected_points)
+        assert ax.get_xlabel() == "Time (seconds)"
+    finally:
+        plt.close(fig)
+
+
 def test_signal_period():
     # Test warning path of no peaks
     with pytest.warns(nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."):
