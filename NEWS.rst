@@ -1065,6 +1065,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``read_xdf()`` disambiguates duplicate channel names within the same stream or across
+  streams with identical names using numeric suffixes (#1248).
 * ``hrv_nonlinear()`` weights short acceleration/deceleration segments by their
   number of RR differences when calculating ``HRV_PSS`` (#1214).
 * ``hrv_time()``: ``SDANN`` and ``SDNNI`` dropped the last RR interval of each window, and

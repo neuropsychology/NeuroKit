@@ -2,6 +2,7 @@ import io
 import time
 import urllib.parse
 import warnings
+from collections import Counter
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -933,6 +934,22 @@ def _sanitize_streams(streams, timestamp_reset=True, mode="precise", verbose=Tru
             if any(col in duplicate_cols for col in s["columns"]):
                 s["columns"] = [f"{s['name']}_{col}" for col in s["columns"]]
 
+    # If duplicate column names remain (e.g., duplicates within the same stream,
+    # or multiple streams sharing the same stream name), disambiguate with numerical suffixes.
+    all_cols = [col for s in stream_data for col in s["columns"]]
+    col_counts = Counter(all_cols)
+    if any(count > 1 for count in col_counts.values()):
+        seen = {}
+        for s in stream_data:
+            new_cols = []
+            for col in s["columns"]:
+                if col_counts[col] > 1:
+                    idx = seen.get(col, 0) + 1
+                    seen[col] = idx
+                    new_cols.append(f"{col}_{idx}")
+                else:
+                    new_cols.append(col)
+            s["columns"] = new_cols
     return stream_data
 
 
