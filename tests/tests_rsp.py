@@ -532,3 +532,72 @@ def test_rsp_intervalrelated_independent_calls():
 
     assert list(after.columns) == list(before.columns)
     pd.testing.assert_frame_equal(after, before)
+
+
+def test_rsp_intervalrelated_missing_phases():
+    # Signals with missing or incomplete phase completion should return NaN without raising IndexError
+    duration_cols = [
+        "RSP_Phase_Duration_Inspiration",
+        "RSP_Phase_Duration_Expiration",
+        "RSP_Phase_Duration_Ratio",
+    ]
+
+    # Case 1: All NaN phase completion (e.g., short recordings with no extrema)
+    nan_phase_df = pd.DataFrame(
+        {
+            "RSP_Phase": [np.nan] * 10,
+            "RSP_Phase_Completion": [np.nan] * 10,
+        }
+    )
+    res_nan = nk.rsp_intervalrelated(nan_phase_df, sampling_rate=100)
+    assert np.isnan(res_nan[duration_cols].values.astype(float)).all()
+
+    # Case 2: Only inspiration, no expiration phase
+    only_insp_df = pd.DataFrame(
+        {
+            "RSP_Phase": [1.0, 1.0, 1.0, 1.0],
+            "RSP_Phase_Completion": [0.0, 0.33, 0.66, 1.0],
+        }
+    )
+    res_insp = nk.rsp_intervalrelated(only_insp_df, sampling_rate=100)
+    assert not np.isnan(res_insp["RSP_Phase_Duration_Inspiration"].iloc[0])
+    assert np.isnan(res_insp["RSP_Phase_Duration_Expiration"].iloc[0])
+    assert np.isnan(res_insp["RSP_Phase_Duration_Ratio"].iloc[0])
+
+    # Case 3: Only expiration, no inspiration phase
+    only_exp_df = pd.DataFrame(
+        {
+            "RSP_Phase": [0.0, 0.0, 0.0, 0.0],
+            "RSP_Phase_Completion": [0.0, 0.33, 0.66, 1.0],
+        }
+    )
+    res_exp = nk.rsp_intervalrelated(only_exp_df, sampling_rate=100)
+    assert np.isnan(res_exp["RSP_Phase_Duration_Inspiration"].iloc[0])
+    assert not np.isnan(res_exp["RSP_Phase_Duration_Expiration"].iloc[0])
+    assert np.isnan(res_exp["RSP_Phase_Duration_Ratio"].iloc[0])
+
+    # Case 4: Incomplete phases (no completion == 1)
+    incomplete_df = pd.DataFrame(
+        {
+            "RSP_Phase": [1.0, 1.0, 0.0, 0.0],
+            "RSP_Phase_Completion": [0.0, 0.5, 0.0, 0.5],
+        }
+    )
+    res_inc = nk.rsp_intervalrelated(incomplete_df, sampling_rate=100)
+    assert np.isnan(res_inc[duration_cols].values.astype(float)).all()
+
+    # Case 5: Epoched dict where one epoch has incomplete phases
+    epochs = {
+        "1": only_insp_df.assign(Label="1"),
+        "2": nan_phase_df.assign(Label="2"),
+    }
+    res_epochs = nk.rsp_intervalrelated(epochs, sampling_rate=100)
+    assert res_epochs.shape[0] == 2
+    assert not np.isnan(res_epochs.loc["1", "RSP_Phase_Duration_Inspiration"])
+    assert np.isnan(res_epochs.loc["1", "RSP_Phase_Duration_Expiration"])
+    assert np.isnan(res_epochs.loc["2", duration_cols].values.astype(float)).all()
+
+
+def test_rsp_intervalrelated_invalid_input():
+    with pytest.raises(ValueError, match="Input should be a dataframe or a dict"):
+        nk.rsp_intervalrelated([1, 2, 3])

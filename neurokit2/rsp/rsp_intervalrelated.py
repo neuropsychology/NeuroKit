@@ -73,12 +73,15 @@ def rsp_intervalrelated(data, sampling_rate=1000):
             intervals[index] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]["Label"] = data[index]["Label"].iloc[0]
+            if "Label" in data[index].columns:
+                intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             # Features
             intervals[index] = _rsp_intervalrelated_features(data[index], sampling_rate, intervals[index])
 
         intervals = pd.DataFrame.from_dict(intervals, orient="index")
+    else:
+        raise ValueError("Input should be a dataframe or a dict of dataframes (epochs).")
 
     return intervals
 
@@ -111,7 +114,7 @@ def _rsp_intervalrelated_features(data, sampling_rate, output=None):
         output["RSP_Symmetry_PeakTrough"] = np.nanmean(data["RSP_Symmetry_PeakTrough"].values)
         output["RSP_Symmetry_RiseDecay"] = np.nanmean(data["RSP_Symmetry_RiseDecay"].values)
 
-    if "RSP_Phase" in colnames:
+    if "RSP_Phase" in colnames and "RSP_Phase_Completion" in colnames:
         # Phase durations depend on sample positions, not dataframe index labels.
         # Epochs use time-based indices, while continuous signals typically use
         # a RangeIndex, so normalize the index before calculating durations.
@@ -122,39 +125,60 @@ def _rsp_intervalrelated_features(data, sampling_rate, output=None):
         insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
         insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
 
-        # Check that start of phase is before end of phase
-        if insp_start[0] > insp_end[0]:
-            insp_end = insp_end[1:]
+        if len(insp_start) > 0 and len(insp_end) > 0:
+            # Check that start of phase is before end of phase
+            if insp_start[0] > insp_end[0]:
+                insp_end = insp_end[1:]
 
-        # Check for unequal lengths
-        diff = abs(len(insp_start) - len(insp_end))
-        if len(insp_start) > len(insp_end):
-            insp_start = insp_start[: len(insp_start) - diff]  # remove extra start points
-        elif len(insp_end) > len(insp_start):
-            insp_end = insp_end[: len(insp_end) - diff]  # remove extra end points
+            # Check for unequal lengths
+            diff = abs(len(insp_start) - len(insp_end))
+            if len(insp_start) > len(insp_end):
+                insp_start = insp_start[: len(insp_start) - diff]  # remove extra start points
+            elif len(insp_end) > len(insp_start):
+                insp_end = insp_end[: len(insp_end) - diff]  # remove extra end points
 
-        insp_times = np.array(insp_end - insp_start) / sampling_rate
+            if len(insp_start) > 0 and len(insp_end) > 0:
+                insp_times = np.array(insp_end - insp_start) / sampling_rate
+                output["RSP_Phase_Duration_Inspiration"] = np.nanmean(insp_times)
+            else:
+                output["RSP_Phase_Duration_Inspiration"] = np.nan
+        else:
+            output["RSP_Phase_Duration_Inspiration"] = np.nan
 
         # Extract expiration durations
         exp_phases = phase_data[phase_data["RSP_Phase"] == 0]
         exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
         exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
 
-        # Check that start of phase is before end of phase
-        if exp_start[0] > exp_end[0]:
-            exp_end = exp_end[1:]
+        if len(exp_start) > 0 and len(exp_end) > 0:
+            # Check that start of phase is before end of phase
+            if exp_start[0] > exp_end[0]:
+                exp_end = exp_end[1:]
 
-        # Check for unequal lengths
-        diff = abs(len(exp_start) - len(exp_end))
-        if len(exp_start) > len(exp_end):
-            exp_start = exp_start[: len(exp_start) - diff]  # remove extra start points
-        elif len(exp_end) > len(exp_start):
-            exp_end = exp_end[: len(exp_end) - diff]  # remove extra end points
+            # Check for unequal lengths
+            diff = abs(len(exp_start) - len(exp_end))
+            if len(exp_start) > len(exp_end):
+                exp_start = exp_start[: len(exp_start) - diff]  # remove extra start points
+            elif len(exp_end) > len(exp_start):
+                exp_end = exp_end[: len(exp_end) - diff]  # remove extra end points
 
-        exp_times = np.array(exp_end - exp_start) / sampling_rate
+            if len(exp_start) > 0 and len(exp_end) > 0:
+                exp_times = np.array(exp_end - exp_start) / sampling_rate
+                output["RSP_Phase_Duration_Expiration"] = np.nanmean(exp_times)
+            else:
+                output["RSP_Phase_Duration_Expiration"] = np.nan
+        else:
+            output["RSP_Phase_Duration_Expiration"] = np.nan
 
-        output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
-        output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
-        output["RSP_Phase_Duration_Ratio"] = output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
+        if (
+            not np.isnan(output["RSP_Phase_Duration_Inspiration"])
+            and not np.isnan(output["RSP_Phase_Duration_Expiration"])
+            and output["RSP_Phase_Duration_Expiration"] > 0
+        ):
+            output["RSP_Phase_Duration_Ratio"] = (
+                output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
+            )
+        else:
+            output["RSP_Phase_Duration_Ratio"] = np.nan
 
     return output

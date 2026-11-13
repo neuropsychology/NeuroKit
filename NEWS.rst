@@ -671,6 +671,9 @@ New Features
 Fixes
 +++++++++++++
 
+* ``rsp_intervalrelated()`` no longer raises ``IndexError`` when signals have missing or incomplete
+  respiratory phase completion (such as in short recordings or segments), returning ``NaN`` for
+  unobserved phase duration features. Inputs of invalid types now raise a ``ValueError``.
 * ``signal_autocor()``: ``unbiased=True`` now returns 1 at lag 0 (values were divided by their
   maximum), integer signals no longer overflow with ``demean=False``, invalid lags and
   multidimensional inputs raise a ``ValueError``, and the plot's lag axis starts at 0.
