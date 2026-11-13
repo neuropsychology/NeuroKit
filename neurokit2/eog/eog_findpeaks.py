@@ -221,7 +221,7 @@ def _eog_findpeaks_mne(eog_cleaned):
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. ",
+            "NeuroKit error: eog_findpeaks(): the 'mne' module is required for this method to run. ",
             "Please install it first (`pip install mne`).",
         )
 
