@@ -1136,20 +1136,28 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
     qrs_duration_threshold = int(0.08 * sampling_rate)
     rr_distance_threshold = int(0.3 * sampling_rate)
 
+    def _add_detection(start, end):
+        if end - start > qrs_duration_threshold:
+            detection = np.argmax(signal[start : end + 1]) + start
+            if QRS:
+                if detection - QRS[-1] > rr_distance_threshold:
+                    QRS.append(detection)
+            else:
+                QRS.append(detection)
+
+    start = None
     for i, (prev, cur) in enumerate(zip(blocks, blocks[1:])):
         if prev < cur:
             start = i
 
         elif prev > cur:
-            end = i - 1
+            _add_detection(start, i - 1)
+            start = None
 
-            if end - start > qrs_duration_threshold:
-                detection = np.argmax(signal[start : end + 1]) + start
-                if QRS:
-                    if detection - QRS[-1] > rr_distance_threshold:
-                        QRS.append(detection)
-                else:
-                    QRS.append(detection)
+    # A block still open when the signal ends never gets a falling edge to
+    # close it, so the last QRS complex would otherwise be silently dropped.
+    if start is not None and len(blocks):
+        _add_detection(start, len(blocks) - 1)
 
     QRS = np.array(QRS, dtype="int")
     return QRS
