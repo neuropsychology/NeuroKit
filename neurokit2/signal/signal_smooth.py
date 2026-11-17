@@ -83,6 +83,9 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
     """
     if isinstance(signal, pd.Series):
         signal = signal.values
+    # Smooth in floating point: the filters return the dtype of their input, so that the moving
+    # average of an integer signal would be truncated to integers
+    signal = np.asarray(signal, dtype=float)
 
     length = len(signal)
 

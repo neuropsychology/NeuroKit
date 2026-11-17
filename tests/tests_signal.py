@@ -42,6 +42,16 @@ def test_signal_smooth_boxcar():
     )
 
 
+@pytest.mark.parametrize("kernel", ["boxcar", "boxzen"])
+def test_signal_smooth_integer_signal(kernel):
+    # An integer signal must be smoothed like the same values stored as floats
+    signal = np.array([1, 2, 4, 4, 5, 9, 7, 8, 12, 10, 3, 1, 6, 8, 2, 5])
+    smoothed = nk.signal_smooth(signal, kernel=kernel, size=3)
+    expected = nk.signal_smooth(signal.astype(float), kernel=kernel, size=3)
+    np.testing.assert_array_almost_equal(smoothed, expected)
+    assert not np.allclose(smoothed, np.round(smoothed))  # not truncated to integers
+
+
 def test_signal_binarize():
     signal = np.cos(np.linspace(start=0, stop=20, num=1000))
     binary = nk.signal_binarize(signal)

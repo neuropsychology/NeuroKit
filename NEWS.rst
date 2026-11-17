@@ -12,6 +12,8 @@ Compatibility
 Changes in Results
 ++++++++++++++++++
 
+* ``signal_smooth()`` now smooths integer signals in floating point, preserving fractional
+  values that were previously truncated to integers by the convolution filters.
 * ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
 * ``expspace()`` returns different values when ``start`` is above 0.
 * ``entropy_approximate()`` (and ``entropy_fuzzy(approximate=True)``, ``entropy_range(approximate=True)``,
