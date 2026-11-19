@@ -612,6 +612,8 @@ Changes in Results
   signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
   Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
+* ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
+  because the latency penalty of the T-peak candidates is now symmetric (absolute value).
 
 New Features
 +++++++++++++
@@ -1021,6 +1023,9 @@ Fixes
   ``dimension`` columns.
 * ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
   which made the threshold 0 so that no sample counted as flat.
+* ``ecg_delineate(method="dwt")``: the latency penalty used to choose the T peak among the candidates is now
+  symmetric (absolute value), as it already was for the P peak. Before, candidates earlier than expected
+  were favoured (#1220).
 
 
 0.3.0
