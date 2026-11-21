@@ -29,7 +29,7 @@ def mad(x, constant=1.4826, **kwargs):
     * https://en.wikipedia.org/wiki/Median_absolute_deviation
 
     """
-    median = np.nanmedian(np.ma.array(x).compressed(), **kwargs)
+    median = np.nanmedian(x, keepdims=True, **kwargs)
     mad_value = np.nanmedian(np.abs(x - median), **kwargs)
     mad_value = mad_value * constant
     return mad_value

@@ -257,6 +257,12 @@ def test_signal_findpeaks():
     assert len(info1["Peaks"]) > len(info2["Peaks"])
 
 
+def test_signal_zerocrossings_unsigned_direction():
+    signal = np.array([5, 0, 0, 7], dtype=np.uint8)
+    np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="positive"), [2])
+    np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="negative"), [0])
+
+
 def test_signal_merge():
     signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
     signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
