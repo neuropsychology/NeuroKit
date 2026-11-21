@@ -451,6 +451,15 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     assert rate.shape == (duration * sampling_rate,)
 
 
+def test_signal_rate_show():
+    peaks = [100, 200, 300, 400]
+    rate = nk.signal_rate(peaks, sampling_rate=100, show=True)
+    points = plt.gca().collections[0].get_offsets()
+    np.testing.assert_allclose(points, np.column_stack([np.array(peaks) / 100, rate]))
+    nk.signal_rate({"Peaks": np.array(peaks)}, sampling_rate=100, desired_length=500, show=True)
+    plt.close("all")
+
+
 def test_signal_period():
     # Test warning path of no peaks
     with pytest.warns(nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."):

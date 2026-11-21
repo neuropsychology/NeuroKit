@@ -682,6 +682,8 @@ Fixes
 +++++++++++++
 
 * ``signal_zerocrossings()`` returns the correct ``direction`` for unsigned integer signals.
+* ``signal_rate(show=True)`` works without ``desired_length`` and with dict or DataFrame peaks.
+  Non-interpolated rates are plotted at the original peak locations.
 * ``signal_autocor()``: ``unbiased=True`` now returns 1 at lag 0 (values were divided by their
   maximum), integer signals no longer overflow with ``demean=False``, invalid lags and
   multidimensional inputs raise a ``ValueError``, and the plot's lag axis starts at 0.
