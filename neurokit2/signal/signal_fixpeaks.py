@@ -268,10 +268,10 @@ def _find_artifacts(
     elif len(drrs) == 1:
         drrs[0] = 0.0
 
-    # Normalize by threshold.
-    th1 = _compute_threshold(drrs, alpha, window_width)
-    th1_safe = np.where(th1 > 0, th1, np.finfo(float).eps)
-    drrs = drrs / th1_safe
+    # Normalize by threshold (floored at one sample).
+    th_min = 1 / sampling_rate
+    th1 = np.maximum(_compute_threshold(drrs, alpha, window_width), th_min)
+    drrs = drrs / th1
 
     # Cast dRRs to subspace s12 and s22.
     padding = 2
@@ -296,10 +296,9 @@ def _find_artifacts(
     medrr = df.rolling(medfilt_order, center=True, min_periods=1).median().signal.values
     mrrs = rr - medrr
     mrrs[mrrs < 0] = mrrs[mrrs < 0] * 2
-    # Normalize by threshold.
-    th2 = _compute_threshold(mrrs, alpha, window_width)
-    th2_safe = np.where(th2 > 0, th2, np.finfo(float).eps)
-    mrrs = mrrs / th2_safe
+    # Normalize by threshold (floored at one sample).
+    th2 = np.maximum(_compute_threshold(mrrs, alpha, window_width), th_min)
+    mrrs = mrrs / th2
 
     # Artifact classification #################################################
     ###########################################################################
@@ -310,7 +309,8 @@ def _find_artifacts(
     ectopic_idcs = []
     longshort_idcs = []
 
-    i = 0
+    # Skip the first interval as it is a synthetic placeholder.
+    i = 1
     while i < rr.size - 2:  # The flow control is implemented based on Figure 1
         if np.abs(drrs[i]) > 1:  # Figure 1
             eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # pylint: disable=E1111
@@ -345,9 +345,9 @@ def _find_artifacts(
             # peaks.
 
             # Missing.
-            eq6 = np.abs(rr[j] / 2 - medrr[j]) <= th2[j]  # Figure 1
+            eq6 = np.abs(rr[j] / 2 - medrr[j]) < th2[j]  # Figure 1
             # Extra.
-            eq7 = np.abs(rr[j] + rr[j + 1] - medrr[j]) <= th2[j]  # Figure 1
+            eq7 = np.abs(rr[j] + rr[j + 1] - medrr[j]) < th2[j]  # Figure 1
 
             # Check if extra.
             if np.all([eq5 or mrrs[j] < -3, eq7]):

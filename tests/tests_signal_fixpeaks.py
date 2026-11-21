@@ -291,7 +291,14 @@ def test_kubios_mrr_gate_and_boundary_index():
     peaks = np.delete(np.arange(0, 100000, 1000), [1, 50])
     info, peaks_fixed = nk.signal_fixpeaks(peaks, sampling_rate=1000, iterative=False, method="Kubios")
     assert 1 in info["missed"] and 49 in info["missed"]
+    assert 0 not in info["ectopic"] + info["missed"] + info["extra"] + info["longshort"]
     assert np.array_equal(peaks_fixed, np.arange(0, 100000, 1000))
+
+    # 1-sample RR change should not be flagged when IQR == 0
+    step_rr = np.cumsum([1000] * 25 + [1001] * 25)
+    info_step, peaks_step = nk.signal_fixpeaks(step_rr, sampling_rate=1000, method="Kubios")
+    assert all(len(info_step[k]) == 0 for k in ("ectopic", "missed", "extra", "longshort"))
+    assert np.array_equal(peaks_step, step_rr)
 
 
 def test_neurokit_gap_endpoints_and_list_input():
