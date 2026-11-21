@@ -43,11 +43,8 @@ def signal_zerocrossings(signal, direction="both"):
       plt.close()
 
     """
-    signs = np.asanyarray(np.sign(signal))
-    # Unsigned subtraction would wrap a falling transition from 1 to 0.
-    if np.issubdtype(signs.dtype, np.unsignedinteger):
-        signs = signs.astype(np.int8)
-    df = np.diff(signs)
+    signal = np.asarray(signal, dtype=float)
+    df = np.diff(np.sign(signal))
     if direction in ["positive", "up"]:
         zerocrossings = np.where(df > 0)[0]
     elif direction in ["negative", "down"]:

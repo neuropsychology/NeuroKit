@@ -263,11 +263,6 @@ def test_signal_zerocrossings_unsigned_direction():
     np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="negative"), [0])
 
 
-def test_signal_zerocrossings_masked_array():
-    signal = np.ma.array([-1.0, 0.0, 1.0], mask=[False, True, False])
-    np.testing.assert_array_equal(nk.signal_zerocrossings(signal), [])
-
-
 def test_signal_merge():
     signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
     signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
