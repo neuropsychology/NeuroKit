@@ -7,6 +7,7 @@ Compatibility
 +++++++++++++
 
 * Python 3.15 is now supported, and Python 3.10 (end of life) is no longer supported.
+* ``matplotlib>=3.10`` is now required.
 * ``setuptools`` is now only installed with the ``full`` extra, removing its ``<82`` pin.
 
 Changes in Results

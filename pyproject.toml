@@ -35,7 +35,7 @@ dependencies = [
     "pandas>=2.0.0",
     "scipy",
     "scikit-learn>=1.0.0",
-    "matplotlib>=3.5.0",
+    "matplotlib>=3.10",
     "PyWavelets>=1.4.0",
 ]
 

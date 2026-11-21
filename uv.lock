@@ -2693,7 +2693,7 @@ requires-dist = [
     { name = "cvxopt", marker = "extra == 'full'" },
     { name = "emd-signal", marker = "extra == 'full'" },
     { name = "joblib", marker = "extra == 'full'" },
-    { name = "matplotlib", specifier = ">=3.5.0" },
+    { name = "matplotlib", specifier = ">=3.10" },
     { name = "menpo", marker = "extra == 'full'" },
     { name = "menpodetect", marker = "extra == 'full'" },
     { name = "mne", marker = "extra == 'full'" },
