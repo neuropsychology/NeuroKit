@@ -17,7 +17,7 @@ jobs:
               uses: astral-sh/setup-uv@v9.0.0
               with:
                   enable-cache: true
-                  python-version: "3.10"
+                  python-version: "3.11"
 
             - name: Check Style
               # Run both checks even if one fails, then exit with error if either failed
