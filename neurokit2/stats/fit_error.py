@@ -51,8 +51,8 @@ def fit_error(y, y_predicted, n_parameters=2):
     """
 
     # Get information
+    y, y_predicted = np.asarray(y), np.asarray(y_predicted)
     SSE, n, df = _fit_error_prepare(y, y_predicted, n_parameters)
-    y = np.asarray(y)
 
     # Mean squared error
     MSE = SSE / n
@@ -107,7 +107,6 @@ def _fit_error_prepare(y, y_predicted, n_parameters=2):
         raise TypeError("NeuroKit error: fit_error(): 'y' and 'y_predicted' are not of the same length.")
 
     # Residual, i.e. the difference between data and model
-    y, y_predicted = np.asarray(y), np.asarray(y_predicted)
     residual = y - y_predicted
 
     # Degrees of freedom, i.e., number of observations (length of signal) minus number of parameters
