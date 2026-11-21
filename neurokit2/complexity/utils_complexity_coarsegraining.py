@@ -36,9 +36,11 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
       original signal length (currently using a monotonic cubic method, but let us know if you have
       any opinion on that).
     * **Moving average**: The coarse-grained time series via a moving average.
-    * **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see
-      **Figure** below). Somewhat similar to moving-average, with the difference that the time lag
-      creates new vectors.
+    * **Time-shift**: For each scale factor Tau, Tau coarse-grained series are constructed (see
+      **Figure** below): the *k*-th one averages the non-overlapping windows of size Tau that start
+      at the *k*-th sample (Wu et al., 2013). It is equivalent to taking every Tau-th value of the
+      moving average, starting from the *k*-th one. The series are returned as a list, as their
+      lengths can differ by one window.
 
     .. figure:: ../img/wu2013b.png
        :alt: Figure from Wu et al. (2013).
@@ -62,7 +64,8 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
     Returns
     -------
     array
-        The coarse-grained signal.
+        The coarse-grained signal. For ``method="timeshift"``, a list of the Tau coarse-grained
+        series.
 
     See Also
     ------------
@@ -134,11 +137,11 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
       scale = 3
 
       x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
-      x_nk = nk.complexity_coarsegraining(signal, scale=scale, rolling=True)
-      np.allclose(x_pd - x_nk[1:-1], 0)
+      x_nk = nk.complexity_coarsegraining(signal, scale=scale, method="rolling")
+      np.allclose(x_pd - x_nk, 0)
 
       %timeit pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
-      %timeit nk.complexity_coarsegraining(signal, scale=scale, rolling=True)
+      %timeit nk.complexity_coarsegraining(signal, scale=scale, method="rolling")
 
     References
     -----------
@@ -158,6 +161,8 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
 
     """
     # Sanity checks
+    signal = np.asarray(signal, dtype=float)
+    scale = int(scale)
     if scale in [0, 1]:
         return signal
     n = len(signal)
@@ -165,13 +170,7 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
         return np.array([])
 
     if method in ["nonoverlapping", "resampling", "interpolate"]:
-        # The following is a fast alternative to:
-        # pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]
-
-        # Get max j
-        j = n // scale
-        # Coarse-grain
-        coarse = np.nanmean(np.reshape(signal[0 : j * scale], (j, scale)), axis=1)
+        coarse = _coarsegrain_nonoverlapping(signal, scale)
 
         if method in ["resampling", "interpolate"]:
             x_values = (np.arange(len(coarse)) * scale + scale / 2).astype(int)
@@ -182,7 +181,9 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
         coarse = complexity_embedding(signal, dimension=scale, delay=1).mean(axis=1)
 
     elif method == "timeshift":
-        coarse = np.transpose(np.reshape(signal[: scale * (n // scale)], (n // scale, scale)))
+        # Wu et al. (2013): the k-th composite series averages the non-overlapping windows that
+        # start at the k-th sample. Their lengths differ by at most one window.
+        coarse = [_coarsegrain_nonoverlapping(signal[k:], scale) for k in range(scale)]
 
     else:
         raise ValueError(f"Unknown `method`: {method}")
@@ -195,6 +196,17 @@ def complexity_coarsegraining(signal, scale=2, method="nonoverlapping", show=Fal
 # =============================================================================
 # Utils
 # =============================================================================
+def _coarsegrain_nonoverlapping(signal, scale):
+    """Average the non-overlapping windows of size `scale` (Costa et al., 2002).
+
+    Fast alternative to ``pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]``.
+    """
+    j = len(signal) // scale
+    if j == 0:
+        return np.array([])
+    return np.nanmean(np.reshape(signal[0 : j * scale], (j, scale)), axis=1)
+
+
 def _complexity_coarsegraining_show(signal, coarse, method="nonoverlapping"):
     plt.plot(signal, linewidth=1.5)
     if method == "nonoverlapping":
@@ -206,10 +218,12 @@ def _complexity_coarsegraining_show(signal, coarse, method="nonoverlapping"):
         )
         plt.scatter(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=0.5)
     elif method == "timeshift":
-        for i in range(len(coarse)):
+        scale = len(coarse)
+        for k, series in enumerate(coarse):
+            # Each value is plotted at the centre of its window
             plt.plot(
-                np.arange(i, len(signal) - len(coarse) + i + 1, len(coarse)),
-                coarse[i],
+                k + np.arange(len(series)) * scale + (scale - 1) / 2,
+                series,
                 color="red",
                 linewidth=0.75,
             )
@@ -221,14 +235,22 @@ def _complexity_coarsegraining_show(signal, coarse, method="nonoverlapping"):
 # =============================================================================
 # Get Scale Factor
 # =============================================================================
-def _get_scales(signal, scale="default", dimension=2):
-    """Select scale factors"""
-    if scale is None or scale == "max":
+def _get_scales(signal, scale="default"):
+    """Select scale factors (returned as an array of integers)."""
+    if scale is None or (isinstance(scale, str) and scale == "max"):
         scale = np.arange(1, len(signal) // 2)  # Set to max
-    elif scale == "default":
-        # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
-        scale = np.arange(1, int(len(signal) / (dimension + 10)))
-    elif isinstance(scale, int):
-        scale = np.arange(1, scale + 1)
+    elif isinstance(scale, str) and scale == "default":
+        # Scales 1 to 20 (Costa et al., 2005), as long as the coarse-grained series keep at least
+        # 100 samples: SampEn is unreliable on shorter series (Richman & Moorman, 2000; Yentes et
+        # al., 2013)
+        scale = np.arange(1, max(1, min(20, len(signal) // 100)) + 1)
+    elif isinstance(scale, str):
+        raise ValueError(f"`scale` must be 'default', 'max', an integer or a list of integers, not '{scale}'.")
+    elif isinstance(scale, (int, np.integer)):
+        scale = np.arange(1, int(scale) + 1)
+    else:
+        scale = np.asarray(scale, dtype=int)
+        if scale.ndim != 1:
+            raise ValueError("`scale` must be 'default', 'max', an integer or a list of integers.")
 
     return scale

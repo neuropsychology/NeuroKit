@@ -267,16 +267,14 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
     changepoints = signal_changepoints(emg_cleaned, change="var", show=False, **kwargs)
 
     # Add first point
-    if changepoints[0] != 0:
-        changepoints = np.append(0, changepoints)
+    changepoints = np.append(0, changepoints)
 
     # Sanitize
     lengths = np.append(0, np.diff(changepoints))
     changepoints = changepoints[1:][lengths[1:] > duration_min]
 
     # reèAdd first point
-    if changepoints[0] != 0:
-        changepoints = np.append(0, changepoints)
+    changepoints = np.append(0, changepoints)
 
     binary = np.full(len(emg_cleaned), np.nan)
     binary[changepoints[0::2]] = 0
@@ -285,7 +283,7 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
     activity = pd.Series(binary).ffill().values
 
     # Label as 1 to parts that have the larger SD (likely to be activations)
-    if emg_cleaned[activity == 1].std() > emg_cleaned[activity == 0].std():
+    if emg_cleaned[activity == 1].std() < emg_cleaned[activity == 0].std():
         activity = np.abs(activity - 1)
 
     # Ensure activity is writable

@@ -5,12 +5,21 @@ import pandas as pd
 def fractal_katz(signal):
     """**Katz's Fractal Dimension (KFD)**
 
-    Computes Katz's Fractal Dimension (KFD). The euclidean distances between successive points in
-    the signal are summed and averaged, and the maximum distance between the starting point and any
-    other point in the sample.
+    Computes Katz's Fractal Dimension (KFD), from the total length of the curve *L* (the sum of the
+    distances between successive values), the average distance between successive values *a*,
+    and the largest distance between the first value and any other *d*:
 
-    Fractal dimensions range from 1.0 for straight lines, through approximately 1.15 for
-    random-walks, to approaching 1.5 for the most convoluted waveforms.
+    .. math::
+
+      KFD = \\frac{log_{10}(L / a)}{log_{10}(d / a)}
+
+    The distances are absolute differences between values, ignoring time, as in other
+    implementations (e.g., antropy, MNE-features). Katz (1988) used the Euclidean distances between
+    the points of the waveform, which depend on the units of the amplitude relative to time. KFD is
+    1 for a straight line and increases with the irregularity of the signal, but it is not bounded
+    by 2, and it increases with the length of the signal when *d* / *a* is bounded (e.g., about 4.9
+    for 250 samples of white noise and 7.1 for 16,000). Since *d* is measured from the first value,
+    KFD also depends on where the signal starts.
 
     Parameters
     ----------

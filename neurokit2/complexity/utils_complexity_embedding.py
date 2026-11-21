@@ -50,7 +50,9 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     Returns
     -------
     array
-        Embedded time-series, of shape ``length - (dimension - 1) * delay``
+        Embedded time-series, of shape ``(length - (dimension - 1) * delay, dimension)``: each row
+        is a state vector, whose columns are the values at *t*, *t + delay*, ...,
+        *t + (dimension - 1) * delay*.
 
     See Also
     ------------
@@ -129,21 +131,23 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     signal = signal_sanitize(signal)
 
     # Sanity checks
-    if isinstance(delay, float):
+    if isinstance(delay, (float, np.floating)):
         warn("`delay` must be an integer. Running `int(delay)`", category=NeuroKitWarning)
         delay = int(delay)
-    if isinstance(dimension, float):
+    if isinstance(dimension, (float, np.floating)):
         warn("`dimension` must be an integer. Running `int(dimension)`", category=NeuroKitWarning)
         dimension = int(dimension)
-    if dimension * delay > N:
-        raise ValueError(
-            "NeuroKit error: complexity_embedding(): dimension * delay should be lower than",
-            " the length of the signal.",
-        )
     if delay < 1:
         raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
+    if dimension < 1:
+        raise ValueError("NeuroKit error: complexity_embedding(): 'dimension' has to be at least 1.")
+    if dimension * delay > N:
+        raise ValueError(
+            "NeuroKit error: complexity_embedding(): dimension * delay should not exceed the length of the"
+            f" signal (here {dimension} * {delay} > {N})."
+        )
 
-    Y = np.zeros((dimension, N - (dimension - 1) * delay))
+    Y = np.empty((dimension, N - (dimension - 1) * delay))
     for i in range(dimension):
         Y[i] = signal[i * delay : i * delay + Y.shape[1]]
     embedded = Y.T

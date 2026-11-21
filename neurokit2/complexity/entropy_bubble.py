@@ -10,8 +10,14 @@ def entropy_bubble(signal, delay=1, dimension=3, alpha=2, **kwargs):
 
     Introduced by Manis et al. (2017) with the goal of being independent of parameters such as
     *Tolerance* and *Dimension*. Bubble Entropy is based on :func:`permutation entropy <entropy_permutation>`,
-    but uses the bubble sort algorithm for the ordering procedure instead of the number of swaps
-    performed for each vector.
+    but instead of the ordinal pattern of each embedded vector, it uses the number of swaps that the
+    bubble sort algorithm performs to sort it. The :func:`Rényi entropy <entropy_renyi>` (of order
+    2) of the distribution of the number of swaps is computed for the dimensions *m* and *m + 1*,
+    and Bubble Entropy is their normalized difference:
+
+    .. math::
+
+      BubbEn = \\frac{H_{swaps}^{m+1} - H_{swaps}^{m}}{\\log \\left( \\frac{m + 1}{m - 1} \\right)}
 
     Parameters
     ----------
@@ -21,14 +27,11 @@ def entropy_bubble(signal, delay=1, dimension=3, alpha=2, **kwargs):
         Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*), at least 2. See
         :func:`complexity_dimension` to estimate the optimal value for this parameter.
-    tolerance : float
-        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
-        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
-        :func:`complexity_tolerance` to estimate the optimal value for this parameter.
     alpha : float
-        The *alpha* :math:`\\alpha` parameter (default to 1) for :func:`Rényi entropy <entropy_renyi>`).
+        The *alpha* :math:`\\alpha` parameter (default to 2, as in Manis et al., 2017) for
+        :func:`Rényi entropy <entropy_renyi>`.
     **kwargs : optional
         Other arguments.
 
@@ -42,7 +45,7 @@ def entropy_bubble(signal, delay=1, dimension=3, alpha=2, **kwargs):
         The Bubble Entropy.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute sample entropy.
+        to compute Bubble Entropy.
 
     Examples
     ----------
@@ -64,9 +67,11 @@ def entropy_bubble(signal, delay=1, dimension=3, alpha=2, **kwargs):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+    if dimension < 2:
+        raise ValueError("The dimension of Bubble Entropy should be at least 2.")
 
     # Store parameters
-    info = {"Dimension": dimension, "Delay": delay}
+    info = {"Dimension": dimension, "Delay": delay, "Alpha": alpha}
 
     H = [
         _entropy_permutation(
@@ -75,6 +80,7 @@ def entropy_bubble(signal, delay=1, dimension=3, alpha=2, **kwargs):
             delay=delay,
             algorithm=entropy_renyi,
             sorting="bubblesort",
+            alpha=alpha,
             **kwargs,
         )
         for d in [dimension, dimension + 1]

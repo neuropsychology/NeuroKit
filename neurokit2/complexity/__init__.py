@@ -1,9 +1,12 @@
 """Submodule for NeuroKit."""
+
 import functools
 
 from .complexity import complexity
 from .complexity_decorrelation import complexity_decorrelation
 from .complexity_hjorth import complexity_hjorth
+from .complexity_irreversibility import complexity_irreversibility
+from .complexity_jensenshannon import complexity_jensenshannon
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_relativeroughness import complexity_relativeroughness
@@ -13,6 +16,7 @@ from .entropy_approximate import entropy_approximate
 from .entropy_attention import entropy_attention
 from .entropy_bubble import entropy_bubble
 from .entropy_coalition import entropy_coalition
+from .entropy_correctedconditional import entropy_correctedconditional
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_cumulativeresidual import entropy_cumulativeresidual
 from .entropy_differential import entropy_differential
@@ -42,6 +46,7 @@ from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .entropy_tsallis import entropy_tsallis
+from .entropy_wiener import entropy_wiener
 from .fractal_correlation import fractal_correlation
 from .fractal_density import fractal_density
 from .fractal_dfa import fractal_dfa
@@ -64,7 +69,6 @@ from .optim_complexity_dimension import complexity_dimension
 from .optim_complexity_k import complexity_k
 from .optim_complexity_optimize import complexity_optimize
 from .optim_complexity_tolerance import complexity_tolerance
-from .TODO_entropy_wiener import entropy_wiener
 from .utils_complexity_attractor import complexity_attractor
 from .utils_complexity_coarsegraining import complexity_coarsegraining
 from .utils_complexity_embedding import complexity_embedding
@@ -73,6 +77,7 @@ from .utils_complexity_simulate import complexity_simulate
 from .utils_complexity_symbolize import complexity_symbolize
 from .utils_fractal_mandelbrot import fractal_mandelbrot
 from .utils_recurrence_matrix import recurrence_matrix
+
 
 # Aliases
 complexity_se = entropy_shannon
@@ -92,14 +97,12 @@ complexity_pe = entropy_permutation
 complexity_wpe = functools.partial(entropy_permutation, weighted=True)
 
 complexity_mse = entropy_multiscale
-complexity_mspe = functools.partial(entropy_multiscale, scale="MSPEn")
+complexity_mspe = functools.partial(entropy_multiscale, method="MSPEn")
 complexity_cmse = functools.partial(entropy_multiscale, method="CMSEn")
 complexity_rcmse = functools.partial(entropy_multiscale, method="RCMSEn")
 complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
 complexity_fuzzycmse = functools.partial(entropy_multiscale, method="CMSEn", fuzzy=True)
-complexity_fuzzyrcmse = functools.partial(
-    entropy_multiscale, method="RCMSEn", fuzzy=True
-)
+complexity_fuzzyrcmse = functools.partial(entropy_multiscale, method="RCMSEn", fuzzy=True)
 
 
 complexity_dfa = fractal_dfa
@@ -128,6 +131,8 @@ __all__ = [
     "complexity_optimize",
     "complexity_simulate",
     "complexity_hjorth",
+    "complexity_irreversibility",
+    "complexity_jensenshannon",
     "fractal_hurst",
     "complexity_tolerance",
     "complexity_lempelziv",
@@ -195,6 +200,7 @@ __all__ = [
     "entropy_permutation",
     "entropy_range",
     "entropy_cosinesimilarity",
+    "entropy_correctedconditional",
     "fisher_information",
     "fishershannon_information",
     "fractal_dfa",
@@ -214,3 +220,62 @@ __all__ = [
     "mutual_information",
     "information_gain",
 ]
+
+
+# =============================================================================
+# Roadmap: potential additions
+# =============================================================================
+# From a survey of the literature (2021-2026) and of Julia, R and Python packages (Nov 2026).
+# Rough effort: S(mall), M(edium), L(arge). Packages are listed as references to validate
+# against (pyhctsa is GPL-3.0 and pyrpde EUPL: implement from the papers rather than porting).
+#
+# Extensions of existing functions
+# - entropy_permutation(): tie handling, which matters for quantized signals (e.g., RR intervals
+#   in ms): modified PE, with ties as patterns of their own (Bian et al., 2012, PRE 85:021906),
+#   and amplitude-aware PE (Azami & Escudero, 2016, Comput Methods Programs Biomed 128:40).
+#   Reference: EntropyHub PermEn(Typex=...). S.
+# - complexity_jensenshannon(): Tsallis and Renyi complexity-entropy curves (Ribeiro et al., 2017,
+#   PRE 95:062106; Jauregui et al., 2018, Physica A 498:74), and the ordinal-pattern Fisher
+#   information of the Fisher-Shannon causality plane (Olivares et al., 2012, Physica A 391:2518),
+#   whose value depends on how the patterns are ordered. Reference: ordpy, statcomp. S.
+# - complexity_irreversibility(): Costa's multiscale time asymmetry index (Costa et al., 2005,
+#   PRL 95:198102). S.
+#
+# Valuable, moderate effort
+# - Visibility graphs, natural (Lacasa et al., 2008, PNAS 105:4972) and horizontal (Luque et al.,
+#   2009, PRE 80:046103): exponent of the degree distribution (ln(3/2) for i.i.d. noise) and degree
+#   entropy. Parameter-free, used in EEG and HRV. Reference: ts2vg (MIT). M.
+# - 0-1 test for chaos (Gottwald & Melbourne, 2004, Proc R Soc A 460:603; 2009, SIAM J Appl Dyn
+#   Syst 8:129). The plain test also gives K close to 1 for noise: pair it with the surrogate-based
+#   Chaos Decision Tree (Toker et al., 2020, Commun Biol 3:11). Reference: R Chaos01. S-M.
+# - Wavelet entropy (Rosso et al., 2001, J Neurosci Methods 105:65): Shannon entropy of the
+#   relative energies of the wavelet decomposition levels (PyWavelets). S.
+# - Recurrence network measures (Donner et al., 2010, New J Phys 12:033025): transitivity,
+#   average path length and clustering of recurrence_matrix(). Reference: pyunicorn. M.
+# - Nonlinear prediction / empirical dynamic modelling (Sugihara & May, 1990, Nature 344:734):
+#   simplex forecast skill as a function of the horizon, and S-map nonlinearity (theta).
+#   Reference: pyEDM, rEDM. M.
+# - Recurrence period density entropy (RPDE; Little et al., 2007, BioMed Eng OnLine 6:23), a
+#   standard feature in voice analysis, distinct from RQA. S-M.
+# - fractal_correlation(): Takens' maximum-likelihood estimator of D2 (with confidence intervals)
+#   and generalized dimensions D_q. Reference: FractalDimensions.jl, nonlinearTseries. S-M.
+#
+# To watch (niche or recent)
+# - Rescaled auto-density (RAD), a distance-to-criticality index (Harris, Gollo & Fulcher, 2024,
+#   PRX 14:031021). S.
+# - Recurrence microstates entropy (Corso et al., 2018, Chaos 28:083108); the tolerance that
+#   maximizes it could also be a default for complexity_rqa(). Reference:
+#   RecurrenceMicrostatesAnalysis.jl. M.
+# - Persistent entropy (topological data analysis), e.g., from the 0-dimensional sublevel-set
+#   persistence of the signal (Rucco et al., 2016). Reference: giotto-tda, teaspoon. M.
+# - Wavelet-leader multifractal analysis, log-cumulants c1 and c2 (Wendt, Abry & Jaffard, 2007,
+#   IEEE Signal Process Mag 24:38), an alternative to MFDFA. Reference: pymultifracs. L.
+# - Chhabra & Jensen (1989) direct multifractal spectrum, as an option of fractal_tmf() to match
+#   Bell et al. (2019) (see the note in its docstring). Needs a positive measure from the signal
+#   (e.g., absolute increments) and keeps only the q whose fits have r >= 0.995. M.
+# - Whittle maximum-likelihood estimator of the Hurst exponent of fractional Gaussian noise. S-M.
+# - Bias-corrected Shannon entropy estimators (Miller-Madow, Chao-Shen, shrinkage), as an option
+#   of the symbolic entropies on short signals. Reference: ComplexityMeasures.jl. S.
+# - Tone-entropy of heart rate (Oida et al., 1997, J Appl Physiol 82:1794). S.
+# - Functional excitation-inhibition ratio (fE/I; Bruining et al., 2020, Sci Rep,
+#   doi:10.1038/s41598-020-65500-4), rather for the EEG module. M.

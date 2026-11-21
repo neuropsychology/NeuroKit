@@ -8,7 +8,7 @@ import scipy.signal
 from ..misc import NeuroKitWarning
 
 
-def entropy_attention(signal, show=False, silent=False, **kwargs):
+def entropy_attention(signal, show=False, silent=False, base=2, **kwargs):
     """**Attention Entropy (AttEn)**
 
     Yang et al. (2020) propose a conceptually new approach called **Attention Entropy (AttEn)**,
@@ -22,7 +22,8 @@ def entropy_attention(signal, show=False, silent=False, **kwargs):
     cleaning (in particular filtering), and eventually more tuning for the peak detection
     algorithm, can help.
 
-    **AttEn** is computed as the average of various subindices, such as:
+    **AttEn** is computed as the average of the :func:`Shannon entropies <entropy_shannon>` of the
+    distributions of four types of intervals (in samples):
 
     * **MaxMax**: The entropy of local-maxima intervals.
     * **MinMin**: The entropy of local-minima intervals.
@@ -37,18 +38,22 @@ def entropy_attention(signal, show=False, silent=False, **kwargs):
         If True, the local maxima and minima will be displayed.
     silent : bool
         If ``True``, silence possible warnings.
+    base : float
+        The logarithmic base to use, defaults to ``2``, giving a unit in *bits* (as in
+        :func:`entropy_shannon`). Use ``np.e`` for *nats*.
     **kwargs
-        Other arguments to be passed to ``scipy.signal.find_peaks()``.
+        Other arguments to be passed to ``scipy.signal.find_peaks()``. They are used for both the
+        maxima (on the signal) and the minima (on the inverted signal), so that, for instance,
+        ``height=0.5`` keeps the minima below -0.5.
 
     Returns
     --------
     atten : float
-        The attention entropy of the signal.
+        The attention entropy of the signal. It is NaN if one type of interval is missing (e.g.,
+        with fewer than two local maxima).
     info : dict
         A dictionary containing values of sub-entropies, such as ``MaxMax``, ``MinMin``,
         ``MaxMin``, and ``MinMax``.
-    **kwargs
-        Other arguments to be passed to ``scipy.signal.find_peaks()``.
 
     See Also
     --------
@@ -79,79 +84,55 @@ def entropy_attention(signal, show=False, silent=False, **kwargs):
       interval time-series using attention entropy. IEEE Transactions on Affective Computing.
 
     """
-    # Note: Code is based on the EntropyHub's package
+    # Note: Code is based on the EntropyHub's package (whose peak detection, PkFind, gives the same
+    # key patterns as scipy.signal.find_peaks())
 
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
+    signal = np.asarray(signal, dtype=float)
+
     # Identify key patterns
     Xmax, _ = scipy.signal.find_peaks(signal, **kwargs)
     Xmin, _ = scipy.signal.find_peaks(-signal, **kwargs)
 
-    if len(Xmax) == 0 or len(Xmin) == 0:
-        if silent is False:
-            warn(
-                "No local maxima or minima was detected, which makes it impossible to compute AttEn. Returning np.nan",
-                category=NeuroKitWarning,
-            )
-        return np.nan, {}
+    # Intervals from each key pattern to the next one of each type. The maxima and minima alternate
+    # with the default peak detection, but not necessarily when it is tuned (e.g., with `distance`)
+    intervals = {
+        "AttEn_MaxMax": np.diff(Xmax),
+        "AttEn_MinMin": np.diff(Xmin),
+        "AttEn_MaxMin": _entropy_attention_next(Xmax, Xmin),
+        "AttEn_MinMax": _entropy_attention_next(Xmin, Xmax),
+    }
+    info = {key: _entropy_attention_shannon(t, base) for key, t in intervals.items()}
+    atten = np.mean(list(info.values()))
 
-    Txx = np.diff(Xmax)
-    Tnn = np.diff(Xmin)
-    Temp = np.diff(np.sort(np.hstack((Xmax, Xmin))))
-
-    if Xmax[0] < Xmin[0]:
-        Txn = Temp[::2]
-        Tnx = Temp[1::2]
-    else:
-        Txn = Temp[1::2]
-        Tnx = Temp[::2]
-
-    Edges = np.arange(-0.5, len(signal) + 1)
-    Pnx, _ = np.histogram(Tnx, Edges)
-    Pnn, _ = np.histogram(Tnn, Edges)
-    Pxx, _ = np.histogram(Txx, Edges)
-    Pxn, _ = np.histogram(Txn, Edges)
-
-    Pnx = Pnx[Pnx != 0] / len(Tnx)
-    Pxn = Pxn[Pxn != 0] / len(Txn)
-    Pnn = Pnn[Pnn != 0] / len(Tnn)
-    Pxx = Pxx[Pxx != 0] / len(Txx)
-
-    maxmax = -sum(Pxx * np.log(Pxx))
-    maxmin = -sum(Pxn * np.log(Pxn))
-    minmax = -sum(Pnx * np.log(Pnx))
-    minmin = -sum(Pnn * np.log(Pnn))
-    Av4 = np.mean([minmin, maxmax, maxmin, minmax])
+    if np.isnan(atten) and silent is False:
+        warn(
+            "Not enough local maxima and minima were detected to compute all the intervals of AttEn. Returning np.nan",
+            category=NeuroKitWarning,
+        )
 
     if show is True:
         plt.plot(signal, zorder=0, c="black")
         plt.scatter(Xmax, signal[Xmax], c="green", zorder=1)
         plt.scatter(Xmin, signal[Xmin], c="red", zorder=2)
 
-    return Av4, {
-        "AttEn_MaxMax": maxmax,
-        "AttEn_MinMin": minmin,
-        "AttEn_MaxMin": maxmin,
-        "AttEn_MinMax": minmax,
-    }
+    return atten, info
 
 
-# def _find_keypatterns(signal):
-#     """This original function seems to be equivalent to scipy.signal.find_peaks()"""
-#     n = len(signal)
-#     vals = np.zeros(n)
-#     for i in range(1, n - 1):
-#         if signal[i - 1] < signal[i] > signal[i + 1]:
-#             vals[i] = i
+def _entropy_attention_next(a, b):
+    """Intervals from each key pattern in a to the next key pattern in b (both sorted)."""
+    idx = np.searchsorted(b, a, side="right")
+    valid = idx < len(b)
+    return b[idx[valid]] - a[valid]
 
-#         elif signal[i - 1] < signal[i] == signal[i + 1]:
-#             k = 1
-#             while (i + k) < n - 1 and signal[i] == signal[i + k]:
-#                 k += 1
 
-#             if signal[i] > signal[i + k]:
-#                 vals[i] = i + ((k - 1) // 2)
-
-#     return vals[vals != 0].astype(int)
+def _entropy_attention_shannon(intervals, base=2):
+    """Shannon entropy of the distribution of the intervals (NaN if there are none)."""
+    if len(intervals) == 0:
+        return np.nan
+    p = np.bincount(intervals)
+    p = p[p > 0] / len(intervals)
+    return -np.sum(p * np.log(p)) / np.log(base)

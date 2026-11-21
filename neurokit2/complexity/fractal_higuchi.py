@@ -1,8 +1,11 @@
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .optim_complexity_k import _complexity_k_slope, complexity_k
+from ..misc import NeuroKitWarning
+from .optim_complexity_k import _complexity_k_Lk, _complexity_k_slope, complexity_k
 
 
 def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
@@ -21,8 +24,9 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     k_max : str or int
-        Maximum number of interval times (should be greater than or equal to 2).
-        If ``"default"``, the optimal k-max is estimated using :func:`complexity_k`, which is slow.
+        Maximum number of interval times, between 2 and half the length of the signal (otherwise,
+        HFD is returned as NaN). If ``"default"``, the optimal k-max is estimated using
+        :func:`complexity_k`.
     show : bool
         Visualise the slope of the curve for the selected k_max value.
     **kwargs : optional
@@ -46,7 +50,7 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
+      signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[3, 6], noise=0.2)
 
       @savefig p_fractal_higuchi1.png scale=100%
       k_max, info =  nk.complexity_k(signal, k_max='default', show=True)
@@ -75,6 +79,7 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+    signal = np.asarray(signal, dtype=float)
 
     # Get k_max
     if isinstance(k_max, (str, list, np.ndarray, pd.Series)):
@@ -85,11 +90,19 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
         intercept = info["Intercepts"][idx]
         average_values = info["Average_Values"][idx]
         k_values = np.arange(1, k_max + 1)
+    elif not 2 <= k_max <= len(signal) // 2:
+        warn(
+            f"k_max should be between 2 and half the length of the signal ({len(signal) // 2}). "
+            + "HFD cannot be computed and is returned as NaN.",
+            category=NeuroKitWarning,
+        )
+        return np.nan, {"k_max": k_max, "Values": np.array([]), "Scores": np.array([]), "Intercept": np.nan}
     else:
         # Compute Higuchi
-        slope, intercept, info = _complexity_k_slope(k_max, signal)
-        k_values = info["k_values"]
-        average_values = info["average_values"]
+        k_values = np.arange(1, k_max + 1)
+        average_values = _complexity_k_Lk(signal, k_max)
+        slope, intercept = _complexity_k_slope(average_values)
+        slope, intercept = slope[-1], intercept[-1]
 
     # Plot
     if show:
@@ -144,7 +157,7 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
         ax.plot([], label=f"k = {np.min(k_values)}", c=colors[0])
         ax.plot([], label=f"k = {np.max(k_values)}", c=colors[-1])
 
-    fit_values = [slope * i + -intercept for i in -np.log(k_values)]
+    fit_values = slope * -np.log(k_values) + intercept
     ax.plot(-np.log(k_values), fit_values, color="#FF9800", zorder=1)
     ax.legend(loc="lower right")
 

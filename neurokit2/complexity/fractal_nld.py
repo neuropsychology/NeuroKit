@@ -4,14 +4,20 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning
-from ..stats import standardize
 
 
 def fractal_nld(signal, corrected=False):
     """**Fractal dimension via Normalized Length Density (NLDFD)**
 
-    NLDFD is a very simple index corresponding to the average absolute consecutive
-    differences of the (standardized) signal (``np.mean(np.abs(np.diff(std_signal)))``).
+    NLDFD is a very simple index corresponding to the length of the amplitude-normalized signal
+    divided by its number of samples *N* (Kalauzi et al., 2009):
+
+    .. math::
+
+      NLD = \\frac{1}{N} \\sum_{i=2}^{N} |y_n(i) - y_n(i - 1)|
+
+    where :math:`y_n` is the signal centered on its mean and divided by its mean absolute deviation
+    (:math:`y_n = y' / mean(|y'|)`, with :math:`y' = y - mean(y)`).
     This method was developed for measuring signal complexity of very short durations (< 30
     samples), and can be used for instance when continuous signal FD changes (or "running" FD) are
     of interest (by computing it on sliding windows, see example).
@@ -29,18 +35,20 @@ def fractal_nld(signal, corrected=False):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     corrected : bool
-        If ``True``, will rescale the output value according to the power model estimated by
-        Kalauzi et al. (2009) to make it more comparable with "true" FD range, as follows:
+        If ``True``, will convert the NLD to an FD estimate using the calibration curve (power
+        model) of Kalauzi et al. (2009), fitted on Weierstrass functions of known FD (1.01-1.99):
         ``FD = 1.9079*((NLD-0.097178)^0.18383)``. Note that this can result in ``np.nan`` if the
-        result of the difference is negative.
+        result of the difference is negative. Kalauzi et al. (2009) also proposed parameters
+        adjusted on 10-sample epochs of EEG signals (:math:`a = 1.8399` and :math:`k = 0.3523`,
+        with the same :math:`NLD_0`), so that the window FDs stay within [1, 2].
 
     Returns
     --------
-    fd : DataFrame
-        A dataframe containing the fractal dimension across epochs.
+    fd : float
+        The normalized length density (or the FD estimate if ``corrected=True``).
     info : dict
-        A dictionary containing additional information (currently, but returned nonetheless for
-        consistency with other functions).
+        A dictionary containing additional information (currently empty, but returned nonetheless
+        for consistency with other functions).
 
     Examples
     ----------
@@ -109,14 +117,23 @@ def fractal_nld(signal, corrected=False):
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
-    # Amplitude normalization
-    signal = standardize(signal)
+    # Amplitude normalization (Kalauzi et al., 2009, eqs. 9-10): center on the mean and divide by
+    # the mean absolute deviation (not the standard deviation)
+    signal = np.asarray(signal, dtype=float)
+    signal = signal - np.nanmean(signal)
+    signal = signal / np.nanmean(np.abs(signal))
 
-    # Calculate normalized length density
-    nld = np.nanmean(np.abs(np.diff(signal)))
+    # Calculate normalized length density (eq. 8): the N - 1 absolute differences are divided by N
+    diffs = np.abs(np.diff(signal))
+    nld = np.nansum(diffs) / np.sum(~np.isnan(signal))
 
+    # TODO: Kalauzi et al. (2009) also describe (1) parameters of the power model adjusted on EEG
+    # (a = 1.8399, k = 0.3523, for 10-sample epochs), and (2) an "integral normalization" (IN), in
+    # which the whole signal is normalized once before computing NLD on its windows (instead of
+    # normalizing each window, as done here when calling this function on windows), which was more
+    # accurate for extracting FD waveforms (their Fig. 7). Consider offering them as options.
     if corrected:
-        # Power model optimal parameters based on analysis of EEG signals (from Kalauzi et al. 2009)
+        # Power model fitted on Weierstrass functions of known FD (from Kalauzi et al. 2009)
         a = 1.9079
         k = 0.18383
         nld_diff = nld - 0.097178  # NLD - NLD0

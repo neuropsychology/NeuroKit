@@ -22,7 +22,9 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
         The sampling frequency of :func:`.eog_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     **kwargs
-        Other arguments passed to other functions.
+        Other arguments passed to :func:`.eog_clean` and :func:`.eog_findpeaks`. By default,
+        blink detection uses MNE, which must be installed separately (``pip install mne``).
+        Pass ``method="neurokit"`` to clean the signal and detect blinks without MNE.
 
     Returns
     -------
