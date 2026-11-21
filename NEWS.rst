@@ -12,6 +12,9 @@ Compatibility
 Changes in Results
 ++++++++++++++++++
 
+* ``fit_error()`` and ``fit_r2()`` now use the total sum of squares to compute R² as
+  ``1 - SSE / SST`` and use that value for adjusted R². A perfect fit now returns 1.
+
 * ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
 * ``expspace()`` returns different values when ``start`` is above 0.
 * ``entropy_approximate()`` (and ``entropy_fuzzy(approximate=True)``, ``entropy_range(approximate=True)``,
@@ -612,6 +615,8 @@ Changes in Results
   signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
   Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
+* ``mad()`` with an ``axis`` now centers each slice on its own median (it used the median of
+  the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
 * ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
   because the latency penalty of the T-peak candidates is now symmetric (absolute value).
 
@@ -673,6 +678,7 @@ New Features
 Fixes
 +++++++++++++
 
+* ``signal_zerocrossings()`` returns the correct ``direction`` for unsigned integer signals.
 * ``signal_autocor()``: ``unbiased=True`` now returns 1 at lag 0 (values were divided by their
   maximum), integer signals no longer overflow with ``demean=False``, invalid lags and
   multidimensional inputs raise a ``ValueError``, and the plot's lag axis starts at 0.

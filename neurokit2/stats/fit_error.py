@@ -51,6 +51,7 @@ def fit_error(y, y_predicted, n_parameters=2):
     """
 
     # Get information
+    y, y_predicted = np.asarray(y), np.asarray(y_predicted)
     SSE, n, df = _fit_error_prepare(y, y_predicted, n_parameters)
 
     # Mean squared error
@@ -59,18 +60,17 @@ def fit_error(y, y_predicted, n_parameters=2):
     # Root mean squared error
     RMSE = np.sqrt(SSE / n)
 
-    # Adjusted r-squared
-    # For optimization use 1 - adjR2 since we want to minimize the function
-    SST = np.std(y) * n
+    # Total sum of squares
+    SST = np.sum((y - np.mean(y)) ** 2)
 
-    # Get R2
+    # Get R2 (coefficient of determination)
     if SST == 0:
         R2 = 1
     else:
-        R2 = SSE / SST
+        R2 = 1 - SSE / SST
 
-    # R2 adjusted
-    R2_adjusted = 1 - (1 - (1 - R2)) * (n - 1) / df
+    # R2 adjusted for the number of parameters
+    R2_adjusted = 1 - (1 - R2) * (n - 1) / df
 
     return {"SSE": SSE, "MSE": MSE, "RMSE": RMSE, "R2": R2, "R2_adjusted": R2_adjusted}
 
