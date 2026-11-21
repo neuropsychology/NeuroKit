@@ -1036,6 +1036,8 @@ Fixes
   symmetric (absolute value), as it already was for the P peak. Before, candidates earlier than expected
   were favoured (#1220).
 * ``ecg_findpeaks(method="elgendi2010")`` no longer drops a QRS complex at the end of the signal.
+* ``eog_intervalrelated()`` raises a ``ValueError`` for a DataFrame without an ``EOG_Rate`` column,
+  as it does for a dict of epochs, instead of returning an empty DataFrame.
 
 
 0.3.0
