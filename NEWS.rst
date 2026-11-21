@@ -1038,6 +1038,8 @@ Fixes
 * ``ecg_findpeaks(method="elgendi2010")`` no longer drops a QRS complex at the end of the signal.
 * ``eog_intervalrelated()`` raises a ``ValueError`` for a DataFrame without an ``EOG_Rate`` column,
   as it does for a dict of epochs, instead of returning an empty DataFrame.
+* ``emg_intervalrelated()`` raises its ``ValueError`` when ``EMG_Amplitude`` or ``EMG_Activity`` is
+  missing; the column check never triggered, so a bare ``KeyError`` was raised instead.
 
 
 0.3.0
