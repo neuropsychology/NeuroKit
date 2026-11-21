@@ -617,6 +617,8 @@ Changes in Results
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
 * ``mad()`` with an ``axis`` now centers each slice on its own median (it used the median of
   the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
+* ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
+  because the latency penalty of the T-peak candidates is now symmetric (absolute value).
 
 New Features
 +++++++++++++
@@ -1027,6 +1029,9 @@ Fixes
   ``dimension`` columns.
 * ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
   which made the threshold 0 so that no sample counted as flat.
+* ``ecg_delineate(method="dwt")``: the latency penalty used to choose the T peak among the candidates is now
+  symmetric (absolute value), as it already was for the P peak. Before, candidates earlier than expected
+  were favoured (#1220).
 
 
 0.3.0

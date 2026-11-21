@@ -444,7 +444,7 @@ def _dwt_delineate_tp_peaks(
                 idx_zero = signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
-                score = ecg_local[idx_zero] - (float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
+                score = ecg_local[idx_zero] - abs(float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
                 candidate_peaks.append(idx_zero)
                 candidate_peaks_scores.append(score)
 
