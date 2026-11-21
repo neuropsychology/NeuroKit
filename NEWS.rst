@@ -680,6 +680,9 @@ New Features
   the previous ones, corrected for the patterns found only once, a standard regularity index for
   short cardiovascular series. It also returns the normalized CCE and the regularity index
   (Porta et al., 2001).
+* ``hrv_rsa()`` gains ``method`` (``"all"``, ``"p2t"``, ``"porgesbohrer"``, ``"gates"``) and
+  ``verbose`` arguments, allowing individual RSA estimators to be computed on demand without
+  spurious short-window warnings in ``bio_process()``.
 
 Fixes
 +++++++++++++
@@ -706,6 +709,9 @@ Fixes
   return ``NaN`` values when peaks or troughs are missing (#1242).
 * ``hrv(show=True)`` no longer raises ``KeyError`` when ``peaks`` is the info dict returned by
   ``ppg_peaks()``; the plot now uses the same peaks as the computed indices.
+* ``hrv_rsa()`` no longer crashes on short recordings (``< 32`` s) in ``bio_process()`` or
+  ``hrv()``, uses all ``window_number`` tapers in ``_hrv_rsa_gates()`` instead of hardcoding 4, and
+  preserves the input ``sampling_rate`` when interpolating continuous ``RSA_Gates``.
 * ``complexity_rqa()`` (and ``hrv_rqa()``) now returns the documented ``LamiDet`` (laminarity /
   determinism): it was computed but never stored, so the column was missing (it only appeared,
   as NaN, when the determinism was 0 or undefined). The lines of the recurrence matrix are now

@@ -225,6 +225,7 @@ def bio_process(
             rpeaks=None,
             sampling_rate=sampling_rate,
             continuous=True,
+            verbose=False,
         )
         bio_df = pd.concat([bio_df, rsa], axis=1)
 

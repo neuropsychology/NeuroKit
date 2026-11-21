@@ -27,6 +27,8 @@ def hrv_rsa(
     continuous=False,
     window=None,
     window_number=None,
+    method="all",
+    verbose=True,
 ):
     """**Respiratory Sinus Arrhythmia (RSA)**
 
@@ -88,6 +90,12 @@ def hrv_rsa(
         Between 2 and 8. For calculating RSA second by second. Number of windows to be
         calculated in Peak Matched Multiple Window. If ``None`` (default), window_number will be
         set at 8.
+    method : str or list
+        The RSA method(s) to compute. Can be ``"all"`` (default), ``"p2t"``, ``"porgesbohrer"``,
+        ``"gates"``, or a list of these methods. Note that ``"porgesbohrer"`` is only available
+        when ``continuous=False``.
+    verbose : bool
+        If ``True`` (default), emit warnings when signals are too short for a requested method.
 
     Returns
     ----------
@@ -142,68 +150,103 @@ def hrv_rsa(
 
     """
 
-    signals, ecg_period, rpeaks, sampling_rate = _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
+    methods = _hrv_rsa_sanitize_method(method, continuous=continuous)
+    need_rsp = "p2t" in methods
 
-    # Extract cycles
-    rsp_cycles = _hrv_rsa_cycles(signals)
-    rsp_onsets = rsp_cycles["RSP_Inspiration_Onsets"]
-    rsp_peaks = np.argwhere(signals["RSP_Peaks"].values == 1)[:, 0]
-    rsp_peaks = np.array(rsp_peaks)[rsp_peaks > rsp_onsets[0]]
+    signals, ecg_period, rpeaks, sampling_rate = _hrv_rsa_formatinput(
+        ecg_signals, rsp_signals, rpeaks, sampling_rate, need_rsp=need_rsp
+    )
 
-    if len(rsp_peaks) - len(rsp_onsets) == 0:
-        rsp_peaks = rsp_peaks[:-1]
-    if len(rsp_peaks) - len(rsp_onsets) != -1:
-        warn(
-            "Couldn't find rsp cycles onsets and centers. Check your RSP signal." + " Returning empty dict.",
-            category=NeuroKitWarning,
-        )
-        return {}
+    if len(rpeaks) < 2:
+        if verbose:
+            warn(
+                "Too few R-peaks detected to compute RSA. Returning NaN.",
+                category=NeuroKitWarning,
+            )
+        return _hrv_rsa_empty_output(methods, continuous=continuous, length=len(signals))
+
+    # Extract cycles when P2T is requested
+    if need_rsp:
+        rsp_cycles = _hrv_rsa_cycles(signals)
+        rsp_onsets = rsp_cycles["RSP_Inspiration_Onsets"]
+        rsp_peaks = np.argwhere(signals["RSP_Peaks"].values == 1)[:, 0]
+        if len(rsp_onsets) > 0:
+            rsp_peaks = np.array(rsp_peaks)[rsp_peaks > rsp_onsets[0]]
+            if len(rsp_peaks) - len(rsp_onsets) == 0:
+                rsp_peaks = rsp_peaks[:-1]
+
+        if len(rsp_onsets) == 0 or len(rsp_peaks) - len(rsp_onsets) != -1:
+            if verbose:
+                warn(
+                    "Couldn't find rsp cycles onsets and centers. Check your RSP signal." + " Returning empty dict.",
+                    category=NeuroKitWarning,
+                )
+            if continuous is False:
+                return {}
+            return _hrv_rsa_empty_output(methods, continuous=True, length=len(signals))
 
     # Methods ------------------------
+    rsa = {}
 
     # Peak-to-Trough
-    rsa_p2t = _hrv_rsa_p2t(
-        rsp_onsets,
-        rpeaks,
-        sampling_rate,
-        continuous=continuous,
-        ecg_period=ecg_period,
-        rsp_peaks=rsp_peaks,
-    )
-    # Porges-Bohrer
-    rsa_pb = _hrv_rsa_pb(ecg_period, sampling_rate, continuous=continuous)
-
-    # RSAsecondbysecond
-    if window is None:
-        window = 32  # 32 seconds
-    input_duration = rpeaks[-1] / sampling_rate
-    if input_duration >= window:
-        rsa_gates = _hrv_rsa_gates(
-            ecg_signals,
+    if "p2t" in methods:
+        rsa_p2t = _hrv_rsa_p2t(
+            rsp_onsets,
             rpeaks,
-            sampling_rate=sampling_rate,
-            window=window,
-            window_number=window_number,
+            sampling_rate,
             continuous=continuous,
-        )
-    else:
-        warn(
-            f"The duration of recording is shorter than the duration of the window ({window}"
-            " seconds). Returning RSA by Gates method as Nan. Consider using a longer recording.",
-            category=NeuroKitWarning,
+            ecg_period=ecg_period,
+            rsp_peaks=rsp_peaks,
         )
         if continuous is False:
-            rsa_gates = np.nan
+            rsa.update(rsa_p2t)
         else:
-            rsa_gates = np.full(len(rsa_p2t), np.nan)
+            rsa["RSA_P2T"] = rsa_p2t
 
-    if continuous is False:
-        rsa = {}  # Initialize empty dict
-        rsa.update(rsa_p2t)
-        rsa.update(rsa_pb)
-        rsa.update(rsa_gates)
-    else:
-        rsa = pd.DataFrame({"RSA_P2T": rsa_p2t, "RSA_Gates": rsa_gates})
+    # Porges-Bohrer
+    if "porgesbohrer" in methods:
+        rsa_pb = _hrv_rsa_pb(ecg_period, sampling_rate, continuous=continuous, verbose=verbose)
+        if continuous is False and rsa_pb is not None:
+            rsa.update(rsa_pb)
+
+    # RSAsecondbysecond (Gates)
+    if "gates" in methods:
+        if window is None:
+            window = 32  # 32 seconds
+        rri_duration = (rpeaks[-1] - rpeaks[1]) / sampling_rate if len(rpeaks) >= 2 else 0.0
+        if rri_duration >= window:
+            rsa_gates = _hrv_rsa_gates(
+                signals,
+                rpeaks,
+                sampling_rate=sampling_rate,
+                window=window,
+                window_number=window_number,
+                continuous=continuous,
+                verbose=verbose,
+            )
+        else:
+            if verbose:
+                warn(
+                    f"The duration of recording is shorter than the duration of the window ({window}"
+                    " seconds). Returning RSA by Gates method as Nan. Consider using a longer recording.",
+                    category=NeuroKitWarning,
+                )
+            if continuous is False:
+                rsa_gates = {
+                    "RSA_Gates_Mean": np.nan,
+                    "RSA_Gates_Mean_log": np.nan,
+                    "RSA_Gates_SD": np.nan,
+                }
+            else:
+                rsa_gates = np.full(len(signals), np.nan)
+
+        if continuous is False:
+            rsa.update(rsa_gates)
+        else:
+            rsa["RSA_Gates"] = rsa_gates
+
+    if continuous is True:
+        rsa = pd.DataFrame(rsa)
 
     return rsa
 
@@ -246,30 +289,56 @@ def _hrv_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
                 rsa_values[i] = 0
 
     if continuous is False:
-        rsa = {"RSA_P2T_Mean": np.nanmean(rsa_values)}
-        rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])  # pylint: disable=E1111
-        rsa["RSA_P2T_SD"] = np.nanstd(rsa_values, ddof=1)
-        rsa["RSA_P2T_NoRSA"] = len(pd.Series(rsa_values).index[pd.Series(rsa_values).isnull()])
+        valid_vals = rsa_values[~np.isnan(rsa_values)]
+        mean_rsa = float(np.mean(valid_vals)) if len(valid_vals) > 0 else np.nan
+        rsa = {"RSA_P2T_Mean": mean_rsa}
+        rsa["RSA_P2T_Mean_log"] = float(np.log(mean_rsa)) if mean_rsa > 0 else np.nan
+        rsa["RSA_P2T_SD"] = float(np.std(valid_vals, ddof=1)) if len(valid_vals) > 1 else np.nan
+        rsa["RSA_P2T_NoRSA"] = int(np.sum(np.isnan(rsa_values)))
     else:
-        rsa = signal_interpolate(
-            x_values=rsp_peaks[~np.isnan(rsa_values)],
-            y_values=rsa_values[~np.isnan(rsa_values)],
-            x_new=np.arange(len(ecg_period)),
-        )
+        valid = ~np.isnan(rsa_values)
+        x_valid = rsp_peaks[valid]
+        y_valid = rsa_values[valid]
+        if len(x_valid) == 0:
+            rsa = np.full(len(ecg_period), np.nan)
+        elif len(x_valid) == 1:
+            rsa = np.full(len(ecg_period), y_valid[0])
+        elif len(x_valid) == 2:
+            rsa = signal_interpolate(
+                x_values=x_valid,
+                y_values=y_valid,
+                x_new=np.arange(len(ecg_period)),
+                method="linear",
+            )
+        else:
+            rsa = signal_interpolate(
+                x_values=x_valid,
+                y_values=y_valid,
+                x_new=np.arange(len(ecg_period)),
+            )
 
     return rsa
 
 
-def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
+def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False, verbose=True):
     """Porges-Bohrer method."""
     if continuous is True:
         return None
 
     # ``ecg_period`` holds the heart rate (bpm), but Porges-Bohrer works on heart period (ms)
     heart_period = 60000 / np.asarray(ecg_period, dtype=float)
+    if np.all(np.isnan(heart_period)):
+        return {"RSA_PorgesBohrer": np.nan}
 
     # Re-sample at 2 Hz
     resampled = signal_resample(heart_period, sampling_rate=sampling_rate, desired_sampling_rate=2)
+    if len(resampled) <= 21:
+        if verbose:
+            warn(
+                "The duration of recording is too short for Porges-Bohrer RSA. Returning NaN.",
+                category=NeuroKitWarning,
+            )
+        return {"RSA_PorgesBohrer": np.nan}
 
     # Fit 21-point cubic polynomial filter (zero mean, 3rd order)
     # with a low-pass cutoff frequency of 0.095Hz
@@ -292,14 +361,15 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
     time = pd.DataFrame({"Epoch Index": time // 30, "Signal": zero_mean_filtered})
     time = time.set_index("Epoch Index")
 
-    epochs = [time.loc[i] for i in range(int(np.max(time.index.values)) + 1)]
     variance = []
-    for epoch in epochs:
-        variance.append(np.log(epoch.var(axis=0)))  # ln(ms^2)
+    for i in range(int(np.max(time.index.values)) + 1):
+        epoch = time.loc[[i], "Signal"]
+        if len(epoch) > 1:
+            var = epoch.var()
+            if not np.isnan(var) and var > 0:
+                variance.append(np.log(var))  # ln(ms^2)
 
-    variance = [row for row in variance if not np.isnan(row).any()]
-
-    return {"RSA_PorgesBohrer": pd.concat(variance).mean()}
+    return {"RSA_PorgesBohrer": float(np.mean(variance)) if len(variance) > 0 else np.nan}
 
 
 # def _hrv_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
@@ -380,6 +450,7 @@ def _hrv_rsa_gates(
     window=None,
     window_number=None,
     continuous=False,
+    verbose=True,
 ):
     # Boundaries of rsa freq
     min_frequency = 0.12
@@ -388,10 +459,10 @@ def _hrv_rsa_gates(
     # Retrieve IBI and interpolate it
     rri, rri_time, _ = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate)
 
-    # Re-sample at 4 Hz
+    # Re-sample at 4 Hz (do not overwrite signal `sampling_rate`)
     desired_sampling_rate = 4
 
-    rri, rri_time, sampling_rate = intervals_process(
+    rri, rri_time, _ = intervals_process(
         rri,
         intervals_time=rri_time,
         interpolate=True,
@@ -400,14 +471,27 @@ def _hrv_rsa_gates(
 
     # Sanitize parameters
     overlap = int((window - 1) * desired_sampling_rate)
-    nperseg = window * desired_sampling_rate
+    nperseg = int(window * desired_sampling_rate)
+    if len(rri) < nperseg:
+        if verbose:
+            warn(
+                f"The duration of recording is shorter than the duration of the window ({window}"
+                " seconds). Returning RSA by Gates method as Nan. Consider using a longer recording.",
+                category=NeuroKitWarning,
+            )
+        if continuous is False:
+            return {"RSA_Gates_Mean": np.nan, "RSA_Gates_Mean_log": np.nan, "RSA_Gates_SD": np.nan}
+        return np.full(len(ecg_signals), np.nan)
+
     if window_number is None:
         window_number = 8
+    if window_number < 2 or window_number >= nperseg:
+        raise ValueError("NeuroKit error: hrv_rsa(): 'window_number' must be at least 2 and smaller than `window * 4`.")
 
     # Get multipeak window
     multipeak, weight = _get_multipeak_window(nperseg, window_number)
 
-    for i in range(4):
+    for i in range(window_number):
         _, time, psd = signal_timefrequency(
             rri,
             sampling_rate=desired_sampling_rate,
@@ -426,26 +510,22 @@ def _hrv_rsa_gates(
 
     # Sanitize output
     if continuous is False:
-        rsa = {"RSA_Gates_Mean": np.nanmean(meanRSA)}
-        rsa["RSA_Gates_Mean_log"] = np.log(rsa["RSA_Gates_Mean"])  # pylint: disable=E1111
-        rsa["RSA_Gates_SD"] = np.nanstd(meanRSA, ddof=1)
+        mean_val = float(np.nanmean(meanRSA))
+        rsa = {"RSA_Gates_Mean": mean_val}
+        rsa["RSA_Gates_Mean_log"] = float(np.log(mean_val)) if mean_val > 0 else np.nan
+        rsa["RSA_Gates_SD"] = float(np.nanstd(meanRSA, ddof=1)) if len(meanRSA) > 1 else np.nan
     else:
-        # For window=32, meanRSA is RSA from 16th second to xth second where x=recording
-        # duration-16secs
-        # Padding the missing first and list window/2 segments
-        pad_length = window / 2
-        time_start = np.arange(0, pad_length)
-        time_end = np.arange(time[-1], time[-1] + pad_length)[1:]
-        time = np.concatenate((time_start, time, time_end))
+        # Map STFT window centers (relative to rri_time[0]) back to ECG sample indices,
+        # padding constant values at recording boundaries [0 .. len(ecg_signals) - 1].
+        sample_times = (rri_time[0] + time) * sampling_rate
+        if sample_times[0] > 0:
+            sample_times = np.insert(sample_times, 0, 0.0)
+            meanRSA = np.insert(meanRSA, 0, meanRSA[0])
+        if sample_times[-1] < len(ecg_signals) - 1:
+            sample_times = np.append(sample_times, float(len(ecg_signals) - 1))
+            meanRSA = np.append(meanRSA, meanRSA[-1])
 
-        rsa_start = np.full(len(time_start), meanRSA[0])
-        rsa_end = np.full(len(time_end), meanRSA[-1])
-        meanRSA = np.concatenate((rsa_start, meanRSA, rsa_end))
-
-        # Convert to samples
-        time = np.multiply(time, sampling_rate)
-
-        rsa = signal_interpolate(time.astype(int), meanRSA, x_new=len(ecg_signals), method="monotone_cubic")
+        rsa = signal_interpolate(sample_times, meanRSA, x_new=np.arange(len(ecg_signals)), method="monotone_cubic")
     return rsa
 
 
@@ -529,7 +609,57 @@ def _hrv_rsa_cycles(signals):
     }
 
 
-def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
+def _hrv_rsa_sanitize_method(method, continuous=False):
+    aliases = {
+        "p2t": "p2t",
+        "peak-to-trough": "p2t",
+        "porgesbohrer": "porgesbohrer",
+        "porges-bohrer": "porgesbohrer",
+        "pb": "porgesbohrer",
+        "gates": "gates",
+    }
+    if method is None or (isinstance(method, str) and method.lower() == "all"):
+        return ["p2t", "gates"] if continuous else ["p2t", "porgesbohrer", "gates"]
+
+    raw_methods = [method] if isinstance(method, str) else list(method)
+    resolved = []
+    for m in raw_methods:
+        key = str(m).lower()
+        if key == "all":
+            for default_m in ["p2t", "gates"] if continuous else ["p2t", "porgesbohrer", "gates"]:
+                if default_m not in resolved:
+                    resolved.append(default_m)
+        elif key in aliases:
+            target = aliases[key]
+            if continuous and target == "porgesbohrer":
+                raise ValueError("NeuroKit error: hrv_rsa(): 'porgesbohrer' method does not support continuous=True.")
+            if target not in resolved:
+                resolved.append(target)
+        else:
+            raise ValueError("NeuroKit error: hrv_rsa(): 'method' should be one of 'all', 'p2t', 'porgesbohrer', or 'gates'.")
+    return resolved
+
+
+def _hrv_rsa_empty_output(methods, continuous=False, length=0):
+    if continuous:
+        out = {}
+        if "p2t" in methods:
+            out["RSA_P2T"] = np.full(length, np.nan)
+        if "gates" in methods:
+            out["RSA_Gates"] = np.full(length, np.nan)
+        return pd.DataFrame(out)
+
+    out = {}
+    if "p2t" in methods:
+        out.update({"RSA_P2T_Mean": np.nan, "RSA_P2T_Mean_log": np.nan, "RSA_P2T_SD": np.nan, "RSA_P2T_NoRSA": np.nan})
+    if "porgesbohrer" in methods:
+        out["RSA_PorgesBohrer"] = np.nan
+    if "gates" in methods:
+        out.update({"RSA_Gates_Mean": np.nan, "RSA_Gates_Mean_log": np.nan, "RSA_Gates_SD": np.nan})
+    return out
+
+
+def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000, need_rsp=True):
     rpeaks, sampling_rate = _hrv_format_input(rpeaks, sampling_rate=sampling_rate, output_format="peaks")
 
     # Sanity Checks
@@ -555,7 +685,7 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
     elif isinstance(rsp_signals, tuple):
         rsp_signals = rsp_signals[0]
 
-    if isinstance(rsp_signals, pd.DataFrame):
+    if need_rsp and isinstance(rsp_signals, pd.DataFrame):
         rsp_cols = [col for col in rsp_signals.columns if "RSP_Phase" in col]
         if len(rsp_cols) != 2:
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
