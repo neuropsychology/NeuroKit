@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
-from .signal_period import signal_period
+from .signal_period import _signal_period_interpolate, signal_period
 
 
 def signal_rate(
@@ -93,9 +93,7 @@ def signal_rate(
 
     if show is True:
         peaks = _signal_formatpeaks_sanitize(peaks)
-        interpolated = isinstance(desired_length, (int, float, np.integer, np.floating)) or (
-            isinstance(desired_length, np.ndarray) and desired_length.ndim == 0
-        )
+        interpolated = _signal_period_interpolate(desired_length)
         if not interpolated:
             interpolation_method = None
         _signal_rate_plot(
