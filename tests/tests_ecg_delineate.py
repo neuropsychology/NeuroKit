@@ -116,31 +116,21 @@ def test_dwt_normalize_window():
 
 
 def test_dwt_tpeak_latency_penalty_is_symmetric():
-    """A T-peak candidate that comes earlier than expected must not be favoured over one that comes later by the same
-    amount (the latency penalty is |latency - expected|, as for the P peaks)."""
+    """A T-peak candidate earlier than expected must not be favoured over one equally late."""
     from neurokit2.ecg.ecg_delineate import _dwt_delineate_tp_peaks
 
-    sampling_rate = 250  # 60 bpm below: rt_duration = 0.25 s, qrs_width = 0.13 s, search window starts 16 samples after R
+    # At 60 bpm and 250 Hz: qrs_width = 0.13 s and rt_duration = 0.25 s
     rpeaks = np.arange(250, 2501, 250)
-    n_samples = 3000
-    window_start = rpeaks[0] + int(0.5 * 0.13 * sampling_rate)
-    expected = int((0.25 - 0.5 * 0.13) * sampling_rate)  # expected latency of the T peak within the window (samples)
-    early, late = expected - 25, expected + 25  # equally far (0.1 s) before / after the expected latency
+    search_start = rpeaks[0] + 16  # 0.5 * qrs_width after R
+    expected = search_start + 46  # rt_duration - 0.5 * qrs_width into the search window
+    early, late = expected - 25, expected + 25  # 0.1 s before and after
 
-    def wavelet_zero_crossing(center, length=n_samples):
-        """Positive then negative lobe: a candidate with a zero crossing at `center`."""
-        wave = np.zeros(length)
-        x = np.arange(length) - (window_start + center)
-        wave[np.abs(x) <= 8] = -np.sign(x[np.abs(x) <= 8]) * (1 - np.abs(x[np.abs(x) <= 8]) / 8)
-        return wave
+    # Each candidate is a +/- pair in the wavelet transform; the later one has the higher ECG amplitude
+    dwtmatr = np.zeros((9, 3000))
+    dwtmatr[3, [early, late]] = 1  # row 3 = degree_tpeak
+    dwtmatr[3, [early + 2, late + 2]] = -1
+    ecg = np.zeros(3000)
+    ecg[early], ecg[late] = 0.8, 1.0
 
-    dwtmatr = np.zeros((9, n_samples))
-    dwtmatr[3] = wavelet_zero_crossing(early) + wavelet_zero_crossing(late)
-
-    # The later candidate has the (slightly) higher wave, so with a symmetric penalty it must win
-    ecg = np.zeros(n_samples)
-    ecg[window_start + early - 2 : window_start + early + 3] = 0.8
-    ecg[window_start + late - 2 : window_start + late + 3] = 1.0
-
-    tpeaks, _ = _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=sampling_rate)
-    assert abs(tpeaks[0] - (window_start + late)) <= 2, tpeaks
+    tpeaks, _ = _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250)
+    assert tpeaks[0] == late
