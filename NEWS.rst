@@ -12,6 +12,8 @@ Compatibility
 Changes in Results
 ++++++++++++++++++
 
+* ``fit_error()`` and ``fit_r2()`` now use the total sum of squares to compute R² as
+  ``1 - SSE / SST`` and use that value for adjusted R². A perfect fit now returns 1.
 * ``hrv_time()`` now fits TINN across all left and right triangle endpoints and
   includes the histogram tails in the fitting error. Isolated intervals no longer
   force the fitted triangle to start at the shortest interval.
@@ -615,6 +617,10 @@ Changes in Results
   signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
   Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
+* ``mad()`` with an ``axis`` now centers each slice on its own median (it used the median of
+  the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
+* ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
+  because the latency penalty of the T-peak candidates is now symmetric (absolute value).
 
 New Features
 +++++++++++++
@@ -674,6 +680,7 @@ New Features
 Fixes
 +++++++++++++
 
+* ``signal_zerocrossings()`` returns the correct ``direction`` for unsigned integer signals.
 * ``signal_autocor()``: ``unbiased=True`` now returns 1 at lag 0 (values were divided by their
   maximum), integer signals no longer overflow with ``demean=False``, invalid lags and
   multidimensional inputs raise a ``ValueError``, and the plot's lag axis starts at 0.
@@ -1024,6 +1031,9 @@ Fixes
   ``dimension`` columns.
 * ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
   which made the threshold 0 so that no sample counted as flat.
+* ``ecg_delineate(method="dwt")``: the latency penalty used to choose the T peak among the candidates is now
+  symmetric (absolute value), as it already was for the P peak. Before, candidates earlier than expected
+  were favoured (#1220).
 
 
 0.3.0
