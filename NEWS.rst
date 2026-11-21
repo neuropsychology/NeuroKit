@@ -12,6 +12,9 @@ Compatibility
 Changes in Results
 ++++++++++++++++++
 
+* ``fit_error()`` and ``fit_r2()`` now use the total sum of squares to compute R² as
+  ``1 - SSE / SST`` and use that value for adjusted R². A perfect fit now returns 1.
+
 * ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
 * ``expspace()`` returns different values when ``start`` is above 0.
 * ``entropy_approximate()`` (and ``entropy_fuzzy(approximate=True)``, ``entropy_range(approximate=True)``,
