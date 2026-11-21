@@ -3,6 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import mne
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -160,3 +161,9 @@ def test_eog_intervalrelated():
 
     assert all(elem in columns for elem in np.array(epochs_dict.columns.values, dtype=str))
     assert epochs_dict.shape[0] == len(epochs)  # Number of rows
+
+
+def test_eog_intervalrelated_missing_rate():
+    data = pd.DataFrame({"EOG_Blinks": [0, 1, 0]})
+    with pytest.raises(ValueError, match="EOG_Rate"):
+        nk.eog_intervalrelated(data)
