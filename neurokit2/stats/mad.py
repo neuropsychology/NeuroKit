@@ -29,11 +29,7 @@ def mad(x, constant=1.4826, **kwargs):
     * https://en.wikipedia.org/wiki/Median_absolute_deviation
 
     """
-    if kwargs.get("axis") is None:
-        median = np.nanmedian(np.ma.array(x).compressed(), **kwargs)
-    else:
-        # Center each slice on its own median, not on that of the flattened data
-        median = np.nanmedian(x, axis=kwargs["axis"], keepdims=True)
+    median = np.nanmedian(x, keepdims=True, **kwargs)
     mad_value = np.nanmedian(np.abs(x - median), **kwargs)
     mad_value = mad_value * constant
     return mad_value
