@@ -621,6 +621,7 @@ Changes in Results
   the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
 * ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
   because the latency penalty of the T-peak candidates is now symmetric (absolute value).
+* ``ecg_findpeaks(method="elgendi2010")`` fixes an off-by-one error in the R-peak search window.
 
 New Features
 +++++++++++++
@@ -1034,6 +1035,7 @@ Fixes
 * ``ecg_delineate(method="dwt")``: the latency penalty used to choose the T peak among the candidates is now
   symmetric (absolute value), as it already was for the P peak. Before, candidates earlier than expected
   were favoured (#1220).
+* ``ecg_findpeaks(method="elgendi2010")`` no longer drops a QRS complex at the end of the signal.
 
 
 0.3.0
