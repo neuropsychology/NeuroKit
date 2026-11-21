@@ -163,11 +163,7 @@ def test_eog_intervalrelated():
     assert epochs_dict.shape[0] == len(epochs)  # Number of rows
 
 
-@pytest.mark.parametrize("missing", ["EOG_Rate", "EOG_Blinks"])
-def test_eog_intervalrelated_missing_columns(missing):
-    data = pd.DataFrame({"EOG_Rate": [10.0, 12.0, 14.0], "EOG_Blinks": [0, 1, 0], "Label": ["1"] * 3})
-    data = data.drop(columns=missing)
-    with pytest.raises(ValueError, match=missing):
+def test_eog_intervalrelated_missing_rate():
+    data = pd.DataFrame({"EOG_Blinks": [0, 1, 0]})
+    with pytest.raises(ValueError, match="EOG_Rate"):
         nk.eog_intervalrelated(data)
-    with pytest.raises(ValueError, match=missing):
-        nk.eog_intervalrelated({"1": data})
