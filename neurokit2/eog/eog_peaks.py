@@ -2,7 +2,7 @@ from ..signal import signal_formatpeaks
 from .eog_findpeaks import eog_findpeaks
 
 
-def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
+def eog_peaks(veog_cleaned, sampling_rate=1000, method="mne", **kwargs):
     """**Locate EOG eye blinks**
 
     Parameters
@@ -95,6 +95,8 @@ def eog_peaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
       extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience, 11, 12.
 
     """
+    if sampling_rate is None:
+        sampling_rate = 1000
     peaks = eog_findpeaks(veog_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
     info = {"EOG_Blinks": peaks}
 

@@ -99,8 +99,8 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
         clean = _eog_clean_kong1998(eog_signal, sampling_rate=sampling_rate)
     else:
         raise ValueError(
-            "NeuroKit error: eog_clean(): 'method' should be one of 'agarwal2019', 'brainstorm',",
-            "'mne', 'kong1998', 'blinker'.",
+            "NeuroKit error: eog_clean(): 'method' should be one of 'neurokit', 'agarwal2019', 'brainstorm', "
+            "'mne', 'kong1998', or 'blinker'."
         )
 
     return clean
@@ -110,9 +110,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
 # Handle missing data
 # =============================================================================
 def _eog_clean_missing(eog_signal):
-    eog_signal = pd.DataFrame.pad(pd.Series(eog_signal))
-
-    return eog_signal
+    return pd.Series(eog_signal).ffill().bfill().to_numpy()
 
 
 # =============================================================================

@@ -733,6 +733,11 @@ Fixes
 * ``eog_findpeaks()`` and ``eog_clean()`` now identify the correct function in missing-MNE errors,
   rather than reporting ``signal_filter()``. ``eog_process()`` documents its default blink detector's
   optional MNE dependency and the ``method="neurokit"`` alternative (#1241).
+* ``eog_process(method="neurokit")`` and ``eog_findpeaks()`` no longer plot by default, fail on
+  peak-detector kwargs, crash on ``<= 3`` blinks or float ``sampling_rate``, or duplicate/drop
+  blinks in ``method="blinker"``. ``eog_features()`` now computes scale-invariant ``Blink_pAVR`` and
+  ``Blink_nAVR`` ratios per Kleifges et al. (2017), ``eog_clean()`` fills leading ``NaN`` values
+  cleanly under pandas 3, and ``eog_plot()`` works when ``info=None`` or zero blinks are detected.
 * ``fractal_correlation()`` is about 3 times faster and uses half the memory: the distances are
   computed once per pair (``scipy.spatial.distance.pdist()``) and the correlation sums of all the
   radii are counted in one pass. The radii are returned sorted. Results are unchanged, except with

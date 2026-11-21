@@ -53,6 +53,13 @@ def eog_plot(eog_signals, info=None):
       plt.close()
 
     """
+    # Sanity-check input.
+    if not isinstance(eog_signals, pd.DataFrame):
+        raise ValueError(
+            "NeuroKit error: eog_plot(): The `eog_signals` argument must be the DataFrame returned by `eog_process()`."
+        )
+
+    blinks = np.where(eog_signals["EOG_Blinks"] == 1)[0]
     if info is None:
         warn(
             "'info' dict not provided. Some information might be missing." + " Sampling rate will be set to 1000 Hz.",
@@ -60,14 +67,9 @@ def eog_plot(eog_signals, info=None):
         )
 
         info = {
+            "EOG_Blinks": blinks,
             "sampling_rate": 1000,
         }
-
-    # Sanity-check input.
-    if not isinstance(eog_signals, pd.DataFrame):
-        raise ValueError(
-            "NeuroKit error: eog_plot(): The `eog_signals` argument must be the DataFrame returned by `eog_process()`."
-        )
 
     # Prepare figure
     x_axis = np.arange(eog_signals.shape[0]) / info["sampling_rate"]
@@ -97,10 +99,9 @@ def eog_plot(eog_signals, info=None):
     ax0.set_ylabel("Amplitude (mV)")
 
     # Plot blinks
-    blinks = np.where(eog_signals["EOG_Blinks"] == 1)[0]
     ax0.scatter(
         x_axis[blinks],
-        eog_signals["EOG_Clean"][blinks],
+        eog_signals["EOG_Clean"].iloc[blinks],
         color="#0146D7",
         label="Blinks",
         zorder=2,
@@ -117,6 +118,8 @@ def eog_plot(eog_signals, info=None):
 
     # Plot individual blinks
     ax2.set_title("Individual Blinks")
+    if len(info["EOG_Blinks"]) == 0:
+        return
 
     # Create epochs
     events = epochs_create(
