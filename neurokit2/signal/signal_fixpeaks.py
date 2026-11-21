@@ -145,7 +145,7 @@ def signal_fixpeaks(
 
     """
     # Format input
-    peaks = _signal_formatpeaks_sanitize(peaks)
+    peaks = np.asarray(_signal_formatpeaks_sanitize(peaks))
 
     # If method Kubios
     if method.lower() == "kubios":
@@ -218,16 +218,14 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
         # of artifacts stops decreasing.
         n_artifacts_current = sum([len(i) for i in artifacts.values()])
 
-        while True:
-            new_artifacts, new_subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate, **kwargs)
+        while n_artifacts_current > 0:
+            new_artifacts, _ = _find_artifacts(peaks_clean, sampling_rate=sampling_rate, **kwargs)
 
             n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in new_artifacts.values()])
             if n_artifacts_current >= n_artifacts_previous:
                 break
-            artifacts = new_artifacts
-            subspaces = new_subspaces
-            peaks_clean = _correct_artifacts(artifacts, peaks_clean)
+            peaks_clean = _correct_artifacts(new_artifacts, peaks_clean)
 
     artifacts["method"] = "kubios"
     artifacts.update(subspaces)
@@ -272,27 +270,27 @@ def _find_artifacts(
 
     # Normalize by threshold.
     th1 = _compute_threshold(drrs, alpha, window_width)
-    np.divide(drrs, th1, out=drrs, where=th1 != 0)
-    drrs[th1 == 0] = np.nan
+    th1_safe = np.where(th1 > 0, th1, np.finfo(float).eps)
+    drrs = drrs / th1_safe
 
-    # Cast dRRs to subspace s12.
-    # Pad drrs with one element.
+    # Cast dRRs to subspace s12 and s22.
     padding = 2
-    drrs_pad = np.pad(drrs, padding, "reflect")
+    if drrs.size > 0:
+        drrs_pad = np.pad(drrs, padding, "reflect")
+        prev_drr = drrs_pad[padding - 1 : padding - 1 + drrs.size]
+        next_drr = drrs_pad[padding + 1 : padding + 1 + drrs.size]
+        next2_drr = drrs_pad[padding + 2 : padding + 2 + drrs.size]
 
-    s12 = np.zeros(drrs.size)
-    for d in np.arange(padding, padding + drrs.size):
-        if drrs_pad[d] > 0:
-            s12[d - padding] = np.max([drrs_pad[d - 1], drrs_pad[d + 1]])
-        elif drrs_pad[d] < 0:
-            s12[d - padding] = np.min([drrs_pad[d - 1], drrs_pad[d + 1]])
-    # Cast dRRs to subspace s22.
-    s22 = np.zeros(drrs.size)
-    for d in np.arange(padding, padding + drrs.size):
-        if drrs_pad[d] >= 0:
-            s22[d - padding] = np.min([drrs_pad[d + 1], drrs_pad[d + 2]])
-        elif drrs_pad[d] < 0:
-            s22[d - padding] = np.max([drrs_pad[d + 1], drrs_pad[d + 2]])
+        s12 = np.where(
+            drrs > 0,
+            np.maximum(prev_drr, next_drr),
+            np.where(drrs < 0, np.minimum(prev_drr, next_drr), 0.0),
+        )
+        s22 = np.where(drrs >= 0, np.minimum(next_drr, next2_drr), np.maximum(next_drr, next2_drr))
+    else:
+        s12 = np.zeros(0)
+        s22 = np.zeros(0)
+
     # Compute mRRs: time series of deviation of RRs from median.
     df = pd.DataFrame({"signal": rr})
     medrr = df.rolling(medfilt_order, center=True, min_periods=1).median().signal.values
@@ -300,8 +298,8 @@ def _find_artifacts(
     mrrs[mrrs < 0] = mrrs[mrrs < 0] * 2
     # Normalize by threshold.
     th2 = _compute_threshold(mrrs, alpha, window_width)
-    np.divide(mrrs, th2, out=mrrs, where=th2 != 0)
-    mrrs[th2 == 0] = np.nan
+    th2_safe = np.where(th2 > 0, th2, np.finfo(float).eps)
+    mrrs = mrrs / th2_safe
 
     # Artifact classification #################################################
     ###########################################################################
@@ -314,18 +312,16 @@ def _find_artifacts(
 
     i = 0
     while i < rr.size - 2:  # The flow control is implemented based on Figure 1
-        if np.abs(drrs[i]) <= 1:  # Figure 1
-            i += 1
-            continue
-        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # pylint: disable=E1111
-        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # pylint: disable=E1111
+        if np.abs(drrs[i]) > 1:  # Figure 1
+            eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # pylint: disable=E1111
+            eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # pylint: disable=E1111
 
-        if np.any([eq1, eq2]):
-            # If any of the two equations is true.
-            ectopic_idcs.append(i)
-            i += 1
-            continue
-        # If none of the two equations is true.
+            if np.any([eq1, eq2]):
+                # If any of the two equations is true.
+                ectopic_idcs.append(i)
+                i += 1
+                continue
+        # If none of the two equations is true, check whether |dRRs| > 1 or |mRRs| > 3.
         if ~np.any([np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3]):  # Figure 1
             i += 1
             continue
@@ -349,17 +345,17 @@ def _find_artifacts(
             # peaks.
 
             # Missing.
-            eq6 = np.abs(rr[j] / 2 - medrr[j]) < th2[j]  # Figure 1
+            eq6 = np.abs(rr[j] / 2 - medrr[j]) <= th2[j]  # Figure 1
             # Extra.
-            eq7 = np.abs(rr[j] + rr[j + 1] - medrr[j]) < th2[j]  # Figure 1
+            eq7 = np.abs(rr[j] + rr[j + 1] - medrr[j]) <= th2[j]  # Figure 1
 
             # Check if extra.
-            if np.all([eq5, eq7]):
+            if np.all([eq5 or mrrs[j] < -3, eq7]):
                 extra_idcs.append(j)
                 i += 1
                 continue
             # Check if missing.
-            if np.all([eq3, eq6]):
+            if np.all([eq3 or mrrs[j] > 3, eq6]):
                 missed_idcs.append(j)
                 i += 1
                 continue
@@ -403,29 +399,28 @@ def _correct_artifacts(artifacts, peaks):
     # The integrity of indices must be maintained if peaks are inserted or
     # deleted: for each deleted beat, decrease indices following that beat in
     # all other index lists by 1. Likewise, for each added beat, increment the
-    # indices following that beat in all other lists by 1.
-    extra_idcs = artifacts["extra"]
-    missed_idcs = artifacts["missed"]
-    ectopic_idcs = artifacts["ectopic"]
-    longshort_idcs = artifacts["longshort"]
+    # indices at or following that beat in all other lists by 1.
+    peaks = np.asarray(peaks)
+    extra_idcs = sorted({int(i) for i in artifacts["extra"] if 0 <= i < len(peaks)})
+    missed_idcs = [int(i) for i in artifacts["missed"]]
+    # An ectopic classification at interval j (dRR[j] = RR[j] - RR[j - 1]) reflects a
+    # misplaced peak at j - 1 (shared between RR[j - 1] and RR[j]).
+    misaligned_idcs = sorted(set(int(i) for i in artifacts["longshort"]) | {int(j) - 1 for j in artifacts["ectopic"]})
 
     # Delete extra peaks.
     if extra_idcs:
         peaks = _correct_extra(extra_idcs, peaks)
-        # Update remaining indices.
         missed_idcs = _update_indices(extra_idcs, missed_idcs, -1)
-        ectopic_idcs = _update_indices(extra_idcs, ectopic_idcs, -1)
-        longshort_idcs = _update_indices(extra_idcs, longshort_idcs, -1)
+        misaligned_idcs = _update_indices(extra_idcs, misaligned_idcs, -1)
+
     # Add missing peaks.
+    missed_idcs = sorted({i for i in missed_idcs if 0 < i < len(peaks)})
     if missed_idcs:
         peaks = _correct_missed(missed_idcs, peaks)
-        # Update remaining indices.
-        ectopic_idcs = _update_indices(missed_idcs, ectopic_idcs, 1)
-        longshort_idcs = _update_indices(missed_idcs, longshort_idcs, 1)
-    if ectopic_idcs:
-        peaks = _correct_misaligned(ectopic_idcs, peaks)
-    if longshort_idcs:
-        peaks = _correct_misaligned(longshort_idcs, peaks)
+        misaligned_idcs = _update_indices(missed_idcs, misaligned_idcs, 1)
+
+    if misaligned_idcs:
+        peaks = _correct_misaligned(misaligned_idcs, peaks)
     return peaks
 
 
@@ -437,54 +432,57 @@ def _correct_extra(extra_idcs, peaks):
 
 
 def _correct_missed(missed_idcs, peaks):
-    corrected_peaks = peaks.copy()
-    missed_idcs = np.array(missed_idcs)
-    # Calculate the position(s) of new beat(s). Make sure to not generate
-    # negative indices. prev_peaks and next_peaks must have the same
-    # number of elements.
-    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
+    corrected_peaks = peaks.astype(float, copy=True)
+    missed_idcs = np.asarray(missed_idcs, dtype=int)
+    valid_idcs = np.logical_and(missed_idcs > 0, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
     missed_idcs = missed_idcs[valid_idcs]
-    prev_peaks = corrected_peaks[[i - 1 for i in missed_idcs]]
+    prev_peaks = corrected_peaks[missed_idcs - 1]
     next_peaks = corrected_peaks[missed_idcs]
     added_peaks = prev_peaks + (next_peaks - prev_peaks) / 2
     # Add the new peaks before the missed indices (see numpy docs).
     corrected_peaks = np.insert(corrected_peaks, missed_idcs, added_peaks)
+    if np.issubdtype(peaks.dtype, np.integer):
+        corrected_peaks = np.rint(corrected_peaks).astype(peaks.dtype)
+    else:
+        corrected_peaks = corrected_peaks.astype(peaks.dtype)
 
     return corrected_peaks
 
 
 def _correct_misaligned(misaligned_idcs, peaks):
-    corrected_peaks = peaks.copy()
-    misaligned_idcs = np.array(misaligned_idcs)
-    # Make sure to not generate negative indices, or indices that exceed
-    # the total number of peaks. prev_peaks and next_peaks must have the
-    # same number of elements.
+    corrected_peaks = peaks.astype(float, copy=True)
+    misaligned_idcs = np.asarray(misaligned_idcs, dtype=int)
     valid_idcs = np.logical_and(
-        misaligned_idcs > 1,
+        misaligned_idcs > 0,
         misaligned_idcs < len(corrected_peaks) - 1,  # pylint: disable=E1111
     )
     misaligned_idcs = misaligned_idcs[valid_idcs]
-    prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs]]
-    next_peaks = corrected_peaks[[i + 1 for i in misaligned_idcs]]
+    if len(misaligned_idcs) == 0:
+        return peaks.copy()
 
-    half_ibi = (next_peaks - prev_peaks) / 2
-    peaks_interp = prev_peaks + half_ibi
-    # Shift the R-peaks from the old to the new position.
-    corrected_peaks = np.delete(corrected_peaks, misaligned_idcs)
-    corrected_peaks = np.concatenate((corrected_peaks, peaks_interp)).astype(int)
+    # Interpolate misaligned peaks linearly between surrounding valid peaks.
+    corrected_peaks[misaligned_idcs] = np.nan
+    corrected_peaks = pd.Series(corrected_peaks).interpolate(limit_area="inside").to_numpy()
+    if np.issubdtype(peaks.dtype, np.integer):
+        corrected_peaks = np.rint(corrected_peaks).astype(peaks.dtype)
+    else:
+        corrected_peaks = corrected_peaks.astype(peaks.dtype)
     corrected_peaks.sort(kind="mergesort")
 
     return corrected_peaks
 
 
 def _update_indices(source_idcs, update_idcs, update):
-    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger
-    than s."""
+    """Update indices in `update_idcs` after simultaneous deletions (`update=-1`) or insertions (`update=1`) at
+    `source_idcs`."""
     if not update_idcs:
         return update_idcs
-    for s in source_idcs:
-        update_idcs = [u + update if u > s else u for u in update_idcs]
-    return list(np.unique(update_idcs))
+    if update < 0:
+        source_set = set(source_idcs)
+        updated = [u + update * sum(s < u for s in source_idcs) for u in update_idcs if u not in source_set]
+    else:
+        updated = [u + update * sum(s <= u for s in source_idcs) for u in update_idcs]
+    return list(np.unique(updated))
 
 
 def _plot_artifacts_lipponen2019(info):
@@ -608,6 +606,15 @@ def _plot_artifacts_lipponen2019(info):
 # =============================================================================
 # NeuroKit
 # =============================================================================
+def _compute_neurokit_intervals(peaks, sampling_rate=1000):
+    if len(peaks) <= 3:
+        interval = np.ediff1d(peaks, to_begin=0) / sampling_rate
+        if len(interval) > 1:
+            interval[0] = np.mean(interval[1:])
+        return interval
+    return signal_period(peaks, sampling_rate=sampling_rate, desired_length=())
+
+
 def _remove_small(
     peaks,
     sampling_rate=1000,
@@ -615,14 +622,18 @@ def _remove_small(
     relative_interval_min=None,
     robust=False,
 ):
-    if interval_min is None and relative_interval_min is None:
+    if (interval_min is None and relative_interval_min is None) or len(peaks) <= 1:
         return peaks
-    if interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=())
-        peaks = peaks[interval > interval_min]
-    if relative_interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=())
-        peaks = peaks[standardize(interval, robust=robust) > relative_interval_min]
+    if interval_min is not None and len(peaks) > 1:
+        interval = _compute_neurokit_intervals(peaks, sampling_rate=sampling_rate)
+        keep = interval > interval_min
+        keep[0] = True
+        peaks = peaks[keep]
+    if relative_interval_min is not None and len(peaks) > 2:
+        interval = _compute_neurokit_intervals(peaks, sampling_rate=sampling_rate)
+        keep = standardize(interval, robust=robust) > relative_interval_min
+        keep[0] = True
+        peaks = peaks[keep]
     return peaks
 
 
@@ -633,39 +644,41 @@ def _interpolate_big(
     relative_interval_max=None,
     robust=False,
 ):
-    if interval_max is None and relative_interval_max is None:
+    if (interval_max is None and relative_interval_max is None) or len(peaks) <= 1:
         return peaks
-    else:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=())
-        if relative_interval_max is not None:
-            outliers = standardize(interval, robust=robust) > relative_interval_max
-        else:
-            outliers = interval > interval_max
-        outliers_loc = np.where(outliers)[0]
-
-        # interval returned by signal_period at index 0 is the mean of the intervals
-        # so it does not actually correspond to whether the first peak is an outlier
-        outliers_loc = outliers_loc[outliers_loc != 0]
-
-        if np.sum(outliers) == 0:
+    interval = _compute_neurokit_intervals(peaks, sampling_rate=sampling_rate)
+    if relative_interval_max is not None:
+        if len(peaks) <= 2:
             return peaks
-        peaks_to_correct = peaks.copy().astype(float)
+        outliers = standardize(interval, robust=robust) > relative_interval_max
+    else:
+        outliers = interval > interval_max
 
-        interval_without_outliers = interval[np.invert(outliers)]
-        mean_interval = np.nanmean(interval_without_outliers)
+    # interval at index 0 is the mean of the intervals, so it does not
+    # correspond to whether the first peak is an outlier
+    outliers[0] = False
+    outliers_loc = np.where(outliers)[0]
 
-        # go through the outliers starting with the highest indices
-        # so that the indices of the other outliers are not moved when
-        # unknown intervas are inserted
-        for loc in np.flip(outliers_loc):
-            # compute number of NaNs to insert based on the mean interval
-            n_nan = round(interval[loc] / mean_interval)
-
-            # Delete peak corresponding to large interval and replace by N NaNs
-            peaks_to_correct[loc] = np.nan
-            peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * (n_nan - 1))
-        # Interpolate values
-        interpolated_peaks = pd.Series(peaks_to_correct).interpolate(limit_area="inside").values
-        # If there are missing values remaining, remove
-        peaks = interpolated_peaks[np.invert(np.isnan(interpolated_peaks))].astype(peaks.dtype)
+    if len(outliers_loc) == 0 or np.all(outliers[1:]):
         return peaks
+    peaks_to_correct = peaks.astype(float, copy=True)
+
+    interval_without_outliers = interval[~outliers]
+    mean_interval = np.nanmean(interval_without_outliers)
+
+    # go through the outliers starting with the highest indices
+    # so that the indices of the other outliers are not moved when
+    # unknown intervals are inserted
+    for loc in np.flip(outliers_loc):
+        # compute number of missing peaks to insert before `loc` based on the mean interval
+        n_missing = round(interval[loc] / mean_interval) - 1
+        if n_missing > 0:
+            peaks_to_correct = np.insert(peaks_to_correct, loc, [np.nan] * n_missing)
+    # Interpolate values
+    interpolated_peaks = pd.Series(peaks_to_correct).interpolate(limit_area="inside").to_numpy()
+    valid_interpolated = interpolated_peaks[~np.isnan(interpolated_peaks)]
+    if np.issubdtype(peaks.dtype, np.integer):
+        peaks = np.rint(valid_interpolated).astype(peaks.dtype)
+    else:
+        peaks = valid_interpolated.astype(peaks.dtype)
+    return peaks

@@ -153,12 +153,12 @@ def idfn(val):
 @pytest.mark.parametrize(
     "peaks_misaligned, iterative, rmssd_diff",
     [
-        (2, True, 27),
-        (2, False, 27),
-        (4, True, 113),
-        (4, False, 113),
-        (8, True, 444),
-        (8, False, 444),
+        (2, True, 35),
+        (2, False, 35),
+        (4, True, 134),
+        (4, False, 134),
+        (8, True, 467),
+        (8, False, 467),
     ],
     indirect=["peaks_misaligned"],
     ids=idfn,
@@ -268,3 +268,40 @@ def test_neurokit_method_returns_strictly_increasing_indices(testpeaks_for_neuro
         method="neurokit",
     )
     assert np.all(np.diff(peaks_corrected) > 0)
+
+
+def test_kubios_ectopic_and_fractional_peaks():
+    # Premature beat at index 50 must relocate peak 50 without corrupting peak 51,
+    # preserve initial artifacts with iterative=True, and preserve float peak positions (#1218).
+    rng = np.random.default_rng(0)
+    peaks_true = np.cumsum(1000.0 + rng.normal(0, 15, 100))
+    peaks_true[-1] += 0.5  # fractional sample position
+    peaks_ect = peaks_true.copy()
+    peaks_ect[50] -= 350.0
+
+    info, peaks_fixed = nk.signal_fixpeaks(peaks_ect, sampling_rate=1000, iterative=True, method="Kubios")
+    assert 51 in info["ectopic"]
+    assert np.isclose(peaks_fixed[51], peaks_true[51])
+    assert np.isclose(peaks_fixed[-1], peaks_true[-1])
+    assert abs(peaks_fixed[50] - peaks_true[50]) < 25.0
+
+
+def test_kubios_mrr_gate_and_boundary_index():
+    # Missed beat in constant-interval series (th1 == 0) and missed beat at index 1
+    peaks = np.delete(np.arange(0, 100000, 1000), [1, 50])
+    info, peaks_fixed = nk.signal_fixpeaks(peaks, sampling_rate=1000, iterative=False, method="Kubios")
+    assert 1 in info["missed"] and 49 in info["missed"]
+    assert np.array_equal(peaks_fixed, np.arange(0, 100000, 1000))
+
+
+def test_neurokit_gap_endpoints_and_list_input():
+    # Trailing gap and interior gap with varying post-gap interval should keep valid endpoints
+    _, p_tail = nk.signal_fixpeaks([0, 1000, 2000, 3000, 5000], interval_min=0.5, interval_max=1.5, method="neurokit")
+    assert np.array_equal(p_tail, np.array([0, 1000, 2000, 3000, 4000, 5000]))
+
+    _, p_var = nk.signal_fixpeaks(np.array([0, 1000, 2000, 3000, 5000, 5800]), interval_max=1.5, method="neurokit")
+    assert np.array_equal(p_var, np.array([0, 1000, 2000, 3000, 4000, 5000, 5800]))
+
+    # Short list with <= 3 peaks and leading extra noise should preserve peaks[0]
+    _, p_first = nk.signal_fixpeaks([1000, 1100, 2000], interval_min=0.5, method="neurokit")
+    assert np.array_equal(p_first, np.array([1000, 2000]))

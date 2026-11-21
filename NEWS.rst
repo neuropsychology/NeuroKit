@@ -698,6 +698,12 @@ Fixes
   documented peak dict (and the tuple or DataFrame returned by the ``*_peaks()`` functions) and
   raise a clear error with too few peaks. Any ``signal_name`` can now be plotted by
   ``signal_cyclesegment()``.
+* ``signal_fixpeaks(method="Kubios")`` evaluates the ``|mRRs| > 3`` branch when ``|dRRs| <= 1`` as
+  in Lipponen & Tarvainen (2019), relocates the misplaced ectopic peak ``j - 1`` instead of the
+  following peak ``j``, keeps detected artifact indices in ``info`` when ``iterative=True``,
+  corrects index-1 artifacts without shifting downstream indices, and preserves float peak
+  positions (#1218). ``method="neurokit"`` accepts list inputs, preserves valid gap-endpoint peaks,
+  and no longer drops ``peaks[0]`` or ``<= 3`` peaks.
 * ``signal_decompose(method="emd")`` accepts lists, Series and column arrays and passes PyEMD
   options correctly, and ``method="ssa"`` needs less memory and time on long signals.
 * ``signal_detrend()`` accepts ``(n, 1)`` column arrays (it could return an ``(n, n)`` matrix).
