@@ -59,8 +59,7 @@ def emg_intervalrelated(data):
                 "contains an `EMG_Onsets` column."
             )
         amplitude_cols = ["EMG_Amplitude", "EMG_Activity"]
-        len([col in data.columns for col in amplitude_cols])
-        if len(amplitude_cols) == 2:
+        if all(col in data.columns for col in amplitude_cols):
             data_bursts = data.loc[data["EMG_Activity"] == 1]
             intervals["Amplitude_Mean"] = data_bursts["EMG_Amplitude"].values.mean()
         else:
@@ -107,7 +106,7 @@ def _emg_intervalrelated_formatinput(interval, output=None):
         )
 
     activity_cols = ["EMG_Amplitude", "EMG_Activity"]
-    if len([i in colnames for i in activity_cols]) != 2:
+    if not all(col in colnames for col in activity_cols):
         raise ValueError(
             "NeuroKit error: emg_intervalrelated(): Wrong"
             "input, we couldn't extract EMG amplitudes."

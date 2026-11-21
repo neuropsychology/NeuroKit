@@ -78,6 +78,34 @@ def test_fit_loess():
     assert np.allclose(np.mean(signal - fit), -0.0201905899, atol=0.0001)
 
 
+def test_fit_error():
+    import sklearn.metrics
+
+    rng = np.random.default_rng(42)
+    x = np.linspace(0, 10, 200)
+    y_predicted = 3 * x + 2
+    n, n_parameters = len(x), 2
+
+    for noise in (0.5, 5.0):
+        y = y_predicted + noise * rng.standard_normal(n)
+        error = nk.fit_error(y, y_predicted, n_parameters=n_parameters)
+
+        r2 = sklearn.metrics.r2_score(y, y_predicted)
+        assert np.isclose(error["R2"], r2)
+        assert np.isclose(error["R2_adjusted"], 1 - (1 - r2) * (n - 1) / (n - n_parameters))
+        assert np.isclose(error["MSE"], sklearn.metrics.mean_squared_error(y, y_predicted))
+        assert np.isclose(error["RMSE"], np.sqrt(error["MSE"]))
+        assert np.isclose(nk.fit_r2(y, y_predicted, adjusted=False), r2)
+
+    # A perfect fit explains all the variance
+    error = nk.fit_error(y_predicted, y_predicted)
+    assert error["R2"] == 1
+    assert error["R2_adjusted"] == 1
+
+    # Lists are accepted too
+    assert np.isclose(nk.fit_error(list(y), list(y_predicted))["R2"], r2)
+
+
 def test_mad():
     simple_case = [0] * 10
     assert nk.mad(simple_case) == 0
@@ -88,6 +116,18 @@ def test_mad():
 
     negative_wikipedia_example = -wikipedia_example
     assert nk.mad(negative_wikipedia_example, constant=constant) == constant
+
+
+def test_mad_axis():
+    # With an axis, each column is centered on its own median
+    x = np.array([[1, 100], [2, 200], [3, 300]])
+    assert np.allclose(nk.mad(x, axis=0, constant=1), [1, 100])
+    assert np.allclose(nk.mad(x.T, axis=1, constant=1), [1, 100])
+
+    # Robust L2 GFP is the MAD across channels at each time point
+    eeg = np.array([[1.0, 10.0], [2.0, 20.0], [4.0, 50.0]])
+    gfp = nk.eeg_gfp(eeg, method="l2", robust=True)
+    assert np.allclose(gfp, [nk.mad(eeg[:, 0]), nk.mad(eeg[:, 1])])
 
 
 def create_sample_cluster_data(random_state):

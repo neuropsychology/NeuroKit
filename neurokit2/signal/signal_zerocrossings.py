@@ -43,6 +43,7 @@ def signal_zerocrossings(signal, direction="both"):
       plt.close()
 
     """
+    signal = np.asarray(signal, dtype=float)
     df = np.diff(np.sign(signal))
     if direction in ["positive", "up"]:
         zerocrossings = np.where(df > 0)[0]

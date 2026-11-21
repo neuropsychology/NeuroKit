@@ -257,6 +257,12 @@ def test_signal_findpeaks():
     assert len(info1["Peaks"]) > len(info2["Peaks"])
 
 
+def test_signal_zerocrossings_unsigned_direction():
+    signal = np.array([5, 0, 0, 7], dtype=np.uint8)
+    np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="positive"), [2])
+    np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="negative"), [0])
+
+
 def test_signal_merge():
     signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
     signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
@@ -781,3 +787,11 @@ def test_signal_formatpeaks_drops_every_nan_index():
     assert recovery_time[45] == 0.7
     assert np.count_nonzero(recovery_time) == 2
     assert np.all(np.where(signals["SCR_Recovery"] != 0)[0] == [25, 45])
+
+
+def test_signal_flatline_constant_signal():
+    # A constant signal is entirely flat; its largest change is 0, which used
+    # to make the threshold 0 so that no sample was counted as flat.
+    assert nk.signal_flatline(np.ones(100)) == 1.0
+    signal = np.concatenate([np.zeros(50), np.sin(np.linspace(0, 10, 50))])
+    assert 0 < nk.signal_flatline(signal) < 1
