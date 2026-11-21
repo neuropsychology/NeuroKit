@@ -133,7 +133,7 @@ def _signal_rate_plot(
         x_axis = np.arange(0, len(rate))
         ax.set_xlabel("Time (samples)")
     else:
-        x_axis = np.linspace(0, len(rate) / sampling_rate, len(rate))
+        x_axis = np.arange(len(rate)) / sampling_rate
         ax.set_xlabel("Time (seconds)")
 
     if not interpolated:

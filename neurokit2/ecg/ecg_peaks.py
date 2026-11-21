@@ -305,7 +305,7 @@ def _ecg_peaks_plot(
     phase=None,
     ax=None,
 ):
-    x_axis = np.linspace(0, len(ecg_cleaned) / sampling_rate, len(ecg_cleaned))
+    x_axis = np.arange(len(ecg_cleaned)) / sampling_rate
 
     # Prepare plot
     if ax is None:

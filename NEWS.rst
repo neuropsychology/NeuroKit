@@ -681,6 +681,7 @@ New Features
 Fixes
 +++++++++++++
 
+* The time axis of the plotting functions no longer stretches the signal by one sample.
 * ``signal_zerocrossings()`` returns the correct ``direction`` for unsigned integer signals.
 * ``signal_rate(show=True)`` works without ``desired_length`` and with dict or DataFrame peaks.
   Non-interpolated rates are plotted at the original peak locations.

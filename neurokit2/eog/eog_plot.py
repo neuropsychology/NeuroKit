@@ -70,7 +70,7 @@ def eog_plot(eog_signals, info=None):
         )
 
     # Prepare figure
-    x_axis = np.linspace(0, eog_signals.shape[0] / info["sampling_rate"], eog_signals.shape[0])
+    x_axis = np.arange(eog_signals.shape[0]) / info["sampling_rate"]
     gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[1 - 1 / np.pi, 1 / np.pi])
     fig = plt.figure(constrained_layout=False)
     ax0 = fig.add_subplot(gs[0, :-1])
