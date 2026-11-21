@@ -17,16 +17,15 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     change : str
         Can be one of ``"meanvar"`` (default), ``"mean"`` or ``"var"``.
     penalty : float
-        The algorithm penalty. Defaults to ``np.log(len(signal))``.
+        The algorithm penalty. Defaults to the Schwarz Information Criterion: ``np.log(len(signal))``
+        for ``"mean"``, twice that for ``"var"`` and three times that for ``"meanvar"``.
     show : bool
-        Defaults to ``False``.
+        If ``True``, plots the signal with markers of changepoints. Defaults to ``False``.
 
     Returns
     -------
     Array
         Values indicating the samples at which the changepoints occur.
-    Fig
-        Figure of plot of signal with markers of changepoints.
 
     Examples
     --------
@@ -47,7 +46,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
       linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
 
     """
-    signal = as_vector(signal)
+    signal = as_vector(signal).astype(float)
     changepoints = _signal_changepoints_pelt(signal, change=change, penalty=penalty)
 
     if show is True:
@@ -68,8 +67,10 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
     """
     # Initialize
     length = len(signal)
+    if len(np.unique(signal)) <= 1:
+        return np.array([], dtype=int)
     if penalty is None:
-        penalty = np.log(length)  # pylint: disable=E1111
+        penalty = {"mean": 1, "var": 2}.get(change.lower(), 3) * np.log(length)
     if change.lower() == "var":
         cost = _signal_changepoints_cost_var(signal)
     elif change.lower() == "mean":
@@ -80,9 +81,11 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
     # Run algorithm
     F = np.zeros(length + 1)
     R = np.array([0], dtype=int)
+    pruned = np.array([], dtype=int)
     candidates = np.zeros(length + 1, dtype=int)
 
     F[0] = -penalty  # pylint: disable=E1130
+    F[1] = np.inf
 
     for tstar in range(2, length + 1):
         cpt_cands = R
@@ -93,14 +96,15 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
         tau = np.nanargmin(F_cost)
         candidates[tstar] = cpt_cands[tau]
 
-        ineq_prune = [val < F[tstar] for val in F_cost]
-        R = [cpt_cands[j] for j, val in enumerate(ineq_prune) if val]
-        R.append(tstar - 1)
-        R = np.array(R, dtype=int)
+        R = np.append(cpt_cands[~np.isin(cpt_cands, pruned)], tstar - 1)
+        pruned = cpt_cands[F_cost >= F[tstar]]
 
-    changepoints = np.sort(np.unique(candidates[candidates]))
-    changepoints = changepoints[changepoints > 0]
-    return changepoints
+    changepoints = []
+    last = candidates[-1]
+    while last > 0:
+        changepoints.append(last)
+        last = candidates[last]
+    return np.array(changepoints[::-1], dtype=int)
 
 
 # =============================================================================
@@ -108,38 +112,40 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 # =============================================================================
 def _signal_changepoints_cost_mean(signal):
     """Cost function for a normally distributed signal with a changing mean."""
-    i_variance_2 = 1 / (np.var(signal) ** 2)
+    i_variance = 1 / (2 * np.var(signal))
     cmm = [0.0]
     cmm.extend(np.cumsum(signal))
 
     cmm2 = [0.0]
-    cmm2.extend(np.cumsum(np.abs(signal)))
+    cmm2.extend(np.cumsum(np.square(signal)))
 
     def cost(start, end):
         cmm2_diff = cmm2[end] - cmm2[start]
         cmm_diff = pow(cmm[end] - cmm[start], 2)
         i_diff = end - start
-        diff = cmm2_diff - cmm_diff
-        return (diff / i_diff) * i_variance_2
+        diff = cmm2_diff - cmm_diff / i_diff
+        return diff * i_variance
 
     return cost
 
 
 def _signal_changepoints_cost_var(signal):
     """Cost function for a normally distributed signal with a changing variance."""
+    floor = 1e-10 * np.var(signal)
     cumm = [0.0]
     cumm.extend(np.cumsum(np.power(np.abs(signal - np.mean(signal)), 2)))
 
     def cost(s, t):
         dist = float(t - s)
         diff = cumm[t] - cumm[s]
-        return dist * np.log(diff / dist)
+        return dist * np.log(max(diff / dist, floor))
 
     return cost
 
 
 def _signal_changepoints_cost_meanvar(signal):
     """Cost function for a normally distributed signal with a changing mean and variance."""
+    floor = 1e-10 * np.var(signal)
     signal = np.hstack(([0.0], np.array(signal)))
 
     cumm = np.cumsum(signal)
@@ -148,17 +154,7 @@ def _signal_changepoints_cost_meanvar(signal):
     def cost(s, t):
         ts_i = 1.0 / (t - s)
         mu = (cumm[t] - cumm[s]) * ts_i
-        sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu**2
-        sig_i = 1.0 / sig
-
-        if sig <= 0:
-            return np.nan
-        else:
-            return (
-                (t - s) * np.log(sig)
-                + (cumm_sq[t] - cumm_sq[s]) * sig_i
-                - 2 * (cumm[t] - cumm[s]) * mu * sig_i
-                + ((t - s) * mu**2) * sig_i
-            )
+        sig = max((cumm_sq[t] - cumm_sq[s]) * ts_i - mu**2, floor)
+        return (t - s) * (np.log(sig) + 1)
 
     return cost

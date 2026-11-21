@@ -198,6 +198,64 @@ def test_rsp_amplitude():
     assert np.abs(amplitude.mean() - 1) < 0.01
 
 
+@pytest.mark.parametrize("seed", [0, 2])
+def test_rsp_process_short_recording(seed):
+    rsp = nk.rsp_simulate(duration=8, sampling_rate=250, respiratory_rate=15, random_state=seed)
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="amplitude"):
+        signals, info = nk.rsp_process(rsp, sampling_rate=250)
+
+    assert len(signals) == len(rsp)
+    np.testing.assert_array_equal(signals["RSP_Raw"], rsp)
+    assert info["RSP_Peaks"].size == 0
+    assert info["RSP_Troughs"].size == 0
+    assert signals[["RSP_Phase", "RSP_Phase_Completion", "RSP_Amplitude", "RSP_Rate"]].isna().all().all()
+    assert signals[["RSP_Peaks", "RSP_Troughs"]].eq(0).all().all()
+
+
+@pytest.mark.parametrize("method", ["khodadad2018", "biosppy", "scipy"])
+@pytest.mark.parametrize("signal", [np.zeros(100), np.linspace(-1, 1, 100)])
+def test_rsp_findpeaks_without_cycles(method, signal):
+    info = nk.rsp_findpeaks(signal, sampling_rate=100, method=method)
+
+    for key in ["RSP_Peaks", "RSP_Troughs"]:
+        assert info[key].size == 0
+        assert np.issubdtype(info[key].dtype, np.integer)
+
+
+@pytest.mark.parametrize("empty", [[], np.array([]), np.array([], dtype=int), pd.Series([], dtype=float)])
+def test_rsp_phase_without_extrema(empty):
+    phase = nk.rsp_phase(empty, empty, desired_length=100)
+
+    assert phase.shape == (100, 2)
+    assert phase.isna().all().all()
+
+
+def test_rsp_amplitude_without_extrema():
+    empty = np.array([], dtype=int)
+    with pytest.warns(nk.misc.NeuroKitWarning, match="amplitude"):
+        amplitude = nk.rsp_amplitude(np.zeros(100), empty, empty)
+
+    assert amplitude.shape == (100,)
+    assert np.isnan(amplitude).all()
+
+
+@pytest.mark.parametrize("peaks_only", [True, False])
+def test_rsp_phase_amplitude_one_sided_extrema(peaks_only):
+    extrema = np.array([20, 60])
+    empty = np.array([], dtype=int)
+    peaks, troughs = (extrema, empty) if peaks_only else (empty, extrema)
+
+    phase = nk.rsp_phase(peaks, troughs, desired_length=100)
+    assert phase.shape == (100, 2)
+    assert phase.isna().all().all()
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="amplitude"):
+        amplitude = nk.rsp_amplitude(np.zeros(100), peaks, troughs)
+    assert amplitude.shape == (100,)
+    assert np.isnan(amplitude).all()
+
+
 def test_rsp_rav():
     rsp = nk.rsp_simulate(duration=45, sampling_rate=50, respiratory_rate=15, random_state=42)
     peak_signal, _ = nk.rsp_peaks(rsp, sampling_rate=50)

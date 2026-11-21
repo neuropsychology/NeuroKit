@@ -25,14 +25,20 @@ def ppg_eventrelated(epochs, silent=False):
         by the `Label` column (if not present, by the `Index` column). The analyzed features
         consist of the following:
 
+        Rate features use the sample nearest stimulus onset as baseline and summarize the samples
+        after that baseline sample. Maximum, minimum and mean rates are reported as changes from
+        baseline, not absolute rates. The standard deviation is the population standard deviation
+        of the post-baseline rates, not a change from baseline. Times are in seconds relative to
+        stimulus onset.
+
         .. codebookadd::
-            PPG_Rate_Baseline|The baseline heart rate (at stimulus onset).
-            PPG_Rate_Max|The maximum heart rate after stimulus onset.
-            PPG_Rate_Min|The minimum heart rate after stimulus onset.
-            PPG_Rate_Mean|The mean heart rate after stimulus onset.
-            PPG_Rate_SD|The standard deviation of the heart rate after stimulus onset.
-            PPG_Rate_Max_Time|The time at which maximum heart rate occurs.
-            PPG_Rate_Min_Time|The time at which minimum heart rate occurs.
+            PPG_Rate_Baseline|The heart rate at the sample nearest stimulus onset.
+            PPG_Rate_Max|The maximum change in heart rate from the onset baseline.
+            PPG_Rate_Min|The minimum change in heart rate from the onset baseline.
+            PPG_Rate_Mean|The mean change in heart rate from the onset baseline.
+            PPG_Rate_SD|The population standard deviation of the post-baseline heart rate.
+            PPG_Rate_Max_Time|The time of maximum post-baseline heart rate, relative to stimulus onset (seconds).
+            PPG_Rate_Min_Time|The time of minimum post-baseline heart rate, relative to stimulus onset (seconds).
 
         We also include the following *experimental* features related to the parameters of a
         quadratic model:

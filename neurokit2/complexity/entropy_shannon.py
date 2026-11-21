@@ -15,24 +15,28 @@ def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, 
 
     .. math::
 
-      ShanEn = -\\sum_{x \\in \\mathcal{X}} p(x) \\log_2 p(x)
+      ShanEn = -\\sum_{x \\in \\mathcal{X}} p(x) \\log_b p(x)
+
+    where *p(x)* is the proportion of the samples that are equal to the state *x* (states that do
+    not occur do not contribute), and *b* is the logarithmic ``base`` (2 by default, giving bits).
 
     Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
     (see :func:`entropy_differential`).
 
     Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B",
-    "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
-    the signal into a number of bins using for instance ``pd.cut(signal, bins=100, labels=False)``.
-    This can be done automatically using the ``method`` argument, which will be transferred to
-    :func:`complexity_symbolize`.
+    "B", "A"]), it does not do well with continuous signals: every distinct value is then a state.
+    One option is to binarize (i.e., cut) the signal into a number of bins using for instance
+    ``pd.cut(signal, bins=100, labels=False)``. This can be done automatically using the
+    ``symbolize`` argument, which will be transferred to :func:`complexity_symbolize`.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
-    base: float
+    signal : Union[list, np.array, pd.Series, str]
+        The signal (i.e., a time series) in the form of a vector of values. A string (e.g.,
+        ``"ABBA"``) is treated as a sequence of characters.
+    base : float
         The logarithmic base to use, defaults to ``2``, giving a unit in *bits*. Note that ``scipy.
         stats.entropy()`` uses Euler's number (``np.e``) as default (the natural logarithm), giving
         a measure of information expressed in *nats*.
@@ -41,12 +45,13 @@ def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, 
         default, which skips the process (and assumes the input is already discrete). See
         :func:`complexity_symbolize` for details.
     show : bool
-        If ``True``, will show the discrete the signal.
+        If ``True``, will show the discrete signal.
     freq : np.array
-        Instead of a signal, a vector of probabilities can be provided (used for instance in
-        :func:`entropy_permutation`).
+        Instead of a signal, a vector of probabilities (or counts, which are normalized) of each
+        state can be provided (used for instance in :func:`entropy_permutation`).
     **kwargs
-        Optional arguments. Not used for now.
+        Other arguments passed to :func:`complexity_symbolize`, such as ``c`` (the number of
+        symbols for the methods that need it) or ``random_state``.
 
 
     Returns
@@ -107,15 +112,15 @@ def entropy_shannon(signal=None, base=2, symbolize=None, show=False, freq=None, 
 
     """
     if freq is None:
-        _, freq = _entropy_freq(signal, symbolize=symbolize, show=show)
+        _, freq = _entropy_freq(signal, symbolize=symbolize, show=show, **kwargs)
 
     return scipy.stats.entropy(freq, base=base), {"Symbolization": symbolize, "Base": base}
 
 
 # =============================================================================
-# Compute frequencies (common to Shannon and Tsallis)
+# Compute frequencies (common to Shannon, Rényi, Tsallis and CREn)
 # =============================================================================
-def _entropy_freq(signal, symbolize=None, show=False):
+def _entropy_freq(signal, symbolize=None, show=False, **kwargs):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
@@ -128,8 +133,12 @@ def _entropy_freq(signal, symbolize=None, show=False):
     if not isinstance(signal, np.ndarray):
         signal = np.array(signal)
 
-    # Make discrete
-    if not np.isscalar(signal):
-        signal = complexity_symbolize(signal, method=symbolize, show=show)
+    # A numpy integer (e.g., np.int64(3)) is a number of bins, like a Python integer
+    if isinstance(symbolize, np.integer):
+        symbolize = int(symbolize)
+
+    # Make discrete (passing on the arguments of complexity_symbolize, such as the number of symbols)
+    options = {key: kwargs[key] for key in ["c", "random_state"] if key in kwargs}
+    signal = complexity_symbolize(signal, method=symbolize, show=show, **options)
 
     return np.unique(signal, return_counts=True)

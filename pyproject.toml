@@ -26,7 +26,8 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14"
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15"
 ]
 
 dependencies = [
@@ -37,7 +38,6 @@ dependencies = [
     "scikit-learn>=1.0.0",
     "matplotlib>=3.5.0",
     "PyWavelets>=1.4.0",
-    "setuptools<82.0.0",
 ]
 
 [project.optional-dependencies]
@@ -51,6 +51,7 @@ full = [
     "EMD-signal",
     "menpo",
     "menpodetect",
+    "setuptools",
     "pyrqa",
     "mne",
     "plotly",
@@ -68,7 +69,6 @@ test = [
     "pyentrp",
     "antropy",
     "EntropyHub",
-    "nolds<=0.6.2",
     "biosppy==0.6.1",
     "numba>=0.61.0",
     "llvmlite>=0.44.0",

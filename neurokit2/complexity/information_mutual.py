@@ -144,8 +144,11 @@ def mutual_information(x, y, method="varoquaux", bins="default", **kwargs):
             # Hacine-Gharbi (2018)
             # https://stats.stackexchange.com/questions/179674/
             # number-of-bins-when-computing-mutual-information
-            bins = 1 + np.sqrt(1 + (24 * len(x) / (1 - np.corrcoef(x, y)[0, 1] ** 2)))
-            bins = np.round((1 / np.sqrt(2)) * np.sqrt(bins)).astype(int)
+            rho2 = min(np.corrcoef(x, y)[0, 1] ** 2, 1 - 1e-12)  # avoid a division by zero when |rho| = 1
+            bins = 1 + np.sqrt(1 + (24 * len(x) / (1 - rho2)))
+            bins = int(np.round((1 / np.sqrt(2)) * np.sqrt(bins)))
+            # The formula diverges for perfectly correlated variables: cap the number of bins
+            bins = max(2, min(bins, int(np.sqrt(len(x)))))
 
         if method in ["varoquaux"]:
             mi = _mutual_information_varoquaux(x, y, bins=bins, **kwargs)

@@ -140,7 +140,9 @@ def _resample_numpy(signal, desired_length):
 
 
 def _resample_interpolation(signal, desired_length):
-    resampled_signal = scipy.ndimage.zoom(signal, desired_length / len(signal))
+    # The default mode returns 0 if rounding puts the last position past the end.
+    # This was a problem e.g., for beat lengths in ecg_simulate.
+    resampled_signal = scipy.ndimage.zoom(signal, desired_length / len(signal), mode="mirror")
     return resampled_signal
 
 

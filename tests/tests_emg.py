@@ -39,6 +39,15 @@ def test_emg_activation():
         assert i < j
 
 
+@pytest.mark.parametrize("burst_number", [1, 3])
+def test_emg_activation_pelt_labels_bursts(burst_number):
+    emg = nk.emg_simulate(duration=10, sampling_rate=500, burst_number=burst_number, random_state=0)
+    cleaned = nk.emg_clean(emg, sampling_rate=500)
+    signals, _ = nk.emg_activation(emg_cleaned=cleaned, sampling_rate=500, method="pelt")
+    active = signals["EMG_Activity"].to_numpy() == 1
+    assert cleaned[active].std() > cleaned[~active].std()
+
+
 def test_emg_clean():
     sampling_rate = 1000
 

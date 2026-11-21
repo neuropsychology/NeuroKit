@@ -41,6 +41,9 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     """
 
+    signal1 = np.asarray(signal1)
+    signal2 = np.asarray(signal2)
+
     # Resample signals if different
     sampling_rate1 = len(signal1) / np.diff(time1)[0]
     sampling_rate2 = len(signal2) / np.diff(time2)[0]

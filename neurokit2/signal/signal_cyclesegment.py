@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..epochs import epochs_create, epochs_to_df
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal.signal_rate import signal_rate
 
 
@@ -37,7 +38,7 @@ def signal_cyclesegment(
     dict
         A dict containing DataFrames for all segmented cycles.
     average_cycle_rate : float
-        The average cycle rate (e.g. heart rate, respiratory rate) (in Hz, i.e., samples/second)
+        The average cycle rate (e.g. heart rate, respiratory rate), in cycles per minute.
 
     See Also
     --------
@@ -61,6 +62,7 @@ def signal_cyclesegment(
     if len(signal_cleaned) < sampling_rate * 4:
         raise ValueError("The data length is too small to be segmented.")
 
+    cycle_indices = _signal_formatpeaks_sanitize(cycle_indices)
     epochs_start, epochs_end, average_cycle_rate = _segment_window(
         cycle_indices=cycle_indices,
         sampling_rate=sampling_rate,
@@ -114,7 +116,7 @@ def _segment_plot(cycles, cyclerate=0, signal_name="signal", color="#F44336", ax
         cycle_name = "breath"
         rate_name = "respiratory rate"
         rate_unit = "breaths per min"
-    elif signal_name == "signal":
+    else:
         cycle_name = "cycle"
         rate_name = "cycle rate"
         rate_unit = "per min"
@@ -166,6 +168,9 @@ def _segment_window(
             raise ValueError("Either `cycle_rate` or `cycle_indices` must be provided.")
     else:
         cycle_rate = np.mean(cycle_rate)  # In case it's an array
+
+    if np.isnan(cycle_rate):
+        raise ValueError("Too few cycle indices to compute the cycle rate (at least 4 are needed).")
 
     # Modulator
     # Note: this is based on quick internal testing but could be improved

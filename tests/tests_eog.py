@@ -1,3 +1,5 @@
+import sys
+
 import matplotlib.pyplot as plt
 import mne
 import numpy as np
@@ -59,6 +61,20 @@ def test_eog_findpeaks():
 
     blinker_peaks = nk.eog_findpeaks(eog_cleaned, method="blinker", sampling_rate=100)
     assert blinker_peaks.size == 14
+
+
+@pytest.mark.parametrize(
+    "function, kwargs, name",
+    [
+        (nk.eog_findpeaks, {}, "eog_findpeaks"),
+        (nk.eog_process, {}, "eog_findpeaks"),
+        (nk.eog_clean, {"method": "mne"}, "eog_clean"),
+    ],
+)
+def test_eog_missing_mne(monkeypatch, function, kwargs, name):
+    monkeypatch.setitem(sys.modules, "mne", None)
+    with pytest.raises(ImportError, match=rf"^NeuroKit error: {name}\(\).*pip install mne"):
+        function(np.zeros(1000), sampling_rate=100, **kwargs)
 
 
 def test_eog_process():

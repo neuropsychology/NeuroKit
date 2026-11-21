@@ -104,6 +104,12 @@ def test_signal_resample():
     assert np.allclose(np.mean(rez.mean()), 0.0001, atol=0.0001)
 
 
+def test_signal_resample_interpolation_last_sample():
+    # Rounding can put the last position just past the end of the signal, which must not give 0
+    resampled = nk.signal_resample(np.ones(512), desired_length=51200, method="interpolation")
+    assert np.allclose(resampled, 1)
+
+
 def test_signal_detrend():
     signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
     signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
@@ -258,6 +264,153 @@ def test_signal_merge():
     signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
     assert len(signal) == 150
     assert signal[0] == signal2[0] + signal2[0]
+
+
+@pytest.mark.parametrize("container", [list, pd.Series])
+@pytest.mark.parametrize(
+    "time1, time2, expected",
+    [
+        ([0, 4], [0, 4], [11, 22, 33, 44]),
+        ([0, 4], [2, 6], [11, 12, 13, 24, 34, 44]),
+        ([2, 6], [0, 4], [11, 21, 31, 42, 43, 44]),
+    ],
+)
+def test_signal_merge_input_types(container, time1, time2, expected):
+    merged = nk.signal_merge(container([1, 2, 3, 4]), container([10, 20, 30, 40]), time1, time2)
+    assert isinstance(merged, np.ndarray)
+    np.testing.assert_array_equal(merged, expected)
+
+
+def test_signal_merge_series_index():
+    signal1 = pd.Series([1, 2, 3, 4], index=[10, 11, 12, 13])
+    signal2 = pd.Series([10, 20, 30, 40], index=[20, 21, 22, 23])
+    np.testing.assert_array_equal(nk.signal_merge(signal1, signal2, [0, 4], [0, 4]), [11, 22, 33, 44])
+
+
+@pytest.mark.parametrize("unbiased", [False, True])
+@pytest.mark.parametrize("method", ["auto", "correlation", "fft"])
+def test_signal_autocor(method, unbiased):
+    signal = np.array([-1.01, 3.1, -0.03, -0.79, 2.4])
+    x = signal - signal.mean()
+    n = len(x)
+    acov = np.array([np.dot(x[: n - k], x[k:]) / ((n - k) if unbiased else 1) for k in range(n)])
+
+    r, _ = nk.signal_autocor(signal, method=method, unbiased=unbiased)
+    np.testing.assert_allclose(r, acov / acov[0])
+    assert nk.signal_autocor(signal, lag=1, method=method, unbiased=unbiased)[0] == pytest.approx(r[1])
+
+
+@pytest.mark.parametrize("lag", [5, -1, 1.5, np.inf, np.nan])
+def test_signal_autocor_invalid_lag(lag):
+    with pytest.raises(ValueError, match="whole number of samples"):
+        nk.signal_autocor([1, 2, 3, 4, 5], lag=lag)
+
+
+@pytest.mark.parametrize("signal", [np.zeros((20, 1)), np.zeros((20, 3)), [[1.0], [2.0]]])
+def test_signal_autocor_multidimensional(signal):
+    with pytest.raises(ValueError, match="Multidimensional"):
+        nk.signal_autocor(signal)
+
+
+@pytest.mark.parametrize("method", ["auto", "correlation", "fft"])
+def test_signal_autocor_integer_input(method):
+    signal = np.array([100, 120, 90, 130, 110, 140, 95, 125, 105, 135], dtype=np.int16)
+    r, _ = nk.signal_autocor(signal, demean=False, method=method)
+    expected, _ = nk.signal_autocor(signal.astype(float), demean=False, method=method)
+    np.testing.assert_allclose(r, expected)
+
+
+def test_signal_autocor_plot():
+    r, _ = nk.signal_autocor(np.sin(np.arange(20)), show=True)
+    x = plt.gca().get_lines()[-1].get_xdata()
+    plt.close("all")
+    np.testing.assert_array_equal(x, np.arange(len(r)))
+
+
+@pytest.mark.parametrize("change", ["mean", "var", "meanvar"])
+def test_signal_changepoints(change):
+    signal = np.concatenate([np.zeros(200), np.full(200, 5.0), np.full(200, 10.0)])
+    np.testing.assert_array_equal(nk.signal_changepoints(signal, change=change), [200, 400])
+    assert len(nk.signal_changepoints(np.full(200, 7.3), change=change)) == 0
+
+
+@pytest.mark.parametrize("change", ["mean", "var", "meanvar"])
+def test_signal_changepoints_noise(change):
+    signal = np.random.default_rng(0).normal(size=500)
+    assert len(nk.signal_changepoints(signal, change=change)) == 0
+
+
+@pytest.mark.parametrize("signal", [[], [1.0, 2.0, 4.0], [3.0, 1.0, 2.0, 0.0, 1.0, 3.0]])
+def test_signal_changepoints_no_change(signal):
+    assert len(nk.signal_changepoints(signal)) == 0
+
+
+def test_signal_changepoints_integer_overflow():
+    signal = np.concatenate([np.zeros(100), np.full(100, 5e9), np.full(100, 1e10)]).astype(np.int64)
+    np.testing.assert_array_equal(nk.signal_changepoints(signal, change="mean"), [100, 200])
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [{"max_imf": 2}, {"std_thr": 0.01}, {"extrema_detection": "simple"}, {"ensemble": True, "trials": 3, "parallel": False}],
+)
+def test_signal_decompose_emd_options(kwargs):
+    signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[1, 5], noise=0.05, random_state=42)
+    assert np.ndim(nk.signal_decompose(signal, method="emd", **kwargs)) == 2
+
+
+@pytest.mark.parametrize("convert", [list, pd.Series, lambda signal: signal.reshape(-1, 1)])
+def test_signal_decompose_emd_input_types(convert):
+    signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[1, 5], noise=0.05, random_state=42)
+    np.testing.assert_allclose(nk.signal_decompose(convert(signal)), nk.signal_decompose(signal))
+
+
+def test_signal_decompose_ssa_components():
+    signal = np.random.default_rng(0).normal(size=200)
+    components = nk.signal_decompose(signal, method="ssa", n_components=10)
+    assert components.shape == (10, 200)
+    np.testing.assert_allclose(components.sum(axis=0), signal)
+
+    sines = np.sin(2 * np.pi * np.arange(1000) / 50) + 0.5 * np.sin(2 * np.pi * np.arange(1000) / 20)
+    assert nk.signal_decompose(sines, method="ssa", n_components=20).shape == (4, 1000)
+
+
+@pytest.mark.parametrize("method", ["polynomial", "tarvainen2002", "loess"])
+def test_signal_detrend_column_input(method):
+    signal = nk.signal_simulate(duration=2, sampling_rate=100, noise=0.05, random_state=42)
+    expected = nk.signal_detrend(signal, method=method)
+    np.testing.assert_allclose(nk.signal_detrend(signal.reshape(-1, 1), method=method), expected)
+
+
+def test_signal_cyclesegment_any_signal_name():
+    signal = np.sin(np.linspace(0, 40 * np.pi, 2000))
+    ax = nk.signal_cyclesegment(signal, [100, 500, 900, 1300, 1700], sampling_rate=250, show="return", signal_name="eeg")
+    assert ax.get_ylabel() == "eeg"
+    plt.close("all")
+
+
+@pytest.mark.parametrize(
+    "format_peaks", [lambda signals, info: info, lambda signals, info: (signals, info), lambda signals, info: signals]
+)
+def test_signal_cyclesegment_peak_formats(format_peaks):
+    ppg = nk.ppg_clean(nk.ppg_simulate(duration=30, sampling_rate=100, random_state=1), sampling_rate=100)
+    signals, info = nk.ppg_peaks(ppg, sampling_rate=100)
+    cycles, _ = nk.signal_cyclesegment(ppg, format_peaks(signals, info), sampling_rate=100)
+    expected, _ = nk.signal_cyclesegment(ppg, info["PPG_Peaks"], sampling_rate=100)
+    assert cycles.keys() == expected.keys()
+
+
+def test_ecg_segment_peak_dict():
+    ecg = nk.ecg_clean(nk.ecg_simulate(duration=15, sampling_rate=500, random_state=1), sampling_rate=500)
+    _, info = nk.ecg_peaks(ecg, sampling_rate=500)
+    assert len(nk.ecg_segment(ecg, rpeaks=info, sampling_rate=500)) == len(info["ECG_R_Peaks"])
+
+
+@pytest.mark.parametrize("segment", [nk.signal_cyclesegment, nk.ecg_segment])
+@pytest.mark.parametrize("peaks", [[], [100, 200, 300]])
+def test_segment_too_few_peaks(segment, peaks):
+    with pytest.raises(ValueError, match="Too few"):
+        segment(np.sin(np.arange(1000)), np.array(peaks, dtype=int), sampling_rate=100)
 
 
 def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
@@ -601,3 +754,29 @@ def test_signal_quality():
     quality = nk.signal_quality(signal_zeros, cycle_inds=peaks, signal_type="ecg", method="ici", sampling_rate=sampling_rate)
 
     assert np.allclose(quality, np.zeros_like(quality))
+
+
+def test_signal_formatpeaks_drops_every_nan_index():
+    # Each nan index must be dropped with its own value, not only the first one
+    info = {
+        "SCR_Peaks": np.array([10, 20, 30, 40]),
+        "SCR_Recovery": np.array([np.nan, 25.0, np.nan, 45.0]),
+        "SCR_RecoveryTime": np.array([np.nan, 0.5, np.nan, 0.7]),
+    }
+    signals = nk.signal_formatpeaks(
+        info, desired_length=50, peak_indices=info["SCR_Peaks"], other_indices=info["SCR_Recovery"]
+    )
+
+    recovery_time = signals["SCR_RecoveryTime"]
+    assert recovery_time[25] == 0.5
+    assert recovery_time[45] == 0.7
+    assert np.count_nonzero(recovery_time) == 2
+    assert np.all(np.where(signals["SCR_Recovery"] != 0)[0] == [25, 45])
+
+
+def test_signal_flatline_constant_signal():
+    # A constant signal is entirely flat; its largest change is 0, which used
+    # to make the threshold 0 so that no sample was counted as flat.
+    assert nk.signal_flatline(np.ones(100)) == 1.0
+    signal = np.concatenate([np.zeros(50), np.sin(np.linspace(0, 10, 50))])
+    assert 0 < nk.signal_flatline(signal) < 1

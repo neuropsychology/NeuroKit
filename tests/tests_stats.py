@@ -78,6 +78,34 @@ def test_fit_loess():
     assert np.allclose(np.mean(signal - fit), -0.0201905899, atol=0.0001)
 
 
+def test_fit_error():
+    import sklearn.metrics
+
+    rng = np.random.default_rng(42)
+    x = np.linspace(0, 10, 200)
+    y_predicted = 3 * x + 2
+    n, n_parameters = len(x), 2
+
+    for noise in (0.5, 5.0):
+        y = y_predicted + noise * rng.standard_normal(n)
+        error = nk.fit_error(y, y_predicted, n_parameters=n_parameters)
+
+        r2 = sklearn.metrics.r2_score(y, y_predicted)
+        assert np.isclose(error["R2"], r2)
+        assert np.isclose(error["R2_adjusted"], 1 - (1 - r2) * (n - 1) / (n - n_parameters))
+        assert np.isclose(error["MSE"], sklearn.metrics.mean_squared_error(y, y_predicted))
+        assert np.isclose(error["RMSE"], np.sqrt(error["MSE"]))
+        assert np.isclose(nk.fit_r2(y, y_predicted, adjusted=False), r2)
+
+    # A perfect fit explains all the variance
+    error = nk.fit_error(y_predicted, y_predicted)
+    assert error["R2"] == 1
+    assert error["R2_adjusted"] == 1
+
+    # Lists are accepted too
+    assert np.isclose(nk.fit_error(list(y), list(y_predicted))["R2"], r2)
+
+
 def test_mad():
     simple_case = [0] * 10
     assert nk.mad(simple_case) == 0

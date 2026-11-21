@@ -292,3 +292,15 @@ def test_eda_report(tmp_path, method_cleaning, method_phasic, method_peaks):
     )
 
     assert p.is_file()
+
+
+@pytest.mark.parametrize("sampling_rate, lag", [(1000, 2.5), (1000.0, 2)])
+def test_eda_autocor(sampling_rate, lag):
+    eda = np.random.default_rng(33).random(8000)
+    expected = nk.signal_autocor(eda, lag=int(lag * 1000))[0]
+    assert nk.eda_autocor(eda, sampling_rate=sampling_rate, lag=lag) == pytest.approx(expected)
+
+
+def test_eda_autocor_lag_too_long():
+    with pytest.raises(ValueError, match="exceeds the duration"):
+        nk.eda_autocor(np.zeros(4000), sampling_rate=1000, lag=4)

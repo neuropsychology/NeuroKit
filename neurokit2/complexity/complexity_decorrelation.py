@@ -1,7 +1,10 @@
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_autocor
 
 
@@ -9,10 +12,14 @@ def complexity_decorrelation(signal, show=False):
     """**Decorrelation Time (DT)**
 
     The decorrelation time (DT) is defined as the time (in samples) of the first zero crossing of
-    the autocorrelation sequence. A shorter decorrelation time corresponds to a less correlated
+    the autocorrelation sequence, i.e., the first lag at which the autocorrelation of the (demeaned)
+    signal is zero or negative. A shorter decorrelation time corresponds to a less correlated
     signal. For instance, a drop in the decorrelation time of EEG has been observed prior to
     seizures, related to a decrease in the low frequency power (Mormann et al., 2005).
 
+    As the autocovariances of a demeaned signal at all lags sum to zero, the autocorrelation of any
+    non-constant signal crosses zero. DT is undefined (NaN) for constant signals and for signals with
+    missing values.
 
     Parameters
     ----------
@@ -23,8 +30,8 @@ def complexity_decorrelation(signal, show=False):
 
     Returns
     -------
-    float
-        Decorrelation Time (DT)
+    int
+        Decorrelation Time (DT), in samples (NaN if undefined).
     dict
         A dictionary containing additional information (currently empty, but returned nonetheless
         for consistency with other functions).
@@ -63,21 +70,32 @@ def complexity_decorrelation(signal, show=False):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+    signal = np.asarray(signal, dtype=float)
 
-    # Unbiased autocor (see https://github.com/mne-tools/mne-features/)
-    autocor, _ = signal_autocor(signal, unbiased=True)
+    if np.any(np.isnan(signal)):
+        warn("The signal contains missing values. Returning NaN.", category=NeuroKitWarning)
+        return np.nan, {}
+    if len(signal) == 0 or np.all(signal == signal[0]):
+        warn("The signal is constant, its autocorrelation is undefined. Returning NaN.", category=NeuroKitWarning)
+        return np.nan, {}
 
-    # Get zero-crossings
-    zc = np.diff(np.sign(autocor)) != 0
-    if np.any(zc):
-        dt = np.argmax(zc) + 1
-    else:
-        dt = -1
+    # Unbiased autocovariance (see https://github.com/mne-tools/mne-features/). Only its sign
+    # matters here, which the normalization by the number of overlapping samples does not change.
+    _, info = signal_autocor(signal, unbiased=True)
+    acov = info["ACov"]
+
+    # First lag at which the autocorrelation is zero or negative (it is positive at lag 0)
+    crossings = np.flatnonzero(acov <= 0)
+    if len(crossings) == 0:
+        # Only possible through rounding errors, as the autocovariances sum to zero
+        warn("The autocorrelation does not cross zero. Returning NaN.", category=NeuroKitWarning)
+        return np.nan, {}
+    dt = crossings[0]
 
     if show is True:
+        autocor = acov / acov[0]
         # Max length of autocorrelation to plot
-        max_len = int(dt * 4)
-        max_len = min(max_len, len(autocor))
+        max_len = min(int(dt * 4), len(autocor))
 
         plt.plot(autocor[0:max_len])
         plt.xlabel("Lag")
