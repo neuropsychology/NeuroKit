@@ -14,7 +14,9 @@ Changes in Results
 
 * ``fit_error()`` and ``fit_r2()`` now use the total sum of squares to compute R² as
   ``1 - SSE / SST`` and use that value for adjusted R². A perfect fit now returns 1.
-
+* ``hrv_time()`` now fits TINN across all left and right triangle endpoints and
+  includes the histogram tails in the fitting error. Isolated intervals no longer
+  force the fitted triangle to start at the shortest interval.
 * ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
 * ``expspace()`` returns different values when ``start`` is above 0.
 * ``entropy_approximate()`` (and ``entropy_fuzzy(approximate=True)``, ``entropy_range(approximate=True)``,
