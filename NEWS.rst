@@ -615,6 +615,8 @@ Changes in Results
   signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
   Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
+* ``mad()`` with an ``axis`` now centers each slice on its own median (it used the median of
+  the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
 
 New Features
 +++++++++++++

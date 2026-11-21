@@ -118,6 +118,18 @@ def test_mad():
     assert nk.mad(negative_wikipedia_example, constant=constant) == constant
 
 
+def test_mad_axis():
+    # With an axis, each column is centered on its own median
+    x = np.array([[1, 100], [2, 200], [3, 300]])
+    assert np.allclose(nk.mad(x, axis=0, constant=1), [1, 100])
+    assert np.allclose(nk.mad(x.T, axis=1, constant=1), [1, 100])
+
+    # Robust L2 GFP is the MAD across channels at each time point
+    eeg = np.array([[1.0, 10.0], [2.0, 20.0], [4.0, 50.0]])
+    gfp = nk.eeg_gfp(eeg, method="l2", robust=True)
+    assert np.allclose(gfp, [nk.mad(eeg[:, 0]), nk.mad(eeg[:, 1])])
+
+
 def create_sample_cluster_data(random_state):
     rng = nk.misc.check_random_state(random_state)
 
