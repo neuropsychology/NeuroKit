@@ -51,4 +51,4 @@ Miscellaneous
 
 .. automodule:: neurokit2.eog
    :members:
-   :exclude-members: eog_process, eog_analyze, eog_plot, eog_clean, eog_features, eog_peaks, eog_eventrelated, eog_intervalrelated, eog_findpeaks
+   :exclude-members: eog_process, eog_analyze, eog_plot, eog_clean, eog_features, eog_peaks, eog_eventrelated, eog_intervalrelated, eog_findpeaks, eog_rate

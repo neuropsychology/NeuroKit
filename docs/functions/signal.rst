@@ -77,6 +77,14 @@ Peaks
 """"""""""""""""""""
 .. autofunction:: neurokit2.signal_fixpeaks
 
+*signal_formatpeaks()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_formatpeaks
+
+*signal_tidypeaksonsets()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_tidypeaksonsets
+
 
 Analysis
 ^^^^^^^^^^^^^^^^
@@ -87,6 +95,10 @@ Analysis
 *signal_changepoints()*
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.signal_changepoints
+
+*signal_cyclesegment()*
+"""""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_cyclesegment
 
 *signal_period()*
 """"""""""""""""""""
@@ -107,6 +119,10 @@ Analysis
 *signal_psd()*
 """"""""""""""""""
 .. autofunction:: neurokit2.signal_psd
+
+*signal_quality()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_quality
 
 *signal_rate()*
 """"""""""""""""""
@@ -134,4 +150,4 @@ Analysis
 
 .. automodule:: neurokit2.signal
    :members:
-   :exclude-members: signal_simulate, signal_filter, signal_sanitize, signal_resample, signal_binarize, signal_decompose, signal_recompose, signal_detrend, signal_distort, signal_fillmissing, signal_flatline, signal_interpolate, signal_merge, signal_noise, signal_surrogate, signal_findpeaks, signal_fixpeaks, signal_autocor, signal_changepoints, signal_period, signal_phase, signal_plot, signal_power, signal_psd, signal_rate, signal_smooth, signal_synchrony, signal_timefrequency, signal_zerocrossings
+   :exclude-members: signal_simulate, signal_filter, signal_sanitize, signal_resample, signal_binarize, signal_decompose, signal_recompose, signal_detrend, signal_distort, signal_fillmissing, signal_flatline, signal_interpolate, signal_merge, signal_noise, signal_surrogate, signal_findpeaks, signal_fixpeaks, signal_autocor, signal_changepoints, signal_period, signal_phase, signal_plot, signal_power, signal_psd, signal_rate, signal_smooth, signal_synchrony, signal_timefrequency, signal_zerocrossings, signal_formatpeaks, signal_tidypeaksonsets, signal_cyclesegment, signal_quality

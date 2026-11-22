@@ -26,6 +26,10 @@ Parameters Choice
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_k
 
+*complexity_optimize()*
+"""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_optimize
+
 
 Fractal Dimension
 ^^^^^^^^^^^^^^^^^
@@ -76,6 +80,10 @@ Fractal Dimension
 *fractal_tmf()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_tmf
+
+*fractal_sda()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_sda
 
 Entropy
 ^^^^^^^^^^^^^^^^^
@@ -229,6 +237,10 @@ Other indices
 *mutual_information()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.mutual_information
+
+*information_gain()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.information_gain
 
 *complexity_hjorth()*
 """""""""""""""""""""""
