@@ -198,6 +198,63 @@ def test_cluster_microstates_method_routing():
     assert info["clustering_function"].func.__name__ == "_cluster_aahc"
 
 
+def test_cluster_sklearn_aahc_kmod_and_quality():
+    import sklearn.cluster
+
+    data, centres = create_sample_cluster_data(42)
+    k = len(centres)
+
+    # Hierarchical and agglomerative must dispatch to AgglomerativeClustering (not SpectralClustering)
+    pred_h, clusters_h, info_h = nk.cluster(data, method="hierarchical", n_clusters=k)
+    assert isinstance(info_h["sklearn_model"], sklearn.cluster.AgglomerativeClustering)
+    assert info_h["sklearn_model"].linkage == "ward"
+    assert info_h["clustering_function"].keywords["method"] == "hierarchical"
+    assert clusters_h.shape == (k, data.shape[1])
+
+    _, _, info_agg = nk.cluster(data, method="agglomerative", n_clusters=k)
+    assert info_agg["sklearn_model"].linkage == "single"
+
+    with pytest.raises(ValueError, match="not recognized"):
+        nk.cluster(data, method="unknown_method", n_clusters=2)
+
+    # AAHC must assign each sample to its highest-squared-correlation map (not largest Euclidean distance)
+    map0 = np.array([1.0, -1.0, 1.0, -1.0])
+    map1 = np.array([1.0, 1.0, -1.0, -1.0])
+    synth = np.vstack([np.outer([1, 2, -1.5, 0.8], map0), np.outer([1.2, -2.0, 0.9, -1.1], map1)])
+    pred_aahc, maps_aahc, _ = nk.cluster(synth, method="aahc", n_clusters=2, random_state=0)
+    labels_aahc = pred_aahc["Cluster"].to_numpy()
+    assert len(np.unique(labels_aahc[:4])) == 1
+    assert len(np.unique(labels_aahc[4:])) == 1
+    assert labels_aahc[0] != labels_aahc[4]
+    assert maps_aahc.shape == (2, 4)
+
+    # Modified k-means with integer inputs + non-convergence warning
+    int_data = np.round(synth * 10).astype(int)
+    with pytest.warns(nk.misc.NeuroKitWarning, match="failed to converge"):
+        pred_kmod, clusters_kmod, _ = nk.cluster(
+            int_data, method="kmod", n_clusters=2, max_iterations=1, threshold=0.0, random_state=0
+        )
+    assert clusters_kmod.shape == (2, 4) and len(pred_kmod) == len(int_data)
+
+    # cluster_quality for n_clusters != 4 (K=5), GaussianMixture (even for <10 rows), and info=None
+    pred_km, clusters_km, info_km = nk.cluster(data, method="kmeans", n_clusters=k, random_state=42)
+    indiv, gen = nk.cluster_quality(data, pred_km, clusters_km, info_km, n_random=3, random_state=42)
+    assert len(indiv) == len(data)
+    expected_disp = sum(
+        np.sum((data[pred_km["Cluster"] == c] - data[pred_km["Cluster"] == c].mean(axis=0)) ** 2) for c in range(k)
+    )
+    assert np.isclose(gen["Dispersion"].iloc[0], expected_disp)
+    assert gen["Score_GAP"].iloc[0] > 0
+    assert gen["Score_GAPmod_sk"].iloc[0] < gen["Score_GAPmod"].iloc[0]
+
+    _, gen_no_info = nk.cluster_quality(data, pred_km, clusters_km, info=None)
+    assert "Score_GAP" not in gen_no_info.columns
+
+    pred_gm, clusters_gm, info_gm = nk.cluster(data[:8], method="mixture", n_clusters=2, random_state=42)
+    _, gen_gm = nk.cluster_quality(data[:8], pred_gm, clusters_gm, info_gm, n_random=2, random_state=42)
+    assert np.isfinite(gen_gm["Score_AIC"].iloc[0]) and np.isfinite(gen_gm["Score_BIC"].iloc[0])
+
+
 def test_cor():
     # pearson
     wiki_example_x = np.array([1, 2, 3, 5, 8])

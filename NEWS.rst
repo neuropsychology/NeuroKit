@@ -973,6 +973,20 @@ Fixes
   and its expected values, notes that its ``**kwargs`` are passed to ``density()``, and no longer
   warns that the implementation is uncertain; its example no longer passes a ``method`` argument
   that was ignored.
+* ``cluster_quality()`` computes within-cluster dispersion, total variance and sum-of-squares from
+  cluster centroids in *O*(*N*) time and memory instead of building *N* × *N* ``pdist``/``cdist``
+  distance matrices (e.g., 3.5 ms instead of 0.24 s for 5,000 samples, avoiding ``MemoryError`` on
+  standard EEG recordings), uses the actual cluster count instead of hardcoding ``n_clusters=4`` in
+  dispersion and GEV, uses the clustering function's assignments and reference mean in GAP/GAP*
+  (Mohajer et al., 2011), and drops an unused 10-fold ``cross_val_score`` call on mixture models.
+  ``cluster()`` now forwards ``method`` to ``_cluster_sklearn()`` (``"hierarchical"`` and
+  ``"agglomerative"`` ran ``SpectralClustering``), assigns samples in ``"aahc"`` by maximum squared
+  spatial correlation rather than maximum Euclidean distance, uses ``cdist`` in ``"kmedoids"``, and
+  fixes integer inputs and the non-convergence warning in ``"kmod"``. ``microstates_findnumber()``
+  uses ``np.nanargmax()`` and requires ``n_max >= 4`` for ``method="KL"`` (``np.argmax()`` always
+  returned 2 because the first entry is ``NaN``), ``microstates_static()`` vectorises run-length
+  encoding and supports string state labels, and ``microstates_plot()`` unwraps ``info["Info"]``,
+  supports array inputs without MNE ``Info``, and returns ``fig``.
 * ``entropy_range()`` is 4 to 6 times faster (the range distances are computed by blocks with
   array operations instead of a loop over the vectors), returns NaN with a warning for constant
   signals (whose range distances are all undefined) and for signals with missing values (instead

@@ -4,7 +4,6 @@ import scipy.spatial
 import sklearn.cluster
 import sklearn.metrics
 import sklearn.mixture
-import sklearn.model_selection
 
 from ..misc import check_random_state
 
@@ -80,6 +79,10 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, ran
 
     if isinstance(clustering, pd.DataFrame):
         clustering = clustering["Cluster"].values
+    clustering = np.asarray(clustering)
+    data = np.asarray(data, dtype=float)
+    clusters = np.asarray(clusters, dtype=float)
+    n_clusters = len(clusters)
 
     individual, general = _cluster_quality_sklearn(data, clustering, clusters)
 
@@ -91,22 +94,22 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, ran
 
     # Variance explained
     general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters, clustering)
-    general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, **kwargs)
+    general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, n_clusters=n_clusters, **kwargs)
     general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
     # Dispersion
-    general["Dispersion"] = _cluster_quality_dispersion(data, clustering, **kwargs)
+    general["Dispersion"] = _cluster_quality_dispersion(data, clustering, n_clusters=n_clusters, **kwargs)
 
     # Gap statistic
-    general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random, rng=rng))
+    if info is not None and "clustering_function" in info:
+        general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random, rng=rng))
 
     # Mixture models
-    if "sklearn_model" in info:
+    if info is not None and "sklearn_model" in info:
         if isinstance(info["sklearn_model"], sklearn.mixture.GaussianMixture):
             general["Score_AIC"] = info["sklearn_model"].aic(data)
             general["Score_BIC"] = info["sklearn_model"].bic(data)
             general["Score_LogLikelihood"] = info["sklearn_model"].score(data)
-            sklearn.model_selection.cross_val_score(info["sklearn_model"], data, cv=10)
 
     general = pd.DataFrame.from_dict(general, orient="index").T
     return individual, general
@@ -150,42 +153,40 @@ def _cluster_quality_distance(data, clusters, to_dataframe=False):
 
 def _cluster_quality_sumsquares(data, clusters, clustering):
     """Sumsquares of the distance of each data point to its respective cluster"""
-    distance = _cluster_quality_distance(data, clusters)
-    min_distance = []  # distance from each sample to the centroid of its cluster
-    for idx in range(len(data)):
-        cluster_identity = clustering[idx]
-        min_distance.append(distance[idx, cluster_identity])
-    min_distance_squared = [i**2 for i in min_distance]
-    return np.sum(min_distance_squared)
+    data = np.asarray(data, dtype=float)
+    clusters = np.asarray(clusters, dtype=float)
+    clustering = np.asarray(clustering, dtype=int)
+    return float(np.nansum((data - clusters[clustering]) ** 2))
 
 
-def _cluster_quality_dispersion(data, clustering, n_clusters=4):
-    """Sumsquares of the distances between samples within each clusters.
+def _cluster_quality_dispersion(data, clustering, n_clusters=None, **kwargs):
+    """Sumsquares of the distances between samples within each cluster.
     An error measure for a n_clusters cluster where the lower the better.
     Can be used to compare and find the optimal number of clusters.
     """
+    data = np.asarray(data, dtype=float)
+    clustering = np.asarray(clustering)
+    states = np.unique(clustering) if n_clusters is None else range(n_clusters)
 
-    dispersion_state = np.full(n_clusters, np.nan)
-    for i in range(n_clusters):
-        idx = clustering == i
-        data_state = data[idx, :]
-        state_size = len(data_state)  # number of samples in this cluster
-        if state_size > 0:
-            # pair-wise distance between members of the same cluster
-            distance = scipy.spatial.distance.cdist(data_state, data_state)
-            # sumsquares of distances
-            dispersion_state[i] = 0.5 * np.nansum(distance**2) / state_size
-        else:
-            dispersion_state[i] = np.nan
+    dispersion_total = 0.0
+    for state in states:
+        data_state = data[clustering == state]
+        if len(data_state) > 0:
+            # Identity: (1 / (2 * n)) * sum_{u,v} ||x_u - x_v||^2 == sum_u ||x_u - mean(x)||^2
+            center = np.nanmean(data_state, axis=0)
+            dispersion_total += float(np.nansum((data_state - center) ** 2))
 
-    dispersion = np.nansum(dispersion_state)
-    return dispersion
+    return np.float64(dispersion_total)
 
 
 def _cluster_quality_variance(data, clusters, clustering):
     """Variance explained by clustering"""
+    data = np.asarray(data, dtype=float)
     sum_squares_within = _cluster_quality_sumsquares(data, clusters, clustering)
-    sum_squares_total = np.sum(scipy.spatial.distance.pdist(data) ** 2) / data.shape[0]
+    # Identity: sum(pdist(data)**2) / n == sum((data - mean(data, axis=0))**2)
+    sum_squares_total = float(np.nansum((data - np.nanmean(data, axis=0)) ** 2))
+    if sum_squares_total == 0.0:
+        return np.nan
     return (sum_squares_total - sum_squares_within) / sum_squares_total
 
 
@@ -195,6 +196,8 @@ def _cluster_quality_gap(data, clusters, clustering, info, n_random=10, rng=None
     The GAP statistic compares the total within intra-cluster variation for different values of k
     with their expected values under null reference distribution of the data.
     """
+    if rng is None:
+        rng = check_random_state(None)
     dispersion = _cluster_quality_sumsquares(data, clusters, clustering)
 
     mins, maxs = np.min(data, axis=0), np.max(data, axis=0)
@@ -205,26 +208,29 @@ def _cluster_quality_gap(data, clusters, clustering, info, n_random=10, rng=None
         random_data = rng.uniform(size=data.shape)
 
         # Rescale random
-        m = (maxs - mins) / (np.max(random_data, axis=0) - np.min(random_data, axis=0))
+        span = np.max(random_data, axis=0) - np.min(random_data, axis=0)
+        span = np.where(span == 0, 1.0, span)
+        m = (maxs - mins) / span
         b = mins - (m * np.min(random_data, axis=0))
-        random_data = np.array(m) * random_data + np.array(b)
+        random_data = m * random_data + b
 
-        # Cluster random
-        _, random_clusters, info = info["clustering_function"](random_data)
-        random_activation = random_clusters.dot(random_data.T)
-        random_clustering = np.argmax(np.abs(random_activation), axis=0)
+        # Cluster random using the actual clustering assignments returned by clustering_function
+        random_clustering_df, random_clusters, _ = info["clustering_function"](random_data)
+        random_clustering = random_clustering_df["Cluster"].to_numpy()
         dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters, random_clustering)
 
     # Compute GAP
-    gap = np.mean(np.log(dispersion_random)) - np.log(dispersion)
+    log_disp_random = np.log(dispersion_random)
+    gap = np.mean(log_disp_random) - np.log(dispersion)
 
     # Compute standard deviation
-    sd_k = np.sqrt(np.mean((np.log(dispersion_random) - np.mean(np.log(dispersion_random))) ** 2.0))
+    sd_k = np.sqrt(np.mean((log_disp_random - np.mean(log_disp_random)) ** 2.0))
     s_k = np.sqrt(1.0 + 1.0 / n_random) * sd_k
 
     # Calculate Gap* statistic by Mohajer (2011)
-    gap_star = np.mean(dispersion_random) - dispersion
-    sd_k_star = np.sqrt(np.mean((dispersion_random - dispersion) ** 2.0))
+    mean_disp_random = np.mean(dispersion_random)
+    gap_star = mean_disp_random - dispersion
+    sd_k_star = np.sqrt(np.mean((dispersion_random - mean_disp_random) ** 2.0))
     s_k_star = np.sqrt(1.0 + 1.0 / n_random) * sd_k_star
 
     out = {
@@ -277,19 +283,23 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
 #     return gev_total
 
 
-def _cluster_quality_gev(data, clusters, clustering, sd=None, n_clusters=4):
+def _cluster_quality_gev(data, clusters, clustering, sd=None, n_clusters=None, **kwargs):
     """Global Variance Explained (GEV)"""
+    if n_clusters is None:
+        n_clusters = len(clusters)
     if sd is None:
         sd = np.nanstd(data, axis=1)
     map_corr = _correlate_vectors(data.T, clusters[clustering].T)
 
     gev_all = np.zeros(n_clusters)
+    denom = np.nansum(sd**2)
+    if denom == 0:
+        return np.nan, np.full(n_clusters, np.nan)
     for state in range(n_clusters):
         idx = clustering == state
-        gev_all[state] = np.nansum((sd[idx] * map_corr[idx]) ** 2) / np.nansum(sd**2)
+        gev_all[state] = np.nansum((sd[idx] * map_corr[idx]) ** 2) / denom
 
     gev = np.nansum(gev_all)
-    #    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)
     return gev, gev_all
 
 

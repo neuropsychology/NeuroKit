@@ -66,20 +66,32 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
             info = microstates["Info"]
         if gfp is None and "GFP" in microstates.keys():
             gfp = microstates["GFP"]
-        segmentation = microstates["Sequence"]
+        if segmentation is None and "Sequence" in microstates.keys():
+            segmentation = microstates["Sequence"]
         microstates = microstates["Microstates"]
+
+    if isinstance(info, dict) and not isinstance(info, mne.Info) and "Info" in info:
+        info = info["Info"]
 
     # Sanity checks
     if gfp is None:
         raise ValueError("GFP data must be passed to 'gfp' in order to plot the segmentation.")
+    if segmentation is None:
+        raise ValueError("Segmentation sequence must be passed to 'segmentation' in order to plot.")
+
+    gfp = np.asarray(gfp)
+    segmentation = np.asarray(segmentation)
 
     # Prepare figure layout
     n = len(microstates)
     fig, ax = plt.subplot_mosaic([np.arange(n), ["GFP"] * n])
 
     # Plot topomaps -----------------------------------------------------------
-    for i, map in enumerate(microstates):
-        _, _ = mne.viz.plot_topomap(map, info, axes=ax[i], ch_type="eeg", show=False)
+    for i, map_vals in enumerate(microstates):
+        if info is not None:
+            _, _ = mne.viz.plot_topomap(map_vals, info, axes=ax[i], ch_type="eeg", show=False)
+        else:
+            ax[i].bar(np.arange(len(map_vals)), map_vals)
         ax[i].set_title(f"{i}")
 
     # Plot GFP ---------------------------------------------------------------
@@ -94,6 +106,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
         segmentation = segmentation[0 : len(gfp)]
     if len(segmentation) < len(gfp):
         gfp = gfp[0 : len(segmentation)]
+        times = times[0 : len(segmentation)]
 
     if epoch is None:
         epoch = (0, len(gfp))
@@ -122,3 +135,4 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None, epoch=
         ax["GFP"].set_xlabel("Sample")
     ax["GFP"].set_ylabel("Global Field Power (GFP)")
     ax["GFP"].set_title("Microstates Sequence")
+    return fig

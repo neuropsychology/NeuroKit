@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
-from ..misc import as_vector, find_groups
+from ..misc import as_vector
 
 
 def microstates_static(microstates, sampling_rate=1000, show=False):
@@ -78,19 +78,21 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 # Duration
 # =============================================================================
 def _microstates_duration(microstates, sampling_rate=1000, out=None):
+    microstates = np.asarray(microstates)
     states = np.unique(microstates)
 
     if out is None:
         out = {}
 
-    # Find durations of each state
-    groups = find_groups(microstates)
-    # Initialize empty containers for duration and type
-    durations = np.full(len(groups), np.nan)
-    types = np.full(len(groups), np.nan)
-    for i, group in enumerate(groups):
-        types[i] = group[0]
-        durations[i] = len(group) / sampling_rate
+    if len(microstates) == 0:
+        out["Average_DurationMean"] = np.nan
+        out["Average_DurationMedian"] = np.nan
+        return out, np.array([], dtype=float), np.array([], dtype=microstates.dtype)
+
+    # Vectorized run-length encoding preserving state label dtype (e.g., int or str)
+    change_idx = np.r_[0, np.flatnonzero(microstates[1:] != microstates[:-1]) + 1, len(microstates)]
+    types = microstates[change_idx[:-1]]
+    durations = np.diff(change_idx) / sampling_rate
 
     # Average duration
     for s in states:
@@ -167,12 +169,12 @@ def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_d
     else:
         fig = None
 
-    for s in states:
-        ax_prop.bar(s, out[str(s) + "_Proportion"])
+    for idx, s in enumerate(states):
+        ax_prop.bar(idx, out[str(s) + "_Proportion"])
         ax_distrib.plot(lifetimes[s], label=str(s))
 
-    plt.legend()
-    ax_prop.set_xticks(range(len(states)))
+    ax_distrib.legend()
+    ax_prop.set_xticks(range(len(states)), labels=[str(s) for s in states])
     ax_prop.set_title("Proportion")
     ax_distrib.set_title("Lifetime Distribution")
 
@@ -186,37 +188,22 @@ def _microstates_lifetime(microstates, out=None):
 
     Compute the lifetime distributions for each symbol in a symbolic sequence X with ns symbols.
     """
-    n = len(microstates)
+    microstates = np.asarray(microstates)
     states = np.unique(microstates)
 
-    tau_dict = {s: [] for s in states}
-    s = microstates[0]  # current symbol
-    tau = 1.0  # current lifetime
-    for i in range(1, n):
-        if microstates[i] == s:
-            tau += 1.0
-        else:
-            tau_dict[s].append(tau)
-            s = microstates[i]
-            tau = 1.0
-    tau_dict[s].append(tau)  # last state
-
-    # Initialize empty distributions with max lifetime for each symbol
     lifetimes = {}
-    for s in states:
-        lifetimes[s] = np.zeros(int(np.max(tau_dict[s])))
-
-    # Lifetime distributions
-    for s in states:
-        for j in range(len(tau_dict[s])):
-            tau = tau_dict[s][j]
-            lifetimes[s][int(tau) - 1] += 1.0
+    if len(microstates) > 0:
+        change_idx = np.r_[0, np.flatnonzero(microstates[1:] != microstates[:-1]) + 1, len(microstates)]
+        run_states = microstates[change_idx[:-1]]
+        run_lengths = np.diff(change_idx)
+        for s in states:
+            taus = run_lengths[run_states == s]
+            lifetimes[s] = np.bincount(taus - 1, minlength=int(np.max(taus))).astype(float)
 
     # Get Area under curve (AUCs)
     if out is None:
         out = {}
-    trapezoid = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     for s in states:
-        out[str(s) + "_LifetimeDistribution"] = trapezoid(lifetimes[s])
+        out[str(s) + "_LifetimeDistribution"] = np.trapezoid(lifetimes[s])
 
     return out, lifetimes
