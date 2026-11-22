@@ -7,6 +7,10 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: check-added-large-files
+        exclude: ^data/
+      - id: check-added-large-files
+        files: ^data/
+        args: [--maxkb=10240]
 
   # 2. Ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
