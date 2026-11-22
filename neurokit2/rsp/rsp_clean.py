@@ -6,7 +6,6 @@ import scipy.signal
 
 from ..misc import NeuroKitWarning, as_vector
 from ..signal import signal_detrend, signal_filter
-from ..stats import mad
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
@@ -94,7 +93,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
     elif method == "biosppy":
         clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     elif method in ["power", "power2020", "hampel"]:
-        clean = _rsp_clean_hampel(rsp_signal, **kwargs)
+        clean = _rsp_clean_hampel(rsp_signal, sampling_rate=sampling_rate, **kwargs)
     elif method in ["charlton", "charlton2021"]:
         clean = _rsp_clean_charlton2021(rsp_signal, sampling_rate)
     elif method is None or method == "none":
@@ -111,7 +110,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018", **kwargs):
 # Handle missing data
 # =============================================================================
 def _rsp_clean_missing(rsp_signal):
-    rsp_signal = pd.DataFrame.pad(pd.Series(rsp_signal))
+    rsp_signal = pd.Series(rsp_signal).ffill().bfill().to_numpy()
 
     return rsp_signal
 
@@ -204,25 +203,36 @@ def _rsp_clean_hampel(rsp_signal, sampling_rate=1000, window_length=0.1, thresho
     ----------
     rsp_signal : Union[list, np.array, pd.Series]
         The raw respiration channel (as measured, for instance, by a respiration belt).
-    window_length : int, optional
+    window_length : float, optional
         Window to be considered when cleaning, by default 0.1. In seconds.
     threshold : float, optional
         Threshold of deviations after which a point is considered an outlier, by default 3.
 
     """
     # Get window length in samples
-    window_length = int(window_length * sampling_rate)
+    window_length = max(1, int(round(window_length * sampling_rate)))
 
-    # Convert to Series to use its rolling methods
-    rsp_signal = pd.Series(rsp_signal)
+    arr = np.array(as_vector(rsp_signal), dtype=float, copy=True)
+    n = len(arr)
+    if n < window_length:
+        return arr
 
-    rolling_median = rsp_signal.rolling(window=window_length, center=True).median()
-    rolling_MAD = rsp_signal.rolling(window=window_length, center=True).apply(mad)
+    rolling_median = pd.Series(arr).rolling(window=window_length, center=True).median().to_numpy()
 
-    threshold = threshold * rolling_MAD
-    difference = np.abs(rsp_signal - rolling_median)
-    # Find outliers
-    outlier_idx = difference > threshold
-    # Substitute outliers with rolling median
-    rsp_signal[outlier_idx] = rolling_median[outlier_idx]
-    return as_vector(rsp_signal)
+    # Vectorized rolling MAD in chunks to match scipy's normal-consistent MAD without Python callbacks
+    n_windows = n - window_length + 1
+    offset = window_length // 2
+    windows = np.lib.stride_tricks.sliding_window_view(arr, window_length)
+    med_valid = rolling_median[offset : offset + n_windows]
+
+    rolling_mad = np.full(n, np.nan)
+    chunk_size = 4096
+    for start in range(0, n_windows, chunk_size):
+        stop = min(start + chunk_size, n_windows)
+        rolling_mad[offset + start : offset + stop] = 1.482602218505602 * np.median(
+            np.abs(windows[start:stop] - med_valid[start:stop, None]), axis=-1
+        )
+
+    outlier_idx = np.abs(arr - rolling_median) > (threshold * rolling_mad)
+    arr[outlier_idx] = rolling_median[outlier_idx]
+    return arr

@@ -69,8 +69,14 @@ def rsp_rate(
     if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
         if troughs is None:
             _, troughs = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
+        if isinstance(troughs, tuple):
+            # Handle (signals, info) tuple returned directly by rsp_peaks()
+            troughs = troughs[1]
         if isinstance(troughs, (pd.DataFrame, dict)):
             troughs = troughs["RSP_Troughs"]
+        troughs = np.asarray(troughs)
+        if len(troughs) > 2 and len(troughs) == len(rsp_cleaned) and np.all(np.isin(troughs, [0, 1])):
+            troughs = np.where(troughs == 1)[0]
         rate = signal_rate(
             troughs,
             sampling_rate=sampling_rate,
@@ -100,44 +106,64 @@ def rsp_rate(
 
 def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1, interpolation_method="monotone_cubic"):
     N = len(rsp_cleaned)
-    # Downsample data to 10Hz
+    if N == 0:
+        return np.array([], dtype=float)
+
+    # Downsample data to 10 Hz (sufficient for up to 30 breaths/min = 0.5 Hz)
     desired_sampling_rate = 10
-    rsp = signal_resample(rsp_cleaned, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
+    if sampling_rate > desired_sampling_rate:
+        rsp = signal_resample(rsp_cleaned, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
+        effective_sr = desired_sampling_rate
+    else:
+        rsp = np.asarray(rsp_cleaned, dtype=float)
+        effective_sr = sampling_rate
 
-    # Define paramters
-    window_length = int(desired_sampling_rate * window)
+    if len(rsp) < 2:
+        return np.full(N, np.nan)
 
-    rsp_rate = []
-    for start in np.arange(0, N, hop_size):
-        window_segment = rsp[start : start + window_length]
-        if len(window_segment) < window_length:
-            break  # the last frames that are smaller than windlow_length
-        # Calculate the 1-order difference
-        diff = np.ediff1d(window_segment)
-        norm_diff = diff / np.max(diff)
-        # Find xcorr for all frequencies with diff
-        xcorr = []
-        t = np.linspace(0, window, len(diff))
-        for frequency in np.arange(5 / 60, 30.25 / 60, 0.25 / 60):
-            # Define the sin waves
-            sin_wave = np.sin(2 * np.pi * frequency * t)
-            # Calculate cross-correlation
-            _xcorr = np.corrcoef(norm_diff, sin_wave)[0, 1]
-            xcorr.append(_xcorr)
+    window_length = max(2, min(len(rsp), int(round(effective_sr * window))))
+    hop_ds = max(1, int(round(hop_size * effective_sr / sampling_rate)))
 
-        # Find frequency with the highest xcorr with diff
-        max_frequency_idx = np.argmax(xcorr)
-        max_frequency = np.arange(5 / 60, 30.25 / 60, 0.25 / 60)[max_frequency_idx]
-        # Append max_frequency to rsp_rate - instanteneous rate
-        rsp_rate.append(max_frequency)
+    starts = np.arange(0, len(rsp) - window_length + 1, hop_ds)
+    all_windows = np.lib.stride_tricks.sliding_window_view(rsp, window_length)[starts]
 
-    x = np.arange(len(rsp_rate))
-    y = rsp_rate
-    rsp_rate = signal_interpolate(x, y, x_new=len(rsp_cleaned), method=interpolation_method)
-    # Smoothing
-    rsp_rate = signal_filter(rsp_rate, highcut=0.1, order=4, sampling_rate=sampling_rate)
+    # Center and normalize each window
+    win_centered = all_windows - all_windows.mean(axis=1, keepdims=True)
+    win_norms = np.linalg.norm(win_centered, axis=1, keepdims=True)
+    valid = win_norms[:, 0] > 0
+    if not np.any(valid):
+        return np.full(N, np.nan)
 
-    # Convert to Brpm
+    win_unit = np.zeros_like(win_centered)
+    win_unit[valid] = win_centered[valid] / win_norms[valid]
+
+    # Build orthonormal quadrature (sin, cos) basis across candidate frequencies (5 to 30 bpm)
+    frequencies = np.arange(5 / 60, 30.25 / 60, 0.25 / 60)
+    t = np.arange(window_length) / effective_sr
+    angles = 2 * np.pi * frequencies[:, None] * t[None, :]
+
+    sin_centered = np.sin(angles)
+    sin_centered -= sin_centered.mean(axis=1, keepdims=True)
+    e1 = sin_centered / np.linalg.norm(sin_centered, axis=1, keepdims=True)
+
+    cos_centered = np.cos(angles)
+    cos_centered -= cos_centered.mean(axis=1, keepdims=True)
+    cos_orth = cos_centered - np.sum(cos_centered * e1, axis=1, keepdims=True) * e1
+    e2 = cos_orth / np.linalg.norm(cos_orth, axis=1, keepdims=True)
+
+    # Phase-invariant correlation amplitude for every window and candidate frequency
+    xcorr = np.hypot(win_unit @ e1.T, win_unit @ e2.T)
+    max_freqs = frequencies[np.argmax(xcorr, axis=1)]
+
+    # Interpolate valid window centers back to original sample grid
+    centers = (starts[valid] + (window_length - 1) / 2.0) * (sampling_rate / effective_sr)
+    rsp_rate = signal_interpolate(centers, max_freqs, x_new=np.arange(N), method=interpolation_method)
+
+    # Smooth instantaneous rate when signal is long enough for order-4 filtfilt and Nyquist allows 0.1 Hz
+    if N > 15 and sampling_rate > 0.2 and np.ptp(rsp_rate) > 0:
+        rsp_rate = signal_filter(rsp_rate, highcut=0.1, order=4, sampling_rate=sampling_rate)
+
+    # Convert Hz to breaths per minute
     rsp_rate = np.multiply(rsp_rate, 60)
 
-    return np.array(rsp_rate)
+    return np.asarray(rsp_rate, dtype=float)

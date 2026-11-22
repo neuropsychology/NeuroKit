@@ -71,7 +71,7 @@ def emg_eventrelated(epochs, silent=False):
                 category=NeuroKitWarning,
             )
             data[i]["EMG_Activation"] = 0
-        elif np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] != 0):
+        elif np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] == 1):
             data[i]["EMG_Activation"] = 1
         else:
             data[i]["EMG_Activation"] = 0
@@ -97,7 +97,10 @@ def emg_eventrelated(epochs, silent=False):
 # =============================================================================
 # Internals
 # =============================================================================
-def _emg_eventrelated_features(epoch, output={}):
+def _emg_eventrelated_features(epoch, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     if "EMG_Activity" not in epoch or "EMG_Amplitude" not in epoch:
         warn(
@@ -107,18 +110,32 @@ def _emg_eventrelated_features(epoch, output={}):
         return output
 
     # Peak amplitude and Time of peak
-    activations = len(np.where(epoch["EMG_Onsets"][epoch.index > 0] == 1)[0])
-    activated_signal = np.where(epoch["EMG_Activity"][epoch.index > 0] == 1)
-    mean = np.array(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]).mean()
-    maximum = np.array(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]).max()
+    post_event = epoch[epoch.index > 0]
+    activations = int(np.sum(post_event["EMG_Onsets"] == 1))
+    activated_idx = np.where(post_event["EMG_Activity"] == 1)[0]
+    if len(activated_idx) == 0:
+        output["EMG_Amplitude_Mean"] = np.nan
+        output["EMG_Amplitude_Max"] = np.nan
+        output["EMG_Amplitude_SD"] = np.nan
+        output["EMG_Amplitude_Max_Time"] = np.nan
+        output["EMG_Bursts"] = activations
+        return output
 
-    index_time = np.where(epoch["EMG_Amplitude"][epoch.index > 0] == maximum)[0]
-    time = np.array(epoch["EMG_Amplitude"][epoch.index > 0].index[index_time])[0]
+    active_amp = post_event["EMG_Amplitude"].iloc[activated_idx]
+    amp_values = active_amp.to_numpy(dtype=float)
+    if np.all(np.isnan(amp_values)):
+        output["EMG_Amplitude_Mean"] = np.nan
+        output["EMG_Amplitude_Max"] = np.nan
+        output["EMG_Amplitude_SD"] = np.nan
+        output["EMG_Amplitude_Max_Time"] = np.nan
+        output["EMG_Bursts"] = activations
+        return output
 
-    output["EMG_Amplitude_Mean"] = mean
-    output["EMG_Amplitude_Max"] = maximum
-    output["EMG_Amplitude_SD"] = np.std(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal])
-    output["EMG_Amplitude_Max_Time"] = time
+    max_pos = int(np.nanargmax(amp_values))
+    output["EMG_Amplitude_Mean"] = np.nanmean(amp_values)
+    output["EMG_Amplitude_Max"] = amp_values[max_pos]
+    output["EMG_Amplitude_SD"] = np.nanstd(amp_values)
+    output["EMG_Amplitude_Max_Time"] = active_amp.index[max_pos]
     output["EMG_Bursts"] = activations
 
     return output

@@ -50,7 +50,7 @@ def emg_intervalrelated(data):
     if isinstance(data, pd.DataFrame):
         activity_cols = [col for col in data.columns if "EMG_Onsets" in col]
         if len(activity_cols) == 1:
-            intervals["Activation_N"] = data[activity_cols[0]].values.sum()
+            intervals["Activation_N"] = int(np.sum(data[activity_cols[0]] == 1))
         else:
             raise ValueError(
                 "NeuroKit error: emg_intervalrelated(): Wrong"
@@ -60,8 +60,10 @@ def emg_intervalrelated(data):
             )
         amplitude_cols = ["EMG_Amplitude", "EMG_Activity"]
         if all(col in data.columns for col in amplitude_cols):
-            data_bursts = data.loc[data["EMG_Activity"] == 1]
-            intervals["Amplitude_Mean"] = data_bursts["EMG_Amplitude"].values.mean()
+            data_bursts = data.loc[data["EMG_Activity"] == 1, "EMG_Amplitude"].to_numpy(dtype=float)
+            intervals["Amplitude_Mean"] = (
+                np.nanmean(data_bursts) if len(data_bursts) > 0 and not np.all(np.isnan(data_bursts)) else np.nan
+            )
         else:
             raise ValueError(
                 "NeuroKit error: emg_intervalrelated(): Wrong"
@@ -70,17 +72,21 @@ def emg_intervalrelated(data):
                 "`EMG_Amplitude` and `EMG_Activity` columns."
             )
 
-        emg_intervals = pd.DataFrame.from_dict(intervals, orient="index").T.add_prefix("EMG_")
+        emg_intervals = pd.DataFrame([intervals]).add_prefix("EMG_")
 
     elif isinstance(data, dict):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]["Label"] = data[index]["Label"].iloc[0]
+            if "Label" in data[index].columns:
+                intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             intervals[index] = _emg_intervalrelated_formatinput(data[index], intervals[index])
         emg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
+
+    else:
+        raise ValueError("NeuroKit error: emg_intervalrelated(): 'data' should be a DataFrame or a dict.")
 
     return emg_intervals
 
@@ -114,10 +120,12 @@ def _emg_intervalrelated_formatinput(interval, output=None):
             "`EMG_Amplitude` and `EMG_Activity` columns."
         )
 
-    bursts = interval["EMG_Onsets"].values
-    data_bursts = interval.loc[interval["EMG_Activity"] == 1]
+    bursts = int(np.sum(interval["EMG_Onsets"] == 1))
+    data_bursts = interval.loc[interval["EMG_Activity"] == 1, "EMG_Amplitude"].to_numpy(dtype=float)
 
-    output["EMG_Activation_N"] = np.sum(bursts)
-    output["EMG_Amplitude_Mean"] = data_bursts["EMG_Amplitude"].values.mean()
+    output["EMG_Activation_N"] = bursts
+    output["EMG_Amplitude_Mean"] = (
+        np.nanmean(data_bursts) if len(data_bursts) > 0 and not np.all(np.isnan(data_bursts)) else np.nan
+    )
 
     return output

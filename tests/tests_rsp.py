@@ -448,42 +448,48 @@ def test_rsp_rvt_sampling_rate():
     assert np.isclose(rvt["power", 100] * 100, rvt["power", 1000] * 1000, rtol=0.1)
 
 
-# Commented out for now: Check issue https://github.com/neuropsychology/NeuroKit/issues/1082
-# def test_rsp_rate():
-#     sampling_rate = 1000
-#     rsp_rate = 10
-#     rsp = nk.rsp_simulate(
-#         duration=60, sampling_rate=sampling_rate, respiratory_rate=10,
-#         random_state=42, noise=0
-#     )
-#     _, info = nk.rsp_peaks(rsp, sampling_rate=1000)
-#     for method in ['trough', 'xcorr']:
-#         # Test with troughs as np.array
-#         rate = nk.rsp_rate(rsp, troughs=info['RSP_Troughs'], sampling_rate=sampling_rate, method=method)
-#         assert rate.shape == (rsp.size,)
-#         assert np.abs(rate.mean()-rsp_rate) < 0.5
-#         # Test with troughs as list
-#         rate = nk.rsp_rate(rsp, troughs=info['RSP_Troughs'].tolist(), sampling_rate=sampling_rate, method=method)
-#         assert rate.shape == (rsp.size,)
-#         assert np.abs(rate.mean()-rsp_rate) < 0.5
-#         # Test with troughs as dict
-#         rate = nk.rsp_rate(rsp, troughs=info, sampling_rate=sampling_rate, method=method)
-#         assert rate.shape == (rsp.size,)
-#         assert np.abs(rate.mean()-rsp_rate) < 0.5
-#         # Test with troughs as pd.Series
-#         rate = nk.rsp_rate(rsp, troughs=pd.Series(info['RSP_Troughs']), sampling_rate=sampling_rate, method=method)
-#         assert rate.shape == (rsp.size,)
-#         assert np.abs(rate.mean()-rsp_rate) < 0.5
-#         # Test with troughs as pd.DataFrame
-#         rate = nk.rsp_rate(
-#           rsp, troughs=pd.DataFrame({"RSP_Troughs": info["RSP_Troughs"]}), sampling_rate=sampling_rate, method=method
-#         )
-#         assert rate.shape == (rsp.size,)
-#         assert np.abs(rate.mean()-rsp_rate) < 0.5
-#         # Test without passing troughs as an argument
-#         rate = nk.rsp_rate(rsp, sampling_rate=sampling_rate, method=method)
-#         assert rate.shape == (rsp.size,)
-#         assert np.abs(rate.mean()-rsp_rate) < 0.5
+def test_rsp_rate():
+    sampling_rate = 1000
+    rsp_rate = 10
+    rsp = nk.rsp_simulate(
+        duration=60,
+        sampling_rate=sampling_rate,
+        respiratory_rate=10,
+        method="sinusoidal",
+        random_state=42,
+        noise=0,
+    )
+    signals, info = nk.rsp_peaks(rsp, sampling_rate=1000)
+    for method in ["trough", "xcorr"]:
+        # Test with troughs as np.array
+        rate = nk.rsp_rate(rsp, troughs=info["RSP_Troughs"], sampling_rate=sampling_rate, method=method)
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
+        # Test with troughs as list
+        rate = nk.rsp_rate(rsp, troughs=info["RSP_Troughs"].tolist(), sampling_rate=sampling_rate, method=method)
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
+        # Test with troughs as dict
+        rate = nk.rsp_rate(rsp, troughs=info, sampling_rate=sampling_rate, method=method)
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
+        # Test with troughs as pd.Series
+        rate = nk.rsp_rate(rsp, troughs=pd.Series(info["RSP_Troughs"]), sampling_rate=sampling_rate, method=method)
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
+        # Test with troughs as pd.DataFrame (peak indices and binary indicator signals)
+        rate = nk.rsp_rate(
+            rsp, troughs=pd.DataFrame({"RSP_Troughs": info["RSP_Troughs"]}), sampling_rate=sampling_rate, method=method
+        )
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
+        rate = nk.rsp_rate(rsp, troughs=signals, sampling_rate=sampling_rate, method=method)
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
+        # Test without passing troughs as an argument
+        rate = nk.rsp_rate(rsp, sampling_rate=sampling_rate, method=method)
+        assert rate.shape == (rsp.size,)
+        assert np.abs(rate.mean() - rsp_rate) < 0.5
 
 
 @pytest.mark.parametrize(
@@ -532,3 +538,72 @@ def test_rsp_intervalrelated_independent_calls():
 
     assert list(after.columns) == list(before.columns)
     pd.testing.assert_frame_equal(after, before)
+
+
+def test_rsp_clean_hampel_sampling_rate_and_missing():
+    # Hampel window must scale with sampling_rate (e.g. 1.0 s = 50 samples at 50 Hz, not 1000 samples)
+    sr = 50
+    t = np.arange(0, 10, 1 / sr)
+    rsp = np.sin(2 * np.pi * 0.25 * t)
+    distorted = rsp.copy()
+    # Inject a 3-sample burst spike: corrected by a 1.0s (50-sample) window, but would dominate a 5-sample window
+    distorted[200:203] = 20.0
+    cleaned_1s = nk.rsp_clean(distorted, sampling_rate=sr, method="hampel", window_length=1.0)
+    cleaned_short_win = nk.rsp_clean(distorted, sampling_rate=sr, method="hampel", window_length=0.08)
+    assert np.allclose(cleaned_1s[200:203], rsp[200:203], atol=0.3)
+    assert np.max(cleaned_short_win[200:203]) == 20.0
+
+    # Short signal shorter than Hampel window returns finite copy unchanged
+    short = np.array([0.1, 0.2, 0.3])
+    assert np.allclose(nk.rsp_clean(short, sampling_rate=100, method="hampel", window_length=1.0), short)
+
+    # Missing data (including leading NaN) fills cleanly without AttributeError on pandas 2.2+/3
+    rsp_nan = rsp.copy()
+    rsp_nan[0] = np.nan
+    rsp_nan[50] = np.nan
+    with pytest.warns(nk.misc.NeuroKitWarning, match="missing data"):
+        cleaned_nan = nk.rsp_clean(rsp_nan, sampling_rate=sr, method="khodadad2018")
+    assert np.all(np.isfinite(cleaned_nan))
+
+
+def test_rsp_rate_xcorr_phase_and_edge_cases():
+    # Phase invariance across 0, pi/2, pi, 3pi/2 at 15 bpm (0.25 Hz) and hop_size scaling
+    sr = 100
+    t = np.arange(0, 30, 1 / sr)
+    for phase in [0, np.pi / 2, np.pi, 3 * np.pi / 2]:
+        sig = np.sin(2 * np.pi * 0.25 * t + phase)
+        rate = nk.rsp_rate(sig, sampling_rate=sr, hop_size=20, method="xcorr")
+        assert rate.shape == sig.shape
+        assert np.abs(rate.mean() - 15.0) < 0.3
+
+    # Agreement with trough rate on asymmetric breathmetrics waveform
+    rsp_bm = nk.rsp_simulate(duration=60, sampling_rate=sr, respiratory_rate=12, method="breathmetrics", random_state=42)
+    rate_trough = nk.rsp_rate(rsp_bm, sampling_rate=sr, method="trough")
+    rate_xcorr = nk.rsp_rate(rsp_bm, sampling_rate=sr, method="xcorr")
+    assert np.abs(rate_xcorr.mean() - rate_trough.mean()) < 0.6
+
+    # Low sampling rate (<= 10 Hz) and short signal (< window)
+    t_low = np.arange(0, 4, 1 / 8)
+    sig_low = np.cos(2 * np.pi * 0.25 * t_low)
+    rate_low = nk.rsp_rate(sig_low, sampling_rate=8, window=10, method="xcorr")
+    assert rate_low.shape == sig_low.shape
+    assert np.abs(rate_low.mean() - 15.0) < 0.5
+
+    # Empty, 1-sample, and constant signals
+    assert nk.rsp_rate(np.array([]), sampling_rate=100, method="xcorr").size == 0
+    assert np.isnan(nk.rsp_rate(np.array([1.0]), sampling_rate=100, method="xcorr")).all()
+    assert np.isnan(nk.rsp_rate(np.ones(200), sampling_rate=10, method="xcorr")).all()
+
+
+def test_rsp_findpeaks_dataframe_columns():
+    rsp = nk.rsp_simulate(duration=20, sampling_rate=100, respiratory_rate=15, random_state=42)
+    cleaned = nk.rsp_clean(rsp, sampling_rate=100)
+    expected = nk.rsp_findpeaks(cleaned, sampling_rate=100)
+
+    for col in ["RSP_Clean", "RSP_Raw", "RSP"]:
+        got = nk.rsp_findpeaks(pd.DataFrame({col: cleaned}), sampling_rate=100)
+        np.testing.assert_array_equal(got["RSP_Peaks"], expected["RSP_Peaks"])
+        np.testing.assert_array_equal(got["RSP_Troughs"], expected["RSP_Troughs"])
+
+    with pytest.raises(ValueError, match="RSP_Clean"):
+        nk.rsp_findpeaks(pd.DataFrame({"Other": cleaned}), sampling_rate=100)

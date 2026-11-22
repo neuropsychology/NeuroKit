@@ -1005,6 +1005,13 @@ Fixes
 * ``entropy_angular()``, ``entropy_distribution()``, ``entropy_cosinesimilarity()``,
   ``entropy_kolmogorov()`` and ``entropy_coalition()`` are now listed in the documentation.
 * ``expspace()`` now spans the full range and no longer depends on the units of the values.
+* ``rsp_clean(method="hampel")`` now forwards ``sampling_rate`` and computes rolling MAD in
+  vectorized chunks; ``rsp_rate(method="xcorr")`` uses a vectorized phase-invariant quadrature
+  sinusoid basis and properly scales ``hop_size`` (#1082); ``rsp_findpeaks()`` checks DataFrame
+  columns without catching ``NameError``; and ``emg_activation()``, ``emg_clean()``,
+  ``emg_eventrelated()``, ``emg_intervalrelated()``, and ``emg_plot()`` fix trailing bursts,
+  ``method="silva"`` empty/unclosed bursts, low-sampling-rate highpass guards, NaN padding, and
+  zero-burst plotting while speeding up indicator DataFrame construction.
 * ``fractal_correlation()`` now accepts a list of radiuses and returns 0 for constant signals.
 * ``signal_resample()`` no longer sets the last sample to 0 for some signal lengths.
 * ``ecg_simulate()`` no longer hangs for some settings.
