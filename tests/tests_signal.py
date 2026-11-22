@@ -540,6 +540,15 @@ def test_signal_power():
     finally:
         plt.close(fig)
 
+    # Single float-tuple band with show=True and continuous=True DataFrame shape/columns
+    pwr_single = nk.signal_power(signal2, (0.9, 1.6), sampling_rate=100, show=True)
+    plt.close("all")
+    assert pwr_single.shape == (1, 1)
+
+    pwr_cont = nk.signal_power(signal2, [(0.9, 1.6), (1.4, 2.0)], sampling_rate=100, continuous=True)
+    assert pwr_cont.shape == (len(signal2), 2)
+    assert list(pwr_cont.columns) == ["0.90-1.60Hz", "1.40-2.00Hz"]
+
 
 def test_signal_timefrequency():
     signal = nk.signal_simulate(duration=50, frequency=5) + 2 * nk.signal_simulate(duration=50, frequency=20)
@@ -586,12 +595,71 @@ def test_signal_timefrequency():
 
 
 def test_signal_psd(recwarn):
+    from neurokit2.signal.signal_psd import _signal_psd_burg, _signal_psd_from_arma
+
     warnings.simplefilter("always")
 
     data = nk.data("bio_eventrelated_100hz")
     out = nk.signal_psd(data["ECG"], sampling_rate=100)
 
     assert list(out.columns) == ["Frequency", "Power"]
+
+    # Parseval check: unnormalized one-sided Burg PSD must integrate to signal variance (not 2x variance)
+    rng = np.random.default_rng(42)
+    white = rng.standard_normal(4000) * 2.0
+    psd_burg = nk.signal_psd(white, sampling_rate=100, method="burg", normalize=False, min_frequency=0)
+    psd_welch = nk.signal_psd(white, sampling_rate=100, method="welch", normalize=False, min_frequency=0)
+    assert np.isclose(np.trapezoid(psd_burg["Power"], psd_burg["Frequency"]), np.var(white), rtol=0.05)
+    assert np.isclose(
+        np.trapezoid(psd_burg["Power"], psd_burg["Frequency"]),
+        np.trapezoid(psd_welch["Power"], psd_welch["Frequency"]),
+        rtol=0.1,
+    )
+
+    # Order criteria variants, short-signal DoF guard (N=18, order=16), and constant-signal zero guard
+    for crit in ["AIC", "KIC", "FPE", "MDL", None]:
+        psd_c = nk.signal_psd(white[:200].tolist(), sampling_rate=100, method="burg", order=6, order_criteria=crit)
+        assert len(psd_c) > 0
+    for crit in ["AIC", "KIC", "FPE"]:
+        psd_short = nk.signal_psd(white[:3], sampling_rate=100, method="burg", order=2, order_criteria=crit, min_frequency=1)
+        assert np.all(np.isfinite(psd_short["Power"]))
+    with pytest.raises(ValueError, match="unknown criteria"):
+        nk.signal_psd(white[:50], sampling_rate=100, method="burg", order=4, order_criteria="UNKNOWN")
+    with pytest.raises(ValueError, match="unknown 'side'"):
+        _signal_psd_burg(white[:50], sampling_rate=100, order=4, side="invalid")
+    psd_zero = nk.signal_psd(np.zeros(200), sampling_rate=100, method="burg", normalize=True, min_frequency=1)
+    assert np.all(psd_zero["Power"] == 0.0)
+
+    # Direct ARMA/Burg helper coverage (two-sided, centerdc, odd nfft, MA model)
+    f_two, p_two = _signal_psd_burg(white[:200], sampling_rate=100, order=4, side="two-sided")
+    f_cdc, p_cdc = _signal_psd_burg(white[:200], sampling_rate=100, order=4, side="centerdc")
+    assert len(f_two) == len(p_two) and len(f_cdc) == len(p_cdc)
+    p_odd = _signal_psd_from_arma(
+        ar=np.array([-0.5]), ma=np.array([0.2]), rho=1.0, sampling_rate=100, nfft=101, side="one-sided"
+    )
+    assert len(p_odd) == 51
+
+    # Odd-length FFT must place frequency bins at exact rfftfreq positions
+    t_odd = np.arange(201) / 201.0
+    sig_odd = np.cos(2 * np.pi * 10.0 * t_odd)
+    psd_fft = nk.signal_psd(sig_odd, sampling_rate=201, method="fft", min_frequency=0)
+    assert np.isclose(psd_fft.loc[psd_fft["Power"].idxmax(), "Frequency"], 10.0)
+
+    # Lomb-Scargle with sampling_rate=None uses 1 / median(diff(t)) for default min_frequency (and hrv_frequency plot)
+    t_irreg = np.arange(200, dtype=float) * 0.01
+    psd_lomb_none = nk.signal_psd(np.sin(2 * np.pi * 5 * t_irreg), sampling_rate=None, t=t_irreg, method="lomb")
+    assert np.isclose(psd_lomb_none["Frequency"].min(), (2 / 0.01) / 100, atol=0.1)
+
+    ecg = nk.ecg_simulate(duration=60, sampling_rate=500, heart_rate=70, random_state=42)
+    _, peaks = nk.ecg_peaks(ecg, sampling_rate=500)
+    hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=500, interpolation_rate=None, psd_method="lomb", show=True)
+    plt.close("all")
+    assert np.isfinite(hrv_lomb["HRV_HF"].iloc[0])
+
+    with pytest.raises(ValueError, match="not recognized"):
+        nk.signal_psd(white[:100], sampling_rate=100, method="invalid_method")
+    with pytest.raises(ValueError, match="'t' must be provided"):
+        nk.signal_psd(white[:100], sampling_rate=None, method="lomb")
 
 
 def test_signal_distort():

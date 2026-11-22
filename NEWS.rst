@@ -620,6 +620,10 @@ Changes in Results
   signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
   Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
+* ``signal_psd(method="burg", normalize=False)`` (and therefore ``signal_power()`` and
+  ``hrv_frequency(psd_method="burg", normalize=False)``) no longer doubles the one-sided Burg PSD a
+  second time, and leaves the Nyquist bin un-doubled for even FFT lengths, so that the integrated
+  one-sided spectrum equals the signal variance (matching ``method="welch"``).
 * ``mad()`` with an ``axis`` now centers each slice on its own median (it used the median of
   the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
 * ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
@@ -826,6 +830,15 @@ Fixes
 * ``complexity_coarsegraining()`` accepts lists (a list was returned unchanged at ``scale=1``) and
   numpy integers as ``scale``; its docstring describes the time-shift series, and its benchmarking
   example uses ``method="rolling"`` (it passed a ``rolling=True`` argument that does not exist).
+* ``signal_psd(method="burg")`` is 70 to 180 times faster (vectorised prediction-error and
+  Levinson-Durbin updates instead of Python loops over every sample) and avoids a
+  ``ZeroDivisionError`` in corrected AIC/KIC/FPE order selection on short series. ``signal_psd()``
+  also computes the default ``min_frequency`` from ``1 / median(diff(t))`` when ``sampling_rate``
+  is ``None`` (and fixes the matching ``hrv_frequency(show=True)`` window rate), uses
+  ``np.fft.rfftfreq()`` for odd-length signals in ``method="fft"``, avoids ``0 / 0`` on constant
+  signals with ``normalize=True``, and raises a ``ValueError`` on unknown ``method`` names.
+  ``signal_power(continuous=True)`` is over 1,000 times faster (constructing the DataFrame directly
+  from the band columns instead of transposing an *N*-column ``from_dict(orient="index")`` table).
 * ``entropy_shannon()``, ``entropy_renyi()``, ``entropy_tsallis()`` and
   ``entropy_cumulativeresidual()`` accept numpy integers as ``symbolize`` (e.g., ``np.int64(3)``
   for 3 bins), which raised an ``UnboundLocalError``. The docstring of ``entropy_shannon()`` names
