@@ -104,3 +104,60 @@ def test_ecg_eventrelated_phase_at_first_post_onset_sample():
     assert features["ECG_Phase_Ventricular"] == 0
     assert features["ECG_Phase_Completion_Atrial"] == 0.6
     assert features["ECG_Phase_Completion_Ventricular"] == 0.4
+
+
+def test_epochs_create_baseline_preserves_index_and_from_events():
+    import matplotlib.pyplot as plt
+
+    df = pd.DataFrame({"Signal": np.arange(100, dtype=float), "Category": ["A"] * 100})
+    epochs = nk.epochs_create(
+        df, events=[20, 60], sampling_rate=10, epochs_start=-0.5, epochs_end=1.0, baseline_correction=True
+    )
+    # Sample Index must remain integer sample positions (not baseline-subtracted floats), and string cols must survive
+    np.testing.assert_array_equal(epochs["1"]["Index"], np.arange(15, 30))
+    np.testing.assert_array_equal(epochs["2"]["Index"], np.arange(55, 70))
+    assert list(epochs["1"]["Category"].unique()) == ["A"]
+
+    # epochs_end="from_events" without explicit duration must end the final epoch at len(data)
+    ep_from_ev = nk.epochs_create(np.arange(100, dtype=float), events=[20, 60], sampling_rate=10, epochs_end="from_events")
+    assert len(ep_from_ev["1"]) == 40
+    assert len(ep_from_ev["2"]) == 40
+    assert not np.any(np.isnan(ep_from_ev["2"]["Signal"]))
+
+    # Fractional duration float rounding must give identical sample counts across all events
+    ep_round = nk.epochs_create(np.zeros(3000), events=[100, 1000, 2000], sampling_rate=100, epochs_start=0.0, epochs_end=0.29)
+    assert [len(ep_round[k]) for k in ep_round] == [29, 29, 29]
+
+    # epochs_average must not mutate `indices`, must omit spurious "index" col, and plot without "mean"
+    caller_indices = ["median", "ci"]
+    av1 = nk.epochs_average(epochs, which="Signal", indices=caller_indices, show=True)
+    plt.close("all")
+    assert caller_indices == ["median", "ci"]
+    assert list(av1.columns) == ["Time", "Signal_Median", "Signal_CI_low", "Signal_CI_high"]
+
+    av_def1 = nk.epochs_average(epochs, which="Signal")
+    av_def2 = nk.epochs_average(epochs, which="Signal")
+    assert list(av_def1.columns) == ["Time", "Signal_Mean", "Signal_SD", "Signal_CI_low", "Signal_CI_high"]
+    pd.testing.assert_frame_equal(av_def1, av_def2)
+
+
+def test_eventrelated_rate_nan_padding_and_short_epochs():
+    # Trailing NaN padding from epochs_create must not turn rate features into NaN or pick NaN index for Max_Time
+    epoch_nan = pd.DataFrame(
+        {"PPG_Rate": [80.0, 60.0, 55.0, 58.0, 64.0, np.nan, np.nan]},
+        index=[-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5],
+    )
+    feat = nk.ppg_eventrelated({"1": epoch_nan}).iloc[0]
+    assert feat["PPG_Rate_Baseline"] == 60.0
+    assert feat["PPG_Rate_Max"] == 4.0
+    assert feat["PPG_Rate_Min"] == -5.0
+    assert feat["PPG_Rate_Max_Time"] == 0.3
+    assert feat["PPG_Rate_Min_Time"] == 0.1
+    assert np.isfinite(feat["PPG_Rate_Trend_Linear"])
+
+    # Epoch ending at 0 (no post-onset samples) must return NaN rate features without crashing
+    epoch_pre_only = pd.DataFrame({"PPG_Rate": [70.0, 65.0, 60.0]}, index=[-0.2, -0.1, 0.0])
+    feat_empty = nk.ppg_eventrelated({"1": epoch_pre_only}).iloc[0]
+    assert feat_empty["PPG_Rate_Baseline"] == 60.0
+    assert np.isnan(feat_empty["PPG_Rate_Max"])
+    assert np.isnan(feat_empty["PPG_Rate_Max_Time"])
