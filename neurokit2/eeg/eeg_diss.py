@@ -51,18 +51,29 @@ def eeg_diss(eeg, gfp=None, **kwargs):
       neurophysiology, 48(6), 609-621.
 
     """
-    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
+    if isinstance(eeg, pd.DataFrame):
+        eeg = eeg.to_numpy(dtype=float).T
+    elif not isinstance(eeg, np.ndarray):
         eeg = eeg.get_data()
+    else:
+        eeg = np.asarray(eeg, dtype=float)
+
+    if eeg.ndim == 3:
+        eeg = np.transpose(eeg, (1, 0, 2)).reshape(eeg.shape[1], -1)
 
     if gfp is None:
         gfp = eeg_gfp(eeg, **kwargs)
+    gfp = np.asarray(gfp, dtype=float)
 
-    normalized = eeg / gfp
+    # Reference-independent potentials relative to instantaneous average across electrodes (Lehmann & Skrandies, 1980)
+    centered = eeg - np.mean(eeg, axis=0, keepdims=True)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        normalized = np.where(gfp != 0, centered / gfp, 0.0)
 
     diff = np.diff(normalized, axis=1)
-    diss = np.mean(np.power(diff, 2), axis=0)
+    diss = np.sqrt(np.mean(np.square(diff), axis=0))
 
     # Preserve length
-    diss = np.insert(diss, 0, 0, axis=0)
+    diss = np.insert(diss, 0, 0.0, axis=0)
 
     return diss

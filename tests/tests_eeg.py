@@ -183,3 +183,108 @@ def test_mne_to_df():
 
     evoked = [epochs[name].average() for name in ("audio", "visual")]
     assert len(nk.mne_to_df(evoked)) == 182
+
+
+def test_eeg_gfp_and_diss():
+    import pytest
+
+    rng = np.random.default_rng(42)
+    # Channel 0 has 100x scale of channels 1..3; standardize_eeg=True must standardize across time (axis=1)
+    eeg = rng.standard_normal((4, 200))
+    eeg[0] *= 100.0
+    gfp_z = nk.eeg_gfp(eeg, method="l2", standardize_eeg=True)
+    expected_z = np.std(nk.standardize(eeg.T).T, axis=0, ddof=0)
+    np.testing.assert_allclose(gfp_z, expected_z)
+    assert np.std(gfp_z) > 0.05  # Not collapsed to a constant flat line!
+
+    # DataFrame (times, channels) and MNE EpochsArray (3D) must match 2D (channels, times)
+    df = pd.DataFrame(eeg.T, columns=["Fp1", "Fp2", "Cz", "Pz"])
+    np.testing.assert_allclose(nk.eeg_gfp(df, method="l1"), nk.eeg_gfp(eeg, method="l1"))
+
+    info = mne.create_info(["Fp1", "Fp2", "Cz", "Pz"], sfreq=100, ch_types="eeg")
+    epochs = mne.EpochsArray(np.stack([eeg[:, :100], eeg[:, 100:]], axis=0), info, verbose=False)
+    np.testing.assert_allclose(
+        nk.eeg_gfp(epochs, method="l2", smooth=0.05), nk.eeg_gfp(eeg, sampling_rate=100, method="l2", smooth=0.05)
+    )
+    assert np.all(nk.eeg_gfp(np.zeros((4, 20)), normalize=True) == 0.0)
+    with pytest.raises(ValueError, match="not recognized"):
+        nk.eeg_gfp(eeg, method="l3")
+
+    # DISS: identical topographies -> 0, inverted L2-normalized topographies -> 2, reference-independent, zero-GFP safe
+    map_a = np.array([1.0, -1.0, 1.0, -1.0])
+    eeg_flip = np.column_stack([map_a, map_a, -map_a, np.zeros(4)])
+    gfp_l2 = nk.eeg_gfp(eeg_flip, method="l2")
+    diss = nk.eeg_diss(eeg_flip, gfp=gfp_l2)
+    np.testing.assert_allclose(diss[:3], [0.0, 0.0, 2.0])
+    assert np.isfinite(diss[3])
+    # Reference-independence: adding common-mode offset across channels must not change DISS
+    np.testing.assert_allclose(nk.eeg_diss(eeg + 50.0, method="l2"), nk.eeg_diss(eeg, method="l2"))
+    np.testing.assert_allclose(nk.eeg_diss(df, method="l2"), nk.eeg_diss(eeg, method="l2"))
+    np.testing.assert_allclose(nk.eeg_diss(epochs, method="l2"), nk.eeg_diss(eeg, method="l2"))
+
+
+def test_eeg_power_badchannels_and_mne_crop():
+    import pytest
+
+    rng = np.random.default_rng(7)
+    t = np.arange(500) / 100.0
+    eeg = np.vstack([np.sin(2 * np.pi * 10 * t), np.sin(2 * np.pi * 20 * t), 0.1 * rng.standard_normal(500)])
+
+    # Repeated default calls must preserve band column names (no mutable default mutation)
+    pwr1 = nk.eeg_power(eeg, sampling_rate=100)
+    pwr2 = nk.eeg_power(eeg, sampling_rate=100)
+    assert list(pwr1.columns) == ["Channel", "Gamma", "Beta", "Alpha", "Theta", "Delta"]
+    pd.testing.assert_frame_equal(pwr1, pwr2)
+
+    # Caller's list must not be mutated; spaced band names ("Beta 1") and MNE EpochsArray must work
+    caller_bands = ["Alpha", "Beta 1", (18, 22)]
+    pwr_custom = nk.eeg_power(eeg, sampling_rate=100, frequency_band=caller_bands, normalize=False)
+    assert caller_bands == ["Alpha", "Beta 1", (18, 22)]
+    assert list(pwr_custom.columns) == ["Channel", "Alpha", "Beta 1", "Hz_18_22"]
+    assert pwr_custom.loc[0, "Alpha"] > pwr_custom.loc[1, "Alpha"]
+    assert pwr_custom.loc[1, "Hz_18_22"] > pwr_custom.loc[0, "Hz_18_22"]
+
+    info = mne.create_info(["Fz", "Cz", "Pz"], sfreq=100, ch_types="eeg")
+    epochs = mne.EpochsArray(eeg.reshape(1, 3, 500), info, verbose=False)
+    pwr_ep = nk.eeg_power(epochs, frequency_band="Alpha")
+    assert list(pwr_ep["Channel"]) == ["Fz", "Cz", "Pz"]
+
+    evoked = epochs.average()
+    df_ev = nk.mne_to_df(evoked)
+    assert len(df_ev) == 500 and "Fz" in df_ev.columns
+
+    with pytest.raises(ValueError, match="sampling_rate"):
+        nk.eeg_power(eeg)
+
+    # eeg_badchannels: legend label must name the bad channel (ch_names[bad], not ch_names[0]), and handle NaNs + Epochs
+    bad_arr = rng.standard_normal((4, 200))
+    bad_arr[2, :] *= 25.0
+    bad_arr[0, 5] = np.nan
+    df_bad = pd.DataFrame(bad_arr.T, columns=["Fp1", "Fp2", "Pz_BAD", "Oz"])
+    bads, res_bad = nk.eeg_badchannels(df_bad, bad_threshold=0.3, distance_threshold=0.9, show=True)
+    fig = plt.gcf()
+    _, labels = fig.axes[0].get_legend_handles_labels()
+    plt.close("all")
+    assert bads == ["Pz_BAD"]
+    assert labels == ["Pz_BAD"]
+    assert np.all(np.isfinite(res_bad.loc[0, ["Skewness", "Kurtosis", "Amplitude"]]))
+
+    bads_ep, _ = nk.eeg_badchannels(
+        mne.EpochsArray(
+            np.stack([bad_arr[:, :100], bad_arr[:, 100:]], axis=0),
+            mne.create_info(["Fp1", "Fp2", "Pz_BAD", "Oz"], 100, "eeg"),
+            verbose=False,
+        ),
+        bad_threshold=0.3,
+        distance_threshold=0.9,
+    )
+    assert "Pz_BAD" in bads_ep
+
+    # mne_crop must match MNE's Raw.crop() for both include_tmax=True and include_tmax=False
+    raw = mne.io.RawArray(eeg, info, verbose=False)
+    crop_incl = nk.mne_crop(raw, tmin=0.1, tmax=1.0, include_tmax=True)
+    crop_excl = nk.mne_crop(raw, tmin=0.1, tmax=1.0, include_tmax=False)
+    assert crop_incl.n_times == raw.copy().crop(0.1, 1.0, include_tmax=True).n_times
+    assert crop_excl.n_times == raw.copy().crop(0.1, 1.0, include_tmax=False).n_times
+    assert nk.mne_crop(raw, smin=10, smax=50, include_tmax=False).n_times == 40
+    assert nk.mne_crop(raw, smin=10, smax=50, include_tmax=True).n_times == 41

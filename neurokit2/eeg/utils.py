@@ -31,6 +31,7 @@ def _sanitize_eeg(eeg, sampling_rate=None, time=None):
         sampling_rate = eeg.info["sfreq"]
         eeg = mne_to_df(eeg)
         time = eeg["Time"].values
-        eeg = eeg.drop(columns=["Time"])
+        meta_cols = [col for col in ("Time", "Condition", "Epoch") if col in eeg.columns]
+        eeg = eeg.drop(columns=meta_cols)
 
     return eeg, sampling_rate, time

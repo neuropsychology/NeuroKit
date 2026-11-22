@@ -123,14 +123,14 @@ def _mne_convert(eeg, to_what="df"):
     old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
 
     # If raw object
-    if isinstance(eeg, (mne.io.Raw, mne.io.RawArray)):
+    if isinstance(eeg, mne.io.BaseRaw):
         data = eeg.to_data_frame(time_format=None)
         data = data.rename(columns={"time": "Time"})
         if to_what == "dict":
             data = data.to_dict(orient="list")
 
     # If epoch object
-    elif isinstance(eeg, mne.Epochs):
+    elif isinstance(eeg, mne.BaseEpochs):
         data = eeg.to_data_frame(time_format=None)
         data = data.rename(columns={"time": "Time", "condition": "Condition", "epoch": "Epoch"})
         if to_what == "dict":
@@ -145,16 +145,17 @@ def _mne_convert(eeg, to_what="df"):
         if to_what == "dict":
             data = data.to_dict(orient="list")
 
-    # If dataframe, skip and return
+    # If array, skip and return
     elif isinstance(eeg, np.ndarray):
         data = pd.DataFrame(eeg)
         if to_what == "dict":
             data = data.to_dict(orient="list")
 
-    # it might be an evoked object
+    # It might be an Evoked object or list of Evoked objects
     else:
+        evokeds = [eeg] if isinstance(eeg, mne.Evoked) else eeg
         dfs = []
-        for i, evoked in enumerate(eeg):
+        for evoked in evokeds:
             data = evoked.to_data_frame(time_format=None)
             data = data.rename(columns={"time": "Time"})
             data.insert(1, "Condition", evoked.comment)

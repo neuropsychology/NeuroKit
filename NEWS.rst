@@ -574,6 +574,10 @@ Changes in Results
   rates between about 0.4% and 2.3%. With a custom ``r_range``, the value of the range whose rate
   is the closest to 1% is still returned. It is also about 7 times faster (0.6 s instead of 4.4 s
   for 5,000 samples).
+* ``eeg_gfp(standardize_eeg=True)`` now standardizes each channel across time rather than across
+  electrodes at each sample (which collapsed GFP to a constant), and ``eeg_diss()`` now takes the
+  square root of the mean squared difference of average-referenced GFP-normalized topographies per
+  Lehmann & Skrandies (1980) instead of returning squared dissimilarity.
 * ``information_gain()`` with ``delay`` above 1 now follows each word by the word starting
   ``delay`` samples later, which adds one new symbol, so that the mean information gain (MIG) is
   the conditional entropy of that symbol given the word (the entropy of the words of
@@ -1020,6 +1024,14 @@ Fixes
   numbered as integers and the transitions counted with ``np.unique()``, instead of joining the
   symbols into strings and looping over all the pairs of words. Its docstring gives the formulas
   of MIG and FC and describes the words with a ``delay``.
+* ``eeg_power()`` no longer mutates its default or caller ``frequency_band`` list in place across
+  calls, accepts ``"Beta 1"``–``"Beta 3"`` and MNE ``Epochs``/``EpochsArray`` inputs (dropping
+  ``"Condition"`` and ``"Epoch"`` metadata columns in ``_sanitize_eeg()`` and supporting
+  ``BaseRaw``/``BaseEpochs``/single ``Evoked`` in ``mne_to_df()``). ``eeg_gfp()`` and ``eeg_diss()``
+  transpose ``(times, channels)`` DataFrames and reshape 3D ``Epochs`` inputs, ``eeg_badchannels()``
+  labels bad channels with ``ch_names[bad]`` instead of ``ch_names[i]`` and handles ``NaN`` samples
+  and ``Epochs``, and ``mne_crop()`` no longer drops the final sample when ``smax=None`` and
+  ``include_tmax=False``.
 * ``complexity_relativeroughness()`` is about 25 times faster for long signals (e.g., 5 ms instead
   of 0.13 s for 1,000,000 samples): only the autocovariances at lag 0 and 1 are computed, instead
   of the whole autocorrelation function. Values are unchanged. ``demean`` and ``unbiased`` are now
