@@ -80,7 +80,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     elif method is None or method == "none":
         clean = eda_signal
     else:
-        raise ValueError("NeuroKit error: eda_clean(): 'method' should be one of 'biosppy'.")
+        raise ValueError("NeuroKit error: eda_clean(): 'method' should be one of 'neurokit', 'biosppy', or 'none'.")
 
     return clean
 
@@ -89,7 +89,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
 # Handle missing data
 # =============================================================================
 def _eda_clean_missing(eda_signal):
-    eda_signal = pd.DataFrame.pad(pd.Series(eda_signal))
+    eda_signal = pd.Series(eda_signal).ffill().bfill().to_numpy()
 
     return eda_signal
 
@@ -123,13 +123,22 @@ def _eda_clean_biosppy(eda_signal, sampling_rate=1000):
     # Parameters
     order = 4
     frequency = 5
-    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
-
-    # Filtering
-    b, a = scipy.signal.butter(N=order, Wn=frequency, btype="lowpass", analog=False, output="ba")
-    filtered = scipy.signal.filtfilt(b, a, eda_signal)
+    if sampling_rate <= 2 * frequency:
+        warn(
+            "EDA signal is sampled at very low frequency. Skipping lowpass filtering.",
+            category=NeuroKitWarning,
+        )
+        filtered = eda_signal
+    else:
+        frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+        b, a = scipy.signal.butter(N=order, Wn=frequency, btype="lowpass", analog=False, output="ba")
+        filtered = scipy.signal.filtfilt(b, a, eda_signal)
 
     # Smoothing
-    clean = signal_smooth(filtered, method="convolution", kernel="boxzen", size=int(0.75 * sampling_rate))
+    smooth_size = int(0.75 * sampling_rate)
+    if smooth_size >= 2:
+        clean = signal_smooth(filtered, method="convolution", kernel="boxzen", size=smooth_size)
+    else:
+        clean = filtered
 
     return clean

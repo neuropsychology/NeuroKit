@@ -119,9 +119,9 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass", **kwargs):
     """
     method = method.lower()  # remove capitalised letters
     if method in ["cvxeda", "convex"]:
-        tonic, phasic = _eda_phasic_cvxeda(eda_signal, sampling_rate)
+        tonic, phasic = _eda_phasic_cvxeda(eda_signal, sampling_rate, **kwargs)
     elif method in ["sparse", "sparseda"]:
-        tonic, phasic = _eda_phasic_sparsEDA(eda_signal, sampling_rate)
+        tonic, phasic = _eda_phasic_sparsEDA(eda_signal, sampling_rate, **kwargs)
     elif method in ["median", "smoothmedian"]:
         tonic, phasic = _eda_phasic_mediansmooth(eda_signal, sampling_rate, **kwargs)
     elif method in ["neurokit", "highpass", "biopac", "acqknowledge"]:
@@ -129,8 +129,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass", **kwargs):
     else:
         raise ValueError(
             "NeuroKit error: eda_phasic(): 'method' should be one of "
-            "'cvxeda', 'median', 'smoothmedian', 'neurokit', 'highpass', "
-            "'biopac', 'acqknowledge'."
+            "'cvxeda', 'sparse', 'sparseda', 'median', 'smoothmedian', "
+            "'neurokit', 'highpass', 'biopac', 'acqknowledge'."
         )
 
     return pd.DataFrame({"EDA_Tonic": tonic, "EDA_Phasic": phasic})
@@ -337,19 +337,15 @@ def _eda_phasic_sparsEDA(eda_signal, sampling_rate=8, epsilon=0.0001, Kmax=40, N
         reminder of the signal fitting
     """
 
-    dmin = Nmin * sampling_rate
     original_length = len(eda_signal)  # Used for resampling at the end
 
-    # Exceptions
-    # if len(eda_signal) / sampling_rate < 80:
-    #     raise AssertionError("Signal not enough large. longer than 80 seconds")
-
     if np.sum(np.isnan(eda_signal)) > 0:
-        raise AssertionError("Signal contains NaN")
+        raise ValueError("NeuroKit error: eda_phasic(): Signal contains NaN values.")
 
-    # Resample to 8 Hz
-    eda_signal = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=8)
+    # Resample to 8 Hz and express minimum inter-driver spacing at the 8 Hz grid
     new_sr = 8
+    dmin = Nmin * new_sr
+    eda_signal = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=new_sr)
 
     # Preprocessing
     signalAdd = np.zeros(len(eda_signal) + (20 * new_sr) + (60 * new_sr))
@@ -456,23 +452,24 @@ def _eda_phasic_sparsEDA(eda_signal, sampling_rate=8, epsilon=0.0001, Kmax=40, N
 
     # PP
     ind = np.argwhere(SCRaux > 0).reshape(-1)
-    scr_temp = SCRaux[ind]
-    ind2 = np.argsort(scr_temp)[::-1]
-    scr_ord = scr_temp[ind2]
-    scr_fin = [scr_ord[0]]
-    ind_fin = [ind[ind2[0]]]
-
-    for i in range(1, len(ind2)):
-        if np.all(np.abs(ind[ind2[i]] - ind_fin) >= dmin):
-            scr_fin.append(scr_ord[i])
-            ind_fin.append(ind[ind2[i]])
-
     driver = np.zeros(len(SCRaux))
-    driver[np.array(ind_fin)] = np.array(scr_fin)
+    if len(ind) > 0:
+        scr_temp = SCRaux[ind]
+        ind2 = np.argsort(scr_temp)[::-1]
+        scr_ord = scr_temp[ind2]
+        scr_fin = [scr_ord[0]]
+        ind_fin = [ind[ind2[0]]]
 
-    scr_max = scr_fin[0]
-    threshold = rho * scr_max
-    driver[driver < threshold] = 0
+        for i in range(1, len(ind2)):
+            if np.all(np.abs(ind[ind2[i]] - ind_fin) >= dmin):
+                scr_fin.append(scr_ord[i])
+                ind_fin.append(ind[ind2[i]])
+
+        driver[np.array(ind_fin)] = np.array(scr_fin)
+
+        scr_max = scr_fin[0]
+        threshold = rho * scr_max
+        driver[driver < threshold] = 0
 
     # Resample back to original sampling rate
     SCR = eda_signal - SCL
@@ -519,7 +516,10 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
     for j in range(0, len(newIndices)):
         iter = iter + 1
         R_I, flag = updateChol(R_I, N, W, R, 1, activeSet, newIndices[j], zeroTol)
-        activeSet.append(newIndices[j])
+        if flag:
+            collinearIndices.append(newIndices[j])
+        else:
+            activeSet.append(newIndices[j])
     activationHist = activeSet.copy()
 
     # Loop
@@ -529,11 +529,19 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
             lmbda = np.max(c)
             newIndices = np.argwhere(np.abs(c - lmbda) < zeroTol).flatten()
             activeSet = []
+            R_I = []
             for j in range(0, len(newIndices)):
                 iter = iter + 1
                 R_I, flag = updateChol(R_I, N, W, R, 1, activeSet, newIndices[j], zeroTol)
-                activeSet.append(newIndices[j])
+                if flag:
+                    collinearIndices.append(newIndices[j])
+                else:
+                    activeSet.append(newIndices[j])
             [activationHist.append(ele) for ele in activeSet]
+        elif len(activeSet) == 0:
+            beta.append(x)
+            duals.append(np.zeros((N, 1)))
+            break
         else:
             lmbda = c[activeSet[0]]
 
@@ -578,8 +586,8 @@ def lasso(R, s, sampling_rate, maxIters, epsilon):
             gammaIc = 1
             newIndices = []
         else:
-            epsilon = 1e-12
-            gammaArr = (lmbda - c[inactiveSet]) / (1 - ATv[inactiveSet] + epsilon)
+            eps_div = 1e-12
+            gammaArr = (lmbda - c[inactiveSet]) / (1 - ATv[inactiveSet] + eps_div)
 
             gammaArr[gammaArr < zeroTol] = np.inf
             gammaIc = np.min(gammaArr)

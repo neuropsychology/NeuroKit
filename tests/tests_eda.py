@@ -304,3 +304,106 @@ def test_eda_autocor(sampling_rate, lag):
 def test_eda_autocor_lag_too_long():
     with pytest.raises(ValueError, match="exceeds the duration"):
         nk.eda_autocor(np.zeros(4000), sampling_rate=1000, lag=4)
+
+
+def test_eda_findpeaks_pairing_ties_and_sampling_rate():
+    # gamboa2008 must pair each peak with its preceding onset (onsets < peaks)
+    eda = nk.eda_simulate(duration=30, sampling_rate=100, scr_number=4, noise=0, drift=0.0, random_state=42)
+    phasic = nk.eda_phasic(eda, sampling_rate=100, method="highpass")["EDA_Phasic"].to_numpy()
+    gamboa = nk.eda_findpeaks(phasic, sampling_rate=100, method="gamboa2008")
+    assert len(gamboa["SCR_Onsets"]) == len(gamboa["SCR_Peaks"]) == 4
+    assert np.all(gamboa["SCR_Onsets"] < gamboa["SCR_Peaks"])
+
+    _, gamboa_peaks_info = nk.eda_peaks(phasic, sampling_rate=100, method="gamboa2008")
+    assert np.all(np.isfinite(gamboa_peaks_info["SCR_RiseTime"]))
+    assert np.all(gamboa_peaks_info["SCR_RiseTime"] > 0)
+
+    # nabian2018 handles tied peak amplitudes without ValueError and flat/short signals cleanly
+    t = np.linspace(0, 20, 2000)
+    tied = np.exp(-((t - 5.0) ** 2) / 0.5) + np.exp(-((t - 14.0) ** 2) / 0.5) - 0.01 * t
+    # Force exact float tie at both peaks
+    p1 = int(np.argmax(tied[:1000]))
+    p2 = 1000 + int(np.argmax(tied[1000:]))
+    tied[p2] = tied[p1]
+    nab = nk.eda_findpeaks(tied, sampling_rate=100, method="nabian2018")
+    assert len(nab["SCR_Peaks"]) == 2
+    assert np.all(nab["SCR_Onsets"] < nab["SCR_Peaks"])
+
+    empty_nab = nk.eda_findpeaks(np.zeros(50), sampling_rate=100, method="nabian2018")
+    assert empty_nab["SCR_Peaks"].size == 0
+
+    # vanhalem2020 scales window_size with sampling_rate and handles <501-sample low-rate signals
+    phasic_low = -np.cos(2 * np.pi * np.arange(300) / 60)
+    vh_low = nk.eda_findpeaks(phasic_low, sampling_rate=10, method="vanhalem2020")
+    assert len(vh_low["SCR_Peaks"]) >= 2
+    assert np.all(vh_low["SCR_Onsets"] < vh_low["SCR_Peaks"])
+    assert nk.eda_findpeaks(np.array([]), sampling_rate=10, method="vanhalem2020")["SCR_Peaks"].size == 0
+    assert nk.eda_findpeaks(np.array([0.0, 1.0, 0.0]), sampling_rate=4, method="vanhalem2020")["SCR_Peaks"].size == 0
+
+
+def test_eda_eventrelated_postevent_pairing_and_nan_padding():
+    from neurokit2.eda.eda_eventrelated import _eda_eventrelated_eda, _eda_eventrelated_scr
+
+    idx = np.array([-0.5, -0.2, 0.2, 0.5, 1.0, 1.8, 2.5, 3.0])
+    # Pre-stimulus SCR starts at -0.5, peaks at +0.2 (amp=9.0), recovers at +0.5 (recov=0.3);
+    # True post-stimulus SCR starts at +1.0, peaks at +1.8 (amp=2.5, rise=0.8), padded NaN at tail without recovery
+    ep = pd.DataFrame(
+        {
+            "EDA_Phasic": [0.0, 2.0, 9.0, 4.5, 0.1, 2.6, 2.0, np.nan],
+            "SCR_Onsets": [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, np.nan],
+            "SCR_Peaks": [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, np.nan],
+            "SCR_Amplitude": [0.0, 0.0, 9.0, 0.0, 0.0, 2.5, 0.0, np.nan],
+            "SCR_RiseTime": [0.0, 0.0, 0.7, 0.0, 0.0, 0.8, 0.0, np.nan],
+            "SCR_Recovery": [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, np.nan],
+            "SCR_RecoveryTime": [0.0, 0.0, 0.0, 0.3, 0.0, 0.0, 0.0, np.nan],
+            "Label": ["1"] * 8,
+        },
+        index=idx,
+    )
+    res = nk.eda_eventrelated({"1": ep})
+    assert res["EDA_SCR"].iloc[0] == 1
+    assert np.isclose(res["SCR_Peak_Amplitude"].iloc[0], 2.5)
+    assert np.isclose(res["SCR_Peak_Amplitude_Time"].iloc[0], 1.8)
+    assert np.isclose(res["SCR_RiseTime"].iloc[0], 0.8)
+    assert np.isnan(res["SCR_RecoveryTime"].iloc[0])
+
+    # Epoch where pre-stimulus SCR peaks at +0.2 and post-stimulus onset at +2.5 has not peaked yet -> EDA_SCR == 0
+    ep_unpeaked = ep.copy()
+    ep_unpeaked["SCR_Peaks"] = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, np.nan]
+    res_unpeaked = nk.eda_eventrelated({"1": ep_unpeaked})
+    assert res_unpeaked["EDA_SCR"].iloc[0] == 0
+
+    # Mutable default dict safety
+    d1 = _eda_eventrelated_eda(ep)
+    d1["Extra"] = 1
+    assert "Extra" not in _eda_eventrelated_eda(ep)
+    s1 = _eda_eventrelated_scr(ep)
+    s1["Extra"] = 1
+    assert "Extra" not in _eda_eventrelated_scr(ep)
+
+
+def test_eda_simulate_length_clean_missing_and_sparseda_kwargs():
+    # Exact length respected when length != duration * sampling_rate
+    sim = nk.eda_simulate(duration=10, length=500, sampling_rate=100, scr_number=2, random_state=42)
+    assert len(sim) == 500
+    assert np.all(np.isfinite(sim))
+
+    # eda_clean handles missing values (including leading NaN) and low-rate biosppy
+    sim_nan = sim.copy()
+    sim_nan[0] = np.nan
+    sim_nan[20] = np.nan
+    with pytest.warns(nk.misc.NeuroKitWarning, match="missing data"):
+        cleaned = nk.eda_clean(sim_nan, sampling_rate=50)
+    assert np.all(np.isfinite(cleaned))
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="very low frequency"):
+        cleaned_low = nk.eda_clean(np.ones(32), sampling_rate=4, method="biosppy")
+    assert len(cleaned_low) == 32
+
+    # sparsEDA forwards kwargs, handles constant signals without IndexError, and rejects NaNs with ValueError
+    flat_decomp = nk.eda_phasic(np.ones(200), sampling_rate=20, method="sparsEDA", Kmax=10, epsilon=1e-3)
+    assert flat_decomp.shape == (200, 2)
+    assert np.all(np.isfinite(flat_decomp))
+
+    with pytest.raises(ValueError, match="NaN"):
+        nk.eda_phasic(np.array([1.0, np.nan, 1.0]), sampling_rate=10, method="sparsEDA")
