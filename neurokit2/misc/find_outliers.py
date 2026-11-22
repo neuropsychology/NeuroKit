@@ -29,7 +29,7 @@ def find_outliers(data, exclude=2, side="both", method="sd", **kwargs):
         Can be ``"both"``, ``"left"`` or ``"right"``. If ``exclude=0.05`` and ``side="both"`` and
         ``method="norm"``, 2.5% of extreme observation of each side will be marked as outliers.
     method: str
-        Can be "standardize" or "percentile". The default is "standardize".
+        Can be ``"sd"`` (or ``"standardize"``, ``"z"``), ``"norm"``, or ``"percentile"``. Defaults to ``"sd"``.
     **kwargs : optional
         Other arguments to be passed to :func:`standardize`.
 
@@ -77,7 +77,7 @@ def find_outliers(data, exclude=2, side="both", method="sd", **kwargs):
 
     method = method.lower()
     if method not in ["standardize", "z", "sd", "percentile", "norm"]:
-        raise ValueError("method must be 'standardize' or 'percentile'.")
+        raise ValueError("method must be 'sd', 'standardize', 'z', 'percentile', or 'norm'.")
 
     # Force array
     data = np.array(data)
@@ -85,13 +85,14 @@ def find_outliers(data, exclude=2, side="both", method="sd", **kwargs):
     # Find thresholds
     if method in ["percentile"]:
         if isinstance(exclude, (list, tuple, np.ndarray)):
-            right = np.percentile(data, exclude[1] * 100)
-            left = np.percentile(data, exclude[0] * 100)
+            right = np.nanpercentile(data, exclude[1] * 100)
+            left = np.nanpercentile(data, exclude[0] * 100)
         else:
-            right = np.percentile(data, (1 - (exclude / 2)) * 100)
-            left = np.percentile(data, (exclude / 2) * 100)
+            tail = exclude / 2 if side == "both" else exclude
+            right = np.nanpercentile(data, (1 - tail) * 100)
+            left = np.nanpercentile(data, tail * 100)
 
-    elif method in ["sd"]:
+    elif method in ["sd", "standardize", "z"]:
         if isinstance(exclude, (list, tuple, np.ndarray)):
             right = exclude[1]
             left = exclude[0]

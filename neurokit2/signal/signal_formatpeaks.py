@@ -9,7 +9,9 @@ def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=No
 
     """
     if peak_indices is None:
-        peak_indices = [key for key in info.keys() if "Peaks" in key]
+        peaks_keys = [key for key in info.keys() if "Peaks" in key]
+        if len(peaks_keys) > 0:
+            peak_indices = info[peaks_keys[0]]
 
     signals = {}
     for feature, values in info.items():
@@ -20,15 +22,15 @@ def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=No
 
         # Get values of features
         elif "RecoveryTime" in feature:
-            # Sanitize indices and values
-            other_indices, other_values = _signal_sanitize_indices(other_indices, values)
+            # Sanitize indices and values without mutating `other_indices` across iterations
+            sanitized_indices, other_values = _signal_sanitize_indices(other_indices, values)
             # Append recovery time values to signal
-            signals[feature] = _signal_from_indices(other_indices, desired_length, other_values)
+            signals[feature] = _signal_from_indices(sanitized_indices, desired_length, other_values)
         else:
-            # Sanitize indices and values
-            peak_indices, peak_values = _signal_sanitize_indices(peak_indices, values)
+            # Sanitize indices and values without mutating `peak_indices` across iterations
+            sanitized_indices, peak_values = _signal_sanitize_indices(peak_indices, values)
             # Append peak values to signal
-            signals[feature] = _signal_from_indices(peak_indices, desired_length, peak_values)
+            signals[feature] = _signal_from_indices(sanitized_indices, desired_length, peak_values)
 
     signals = pd.DataFrame(signals)
     return signals
@@ -40,10 +42,13 @@ def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=No
 
 
 def _signal_sanitize_indices(indices, values):
+    if indices is None:
+        return np.array([], dtype=int), np.array([])
     # Drop every nan index together with its value
-    nan_mask = np.isnan(indices)
+    indices_arr = np.asarray(indices)
+    nan_mask = pd.isna(indices_arr)
     if np.any(nan_mask):
-        indices = np.asarray(indices)[~nan_mask]
+        indices = indices_arr[~nan_mask]
         values = np.asarray(values)[~nan_mask]
 
     return indices, values
@@ -62,23 +67,35 @@ def _signal_from_indices(indices, desired_length=(), value=1):
     if isinstance(indices, np.ndarray) and (indices.size == 0):  # skip empty arrays
         return signal
 
-    # Force indices as int
-    if isinstance(indices[0], float):
-        indices = indices[~np.isnan(indices)].astype(int)
+    # Force indices as int, filtering any NaNs
+    indices_arr = np.asarray(indices)
+    if indices_arr.dtype.kind in ("f", "O"):
+        valid = ~pd.isna(indices_arr)
+        indices = indices_arr[valid].astype(int)
+        if isinstance(value, (np.ndarray, list)) and len(value) == len(indices_arr):
+            value = np.asarray(value)[valid]
+    else:
+        indices = indices_arr.astype(int)
+
+    if len(indices) == 0:
+        return signal
 
     # Appending single value
     if isinstance(value, (int, float)):
-        signal[indices] = value
+        signal.iloc[indices] = value
     # Appending multiple values
     elif isinstance(value, (np.ndarray, list)):
-        for index, val in zip(indices, value):
-            signal.iloc[index] = val
+        if len(value) != len(indices):
+            raise ValueError(
+                "NeuroKit error: _signal_from_indices(): The number of values is different from the number of indices."
+            )
+        signal.iloc[indices] = value
     else:
         if len(value) != len(indices):
             raise ValueError(
                 "NeuroKit error: _signal_from_indices(): The number of values is different from the number of indices."
             )
-        signal[indices] = value
+        signal.iloc[indices] = value
 
     return signal
 
