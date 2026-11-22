@@ -773,6 +773,13 @@ Fixes
   argument).
 * ``fractal_sda()``'s docstring now describes the bins (``scales`` are bin sizes, which can be
   given as a list) and the relationship with H (FD = 2 - H for fractional Gaussian noise).
+* ``ecg_delineate(method="cwt")`` computes the continuous wavelet transform once per signal instead
+  of once per heartbeat plus three times for onsets and offsets (e.g., 0.6 s instead of 8 s for a
+  5-minute 1,000 Hz recording, scaling linearly rather than quadratically with recording length).
+  ``ecg_delineate()`` also clamps DWT, CWT and prominence search windows near signal boundaries,
+  supports single-beat prominence delineation and multi-epoch dicts, preserves sample index 0 and
+  beat-aligned list lengths when sanitizing out-of-bounds indices, and fixes ``check=True`` under
+  pandas 3 Copy-on-Write (including ``method="cwt"`` and updating ``signals`` alongside ``waves``).
 * ``complexity_k()`` (and therefore ``fractal_higuchi(k_max="default")``) is several hundred times
   faster (e.g., 0.04 s instead of 19 s for 1,600 samples): the curve lengths are computed once
   instead of again for each tested k_max, and the least-squares fits of all the k_max values are
