@@ -1,10 +1,8 @@
+import io
 import json
 import os
-import pathlib
-import pickle
-import urllib
+import urllib.request
 
-import numpy as np
 import pandas as pd
 from sklearn import datasets as sklearn_datasets
 
@@ -227,7 +225,7 @@ def data(dataset="bio_eventrelated_100hz"):
     # TODO: Add more EEG (fif and edf datasets)
     if dataset in ["eeg_1min_200hz"]:
         try:
-            import mne  # pylint: disable=unused-import # noqa: F401
+            import mne
         except ImportError:
             raise ImportError(
                 "NeuroKit error: data(): the 'mne' module is required",
@@ -235,21 +233,9 @@ def data(dataset="bio_eventrelated_100hz"):
                 "Please install it first (`pip install mne`).",
             )
 
-        url = "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz.pickle?raw=true"
+        url = "https://github.com/neuropsychology/NeuroKit/blob/dev/data/eeg_1min_200hz_raw.fif?raw=true"
         with urllib.request.urlopen(url) as response:
-            # handle if system is posix (Windows paths are used in the pickle)
-            if os.name == "posix":
-                windows_backup = pathlib.WindowsPath
-                pathlib.WindowsPath = pathlib.PosixPath
-                raw = pickle.load(response)
-                pathlib.WindowsPath = windows_backup
-            else:
-                raw = pickle.load(response)
-
-        if hasattr(raw.info, "proj_id") and isinstance(raw.info.proj_id, np.ndarray) and raw.info.proj_id.size == 1:
-            raw.info["proj_id"] = int(raw.info.proj_id[0])
-        elif not hasattr(raw.info, "proj_id") or not isinstance(raw.info.proj_id, int):
-            raw.info.proj_id = None
+            raw = mne.io.read_raw_fif(io.BytesIO(response.read()), preload=True, verbose=False)
         return raw
 
     # General case
