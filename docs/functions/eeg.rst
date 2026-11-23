@@ -32,6 +32,13 @@ Features
 .. autofunction:: neurokit2.eeg.eeg_source_extract
 
 
+Simulation
+^^^^^^^^^^^^^^
+*eeg_simulate()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.eeg.eeg_simulate
+
+
 MNE-Utilities
 ^^^^^^^^^^^^^^^^
 *mne_data()*
@@ -41,6 +48,10 @@ MNE-Utilities
 *mne_to_df()*
 """"""""""""""
 .. autofunction:: neurokit2.eeg.mne_to_df
+
+*mne_to_dict()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.eeg.mne_to_dict
 
 *mne_channel_add()*
 """"""""""""""""""""
@@ -65,4 +76,4 @@ MNE-Utilities
 
 .. automodule:: neurokit2.eeg
    :members:
-   :exclude-members: eeg_badchannels, eeg_diss, eeg_gfp, eeg_power, eeg_rereference, eeg_source, eeg_source_extract, mne_channel_add, mne_channel_extract, mne_crop, mne_data, mne_templateMRI, mne_to_df
+   :exclude-members: eeg_badchannels, eeg_diss, eeg_gfp, eeg_power, eeg_rereference, eeg_source, eeg_source_extract, mne_channel_add, mne_channel_extract, mne_crop, mne_data, mne_templateMRI, mne_to_df, eeg_simulate, mne_to_dict

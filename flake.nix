@@ -82,7 +82,6 @@
         {
           default = makePythonShell pkgs.python313;
 
-          py310 = makePythonShell pkgs.python310;
           py311 = makePythonShell pkgs.python311;
           py312 = makePythonShell pkgs.python312;
           py313 = makePythonShell pkgs.python313;

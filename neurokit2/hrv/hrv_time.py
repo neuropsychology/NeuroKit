@@ -272,11 +272,11 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
     if len(idx_where) == 0:
         return np.nan
     n = bar_x[idx_where[0]]  # starting search of N
-    m = X + binsize  # starting search value of M
     N = 0
     M = 0
     # start to find best values of M and N where least square is minimized
     while n < X:
+        m = X + binsize  # search every right endpoint for each left endpoint
         while m < np.max(rri):
             n_start = np.where(bar_x == n)[0][0]
             n_end = np.where(bar_x == X)[0][0]
@@ -284,11 +284,11 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
             m_start = np.where(bar_x == X)[0][0]
             m_end = np.where(bar_x == m)[0][0]
             qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start : m_end + 1])
-            q = np.zeros(len(bar_x))
+            q = np.zeros(len(bar_y))
             q[n_start : n_end + 1] = qn
             q[m_start : m_end + 1] = qm
             # least squares error
-            error = np.sum((bar_y[n_start : m_end + 1] - q[n_start : m_end + 1]) ** 2)
+            error = np.sum((bar_y - q) ** 2)
             if error < min_error:
                 N = n
                 M = m

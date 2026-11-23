@@ -27,6 +27,10 @@ Preprocessing
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_clean
 
+*rsp_quality()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_quality
+
 *rsp_amplitude()*
 """""""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_amplitude
@@ -59,9 +63,17 @@ Preprocessing
 """""""""""
 .. autofunction:: neurokit2.rsp.rsp_rrv
 
+*rsp_rav()*
+"""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_rav
+
 *rsp_rvt()*
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_rvt
+
+*rsp_segment()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_segment
 
 
 Analysis
@@ -75,9 +87,15 @@ Analysis
 .. autofunction:: neurokit2.rsp.rsp_intervalrelated
 
 
+Miscellaneous
+^^^^^^^^^^^^^^^^^
+*rsp_methods()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_methods
+
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.rsp
    :members:
-   :exclude-members: rsp_process, rsp_analyze, rsp_plot, rsp_clean, rsp_amplitude, rsp_findpeaks, rsp_fixpeaks, rsp_peaks, rsp_phase, rsp_rate, rsp_rrv, rsp_eventrelated, rsp_intervalrelated, rsp_simulate, rsp_rvt, rsp_symmetry
+   :exclude-members: rsp_process, rsp_analyze, rsp_plot, rsp_clean, rsp_amplitude, rsp_findpeaks, rsp_fixpeaks, rsp_peaks, rsp_phase, rsp_rate, rsp_rrv, rsp_eventrelated, rsp_intervalrelated, rsp_simulate, rsp_rvt, rsp_symmetry, rsp_quality, rsp_rav, rsp_segment, rsp_methods

@@ -267,6 +267,12 @@ def test_signal_findpeaks():
     assert len(info1["Peaks"]) > len(info2["Peaks"])
 
 
+def test_signal_zerocrossings_unsigned_direction():
+    signal = np.array([5, 0, 0, 7], dtype=np.uint8)
+    np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="positive"), [2])
+    np.testing.assert_array_equal(nk.signal_zerocrossings(signal, direction="negative"), [0])
+
+
 def test_signal_merge():
     signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
     signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
@@ -453,6 +459,15 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     # Test with dictionary.produced from rsp_findpeaks.
     rate = nk.signal_rate(info, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
     assert rate.shape == (duration * sampling_rate,)
+
+
+def test_signal_rate_show():
+    peaks = [100, 200, 300, 400]
+    rate = nk.signal_rate(peaks, sampling_rate=100, show=True)
+    points = plt.gca().collections[0].get_offsets()
+    np.testing.assert_allclose(points, np.column_stack([np.array(peaks) / 100, rate]))
+    nk.signal_rate({"Peaks": np.array(peaks)}, sampling_rate=100, desired_length=500, show=True)
+    plt.close("all")
 
 
 def test_signal_period():

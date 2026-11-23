@@ -11,6 +11,10 @@ Utilities
 """"""""""""
 .. autofunction:: neurokit2.density
 
+*density_bandwidth()*
+"""""""""""""""""""""""""
+.. autofunction:: neurokit2.density_bandwidth
+
 *distance()*
 """"""""""""""
 .. autofunction:: neurokit2.distance
@@ -57,6 +61,18 @@ Indices of fit
 """"""""""""""
 .. autofunction:: neurokit2.fit_error
 
+*fit_mse()*
+"""""""""""""""
+.. autofunction:: neurokit2.fit_mse
+
+*fit_rmse()*
+""""""""""""""""
+.. autofunction:: neurokit2.fit_rmse
+
+*fit_r2()*
+""""""""""""""
+.. autofunction:: neurokit2.fit_r2
+
 *fit_loess()*
 """"""""""""""
 .. autofunction:: neurokit2.fit_loess
@@ -69,9 +85,13 @@ Indices of fit
 """"""""""""""""""""
 .. autofunction:: neurokit2.fit_polynomial
 
+*fit_polynomial_findorder()*
+""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.fit_polynomial_findorder
+
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.stats
    :members:
-   :exclude-members: cor, density, distance, hdi, mad, rescale, standardize, summary_plot, cluster, cluster_findnumber, cluster_quality, fit_error, fit_loess, fit_mixture, fit_polynomial
+   :exclude-members: cor, density, distance, hdi, mad, rescale, standardize, summary_plot, cluster, cluster_findnumber, cluster_quality, fit_error, fit_loess, fit_mixture, fit_polynomial, density_bandwidth, fit_mse, fit_rmse, fit_r2, fit_polynomial_findorder

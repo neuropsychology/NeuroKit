@@ -7,7 +7,7 @@ name = "neurokit2"
 dynamic = ["version"]
 description = "The Python Toolbox for Neurophysiological Signal Processing."
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {text = "MIT License"}
 authors = [
     {name = "Dominique Makowski", email = "D.Makowski@sussex.ac.uk"},
@@ -22,7 +22,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -36,7 +35,7 @@ dependencies = [
     "pandas>=2.0.0",
     "scipy",
     "scikit-learn>=1.0.0",
-    "matplotlib>=3.5.0",
+    "matplotlib>=3.10",
     "PyWavelets>=1.4.0",
 ]
 
@@ -151,7 +150,7 @@ addopts = """
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
 
 [tool.tox]
-env_list = ["py310", "py311", "py312", "py313", "py314"]
+env_list = ["py311", "py312", "py313", "py314", "py315"]
 requires = ["tox-uv>=1.22.2"]
 
 [tool.tox.env_run_base]
@@ -174,7 +173,7 @@ commands = [
 # Style
 [tool.ruff]
 line-length = 127
-target-version = "py310"
+target-version = "py311"
 
 extend-exclude = ["neurokit2/complexity/__init__.py", "studies/**/*.md"]
 

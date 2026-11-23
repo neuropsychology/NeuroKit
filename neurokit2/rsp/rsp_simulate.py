@@ -91,6 +91,7 @@ def rsp_simulate(
             sampling_rate=sampling_rate,
             respiratory_rate=respiratory_rate,
             rng=rng,
+            length=length,
         )
         rsp = rsp[0:length]
 
@@ -357,15 +358,17 @@ def _rsp_simulate_breathmetrics_original(
     return simulated_respiration, raw_features, feature_stats
 
 
-def _rsp_simulate_breathmetrics(duration=10, sampling_rate=1000, respiratory_rate=15, rng=None):
-    n_cycles = int(respiratory_rate / 60 * duration)
+def _rsp_simulate_breathmetrics(duration=10, sampling_rate=1000, respiratory_rate=15, rng=None, length=None):
+    n_cycles = max(int(int(respiratory_rate / 60 * duration) * 1.5), 1)
+    if length is None:
+        length = duration * sampling_rate
 
-    # Loop until it doesn't fail
-    rsp = False
-    while rsp is False:
-        # Generate a longer than necessary signal so it won't be shorter
+    rsp = []
+    while len(rsp) < length:
+        if len(rsp) > 0:
+            n_cycles += 1
         rsp, _, __ = _rsp_simulate_breathmetrics_original(
-            nCycles=int(n_cycles * 1.5),
+            nCycles=n_cycles,
             sampling_rate=sampling_rate,
             breathing_rate=respiratory_rate / 60,
             signal_noise=0,

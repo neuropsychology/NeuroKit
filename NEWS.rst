@@ -6,7 +6,8 @@ News
 Compatibility
 +++++++++++++
 
-* Python 3.15 is now supported.
+* Python 3.15 is now supported, and Python 3.10 (end of life) is no longer supported.
+* ``matplotlib>=3.10`` is now required.
 * ``setuptools`` is now only installed with the ``full`` extra, removing its ``<82`` pin.
 
 Changes in Results
@@ -14,6 +15,11 @@ Changes in Results
 
 * ``signal_smooth()`` now smooths integer signals in floating point, preserving fractional
   values that were previously truncated to integers by the convolution filters.
+* ``fit_error()`` and ``fit_r2()`` now use the total sum of squares to compute R² as
+  ``1 - SSE / SST`` and use that value for adjusted R². A perfect fit now returns 1.
+* ``hrv_time()`` now fits TINN across all left and right triangle endpoints and
+  includes the histogram tails in the fitting error. Isolated intervals no longer
+  force the fitted triangle to start at the shortest interval.
 * ``fractal_correlation()`` with the default ``radius``, and therefore ``HRV_CD``, can differ.
 * ``expspace()`` returns different values when ``start`` is above 0.
 * ``entropy_approximate()`` (and ``entropy_fuzzy(approximate=True)``, ``entropy_range(approximate=True)``,
@@ -614,6 +620,11 @@ Changes in Results
   signals no longer return changepoints. The default ``penalty`` now follows the Schwarz Information
   Criterion (``2 * log(n)`` for ``change="var"`` and ``3 * log(n)`` for ``"meanvar"``).
 * ``emg_activation(method="pelt")`` now labels bursts as active (activity and rest were inverted).
+* ``mad()`` with an ``axis`` now centers each slice on its own median (it used the median of
+  the flattened data), which also changes ``eeg_gfp(method="l2", robust=True)``.
+* ``ecg_delineate(method="dwt")`` can select a different T peak (and therefore different T onsets and offsets),
+  because the latency penalty of the T-peak candidates is now symmetric (absolute value).
+* ``ecg_findpeaks(method="elgendi2010")`` fixes an off-by-one error in the R-peak search window.
 
 New Features
 +++++++++++++
@@ -673,6 +684,12 @@ New Features
 Fixes
 +++++++++++++
 
+* ``nk.data("eeg_1min_200hz")`` works again with recent versions of MNE. The dataset is now stored
+  as a FIF file instead of a pickled MNE object, which broke with MNE updates.
+* The time axis of the plotting functions no longer stretches the signal by one sample.
+* ``signal_zerocrossings()`` returns the correct ``direction`` for unsigned integer signals.
+* ``signal_rate(show=True)`` works without ``desired_length`` and with dict or DataFrame peaks.
+  Non-interpolated rates are plotted at the original peak locations.
 * ``signal_autocor()``: ``unbiased=True`` now returns 1 at lag 0 (values were divided by their
   maximum), integer signals no longer overflow with ``demean=False``, invalid lags and
   multidimensional inputs raise a ``ValueError``, and the plot's lag axis starts at 0.
@@ -1023,6 +1040,14 @@ Fixes
   ``dimension`` columns.
 * ``signal_flatline()`` returns 1.0 for a constant signal instead of 0; its largest change is 0,
   which made the threshold 0 so that no sample counted as flat.
+* ``ecg_delineate(method="dwt")``: the latency penalty used to choose the T peak among the candidates is now
+  symmetric (absolute value), as it already was for the P peak. Before, candidates earlier than expected
+  were favoured (#1220).
+* ``ecg_findpeaks(method="elgendi2010")`` no longer drops a QRS complex at the end of the signal.
+* ``eog_intervalrelated()`` raises a ``ValueError`` for a DataFrame without an ``EOG_Rate`` column,
+  as it does for a dict of epochs, instead of returning an empty DataFrame.
+* ``emg_intervalrelated()`` raises its ``ValueError`` when ``EMG_Amplitude`` or ``EMG_Activity`` is
+  missing; the column check never triggered, so a bare ``KeyError`` was raised instead.
 
 
 0.3.0

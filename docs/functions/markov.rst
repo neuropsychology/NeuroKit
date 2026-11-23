@@ -13,6 +13,10 @@ Markov Chains
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.markov.markov_test_random
 
+*markov_test_markovity()*
+""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.markov.markov_test_markovity
+
 *markov_test_symmetry()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.markov.markov_test_symmetry

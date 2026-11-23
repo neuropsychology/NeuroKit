@@ -73,6 +73,26 @@ def test_hrv_time_tinn_preserves_repeated_distribution():
     assert repeated == pytest.approx(original)
 
 
+def test_hrv_time_tinn_fits_triangle_with_sparse_tails():
+    # The histogram is exactly a triangle with base [600, 850] and peak 725,
+    # apart from one isolated interval on either side of the triangle.
+    rri = np.concatenate(([505.0], np.repeat(np.arange(625.0, 850.0, 25.0), [2, 4, 6, 8, 10, 8, 6, 4, 2]), [905.0]))
+    result = nk.hrv_time({"RRI": rri}, binsize=25)
+    assert result["HRV_TINN"].iloc[0] == pytest.approx(250.0)
+
+
+def test_hrv_time_tinn_is_robust_to_isolated_interval():
+    rng = np.random.default_rng(1)
+    rri = rng.normal(800, 30, 600)
+    tinn = nk.hrv_time({"RRI": rri})["HRV_TINN"].iloc[0]
+    tinn_outlier = nk.hrv_time({"RRI": np.append(rri, 500.0)})["HRV_TINN"].iloc[0]
+    tinn_wide = nk.hrv_time({"RRI": rng.normal(800, 60, 600)})["HRV_TINN"].iloc[0]
+
+    assert 100 < tinn < 200
+    assert 100 < tinn_outlier < 200
+    assert tinn_wide > 1.5 * tinn
+
+
 def test_hrv_frequency():
     # Test frequency domain
     ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
