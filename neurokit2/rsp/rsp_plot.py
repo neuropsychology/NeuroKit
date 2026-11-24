@@ -85,7 +85,7 @@ def rsp_plot(rsp_signals, info=None, static=True):
 
     # Determine unit of x-axis.
     x_label = "Time (seconds)"
-    x_axis = np.linspace(0, len(rsp_signals) / info["sampling_rate"], len(rsp_signals))
+    x_axis = np.arange(len(rsp_signals)) / info["sampling_rate"]
 
     if static:
         fig, ax = plt.subplots(nrows=nrow, ncols=1, sharex=True)

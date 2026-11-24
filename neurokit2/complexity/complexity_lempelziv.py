@@ -127,7 +127,8 @@ def complexity_lempelziv(
         info["Dimension"] = dimension
         info["Delay"] = delay
         # Permutation on the signal (i.e., converting to ordinal pattern).
-        _, info = complexity_ordinalpatterns(signal, delay=delay, dimension=dimension, **kwargs)
+        _, info_patterns = complexity_ordinalpatterns(signal, delay=delay, dimension=dimension, **kwargs)
+        info.update(info_patterns)
         symbolic = info["Uniques"]
     else:
         # Binarize the signal
@@ -149,68 +150,24 @@ def complexity_lempelziv(
 # Utilities
 # =============================================================================
 def _complexity_lempelziv_count(symbolic):
-    """Computes LZC counts from symbolic sequences."""
+    """Number of words of the LZ76 parsing (Lempel & Ziv, 1976), and the length of the sequence.
 
-    # TODO: I really can't imagine that there is no faster way of doing that that with a while loop
-
-    # Convert to string (faster)
-    string = "".join(list(symbolic.astype(int).astype(str)))
-
-    # Initialize variables
+    Each word is the shortest part of the rest of the sequence that cannot be copied from what
+    precedes its last symbol (the copy can overlap the word itself). The parsing uses Python's
+    substring search, which runs in C, instead of comparing one symbol at a time in a loop.
+    """
+    # One character per symbol, whatever their values (e.g., the indices of the ordinal patterns,
+    # which can exceed 9 and would otherwise be written with several digits)
+    _, codes = np.unique(np.asarray(symbolic), return_inverse=True)
+    string = "".join(map(chr, codes.ravel()))
     n = len(string)
 
-    s = "0" + string
-    c = 1
-    j = 1
-    i = 0
-    k = 1
-    k_max = 1
-    stop = False
-
-    # Start counting
-    while stop is False:
-        if s[i + k] != s[j + k]:
-            # k_max stores the length of the longest pattern in the LA that has been matched
-            # somewhere in the SB
-            k_max = max(k_max, k)
-
-            # we increase i while the bit doesn't match, looking for a previous occurrence of a
-            # pattern. s[i+k] is scanning the "search buffer" (SB)
-            i = i + 1
-            # we stop looking when i catches up with the first bit of the "look-ahead" (LA) part.
-            if i == j:
-                # If we were actually compressing, we would add the new token here. here we just
-                # count reconstruction STEPs
-                c = c + 1
-                # we move the beginning of the LA to the end of the newly matched pattern.
-                j = j + k_max
-                # if the LA surpasses length of string, then we stop.
-                if j + 1 > n:
-                    stop = True
-                # after STEP,
-                else:
-                    # we reset the searching index to beginning of SB (beginning of string)
-                    i = 0
-                    # we reset pattern matching index. Note that we are actually matching against
-                    # the first bit of the string, because we added an extra 0 above, so i+k is the
-                    # first bit of the string.
-                    k = 1
-                    # and we reset max length of matched pattern to k.
-                    k_max = 1
-            else:
-                # we've finished matching a pattern in the SB, and we reset the matched pattern
-                # length counter.
-                k = 1
-        # I increase k as long as the pattern matches, i.e. as long as s[j+k] bit string can be
-        # reconstructed by s[i+k] bit string. Note that the matched pattern can "run over" j
-        # because the pattern starts copying itself (see LZ 76 paper). This is just what happens
-        # when you apply the cloning tool on photoshop to a region where you've already cloned...
-        else:
-            k = k + 1
-            # if we reach the end of the string while matching, we need to add that to the tokens,
-            # and stop.
-            if j + k > n:
-                c = c + 1
-                stop = True
-
+    c, p = 0, 0  # number of words, start of the current word
+    while p < n:
+        k = 1  # length of the current word
+        # Extend the word while it can be copied from the sequence before its last symbol
+        while p + k <= n and string[p : p + k] in string[: p + k - 1]:
+            k += 1
+        c += 1
+        p += k
     return c, n

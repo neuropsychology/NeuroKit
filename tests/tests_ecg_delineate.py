@@ -113,3 +113,24 @@ def test_dwt_normalize_window():
     # Degenerate windows must not produce NaN/inf
     np.testing.assert_array_equal(_dwt_normalize_window(np.full(5, 3.0)), np.zeros(5))
     assert len(_dwt_normalize_window([])) == 0
+
+
+def test_dwt_tpeak_latency_penalty_is_symmetric():
+    """A T-peak candidate earlier than expected must not be favoured over one equally late."""
+    from neurokit2.ecg.ecg_delineate import _dwt_delineate_tp_peaks
+
+    # At 60 bpm and 250 Hz: qrs_width = 0.13 s and rt_duration = 0.25 s
+    rpeaks = np.arange(250, 2501, 250)
+    search_start = rpeaks[0] + 16  # 0.5 * qrs_width after R
+    expected = search_start + 46  # rt_duration - 0.5 * qrs_width into the search window
+    early, late = expected - 25, expected + 25  # 0.1 s before and after
+
+    # Each candidate is a +/- pair in the wavelet transform; the later one has the higher ECG amplitude
+    dwtmatr = np.zeros((9, 3000))
+    dwtmatr[3, [early, late]] = 1  # row 3 = degree_tpeak
+    dwtmatr[3, [early + 2, late + 2]] = -1
+    ecg = np.zeros(3000)
+    ecg[early], ecg[late] = 0.8, 1.0
+
+    tpeaks, _ = _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250)
+    assert tpeaks[0] == late

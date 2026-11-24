@@ -118,7 +118,7 @@ def _microstates_duration_plot(durations, types, ax=None):
     parts = ax.violinplot(
         data,
         positions=range(len(states)),
-        vert=False,
+        orientation="horizontal",
         showmedians=True,
         showextrema=False,
     )

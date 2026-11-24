@@ -34,3 +34,7 @@ Main
 *microstates_static()*
 """""""""""""""""""""""""
 .. autofunction:: neurokit2.microstates.microstates_static
+
+*microstates_complexity()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.microstates.microstates_complexity

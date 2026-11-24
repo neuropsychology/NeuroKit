@@ -77,6 +77,7 @@ def signal_period(
 
     """
     peaks = _signal_formatpeaks_sanitize(peaks)
+    interpolate = _signal_period_interpolate(desired_length)
 
     # Sanity checks.
     if np.size(peaks) <= 3:
@@ -85,18 +86,13 @@ def signal_period(
             category=NeuroKitWarning,
         )
         # insert desired_length if not provided:
-        if not isinstance(desired_length, (int, float, np.integer, np.floating)) and not (
-            isinstance(desired_length, np.ndarray) and desired_length.ndim == 0
-        ):
+        if not interpolate:
             desired_length = len(peaks)
 
         return np.full(int(desired_length), np.nan)
 
-    if isinstance(desired_length, (int, float, np.integer, np.floating)) or (
-        isinstance(desired_length, np.ndarray) and desired_length.ndim == 0
-    ):
-        if desired_length <= peaks[-1]:
-            raise ValueError("NeuroKit error: desired_length must be None or larger than the index of the last peak.")
+    if interpolate and desired_length <= peaks[-1]:
+        raise ValueError("NeuroKit error: desired_length must be None or larger than the index of the last peak.")
 
     # Calculate period in sec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
@@ -105,9 +101,7 @@ def signal_period(
     period[0] = np.mean(period[1:])
 
     # Interpolate all statistics to desired length.
-    if isinstance(desired_length, (int, float, np.integer, np.floating)) or (
-        isinstance(desired_length, np.ndarray) and desired_length.ndim == 0
-    ):
+    if interpolate:
         period = signal_interpolate(
             peaks,
             period,
@@ -116,3 +110,7 @@ def signal_period(
         )
 
     return period
+
+
+def _signal_period_interpolate(desired_length):
+    return desired_length is not None and np.ndim(desired_length) == 0

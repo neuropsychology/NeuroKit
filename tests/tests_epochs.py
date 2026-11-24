@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -70,3 +71,36 @@ def test_epochs_create_baseline_per_epoch(starts):
         np.testing.assert_allclose(corrected[epoch]["Signal"], expected)
         np.testing.assert_array_equal(corrected[epoch].index, expected.index)
         np.testing.assert_array_equal(corrected[epoch]["Label"], raw[epoch]["Label"])
+
+
+def test_eventrelated_rate_changes_from_onset():
+    epoch = pd.DataFrame({"PPG_Rate": [100, 80, 60, 55, 57, 59, 61]}, index=[-0.3, -0.1, 0, 0.1, 0.2, 0.3, 0.4])
+    features = nk.ppg_eventrelated({"trial": epoch}).iloc[0]
+
+    assert features["PPG_Rate_Baseline"] == 60
+    assert features["PPG_Rate_Max"] == 1
+    assert features["PPG_Rate_Min"] == -5
+    assert features["PPG_Rate_Mean"] == -2
+    np.testing.assert_allclose(features["PPG_Rate_SD"], np.sqrt(5))
+    assert features["PPG_Rate_Max_Time"] == 0.4
+    assert features["PPG_Rate_Min_Time"] == 0.1
+
+
+def test_ecg_eventrelated_phase_at_first_post_onset_sample():
+    epoch = pd.DataFrame(
+        {
+            "ECG_Rate": [100, 80, 60, 55, 57, 59, 61],
+            "ECG_Phase_Atrial": [0, 0, 0, 1, 1, 1, 1],
+            "ECG_Phase_Ventricular": [1, 1, 1, 0, 0, 0, 0],
+            "ECG_Phase_Completion_Atrial": [0.1, 0.1, 0.2, 0.6, 0.7, 0.8, 0.9],
+            "ECG_Phase_Completion_Ventricular": [0.1, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7],
+            "ECG_Quality": 1,
+        },
+        index=[-0.3, -0.1, 0, 0.1, 0.2, 0.3, 0.4],
+    )
+    features = nk.ecg_eventrelated({"trial": epoch}).iloc[0]
+
+    assert features["ECG_Phase_Atrial"] == 1
+    assert features["ECG_Phase_Ventricular"] == 0
+    assert features["ECG_Phase_Completion_Atrial"] == 0.6
+    assert features["ECG_Phase_Completion_Ventricular"] == 0.4

@@ -66,7 +66,7 @@ def eda_plot(eda_signals, info=None, static=True):
 
     # Determine unit of x-axis.
     x_label = "Time (seconds)"
-    x_axis = np.linspace(0, len(eda_signals) / info["sampling_rate"], len(eda_signals))
+    x_axis = np.arange(len(eda_signals)) / info["sampling_rate"]
 
     if static:
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)

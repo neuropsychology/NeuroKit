@@ -126,7 +126,7 @@ def ppg_plot(ppg_signals, info=None, static=True):
             ) from e
 
         # X-axis
-        x_axis = np.linspace(0, len(ppg_signals) / info["sampling_rate"], len(ppg_signals))
+        x_axis = np.arange(len(ppg_signals)) / info["sampling_rate"]
 
         fig = make_subplots(
             rows=2,

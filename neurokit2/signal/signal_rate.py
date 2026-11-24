@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .signal_period import signal_period
+from .signal_formatpeaks import _signal_formatpeaks_sanitize
+from .signal_period import _signal_period_interpolate, signal_period
 
 
 def signal_rate(
@@ -91,7 +92,17 @@ def signal_rate(
     rate = 60 / period
 
     if show is True:
-        _signal_rate_plot(rate, peaks, sampling_rate, interpolation_method)
+        peaks = _signal_formatpeaks_sanitize(peaks)
+        interpolated = _signal_period_interpolate(desired_length)
+        if not interpolated:
+            interpolation_method = None
+        _signal_rate_plot(
+            rate,
+            peaks,
+            sampling_rate,
+            interpolation_method,
+            interpolated=interpolated,
+        )
 
     return rate
 
@@ -110,6 +121,7 @@ def _signal_rate_plot(
     color_mean="orange",
     color_points="red",
     ax=None,
+    interpolated=True,
 ):
     # Prepare plot
     if ax is None:
@@ -119,8 +131,13 @@ def _signal_rate_plot(
         x_axis = np.arange(0, len(rate))
         ax.set_xlabel("Time (samples)")
     else:
-        x_axis = np.linspace(0, len(rate) / sampling_rate, len(rate))
+        x_axis = np.arange(len(rate)) / sampling_rate
         ax.set_xlabel("Time (seconds)")
+
+    if not interpolated:
+        x_axis = np.asarray(peaks)
+        if sampling_rate is not None:
+            x_axis = x_axis / sampling_rate
 
     if interpolation_method is not None:
         title += " (interpolation method: " + str(interpolation_method) + ")"
@@ -139,8 +156,8 @@ def _signal_rate_plot(
     # Plot points
     if peaks is not None:
         ax.scatter(
-            x_axis[peaks],
-            rate[peaks],
+            x_axis[peaks] if interpolated else x_axis,
+            rate[peaks] if interpolated else rate,
             color=color_points,
         )
 

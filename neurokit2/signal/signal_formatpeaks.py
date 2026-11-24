@@ -40,12 +40,11 @@ def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=No
 
 
 def _signal_sanitize_indices(indices, values):
-    # Check if nan in indices
-    if np.sum(np.isnan(indices)) > 0:
-        to_drop = np.argwhere(np.isnan(indices))[0]
-        for i in to_drop:
-            indices = np.delete(indices, i)
-            values = np.delete(values, i)
+    # Drop every nan index together with its value
+    nan_mask = np.isnan(indices)
+    if np.any(nan_mask):
+        indices = np.asarray(indices)[~nan_mask]
+        values = np.asarray(values)[~nan_mask]
 
     return indices, values
 

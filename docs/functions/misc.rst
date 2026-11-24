@@ -53,9 +53,37 @@ Misc
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.misc.as_vector
 
+*check_random_state()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.misc.check_random_state
+
+*check_random_state_children()*
+"""""""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.misc.check_random_state_children
+
+*spawn_random_state()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.misc.spawn_random_state
+
+*copyfunction()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.misc.copyfunction
+
+*create_report()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.misc.create_report
+
+*fig2img()*
+"""""""""""""""
+.. autofunction:: neurokit2.misc.fig2img
+
+*NeuroKitWarning*
+"""""""""""""""""""""""
+.. autoclass:: neurokit2.misc.NeuroKitWarning
+
 
 *Any function appearing below this point is not explicitly part of the documentation and should be added. Please open an issue if there is one.*
 
 .. automodule:: neurokit2.misc
    :members:
-   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, listify, parallel_run, progress_bar, replace, as_vector, find_knee
+   :exclude-members: check_type, expspace, find_closest, find_consecutive, find_groups, find_outliers, find_plateau, listify, parallel_run, progress_bar, replace, as_vector, find_knee, check_random_state, check_random_state_children, spawn_random_state, copyfunction, create_report, fig2img, NeuroKitWarning

@@ -1131,28 +1131,17 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
 
     blocks = mwa_qrs > mwa_beat
 
-    QRS = []
-
     qrs_duration_threshold = int(0.08 * sampling_rate)
     rr_distance_threshold = int(0.3 * sampling_rate)
 
-    for i, (prev, cur) in enumerate(zip(blocks, blocks[1:])):
-        if prev < cur:
-            start = i
+    QRS = []
+    for start, end in zip(*_ecg_findpeaks_blocks(blocks)):
+        if end - start > qrs_duration_threshold:
+            detection = np.argmax(signal[start : end + 1]) + start
+            if not QRS or detection - QRS[-1] > rr_distance_threshold:
+                QRS.append(detection)
 
-        elif prev > cur:
-            end = i - 1
-
-            if end - start > qrs_duration_threshold:
-                detection = np.argmax(signal[start : end + 1]) + start
-                if QRS:
-                    if detection - QRS[-1] > rr_distance_threshold:
-                        QRS.append(detection)
-                else:
-                    QRS.append(detection)
-
-    QRS = np.array(QRS, dtype="int")
-    return QRS
+    return np.array(QRS, dtype="int")
 
 
 def _ecg_findpeaks_elgendi2013(signal, sampling_rate=1000, **kwargs):
@@ -1174,16 +1163,8 @@ def _ecg_findpeaks_elgendi2013(signal, sampling_rate=1000, **kwargs):
     threshold = ma_beat + 0.08 * np.mean(squared)
     blocks = ma_qrs > threshold
 
-    changes = np.diff(blocks.astype(int))
-    starts = np.where(changes == 1)[0] + 1
-    ends = np.where(changes == -1)[0]
-    # Both moving averages equal the first sample, and the offset is positive,
-    # so a block cannot already be open at index 0.
-    if len(blocks) and blocks[-1]:
-        ends = np.r_[ends, len(blocks) - 1]
-
     peaks = []
-    for start, end in zip(starts, ends):
+    for start, end in zip(*_ecg_findpeaks_blocks(blocks)):
         if end - start + 1 < qrs_window:
             continue
         segment = signal[start : end + 1]
@@ -1673,6 +1654,15 @@ def _ecg_findpeaks_visibilitygraph(
 # =============================================================================
 # Utilities
 # =============================================================================
+
+
+def _ecg_findpeaks_blocks(blocks):
+    changes = np.diff(blocks.astype(int))
+    starts = np.where(changes == 1)[0] + 1
+    ends = np.where(changes == -1)[0]
+    if len(blocks) and blocks[-1]:
+        ends = np.append(ends, len(blocks) - 1)
+    return starts, ends
 
 
 def _ecg_findpeaks_MWA(signal, window_size, **kwargs):

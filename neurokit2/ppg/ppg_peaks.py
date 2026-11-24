@@ -153,7 +153,7 @@ def _ppg_peaks_plot(
     quality=None,
     ax=None,
 ):
-    x_axis = np.linspace(0, len(ppg_cleaned) / sampling_rate, len(ppg_cleaned))
+    x_axis = np.arange(len(ppg_cleaned)) / sampling_rate
 
     # Prepare plot
     if ax is None:

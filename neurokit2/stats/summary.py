@@ -53,7 +53,7 @@ def summary_plot(x, errorbars=0, **kwargs):
     # Boxplot
     ax.boxplot(
         x,
-        vert=False,
+        orientation="horizontal",
         positions=[np.max(counts) / 10],
         widths=np.max(counts) / 10,
         manage_ticks=False,

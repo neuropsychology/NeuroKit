@@ -1,6 +1,9 @@
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from .utils_complexity_embedding import complexity_embedding
 
 
@@ -12,6 +15,19 @@ def entropy_svd(signal, delay=1, dimension=2, show=False):
     higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
     space-state. Similarly to :func:`Fisher Information (FI) <information_fisher>`, it is based on
     the Singular Value Decomposition of the :func:`time-delay embedded <complexity_embedding>` signal.
+
+    It is the Shannon entropy of the singular values :math:`\\sigma_i` of the embedding matrix
+    (whose rows are the delay vectors), normalized so that they sum to 1 (Roberts et al., 1999):
+
+    .. math::
+
+        SVDEn = -\\sum_{i=1}^{m} \\bar{\\sigma}_i \\log_2(\\bar{\\sigma}_i), \\quad
+        \\bar{\\sigma}_i = \\frac{\\sigma_i}{\\sum_{j=1}^{m} \\sigma_j}
+
+    where *m* is the embedding dimension. It lies between 0 and :math:`\\log_2(m)` bits. Note that
+    the signal is not centered before the embedding, so that its mean (e.g., for RR intervals in
+    milliseconds) inflates the first singular value and lowers SVDEn. Center the signal beforehand
+    (e.g., with :func:`.standardize`) if this is not desired.
 
     See Also
     --------
@@ -33,7 +49,8 @@ def entropy_svd(signal, delay=1, dimension=2, show=False):
     Returns
     ----------
     svd : float
-        The singular value decomposition (SVD).
+        The SVD entropy (in bits). It is NaN (with a warning) for signals with missing values or
+        made only of zeros.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute SVDEn.
@@ -64,8 +81,25 @@ def entropy_svd(signal, delay=1, dimension=2, show=False):
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
 
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=show)
-    W = np.linalg.svd(embedded, compute_uv=False)  # Compute SVD
-    W /= np.sum(W)  # Normalize singular values
+    info = {"Dimension": dimension, "Delay": delay}
 
-    return -1 * sum(W * np.log2(W)), {"Dimension": dimension, "Delay": delay}
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=show)
+    if np.any(~np.isfinite(embedded)):
+        warn(
+            "The signal contains missing or infinite values. SVDEn cannot be computed and is returned as NaN.",
+            category=NeuroKitWarning,
+        )
+        return np.nan, info
+
+    W = np.linalg.svd(embedded, compute_uv=False)  # Compute SVD
+    if np.sum(W) == 0:
+        warn(
+            "The signal is made only of zeros. SVDEn cannot be computed and is returned as NaN.",
+            category=NeuroKitWarning,
+        )
+        return np.nan, info
+
+    W = W / np.sum(W)  # Normalize singular values
+    W = W[W > 0]  # Null singular values (rank-deficient embedding) contribute 0 * log(0) = 0
+
+    return -np.sum(W * np.log2(W)), info

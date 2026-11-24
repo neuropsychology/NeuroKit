@@ -105,7 +105,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **CMSEn**: See :func:`.entropy_multiscale`.
     * **RCMSEn**: See :func:`.entropy_multiscale`.
     * **CD**: See :func:`.fractal_correlation`.
-    * **HFD**: See :func:`.fractal_higuchi` (with ``kmax`` set to ``"default"``).
+    * **HFD**: See :func:`.fractal_higuchi` (with ``k_max`` set to 10).
     * **KFD**: See :func:`.fractal_katz`.
     * **LZC**: See :func:`.complexity_lempelziv`.
     * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal,

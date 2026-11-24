@@ -4,29 +4,32 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning, find_plateau
+from ..misc import NeuroKitWarning
 
 
 def complexity_k(signal, k_max="max", show=False):
     """**Automated selection of k for Higuchi Fractal Dimension (HFD)**
 
     The optimal *k-max* is computed based on the point at which HFD values plateau for a range of
-    *k-max* values (see Vega, 2015).
+    *k-max* values (see Vega & Noel, 2015): it is the first *k-max* from which the HFD stays within
+    0.01 of its value for the next 10 tested *k-max* values. If there is no such point (e.g., when
+    fewer than 11 values are tested), the largest *k-max* tested is returned with a warning.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     k_max : Union[int, str, list], optional
-        Maximum number of interval times (should be greater than or equal to 3) to be tested. If
-        ``max``, it selects the maximum possible value corresponding to half the length of the
-        signal.
+        Maximum number of interval times (should be greater than or equal to 2) to be tested. If
+        a string (e.g., ``"max"``), it tests all the values up to the maximum possible one, half
+        the length of the signal. If a list, it tests these values in increasing order (between 2
+        and half the length of the signal).
     show : bool
         Visualise the slope of the curve for the selected kmax value.
 
     Returns
     --------
-    k : float
+    k : int
         The optimal kmax of the time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
@@ -62,39 +65,47 @@ def complexity_k(signal, k_max="max", show=False):
       ieeexplore.ieee.org/document/7168285
 
     """
+    # Sanity checks
+    signal = np.asarray(signal, dtype=float)
+    if signal.ndim > 1:
+        raise ValueError("Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.")
+
     # Get the range of k-max values to be tested
     # ------------------------------------------
     if isinstance(k_max, str):  # e.g., "default"
         # upper limit for k value (max possible value)
-        k_max = int(np.floor(len(signal) / 2))  # so that normalizing factor is positive
+        k_max = len(signal) // 2  # so that normalizing factor is positive
 
-    if isinstance(k_max, int):
+    if isinstance(k_max, (int, np.integer)):
         kmax_range = np.arange(2, k_max + 1)
     elif isinstance(k_max, (list, np.ndarray, pd.Series)):
-        kmax_range = np.array(k_max)
+        kmax_range = np.unique(np.asarray(k_max, dtype=int))
     else:
-        warn(
-            "k_max should be an int or a list of values of kmax to be tested.",
-            category=NeuroKitWarning,
+        raise ValueError("k_max should be a string, an int or a list of values of kmax to be tested.")
+
+    if len(kmax_range) == 0 or np.min(kmax_range) < 2 or np.max(kmax_range) > len(signal) // 2:
+        raise ValueError(
+            f"The k_max values to be tested should be between 2 and half the length of the signal ({len(signal) // 2})."
         )
 
     # Compute the slope for each kmax value
     # --------------------------------------
-    vectorized_k_slope = np.vectorize(_complexity_k_slope, excluded=[1])
-    slopes, intercepts, info = vectorized_k_slope(kmax_range, signal)
-    # k_values = [d["k_values"] for d in info]
-    average_values = [d["average_values"] for d in info]
+    # The curve lengths L(k) do not depend on kmax, so they are computed once up to the largest one
+    average_values = _complexity_k_Lk(signal, np.max(kmax_range))
+    slopes, intercepts = _complexity_k_slope(average_values)
+    slopes, intercepts = slopes[kmax_range - 1], intercepts[kmax_range - 1]
+    average_values = [average_values[:k] for k in kmax_range]
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
-    optimal_point = find_plateau(slopes, show=False)
+    optimal_point = _complexity_k_plateau(slopes)
     if optimal_point is not None:
-        kmax_optimal = kmax_range[optimal_point]
+        kmax_optimal = int(kmax_range[optimal_point])
     else:
-        kmax_optimal = np.max(kmax_range)
+        kmax_optimal = int(np.max(kmax_range))
         warn(
-            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. "
-            + f"You can inspect the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
+            "No plateau was found in the HFD values. You can inspect the plot by setting `show=True`. "
+            + f"We will return the largest k_max tested ({kmax_optimal}).",
             category=NeuroKitWarning,
         )
 
@@ -116,43 +127,45 @@ def complexity_k(signal, k_max="max", show=False):
 # =============================================================================
 
 
-def _complexity_k_Lk(k, signal):
+def _complexity_k_Lk(signal, k_max):
+    """Average length L(k) of the curve for k = 1, ..., k_max (Higuchi, 1988)."""
     n = len(signal)
+    average_values = np.zeros(k_max)
+    for k in range(1, k_max + 1):
+        # Step 1: the increments |x(i + k) - x(i)| of the k new time series x(m), x(m + k), ...,
+        # where the increment starting at i belongs to the series m = i % k (0-indexed)
+        increments = np.abs(signal[k:] - signal[:-k])
+        lengths = np.bincount(np.arange(n - k) % k, weights=increments, minlength=k)
 
-    # Step 1: construct k number of new time series for range of k_values from 1 to kmax
-    k_subrange = np.arange(1, k + 1)  # where m = 1, 2... k
+        # Step 2: Calculate length Lm(k) of each curve
+        n_increments = (n - np.arange(1, k + 1)) // k  # floor((n - m) / k), where m = 1, 2... k
+        lengths = lengths * (n - 1) / (n_increments * k) / k
 
-    idx = np.tile(np.arange(0, len(signal), k), (k, 1)).astype(float)
-    idx += np.tile(np.arange(0, k), (idx.shape[1], 1)).T
-    mask = idx >= len(signal)
-    idx[mask] = 0
-
-    sig_values = signal[idx.astype(int)].astype(float)
-    sig_values[mask] = np.nan
-
-    # Step 2: Calculate length Lm(k) of each curve
-    normalization = (n - 1) / (np.floor((n - k_subrange) / k).astype(int) * k)
-    sets = (np.nansum(np.abs(np.diff(sig_values)), axis=1) * normalization) / k
-
-    # Step 3: Compute average value over k sets of Lm(k)
-    return np.sum(sets) / k
+        # Step 3: Compute average value over k sets of Lm(k)
+        average_values[k - 1] = np.mean(lengths)
+    return average_values
 
 
-def _complexity_k_slope(kmax, signal, k_number="max"):
-    if k_number == "max":
-        k_values = np.arange(1, kmax + 1)
-    else:
-        k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
+def _complexity_k_slope(average_values):
+    """HFD (slope) and intercept of log L(k) against log(1/k), for k_max = 1, ..., len(average_values)."""
+    # Least-squares fits of every k = 1, ..., k_max, all at once from cumulative sums
+    x = np.log(1 / np.arange(1, len(average_values) + 1))
+    y = np.log(average_values)
+    n = np.arange(1, len(x) + 1)
+    sum_x, sum_y = np.cumsum(x), np.cumsum(y)
+    with np.errstate(divide="ignore", invalid="ignore"):  # a single point (k_max = 1) has no slope
+        slopes = (n * np.cumsum(x * y) - sum_x * sum_y) / (n * np.cumsum(x**2) - sum_x**2)
+    intercepts = (sum_y - slopes * sum_x) / n
+    return slopes, intercepts
 
-    # Step 3 of Vega & Noel (2015)
-    vectorized_Lk = np.vectorize(_complexity_k_Lk, excluded=[1])
 
-    # Compute length of the curve, Lm(k)
-    average_values = vectorized_Lk(k_values, signal)
-
-    # Slope of best-fit line through points (slope equal to FD)
-    slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
-    return slope, intercept, {"k_values": k_values, "average_values": average_values}
+def _complexity_k_plateau(slopes, tolerance=0.01, window=10):
+    """Index of the first HFD value from which the next ``window`` values stay within ``tolerance``."""
+    if len(slopes) <= window:
+        return None
+    following = np.lib.stride_tricks.sliding_window_view(slopes[1:], window)
+    stable = np.all(np.abs(following - slopes[: len(following), None]) < tolerance, axis=1)
+    return int(np.argmax(stable)) if np.any(stable) else None
 
 
 # =============================================================================

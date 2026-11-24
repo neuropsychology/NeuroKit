@@ -69,7 +69,7 @@ def emg_plot(emg_signals, info=None, static=True):
         raise ValueError("NeuroKit error: The `emg_signals` argument must be the DataFrame returned by `emg_process()`.")
 
     # Determine what to display on the x-axis, mark activity.
-    x_axis = np.linspace(0, emg_signals.shape[0] / info["sampling_rate"], emg_signals.shape[0])
+    x_axis = np.arange(emg_signals.shape[0]) / info["sampling_rate"]
 
     if static is True:
         _emg_plot_static(emg_signals, x_axis, onsets, offsets, info["sampling_rate"])

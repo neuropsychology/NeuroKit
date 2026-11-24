@@ -178,6 +178,16 @@ def test_ecg_findpeaks():
     info_elgendi = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
     assert info_elgendi["ECG_R_Peaks"].size == 70
 
+    # A block still open when the signal ends must not be silently dropped,
+    # same requirement already covered for elgendi2013 in test_ecg_elgendi2013.
+    from neurokit2.ecg.ecg_findpeaks import _ecg_findpeaks_elgendi
+
+    edged_legacy = np.zeros(3000)
+    edged_legacy[500:540] = 5
+    edged_legacy[2800:3000] = 5
+    edged_legacy_peaks = _ecg_findpeaks_elgendi(edged_legacy, sampling_rate=1000)
+    assert np.any(edged_legacy_peaks >= 2800)
+
     # Test engzeemod2012 method
     info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     assert info_engzeemod["ECG_R_Peaks"].size == 69
