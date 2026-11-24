@@ -13,6 +13,8 @@ Compatibility
 Changes in Results
 ++++++++++++++++++
 
+* ``signal_smooth()`` now smooths integer signals in floating point, preserving fractional
+  values that were previously truncated to integers by the convolution filters.
 * ``fit_error()`` and ``fit_r2()`` now use the total sum of squares to compute R² as
   ``1 - SSE / SST`` and use that value for adjusted R². A perfect fit now returns 1.
 * ``hrv_time()`` now fits TINN across all left and right triangle endpoints and

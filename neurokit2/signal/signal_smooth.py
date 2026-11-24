@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import scipy.ndimage
 import scipy.signal
 
@@ -81,8 +80,7 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
     * Smith, S. W. (1997). The scientist and engineer's guide to digital signal processing.
 
     """
-    if isinstance(signal, pd.Series):
-        signal = signal.values
+    signal = np.asarray(signal, dtype=float)
 
     length = len(signal)
 
