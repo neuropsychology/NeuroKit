@@ -891,6 +891,16 @@ Fixes
 * ``entropy_power()`` raises a clear error for constant signals (instead of a ``LinAlgError`` from
   the kernel density estimation) and for signals with missing values, and its docstring gives the
   formula and its units and no longer warns that the implementation is uncertain.
+* ``find_closest()`` is rewritten with ``np.searchsorted()`` instead of a per-target pandas
+  ``Series`` loop (e.g., 3 ms instead of 0.8 s for 5,000 targets in 10,000 values, and over
+  2,000 times faster on larger inputs), while preserving first-occurrence tie-breaking and handling
+  ``NaN`` targets/arrays and ``strictly=True`` with ``direction="both"``. ``find_outliers()`` now
+  treats ``method="standardize"`` and ``"z"`` like ``"sd"`` (they fell into ``"norm"`` and marked
+  every sample as an outlier when ``exclude=2``) and uses ``np.nanpercentile()`` with proper
+  one-sided tails in ``method="percentile"``. ``signal_findpeaks()`` now converts list inputs to
+  arrays so ``Onsets`` and ``Offsets`` are no longer all ``NaN``, and ``signal_formatpeaks()``
+  extracts peak indices when ``peak_indices=None`` without mutating ``peak_indices`` or
+  ``other_indices`` across multiple value columns containing ``NaN`` entries.
 * ``entropy_spectral()`` accepts numpy integers as ``bins`` (e.g., ``np.int64(10)``), which were
   silently ignored (the spectrum was not binned, e.g., 0.751 instead of 0.592 for sinusoids at 5,
   6 and 10 Hz with 10 bins), and raises an error when ``bins`` is not an integer of at least 2

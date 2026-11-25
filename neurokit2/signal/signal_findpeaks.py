@@ -101,6 +101,7 @@ def signal_findpeaks(
     signal_fixpeaks
 
     """
+    signal = as_vector(signal)
     info = _signal_findpeaks_scipy(signal)
 
     # Absolute
@@ -149,11 +150,14 @@ def _signal_findpeaks_keep(
 ):
     if below is None and above is None:
         return info
+    if len(info["Peaks"]) == 0:
+        return info
 
     keep = np.full(len(info["Peaks"]), True)
 
     if relative_max is True:
-        what = info[what] / np.max(info[what])
+        max_val = np.max(info[what])
+        what = info[what] / max_val if max_val != 0 else np.zeros_like(info[what], dtype=float)
     elif relative_median is True:
         what = standardize(info[what], robust=True)
     elif relative_mean is True:
@@ -209,7 +213,7 @@ def _signal_findpeaks_distances(peaks):
     else:
         distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
         distances_prev = np.concatenate([distances_next[1:], [np.nan]])
-        distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
+        distances = np.fmin(distances_next, distances_prev)
 
     return distances
 
@@ -220,6 +224,7 @@ def _signal_findpeaks_findbase(peaks, signal, what="onset"):
     else:
         direction = "greater"
 
+    signal = as_vector(signal)
     troughs, _ = scipy.signal.find_peaks(-1 * signal)
 
     bases = find_closest(peaks, troughs, direction=direction, strictly=True)
