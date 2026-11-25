@@ -4,7 +4,7 @@ from ..signal import signal_power
 from .utils import _sanitize_eeg
 
 
-def eeg_power(eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"], **kwargs):
+def eeg_power(eeg, sampling_rate=None, frequency_band=None, **kwargs):
     """**EEG Power in Different Frequency Bands**
 
     See our `walkthrough <https://neuropsychology.github.io/NeuroKit/examples/eeg_power/eeg_power.html>`_ for
@@ -65,6 +65,8 @@ def eeg_power(eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha",
 
     # Sanitize input
     eeg, sampling_rate, _ = _sanitize_eeg(eeg, sampling_rate=sampling_rate)
+    if sampling_rate is None:
+        raise ValueError("NeuroKit error: eeg_power(): 'sampling_rate' must be provided when 'eeg' is an array or DataFrame.")
 
     # Iterate through channels
     data = []
@@ -77,10 +79,9 @@ def eeg_power(eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha",
         )
         data.append(rez)
 
-    data = pd.concat(data, axis=0)
+    data = pd.concat(data, axis=0, ignore_index=True)
     data.columns = band_names
     data.insert(0, "Channel", eeg.columns)
-    data.reset_index(drop=True, inplace=True)
 
     return data
 
@@ -88,35 +89,37 @@ def eeg_power(eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha",
 # =============================================================================
 # Utilities
 # =============================================================================
-def _eeg_power_sanitize(frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"]):
-    band_names = frequency_band.copy()  # This will used for the names
-    for i, f in enumerate(frequency_band):
+def _eeg_power_sanitize(frequency_band=None):
+    if frequency_band is None:
+        frequency_band = ["Gamma", "Beta", "Alpha", "Theta", "Delta"]
+    elif isinstance(frequency_band, (str, tuple)):
+        frequency_band = [frequency_band]
+
+    band_ranges = {
+        "gamma": (30, 80),
+        "beta": (13, 30),
+        "beta1": (13, 16),
+        "beta2": (16, 20),
+        "beta3": (20, 30),
+        "smr": (13, 15),
+        "alpha": (8, 13),
+        "mu": (9, 11),
+        "theta": (4, 8),
+        "delta": (1, 4),
+    }
+
+    bands_out = []
+    band_names = []
+    for f in frequency_band:
         if isinstance(f, str):
-            f_name = f.lower()
-            if f_name == "gamma":
-                frequency_band[i] = (30, 80)
-            elif f_name == "beta":
-                frequency_band[i] = (13, 30)
-            elif f_name == "beta1":
-                frequency_band[i] = (13, 16)
-            elif f_name == "beta2":
-                frequency_band[i] = (16, 20)
-            elif f_name == "beta3":
-                frequency_band[i] = (20, 30)
-            elif f_name == "smr":
-                frequency_band[i] = (13, 15)
-            elif f_name == "alpha":
-                frequency_band[i] = (8, 13)
-            elif f_name == "mu":
-                frequency_band[i] = (9, 11)
-            elif f_name == "theta":
-                frequency_band[i] = (4, 8)
-            elif f_name == "delta":
-                frequency_band[i] = (1, 4)
-            else:
-                raise ValueError(f"Unknown frequency band: '{f_name}'")
-        elif isinstance(f, tuple):
-            band_names[i] = f"Hz_{f[0]}_{f[1]}"
+            f_key = f.lower().replace(" ", "").replace("_", "")
+            if f_key not in band_ranges:
+                raise ValueError(f"Unknown frequency band: '{f.lower()}'")
+            bands_out.append(band_ranges[f_key])
+            band_names.append(f)
+        elif isinstance(f, (tuple, list)) and len(f) == 2:
+            bands_out.append((f[0], f[1]))
+            band_names.append(f"Hz_{f[0]}_{f[1]}")
         else:
             raise ValueError("'frequency_band' must be a list of tuples (or strings).")
-    return frequency_band, band_names
+    return bands_out, band_names

@@ -49,8 +49,8 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
         import mne
     except ImportError as e:
         raise ImportError(
-            "NeuroKit error: eeg_channel_add(): the 'mne' module is required for this function to run. ",
-            "Please install it first (`pip install mne`).",
+            "NeuroKit error: mne_crop(): the 'mne' module is required for this function to run. "
+            "Please install it first (`pip install mne`)."
         ) from e
 
     # Convert time to samples
@@ -66,7 +66,7 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
         elif tmax > max_time:
             raise ValueError(f"tmax ({tmax}) must be less than or equal to the max time ({max_time} sec).")
 
-        # Convert time to first and last samples
+        # Convert time to first and last samples (`_time_mask` already applies `include_tmax`)
         new_smin, new_smax = np.where(_time_mask(raw.times, tmin, tmax, sfreq=raw.info["sfreq"], include_tmax=include_tmax))[
             0
         ][[0, -1]]
@@ -74,12 +74,12 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
     if smin is None:
         smin = new_smin
     if smax is None:
-        smax = new_smax
-    if include_tmax:
+        smax = new_smax + 1
+    elif include_tmax:
         smax += 1
 
-    # Re-create the Raw object (note that mne does smin : smin + 1)
-    raw = mne.io.RawArray(raw._data[:, int(smin) : int(smax)].copy(), raw.info, verbose="WARNING")
+    # Re-create the Raw object
+    raw = mne.io.RawArray(raw.get_data()[:, int(smin) : int(smax)].copy(), raw.info, verbose="WARNING")
 
     return raw
 
@@ -111,6 +111,6 @@ def _time_mask(times, tmin=None, tmax=None, sfreq=None, raise_error=True, includ
         extra = "" if include_tmax else "when include_tmax=False "
         raise ValueError(
             f"No samples remain when using tmin={orig_tmin} and tmax={orig_tmax} {extra}"
-            "(original time bounds are [{times[0]}, {times[-1]}])"
+            f"(original time bounds are [{times[0]}, {times[-1]}])"
         )
     return mask

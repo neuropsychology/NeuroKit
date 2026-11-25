@@ -57,30 +57,48 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
             ) from e
         selection = mne.pick_types(eeg.info, eeg=True)
         ch_names = np.array(eeg.ch_names)[selection]
-        eeg, _ = eeg[selection]
+        eeg = eeg.get_data(picks=selection)
+        if eeg.ndim == 3:
+            eeg = np.transpose(eeg, (1, 0, 2)).reshape(eeg.shape[1], -1)
     elif isinstance(eeg, pd.DataFrame):
         ch_names = eeg.columns
         eeg = eeg.values.T
     else:
+        eeg = np.asarray(eeg, dtype=float)
+        if eeg.ndim == 3:
+            eeg = np.transpose(eeg, (1, 0, 2)).reshape(eeg.shape[1], -1)
         ch_names = np.arange(len(eeg))
 
     results = []
     for i in range(len(eeg)):
-        channel = eeg[i, :]
+        channel = np.asarray(eeg[i, :], dtype=float)
+        channel_valid = channel[~np.isnan(channel)]
 
-        hdi_values = hdi(channel, ci=0.90)
+        if len(channel_valid) >= 2:
+            hdi_values = hdi(channel_valid, ci=0.90)
+            skew_val = float(scipy.stats.skew(channel_valid))
+            kurt_val = float(scipy.stats.kurtosis(channel_valid))
+            amp_val = float(np.max(channel_valid) - np.min(channel_valid))
+            n_zc = len(signal_zerocrossings(channel_valid - np.mean(channel_valid)))
+        else:
+            hdi_values = (np.nan, np.nan)
+            skew_val = np.nan
+            kurt_val = np.nan
+            amp_val = np.nan
+            n_zc = 0
+
         info = {
             "Channel": [i],
             "SD": [np.nanstd(channel, ddof=1)],
             "Mean": [np.nanmean(channel)],
             "MAD": [mad(channel)],
             "Median": [np.nanmedian(channel)],
-            "Skewness": [scipy.stats.skew(channel)],
-            "Kurtosis": [scipy.stats.kurtosis(channel)],
-            "Amplitude": [np.max(channel) - np.min(channel)],
+            "Skewness": [skew_val],
+            "Kurtosis": [kurt_val],
+            "Amplitude": [amp_val],
             "CI_low": [hdi_values[0]],
             "CI_high": [hdi_values[1]],
-            "n_ZeroCrossings": [len(signal_zerocrossings(channel - np.nanmean(channel)))],
+            "n_ZeroCrossings": [n_zc],
         }
         results.append(pd.DataFrame(info))
     results = pd.concat(results, axis=0)
@@ -121,8 +139,9 @@ def _plot_eeg_badchannels(eeg, bads, ch_names):
     # Plot bad channels
     for i, bad in enumerate(bads_list):
         channel = eeg[bad, :]
-        ax.plot(np.arange(1, len(channel) + 1), channel, c=colors_bad[i], label=ch_names[i])
+        ax.plot(np.arange(1, len(channel) + 1), channel, c=colors_bad[i], label=ch_names[bad])
 
-    ax.legend(loc="upper right")
+    if len(bads_list) > 0:
+        ax.legend(loc="upper right")
 
     return fig

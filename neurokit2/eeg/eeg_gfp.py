@@ -96,24 +96,37 @@ def eeg_gfp(
       neurophysiology, 48(6), 609-621.
 
     """
-    # If MNE object
-    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
+    # Sanitize input to 2D (n_channels, n_times) float array
+    if isinstance(eeg, pd.DataFrame):
+        eeg = eeg.to_numpy(dtype=float).T
+    elif not isinstance(eeg, np.ndarray):
         sampling_rate = eeg.info["sfreq"]
         eeg = eeg.get_data()
+    else:
+        eeg = np.asarray(eeg, dtype=float)
 
-    # Normalization
+    if eeg.ndim == 3:
+        # Concatenate epochs along time: (n_epochs, n_channels, n_times) -> (n_channels, n_epochs * n_times)
+        eeg = np.transpose(eeg, (1, 0, 2)).reshape(eeg.shape[1], -1)
+
+    # Standardize each channel across time (axis=1)
     if standardize_eeg is True:
-        eeg = standardize(eeg, robust=robust)
+        eeg = standardize(eeg.T, robust=robust).T
 
     # Compute GFP
-    if method.lower() == "l1":
+    method_lower = method.lower()
+    if method_lower == "l1":
         gfp = _eeg_gfp_L1(eeg, robust=robust)
-    else:
+    elif method_lower == "l2":
         gfp = _eeg_gfp_L2(eeg, robust=robust)
+    else:
+        raise ValueError(f"NeuroKit error: eeg_gfp(): 'method' '{method}' not recognized. Must be 'l1' or 'l2'.")
 
     # Normalize (between 0 and 1)
-    if normalize is True:
-        gfp = gfp / np.max(gfp)
+    if normalize is True and len(gfp) > 0:
+        max_gfp = np.max(gfp)
+        if max_gfp > 0:
+            gfp = gfp / max_gfp
 
     # Smooth
     if smooth is not None and smooth != 0:
