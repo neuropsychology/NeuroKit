@@ -58,6 +58,8 @@ def intervals_to_peaks(intervals, intervals_time=None, sampling_rate=1000):
     intervals, intervals_time, intervals_missing = _intervals_sanitize(
         intervals, intervals_time=intervals_time, remove_missing=True
     )
+    if len(intervals) == 0:
+        return np.array([], dtype=int)
 
     if intervals_missing:
         # Check for non successive intervals in case of missing data

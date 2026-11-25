@@ -414,6 +414,68 @@ def test_hrv_rsa():
         _ = nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
 
 
+def test_hrv_rsa_short_signals_and_methods(recwarn):
+    # Short signals (5s, 10s, 20s, 33s) should not crash bio_process(), hrv(), or hrv_rsa()
+    for dur in [5, 10, 20, 33]:
+        ecg = nk.ecg_simulate(duration=dur, sampling_rate=100, random_state=42)
+        rsp = nk.rsp_simulate(duration=dur, sampling_rate=100, random_state=42)
+        bio_df, _ = nk.bio_process(ecg=ecg, rsp=rsp, sampling_rate=100)
+        assert {"RSA_P2T", "RSA_Gates"}.issubset(bio_df.columns)
+        assert len(bio_df) == dur * 100
+
+    # bio_process on < 32s should not emit the Gates 32s warning
+    gates_warnings = [w for w in recwarn.list if "shorter than the duration of the window" in str(w.message)]
+    assert len(gates_warnings) == 0
+
+    # Direct hrv_rsa(continuous=False) on 20s and 8s signals returns NaN dicts cleanly with warnings
+    ecg20, info20 = nk.ecg_process(nk.ecg_simulate(duration=20, sampling_rate=100, random_state=42), sampling_rate=100)
+    rsp20, _ = nk.rsp_process(nk.rsp_simulate(duration=20, sampling_rate=100, random_state=42), sampling_rate=100)
+    with pytest.warns(misc.NeuroKitWarning, match="shorter than the duration of the window"):
+        res20 = nk.hrv_rsa(ecg20, rsp20, info20, sampling_rate=100, continuous=False)
+    assert np.isnan(res20["RSA_Gates_Mean"])
+
+    # Method selection & Gates window_number < 4
+    ecg60, info60 = nk.ecg_process(nk.ecg_simulate(duration=60, sampling_rate=100, random_state=42), sampling_rate=100)
+    rsp60, _ = nk.rsp_process(nk.rsp_simulate(duration=60, sampling_rate=100, random_state=42), sampling_rate=100)
+
+    p2t_only = nk.hrv_rsa(ecg20, rsp20, info20, sampling_rate=100, method="p2t", continuous=False)
+    assert set(p2t_only.keys()) == {"RSA_P2T_Mean", "RSA_P2T_Mean_log", "RSA_P2T_SD", "RSA_P2T_NoRSA"}
+
+    pb_only = nk.hrv_rsa(ecg60, rpeaks=info60, sampling_rate=100, method="porgesbohrer", continuous=False)
+    assert list(pb_only.keys()) == ["RSA_PorgesBohrer"] and np.isfinite(pb_only["RSA_PorgesBohrer"])
+
+    gates_w2 = nk.hrv_rsa(ecg60, rpeaks=info60, sampling_rate=100, method="gates", window_number=2, continuous=False)
+    assert set(gates_w2.keys()) == {"RSA_Gates_Mean", "RSA_Gates_Mean_log", "RSA_Gates_SD"}
+    gates_cont = nk.hrv_rsa(ecg60, rpeaks=info60, sampling_rate=100, method="gates", window_number=2, continuous=True)
+    assert list(gates_cont.columns) == ["RSA_Gates"] and len(gates_cont) == len(ecg60)
+
+    combo = nk.hrv_rsa(ecg60, rsp60, info60, sampling_rate=100, method=["p2t", "pb"], continuous=False)
+    assert "RSA_P2T_Mean" in combo and "RSA_PorgesBohrer" in combo and "RSA_Gates_Mean" not in combo
+
+    # Too few R-peaks (< 2), < 10s PB warning, and continuous=True with missing RSP peaks
+    ecg8, info8 = nk.ecg_process(nk.ecg_simulate(duration=8, sampling_rate=100, random_state=42), sampling_rate=100)
+    with pytest.warns(misc.NeuroKitWarning, match="too short for Porges-Bohrer"):
+        assert np.isnan(nk.hrv_rsa(ecg8, rpeaks=info8, sampling_rate=100, method="pb", continuous=False)["RSA_PorgesBohrer"])
+
+    rsp_empty = rsp20.copy()
+    rsp_empty["RSP_Peaks"] = 0
+    empty_cont = nk.hrv_rsa(ecg20, rsp_empty, info20, sampling_rate=100, method=["all"], continuous=True, verbose=False)
+    assert list(empty_cont.columns) == ["RSA_P2T", "RSA_Gates"] and empty_cont.isna().all().all()
+
+    few_df = ecg20.copy()
+    few_df["ECG_R_Peaks"] = 0
+    with pytest.warns(misc.NeuroKitWarning, match="Too few R-peaks"):
+        assert np.isnan(nk.hrv_rsa(few_df, rsp20, rpeaks=[50], sampling_rate=100)["RSA_P2T_Mean"])
+    assert len(nk.hrv_rsa(few_df, rsp20, rpeaks=[50], sampling_rate=100, continuous=True, verbose=False)) == len(few_df)
+
+    with pytest.raises(ValueError, match="does not support continuous=True"):
+        nk.hrv_rsa(ecg60, rsp60, info60, sampling_rate=100, method="porgesbohrer", continuous=True)
+    with pytest.raises(ValueError, match="'method' should be one of"):
+        nk.hrv_rsa(ecg60, rsp60, info60, sampling_rate=100, method="unknown")
+    with pytest.raises(ValueError, match="window_number"):
+        nk.hrv_rsa(ecg60, rpeaks=info60, sampling_rate=100, method="gates", window_number=1)
+
+
 def test_hrv_nonlinear_fragmentation():
     # https://github.com/neuropsychology/NeuroKit/issues/344
     from neurokit2.hrv.hrv_nonlinear import _hrv_nonlinear_fragmentation
