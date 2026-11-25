@@ -866,6 +866,15 @@ Fixes
   ``complexity_symbolize()`` (e.g., for ``symbolize="kmeans"``, whose values changed at every call).
   Its docstring describes DispEn, FDispEn, the fine-sorted DispEn and RDEn, documents the ``base``
   keyword argument, and cites Azami & Escudero (2018), Li et al. (2019) and Fu et al. (2019).
+* ``eda_findpeaks()`` pairs each peak with its preceding onset in ``method="gamboa2008"``, fixes
+  tied-amplitude ``ValueError`` and empty-crossing crashes in ``method="nabian2018"``, and scales
+  Savitzky-Golay smoothing with ``sampling_rate`` in ``method="vanhalem2020"``; ``eda_eventrelated()``
+  attributes post-event SCR amplitude, rise time, and recovery time to the first post-stimulus SCR
+  onset while ignoring ``NaN`` padding; ``eda_simulate()`` respects explicit ``length`` and uses
+  ``fftconvolve`` (~20-80x faster); ``eda_phasic()`` forwards ``**kwargs`` to ``cvxEDA`` and
+  ``sparsEDA`` while fixing ``sparsEDA`` 8 Hz spacing, ``epsilon`` shadowing, and collinear active
+  sets; and ``eda_clean()`` fixes missing-value filling on pandas 3 and low-sampling-rate BioSPPy
+  filtering.
 * ``entropy_slope()`` now accepts lists (they raised a ``TypeError``) and pandas Series with any
   index (a Series with a non-default index returned 0, as its differences were aligned on the
   index), returns NaN with a warning for signals with missing values, and raises an error when

@@ -1,7 +1,8 @@
 import numpy as np
+import scipy.signal
 
 from ..misc import check_random_state, check_random_state_children
-from ..signal import signal_distort, signal_merge
+from ..signal import signal_distort
 
 
 def eda_simulate(
@@ -77,32 +78,39 @@ def eda_simulate(
 
     # Generate number of samples automatically if length is unspecified
     if length is None:
-        length = duration * sampling_rate
+        length = int(np.round(duration * sampling_rate))
+    if duration is None or duration <= 0:
+        duration = length / sampling_rate
+    effective_sr = length / duration
 
     eda = np.full(length, 1.0)
     eda += drift * np.linspace(0, duration, length)
-    time = [0, duration]
 
-    start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
+    if scr_number > 0 and length > 0:
+        start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
+        for start_peak in start_peaks:
+            relative_time_peak = np.abs(rng.normal(0, 5, size=1)) + 3.0745
+            scr = _eda_simulate_scr(sampling_rate=effective_sr, time_peak=relative_time_peak)
+            idx_start = int(np.round(start_peak * effective_sr))
+            if idx_start < 0:
+                scr = scr[-idx_start:]
+                idx_start = 0
+            if idx_start >= length or len(scr) == 0:
+                continue
 
-    for start_peak in start_peaks:
-        relative_time_peak = np.abs(rng.normal(0, 5, size=1)) + 3.0745
-        scr = _eda_simulate_scr(sampling_rate=sampling_rate, time_peak=relative_time_peak)
-        time_scr = [start_peak, start_peak + 9]
-        if time_scr[0] < 0:
-            scr = scr[int(np.round(np.abs(time_scr[0]) * sampling_rate)) : :]
-            time_scr[0] = 0
-        if time_scr[1] > duration:
-            scr = scr[0 : int(np.round((duration - time_scr[0]) * sampling_rate))]
-            time_scr[1] = duration
-
-        eda = signal_merge(signal1=eda, signal2=scr, time1=time, time2=time_scr)
+            idx_end = min(length, idx_start + len(scr))
+            seg = scr[: idx_end - idx_start]
+            if idx_start > 0:
+                eda[:idx_start] += seg[0]
+            eda[idx_start:idx_end] += seg
+            if idx_end < length:
+                eda[idx_end:] += seg[-1]
 
     # Add random noise
-    if noise > 0:
+    if noise > 0 and length > 0:
         eda = signal_distort(
             eda,
-            sampling_rate=sampling_rate,
+            sampling_rate=effective_sr,
             noise_amplitude=noise,
             noise_frequency=[5, 10, 100],
             noise_shape="laplace",
@@ -145,15 +153,16 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
 
     """
     if length is None:
-        length = 9 * sampling_rate
+        length = max(1, int(np.round(9 * sampling_rate)))
     t = np.linspace(sampling_rate / 10000, 90, length)
 
     gt = np.exp(-((t - time_peak) ** 2) / (2 * rise**2))
     ht = np.exp(-t / decay[0]) + np.exp(-t / decay[1])  # pylint: disable=E1130
 
-    ft = np.convolve(gt, ht)
-    ft = ft[0 : len(t)]
-    ft = ft / np.max(ft)
+    ft = scipy.signal.fftconvolve(gt, ht)[: len(t)] if len(t) >= 128 else np.convolve(gt, ht)[: len(t)]
+    max_ft = np.max(ft)
+    if max_ft > 0:
+        ft = ft / max_ft
     return ft
 
 

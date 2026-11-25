@@ -95,10 +95,11 @@ def eda_eventrelated(epochs, silent=False):
         # Maximum phasic amplitude
         data[i] = _eda_eventrelated_eda(epochs[i], data[i])
 
-        # Detect activity following the events
-        if np.any(epochs[i]["SCR_Peaks"][epochs[i].index > 0] == 1) and np.any(
-            epochs[i]["SCR_Onsets"][epochs[i].index > 0] == 1
-        ):
+        # Detect activity following the events (an SCR onset after t=0 followed by a peak in the epoch)
+        post_epoch = epochs[i][epochs[i].index > 0]
+        onset_pos = np.where(post_epoch["SCR_Onsets"] == 1)[0]
+        peak_pos = np.where(post_epoch["SCR_Peaks"] == 1)[0]
+        if len(onset_pos) > 0 and np.any(peak_pos >= onset_pos[0]):
             data[i]["EDA_SCR"] = 1
         else:
             data[i]["EDA_SCR"] = 0
@@ -123,7 +124,10 @@ def eda_eventrelated(epochs, silent=False):
 # =============================================================================
 # Internals
 # =============================================================================
-def _eda_eventrelated_eda(epoch, output={}):
+def _eda_eventrelated_eda(epoch, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     if "EDA_Phasic" not in epoch:
         warn(
@@ -136,7 +140,10 @@ def _eda_eventrelated_eda(epoch, output={}):
     return output
 
 
-def _eda_eventrelated_scr(epoch, output={}):
+def _eda_eventrelated_scr(epoch, output=None):
+    if output is None:
+        output = {}
+
     # Sanitize input
     if "SCR_Amplitude" not in epoch:
         warn(
@@ -160,18 +167,35 @@ def _eda_eventrelated_scr(epoch, output={}):
         return output
 
     epoch_postevent = epoch[epoch.index > 0]
-    # Peak amplitude
-    first_peak = np.where(epoch_postevent["SCR_Amplitude"] != 0)[0][0]
+    if "SCR_Peaks" in epoch_postevent and "SCR_Onsets" in epoch_postevent:
+        onset_pos = np.where(epoch_postevent["SCR_Onsets"] == 1)[0]
+        peak_pos = np.where(epoch_postevent["SCR_Peaks"] == 1)[0]
+        valid_peaks = peak_pos[peak_pos >= onset_pos[0]] if len(onset_pos) > 0 else peak_pos
+    else:
+        amp_vals = epoch_postevent["SCR_Amplitude"].to_numpy(dtype=float)
+        valid_peaks = np.where((amp_vals != 0) & ~np.isnan(amp_vals))[0]
+
+    if len(valid_peaks) == 0:
+        output["SCR_Peak_Amplitude"] = np.nan
+        output["SCR_Peak_Amplitude_Time"] = np.nan
+        output["SCR_RiseTime"] = np.nan
+        output["SCR_RecoveryTime"] = np.nan
+        return output
+
+    # First post-event SCR peak (paired with the first post-event onset rather than a pre-event SCR)
+    first_peak = int(valid_peaks[0])
     output["SCR_Peak_Amplitude"] = epoch_postevent["SCR_Amplitude"].iloc[first_peak]
     # Time of peak (Raw, from epoch onset)
     output["SCR_Peak_Amplitude_Time"] = epoch_postevent.index[first_peak]
     # Rise Time (From the onset of the peak)
     output["SCR_RiseTime"] = epoch_postevent["SCR_RiseTime"].iloc[first_peak]
 
-    # Recovery Time (from peak to half recovery time)
-    if any(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0):
-        recov_t = np.where(epoch_postevent["SCR_RecoveryTime"] != 0)[0][0]
-        output["SCR_RecoveryTime"] = epoch_postevent["SCR_RecoveryTime"].iloc[recov_t]
+    # Recovery Time (between this SCR peak and the next SCR peak, ignoring NaN padding)
+    next_peak = int(valid_peaks[1]) if len(valid_peaks) > 1 else len(epoch_postevent)
+    recov_slice = epoch_postevent["SCR_RecoveryTime"].iloc[first_peak:next_peak].to_numpy(dtype=float)
+    recov_candidates = np.where((recov_slice != 0) & ~np.isnan(recov_slice))[0]
+    if len(recov_candidates) > 0:
+        output["SCR_RecoveryTime"] = recov_slice[recov_candidates[0]]
     else:
         output["SCR_RecoveryTime"] = np.nan
 

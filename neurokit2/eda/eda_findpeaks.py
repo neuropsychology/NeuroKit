@@ -130,32 +130,39 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
 
     """
-    # smooth
-    eda_phasic = signal_filter(
-        eda_phasic,
-        sampling_rate=sampling_rate,
-        lowcut=None,
-        highcut=None,
-        method="savgol",
-        window_size=501,
-    )
-    info = signal_findpeaks(eda_phasic)
-    peaks = info["Peaks"]
+    eda_phasic = np.asarray(eda_phasic, dtype=float)
+    if len(eda_phasic) == 0:
+        return {
+            "SCR_Onsets": np.array([], dtype=int),
+            "SCR_Peaks": np.array([], dtype=int),
+            "SCR_Height": np.array([], dtype=float),
+        }
 
+    # Scale Savitzky-Golay smoothing window (~0.5 s, odd, >= 5, <= signal length) with sampling_rate
+    window_size = max(5, int(round(0.5 * sampling_rate)))
+    if window_size % 2 == 0:
+        window_size += 1
+    if window_size > len(eda_phasic):
+        window_size = len(eda_phasic) if len(eda_phasic) % 2 == 1 else len(eda_phasic) - 1
+
+    if window_size >= 5:
+        eda_phasic = signal_filter(
+            eda_phasic,
+            sampling_rate=sampling_rate,
+            lowcut=None,
+            highcut=None,
+            method="savgol",
+            window_size=window_size,
+        )
+
+    info = signal_findpeaks(eda_phasic)
     threshold = 0.5 * sampling_rate
 
-    # Define each peak as a consistent increase of 0.5s
-    increase = info["Peaks"] - info["Onsets"]
-    peaks = peaks[increase > threshold]
-    idx = np.where(peaks[:, None] == info["Peaks"][None, :])[1]
-
-    # Check if each peak is followed by consistent decrease of 0.5s
-    decrease = info["Offsets"][idx] - peaks
-    if any(np.isnan(decrease)):
-        decrease[np.isnan(decrease)] = False
-    if any(decrease < threshold):
-        keep = np.where(decrease > threshold)[0]
-        idx = idx[keep]  # Update index
+    # Keep peaks preceded by > 0.5 s increase and followed by > 0.5 s decrease
+    with np.errstate(invalid="ignore"):
+        increase = info["Peaks"] - info["Onsets"]
+        decrease = info["Offsets"] - info["Peaks"]
+        idx = np.where((increase > threshold) & (decrease > threshold))[0]
 
     info = {
         "SCR_Onsets": info["Onsets"][idx],
@@ -174,9 +181,10 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
       PhD Thesis Universidade.
 
     """
+    eda_phasic = np.asarray(eda_phasic, dtype=float)
     derivative = np.diff(np.sign(np.diff(eda_phasic)))
 
-    # find extrema
+    # find extrema: pi = local maxima (peaks), ni = local minima (preceding onsets)
     pi = np.nonzero(derivative < 0)[0] + 1
     ni = np.nonzero(derivative > 0)[0] + 1
 
@@ -184,24 +192,22 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
     if len(pi) == 0 or len(ni) == 0:
         raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
 
-    # pair vectors
-    if ni[0] < pi[0]:
-        ni = ni[1:]
-    if pi[-1] > ni[-1]:
-        pi = pi[:-1]
-    if len(pi) > len(ni):
-        pi = pi[:-1]
+    # pair each peak with its preceding onset so onsets[i] < peaks[i]
+    if pi[0] < ni[0]:
+        pi = pi[1:]
+    if len(pi) == 0 or len(ni) == 0:
+        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
+    if ni[-1] > pi[-1]:
+        ni = ni[:-1]
+    if len(pi) == 0 or len(ni) == 0:
+        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
 
     li = min(len(pi), len(ni))
     peaks = pi[:li]
     onsets = ni[:li]
 
-    # indices
-    i0 = peaks - (onsets - peaks) / 2.0
-    i0[0] = max(i0[0], 0)
-
-    # amplitude
-    amplitudes = np.array([np.max(eda_phasic[peaks[i] : onsets[i]]) for i in range(li)])
+    # amplitude (peak height)
+    amplitudes = np.array([np.max(eda_phasic[onsets[i] : peaks[i] + 1]) for i in range(li)])
 
     # output
     info = {"SCR_Onsets": onsets, "SCR_Peaks": peaks, "SCR_Height": amplitudes}
@@ -273,65 +279,81 @@ def _eda_findpeaks_nabian2018(eda_phasic):
 
     """
 
+    eda_phasic = np.asarray(eda_phasic, dtype=float)
+    if len(eda_phasic) < 3:
+        return {
+            "SCR_Onsets": np.array([], dtype=int),
+            "SCR_Peaks": np.array([], dtype=int),
+            "SCR_Height": np.array([], dtype=float),
+        }
+
     # differentiation
     eda_phasic_diff = np.diff(eda_phasic)
 
     # smooth
-    eda_phasic_smoothed = signal_smooth(eda_phasic_diff, kernel="bartlett", size=20)
+    eda_phasic_smoothed = signal_smooth(eda_phasic_diff, kernel="bartlett", size=min(20, len(eda_phasic_diff)))
 
     # zero crossings
     pos_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="positive")
     neg_crossings = signal_zerocrossings(eda_phasic_smoothed, direction="negative")
 
+    if len(pos_crossings) == 0 or len(neg_crossings) == 0:
+        return {
+            "SCR_Onsets": np.array([], dtype=int),
+            "SCR_Peaks": np.array([], dtype=int),
+            "SCR_Height": np.array([], dtype=float),
+        }
+
     # if negative crossing happens before the positive crossing
     # delete first negative crossing because we want to identify peaks
     if neg_crossings[0] < pos_crossings[0]:
         neg_crossings = neg_crossings[1:]
-    # Sanitize consecutive crossings
 
-    if len(pos_crossings) > len(neg_crossings):
-        pos_crossings = pos_crossings[0 : len(neg_crossings)]
-    elif len(pos_crossings) < len(neg_crossings):
-        neg_crossings = neg_crossings[0 : len(pos_crossings)]
+    if len(pos_crossings) == 0 or len(neg_crossings) == 0:
+        return {
+            "SCR_Onsets": np.array([], dtype=int),
+            "SCR_Peaks": np.array([], dtype=int),
+            "SCR_Height": np.array([], dtype=float),
+        }
+
+    # Sanitize consecutive crossings
+    n_pairs = min(len(pos_crossings), len(neg_crossings))
+    pos_crossings = pos_crossings[:n_pairs]
+    neg_crossings = neg_crossings[:n_pairs]
 
     peaks_list = []
     onsets_list = []
     amps_list = []
     for i, j in zip(pos_crossings, neg_crossings):
-        window = eda_phasic[i:j]
-        # The amplitude of the SCR is obtained by finding the maximum value
-        # between these two zero-crossings and calculating the difference
-        # between the initial zero crossing and the maximum value.
-        # amplitude defined in neurokit2
-        amp = np.nanmax(window)
+        if j <= i + 1:
+            continue
+        interior = eda_phasic[i + 1 : j]
+        if len(interior) == 0 or np.all(np.isnan(interior)):
+            continue
+
+        # Find the peak strictly inside (i, j) directly instead of global equality matching
+        peak = int(i + 1 + np.nanargmax(interior))
+        amp = eda_phasic[peak]
+        if amp < eda_phasic[i]:
+            continue
 
         # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
-        # we append the first SCR
         if len(amps_list) == 0:
-            # be careful, if two peaks have the same amplitude, np.where will return a list
-            peaks = np.where(eda_phasic == amp)[0]
-            # make sure that the peak is within the window
-            peaks = [peak for peak in [peaks] if peak > i and peak < j]
-            peaks_list.append(peaks[0])
-            onsets_list.append(i)
+            peaks_list.append(peak)
+            onsets_list.append(int(i))
             amps_list.append(amp)
         else:
-            # we have a list of peaks
-            # amplitude defined in the paper
             diff = amp - eda_phasic[i]
             if not diff < (0.1 * max(amps_list)):
-                peaks = np.where(eda_phasic == amp)[0]
-                # make sure that the peak is within the window
-                peaks = [peak for peak in [peaks] if peak > i and peak < j]
-                peaks_list.append(peaks[0])
-                onsets_list.append(i)
+                peaks_list.append(peak)
+                onsets_list.append(int(i))
                 amps_list.append(amp)
 
     # output
     info = {
-        "SCR_Onsets": np.array(onsets_list),
-        "SCR_Peaks": np.hstack(np.array(peaks_list)),
-        "SCR_Height": np.array(amps_list),
+        "SCR_Onsets": np.array(onsets_list, dtype=int),
+        "SCR_Peaks": np.array(peaks_list, dtype=int),
+        "SCR_Height": np.array(amps_list, dtype=float),
     }
 
     return info
