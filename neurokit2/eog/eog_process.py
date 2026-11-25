@@ -73,7 +73,8 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
     eog_signal = as_vector(veog_signal)
 
     # Clean signal
-    eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate, **kwargs)
+    clean_kwargs = {"method": kwargs["method"]} if "method" in kwargs else {}
+    eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate, **clean_kwargs)
 
     # Find peaks
     peaks = eog_findpeaks(eog_cleaned, sampling_rate=sampling_rate, **kwargs)

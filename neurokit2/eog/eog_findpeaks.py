@@ -9,7 +9,7 @@ from .eog_features import _eog_features_delineate
 from .eog_simulate import _eog_simulate_blink
 
 
-def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
+def eog_findpeaks(veog_cleaned, sampling_rate=1000, method="mne", **kwargs):
     """**Locate EOG eye blinks**
 
     Low-level function used by :func:`.eog_peaks` to identify blinks in an EOG signal using a
@@ -102,6 +102,8 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     """
     # Sanitize input
     eog_cleaned = as_vector(veog_cleaned)
+    if sampling_rate is None:
+        sampling_rate = 1000
 
     # Apply method
     method = method.lower()
@@ -116,7 +118,9 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     #    elif method in ["jammes2008", "jammes"]:
     #        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)
     else:
-        raise ValueError("NeuroKit error: eog_peaks(): 'method' should be one of 'mne', 'brainstorm' or 'blinker'.")
+        raise ValueError(
+            "NeuroKit error: eog_peaks(): 'method' should be one of 'neurokit', 'mne', 'brainstorm' or 'blinker'."
+        )
 
     return peaks
 
@@ -124,10 +128,16 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 # =============================================================================
 # Method - NeuroKit
 # =============================================================================
-def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.33, show=True):
+def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.33, show=False):
     """In-house EOG blink detection."""
     peaks = signal_findpeaks(eog_cleaned, relative_height_min=1.25)["Peaks"]
-    _, peaks = signal_fixpeaks(peaks=peaks, sampling_rate=sampling_rate, interval_min=0.2, method="neurokit")
+    if len(peaks) == 0:
+        return np.array([], dtype=int)
+    if len(peaks) <= 3:
+        keep = np.concatenate(([True], np.diff(peaks) / sampling_rate > 0.2))
+        peaks = peaks[keep]
+    else:
+        _, peaks = signal_fixpeaks(peaks=peaks, sampling_rate=sampling_rate, interval_min=0.2, method="neurokit")
     peaks = _eog_findpeaks_neurokit_filterblinks(
         eog_cleaned, peaks, sampling_rate=sampling_rate, threshold=threshold, show=show
     )
@@ -136,6 +146,9 @@ def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.33, sho
 
 def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000, threshold=0.5, show=False):
     """Compare each detected event to blink template and reject it if too different."""
+    if len(peaks) == 0:
+        return np.array([], dtype=int)
+
     # Get epoch around each blink
     events = epochs_create(
         eog_cleaned,
@@ -146,8 +159,8 @@ def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000,
     )
     events = epochs_to_array(events)  # Convert to 2D array
 
-    # Generate Blink-template
-    template = _eog_simulate_blink(sampling_rate=sampling_rate, method="gamma")
+    # Generate Blink-template matching epoch sample count
+    template = _eog_simulate_blink(sampling_rate=sampling_rate, length=events.shape[0], method="gamma")
 
     # Get the "distance" (RMSE) between each blink and the template
     rmse = np.full(events.shape[1], np.nan)
@@ -262,25 +275,20 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
     threshold = 1.5 * np.std(eog_cleaned) + eog_cleaned.mean()
     min_blink = 0.05 * sampling_rate  # min blink frames
 
-    potential_blinks = []
-    for i, signal in enumerate(eog_cleaned):
-        if signal > threshold:
-            potential_blinks.append(i)
+    potential_blinks = np.flatnonzero(eog_cleaned > threshold)
+    if len(potential_blinks) == 0:
+        return np.array([], dtype=int)
 
-    # Make sure each blink is 50ms long and separated by 50ms
-    indexes = np.where(np.diff(potential_blinks) > min_blink)[0]
-    individual_blinks = np.split(np.diff(potential_blinks), indexes)
-
-    blinks = []
-    for idx, i in enumerate(individual_blinks):
-        if len(i) > min_blink:
-            blinks.append(idx)
-
-    candidates = np.array(potential_blinks)[np.append(0, indexes)[blinks]]
+    # Make sure each blink is >50ms long and separated by >50ms
+    splits = np.where(np.diff(potential_blinks) > min_blink)[0] + 1
+    individual_blinks = np.split(potential_blinks, splits)
+    candidates = np.array([b[0] for b in individual_blinks if len(b) > min_blink], dtype=int)
+    if len(candidates) == 0:
+        return np.array([], dtype=int)
 
     _, peaks, _, _, _, _ = _eog_features_delineate(eog_cleaned, candidates, sampling_rate=sampling_rate)
 
     # Blink peak markers
-    peaks = np.array(peaks)
+    peaks = np.array(peaks, dtype=int)
 
     return peaks

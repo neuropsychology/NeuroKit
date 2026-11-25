@@ -65,6 +65,16 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
 
     """
 
+    if len(peaks) == 0:
+        return {
+            "Blink_LeftZeros": [],
+            "Blink_RightZeros": [],
+            "Blink_pAVR": [],
+            "Blink_nAVR": [],
+            "Blink_BAR": [],
+            "Blink_Duration": [],
+        }
+
     BARs, _, leftzeros, rightzeros, downstrokes, upstrokes = _eog_features_delineate(
         eog_cleaned, peaks, sampling_rate=sampling_rate
     )
@@ -74,23 +84,21 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
     duration_list = []
 
     for i in range(len(peaks)):
-        # Closing blink (pAVR)
-        blink_close = upstrokes[i].Signal
-        change_close = np.diff(blink_close)
-        duration_close = len(change_close) / sampling_rate
-        pAVR = abs(change_close.max() / duration_close) * 100
+        # Closing blink (pAVR): ratio of max blink amplitude over max upstroke velocity (in cs)
+        blink_close = upstrokes[i].Signal.to_numpy()
+        max_amp = blink_close[-1] if len(blink_close) > 0 else np.nan
+        vel_close = np.diff(blink_close) * sampling_rate
+        pAVR = (max_amp / np.max(vel_close)) * 100 if len(vel_close) > 0 and np.max(vel_close) > 0 else np.nan
         pAVR_list.append(pAVR)
 
-        # Opening blink (nAVR)
-        blink_open = downstrokes[i].Signal
-        change_open = np.diff(blink_open)
-        duration_open = len(change_open) / sampling_rate
-        nAVR = abs(change_open.max() / duration_open) * 100
+        # Opening blink (nAVR): ratio of max blink amplitude over max downstroke velocity (in cs)
+        blink_open = downstrokes[i].Signal.to_numpy()
+        vel_open = -np.diff(blink_open) * sampling_rate
+        nAVR = (max_amp / np.max(vel_open)) * 100 if len(vel_open) > 0 and np.max(vel_open) > 0 else np.nan
         nAVR_list.append(nAVR)
 
-        # Duration
-        blink_full = np.hstack([np.array(upstrokes[i].Signal), np.array(downstrokes[i].Signal)])
-        duration_full = len(blink_full) / sampling_rate  # in seconds
+        # Duration (in seconds)
+        duration_full = (rightzeros[i] - leftzeros[i]) / sampling_rate
         duration_list.append(duration_full)
 
     # Return info dictionary
@@ -134,28 +142,24 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
 
         # Check if peak is at the end or start of epoch
         t = epochs[i].loc[epochs[i]["Signal"] == max_value].index
-        if np.all(0.3 < t < 0.51):
+        if np.all((t > 0.3) & (t < 0.51)):
             # Trim end of epoch
             epochs[i] = epochs[i][-0.5:0.3]
             max_value = epochs[i].Signal.max()
-        if np.all(-0.51 < t < -0.3):
+        if np.all((t > -0.51) & (t < -0.3)):
             # Trim start of epoch
             epochs[i] = epochs[i][-0.3:0.5]
             max_value = epochs[i].Signal.max()
 
         # Find position of peak
         max_frame = epochs[i]["Index"].loc[epochs[i]["Signal"] == max_value]
-        max_frame = np.array(max_frame)
-        if len(max_frame) > 1:
-            max_frame = max_frame[0].item()  # If two points achieve max value, first one is blink
-        else:
-            max_frame = max_frame.item()
+        max_frame = np.asarray(max_frame)[0].item()  # If two points achieve max value, first one is blink
 
         # left and right zero markers
         crossings = signal_zerocrossings(epochs[i].Signal)
-        crossings_idx = epochs[i]["Index"].iloc[crossings]
-        crossings_idx = np.sort(np.append([np.array(crossings_idx)], [max_frame]))
-        max_position = np.where(crossings_idx == max_frame)[0].item()
+        crossings_idx = np.asarray(epochs[i]["Index"].iloc[crossings])
+        crossings_idx = np.unique(np.append(crossings_idx, max_frame))
+        max_position = np.where(crossings_idx == max_frame)[0][0].item()
 
         if (max_position - 1) >= 0:  # crosses zero point
             leftzero = crossings_idx[max_position - 1]
@@ -163,21 +167,20 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
             max_value_t = epochs[i].Signal.idxmax()
             sliced_before = epochs[i].loc[slice(max_value_t), :]
             leftzero = sliced_before["Index"].loc[sliced_before["Signal"] == sliced_before["Signal"].min()]
-            leftzero = np.array(leftzero).item()
+            leftzero = np.asarray(leftzero)[0].item()
 
         if (max_position + 1) < len(crossings_idx):  # crosses zero point
             rightzero = crossings_idx[max_position + 1]
         else:
             max_value_t = epochs[i].Signal.idxmax()
-            sliced_before = epochs[i].loc[slice(max_value_t), :]
-            sliced_after = epochs[i].tail(epochs[i].shape[0] - sliced_before.shape[0])
+            sliced_after = epochs[i].loc[slice(max_value_t, None), :]
             rightzero = sliced_after["Index"].loc[sliced_after["Signal"] == sliced_after["Signal"].min()]
-            rightzero = np.array(rightzero).item()
+            rightzero = np.asarray(rightzero)[0].item()
 
-        # upstroke and downstroke markers
-        upstroke_idx = list(np.arange(leftzero, max_frame))
+        # upstroke and downstroke markers (inclusive of peak and zero crossings)
+        upstroke_idx = list(np.arange(leftzero, max_frame + 1))
         upstroke = epochs[i].loc[epochs[i]["Index"].isin(upstroke_idx)]
-        downstroke_idx = list(np.arange(max_frame, rightzero))
+        downstroke_idx = list(np.arange(max_frame, rightzero + 1))
         downstroke = epochs[i].loc[epochs[i]["Index"].isin(downstroke_idx)]
 
         # left base and right base markers
