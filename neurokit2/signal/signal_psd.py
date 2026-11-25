@@ -131,6 +131,7 @@ def signal_psd(
     # Sanitize signal
     if isinstance(signal, pd.Series):
         signal = signal.values
+    signal = np.asarray(signal, dtype=float)
 
     # Constant Detrend
     signal = signal - np.mean(signal)
@@ -142,8 +143,10 @@ def signal_psd(
     N = len(signal)
     if isinstance(min_frequency, str):
         if sampling_rate is None:
+            if t is None or len(t) < 2:
+                raise ValueError("NeuroKit error: signal_psd(): 't' must be provided when 'sampling_rate' is None.")
             # This is to compute min_frequency if both min_frequency and sampling_rate are not provided (#800)
-            min_frequency = (2 * np.median(np.diff(t))) / (N / 2)  # for high frequency resolution
+            min_frequency = (2 / np.median(np.diff(t))) / (N / 2)  # for high frequency resolution
         else:
             min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
 
@@ -160,8 +163,8 @@ def signal_psd(
     elif method in ["fft"]:
         frequency, power = _signal_psd_fft(signal, sampling_rate=sampling_rate, **kwargs)
 
-    # Lombscargle (AtroPy)
-    elif method.lower() in ["lombscargle", "lomb"]:
+    # Lombscargle (AstroPy)
+    elif method in ["lombscargle", "lomb"]:
         frequency, power = _signal_psd_lomb(
             signal,
             sampling_rate=sampling_rate,
@@ -170,8 +173,8 @@ def signal_psd(
             t=t,
         )
 
-    # Method that are using a window
-    else:
+    # Methods that are using a window
+    elif method in ["welch", "burg", "pburg", "spectrum"]:
         # Define window length
         if min_frequency == 0:
             min_frequency = 0.001  # sanitize min_frequency
@@ -194,7 +197,7 @@ def signal_psd(
             nperseg = int(N / 2)
 
         # Welch (Scipy)
-        if method.lower() in ["welch"]:
+        if method in ["welch"]:
             frequency, power = _signal_psd_welch(
                 signal,
                 sampling_rate=sampling_rate,
@@ -204,7 +207,7 @@ def signal_psd(
             )
 
         # BURG
-        elif method.lower() in ["burg", "pburg", "spectrum"]:
+        elif method in ["burg", "pburg", "spectrum"]:
             frequency, power = _signal_psd_burg(
                 signal,
                 sampling_rate=sampling_rate,
@@ -215,9 +218,17 @@ def signal_psd(
                 nperseg=nperseg,
             )
 
+    else:
+        raise ValueError(
+            f"NeuroKit error: signal_psd(): 'method' '{method}' not recognized. "
+            "Must be one of 'welch', 'fft', 'multitapers', 'lombscargle', or 'burg'."
+        )
+
     # Normalize
-    if normalize is True:
-        power /= np.max(power)
+    if normalize is True and len(power) > 0:
+        max_power = np.max(power)
+        if max_power > 0:
+            power = power / max_power
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -245,7 +256,8 @@ def signal_psd(
 def _signal_psd_fft(signal, sampling_rate=1000, n=None):
     # Power-spectrum density (PSD)
     power = np.abs(np.fft.rfft(signal, n=n)) ** 2
-    frequency = np.linspace(0, sampling_rate / 2, len(power))
+    n_fft = len(signal) if n is None else n
+    frequency = np.fft.rfftfreq(n_fft, d=1 / sampling_rate)
     return frequency, power
 
 
@@ -350,30 +362,24 @@ def _signal_psd_burg(
     side="one-sided",
     nperseg=None,
 ):
-    nfft = int(nperseg * 2)
+    if nperseg is None:
+        nperseg = max(1, len(signal) // 2)
+    nfft = max(2, int(nperseg * 2))
     ar, rho, _ = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected)
-    psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
-
-    # signal is real, not complex
-    if nfft % 2 == 0:
-        power = psd[0 : int(nfft / 2 + 1)] * 2
-    else:
-        power = psd[0 : int((nfft + 1) / 2)] * 2
+    power = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
 
     # angular frequencies, w
-    # for one-sided psd, w spans [0, pi]
-    # for two-sdied psd, w spans [0, 2pi)
-    # for dc-centered psd, w spans (-pi, pi] for even nfft, (-pi, pi) for add nfft
+    # for one-sided psd, w spans [0, pi] for even nfft
+    # for two-sided psd, w spans [0, 2pi)
+    # for dc-centered psd, w spans [-pi, pi)
     if side == "one-sided":
         w = np.pi * np.linspace(0, 1, len(power))
-    #    elif side == "two-sided":
-    #        w = np.pi * np.linspace(0, 2, len(power), endpoint=False)  #exclude last point
-    #    elif side == "centerdc":
-    #        if nfft % 2 == 0:
-    #            w = np.pi * np.linspace(-1, 1, len(power))
-    #        else:
-    #            w = np.pi * np.linspace(-1, 1, len(power) + 1, endpoint=False)  # exclude last point
-    #            w = w[1:]  # exclude first point (extra)
+    elif side == "two-sided":
+        w = np.pi * np.linspace(0, 2, len(power), endpoint=False)
+    elif side == "centerdc":
+        w = 2 * np.pi * np.fft.fftshift(np.fft.fftfreq(nfft))
+    else:
+        raise ValueError(f"NeuroKit error: _signal_psd_burg(): unknown 'side' '{side}'.")
 
     frequency = (w * sampling_rate) / (2 * np.pi)
 
@@ -387,26 +393,31 @@ def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
         raise ValueError("Order must be > 0")
     if order > N:
         raise ValueError("Order must be less than length signal minus 2")
-    if not isinstance(signal, np.ndarray):
-        signal = np.array(signal)
+    signal = np.asarray(signal)
 
     # Initialisation
     # rho is variance of driving white noise process (prediction error)
-    rho = sum(abs(signal) ** 2.0) / float(N)
+    rho = float(np.vdot(signal, signal).real) / float(N)
+    if rho == 0.0:
+        return np.zeros(1, dtype=complex), 0.0, np.zeros(1, dtype=complex)
     denominator = rho * 2.0 * N
 
-    ar = np.zeros(0, dtype=complex)  # AR parametric signal model estimate
-    ref = np.zeros(0, dtype=complex)  # vector K of reflection coefficients (parcor coefficients)
+    ar = np.zeros(order, dtype=complex)  # AR parametric signal model estimate
+    ref = np.zeros(order, dtype=complex)  # vector K of reflection coefficients (parcor coefficients)
     ef = signal.astype(complex)  # forward prediction error
     eb = signal.astype(complex)  # backward prediction error
     temp = 1.0
+    k_used = 0
 
     # Main recursion
-
     for k in range(0, order):
+        if k >= N - 1:
+            break
         # calculate the next order reflection coefficient
-        numerator = sum([ef[j] * eb[j - 1].conjugate() for j in range(k + 1, N)])
+        numerator = np.vdot(eb[k : N - 1], ef[k + 1 : N])
         denominator = temp * denominator - abs(ef[k]) ** 2 - abs(eb[N - 1]) ** 2
+        if denominator <= 0:
+            break
         kp = -2.0 * numerator / denominator
 
         # Update the prediction error
@@ -429,34 +440,23 @@ def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
         if rho <= 0:
             raise ValueError(f"Found a negative value (expected positive strictly) {rho}. Decrease the order.")
 
-        ar = np.resize(ar, ar.size + 1)
+        # Update the AR coeff (Levinson-Durbin recursion)
+        if k > 0:
+            ar_prev = ar[:k].copy()
+            ar[:k] = ar_prev + kp * ar_prev[::-1].conjugate()
         ar[k] = kp
-        if k == 0:
-            for j in range(N - 1, k, -1):
-                ef_previous = ef[j]  # previous value
-                ef[j] = ef_previous + kp * eb[j - 1]  # Eq. (8.7)
-                eb[j] = eb[j - 1] + kp.conjugate() * ef_previous
 
-        else:
-            # Update the AR coeff
-            khalf = (k + 1) // 2  # khalf must be an integer
-            for j in range(0, khalf):
-                ar_previous = ar[j]  # previous value
-                ar[j] = ar_previous + kp * ar[k - j - 1].conjugate()  # Eq. (8.2)
-                if j != k - j - 1:
-                    ar[k - j - 1] = ar[k - j - 1] + kp * ar_previous.conjugate()  # Eq. (8.2)
-
-            # Update the forward and backward prediction errors
-            for j in range(N - 1, k, -1):
-                ef_previous = ef[j]  # previous value
-                ef[j] = ef_previous + kp * eb[j - 1]  # Eq. (8.7)
-                eb[j] = eb[j - 1] + kp.conjugate() * ef_previous
+        # Update the forward and backward prediction errors
+        ef_prev = ef[k + 1 : N].copy()
+        eb_prev = eb[k : N - 1].copy()
+        ef[k + 1 : N] = ef_prev + kp * eb_prev
+        eb[k + 1 : N] = eb_prev + kp.conjugate() * ef_prev
 
         # save the reflection coefficient
-        ref = np.resize(ref, ref.size + 1)
         ref[k] = kp
+        k_used = k + 1
 
-    return ar, rho, ref
+    return ar[:k_used], rho, ref[:k_used]
 
 
 # =============================================================================
@@ -496,23 +496,30 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     """
     if criteria == "AIC":
         if corrected is True:
+            if N - k - 2 <= 0:
+                return np.inf
             residual = np.log(rho) + 2.0 * (k + 1) / (N - k - 2)
         else:
             residual = N * np.log(np.array(rho)) + 2.0 * (np.array(k) + 1)
 
     elif criteria == "KIC":
         if corrected is True:
+            if N - k - 2 <= 0 or N - k <= 0:
+                return np.inf
             residual = np.log(rho) + k / N / (N - k) + (3.0 - (k + 2.0) / N) * (k + 1.0) / (N - k - 2.0)
         else:
             residual = np.log(rho) + 3.0 * (k + 1.0) / float(N)
 
     elif criteria == "FPE":
-        fpe = rho * (N + k + 1.0) / (N - k - 1)
-        return fpe
+        if N - k - 1 <= 0:
+            return np.inf
+        return rho * (N + k + 1.0) / (N - k - 1)
 
     elif criteria == "MDL":
-        mdl = N * np.log(rho) + k * np.log(N)
-        return mdl
+        return N * np.log(rho) + k * np.log(N)
+
+    else:
+        raise ValueError(f"NeuroKit error: _criteria(): unknown criteria '{criteria}'.")
 
     return residual
 
@@ -524,19 +531,15 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1.0, sampling_rate=1000, nfft=No
     psd = np.zeros(nfft, dtype=complex)
 
     if ar is not None:
-        ip = len(ar)
-        den = np.zeros(nfft, dtype=complex)
+        den = np.zeros(max(nfft, len(ar) + 1), dtype=complex)
         den[0] = 1.0 + 0j
-        for k in range(0, ip):
-            den[k + 1] = ar[k]
+        den[1 : len(ar) + 1] = ar
         denf = np.fft.fft(den, nfft)
 
     if ma is not None:
-        iq = len(ma)
-        num = np.zeros(nfft, dtype=complex)
+        num = np.zeros(max(nfft, len(ma) + 1), dtype=complex)
         num[0] = 1.0 + 0j
-        for k in range(0, iq):
-            num[k + 1] = ma[k]
+        num[1 : len(ma) + 1] = ma
         numf = np.fft.fft(num, nfft)
 
     if ar is not None and ma is not None:
@@ -550,19 +553,17 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1.0, sampling_rate=1000, nfft=No
 
     # convert to one-sided
     if side == "one-sided":
-        assert len(psd) % 2 == 0
-        one_side_psd = np.array(psd[0 : len(psd) // 2 + 1]) * 2.0
-        one_side_psd[0] /= 2.0
-        #        one_side_psd[-1] = psd[-1]
+        if len(psd) % 2 == 0:
+            one_side_psd = np.array(psd[0 : len(psd) // 2 + 1]) * 2.0
+            one_side_psd[0] /= 2.0
+            one_side_psd[-1] /= 2.0
+        else:
+            one_side_psd = np.array(psd[0 : (len(psd) + 1) // 2]) * 2.0
+            one_side_psd[0] /= 2.0
         psd = one_side_psd
 
     # convert to centerdc
     elif side == "centerdc":
-        first_half = psd[0 : len(psd) // 2]
-        second_half = psd[len(psd) // 2 :]
-        rotate_second_half = second_half[-1:] + second_half[:-1]
-        center_psd = np.concatenate((rotate_second_half, first_half))
-        center_psd[0] = psd[-1]
-        psd = center_psd
+        psd = np.fft.fftshift(psd)
 
     return psd

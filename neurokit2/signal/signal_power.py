@@ -97,10 +97,10 @@ def signal_power(
             normalize=normalize,
             **kwargs,
         )
+        out = pd.DataFrame.from_dict(out, orient="index").T
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
-
-    out = pd.DataFrame.from_dict(out, orient="index").T
+        out = pd.DataFrame(out)
 
     return out
 
@@ -163,7 +163,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
         fig = None
 
     # Sanitize signal
-    if isinstance(frequency_band[0], int):
+    if isinstance(frequency_band[0], (int, float)):
         if len(frequency_band) > 2:
             print(
                 "NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples"
