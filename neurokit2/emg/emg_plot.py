@@ -60,13 +60,13 @@ def emg_plot(emg_signals, info=None, static=True):
             "sampling_rate": 1000,
         }
 
-    # Mark onsets, offsets, activity
-    onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
-    offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
-
     # Sanity-check input.
     if not isinstance(emg_signals, pd.DataFrame):
         raise ValueError("NeuroKit error: The `emg_signals` argument must be the DataFrame returned by `emg_process()`.")
+
+    # Mark onsets, offsets, activity
+    onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
+    offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
 
     # Determine what to display on the x-axis, mark activity.
     x_axis = np.arange(emg_signals.shape[0]) / info["sampling_rate"]
@@ -81,14 +81,19 @@ def emg_plot(emg_signals, info=None, static=True):
 # Internals
 # =============================================================================
 def _emg_plot_activity(emg_signals, onsets, offsets):
-    activity_signal = pd.Series(np.full(len(emg_signals), np.nan))
-    activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
-    activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
+    activity_signal = pd.Series(np.full(len(emg_signals), np.nan), index=emg_signals.index)
+    if len(onsets) > 0:
+        activity_signal.iloc[onsets] = emg_signals["EMG_Amplitude"].iloc[onsets].to_numpy()
+    if len(offsets) > 0:
+        activity_signal.iloc[offsets] = emg_signals["EMG_Amplitude"].iloc[offsets].to_numpy()
     activity_signal = activity_signal.bfill()
 
     if np.any(activity_signal.isna()):
-        index = np.min(np.where(activity_signal.isna())) - 1
-        value_to_fill = activity_signal[index]
+        first_na = int(np.min(np.where(activity_signal.isna())[0]))
+        if first_na > 0:
+            value_to_fill = activity_signal.iloc[first_na - 1]
+        else:
+            value_to_fill = emg_signals["EMG_Amplitude"].max()
         activity_signal = activity_signal.fillna(value_to_fill)
 
     return activity_signal
@@ -143,14 +148,14 @@ def _emg_plot_static(emg_signals, x_axis, onsets, offsets, sampling_rate):
     # Mark onsets and offsets.
     ax1.scatter(
         x_axis[onsets],
-        emg_signals["EMG_Amplitude"][onsets],
+        emg_signals["EMG_Amplitude"].iloc[onsets],
         color="#f03e65",
         label=None,
         zorder=3,
     )
     ax1.scatter(
         x_axis[offsets],
-        emg_signals["EMG_Amplitude"][offsets],
+        emg_signals["EMG_Amplitude"].iloc[offsets],
         color="#f03e65",
         label=None,
         zorder=3,
@@ -222,7 +227,7 @@ def _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate):
     fig.add_trace(
         go.Scatter(
             x=x_axis[onsets],
-            y=emg_signals["EMG_Amplitude"][onsets],
+            y=emg_signals["EMG_Amplitude"].iloc[onsets],
             mode="markers",
             name="Onsets",
             marker=dict(color="#f03e65", size=10),
@@ -233,7 +238,7 @@ def _emg_plot_interactive(emg_signals, x_axis, onsets, offsets, sampling_rate):
     fig.add_trace(
         go.Scatter(
             x=x_axis[offsets],
-            y=emg_signals["EMG_Amplitude"][offsets],
+            y=emg_signals["EMG_Amplitude"].iloc[offsets],
             mode="markers",
             name="Offsets",
             marker=dict(color="#f03e65", size=10),

@@ -236,3 +236,131 @@ def test_emg_intervalrelated_missing_amplitude():
         nk.emg_intervalrelated(data)
     with pytest.raises(ValueError, match="EMG_Amplitude"):
         nk.emg_intervalrelated({"1": data})
+
+
+def test_emg_activation_trailing_and_silva_edge_cases():
+    # Invalid method error includes 'silva'
+    with pytest.raises(ValueError, match="silva"):
+        nk.emg_activation(emg_amplitude=np.ones(100), method="invalid")
+
+    # Trailing burst extending to the end of the signal keeps paired onset/offset and active tail
+    amp = np.zeros(200)
+    amp[120:] = 1.0
+    signals, info = nk.emg_activation(emg_amplitude=amp, sampling_rate=1000, method="threshold", threshold=0.5)
+    assert len(info["EMG_Onsets"]) == len(info["EMG_Offsets"]) == 1
+    assert info["EMG_Onsets"][0] == 120
+    assert info["EMG_Offsets"][0] == 199
+    assert signals["EMG_Activity"].iloc[-1] == 1
+    assert signals["EMG_Offsets"].iloc[-1] == 1
+
+    # Silva method on quiet signal (0 bursts), short signal (< threshold_size), and unclosed trailing burst
+    quiet_sig, quiet_info = nk.emg_activation(emg_cleaned=np.zeros(200), sampling_rate=1000, method="silva")
+    assert quiet_info["EMG_Onsets"].size == 0
+    assert quiet_info["EMG_Offsets"].size == 0
+    assert (quiet_signals := quiet_sig["EMG_Activity"]).sum() == 0
+    assert quiet_signals.dtype.kind in ("i", "u")
+
+    short_sig, short_info = nk.emg_activation(emg_cleaned=np.zeros(10), sampling_rate=1000, method="silva")
+    assert short_info["EMG_Activity"].size == 0
+    assert len(short_sig) == 10
+
+    rng = np.random.default_rng(0)
+    trailing = np.zeros(500)
+    trailing[300:] = rng.normal(0, 1.0, size=200)
+    silva_sig, silva_info = nk.emg_activation(emg_cleaned=trailing, sampling_rate=1000, method="silva", threshold=0.05)
+    assert len(silva_info["EMG_Onsets"]) == len(silva_info["EMG_Offsets"]) >= 1
+    assert silva_sig["EMG_Activity"].sum() > 50
+
+
+def test_emg_clean_missing_and_low_sampling_rate():
+    rng = np.random.default_rng(42)
+    raw = rng.normal(0, 1, size=200) + 5.0
+    raw_nan = raw.copy()
+    raw_nan[0] = np.nan
+    raw_nan[25] = np.nan
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match="missing data"):
+        cleaned_nan = nk.emg_clean(raw_nan, sampling_rate=1000)
+    assert np.all(np.isfinite(cleaned_nan))
+
+    # Sampling rate <= 200 Hz warns and detrends instead of crashing scipy.signal.butter
+    with pytest.warns(nk.misc.NeuroKitWarning, match="too low"):
+        cleaned_low = nk.emg_clean(raw, sampling_rate=100)
+    assert cleaned_low.shape == raw.shape
+    assert np.isclose(np.mean(cleaned_low), 0.0, atol=1e-10)
+
+
+def test_emg_eventrelated_intervalrelated_and_plot_edge_cases():
+    from neurokit2.emg.emg_eventrelated import _emg_eventrelated_features
+
+    # NaN padding in post-event EMG_Onsets must not trigger EMG_Activation == 1
+    idx = np.linspace(-0.1, 0.5, 7)
+    ep_nan = pd.DataFrame(
+        {
+            "EMG_Onsets": [0.0, 0.0, 0.0, 0.0, 0.0, np.nan, np.nan],
+            "EMG_Activity": [0.0, 0.0, 0.0, 0.0, 0.0, np.nan, np.nan],
+            "EMG_Amplitude": [0.1, 0.1, 0.1, 0.1, 0.1, np.nan, np.nan],
+            "Label": ["1"] * 7,
+        },
+        index=idx,
+    )
+    res_nan = nk.emg_eventrelated({"1": ep_nan})
+    assert res_nan["EMG_Activation"].iloc[0] == 0
+    assert np.isnan(res_nan["EMG_Amplitude_Mean"].iloc[0])
+
+    # Active burst max time comes from active region even if inactive sample matches max amplitude
+    ep_active = pd.DataFrame(
+        {
+            "EMG_Onsets": [0, 0, 0, 1, 0, 0, 0],
+            "EMG_Activity": [0, 0, 0, 1, 1, 0, 0],
+            "EMG_Amplitude": [0.1, 0.1, 5.0, 2.0, 5.0, 0.1, 0.1],
+            "Label": ["1"] * 7,
+        },
+        index=idx,
+    )
+    res_active = nk.emg_eventrelated({"1": ep_active})
+    assert res_active["EMG_Activation"].iloc[0] == 1
+    assert np.isclose(res_active["EMG_Amplitude_Max_Time"].iloc[0], idx[4])
+
+    # Fresh default dict and zero-active / all-NaN active guards in _emg_eventrelated_features
+    ep_no_act = ep_active.copy()
+    ep_no_act["EMG_Activity"] = 0
+    out1 = _emg_eventrelated_features(ep_no_act)
+    out1["Extra"] = 1
+    out2 = _emg_eventrelated_features(ep_no_act)
+    assert "Extra" not in out2
+    assert np.isnan(out2["EMG_Amplitude_Mean"])
+
+    # emg_intervalrelated with 0 bursts (no RuntimeWarning) and dict without Label column
+    zero_df = pd.DataFrame(
+        {
+            "EMG_Raw": np.zeros(50),
+            "EMG_Clean": np.zeros(50),
+            "EMG_Amplitude": np.ones(50) * 0.2,
+            "EMG_Activity": np.zeros(50, dtype=int),
+            "EMG_Onsets": np.zeros(50, dtype=int),
+            "EMG_Offsets": np.zeros(50, dtype=int),
+        }
+    )
+    iv_df = nk.emg_intervalrelated(zero_df)
+    assert iv_df["EMG_Activation_N"].iloc[0] == 0
+    assert np.isnan(iv_df["EMG_Amplitude_Mean"].iloc[0])
+
+    iv_dict = nk.emg_intervalrelated({"a": zero_df})
+    assert iv_dict.loc["a", "EMG_Activation_N"] == 0
+    assert np.isnan(iv_dict.loc["a", "EMG_Amplitude_Mean"])
+
+    with pytest.raises(ValueError, match="DataFrame or a dict"):
+        nk.emg_intervalrelated([1, 2, 3])
+
+    # emg_plot with 0 bursts, sliced DataFrame (non-zero index), and invalid input
+    with pytest.raises(ValueError, match="DataFrame"):
+        nk.emg_plot(np.zeros(10), {"sampling_rate": 100})
+
+    nk.emg_plot(zero_df, {"sampling_rate": 100})
+    plt.close("all")
+
+    emg = nk.emg_simulate(duration=5, sampling_rate=500, burst_number=2, random_state=42)
+    emg_signals, info = nk.emg_process(emg, sampling_rate=500)
+    nk.emg_plot(emg_signals.iloc[100:2400], info)
+    plt.close("all")

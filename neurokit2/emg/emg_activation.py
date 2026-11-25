@@ -6,7 +6,6 @@ from ..misc import as_vector
 from ..signal import (
     signal_binarize,
     signal_changepoints,
-    signal_formatpeaks,
     signal_smooth,
 )
 
@@ -192,43 +191,30 @@ def emg_activation(
 
     else:
         raise ValueError(
-            "NeuroKit error: emg_activation(): 'method' should be one of 'mixture', 'threshold', 'pelt' or 'biosppy'."
+            "NeuroKit error: emg_activation(): 'method' should be one of "
+            "'mixture', 'threshold', 'pelt', 'biosppy', or 'silva'."
         )
 
     # Sanitize activity.
     info = _emg_activation_activations(activity, duration_min=duration_min)
 
-    # Prepare Output.
-    df_activity = signal_formatpeaks(
-        {"EMG_Activity": info["EMG_Activity"]},
-        desired_length=len(emg_amplitude),
-        peak_indices=info["EMG_Activity"],
-    )
-    df_onsets = signal_formatpeaks(
-        {"EMG_Onsets": info["EMG_Onsets"]},
-        desired_length=len(emg_amplitude),
-        peak_indices=info["EMG_Onsets"],
-    )
-    df_offsets = signal_formatpeaks(
-        {"EMG_Offsets": info["EMG_Offsets"]},
-        desired_length=len(emg_amplitude),
-        peak_indices=info["EMG_Offsets"],
-    )
+    # Prepare binary indicator DataFrame directly (avoids slow per-sample DataFrame indexing).
+    n_samples = len(emg_amplitude)
+    activity_col = np.zeros(n_samples, dtype=int)
+    onsets_col = np.zeros(n_samples, dtype=int)
+    offsets_col = np.zeros(n_samples, dtype=int)
 
-    # Modify output produced by signal_formatpeaks.
-    for x in range(len(emg_amplitude)):
-        if df_activity.loc[x, "EMG_Activity"] != 0:
-            if df_activity.index[x] == df_activity.index.get_loc(x):
-                df_activity.loc[x, "EMG_Activity"] = 1
-            else:
-                df_activity.loc[x, "EMG_Activity"] = 0
-        if df_offsets.loc[x, "EMG_Offsets"] != 0:
-            if df_offsets.index[x] == df_offsets.index.get_loc(x):
-                df_offsets.loc[x, "EMG_Offsets"] = 1
-            else:
-                df_offsets.loc[x, "EMG_Offsets"] = 0
+    activity_col[info["EMG_Activity"]] = 1
+    onsets_col[info["EMG_Onsets"]] = 1
+    offsets_col[info["EMG_Offsets"]] = 1
 
-    activity_signal = pd.concat([df_activity, df_onsets, df_offsets], axis=1)
+    activity_signal = pd.DataFrame(
+        {
+            "EMG_Activity": activity_col,
+            "EMG_Onsets": onsets_col,
+            "EMG_Offsets": offsets_col,
+        }
+    )
 
     return activity_signal, info
 
@@ -343,6 +329,9 @@ def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="de
     if threshold == "default":
         threshold = 0.05
 
+    if len(emg_cleaned) < threshold_size:
+        return np.zeros(len(emg_cleaned), dtype=int)
+
     # subtract baseline offset
     signal_zero_mean = emg_cleaned - np.mean(emg_cleaned)
 
@@ -370,17 +359,25 @@ def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="de
             onset_time_list.append(k)
             onset = True
 
-    onsets = np.union1d(onset_time_list, offset_time_list)
+    if onset is True:
+        if onset_time_list[-1] < len(threshold_mvgav) - 1:
+            offset_time_list.append(len(threshold_mvgav) - 1)
+        else:
+            onset_time_list.pop()
+
+    if len(onset_time_list) == 0:
+        return np.zeros(len(emg_cleaned), dtype=int)
+
+    onsets = np.union1d(onset_time_list, offset_time_list).astype(int)
 
     # adjust indices because of moving average
-    onsets += int(size / 2)
+    onsets = np.clip(onsets + int(size / 2), 0, len(emg_cleaned) - 1)
 
     binary = np.full(len(emg_cleaned), np.nan)
     binary[onsets[0::2]] = 0
     binary[onsets[1::2]] = 1
 
-    activity = pd.Series(binary).bfill().values
-    activity = pd.Series(activity).fillna(0)
+    activity = pd.Series(binary).bfill().fillna(0).to_numpy()
 
     return activity
 
@@ -397,16 +394,23 @@ def _emg_activation_activations(activity, duration_min=0.05):
 
     # Cross-comparison
     valid = np.isin(activations["onset"], baseline["offset"])
-    onsets = activations["onset"][valid]
-    offsets = activations["offset"][valid]
+    onsets = np.asarray(activations["onset"][valid], dtype=int)
+    raw_offsets = np.asarray(activations["offset"][valid], dtype=int)
 
-    # make sure offset indices are within length of signal
-    offsets = offsets[offsets < len(activity)]
+    # Clamp trailing burst offsets to the last valid sample instead of dropping them
+    n_samples = len(activity)
+    act_ends = np.minimum(raw_offsets, n_samples)
+    offsets = np.minimum(raw_offsets, max(0, n_samples - 1))
 
-    new_activity = np.array([])
-    for x, y in zip(onsets, offsets):
-        activated = np.arange(x, y)
-        new_activity = np.append(new_activity, activated)
+    keep = onsets < offsets
+    onsets = onsets[keep]
+    offsets = offsets[keep]
+    act_ends = act_ends[keep]
+
+    if len(onsets) > 0:
+        new_activity = np.concatenate([np.arange(x, y, dtype=int) for x, y in zip(onsets, act_ends)])
+    else:
+        new_activity = np.array([], dtype=int)
 
     # Prepare Output.
     info = {"EMG_Onsets": onsets, "EMG_Offsets": offsets, "EMG_Activity": new_activity}

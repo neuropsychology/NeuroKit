@@ -78,7 +78,7 @@ def emg_clean(emg_signal, sampling_rate=1000, method="biosppy"):
 # Handle missing data
 # =============================================================================
 def _emg_clean_missing(emg_signal):
-    emg_signal = pd.DataFrame.pad(pd.Series(emg_signal))
+    emg_signal = pd.Series(emg_signal).ffill().bfill().to_numpy()
 
     return emg_signal
 
@@ -90,6 +90,14 @@ def _emg_clean_biosppy(emg_signal, sampling_rate=1000):
     # Parameters
     order = 4
     frequency = 100
+    if sampling_rate <= 2 * frequency:
+        warn(
+            f"The sampling rate ({sampling_rate} Hz) is too low for BioSPPy's 100 Hz highpass"
+            " filter (requires > 200 Hz). Skipping highpass filtering and detrending only.",
+            category=NeuroKitWarning,
+        )
+        return signal_detrend(emg_signal, order=0)
+
     frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     # Filtering

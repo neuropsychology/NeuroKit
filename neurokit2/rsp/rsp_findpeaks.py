@@ -67,13 +67,16 @@ def rsp_findpeaks(
     """
     # Try retrieving correct column
     if isinstance(rsp_cleaned, pd.DataFrame):
-        try:
+        if "RSP_Clean" in rsp_cleaned.columns:
             rsp_cleaned = rsp_cleaned["RSP_Clean"]
-        except NameError:
-            try:
-                rsp_cleaned = rsp_cleaned["RSP_Raw"]
-            except NameError:
-                rsp_cleaned = rsp_cleaned["RSP"]
+        elif "RSP_Raw" in rsp_cleaned.columns:
+            rsp_cleaned = rsp_cleaned["RSP_Raw"]
+        elif "RSP" in rsp_cleaned.columns:
+            rsp_cleaned = rsp_cleaned["RSP"]
+        else:
+            raise ValueError(
+                "NeuroKit error: rsp_findpeaks(): DataFrame must contain an 'RSP_Clean', 'RSP_Raw', or 'RSP' column."
+            )
 
     cleaned = np.array(rsp_cleaned)
 
