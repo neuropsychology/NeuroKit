@@ -63,10 +63,18 @@ def microstates_findnumber(eeg, n_max=12, method="GEV", clustering_method="kmod"
       plt.close()
 
     """
+    method_upper = method.upper()
+    if method_upper not in ("GEV", "KL"):
+        raise ValueError("NeuroKit error: microstates_findnumber(): 'method' must be 'GEV' or 'KL'.")
+    if n_max < 2:
+        raise ValueError("NeuroKit error: microstates_findnumber(): 'n_max' must be at least 2.")
+    if method_upper == "KL" and n_max < 4:
+        raise ValueError("NeuroKit error: microstates_findnumber(): 'n_max' must be at least 4 when method='KL'.")
+
     # Retrieve data
     data, _, _ = _microstates_sanitize_eeg(eeg)
 
-    # Loop accross number and get indices of fit
+    # Loop across number and get indices of fit
     n_channel, _ = data.shape
     dispersion_previous = np.nan
     dispersion_diff_previous = np.nan
@@ -84,25 +92,28 @@ def microstates_findnumber(eeg, n_max=12, method="GEV", clustering_method="kmod"
         # Dispersion(k)
 
         dispersion_current = dispersion * n_microstates ** (2 / n_channel)
-        # dispersion_dff(k) = dispersion(k-1) - dispersion(k)
+        # dispersion_diff(k) = dispersion(k-1) - dispersion(k)
         dispersion_diff = dispersion_previous - dispersion_current
 
         # Calculate KL criterion
         # KL(k) = abs(dispersion_diff(k) / dispersion_diff(k+1))
         rez["KL_Criterion"] = np.nan
-        if idx not in [0]:
-            results[idx - 1]["KL_Criterion"] = np.abs(dispersion_diff_previous / dispersion_diff)
+        if idx != 0:
+            results[idx - 1]["KL_Criterion"] = (
+                np.abs(dispersion_diff_previous / dispersion_diff) if dispersion_diff != 0 else np.nan
+            )
         # Update for next round
-        dispersion_previous = dispersion_current.copy()
-        dispersion_diff_previous = dispersion_diff.copy()
+        dispersion_previous = dispersion_current
+        dispersion_diff_previous = dispersion_diff
 
         results.append(rez)
 
     results = pd.DataFrame(results)
 
     # Estimate optimal number
-    if method == "KL":
-        n_clusters = int(np.argmax(results["KL_Criterion"]) + 2)
+    if method_upper == "KL":
+        kl_vals = results["KL_Criterion"].to_numpy(dtype=float)
+        n_clusters = int(np.nanargmax(kl_vals) + 2) if np.any(~np.isnan(kl_vals)) else 2
     else:
         n_clusters = find_knee(results["Score_GEV"], np.rint(np.arange(2, n_max + 1)))
 

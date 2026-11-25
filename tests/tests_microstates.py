@@ -155,3 +155,54 @@ def test_microstates_lifetime_counts_first_run_once():
 
     np.testing.assert_array_equal(lifetimes[0], [0, 1])
     np.testing.assert_array_equal(lifetimes[1], [1])
+
+
+def test_microstates_findnumber_static_and_plot():
+    import matplotlib.pyplot as plt
+    import pytest
+
+    rng = np.random.RandomState(42)
+    # Build synthetic 3-microstate EEG (6 channels x 90 samples)
+    templates = np.array(
+        [
+            [1.0, -1.0, 0.5, -0.5, 0.2, -0.2],
+            [-0.5, 1.0, -1.0, 0.5, -0.2, 0.2],
+            [0.2, 0.3, 1.0, -1.0, -0.5, 0.5],
+        ]
+    )
+    seq_true = np.repeat([0, 1, 2, 0, 2, 1], 15)
+    eeg = templates[seq_true].T + 0.05 * rng.normal(size=(6, 90))
+
+    n_kl, df_kl = nk.microstates_findnumber(
+        eeg, n_max=5, method="KL", clustering_method="kmeans", train="all", verbose=False, random_state=42
+    )
+    assert np.isnan(df_kl["KL_Criterion"].iloc[0]) and np.isnan(df_kl["KL_Criterion"].iloc[-1])
+    assert n_kl == int(np.nanargmax(df_kl["KL_Criterion"].to_numpy()) + 2)
+    assert n_kl >= 3
+
+    with pytest.raises(ValueError, match="at least 4"):
+        nk.microstates_findnumber(eeg, n_max=3, method="KL", verbose=False)
+    with pytest.raises(ValueError, match="'method' must be"):
+        nk.microstates_findnumber(eeg, n_max=4, method="invalid", verbose=False)
+
+    # microstates_static must handle both integer and string state labels + show=True
+    df_int = nk.microstates_static([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0, 2, 2], sampling_rate=100, show=True)
+    plt.close("all")
+    df_str = nk.microstates_static(["A", "A", "A", "B", "B", "C", "C", "C", "C", "B", "A", "A", "C", "C"], sampling_rate=100)
+    assert np.isclose(df_int["Microstate_0_DurationMean"].iloc[0], df_str["Microstate_A_DurationMean"].iloc[0])
+    assert np.isclose(df_int["Microstate_2_Proportion"].iloc[0], df_str["Microstate_C_Proportion"].iloc[0])
+
+    # microstates_plot must return a Figure, work on array-segmented dicts (info=None), and validate missing args
+    seg = nk.microstates_segment(eeg, n_microstates=3, train="all", method="kmeans", random_state=42)
+    fig = nk.microstates_plot(seg, epoch=(0, 40))
+    assert fig is not None
+    plt.close(fig)
+
+    fig2 = nk.microstates_plot(seg["Microstates"], segmentation=seg["Sequence"][:50], gfp=seg["GFP"], info=seg)
+    assert fig2 is not None
+    plt.close(fig2)
+
+    with pytest.raises(ValueError, match="GFP"):
+        nk.microstates_plot(seg["Microstates"], segmentation=seg["Sequence"])
+    with pytest.raises(ValueError, match="Segmentation"):
+        nk.microstates_plot(seg["Microstates"], gfp=seg["GFP"])

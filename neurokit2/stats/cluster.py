@@ -9,7 +9,7 @@ import sklearn.cluster
 import sklearn.decomposition
 import sklearn.mixture
 
-from ..misc import check_random_state
+from ..misc import NeuroKitWarning, check_random_state
 from .cluster_quality import _cluster_quality_distance
 
 
@@ -161,7 +161,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=Fal
 
     # Others
     else:
-        out = _cluster_sklearn(data, n_clusters=n_clusters, **kwargs)
+        out = _cluster_sklearn(data, method=method, n_clusters=n_clusters, random_state=random_state, **kwargs)
 
     return out
 
@@ -214,7 +214,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, n_init="auto", **kwar
 # =============================================================================
 
 
-def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
+def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None, dist_method="euclidean", **kwargs):
     """Peforms k-medoids clustering which is based on the most centrally located object in a cluster.
     Less sensitive to outliers than K-means clustering.
 
@@ -223,43 +223,38 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
     # Sanitize
     if isinstance(data, pd.DataFrame):
         data = np.array(data)
+    data = np.asarray(data, dtype=float)
     n_samples = data.shape[0]
+    metric = "cityblock" if dist_method in ("manhatten", "manhattan", "cityblock") else dist_method
 
     # Step 1: Initialize random medoids
     rng = check_random_state(random_state)
     ids_of_medoids = rng.choice(n_samples, n_clusters, replace=False)
 
-    # Find distance between objects to their medoids, can be euclidean or manhatten
-    def find_distance(x, y, dist_method="euclidean"):
-        if dist_method == "euclidean":
-            return np.sqrt(np.sum(np.square(x - y), axis=-1))
-        elif dist_method == "manhatten":
-            return np.sum(np.abs(x - y), axis=-1)
-
-    individual_points = data[:, None, :]
-    medoid_points = data[None, ids_of_medoids, :]
-    distance = find_distance(individual_points, medoid_points)
+    distance = scipy.spatial.distance.cdist(data, data[ids_of_medoids], metric=metric)
 
     # Assign each point to the nearest medoid
     segmentation = np.argmin(distance, axis=1)
 
     # Step 2: Update medoids
-    for i in range(max_iterations):
+    for _ in range(max_iterations):
         # Find new medoids
         ids_of_medoids = np.full(n_clusters, -1, dtype=int)
         for j in range(n_clusters):
             indices = np.where(segmentation == j)[0]
-            distances = find_distance(data[indices, None, :], data[None, indices, :]).sum(axis=0)
+            if len(indices) == 0:
+                ids_of_medoids[j] = rng.integers(n_samples)
+                continue
+            distances = scipy.spatial.distance.cdist(data[indices], data[indices], metric=metric).sum(axis=0)
             ids_of_medoids[j] = indices[np.argmin(distances)]
 
         # Step 3: Reassign objects to medoids
-        new_distances = find_distance(data[:, None, :], data[None, ids_of_medoids, :])
+        new_distances = scipy.spatial.distance.cdist(data, data[ids_of_medoids], metric=metric)
         new_assignments = np.argmin(new_distances, axis=1)
         diffs = np.mean(new_assignments != segmentation)
         segmentation = new_assignments
 
-        # If more than 10% of assignments are equal to previous segmentation,
-        # go back to step 2 (threshold arbitrary?)
+        # If more than 99% of assignments are equal to previous segmentation, stop
         if diffs <= 0.01:
             break
 
@@ -276,6 +271,7 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
         n_clusters=n_clusters,
         max_iterations=max_iterations,
         random_state=random_state,
+        dist_method=dist_method,
     )
 
     # Info dump
@@ -330,6 +326,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         Information about the number of clusters, the function and model used for clustering.
 
     """
+    data = np.asarray(data, dtype=float)
     n_samples, n_channels = data.shape
 
     # Cache this value for later to compute residual
@@ -340,14 +337,18 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     init_times = rng.choice(n_samples, size=n_clusters, replace=False)
 
     # Initialize random cluster centroids
-    clusters = data[init_times, :]
+    clusters = data[init_times, :].copy()
 
     # Normalize row-wise (across EEG channels)
-    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)  # Normalize the maps
+    norms = np.linalg.norm(clusters, axis=1, keepdims=True)
+    norms[norms == 0] = 1.0
+    clusters /= norms
 
     # Initialize iteration
-    prev_residual = 0
-    for i in range(max_iterations):
+    prev_residual = 0.0
+    residual = 0.0
+    segmentation = np.zeros(n_samples, dtype=int)
+    for _ in range(max_iterations):
         # Step 3: Assign each sample to the best matching microstate
         activation = clusters.dot(data.T)
         segmentation = np.argmax(np.abs(activation), axis=0)
@@ -355,7 +356,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         # Step 4: Recompute the topographic maps of the microstates, based on the
         # samples that were assigned to each state.
         for state in np.arange(n_clusters):
-            # Get data fro specific state
+            # Get data for specific state
             idx = segmentation == state
             data_state = data[idx, :]
 
@@ -365,41 +366,41 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
                 continue
 
             # Retrieve map values
-
             if optimize:
                 # Method 2 - optimized segmentation
                 state_vals = data_state.T.dot(activation[state, idx])
             else:
-                # Method 1 - eighen value
-                # step 4a
+                # Method 1 - eigenvalue
                 Sk = np.dot(data_state.T, data_state)
-                # step 4b
                 eigen_vals, eigen_vectors = scipy.linalg.eigh(Sk)
                 state_vals = eigen_vectors[:, np.argmax(np.abs(eigen_vals))]
 
-            state_vals /= np.linalg.norm(state_vals)  # Normalize Map
+            norm_val = np.linalg.norm(state_vals)
+            if norm_val > 0:
+                state_vals /= norm_val
             clusters[state, :] = state_vals  # Store map
 
         # Estimate residual noise (step 5)
         act_sum_sq = np.sum(np.sum(clusters[segmentation, :] * data, axis=1) ** 2)
         residual = np.abs(data_sum_sq - act_sum_sq)
-        residual = residual / float(n_samples * (n_channels - 1))
+        denom = float(n_samples * max(1, n_channels - 1))
+        residual = residual / denom
 
         # Have we converged? Convergence criterion: variance estimate (step 6)
         if np.abs(prev_residual - residual) < (threshold * residual):
             break
 
         # Next iteration
-        prev_residual = residual.copy()
-
-    if i == max_iterations:
+        prev_residual = float(residual)
+    else:
         warnings.warn(
-            "Modified K-means algorithm failed to converge after " + str(i) + "",
+            f"Modified K-means algorithm failed to converge after {max_iterations} "
             "iterations. Consider increasing 'max_iterations'.",
+            category=NeuroKitWarning,
         )
 
     # De-normalize
-    clusters_unnormalized = _cluster_getclusters(data, segmentation)
+    clusters_unnormalized = _cluster_getclusters(data, segmentation, n_clusters=n_clusters)
     prediction = _cluster_quality_distance(data, clusters_unnormalized, to_dataframe=True)
     prediction["Cluster"] = segmentation
 
@@ -410,6 +411,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         max_iterations=max_iterations,
         threshold=threshold,
         random_state=random_state,
+        optimize=optimize,
         **kwargs,
     )
 
@@ -448,7 +450,7 @@ def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
     prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
 
     # Recover states from clustering
-    clusters = _cluster_getclusters(data, prediction["Cluster"])
+    clusters = _cluster_getclusters(data, prediction["Cluster"], n_clusters=n_clusters)
 
     # Copy function with given parameters
     clustering_function = functools.partial(_cluster_pca, n_clusters=n_clusters, random_state=random_state, **kwargs)
@@ -491,7 +493,7 @@ def _cluster_ica(data, n_clusters=2, random_state=None, **kwargs):
     clustering_function = functools.partial(_cluster_ica, n_clusters=n_clusters, random_state=random_state, **kwargs)
 
     # Recover states from clustering
-    clusters = _cluster_getclusters(data, prediction["Cluster"])
+    clusters = _cluster_getclusters(data, prediction["Cluster"], n_clusters=n_clusters)
 
     # Info dump
     info = {
@@ -506,28 +508,32 @@ def _cluster_ica(data, n_clusters=2, random_state=None, **kwargs):
 # =============================================================================
 # SKLEARN
 # =============================================================================
-def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
-    """Spectral clustering"""
+def _cluster_sklearn(data, method="spectral", n_clusters=2, random_state=None, **kwargs):
+    """Sklearn clustering methods"""
     # Initialize clustering function
     if method in ["spectral"]:
-        clustering_model = sklearn.cluster.SpectralClustering(n_clusters=n_clusters, **kwargs)
+        clustering_model = sklearn.cluster.SpectralClustering(n_clusters=n_clusters, random_state=random_state, **kwargs)
     elif method in ["hierarchical", "ward"]:
         clustering_model = sklearn.cluster.AgglomerativeClustering(n_clusters=n_clusters, linkage="ward", **kwargs)
     elif method in ["agglomerative", "single"]:
         clustering_model = sklearn.cluster.AgglomerativeClustering(n_clusters=n_clusters, linkage="single", **kwargs)
+    else:
+        raise ValueError(f"NeuroKit error: cluster(): 'method' '{method}' not recognized.")
 
     # Fit
     clustering = clustering_model.fit_predict(data)
 
     # Get representatives
-    clusters = _cluster_getclusters(data, clustering)
+    clusters = _cluster_getclusters(data, clustering, n_clusters=n_clusters)
 
     # Get distance
     prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
     prediction["Cluster"] = clustering
 
     # Else, copy function
-    clustering_function = functools.partial(_cluster_sklearn, n_clusters=n_clusters, **kwargs)
+    clustering_function = functools.partial(
+        _cluster_sklearn, method=method, n_clusters=n_clusters, random_state=random_state, **kwargs
+    )
 
     # Info dump
     info = {
@@ -561,7 +567,9 @@ def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kw
     prediction["Cluster"] = clustering
 
     # Else, copy function
-    clustering_function = functools.partial(_cluster_mixture, n_clusters=n_clusters, random_state=random_state, **kwargs)
+    clustering_function = functools.partial(
+        _cluster_mixture, n_clusters=n_clusters, bayesian=bayesian, random_state=random_state, **kwargs
+    )
 
     # Info dump
     info = {
@@ -684,13 +692,20 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
             c = np.real(c)
             maps[i] = c / np.sqrt(np.sum(c**2))
 
-    # Get distance
+    # Get distance and assign each sample by maximum squared polarity-invariant spatial correlation
     prediction = _cluster_quality_distance(cluster_data, maps, to_dataframe=True)
-    prediction["Cluster"] = prediction.abs().idxmax(axis=1).values
-    prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
+    m_x, s_x = cluster_data.mean(axis=1, keepdims=True), cluster_data.std(axis=1)
+    m_y, s_y = maps.mean(axis=1, keepdims=True), maps.std(axis=1)
+    s_xy = 1.0 * nch * np.outer(s_x, s_y)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        C = np.dot(cluster_data - m_x, np.transpose(maps - m_y)) / s_xy
+    C = np.nan_to_num(C, nan=0.0)
+    prediction["Cluster"] = np.argmax(C**2, axis=1)
 
     # Function
-    clustering_function = functools.partial(_cluster_aahc, n_clusters=n_clusters, random_state=random_state, **kwargs)
+    clustering_function = functools.partial(
+        _cluster_aahc, n_clusters=n_clusters, random_state=random_state, use_peaks=use_peaks, **kwargs
+    )
 
     # Info dump
     info = {
@@ -709,7 +724,10 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
 # =============================================================================
 
 
-def _cluster_getclusters(data, clustering):
+def _cluster_getclusters(data, clustering, n_clusters=None):
     """Get average representatives of clusters"""
-    n_clusters = len(np.unique(clustering))
-    return np.asarray([np.mean(data[np.where(clustering == i)], axis=0) for i in range(n_clusters)])
+    clustering = np.asarray(clustering)
+    states = np.unique(clustering) if n_clusters is None else range(n_clusters)
+    return np.asarray(
+        [np.mean(data[clustering == i], axis=0) if np.any(clustering == i) else np.zeros(data.shape[1]) for i in states]
+    )
