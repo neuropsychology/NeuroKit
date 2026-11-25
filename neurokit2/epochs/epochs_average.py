@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from .epochs_to_df import epochs_to_df
 
 
-def epochs_average(epochs, which=None, indices=["mean", "std", "ci"], show=False, **kwargs):
+def epochs_average(epochs, which=None, indices=None, show=False, **kwargs):
     """**Compute Grand Average**
 
     Average epochs and returns the grand average, as well as the SD and the confidence interval.
@@ -40,44 +41,64 @@ def epochs_average(epochs, which=None, indices=["mean", "std", "ci"], show=False
     """
     data = epochs_to_df(epochs)
 
-    assert "Time" in data.columns, "Something is wrong with the epochs data, could not find a 'Time' column in them."
+    if "Time" not in data.columns:
+        raise ValueError("Something is wrong with the epochs data, could not find a 'Time' column in them.")
 
     # Select only the first column
     if which is None:
         which = data.columns[0]
     if isinstance(which, str):
         which = [which]
+    else:
+        which = list(which)
 
-    # Define quantile functions
-    if "ci" in indices:
+    indices_list = ["mean", "std", "ci"] if indices is None else list(indices)
+    has_ci = "ci" in indices_list
+    agg_indices = [idx for idx in indices_list if idx != "ci"]
 
-        def q1(x):
-            return x.quantile(0.025)
+    grouped = data.groupby("Time", sort=True)[which]
+    parts = []
+    if len(agg_indices) > 0:
+        av_main = grouped.agg(agg_indices)
+        av_main.columns = [f"{col}_{stat}" for col, stat in av_main.columns]
+        parts.append(av_main)
 
-        def q2(x):
-            return x.quantile(0.975)
+    if has_ci:
+        # Vectorized Cython quantile computation across all time points at once
+        ci_df = grouped.quantile([0.025, 0.975]).unstack()
+        ci_cols = {}
+        for col in which:
+            ci_cols[f"{col}_CI_low"] = ci_df[(col, 0.025)]
+            ci_cols[f"{col}_CI_high"] = ci_df[(col, 0.975)]
+        parts.append(pd.DataFrame(ci_cols, index=ci_df.index))
 
-        indices.remove("ci")
-        indices.extend([q1, q2])
+    av = pd.concat(parts, axis=1).reset_index() if len(parts) > 0 else pd.DataFrame({"Time": sorted(data["Time"].unique())})
 
-    # Format which
-    what = {i: indices for i in which}
-
-    # Group by and average
-    av = data.groupby(["Time"], as_index=False).agg(what).reset_index()
-    av.columns = [f"{a}_{b}" if b else f"{a}" for a, b in av.columns]
-
-    # Format
+    # Format column suffixes
     av.columns = av.columns.str.replace("_mean", "_Mean")
     av.columns = av.columns.str.replace("_median", "_Median")
     av.columns = av.columns.str.replace("_std", "_SD")
-    av.columns = av.columns.str.replace("_q1", "_CI_low")
-    av.columns = av.columns.str.replace("_q2", "_CI_high")
+
+    # Ensure deterministic per-column ordering matching requested `indices`
+    ordered_cols = ["Time"]
+    suffix_map = {"mean": ["Mean"], "median": ["Median"], "std": ["SD"], "ci": ["CI_low", "CI_high"]}
+    for col in which:
+        for idx in indices_list:
+            for suf in suffix_map.get(idx, [str(idx)]):
+                cname = f"{col}_{suf}"
+                if cname in av.columns and cname not in ordered_cols:
+                    ordered_cols.append(cname)
+    for cname in av.columns:
+        if cname not in ordered_cols:
+            ordered_cols.append(cname)
+    av = av[ordered_cols]
 
     # Plot
     if show is True:
         for i in which:
-            plt.plot(av["Time"], av[f"{i}_Mean"], label=i)
+            center_col = f"{i}_Mean" if f"{i}_Mean" in av.columns else (f"{i}_Median" if f"{i}_Median" in av.columns else None)
+            if center_col is not None:
+                plt.plot(av["Time"], av[center_col], label=i)
             if f"{i}_CI_low" in av.columns and f"{i}_CI_high" in av.columns:
                 plt.fill_between(
                     av["Time"],
@@ -85,6 +106,7 @@ def epochs_average(epochs, which=None, indices=["mean", "std", "ci"], show=False
                     av[f"{i}_CI_high"],
                     alpha=0.3,
                 )
-        plt.legend()
+        if any(f"{i}_Mean" in av.columns or f"{i}_Median" in av.columns for i in which):
+            plt.legend()
 
     return av

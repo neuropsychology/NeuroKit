@@ -102,6 +102,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
         eog_cols = [col for col in data.columns if "EOG" in col]
         ecg_rate_col = [col for col in data.columns if "ECG_Rate" in col]
         rsp_phase_col = [col for col in data.columns if "RSP_Phase" in col]
+        rsa_cols = [col for col in data.columns if "RSA_" in col]
     elif isinstance(data, dict):
         for i in data:
             ecg_cols = [col for col in data[i].columns if "ECG" in col]
@@ -112,6 +113,8 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
             eog_cols = [col for col in data[i].columns if "EOG" in col]
             ecg_rate_col = [col for col in data[i].columns if "ECG_Rate" in col]
             rsp_phase_col = [col for col in data[i].columns if "RSP_Phase" in col]
+            rsa_cols = [col for col in data[i].columns if "RSA_" in col]
+            break
     else:
         raise ValueError(
             "NeuroKit error: bio_analyze(): Wrong input, please make sure you enter a DataFrame or a dictionary. "
@@ -193,17 +196,21 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
         # Event-related
         if method in ["event-related", "event", "epoch"]:
-            rsa = _bio_analyze_rsa_event(data.copy())
+            if len(rsa_cols) > 0:
+                rsa = _bio_analyze_rsa_event(data)
+                if len(features) > 0:
+                    rsa.index = rsa.index.astype(features.index.dtype)
+                    rsa = rsa.reindex(features.index)
+                features = pd.concat([features, rsa], axis=1, sort=False)
 
         # Interval-related
         elif method in ["interval-related", "interval", "resting-state"]:
-            rsa = _bio_analyze_rsa_interval(data.copy(), sampling_rate=sampling_rate)
+            rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
+            features = pd.concat([features, rsa], axis=1, sort=False)
 
         # Auto
         else:
             raise ValueError("Wrong `method` argument.")
-
-        features = pd.concat([features, rsa], axis=1, sort=False)
 
     # Remove duplicate columns of Label and Condition
     if "Label" in features.columns.values:
@@ -216,15 +223,18 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 # Internals
 # =============================================================================
 def _bio_analyze_slicewindow(data, window_lengths, signal="ECG"):
-    if signal in window_lengths.keys():
-        start = window_lengths[signal][0]
-        end = window_lengths[signal][1]
-        epochs = {}
-        for _, label in enumerate(data):
-            # Slice window
-            epoch = data[label].loc[(data[label].index > start) & (data[label].index < end)]
-            epochs[label] = epoch
+    if signal not in window_lengths.keys():
+        return data
+    start = window_lengths[signal][0]
+    end = window_lengths[signal][1]
+    if isinstance(data, pd.DataFrame):
+        if "Time" in data.columns:
+            return data.loc[(data["Time"] > start) & (data["Time"] < end)].copy()
+        return data.loc[(data.index > start) & (data.index < end)].copy()
 
+    epochs = {}
+    for label, epoch_df in data.items():
+        epochs[label] = epoch_df.loc[(epoch_df.index > start) & (epoch_df.index < end)]
     return epochs
 
 
@@ -246,16 +256,17 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
 
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
-
     if isinstance(data, pd.DataFrame):
         rsa = hrv_rsa(data, sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
 
     elif isinstance(data, dict):
-        for index in data:
-            rsa[index] = {}  # Initialize empty container
-            data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
-            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate, continuous=False)
+        rsa = {}
+        for index, df_ep in data.items():
+            ep = df_ep.set_index("Index") if "Index" in df_ep.columns else df_ep
+            if "Label" in ep.columns:
+                ep = ep.drop(["Label"], axis=1)
+            rsa[index] = hrv_rsa(ep, sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     return rsa
@@ -270,16 +281,11 @@ def _bio_analyze_rsa_event(data):
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     elif isinstance(data, pd.DataFrame):
-        # Convert back to dict
-        for label, df in data.groupby("Label"):
-            rsa[label] = {}
+        # Convert back to dict without mutating or forcing integer labels
+        for label, df in data.groupby("Label", sort=False):
             epoch = df.set_index("Time")
-            rsa[label] = _bio_analyze_rsa_epoch(epoch, rsa[label])
-        rsa = pd.DataFrame.from_dict(rsa, orient="index")
-        # Fix index sorting to combine later with features dataframe
-        rsa.index = rsa.index.astype(int)
-        rsa = rsa.sort_index().rename_axis(None)
-        rsa.index = rsa.index.astype(str)
+            rsa[str(label)] = _bio_analyze_rsa_epoch(epoch)
+        rsa = pd.DataFrame.from_dict(rsa, orient="index").rename_axis(None)
 
     return rsa
 
@@ -290,16 +296,18 @@ def _bio_analyze_rsa_epoch(epoch):
 
     # To remove baseline
     if np.min(epoch.index.values) <= 0:
-        baseline = epoch["RSA_P2T"][epoch.index <= 0].values
-        signal = epoch["RSA_P2T"][epoch.index > 0].values
-        output["RSA_P2T"] = np.mean(signal) - np.mean(baseline)
-        baseline = epoch["RSA_Gates"][epoch.index <= 0].values
-        signal = epoch["RSA_Gates"][epoch.index > 0].values
-        output["RSA_Gates"] = np.nanmean(signal) - np.nanmean(baseline)
+        if "RSA_P2T" in epoch.columns:
+            baseline = epoch["RSA_P2T"][epoch.index <= 0].values
+            signal = epoch["RSA_P2T"][epoch.index > 0].values
+            output["RSA_P2T"] = np.nanmean(signal) - np.nanmean(baseline)
+        if "RSA_Gates" in epoch.columns:
+            baseline = epoch["RSA_Gates"][epoch.index <= 0].values
+            signal = epoch["RSA_Gates"][epoch.index > 0].values
+            output["RSA_Gates"] = np.nanmean(signal) - np.nanmean(baseline)
     else:
-        signal = epoch["RSA_P2T"].values
-        output["RSA_P2T"] = np.mean(signal)
-        signal = epoch["RSA_Gates"].values
-        output["RSA_Gates"] = np.nanmean(signal)
+        if "RSA_P2T" in epoch.columns:
+            output["RSA_P2T"] = np.nanmean(epoch["RSA_P2T"].values)
+        if "RSA_Gates" in epoch.columns:
+            output["RSA_Gates"] = np.nanmean(epoch["RSA_Gates"].values)
 
     return output

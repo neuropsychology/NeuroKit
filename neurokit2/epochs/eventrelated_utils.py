@@ -40,7 +40,9 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
     return epochs
 
 
-def _eventrelated_addinfo(epoch, output={}):
+def _eventrelated_addinfo(epoch, output=None):
+    if output is None:
+        output = {}
     # Add label
     if "Index" in epoch.columns:
         output["Event_Onset"] = epoch.iloc[np.argmin(np.abs(epoch.index))]["Index"]
@@ -77,7 +79,9 @@ def _eventrelated_sanitizeoutput(data):
     return df
 
 
-def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
+def _eventrelated_rate(epoch, output=None, var="ECG_Rate"):
+    if output is None:
+        output = {}
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if var in i]) == 0:
@@ -91,27 +95,47 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     zero = find_closest(0, epoch.index.values, return_index=True)  # Find closest to 0
     baseline = epoch[var].iloc[zero]
 
-    # Get signal
-    signal = epoch[var].values[zero + 1 : :]
-    index = epoch.index.values[zero + 1 : :]
+    # Get post-onset signal excluding NaN padding
+    signal = np.asarray(epoch[var].values[zero + 1 : :], dtype=float)
+    index = np.asarray(epoch.index.values[zero + 1 : :], dtype=float)
+    valid = ~np.isnan(signal)
+    signal_valid = signal[valid]
+    index_valid = index[valid]
+
+    output[var + "_Baseline"] = baseline
+    if len(signal_valid) == 0 or pd.isna(baseline):
+        output[var + "_Max"] = np.nan
+        output[var + "_Min"] = np.nan
+        output[var + "_Mean"] = np.nan
+        output[var + "_SD"] = np.nan
+        output[var + "_Max_Time"] = np.nan
+        output[var + "_Min_Time"] = np.nan
+        output[var + "_Trend_Linear"] = np.nan
+        output[var + "_Trend_Quadratic"] = np.nan
+        output[var + "_Trend_R2"] = np.nan
+        return output
 
     # Max / Min / Mean
-    output[var + "_Baseline"] = baseline
-    output[var + "_Max"] = np.max(signal) - baseline
-    output[var + "_Min"] = np.min(signal) - baseline
-    output[var + "_Mean"] = np.mean(signal) - baseline
-    output[var + "_SD"] = np.std(signal)
+    output[var + "_Max"] = np.max(signal_valid) - baseline
+    output[var + "_Min"] = np.min(signal_valid) - baseline
+    output[var + "_Mean"] = np.mean(signal_valid) - baseline
+    output[var + "_SD"] = np.std(signal_valid)
 
     # Time of Max / Min
-    output[var + "_Max_Time"] = index[np.argmax(signal)]
-    output[var + "_Min_Time"] = index[np.argmin(signal)]
+    output[var + "_Max_Time"] = index_valid[np.argmax(signal_valid)]
+    output[var + "_Min_Time"] = index_valid[np.argmin(signal_valid)]
 
     # Modelling
     # These are experimental indices corresponding to parameters of a quadratic model
     # Instead of raw values (such as min, max etc.)
-    _, info = fit_polynomial(signal - baseline, index, order=2)
-    output[var + "_Trend_Linear"] = info["coefs"][1]
-    output[var + "_Trend_Quadratic"] = info["coefs"][2]
-    output[var + "_Trend_R2"] = info["R2"]
+    if len(signal_valid) >= 3:
+        _, info = fit_polynomial(signal_valid - baseline, index_valid, order=2)
+        output[var + "_Trend_Linear"] = info["coefs"][1]
+        output[var + "_Trend_Quadratic"] = info["coefs"][2]
+        output[var + "_Trend_R2"] = info["R2"]
+    else:
+        output[var + "_Trend_Linear"] = np.nan
+        output[var + "_Trend_Quadratic"] = np.nan
+        output[var + "_Trend_R2"] = np.nan
 
     return output

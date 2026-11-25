@@ -1048,6 +1048,16 @@ Fixes
   as it does for a dict of epochs, instead of returning an empty DataFrame.
 * ``emg_intervalrelated()`` raises its ``ValueError`` when ``EMG_Amplitude`` or ``EMG_Activity`` is
   missing; the column check never triggered, so a bare ``KeyError`` was raised instead.
+* ``epochs_create()`` preserves integer sample positions in ``"Index"`` and non-numeric columns when
+  ``baseline_correction=True``, rounds sample boundaries consistently across events, and ends the
+  final epoch at ``len(data)`` when ``epochs_end="from_events"`` without explicit durations.
+  ``epochs_average()`` no longer mutates its default or caller ``indices`` list, omits the spurious
+  ``"index"`` column, supports plotting without ``"mean"``, and is about 70 times faster via
+  vectorised group quantiles. ``*_eventrelated()`` rate features ignore ``NaN`` padding and handle
+  epochs without post-onset samples, and ``ecg_analyze()``, ``ppg_analyze()``, ``rsp_analyze()``,
+  ``eda_analyze()``, ``emg_analyze()``, ``eog_analyze()`` and ``bio_analyze()`` fix ``KeyError: 0``
+  on ``epochs_to_df()`` DataFrames under pandas 3 as well as RSA dictionary/DataFrame bugs in
+  ``bio_analyze()``.
 
 
 0.3.0

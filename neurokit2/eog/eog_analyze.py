@@ -93,7 +93,7 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
 
         if isinstance(data, pd.DataFrame):
             if "Label" in data.columns:
-                epoch_len = data["Label"].value_counts()[0]
+                epoch_len = data["Label"].value_counts().iloc[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate
@@ -101,5 +101,10 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
                 features = eog_intervalrelated(data)
             else:
                 features = eog_eventrelated(data)
+    else:
+        raise ValueError(
+            f"NeuroKit error: eog_analyze(): 'method' '{method}' not recognized. "
+            "Must be 'event-related', 'interval-related', or 'auto'."
+        )
 
     return features

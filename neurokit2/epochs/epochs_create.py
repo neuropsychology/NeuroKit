@@ -156,7 +156,9 @@ def epochs_create(
     # Create epochs
     if epochs_end == "from_events":
         if "duration" not in events.keys():
-            events["duration"] = list(np.diff(events["onset"])) + [len(data) - 1]
+            events["duration"] = list(np.diff(event_onsets)) + (
+                [len(data) - event_onsets[-1]] if len(event_onsets) > 0 else []
+            )
 
         epochs_end = [i / sampling_rate for i in events["duration"]]
     parameters = listify(
@@ -169,7 +171,9 @@ def epochs_create(
 
     # Find the maximum numbers of samples in an epoch
     parameters["duration"] = list(np.array(parameters["end"]) - np.array(parameters["start"]))
-    epoch_max_duration = int(max(i * sampling_rate for i in parameters["duration"]))
+    epoch_max_duration = (
+        max(1, int(np.ceil(max(i * sampling_rate for i in parameters["duration"])))) if len(parameters["duration"]) > 0 else 1
+    )
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
@@ -187,15 +191,15 @@ def epochs_create(
 
     epochs = {}
     for i, label in enumerate(parameters["label"]):
-        # Find indices
-        start = parameters["onset"][i] + (parameters["start"][i] * sampling_rate)
-        end = parameters["onset"][i] + (parameters["end"][i] * sampling_rate)
+        # Find indices (round to avoid float truncation off-by-one across events)
+        start = int(np.round(parameters["onset"][i] + (parameters["start"][i] * sampling_rate)))
+        end = int(np.round(parameters["onset"][i] + (parameters["end"][i] * sampling_rate)))
 
         # Slice dataframe
-        epoch = data.iloc[int(start) : int(end)].copy()
+        epoch = data.iloc[start:end].copy()
+        epoch_indices = epoch.index.values - length_buffer
 
-        # Correct index
-        epoch["Index"] = epoch.index.values - length_buffer
+        # Set relative time index prior to baseline correction
         epoch.index = np.linspace(
             start=parameters["start"][i],
             stop=parameters["end"][i],
@@ -205,7 +209,11 @@ def epochs_create(
 
         if baseline_correction is True:
             baseline_end = 0 if parameters["start"][i] <= 0 else parameters["start"][i]
-            epoch = epoch - epoch.loc[:baseline_end].mean()
+            num_cols = epoch.select_dtypes(include=["number"]).columns
+            epoch[num_cols] = epoch[num_cols] - epoch.loc[:baseline_end, num_cols].mean()
+
+        # Assign sample Index after baseline correction so sample indices are preserved intact
+        epoch["Index"] = epoch_indices
 
         # Add additional
         epoch["Label"] = parameters["label"][i]

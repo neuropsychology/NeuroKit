@@ -100,7 +100,7 @@ def ppg_analyze(data, sampling_rate=1000, method="auto"):
 
         if isinstance(data, pd.DataFrame):
             if "Label" in data.columns:
-                epoch_len = data["Label"].value_counts()[0]
+                epoch_len = data["Label"].value_counts().iloc[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate
@@ -108,5 +108,10 @@ def ppg_analyze(data, sampling_rate=1000, method="auto"):
                 features = ppg_intervalrelated(data, sampling_rate=sampling_rate)
             else:
                 features = ppg_eventrelated(data)
+    else:
+        raise ValueError(
+            f"NeuroKit error: ppg_analyze(): 'method' '{method}' not recognized. "
+            "Must be 'event-related', 'interval-related', or 'auto'."
+        )
 
     return features
