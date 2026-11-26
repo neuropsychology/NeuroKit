@@ -684,6 +684,8 @@ New Features
 Fixes
 +++++++++++++
 
+* ``signal_filter()`` warns about a sampling rate below the Nyquist rate instead of raising a ``TypeError``
+  when only ``lowcut`` is given, and the warning names the highest cutoff (it used ``highcut``).
 * ``nk.data("eeg_1min_200hz")`` works again with recent versions of MNE. The dataset is now stored
   as a FIF file instead of a pickled MNE object, which broke with MNE updates.
 * The time axis of the plotting functions no longer stretches the signal by one sample.

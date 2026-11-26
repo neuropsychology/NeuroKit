@@ -215,6 +215,18 @@ def test_signal_filter_with_missing():
     assert np.allclose(signal_clean, signal, atol=0.2, equal_nan=True)
 
 
+@pytest.mark.parametrize(
+    ("lowcut", "highcut", "min_rate"),
+    [(60, None, "120"), (60, 10, "120"), (None, 60, "120")],
+)
+def test_signal_filter_nyquist_warning(lowcut, highcut, min_rate):
+    # The warning names the highest cutoff, also for a highpass (no highcut)
+    signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=5)
+    with pytest.warns(nk.misc.NeuroKitWarning, match=f"higher than {min_rate} Hz"):
+        with pytest.raises(ValueError):
+            nk.signal_filter(signal, sampling_rate=100, lowcut=lowcut, highcut=highcut)
+
+
 def test_signal_interpolate():
     # Test with arrays
     x_axis = np.linspace(start=10, stop=30, num=10)

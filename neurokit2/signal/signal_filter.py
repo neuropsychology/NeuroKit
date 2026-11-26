@@ -336,11 +336,13 @@ def _signal_filter_iirnotch(signal, sampling_rate, cutoff=0.05, Q=0.005):
 def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, normalize=False):
     # Sanity checks
     if lowcut is not None or highcut is not None:
-        if sampling_rate <= 2 * np.nanmax(np.array([lowcut, highcut], dtype=np.float64)):
+        # Use the highest cutoff given: either may be None (highpass or lowpass)
+        min_sampling_rate = 2 * np.nanmax(np.array([lowcut, highcut], dtype=np.float64))
+        if sampling_rate <= min_sampling_rate:
             warn(
                 "The sampling rate is too low. Sampling rate"
                 " must exceed the Nyquist rate to avoid aliasing problem."
-                f" In this analysis, the sampling rate has to be higher than {2 * highcut} Hz",
+                f" In this analysis, the sampling rate has to be higher than {min_sampling_rate:g} Hz",
                 category=NeuroKitWarning,
             )
 
