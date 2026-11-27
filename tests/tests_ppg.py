@@ -270,6 +270,25 @@ def test_ppg_findpeaks_all_methods():
         nk.ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, method="invalidmethod")
 
 
+@pytest.mark.parametrize("sampling_rate", [256, 500, 1000])
+def test_ppg_findpeaks_charlton_refines_peaks_and_onsets(sampling_rate):
+    ppg = nk.ppg_simulate(duration=30, sampling_rate=sampling_rate, heart_rate=70, random_state=42, show=False)
+    ppg_cleaned = nk.ppg_clean(ppg, sampling_rate=sampling_rate)
+    info = nk.ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, method="charlton", show=False)
+    window = int(np.ceil(sampling_rate * 0.15))
+
+    for key, extremum in [("PPG_Peaks", np.argmax), ("PPG_Onsets", np.argmin)]:
+        indices = [
+            int(index)
+            for index in info[key]
+            if window <= index < len(ppg_cleaned) - window
+        ]
+        assert indices
+        for index in indices:
+            segment = ppg_cleaned[index - window : index + window + 1]
+            assert extremum(segment) == window
+
+
 def test_ppg_peaks_all_methods():
     sampling_rate = 100
     duration = 30

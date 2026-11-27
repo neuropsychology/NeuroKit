@@ -453,7 +453,8 @@ def _ppg_findpeaks_charlton(
             tol_durn = 0.2
         elif rel_fs < 20:
             tol_durn = 0.1
-        tol = int(np.ceil(rel_fs * tol_durn))
+        # The correction windows use win_sig, which remains at the original sampling rate.
+        tol = int(np.ceil(sampling_rate * tol_durn))
 
         for pk_no in range(len(p)):
             segment = win_sig[(p[pk_no] - tol) : (p[pk_no] + tol + 1)]
