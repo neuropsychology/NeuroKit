@@ -28,10 +28,6 @@ def bio_process(
 
     Parameters
     ----------
-    data : DataFrame
-        The DataFrame containing all the respective signals (e.g., ecg, rsp, Photosensor etc.). If
-        provided, there is no need to fill in the other arguments denoting the channel inputs.
-        Defaults to ``None``.
     ecg : Union[list, np.array, pd.Series]
         The raw ECG channel.
     rsp : Union[list, np.array, pd.Series]

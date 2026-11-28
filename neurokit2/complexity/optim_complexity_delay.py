@@ -599,7 +599,7 @@ def _complexity_delay_entropyratio(
         The maximum time delay (Tau) to test.
     dimension_max : int
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order') to test.
-    surrogate_iter : int
+    surrogate_n : int
         The maximum surrogates generated using the iAAFT method.
 
     """

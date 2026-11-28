@@ -361,13 +361,6 @@ def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None,
     ----------
     y : ndarray
         embedded signal: N-dimensional array containing time-delayed vectors.
-    delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
-        or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
-    dimension_max : int
-        The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order')
-        to test.
     metric : str
         Metric to use for distance computation.  Must be one of "cityblock" (aka the Manhattan metric),
         "chebyshev" (aka the maximum norm metric), or "euclidean". Defaults to 'chebyshev'.
