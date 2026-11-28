@@ -14,9 +14,6 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
     -----------
     raw : mne.io.Raw
         Raw EEG data.
-    path : str
-        Defaults to ``None``, assuming that the MNE data folder already exists. If not,
-        specify the directory to download the folder.
     tmin : float
         See :func:`mne.Raw.crop()`.
     tmax : float
@@ -25,7 +22,7 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
         See :func:`mne.Raw.crop()`.
     smin : int
         Cropping start in samples.
-    samx : int
+    smax : int
         Cropping end in samples.
 
     Returns

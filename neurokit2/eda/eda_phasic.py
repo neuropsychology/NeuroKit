@@ -320,10 +320,6 @@ def _eda_phasic_sparsEDA(eda_signal, sampling_rate=8, epsilon=0.0001, Kmax=40, N
     ----------
     epsilon
         step remainder
-    maxIters
-        maximum number of LARS iterations
-    dmin
-        maximum distance between sparse reactions
     rho
         minimun threshold of sparse reactions
 
